@@ -1,4 +1,6 @@
-﻿namespace Shapeshifter.Core.Facades
+﻿using Shapeshifter.Core.Data;
+
+namespace Shapeshifter.Core.Facades
 {
     interface IClipboardDataVisualizerFacade<TControlType, TDataType> 
         where TDataType : IClipboardData

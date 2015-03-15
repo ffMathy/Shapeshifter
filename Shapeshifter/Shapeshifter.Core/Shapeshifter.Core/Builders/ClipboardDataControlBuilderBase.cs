@@ -2,6 +2,7 @@
 using Shapeshifter.Core.Strategies;
 using System;
 using Autofac;
+using Shapeshifter.Core.Data;
 
 namespace Shapeshifter.Core.Builders
 {
