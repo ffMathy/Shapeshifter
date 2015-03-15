@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shapeshifter.Core
+namespace Shapeshifter.Core.Data
 {
     public interface IDataSource
     {
