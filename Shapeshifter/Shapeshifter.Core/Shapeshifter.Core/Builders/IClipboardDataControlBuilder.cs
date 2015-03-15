@@ -10,6 +10,6 @@
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        bool CanBuild(TDataType data);
+        bool CanBuild(IClipboardData data);
     }
 }

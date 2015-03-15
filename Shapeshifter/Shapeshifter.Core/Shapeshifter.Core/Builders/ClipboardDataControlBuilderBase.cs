@@ -51,6 +51,7 @@ namespace Shapeshifter.Core.Builders
             return newControl;
         }
 
-        public abstract bool CanBuild(TDataType data);
+        //TODO: this should actually be able to determine whether or not something can be built through reflection.
+        public abstract bool CanBuild(IClipboardData data);
     }
 }

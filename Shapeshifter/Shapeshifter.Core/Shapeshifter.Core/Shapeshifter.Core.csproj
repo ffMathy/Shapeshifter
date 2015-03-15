@@ -45,9 +45,13 @@
   <ItemGroup>
     <Compile Include="Builders\ClipboardDataControlBuilderBase.cs" />
     <Compile Include="Builders\IClipboardDataControlBuilder.cs" />
+    <Compile Include="Data\ClipboardFileCollectionData.cs" />
+    <Compile Include="Data\ClipboardFileData.cs" />
+    <Compile Include="Data\ClipboardTextData.cs" />
+    <Compile Include="Data\ClipboardImageData.cs" />
     <Compile Include="Facades\IClipboardDataVisualizerFacade.cs" />
     <Compile Include="Helpers\InversionOfControlHelper.cs" />
-    <Compile Include="IClipboardData.cs" />
+    <Compile Include="Data\IClipboardData.cs" />
     <Compile Include="IClipboardItemControl.cs" />
     <Compile Include="IDataSource.cs" />
     <Compile Include="ISerializable.cs" />
