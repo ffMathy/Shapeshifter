@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Shapeshifter.Core
 {
-    interface IClipboardItemControl<TControlType>
+    public interface IClipboardItemControl<TControlType>
     {
-        TControlType Header { set; }
-        TControlType Body { set; }
-        TControlType BackgroundImage { set; }
+        TControlType Header { get; set; }
+        TControlType Body { get; set; }
+        TControlType Source { get; set; }
+        TControlType BackgroundImage { get; set; }
     }
 }

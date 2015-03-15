@@ -1,6 +1,6 @@
 ﻿namespace Shapeshifter.Core.Builders
 {
-    interface IClipboardDataControlBuilder<TControlType, TDataType>
+    public interface IClipboardDataControlBuilder<TControlType, TDataType>
         where TDataType : IClipboardData
     {
         TControlType Build(TDataType data);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shapeshifter.Core
 {
-    interface IDataSource
+    public interface IDataSource
     {
         byte[] Icon { get; }
 

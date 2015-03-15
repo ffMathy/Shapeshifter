@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shapeshifter.Core
 {
-    interface ISerializable
+    public interface ISerializable
     {
         byte[] Serialize();
     }

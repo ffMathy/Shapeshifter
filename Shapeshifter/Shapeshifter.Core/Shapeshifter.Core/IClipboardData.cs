@@ -1,6 +1,6 @@
 ﻿namespace Shapeshifter.Core
 {
-    interface IClipboardData : ISerializable
+    public interface IClipboardData : ISerializable
     {
         IDataSource Source { get; }
     }

@@ -5,13 +5,13 @@ using Autofac;
 
 namespace Shapeshifter.Core.Builders
 {
-    abstract class ClipboardDataControlBuilderBase<TControlType, TDataType> : IClipboardDataControlBuilder<IClipboardItemControl<TControlType>, TDataType>
+    public abstract class ClipboardDataControlBuilderBase<TControlType, TDataType> : IClipboardDataControlBuilder<IClipboardItemControl<TControlType>, TDataType>
         where TDataType : IClipboardData
     {
         protected abstract IControlConstructionStrategy<TControlType, TDataType> HeaderBuildingStrategy { get; }
         protected abstract IControlConstructionStrategy<TControlType, TDataType> BodyBuildingStrategy { get; }
-
-        protected abstract IImageConstructionStrategy<TDataType> BackgroundImageBuildingStrategy { get; }
+        protected abstract IControlConstructionStrategy<TControlType, TDataType> SourceBuildingStrategy { get; }
+        protected abstract IControlConstructionStrategy<TControlType, TDataType> BackgroundImageBuildingStrategy { get; }
 
         protected ClipboardDataControlBuilderBase()
         {
@@ -25,13 +25,14 @@ namespace Shapeshifter.Core.Builders
                 throw new InvalidOperationException("Data format not supported.");
             }
 
-            if (HeaderBuildingStrategy == null || BodyBuildingStrategy == null)
+            if (HeaderBuildingStrategy == null || BodyBuildingStrategy == null || SourceBuildingStrategy == null)
             {
-                throw new InvalidOperationException("Both the header and body building strategies must be set before calling Build.");
+                throw new InvalidOperationException("Both the header, source and body building strategies must be available before calling Build.");
             }
 
             var header = HeaderBuildingStrategy.ConstructControl(data);
             var body = BodyBuildingStrategy.ConstructControl(data);
+            var source = SourceBuildingStrategy.ConstructControl(data);
 
             var container = InversionOfControlHelper.Container;
 
@@ -39,10 +40,11 @@ namespace Shapeshifter.Core.Builders
 
             newControl.Header = header;
             newControl.Body = body;
+            newControl.Source = source;
 
             if (BackgroundImageBuildingStrategy != null)
             {
-                var backgroundImage = BackgroundImageBuildingStrategy.ConstructImage(data);
+                var backgroundImage = BackgroundImageBuildingStrategy.ConstructControl(data);
                 newControl.BackgroundImage = backgroundImage;
             }
 

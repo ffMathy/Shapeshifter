@@ -52,7 +52,6 @@
     <Compile Include="ISerializable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Strategies\IControlConstructionStrategy.cs" />
-    <Compile Include="Strategies\IImageConstructionStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shapeshifter.Core.Strategies
 {
-    interface IControlConstructionStrategy<TControlType, TDataType>
+    public interface IControlConstructionStrategy<TControlType, TDataType>
     {
         TControlType ConstructControl(TDataType data);
     }
