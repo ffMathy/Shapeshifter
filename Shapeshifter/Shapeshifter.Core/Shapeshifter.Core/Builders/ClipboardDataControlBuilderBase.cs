@@ -7,7 +7,7 @@ using Shapeshifter.Core.Controls;
 
 namespace Shapeshifter.Core.Builders
 {
-    public abstract class ClipboardDataControlBuilderBase<TControlType, TDataType> : IClipboardDataControlBuilder<IClipboardItemControl<TControlType>, TDataType>
+    public abstract class ClipboardDataControlBuilderBase<TControlType, TDataType> : IClipboardDataControlBuilder<IClipboardItemControl<TControlType>>
         where TDataType : IClipboardData
     {
         protected abstract IControlConstructionStrategy<TControlType, TDataType> HeaderBuildingStrategy { get; }
@@ -20,9 +20,9 @@ namespace Shapeshifter.Core.Builders
             //constructor of an abstract class should be protected.
         }
 
-        public IClipboardItemControl<TControlType> Build(TDataType data)
+        public IClipboardItemControl<TControlType> Build(IClipboardData incomingData)
         {
-            if (!CanBuild(data))
+            if (!CanBuild(incomingData))
             {
                 throw new InvalidOperationException("Data format not supported.");
             }
@@ -31,6 +31,8 @@ namespace Shapeshifter.Core.Builders
             {
                 throw new InvalidOperationException("Both the header, source and body building strategies must be available before calling Build.");
             }
+
+            var data = (TDataType)incomingData;
 
             var header = HeaderBuildingStrategy.ConstructControl(data);
             var body = BodyBuildingStrategy.ConstructControl(data);
@@ -52,8 +54,10 @@ namespace Shapeshifter.Core.Builders
 
             return newControl;
         }
-
-        //TODO: this should actually be able to determine whether or not something can be built through reflection.
-        public abstract bool CanBuild(IClipboardData data);
+        
+        public virtual bool CanBuild(IClipboardData data)
+        {
+            return data != null && data.GetType() == typeof(TDataType);
+        }
     }
 }

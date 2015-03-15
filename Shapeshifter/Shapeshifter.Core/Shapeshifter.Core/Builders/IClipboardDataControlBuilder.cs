@@ -2,10 +2,9 @@
 
 namespace Shapeshifter.Core.Builders
 {
-    public interface IClipboardDataControlBuilder<TControlType, TDataType>
-        where TDataType : IClipboardData
+    public interface IClipboardDataControlBuilder<TControlType>
     {
-        TControlType Build(TDataType data);
+        TControlType Build(IClipboardData data);
 
         /// <summary>
         /// Returns a boolean indicating whether or not a control can be built from the given data.
