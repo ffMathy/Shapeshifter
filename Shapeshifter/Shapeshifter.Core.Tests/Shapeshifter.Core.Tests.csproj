@@ -66,7 +66,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Shapeshifter.Core\Shapeshifter.Core\Shapeshifter.Core.csproj">
+    <ProjectReference Include="..\Shapeshifter.Core\Shapeshifter.Core.csproj">
       <Project>{a2c09237-a254-446b-aa1d-26da072743cf}</Project>
       <Name>Shapeshifter.Core</Name>
     </ProjectReference>
