@@ -52,9 +52,9 @@
     <Compile Include="Facades\IClipboardDataVisualizerFacade.cs" />
     <Compile Include="Helpers\InversionOfControlHelper.cs" />
     <Compile Include="Data\IClipboardData.cs" />
-    <Compile Include="IClipboardItemControl.cs" />
+    <Compile Include="Controls\IClipboardItemControl.cs" />
     <Compile Include="Data\IDataSource.cs" />
-    <Compile Include="ISerializable.cs" />
+    <Compile Include="Data\ISerializable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Strategies\IControlConstructionStrategy.cs" />
   </ItemGroup>
