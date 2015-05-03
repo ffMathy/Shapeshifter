@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Shapeshifter.Core.Data;
 using Shapeshifter.Core.Factories.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Properties;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Factories
 {
@@ -14,7 +11,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.
         {
             return new DesignerDataSource()
             {
-                Text = "My documents"
+                Text = "My pictures",
+                Icon = Resources.FileDataSourceIcon
             };
         }
     }

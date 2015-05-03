@@ -59,5 +59,25 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] FileDataFileIcon {
+            get {
+                object obj = ResourceManager.GetObject("FileDataFileIcon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] FileDataSourceIcon {
+            get {
+                object obj = ResourceManager.GetObject("FileDataSourceIcon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

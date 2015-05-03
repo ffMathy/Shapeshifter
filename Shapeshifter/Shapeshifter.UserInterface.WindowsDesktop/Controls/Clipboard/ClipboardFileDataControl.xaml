@@ -5,12 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard"
              xmlns:designer="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer"
+             xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
              d:DataContext="{d:DesignInstance Type=designer:DesignerClipboardFileDataAdapter, IsDesignTimeCreatable=True}"
              Style="{StaticResource ClipboardDataControlStyle}"
              mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -18,13 +19,15 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Image Grid.RowSpan="2" Style="{StaticResource ClipboardDataImageStyle}" Source="{Binding FileIcon, Converter={StaticResource ByteToImageSourceConverter}}" />
-        
-        <TextBlock VerticalAlignment="Center" FontWeight="Thin" FontSize="25" Text="{Binding FileName}" Foreground="{DynamicResource AccentBrush}" Grid.Column="1" />
+        <Border VerticalAlignment="Center" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1" Grid.RowSpan="2">
+            <Image Style="{StaticResource ClipboardDataImageStyle}" Source="{Binding FileIcon, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
+        </Border>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-            <Image Source="{Binding Source.Icon, Converter={StaticResource ByteToImageSourceConverter}}" />
-            <TextBlock Opacity="0.4" Text="{Binding Source.Text}" />
+        <TextBlock VerticalAlignment="Bottom" Margin="13,0,0,0" FontWeight="Thin" FontSize="24" Text="{Binding FileName}" Foreground="{DynamicResource AccentBrush}" Grid.Column="1" />
+
+        <StackPanel VerticalAlignment="Top" Margin="13,5,0,0" Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+            <Image Style="{DynamicResource DataSourceIconStyle}" Source="{Binding Source.Icon, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
+            <TextBlock Style="{DynamicResource DataSourceTextStyle}" Text="{Binding Source.Text}" />
         </StackPanel>
     </Grid>
 </ListBoxItem>
