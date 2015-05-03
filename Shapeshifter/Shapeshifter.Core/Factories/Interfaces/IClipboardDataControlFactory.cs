@@ -1,8 +1,8 @@
 ﻿using Shapeshifter.Core.Data;
 
-namespace Shapeshifter.Core.Builders
+namespace Shapeshifter.Core.Factories
 {
-    public interface IClipboardDataControlBuilder<TControlType>
+    public interface IClipboardDataControlFactory<TControlType>
     {
         TControlType Build(IClipboardData data);
 

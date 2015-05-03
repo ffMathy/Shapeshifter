@@ -1,18 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Shapeshifter.Core.Factories.Interfaces;
 
 namespace Shapeshifter.Core.Data
 {
     public class ClipboardFileData : IClipboardData
     {
+        private readonly IDataSource source;
+
+        public ClipboardFileData(IDataSourceFactory sourceFactory)
+        {
+            this.source = sourceFactory.GetDataSource();
+        }
+
         public IDataSource Source
         {
             get
             {
-                throw new NotImplementedException();
+                return source;
             }
         }
 

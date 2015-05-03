@@ -43,20 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builders\ClipboardDataControlBuilderBase.cs" />
-    <Compile Include="Builders\IClipboardDataControlBuilder.cs" />
+    <Compile Include="Factories\Interfaces\IClipboardDataControlFactory.cs" />
     <Compile Include="Data\ClipboardFileCollectionData.cs" />
     <Compile Include="Data\ClipboardFileData.cs" />
     <Compile Include="Data\ClipboardTextData.cs" />
     <Compile Include="Data\ClipboardImageData.cs" />
-    <Compile Include="Facades\IClipboardDataVisualizerFacade.cs" />
+    <Compile Include="Factories\Interfaces\IDataSourceFactory.cs" />
     <Compile Include="Helpers\InversionOfControlHelper.cs" />
-    <Compile Include="Data\IClipboardData.cs" />
-    <Compile Include="Controls\IClipboardItemControl.cs" />
-    <Compile Include="Data\IDataSource.cs" />
-    <Compile Include="Data\ISerializable.cs" />
+    <Compile Include="Data\Interfaces\IClipboardData.cs" />
+    <Compile Include="Data\Interfaces\IDataSource.cs" />
+    <Compile Include="Data\Interfaces\ISerializable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Strategies\IControlConstructionStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
