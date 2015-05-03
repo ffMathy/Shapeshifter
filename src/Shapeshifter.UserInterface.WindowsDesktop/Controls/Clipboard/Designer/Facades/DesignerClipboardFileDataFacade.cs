@@ -5,12 +5,12 @@ using Shapeshifter.UserInterface.WindowsDesktop.Properties;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer
 {
-    class DesignerClipboardFileDataAdapter : ClipboardFileData
+    class DesignerClipboardFileDataFacade : ClipboardFileData
     {
-        public DesignerClipboardFileDataAdapter() : 
+        public DesignerClipboardFileDataFacade(string extension = ".jpg") : 
             base(new DesignerFileDataSourceFactory())
         {
-            FileName = "Kitten and chicks.jpg";
+            FileName = "Kitten and chicks" + extension;
             FileIcon = Resources.FileDataFileIcon;
         }
     }

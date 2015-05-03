@@ -56,6 +56,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\Clipboard\ClipboardFileCollectionDataControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\Clipboard\ClipboardTextDataControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -76,17 +80,26 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\Clipboard\ClipboardFileCollectionDataControl.xaml.cs">
+      <DependentUpon>ClipboardFileCollectionDataControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Clipboard\ClipboardTextDataControl.xaml.cs">
       <DependentUpon>ClipboardTextDataControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Clipboard\ClipboardFileDataControl.xaml.cs">
       <DependentUpon>ClipboardFileDataControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Clipboard\Designer\Adapters\DesignerClipboardTextDataAdapter.cs" />
-    <Compile Include="Controls\Clipboard\Designer\Adapters\DesignerClipboardFileDataAdapter.cs" />
+    <Compile Include="Controls\Clipboard\Designer\Facades\DesignerClipboardFileCollectionDataFacade.cs" />
+    <Compile Include="Controls\Clipboard\Designer\Facades\DesignerClipboardTextDataFacade.cs" />
+    <Compile Include="Controls\Clipboard\Designer\Facades\DesignerClipboardFileDataFacade.cs" />
     <Compile Include="Controls\Clipboard\Designer\DesignerDataSource.cs" />
     <Compile Include="Controls\Clipboard\Designer\Factories\DesignerTextDataSourceFactory.cs" />
     <Compile Include="Controls\Clipboard\Designer\Factories\DesignerFileDataSourceFactory.cs" />
+    <Compile Include="Controls\Clipboard\ViewModels\ClipboardDataViewModel.cs" />
+    <Compile Include="Controls\Clipboard\ViewModels\FileCollection\ClipboardFileCollectionDataViewModel.cs" />
+    <Compile Include="Controls\Clipboard\ViewModels\FileCollection\FileTypeGroupViewModel.cs" />
+    <Compile Include="Controls\Clipboard\ViewModels\File\ClipboardFileDataViewModel.cs" />
+    <Compile Include="Controls\Clipboard\ViewModels\Text\ClipboardTextDataViewModel.cs" />
     <Compile Include="Converters\ByteArrayToImageSourceConverter.cs" />
     <Compile Include="Core\Builders\ClipboardFileDataControlBuilder.cs" />
     <Content Include="Styles\Light.xaml">

@@ -8,6 +8,12 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Name="Styles">
+                    <Style p:Freeze="True" TargetType="Image">
+                        <Setter Property="RenderOptions.BitmapScalingMode" Value="NearestNeighbor" />
+                        <Setter Property="Stretch" Value="Uniform" />
+                    </Style>
+                </ResourceDictionary>
                 <ResourceDictionary x:Name="Converters">
                     <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
                 </ResourceDictionary>

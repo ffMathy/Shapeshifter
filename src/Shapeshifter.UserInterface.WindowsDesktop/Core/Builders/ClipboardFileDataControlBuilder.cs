@@ -2,16 +2,17 @@
 using Shapeshifter.Core.Data;
 using Shapeshifter.Core.Factories;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Core.Builders
 {
-    class ClipboardFileDataControlBuilder : IClipboardDataControlFactory<ClipboardFileDataControl>
+    class ClipboardFileDataControlBuilder : IClipboardDataControlFactory
     {
-        public ClipboardFileDataControl Build(IClipboardData data)
+        public object Build(IClipboardData data)
         {
             return new ClipboardFileDataControl()
             {
-                DataContext = data
+                DataContext = new ClipboardFileDataViewModel((ClipboardFileData)data)
             };
         }
 

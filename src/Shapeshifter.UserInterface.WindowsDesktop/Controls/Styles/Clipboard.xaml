@@ -2,16 +2,31 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Styles"
                     xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
-    <Style p:Freeze="True" TargetType="ListBoxItem" x:Key="ClipboardDataControlStyle">
-        <Setter Property="Width" Value="500" />
+    
+    <Style p:Freeze="True" TargetType="Border" x:Key="ClipboardDataControlContentStyle">
+        <Setter Property="Width" Value="450" />
         <Setter Property="Height" Value="92" />
-        <Setter Property="Padding" Value="10" />
-
-        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="VerticalContentAlignment" Value="Stretch" />
-
+        
         <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}" />
         <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+    </Style>
+
+    <Style TargetType="Grid" x:Key="ClipboardDataControlContentAreaStyle">
+        <Setter Property="Margin" Value="15,10,10,10" />
+    </Style>
+
+    <Style TargetType="Border" x:Key="ClipboardDataControlImageAreaStyle">
+        <Setter Property="Background" Value="{DynamicResource WindowDarkBackgroundBrush}" />
+    </Style>
+
+    <Style TargetType="Rectangle" x:Key="ClipboardDataControlIconContentSplitterStyle">
+        <Setter Property="Fill" Value="{DynamicResource ControlBorderBrush}" />
+
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+
+        <Setter Property="Width" Value="1" />
     </Style>
 
     <Style TargetType="Image" x:Key="DataSourceIconStyle">
@@ -21,7 +36,6 @@
         <Setter Property="Height" Value="16" />
 
         <Setter Property="Stretch" Value="Uniform" />
-        <Setter Property="RenderOptions.BitmapScalingMode" Value="NearestNeighbor" />
     </Style>
 
     <Style TargetType="TextBlock" x:Key="DataSourceTextStyle">
@@ -35,8 +49,6 @@
         <Setter Property="Width" Value="64" />
         <Setter Property="Height" Value="64" />
         
-        <Setter Property="Stretch" Value="Uniform" />
-        
-        <Setter Property="RenderOptions.BitmapScalingMode" Value="NearestNeighbor" />
+        <Setter Property="Margin" Value="10,10,13,10" />
     </Style>
 </ResourceDictionary>

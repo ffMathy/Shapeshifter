@@ -4,30 +4,37 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard"
-             xmlns:designer="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer"
+             xmlns:viewModels="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels"
              xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-             d:DataContext="{d:DesignInstance Type=designer:DesignerClipboardFileDataAdapter, IsDesignTimeCreatable=True}"
-             Style="{StaticResource ClipboardDataControlStyle}"
-             mc:Ignorable="d">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
+             d:DataContext="{d:DesignInstance Type=viewModels:ClipboardFileDataViewModel, IsDesignTimeCreatable=True}"
+             mc:Ignorable="d" SnapsToDevicePixels="True">
+    <Border Style="{DynamicResource ClipboardDataControlContentStyle}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
-        <Border VerticalAlignment="Center" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1" Grid.RowSpan="2">
-            <Image Style="{StaticResource ClipboardDataImageStyle}" Source="{Binding FileIcon, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
-        </Border>
+            <Border Style="{DynamicResource ClipboardDataControlImageAreaStyle}">
+                <Image Style="{StaticResource ClipboardDataImageStyle}" Source="{Binding Data.FileIcon, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
+            </Border>
 
-        <TextBlock VerticalAlignment="Bottom" Margin="13,0,0,0" FontWeight="Thin" FontSize="24" Text="{Binding FileName}" Foreground="{DynamicResource AccentBrush}" Grid.Column="1" />
+            <Rectangle Grid.Column="1" Style="{DynamicResource ClipboardDataControlIconContentSplitterStyle}" />
 
-        <StackPanel VerticalAlignment="Top" Margin="13,5,0,0" Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-            <Image Style="{DynamicResource DataSourceIconStyle}" Source="{Binding Source.Icon, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
-            <TextBlock Style="{DynamicResource DataSourceTextStyle}" Text="{Binding Source.Text}" />
-        </StackPanel>
-    </Grid>
+            <Grid Grid.Column="2" Style="{DynamicResource ClipboardDataControlContentAreaStyle}">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <TextBlock VerticalAlignment="Center" FontWeight="Thin" FontSize="24" Text="{Binding Data.FileName}" Foreground="{DynamicResource AccentBrush}" Grid.Column="1" />
+
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                    <Image Style="{DynamicResource DataSourceIconStyle}" Source="{Binding Data.Source.Icon, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
+                    <TextBlock Style="{DynamicResource DataSourceTextStyle}" Text="{Binding Data.Source.Text}" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
 </ListBoxItem>
