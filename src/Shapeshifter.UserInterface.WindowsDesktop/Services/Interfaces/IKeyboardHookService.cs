@@ -3,15 +3,13 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
 {
-    interface IKeyboardHookService
+    delegate void KeyEventHandler(object sender, KeyEventArgument e, ref bool blockKeystroke);
+
+    interface IKeyboardHookService : IHookService
     {
-        event EventHandler<HookDisconnectedEvent> HookDisconnected;
-        event EventHandler<HookReconnectedEvent> HookReconnected;
+        event EventHandler<HookRecoveredEventArgument> HookRecovered;
 
-        bool IsConnected { get; }
-
-        void Connect();
-
-
+        event KeyEventHandler KeyUp;
+        event KeyEventHandler KeyDown;
     }
 }

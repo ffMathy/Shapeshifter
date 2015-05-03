@@ -60,9 +60,16 @@
       <DependentUpon>DataSourceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Clipboard\Designer\Facades\DesignerDataSourceFacade.cs" />
+    <Compile Include="Services\Api\KeyboardApi.cs" />
+    <Compile Include="Services\Api\ClipboardApi.cs" />
+    <Compile Include="Services\Events\DataCopiedEventArgument.cs" />
+    <Compile Include="Services\Events\KeyEventArgument.cs" />
+    <Compile Include="Services\Interfaces\IClipboardHookService.cs" />
+    <Compile Include="Services\Interfaces\IHookService.cs" />
+    <Compile Include="Services\Interfaces\IKeyboardHookConfiguration.cs" />
+    <Compile Include="Services\KeyboardHookConfiguration.cs" />
     <Compile Include="Services\KeyboardHookService.cs" />
-    <Compile Include="Services\Events\HookDisconnectedEvent.cs" />
-    <Compile Include="Services\Events\HookReconnectedEvent.cs" />
+    <Compile Include="Services\Events\HookRecoveredEventArgument.cs" />
     <Compile Include="Services\FileIconService.cs" />
     <Compile Include="Services\Interfaces\IKeyboardHookService.cs" />
     <Compile Include="Services\Interfaces\IFileIconService.cs" />
