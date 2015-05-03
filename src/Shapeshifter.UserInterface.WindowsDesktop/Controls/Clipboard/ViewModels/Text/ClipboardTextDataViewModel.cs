@@ -23,5 +23,24 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
         public ClipboardTextDataViewModel(ClipboardTextData data) : base(data)
         {
         }
+
+        public string FriendlyText
+        {
+            get
+            {
+                var text = Data.Text
+                    .Replace("\n", " ")
+                    .Replace("\r", " ")
+                    .Replace("\t", " ")
+                    .Trim();
+
+                while(text.Contains("  "))
+                {
+                    text = text.Replace("  ", " ");
+                }
+
+                return text;
+            }
+        }
     }
 }

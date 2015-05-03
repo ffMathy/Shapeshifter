@@ -28,7 +28,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock TextTrimming="CharacterEllipsis" MaxHeight="40" TextWrapping="Wrap" VerticalAlignment="Bottom" FontWeight="Thin" FontSize="14" Text="{Binding Data.Text}" Foreground="{DynamicResource AccentBrush}" Grid.Column="1" />
+                <TextBlock TextTrimming="CharacterEllipsis" MaxHeight="40" TextWrapping="Wrap" VerticalAlignment="Bottom" FontWeight="Thin" FontSize="14" Text="{Binding FriendlyText}" Foreground="{DynamicResource AccentBrush}" Grid.Column="1" />
 
                 <StackPanel VerticalAlignment="Top" Margin="0,10,0,1" Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                     <Image Style="{DynamicResource DataSourceIconStyle}" Source="{Binding Data.Source.Icon, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
