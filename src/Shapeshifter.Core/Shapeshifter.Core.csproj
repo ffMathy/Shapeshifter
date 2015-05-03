@@ -43,12 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Factories\Interfaces\IClipboardDataControlFactory.cs" />
     <Compile Include="Data\ClipboardFileCollectionData.cs" />
     <Compile Include="Data\ClipboardFileData.cs" />
     <Compile Include="Data\ClipboardTextData.cs" />
     <Compile Include="Data\ClipboardImageData.cs" />
-    <Compile Include="Factories\Interfaces\IDataSourceFactory.cs" />
+    <Compile Include="Services\Interfaces\IDataSourceService.cs" />
     <Compile Include="Helpers\InversionOfControlHelper.cs" />
     <Compile Include="Data\Interfaces\IClipboardData.cs" />
     <Compile Include="Data\Interfaces\IDataSource.cs" />

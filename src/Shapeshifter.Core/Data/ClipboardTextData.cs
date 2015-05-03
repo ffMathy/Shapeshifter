@@ -11,7 +11,7 @@ namespace Shapeshifter.Core.Data
     {
         private readonly IDataSource source;
 
-        public ClipboardTextData(IDataSourceFactory sourceFactory)
+        public ClipboardTextData(IDataSourceService sourceFactory)
         {
             this.source = sourceFactory.GetDataSource();
         }

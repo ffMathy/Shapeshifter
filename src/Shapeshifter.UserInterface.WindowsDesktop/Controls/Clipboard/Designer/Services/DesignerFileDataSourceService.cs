@@ -6,14 +6,14 @@ using Shapeshifter.UserInterface.WindowsDesktop.Properties;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Factories
 {
-    class DesignerTextDataSourceFactory : IDataSourceFactory
+    class DesignerFileDataSourceService : IDataSourceService
     {
         public IDataSource GetDataSource()
         {
             return new DesignerDataSourceFacade()
             {
-                Text = "Skype",
-                Icon = Resources.TextDataSourceIcon
+                Text = "My pictures",
+                Icon = Resources.FileDataSourceIcon
             };
         }
     }

@@ -60,8 +60,13 @@
       <DependentUpon>DataSourceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Clipboard\Designer\Facades\DesignerDataSourceFacade.cs" />
+    <Compile Include="Factories\DeviceIndependentBitmapClipboardDataFactory.cs" />
+    <Compile Include="Factories\Interfaces\IClipboardDataFactory.cs" />
+    <Compile Include="Factories\MetaFilePictureClipboardDataFactory.cs" />
+    <Compile Include="Factories\TextClipboardDataFactory.cs" />
     <Compile Include="Services\Api\KeyboardApi.cs" />
     <Compile Include="Services\Api\ClipboardApi.cs" />
+    <Compile Include="Services\ClipboardHookService.cs" />
     <Compile Include="Services\Events\DataCopiedEventArgument.cs" />
     <Compile Include="Services\Events\KeyEventArgument.cs" />
     <Compile Include="Services\Interfaces\IClipboardHookService.cs" />
@@ -120,15 +125,14 @@
     <Compile Include="Controls\Clipboard\Designer\Facades\DesignerClipboardFileCollectionDataFacade.cs" />
     <Compile Include="Controls\Clipboard\Designer\Facades\DesignerClipboardTextDataFacade.cs" />
     <Compile Include="Controls\Clipboard\Designer\Facades\DesignerClipboardFileDataFacade.cs" />
-    <Compile Include="Controls\Clipboard\Designer\Factories\DesignerTextDataSourceFactory.cs" />
-    <Compile Include="Controls\Clipboard\Designer\Factories\DesignerFileDataSourceFactory.cs" />
+    <Compile Include="Controls\Clipboard\Designer\Services\DesignerTextDataSourceService.cs" />
+    <Compile Include="Controls\Clipboard\Designer\Services\DesignerFileDataSourceService.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardDataViewModel.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\FileCollection\ClipboardFileCollectionDataViewModel.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\FileCollection\FileTypeGroupViewModel.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\File\ClipboardFileDataViewModel.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\Text\ClipboardTextDataViewModel.cs" />
     <Compile Include="Converters\ByteArrayToImageSourceConverter.cs" />
-    <Compile Include="Core\Builders\ClipboardFileDataControlBuilder.cs" />
     <Content Include="Styles\Light.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -167,7 +171,9 @@
       <Name>Shapeshifter.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Core\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

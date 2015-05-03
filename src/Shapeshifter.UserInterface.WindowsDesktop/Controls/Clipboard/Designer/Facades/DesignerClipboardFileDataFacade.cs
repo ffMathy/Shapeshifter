@@ -8,7 +8,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer
     class DesignerClipboardFileDataFacade : ClipboardFileData
     {
         public DesignerClipboardFileDataFacade(string extension = ".jpg") : 
-            base(new DesignerFileDataSourceFactory())
+            base(new DesignerFileDataSourceService())
         {
             FileName = "Kitten and chicks" + extension;
             FileIcon = Resources.FileDataFileIcon;
