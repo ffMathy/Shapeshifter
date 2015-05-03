@@ -56,13 +56,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Controls\Clipboard\ClipboardFileDataControl.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Styles\Clipboard.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Content Include="Controls\Styles\Clipboard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Content>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -74,6 +74,10 @@
     <Compile Include="Controls\Clipboard\Designer\DesignerDataSource.cs" />
     <Compile Include="Controls\Clipboard\Designer\Factories\DesignerFileDataSourceFactory.cs" />
     <Compile Include="Core\Builders\ClipboardFileDataControlBuilder.cs" />
+    <Content Include="Styles\Light.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

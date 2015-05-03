@@ -26,11 +26,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard
         public ClipboardFileDataControl()
         {
             InitializeComponent();
-
-            if(DesignerProperties.GetIsInDesignMode(this))
-            {
-                DataContext = new DesignerClipboardFileDataAdapter();
-            }
         }
     }
 }

@@ -12,6 +12,9 @@ namespace Shapeshifter.Core.Data
             this.source = sourceFactory.GetDataSource();
         }
 
+        public string FileName { get; protected set; }
+        public byte[] FileIcon { get; protected set; }
+
         public IDataSource Source
         {
             get

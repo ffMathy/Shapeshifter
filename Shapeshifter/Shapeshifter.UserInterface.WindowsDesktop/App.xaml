@@ -5,6 +5,11 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Name="Aero">
+                    <Color x:Key="AccentColor">#3399ff</Color>
+                    <SolidColorBrush x:Key="AccentBrush" Color="{DynamicResource AccentColor}" />
+                </ResourceDictionary>
+                <ResourceDictionary Source="Styles/Light.xaml" />
                 <ResourceDictionary Source="Controls/Styles/Clipboard.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

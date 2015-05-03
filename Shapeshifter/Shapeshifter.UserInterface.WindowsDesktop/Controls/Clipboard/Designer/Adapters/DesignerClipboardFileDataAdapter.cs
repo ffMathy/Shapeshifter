@@ -9,6 +9,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer
         public DesignerClipboardFileDataAdapter() : 
             base(new DesignerFileDataSourceFactory())
         {
+            FileName = "Kittens.jpg";
         }
     }
 }
