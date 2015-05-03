@@ -8,9 +8,9 @@ Version 5 is the first version to go Open Source, on this repository. It is a co
 We represent a small group of friends working on Shapeshifter in our spare time (which we don't have a lot of). If you like our effort, feel free to tip us a bit.
 Every dollar matters!
 
-<img src="https://img.shields.io/gratipay/ffMathy.svg" />
+<img src="https://img.shields.io/gratipay/The%20Shapeshifter%20team.svg" />
 
-[Click here to tip us on Gratipay](https://gratipay.com/ffMathy/)
+[Click here to tip us on Gratipay](https://gratipay.com/The%20Shapeshifter%20team/)
 
 #Contributing
 Feel free to contribute to Shapeshifter 5 development! Create a pull request, and we'll look at it.
