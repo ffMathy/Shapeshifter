@@ -30,10 +30,7 @@
 
                 <TextBlock TextTrimming="CharacterEllipsis" MaxHeight="40" TextWrapping="Wrap" VerticalAlignment="Bottom" FontWeight="Thin" FontSize="14" Text="{Binding FriendlyText}" Foreground="{DynamicResource AccentBrush}" Grid.Column="1" />
 
-                <StackPanel VerticalAlignment="Top" Margin="0,10,0,1" Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                    <Image Style="{DynamicResource DataSourceIconStyle}" Source="{Binding Data.Source.Icon, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
-                    <TextBlock Style="{DynamicResource DataSourceTextStyle}" Text="{Binding Data.Source.Text}" />
-                </StackPanel>
+                <local:DataSourceControl VerticalAlignment="Top" Margin="0,10,0,1" DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
             </Grid>
         </Grid>
     </Border>

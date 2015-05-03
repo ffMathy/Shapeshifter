@@ -7,7 +7,7 @@ using Shapeshifter.Core.Data;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
-    public abstract class ClipboardDataViewModel<TClipboardData> where TClipboardData : IClipboardData
+    abstract class ClipboardDataViewModel<TClipboardData> where TClipboardData : IClipboardData
     {
         protected ClipboardDataViewModel() { }
 

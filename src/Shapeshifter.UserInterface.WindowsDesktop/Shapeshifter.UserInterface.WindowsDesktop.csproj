@@ -56,6 +56,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\Clipboard\DataSourceControl.xaml.cs">
+      <DependentUpon>DataSourceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Clipboard\Designer\Facades\DesignerDataSourceFacade.cs" />
+    <Compile Include="Windows\ClipboardListWindow.xaml.cs">
+      <DependentUpon>ClipboardListWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Controls\Clipboard\ClipboardFileCollectionDataControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -71,6 +78,14 @@
     <None Include="Controls\Clipboard\Designer\Resources\FileDataSourceIcon.dat" />
     <None Include="Controls\Clipboard\Designer\Resources\FileDataFileIcon.dat" />
     <None Include="Controls\Clipboard\Designer\Resources\TextDataSourceIcon.dat" />
+    <Page Include="Controls\Clipboard\DataSourceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ClipboardListWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Resource Include="Controls\Clipboard\Resources\ClipboardTextDataIcon.png" />
     <Content Include="Controls\Styles\Clipboard.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -92,7 +107,6 @@
     <Compile Include="Controls\Clipboard\Designer\Facades\DesignerClipboardFileCollectionDataFacade.cs" />
     <Compile Include="Controls\Clipboard\Designer\Facades\DesignerClipboardTextDataFacade.cs" />
     <Compile Include="Controls\Clipboard\Designer\Facades\DesignerClipboardFileDataFacade.cs" />
-    <Compile Include="Controls\Clipboard\Designer\DesignerDataSource.cs" />
     <Compile Include="Controls\Clipboard\Designer\Factories\DesignerTextDataSourceFactory.cs" />
     <Compile Include="Controls\Clipboard\Designer\Factories\DesignerFileDataSourceFactory.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardDataViewModel.cs" />

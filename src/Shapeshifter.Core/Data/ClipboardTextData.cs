@@ -28,7 +28,7 @@ namespace Shapeshifter.Core.Data
 
         public byte[] Serialize()
         {
-            throw new NotImplementedException();
+            return Encoding.UTF8.GetBytes(Text);
         }
     }
 }

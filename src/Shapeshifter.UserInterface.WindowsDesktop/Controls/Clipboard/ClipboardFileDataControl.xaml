@@ -30,10 +30,7 @@
 
                 <TextBlock VerticalAlignment="Center" FontWeight="Thin" FontSize="24" Text="{Binding Data.FileName}" Foreground="{DynamicResource AccentBrush}" Grid.Column="1" />
 
-                <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                    <Image Style="{DynamicResource DataSourceIconStyle}" Source="{Binding Data.Source.Icon, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
-                    <TextBlock Style="{DynamicResource DataSourceTextStyle}" Text="{Binding Data.Source.Text}" />
-                </StackPanel>
+                <local:DataSourceControl DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
             </Grid>
         </Grid>
     </Border>

@@ -48,10 +48,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <StackPanel Margin="0,7,0,0" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                    <Image Style="{DynamicResource DataSourceIconStyle}" Source="{Binding Data.Source.Icon, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
-                    <TextBlock Style="{DynamicResource DataSourceTextStyle}" Text="{Binding Data.Source.Text}" />
-                </StackPanel>
+                <local:DataSourceControl Margin="0,7,0,0" VerticalAlignment="Bottom" DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
             </Grid>
         </Grid>
     </Border>

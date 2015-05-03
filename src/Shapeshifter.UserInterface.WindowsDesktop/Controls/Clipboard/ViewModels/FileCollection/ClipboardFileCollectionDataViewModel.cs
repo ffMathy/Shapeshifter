@@ -10,7 +10,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Fi
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
-    public class ClipboardFileCollectionDataViewModel : ClipboardDataViewModel<ClipboardFileCollectionData>
+    class ClipboardFileCollectionDataViewModel : ClipboardDataViewModel<ClipboardFileCollectionData>
     {
 
         public ClipboardFileCollectionDataViewModel()

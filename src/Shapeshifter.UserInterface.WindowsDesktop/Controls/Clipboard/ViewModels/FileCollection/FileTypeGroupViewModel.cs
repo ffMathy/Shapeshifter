@@ -8,7 +8,7 @@ using Shapeshifter.Core.Data;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection
 {
-    public class FileTypeGroupViewModel
+    class FileTypeGroupViewModel
     {
         public FileTypeGroupViewModel(IEnumerable<ClipboardFileData> data)
         {
