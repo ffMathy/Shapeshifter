@@ -60,6 +60,12 @@
       <DependentUpon>DataSourceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Clipboard\Designer\Facades\DesignerDataSourceFacade.cs" />
+    <Compile Include="Services\KeyboardHookService.cs" />
+    <Compile Include="Services\Events\HookDisconnectedEvent.cs" />
+    <Compile Include="Services\Events\HookReconnectedEvent.cs" />
+    <Compile Include="Services\FileIconService.cs" />
+    <Compile Include="Services\Interfaces\IKeyboardHookService.cs" />
+    <Compile Include="Services\Interfaces\IFileIconService.cs" />
     <Compile Include="Windows\ClipboardListWindow.xaml.cs">
       <DependentUpon>ClipboardListWindow.xaml</DependentUpon>
     </Compile>
