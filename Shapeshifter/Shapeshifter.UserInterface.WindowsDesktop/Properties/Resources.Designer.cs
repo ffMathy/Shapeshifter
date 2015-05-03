@@ -79,5 +79,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] TextDataSourceIcon {
+            get {
+                object obj = ResourceManager.GetObject("TextDataSourceIcon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

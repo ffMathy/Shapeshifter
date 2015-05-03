@@ -4,6 +4,7 @@
                     xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
     <Style p:Freeze="True" TargetType="ListBoxItem" x:Key="ClipboardDataControlStyle">
         <Setter Property="Width" Value="500" />
+        <Setter Property="Height" Value="92" />
         <Setter Property="Padding" Value="10" />
 
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -25,8 +26,8 @@
 
     <Style TargetType="TextBlock" x:Key="DataSourceTextStyle">
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="Padding" Value="3,0,0,0" />
-        <Setter Property="Opacity" Value="0.75" />
+        <Setter Property="Padding" Value="5,0,0,0" />
+        <Setter Property="Opacity" Value="0.5" />
         <Setter Property="FontWeight" Value="Light" />
     </Style>
     
