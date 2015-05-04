@@ -5,7 +5,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
-    class MetaFilePictureClipboardDataControlFactory : IClipboardDataControlFactory
+    class EnhancedMetafileClipboardDataControlFactory : IClipboardDataControlFactory
     {
         public UIElement BuildControl(IClipboardData clipboardData)
         {
@@ -19,12 +19,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public bool CanBuildControl(IClipboardData data)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public bool CanBuildData(string format)
         {
-            return format == "CF_METAFILEPICT" || format == "CF_ENHMETAFILE";
+            return format == DataFormats.EnhancedMetafile;
         }
     }
 }

@@ -19,12 +19,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public bool CanBuildControl(IClipboardData data)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public bool CanBuildData(string format)
         {
-            return format == "CF_DIB" || format == "CF_DIBV5" || format == "CF_BITMAP";
+            return format == DataFormats.Dib;
         }
     }
 }

@@ -77,8 +77,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
         {
             base.OnStartup(e);
 
-            var window = new ClipboardListWindow();
+            //start the main window.
+            var window = MainWindow = new ClipboardListWindow();
             window.Show();
+
+            //start the clipboard mediator.
+            var mediator = Container.Resolve<IClipboardUserInterfaceMediator>();
+            mediator.Connect();
         }
     }
 }

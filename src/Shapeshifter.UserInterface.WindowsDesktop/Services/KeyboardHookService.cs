@@ -37,7 +37,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         
         public void Connect()
         {
-            hookId = SetHook(LowLevelKeyboardCallback);
+            if (!IsConnected)
+            {
+                hookId = SetHook(LowLevelKeyboardCallback);
+            }
         }
 
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
@@ -106,6 +109,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         private IntPtr SetHook(KeyboardApi.KeyboardHookDelegate hook)
         {
+            GC.KeepAlive(hook);
+
             using (var currentProcess = Process.GetCurrentProcess())
             using (var currentModule = currentProcess.MainModule)
             {
@@ -119,8 +124,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public void Disconnect()
         {
-            KeyboardApi.UnhookWindowsHookEx(hookId);
-            hookId = IntPtr.Zero;
+            if (IsConnected)
+            {
+                KeyboardApi.UnhookWindowsHookEx(hookId);
+                hookId = IntPtr.Zero;
+            }
         }
 
         public void Dispose()

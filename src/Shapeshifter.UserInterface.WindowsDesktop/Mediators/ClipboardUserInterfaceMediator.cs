@@ -10,6 +10,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
     class ClipboardUserInterfaceMediator : IClipboardUserInterfaceMediator
     {
+        private readonly IClipboardHookService clipboardHook;
+        private readonly IKeyboardHookService keyboardHook;
 
         private readonly IEnumerable<IClipboardDataControlFactory> dataFactories;
         private readonly IList<IClipboardControlDataPackage> clipboardPackages;
@@ -19,14 +21,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         public event EventHandler<ControlEventArgument> ControlPinned;
         public event EventHandler<ControlEventArgument> ControlHighlighted;
 
+        public bool IsConnected
+        {
+            get
+            {
+                return clipboardHook.IsConnected || keyboardHook.IsConnected;
+            }
+        }
+
         public ClipboardUserInterfaceMediator(IEnumerable<IClipboardDataControlFactory> dataFactories, IClipboardHookService clipboardHook, IKeyboardHookService keyboardHook)
         {
             this.dataFactories = dataFactories;
 
             this.clipboardPackages = new List<IClipboardControlDataPackage>();
-
-            //listen to hook events.
-            clipboardHook.DataCopied += ClipboardHook_DataCopied;
+            
+            this.clipboardHook = clipboardHook;
+            this.keyboardHook = keyboardHook;
         }
 
         private void ClipboardHook_DataCopied(object sender, Events.DataCopiedEventArgument e)
@@ -36,7 +46,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             var package = new ClipboardDataControlPackage();
             foreach (var factory in dataFactories)
             {
-                foreach (var format in dataObject.GetFormats())
+                foreach (var format in dataObject.GetFormats(true))
                 {
                     if (factory.CanBuildData(format))
                     {
@@ -71,6 +81,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             {
                 ControlAdded(this, new ControlEventArgument(package.Control));
             }
+        }
+
+        public void Disconnect()
+        {
+            clipboardHook.DataCopied -= ClipboardHook_DataCopied;
+
+            keyboardHook.Disconnect();
+            clipboardHook.Disconnect();
+        }
+
+        public void Connect()
+        {
+            keyboardHook.Connect();
+            clipboardHook.Connect();
+
+            clipboardHook.DataCopied += ClipboardHook_DataCopied;
         }
 
         public IEnumerable<IClipboardControlDataPackage> ClipboardElements

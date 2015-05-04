@@ -16,7 +16,7 @@ namespace Shapeshifter.Core.Data
             this.source = sourceFactory.GetDataSource();
         }
 
-        public string Text { get; protected set; }
+        public string Text { get; set; }
 
         public IDataSource Source
         {

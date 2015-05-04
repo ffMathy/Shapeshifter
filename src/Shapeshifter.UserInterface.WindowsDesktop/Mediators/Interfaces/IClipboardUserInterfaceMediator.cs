@@ -5,7 +5,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
 {
-    interface IClipboardUserInterfaceMediator
+    interface IClipboardUserInterfaceMediator : IHookService
     {
         event EventHandler<ControlEventArgument> ControlAdded;
         event EventHandler<ControlEventArgument> ControlRemoved;

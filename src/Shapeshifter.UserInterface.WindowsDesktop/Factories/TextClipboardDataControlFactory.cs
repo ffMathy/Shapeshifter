@@ -29,7 +29,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public IClipboardData BuildData(string format, object data)
         {
-            throw new NotImplementedException();
+            return new ClipboardTextData(dataSourceService)
+            {
+                Text = (string)data
+            };
         }
 
         public bool CanBuildControl(IClipboardData data)
@@ -39,7 +42,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public bool CanBuildData(string format)
         {
-            return format == "CF_OEMTEXT" || format == "CF_TEXT" || format == "CF_UNICODETEXT";
+            return format == DataFormats.Text;
         }
     }
 }
