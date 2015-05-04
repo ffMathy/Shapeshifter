@@ -1,18 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
-    class ClipboardManagementService : IClipboardManagementService
+    class ClipboardUserInterfaceManagementService : IClipboardUserInterfaceManagementService
     {
 
         private readonly IEnumerable<IClipboardDataControlFactory> dataFactories;
         private readonly IList<IClipboardControlDataPackage> clipboardPackages;
 
-        public ClipboardManagementService(IEnumerable<IClipboardDataControlFactory> dataFactories, IClipboardHookService clipboardHook, IKeyboardHookService keyboardHook)
+        public event EventHandler<ControlEventArgument> ControlAdded;
+        public event EventHandler<ControlEventArgument> ControlRemoved;
+        public event EventHandler<ControlEventArgument> ControlPinned;
+        public event EventHandler<ControlEventArgument> ControlHighlighted;
+
+        public ClipboardUserInterfaceManagementService(IEnumerable<IClipboardDataControlFactory> dataFactories, IClipboardHookService clipboardHook, IKeyboardHookService keyboardHook)
         {
             this.dataFactories = dataFactories;
 
@@ -52,6 +59,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                         break;
                     }
                 }
+            }
+
+            if(package.Control == null)
+            {
+                throw new NotImplementedException("Can't handle unknown data formats yet.");
+            }
+            
+            //signal an added event.
+            if(ControlAdded != null)
+            {
+                ControlAdded(this, new ControlEventArgument(package.Control));
             }
         }
 

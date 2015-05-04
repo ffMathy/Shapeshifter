@@ -69,11 +69,12 @@
     <Compile Include="Services\Api\KeyboardApi.cs" />
     <Compile Include="Services\Api\ClipboardApi.cs" />
     <Compile Include="Services\ClipboardHookService.cs" />
-    <Compile Include="Services\ClipboardManagementService.cs" />
+    <Compile Include="Services\ClipboardUserInterfaceManagementService.cs" />
+    <Compile Include="Services\Events\ControlEventArgument.cs" />
     <Compile Include="Services\Events\DataCopiedEventArgument.cs" />
     <Compile Include="Services\Events\KeyEventArgument.cs" />
     <Compile Include="Services\Interfaces\IClipboardHookService.cs" />
-    <Compile Include="Services\Interfaces\IClipboardManagementService.cs" />
+    <Compile Include="Services\Interfaces\IClipboardUserInterfaceManagementService.cs" />
     <Compile Include="Services\Interfaces\IHookService.cs" />
     <Compile Include="Services\Interfaces\IKeyboardHookConfiguration.cs" />
     <Compile Include="Services\KeyboardHookConfiguration.cs" />
