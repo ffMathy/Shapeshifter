@@ -60,16 +60,20 @@
       <DependentUpon>DataSourceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Clipboard\Designer\Facades\DesignerDataSourceFacade.cs" />
-    <Compile Include="Factories\DeviceIndependentBitmapClipboardDataFactory.cs" />
-    <Compile Include="Factories\Interfaces\IClipboardDataFactory.cs" />
-    <Compile Include="Factories\MetaFilePictureClipboardDataFactory.cs" />
-    <Compile Include="Factories\TextClipboardDataFactory.cs" />
+    <Compile Include="Data\ClipboardDataControlPackage.cs" />
+    <Compile Include="Data\Interfaces\IClipboardDataControlPackage.cs" />
+    <Compile Include="Factories\DeviceIndependentBitmapClipboardDataControlFactory.cs" />
+    <Compile Include="Factories\Interfaces\IClipboardDataControlFactory.cs" />
+    <Compile Include="Factories\MetaFilePictureClipboardDataControlFactory.cs" />
+    <Compile Include="Factories\TextClipboardDataControlFactory.cs" />
     <Compile Include="Services\Api\KeyboardApi.cs" />
     <Compile Include="Services\Api\ClipboardApi.cs" />
     <Compile Include="Services\ClipboardHookService.cs" />
+    <Compile Include="Services\ClipboardManagementService.cs" />
     <Compile Include="Services\Events\DataCopiedEventArgument.cs" />
     <Compile Include="Services\Events\KeyEventArgument.cs" />
     <Compile Include="Services\Interfaces\IClipboardHookService.cs" />
+    <Compile Include="Services\Interfaces\IClipboardManagementService.cs" />
     <Compile Include="Services\Interfaces\IHookService.cs" />
     <Compile Include="Services\Interfaces\IKeyboardHookConfiguration.cs" />
     <Compile Include="Services\KeyboardHookConfiguration.cs" />
@@ -171,9 +175,7 @@
       <Name>Shapeshifter.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Core\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

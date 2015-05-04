@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Interop;
+using Shapeshifter.UserInterface.WindowsDesktop.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
@@ -15,13 +16,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         public event EventHandler<DataCopiedEventArgument> DataCopied;
 
         private uint lastClipboardItemIdentifier;
-
-        private readonly IEnumerable<IClipboardDataFactory> dataFactories;
-
-        public ClipboardHookService(IEnumerable<IClipboardDataFactory> dataFactories)
-        {
-            this.dataFactories = dataFactories;
-        }
 
         public bool IsConnected
         {
@@ -71,32 +65,19 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                 if (clipboardItemIdentifier != lastClipboardItemIdentifier)
                 {
                     lastClipboardItemIdentifier = clipboardItemIdentifier;
-
-                    HandleCopiedClipboardData();
-                }
-            }
-
-            return IntPtr.Zero;
-        }
-
-        private void HandleCopiedClipboardData()
-        {
-            var dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
-            {
-                foreach (var factory in dataFactories)
-                {
-                    foreach (var format in dataObject.GetFormats())
+                    
+                    if (DataCopied != null)
                     {
-                        if (factory.CanBuild(format))
+                        var data = Clipboard.GetDataObject();
+                        if (data != null)
                         {
-                            throw new NotImplementedException();
-
-                            break;
+                            DataCopied(this, new DataCopiedEventArgument(data));
                         }
                     }
                 }
             }
+
+            return IntPtr.Zero;
         }
 
         public void Disconnect()
