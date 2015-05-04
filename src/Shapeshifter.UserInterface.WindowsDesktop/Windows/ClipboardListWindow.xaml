@@ -6,6 +6,6 @@
         xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Windows"
         mc:Ignorable="d">
     <Grid>
-        
+        <ListBox />
     </Grid>
 </Window>
