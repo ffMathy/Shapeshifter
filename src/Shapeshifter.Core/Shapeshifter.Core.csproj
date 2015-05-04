@@ -48,7 +48,6 @@
     <Compile Include="Data\ClipboardTextData.cs" />
     <Compile Include="Data\ClipboardImageData.cs" />
     <Compile Include="Services\Interfaces\IDataSourceService.cs" />
-    <Compile Include="Helpers\InversionOfControlHelper.cs" />
     <Compile Include="Data\Interfaces\IClipboardData.cs" />
     <Compile Include="Data\Interfaces\IDataSource.cs" />
     <Compile Include="Data\Interfaces\ISerializable.cs" />

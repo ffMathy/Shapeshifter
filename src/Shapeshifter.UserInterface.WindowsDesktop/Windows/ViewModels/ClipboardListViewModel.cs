@@ -9,7 +9,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
     {
         public ObservableCollection<UIElement> Elements { get; private set; }
 
-        public ClipboardListViewModel(IClipboardUserInterfaceManagementService service)
+        public ClipboardListViewModel(IClipboardUserInterfaceMediator service)
         {
             Elements = new ObservableCollection<UIElement>();
 

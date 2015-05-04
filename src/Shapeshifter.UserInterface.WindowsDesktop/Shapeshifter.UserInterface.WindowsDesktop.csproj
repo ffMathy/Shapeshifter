@@ -70,12 +70,12 @@
     <Compile Include="Services\Api\KeyboardApi.cs" />
     <Compile Include="Services\Api\ClipboardApi.cs" />
     <Compile Include="Services\ClipboardHookService.cs" />
-    <Compile Include="Services\ClipboardUserInterfaceManagementService.cs" />
+    <Compile Include="Mediators\ClipboardUserInterfaceMediator.cs" />
     <Compile Include="Services\Events\ControlEventArgument.cs" />
     <Compile Include="Services\Events\DataCopiedEventArgument.cs" />
     <Compile Include="Services\Events\KeyEventArgument.cs" />
     <Compile Include="Services\Interfaces\IClipboardHookService.cs" />
-    <Compile Include="Services\Interfaces\IClipboardUserInterfaceManagementService.cs" />
+    <Compile Include="Mediators\Interfaces\IClipboardUserInterfaceMediator.cs" />
     <Compile Include="Services\Interfaces\IHookService.cs" />
     <Compile Include="Services\Interfaces\IKeyboardHookConfiguration.cs" />
     <Compile Include="Services\KeyboardHookConfiguration.cs" />
@@ -112,10 +112,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Resource Include="Controls\Clipboard\Resources\ClipboardTextDataIcon.png" />
-    <Content Include="Controls\Styles\Clipboard.xaml">
+    <Page Include="Controls\Styles\Clipboard.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Content>
+    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -140,10 +140,10 @@
     <Compile Include="Controls\Clipboard\ViewModels\File\ClipboardFileDataViewModel.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\Text\ClipboardTextDataViewModel.cs" />
     <Compile Include="Converters\ByteArrayToImageSourceConverter.cs" />
-    <Content Include="Styles\Light.xaml">
+    <Page Include="Styles\Light.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Content>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

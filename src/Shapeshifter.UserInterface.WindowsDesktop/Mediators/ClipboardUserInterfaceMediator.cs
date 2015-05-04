@@ -8,7 +8,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
-    class ClipboardUserInterfaceManagementService : IClipboardUserInterfaceManagementService
+    class ClipboardUserInterfaceMediator : IClipboardUserInterfaceMediator
     {
 
         private readonly IEnumerable<IClipboardDataControlFactory> dataFactories;
@@ -19,7 +19,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         public event EventHandler<ControlEventArgument> ControlPinned;
         public event EventHandler<ControlEventArgument> ControlHighlighted;
 
-        public ClipboardUserInterfaceManagementService(IEnumerable<IClipboardDataControlFactory> dataFactories, IClipboardHookService clipboardHook, IKeyboardHookService keyboardHook)
+        public ClipboardUserInterfaceMediator(IEnumerable<IClipboardDataControlFactory> dataFactories, IClipboardHookService clipboardHook, IKeyboardHookService keyboardHook)
         {
             this.dataFactories = dataFactories;
 

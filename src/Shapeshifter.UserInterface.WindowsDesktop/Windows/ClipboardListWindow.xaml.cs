@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using Autofac;
-using Shapeshifter.Core.Helpers;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
@@ -14,7 +13,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
         {
             InitializeComponent();
 
-            DataContext = InversionOfControlHelper.Container.Resolve<ClipboardListViewModel>();
+            DataContext = App.Container.Resolve<ClipboardListViewModel>();
         }
     }
 }
