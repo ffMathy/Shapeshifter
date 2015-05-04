@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Interop;
-using Shapeshifter.UserInterface.WindowsDesktop.Core.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
