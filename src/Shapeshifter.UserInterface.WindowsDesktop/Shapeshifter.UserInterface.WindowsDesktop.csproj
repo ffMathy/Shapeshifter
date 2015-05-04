@@ -64,6 +64,7 @@
     <Compile Include="Data\ClipboardDataControlPackage.cs" />
     <Compile Include="Data\Interfaces\IClipboardDataControlPackage.cs" />
     <Compile Include="Factories\DeviceIndependentBitmapClipboardDataControlFactory.cs" />
+    <Compile Include="Factories\FileClipboardDataControlFactory.cs" />
     <Compile Include="Factories\Interfaces\IClipboardDataControlFactory.cs" />
     <Compile Include="Factories\EnhancedMetafileClipboardDataControlFactory.cs" />
     <Compile Include="Factories\TextClipboardDataControlFactory.cs" />

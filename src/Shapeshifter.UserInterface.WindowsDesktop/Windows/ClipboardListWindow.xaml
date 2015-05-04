@@ -8,6 +8,6 @@
         d:DataContext="{d:DesignInstance Type=viewModels:ClipboardListViewModel}"
         mc:Ignorable="d">
     <Grid>
-        <ListBox ItemsSource="{Binding Elements}" />
+        <ListBox HorizontalAlignment="Left" ItemsSource="{Binding Elements}" />
     </Grid>
 </Window>
