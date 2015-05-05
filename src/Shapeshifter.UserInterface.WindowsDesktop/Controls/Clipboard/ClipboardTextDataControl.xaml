@@ -28,7 +28,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock TextTrimming="CharacterEllipsis" MaxHeight="40" TextWrapping="Wrap" VerticalAlignment="Bottom" FontWeight="Thin" FontSize="14" Text="{Binding FriendlyText}" Foreground="{DynamicResource AccentBrush}" Grid.Column="1" />
+                <TextBlock TextTrimming="CharacterEllipsis" MaxHeight="40" TextWrapping="Wrap" VerticalAlignment="Bottom" FontWeight="Normal" FontSize="14" Text="{Binding FriendlyText}" Foreground="{DynamicResource AccentBrush}" Grid.Column="1" />
 
                 <local:DataSourceControl VerticalAlignment="Top" Margin="0,10,0,1" DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
             </Grid>

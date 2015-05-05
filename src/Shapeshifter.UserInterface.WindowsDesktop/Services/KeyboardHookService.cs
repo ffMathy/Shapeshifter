@@ -6,7 +6,7 @@ using System.Windows.Input;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
+using static Shapeshifter.UserInterface.WindowsDesktop.Services.Api.KeyboardApi;
 using KeyEventHandler = Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces.KeyEventHandler;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
@@ -19,6 +19,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         public event KeyEventHandler KeyDown;
 
         private IntPtr hookId;
+        private KeyboardHookDelegate hookDelegate;
 
         private readonly IKeyboardHookConfiguration configuration;
 
@@ -39,7 +40,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             if (!IsConnected)
             {
-                hookId = SetHook(LowLevelKeyboardCallback);
+                using (var currentProcess = Process.GetCurrentProcess())
+                using (var currentModule = currentProcess.MainModule)
+                {
+                    hookDelegate = LowLevelKeyboardCallback;
+                    hookId = SetWindowsHookEx(
+                        WH_KEYBOARD_LL,
+                        hookDelegate,
+                        GetModuleHandle(currentModule.ModuleName),
+                        0);
+                }
             }
         }
 
@@ -52,25 +62,25 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             var block = false;
 
             if (code >= 0 && (
-                wParam.ToUInt32() == (int)KeyboardApi.KeyEvent.WM_KEYDOWN ||
-                wParam.ToUInt32() == (int)KeyboardApi.KeyEvent.WM_KEYUP ||
-                wParam.ToUInt32() == (int)KeyboardApi.KeyEvent.WM_SYSKEYDOWN ||
-                wParam.ToUInt32() == (int)KeyboardApi.KeyEvent.WM_SYSKEYUP))
+                wParam.ToUInt32() == (int)KeyEvent.WM_KEYDOWN ||
+                wParam.ToUInt32() == (int)KeyEvent.WM_KEYUP ||
+                wParam.ToUInt32() == (int)KeyEvent.WM_SYSKEYDOWN ||
+                wParam.ToUInt32() == (int)KeyEvent.WM_SYSKEYUP))
             {
-                var keyEvent = (KeyboardApi.KeyEvent)wParam.ToUInt32();
+                var keyEvent = (KeyEvent)wParam.ToUInt32();
                 var virtualKeyCode = Marshal.ReadInt32(lParam);
 
                 var key = KeyInterop.KeyFromVirtualKey(virtualKeyCode);
                 switch (keyEvent)
                 {
-                    case KeyboardApi.KeyEvent.WM_KEYDOWN:
+                    case KeyEvent.WM_KEYDOWN:
                         if (KeyDown != null)
                         {
                             KeyDown(this, new KeyEventArgument(virtualKeyCode), ref block);
                         }
                         break;
 
-                    case KeyboardApi.KeyEvent.WM_KEYUP:
+                    case KeyEvent.WM_KEYUP:
                         if (KeyDown != null)
                         {
                             KeyUp(this, new KeyEventArgument(virtualKeyCode), ref block);
@@ -104,29 +114,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                 return new IntPtr(-1);
             }
 
-            return KeyboardApi.CallNextHookEx(hookId, code, wParam, lParam);
-        }
-
-        private IntPtr SetHook(KeyboardApi.KeyboardHookDelegate hook)
-        {
-            GC.KeepAlive(hook);
-
-            using (var currentProcess = Process.GetCurrentProcess())
-            using (var currentModule = currentProcess.MainModule)
-            {
-                return KeyboardApi.SetWindowsHookEx(
-                    KeyboardApi.WH_KEYBOARD_LL,
-                    hook,
-                    KeyboardApi.GetModuleHandle(currentModule.ModuleName),
-                    0);
-            }
+            return CallNextHookEx(hookId, code, wParam, lParam);
         }
 
         public void Disconnect()
         {
             if (IsConnected)
             {
-                KeyboardApi.UnhookWindowsHookEx(hookId);
+                UnhookWindowsHookEx(hookId);
                 hookId = IntPtr.Zero;
             }
         }

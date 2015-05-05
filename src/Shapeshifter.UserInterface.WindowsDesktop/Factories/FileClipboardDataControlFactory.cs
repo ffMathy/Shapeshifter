@@ -5,6 +5,7 @@ using System.Windows;
 using Shapeshifter.Core.Data;
 using Shapeshifter.Core.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
@@ -24,13 +25,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             {
                 return new ClipboardFileCollectionDataControl()
                 {
-                    DataContext = clipboardData
+                    DataContext = new ClipboardFileCollectionDataViewModel((ClipboardFileCollectionData)clipboardData)
                 };
             } else if(clipboardData is ClipboardFileData)
             {
                 return new ClipboardFileDataControl()
                 {
-                    DataContext = clipboardData
+                    DataContext = new ClipboardFileDataViewModel((ClipboardFileData)clipboardData)
                 };
             } else
             {
