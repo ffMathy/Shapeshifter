@@ -7,16 +7,21 @@ using Shapeshifter.Core.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
     class FileClipboardDataControlFactory : IClipboardDataControlFactory
     {
         private readonly IDataSourceService dataSourceService;
+        private readonly IFileIconService fileIconService;
 
-        public FileClipboardDataControlFactory(IDataSourceService dataSourceService)
+        public FileClipboardDataControlFactory(
+            IDataSourceService dataSourceService, 
+            IFileIconService fileIconService)
         {
             this.dataSourceService = dataSourceService;
+            this.fileIconService = fileIconService;
         }
 
         public UIElement BuildControl(IClipboardData clipboardData)
@@ -64,7 +69,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         {
             return new ClipboardFileData(dataSourceService)
             {
-                FileName = Path.GetFileName(file)
+                FileName = Path.GetFileName(file),
+                FileIcon = fileIconService.GetIcon(file, false)
             };
         }
 

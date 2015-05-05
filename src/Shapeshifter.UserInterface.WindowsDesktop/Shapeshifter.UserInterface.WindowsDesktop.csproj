@@ -68,6 +68,7 @@
     <Compile Include="Factories\Interfaces\IClipboardDataControlFactory.cs" />
     <Compile Include="Factories\EnhancedMetafileClipboardDataControlFactory.cs" />
     <Compile Include="Factories\TextClipboardDataControlFactory.cs" />
+    <Compile Include="Services\Api\IconApi.cs" />
     <Compile Include="Services\Api\KeyboardApi.cs" />
     <Compile Include="Services\Api\ClipboardApi.cs" />
     <Compile Include="Services\ClipboardHookService.cs" />
