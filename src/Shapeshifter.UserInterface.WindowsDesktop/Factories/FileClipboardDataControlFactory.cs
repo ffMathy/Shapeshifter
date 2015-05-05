@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
@@ -14,17 +15,32 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public IClipboardData BuildData(string format, object data)
         {
-            throw new NotImplementedException();
+            var files = (string[])data;
+            if(files.Length == 1)
+            {
+                return new ClipboardFileData()
+                {
+                    File = files[0]
+                };
+            } else
+            {
+                return new ClipboardFileCollectionData()
+                {
+                    Files = files.Select(x => new ClipboardFileData()
+                    {
+                        File = x
+                    });
+                };
+            }
         }
 
         public bool CanBuildControl(IClipboardData data)
         {
-            throw new NotImplementedException();
+            return data is ClipboardFileData || data is ClipboardFileCollectionData;
         }
 
         public bool CanBuildData(string format)
         {
-            //TODO: distinguish between multiple files and one file?
             return format == DataFormats.FileDrop;
         }
     }
