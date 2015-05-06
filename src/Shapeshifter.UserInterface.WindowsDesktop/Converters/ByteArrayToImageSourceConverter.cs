@@ -14,16 +14,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var array = (byte[])value;
-            if (array == null) return null;
+            var bytes = (byte[])value;
+            if (bytes == null) return null;
 
             var image = new BitmapImage();
-            using (var stream = new MemoryStream(array))
+            using (var stream = new MemoryStream(bytes))
             {
                 stream.Position = 0;
+
                 image.BeginInit();
-                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.CreateOptions = BitmapCreateOptions.None;
+                image.CacheOption = BitmapCacheOption.OnDemand;
                 image.UriSource = null;
                 image.StreamSource = stream;
                 image.EndInit();

@@ -25,8 +25,24 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
             public string szTypeName;
         };
 
-        [DllImport("gdi32.dll")]
-        public static extern int GetObject(IntPtr hgdiobj, int cbBuffer, IntPtr lpvObject);
+        [StructLayoutAttribute(LayoutKind.Sequential)]
+        public struct BITMAP
+        {
+            public Int32 Type;
+            public Int32 Width;
+            public Int32 Height;
+            public Int32 WidthBytes;
+            public UInt16 Planes;
+            public UInt16 BitsPixel;
+            public IntPtr Bits;
+        }
+
+        [DllImport("gdi32", CharSet = CharSet.Auto)]
+        public extern static int GetObject(
+            IntPtr hgdiobj, 
+            int cbBuffer,
+            out BITMAP lpvObject 
+        );
 
         [DllImport("shell32.dll", SetLastError = true)]
         public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
