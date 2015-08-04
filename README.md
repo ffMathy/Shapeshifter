@@ -4,13 +4,18 @@ although that link is for Version 4.
 
 Version 5 is the first version to go Open Source, on this repository. It is a complete rewrite, so expect it to take some time to get it ready.
 
-## Life is tough - help us manage
+## Accelerate development
 We represent a small group of friends working on Shapeshifter in our spare time (which we don't have a lot of). If you like our effort, feel free to tip us a bit.
 Every dollar matters!
 
 <img src="https://img.shields.io/gratipay/The%20Shapeshifter%20team.svg" />
 
 [Click here to tip us on Gratipay](https://gratipay.com/The%20Shapeshifter%20team/)
+
+#Download alpha version
+An alpha version of a software comes before the beta version. It means that not all features have been implemented, and that nothing is expected to work.
+
+If you're aware of this and still want to try Shapeshifter 5, build download links will soon be available below.
 
 #Contributing
 Feel free to contribute to Shapeshifter 5 development! Create a pull request, and we'll look at it.
