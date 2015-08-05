@@ -4,6 +4,8 @@ using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Services;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows;
+using System.Reflection;
+using Shapeshifter.Core.Factories.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop
 {
@@ -20,31 +22,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
                 if (container == null)
                 {
                     var builder = new ContainerBuilder();
-
-                    //core.
-                    builder
-                        .RegisterAssemblyTypes(typeof(IClipboardData).Assembly)
-                        .AsSelf();
-
-                    builder
-                        .RegisterAssemblyTypes(typeof(IClipboardData).Assembly)
-                        .AsImplementedInterfaces();
-
-                    //this assembly.
-                    builder
-                        .RegisterAssemblyTypes(typeof(App).Assembly)
-                        .AsSelf();
-
-                    builder
-                        .RegisterAssemblyTypes(typeof(App).Assembly)
-                        .AsImplementedInterfaces();
+                    
+                    RegisterAssemblyTypes(builder, typeof(IClipboardData).Assembly);
+                    RegisterAssemblyTypes(builder, typeof(App).Assembly);
 
                     //register services.
                     builder
                         .RegisterType<ClipboardUserInterfaceMediator>()
                         .As<IClipboardUserInterfaceMediator>()
                         .SingleInstance();
-                    
+
                     builder
                         .RegisterType<FileIconService>()
                         .As<IFileIconService>()
@@ -60,11 +47,27 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
                         .As<IKeyboardHookService>()
                         .SingleInstance();
 
+                    builder
+                        .RegisterType<DataSourceService>()
+                        .As<IDataSourceService>()
+                        .SingleInstance();
+
                     container = builder.Build();
                 }
 
                 return container;
             }
+        }
+
+        private static void RegisterAssemblyTypes(ContainerBuilder builder, Assembly assembly)
+        {
+            builder
+                .RegisterAssemblyTypes(assembly)
+                .AsSelf();
+
+            builder
+                .RegisterAssemblyTypes(assembly)
+                .AsImplementedInterfaces();
         }
 
         protected override void OnStartup(StartupEventArgs e)

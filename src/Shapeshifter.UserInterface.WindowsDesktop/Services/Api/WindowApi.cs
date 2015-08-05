@@ -33,7 +33,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
         }
         
         public static uint WM_GETICON = 0x007f;
-        public static IntPtr ICON_SMALL2 = new IntPtr(2);
+        public static IntPtr ICON_BIG = new IntPtr(1);
         public static IntPtr IDI_APPLICATION = new IntPtr(0x7F00);
         public static int GCL_HICON = -14;
     }

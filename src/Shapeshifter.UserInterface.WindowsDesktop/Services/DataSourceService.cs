@@ -34,7 +34,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         private static BitmapSource GetWindowIcon(IntPtr windowHandle)
         {
             var hIcon = default(IntPtr);
-            hIcon = WindowApi.SendMessage(windowHandle, WindowApi.WM_GETICON, WindowApi.ICON_SMALL2, IntPtr.Zero);
+            hIcon = WindowApi.SendMessage(windowHandle, WindowApi.WM_GETICON, WindowApi.ICON_BIG, IntPtr.Zero);
 
             if (hIcon == IntPtr.Zero)
                 hIcon = WindowApi.GetClassLongPtr(windowHandle, WindowApi.GCL_HICON);
@@ -59,7 +59,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             var windowTitle = GetWindowTitle(activeWindowHandle);
             var windowIcon = GetWindowIcon(activeWindowHandle);
 
-            return new DataSource(imagePersistenceService.ConvertBitmapSourceToByteArray(windowIcon), windowTitle);
+            var iconBytes = imagePersistenceService.ConvertBitmapSourceToByteArray(windowIcon);
+            return new DataSource(iconBytes, windowTitle);
         }
     }
 }

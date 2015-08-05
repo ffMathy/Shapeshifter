@@ -47,6 +47,23 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             var dataObject = e.Data;
 
             var package = new ClipboardDataControlPackage();
+            DecoratePackageWithClipboardData(dataObject, package);
+            DecoratePackageWithControl(package);
+
+            if (package.Control == null)
+            {
+                throw new NotImplementedException("Can't handle unknown data formats yet.");
+            }
+
+            //signal an added event.
+            if (ControlAdded != null)
+            {
+                ControlAdded(this, new ControlEventArgument(package));
+            }
+        }
+
+        private void DecoratePackageWithClipboardData(System.Windows.IDataObject dataObject, ClipboardDataControlPackage package)
+        {
             foreach (var factory in dataFactories)
             {
                 foreach (var format in dataObject.GetFormats(true))
@@ -60,8 +77,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                     }
                 }
             }
+        }
 
-            //construct a control if the package contains any data.
+        private void DecoratePackageWithControl(ClipboardDataControlPackage package)
+        {
             foreach (var factory in dataFactories)
             {
                 foreach (var data in package.Contents)
@@ -72,17 +91,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                         break;
                     }
                 }
-            }
-
-            if(package.Control == null)
-            {
-                throw new NotImplementedException("Can't handle unknown data formats yet.");
-            }
-            
-            //signal an added event.
-            if(ControlAdded != null)
-            {
-                ControlAdded(this, new ControlEventArgument(package));
             }
         }
 
