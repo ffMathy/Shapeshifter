@@ -1,9 +1,9 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows;
-using Shapeshifter.Core.Data;
+﻿using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer;
+using System;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
+using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
