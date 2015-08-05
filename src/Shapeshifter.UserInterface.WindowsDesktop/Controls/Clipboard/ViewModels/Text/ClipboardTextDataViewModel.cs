@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer;
+using System.Text.RegularExpressions;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
@@ -32,10 +33,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
                     .Replace("\t", " ")
                     .Trim();
 
-                while(text.Contains("  "))
-                {
-                    text = text.Replace("  ", " ");
-                }
+                // Combine all whitespaces
+                text = Regex.Replace(text, @"\s+", " ");
 
                 return text;
             }
