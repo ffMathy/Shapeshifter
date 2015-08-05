@@ -2,14 +2,14 @@
 
 namespace Shapeshifter.Core.Actions
 {
-    public interface IAction
+    public interface IAction<in T>
     {
         string Title { get; }
 
         string Description { get; }
 
-        bool CanPerform(IClipboardData clipboardData);
+        bool CanPerform(T clipboardData);
 
-        void Perform(IClipboardData clipboardData);
+        void Perform(T clipboardData);
     }
 }

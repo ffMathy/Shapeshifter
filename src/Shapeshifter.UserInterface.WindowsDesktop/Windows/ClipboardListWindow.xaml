@@ -6,8 +6,19 @@
         xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Windows"
         xmlns:viewModels="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewModels:ClipboardListViewModel}"
-        mc:Ignorable="d">
+        mc:Ignorable="d" SizeToContent="WidthAndHeight">
     <Grid>
-        <ListBox HorizontalAlignment="Left" SelectedItem="{Binding SelectedElement}" ItemsSource="{Binding Elements}" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <ListBox HorizontalAlignment="Left" SelectedItem="{Binding SelectedElement}" ItemsSource="{Binding Elements}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <ContentPresenter Content="{Binding Control}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <ListBox Grid.Column="1" HorizontalAlignment="Left" SelectedItem="{Binding SelectedAction}" ItemsSource="{Binding Actions}" />
     </Grid>
 </Window>

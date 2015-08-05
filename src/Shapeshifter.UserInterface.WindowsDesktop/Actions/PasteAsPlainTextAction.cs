@@ -4,7 +4,7 @@ using Shapeshifter.Core.Data;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
-    class PasteAsPlainTextAction : IAction
+    class PasteAsPlainTextAction : IAction<ClipboardTextData>
     {
         public string Description
         {
@@ -22,15 +22,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
-        public bool CanPerform(IClipboardData clipboardData)
+        public bool CanPerform(ClipboardTextData clipboardData)
         {
-            return clipboardData is ClipboardTextData;
+            return true;
         }
 
-        public void Perform(IClipboardData clipboardData)
+        public void Perform(ClipboardTextData clipboardData)
         {
-            var textData = (ClipboardTextData)clipboardData;
-
             throw new NotImplementedException();
         }
     }
