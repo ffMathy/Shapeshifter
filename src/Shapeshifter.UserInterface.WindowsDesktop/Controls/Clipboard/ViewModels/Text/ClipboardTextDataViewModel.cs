@@ -27,16 +27,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
         {
             get
             {
-                var text = Data
-                    .Text
-                    .Substring(0, Math.Min(Data.Text.Length, 512))
-                    .Replace("\n", " ")
-                    .Replace("\r", " ")
-                    .Replace("\t", " ")
-                    .Trim();
-
-                // Combine all whitespaces
+                var text = Data.Text.Trim();
                 text = Regex.Replace(text, @"\s+", " ");
+                text = text.Substring(0, Math.Min(text.Length, 512));
 
                 return text;
             }
