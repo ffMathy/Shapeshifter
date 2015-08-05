@@ -1,11 +1,5 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using static Shapeshifter.UserInterface.WindowsDesktop.Services.Api.IconApi;
 
@@ -45,12 +39,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
                 GetObject(bitmapHandle, bufferSize, out bitmap);
 
-                var bytes = new byte[bitmap.WidthBytes * bitmap.Height];
-                Marshal.Copy(bitmap.Bits, bytes, 0, bytes.Length);
+                try
+                {
+                    var bytes = new byte[bitmap.WidthBytes * bitmap.Height];
+                    Marshal.Copy(bitmap.Bits, bytes, 0, bytes.Length);
 
-                DeleteObject(bitmapHandle);
-
-                return bytes;
+                    return bytes;
+                }
+                finally
+                {
+                    DeleteObject(bitmapHandle);
+                }
             }
             else
             {

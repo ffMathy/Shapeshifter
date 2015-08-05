@@ -6,7 +6,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Events
     {
         public DataCopiedEventArgument(IDataObject data)
         {
-            this.Data = data;
+            Data = data;
         }
 
         public IDataObject Data { get; private set; }

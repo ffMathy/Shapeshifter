@@ -74,14 +74,18 @@
     <Compile Include="Services\Api\IconApi.cs" />
     <Compile Include="Services\Api\KeyboardApi.cs" />
     <Compile Include="Services\Api\ClipboardApi.cs" />
+    <Compile Include="Services\Api\WindowApi.cs" />
     <Compile Include="Services\ClipboardHookService.cs" />
     <Compile Include="Mediators\ClipboardUserInterfaceMediator.cs" />
+    <Compile Include="Services\DataSourceService.cs" />
     <Compile Include="Services\Events\ControlEventArgument.cs" />
     <Compile Include="Services\Events\DataCopiedEventArgument.cs" />
     <Compile Include="Services\Events\KeyEventArgument.cs" />
+    <Compile Include="Services\ImagePersistenceService.cs" />
     <Compile Include="Services\Interfaces\IClipboardHookService.cs" />
     <Compile Include="Mediators\Interfaces\IClipboardUserInterfaceMediator.cs" />
     <Compile Include="Services\Interfaces\IHookService.cs" />
+    <Compile Include="Services\Interfaces\IImagePersistenceService.cs" />
     <Compile Include="Services\Interfaces\IKeyboardHookConfiguration.cs" />
     <Compile Include="Services\KeyboardHookConfiguration.cs" />
     <Compile Include="Services\KeyboardHookService.cs" />
@@ -105,9 +109,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <None Include="Controls\Clipboard\Designer\Resources\FileDataSourceIcon.dat" />
-    <None Include="Controls\Clipboard\Designer\Resources\FileDataFileIcon.dat" />
-    <None Include="Controls\Clipboard\Designer\Resources\TextDataSourceIcon.dat" />
+    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileDataSourceIcon.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileDataFileIcon.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\TextDataSourceIcon.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Page Include="Controls\Clipboard\DataSourceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

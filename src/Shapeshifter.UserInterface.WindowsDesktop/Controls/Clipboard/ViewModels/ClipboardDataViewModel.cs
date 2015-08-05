@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Shapeshifter.Core.Data;
+﻿using Shapeshifter.Core.Data;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
@@ -13,7 +8,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
 
         protected ClipboardDataViewModel(TClipboardData data)
         {
-            this.Data = data;
+            Data = data;
         }
 
         public TClipboardData Data { get; protected set; }

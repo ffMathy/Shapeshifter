@@ -1,14 +1,14 @@
-﻿using System.Windows;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Core.Data;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Events
 {
     class ControlEventArgument
     {
-        public ControlEventArgument(UIElement control)
+        public ControlEventArgument(ClipboardDataControlPackage package)
         {
-            this.Control = control;
+            Package = package;
         }
 
-        public UIElement Control { get; private set; }
+        public ClipboardDataControlPackage Package { get; private set; }
     }
 }

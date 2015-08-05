@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using static Shapeshifter.UserInterface.WindowsDesktop.Services.Api.KeyboardApi;
@@ -61,43 +60,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
             var block = false;
 
-            if (code >= 0 && (
-                wParam.ToUInt32() == (int)KeyEvent.WM_KEYDOWN ||
-                wParam.ToUInt32() == (int)KeyEvent.WM_KEYUP ||
-                wParam.ToUInt32() == (int)KeyEvent.WM_SYSKEYDOWN ||
-                wParam.ToUInt32() == (int)KeyEvent.WM_SYSKEYUP))
+            if (IsKeyEvent(code, ref wParam))
             {
                 var keyEvent = (KeyEvent)wParam.ToUInt32();
                 var virtualKeyCode = Marshal.ReadInt32(lParam);
 
                 var key = KeyInterop.KeyFromVirtualKey(virtualKeyCode);
-                switch (keyEvent)
-                {
-                    case KeyEvent.WM_KEYDOWN:
-                        if (KeyDown != null)
-                        {
-                            KeyDown(this, new KeyEventArgument(virtualKeyCode), ref block);
-                        }
-                        break;
-
-                    case KeyEvent.WM_KEYUP:
-                        if (KeyDown != null)
-                        {
-                            KeyUp(this, new KeyEventArgument(virtualKeyCode), ref block);
-                        }
-                        break;
-                }
+                HandleKeyEvent(ref block, keyEvent, virtualKeyCode);
             }
 
             var endTime = DateTime.UtcNow;
             var executionTime = endTime - startTime;
 
-            const int Overhead = 25;
-            if (executionTime.TotalMilliseconds + Overhead >= configuration.HookTimeout)
+            if (HasHookProbablyDisconnected(executionTime))
             {
                 //reconnect the hook.
-                Disconnect();
-                Connect();
+                Reconnect();
 
                 //attempt to block the keystroke anyway.
                 block = true;
@@ -115,6 +93,47 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             }
 
             return CallNextHookEx(hookId, code, wParam, lParam);
+        }
+
+        private bool HasHookProbablyDisconnected(TimeSpan executionTime)
+        {
+            const int overhead = 25;
+            return executionTime.TotalMilliseconds + overhead >= configuration.HookTimeout;
+        }
+
+        private void Reconnect()
+        {
+            Disconnect();
+            Connect();
+        }
+
+        private void HandleKeyEvent(ref bool block, KeyEvent keyEvent, int virtualKeyCode)
+        {
+            switch (keyEvent)
+            {
+                case KeyEvent.WM_KEYDOWN:
+                    if (KeyDown != null)
+                    {
+                        KeyDown(this, new KeyEventArgument(virtualKeyCode), ref block);
+                    }
+                    break;
+
+                case KeyEvent.WM_KEYUP:
+                    if (KeyDown != null)
+                    {
+                        KeyUp(this, new KeyEventArgument(virtualKeyCode), ref block);
+                    }
+                    break;
+            }
+        }
+
+        private static bool IsKeyEvent(int code, ref UIntPtr wParam)
+        {
+            return code >= 0 && (
+                            wParam.ToUInt32() == (int)KeyEvent.WM_KEYDOWN ||
+                            wParam.ToUInt32() == (int)KeyEvent.WM_KEYUP ||
+                            wParam.ToUInt32() == (int)KeyEvent.WM_SYSKEYDOWN ||
+                            wParam.ToUInt32() == (int)KeyEvent.WM_SYSKEYUP);
         }
 
         public void Disconnect()

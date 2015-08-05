@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer;
@@ -28,7 +24,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
         {
             get
             {
-                var text = Data.Text
+                var text = Data
+                    .Text
+                    .Substring(0, Math.Min(Data.Text.Length, 512))
                     .Replace("\n", " ")
                     .Replace("\r", " ")
                     .Replace("\t", " ")

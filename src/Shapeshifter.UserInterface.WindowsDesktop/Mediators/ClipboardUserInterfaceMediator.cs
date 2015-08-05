@@ -29,11 +29,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             }
         }
 
-        public ClipboardUserInterfaceMediator(IEnumerable<IClipboardDataControlFactory> dataFactories, IClipboardHookService clipboardHook, IKeyboardHookService keyboardHook)
+        public ClipboardUserInterfaceMediator(
+            IEnumerable<IClipboardDataControlFactory> dataFactories, 
+            IClipboardHookService clipboardHook, 
+            IKeyboardHookService keyboardHook)
         {
             this.dataFactories = dataFactories;
 
-            this.clipboardPackages = new List<IClipboardControlDataPackage>();
+            clipboardPackages = new List<IClipboardControlDataPackage>();
             
             this.clipboardHook = clipboardHook;
             this.keyboardHook = keyboardHook;
@@ -79,7 +82,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             //signal an added event.
             if(ControlAdded != null)
             {
-                ControlAdded(this, new ControlEventArgument(package.Control));
+                ControlAdded(this, new ControlEventArgument(package));
             }
         }
 

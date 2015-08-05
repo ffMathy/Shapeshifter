@@ -9,6 +9,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
     {
         public ObservableCollection<UIElement> Elements { get; private set; }
 
+        public UIElement SelectedElement { get; set; }
+
         public ClipboardListViewModel(IClipboardUserInterfaceMediator service)
         {
             Elements = new ObservableCollection<UIElement>();
@@ -21,7 +23,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 
         private void Service_ControlRemoved(object sender, Services.Events.ControlEventArgument e)
         {
-            Elements.Remove(e.Control);
+            Elements.Remove(e.Package.Control);
         }
 
         private void Service_ControlPinned(object sender, Services.Events.ControlEventArgument e)
@@ -31,13 +33,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 
         private void Service_ControlHighlighted(object sender, Services.Events.ControlEventArgument e)
         {
-            Elements.Remove(e.Control);
-            Elements.Insert(0, e.Control);
+            Elements.Remove(e.Package.Control);
+            Elements.Insert(0, e.Package.Control);
         }
 
         private void Service_ControlAdded(object sender, Services.Events.ControlEventArgument e)
         {
-            Elements.Insert(0, e.Control);
+            Elements.Insert(0, e.Package.Control);
         }
     }
 }

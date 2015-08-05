@@ -9,7 +9,7 @@ namespace Shapeshifter.Core.Data
 
         public ClipboardFileData(IDataSourceService sourceFactory)
         {
-            this.source = sourceFactory.GetDataSource();
+            source = sourceFactory.GetDataSource();
         }
 
         public string FileName { get; set; }

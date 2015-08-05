@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Shapeshifter.Core.Data;
+﻿using Shapeshifter.Core.Data;
 using Shapeshifter.Core.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades;
 using Shapeshifter.UserInterface.WindowsDesktop.Properties;
