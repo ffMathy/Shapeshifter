@@ -20,6 +20,22 @@
         <Setter Property="Background" Value="{DynamicResource WindowDarkBackgroundBrush}" />
     </Style>
 
+    <Style TargetType="ListBoxItem" x:Key="ActionControlContentAreaStyle">
+        <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+        <Setter Property="FontWeight" Value="ExtraLight" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Padding" Value="10,5" />
+    </Style>
+
+    <Style TargetType="TextBlock" x:Key="ActionControlHeaderStyle">
+        <Setter Property="FontSize" Value="20" />
+    </Style>
+
+    <Style TargetType="TextBlock" x:Key="ActionControlContentStyle">
+        <Setter Property="Opacity" Value="0.9" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+
     <Style TargetType="Rectangle" x:Key="ClipboardDataControlIconContentSplitterStyle">
         <Setter Property="Fill" Value="{DynamicResource ControlBorderBrush}" />
 
@@ -50,5 +66,7 @@
         <Setter Property="Height" Value="64" />
         
         <Setter Property="Margin" Value="10,10,13,10" />
+        
+        <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
     </Style>
 </ResourceDictionary>

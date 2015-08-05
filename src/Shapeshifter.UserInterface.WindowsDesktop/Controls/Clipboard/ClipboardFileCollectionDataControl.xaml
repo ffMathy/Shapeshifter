@@ -39,7 +39,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="0,0,10,0">
-                                <Image Source="{Binding Icon, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
+                                <Image Source="{Binding Icon, Converter={StaticResource ByteArrayToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
                                 <Border VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="{DynamicResource AccentBrush}">
                                     <TextBlock FontWeight="Light" Padding="6,1" Foreground="#CCFFFFFF" Text="{Binding Count}" />
                                 </Border>

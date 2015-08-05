@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\IAction.cs" />
     <Compile Include="Data\ClipboardFileCollectionData.cs" />
     <Compile Include="Data\ClipboardFileData.cs" />
     <Compile Include="Data\ClipboardTextData.cs" />
