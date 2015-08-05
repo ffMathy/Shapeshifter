@@ -1,11 +1,9 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using System.IO;
 using System.Windows.Media.Imaging;
 using System;
 using System.Windows.Media;
 using System.Runtime.InteropServices;
 using System.Linq;
-using System.Windows.Interop;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
