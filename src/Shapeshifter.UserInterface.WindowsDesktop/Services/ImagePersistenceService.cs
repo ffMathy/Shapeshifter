@@ -5,6 +5,7 @@ using System;
 using System.Windows.Media;
 using System.Runtime.InteropServices;
 using System.Linq;
+using System.Windows.Interop;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -99,14 +100,20 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
             var lengthOfMetaInformation = Marshal.SizeOf(typeof(ImageMetaInformation));
             var metaInformationData = bytes.Take(lengthOfMetaInformation).ToArray();
-            var imageData = bytes.Skip(lengthOfMetaInformation).ToArray();
 
             var metaInformation = ConvertByteArrayToMetaInformation(metaInformationData);
+            if (metaInformation.Width > 0 && metaInformation.Height > 0)
+            {
+                var imageData = bytes.Skip(lengthOfMetaInformation).ToArray();
 
-            var bytesPerPixel = (metaInformation.PixelFormat.BitsPerPixel + 7) / 8;
-            var stride = bytesPerPixel * metaInformation.Width;
+                var bytesPerPixel = (metaInformation.PixelFormat.BitsPerPixel + 7) / 8;
+                var stride = bytesPerPixel * metaInformation.Width;
 
-            return BitmapSource.Create(metaInformation.Width, metaInformation.Height, metaInformation.DpiX, metaInformation.DpiY, metaInformation.PixelFormat, null, imageData, stride);
+                return BitmapSource.Create(metaInformation.Width, metaInformation.Height, metaInformation.DpiX, metaInformation.DpiY, metaInformation.PixelFormat, null, imageData, stride);
+            } else
+            {
+                throw new InvalidOperationException("Tried to load an image without metadata in it.");
+            }
         }
     }
 }

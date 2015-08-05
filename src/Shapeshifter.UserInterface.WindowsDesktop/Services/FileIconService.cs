@@ -2,11 +2,21 @@
 using System.Runtime.InteropServices;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using static Shapeshifter.UserInterface.WindowsDesktop.Services.Api.IconApi;
+using System.Windows.Interop;
+using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
     class FileIconService : IFileIconService
     {
+        private readonly IImagePersistenceService imagePersistenceService;
+
+        public FileIconService(IImagePersistenceService imagePersistenceService)
+        {
+            this.imagePersistenceService = imagePersistenceService;
+        }
+
         public byte[] GetIcon(string path, bool allowThumbnails, int dimensions = 256)
         {
             var bitmapHandle = IntPtr.Zero;
@@ -44,7 +54,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                     var bytes = new byte[bitmap.WidthBytes * bitmap.Height];
                     Marshal.Copy(bitmap.Bits, bytes, 0, bytes.Length);
 
-                    return bytes;
+                    var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(bitmapHandle, IntPtr.Zero, new Int32Rect(0, 0, bitmap.Width, bitmap.Height), BitmapSizeOptions.FromWidthAndHeight(bitmap.Width, bitmap.Height));
+                    return imagePersistenceService.ConvertBitmapSourceToByteArray(bitmapSource);
                 }
                 finally
                 {
