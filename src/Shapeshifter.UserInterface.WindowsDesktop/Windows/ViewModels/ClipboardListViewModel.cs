@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Windows;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Data;
 using System.ComponentModel;
-using Shapeshifter.UserInterface.WindowsDesktop.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Autofac;
-using System.Collections;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 {

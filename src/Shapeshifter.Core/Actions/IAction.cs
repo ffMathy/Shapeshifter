@@ -1,6 +1,4 @@
-﻿using Shapeshifter.Core.Data;
-
-namespace Shapeshifter.Core.Actions
+﻿namespace Shapeshifter.Core.Actions
 {
     public interface IAction<in T>
     {

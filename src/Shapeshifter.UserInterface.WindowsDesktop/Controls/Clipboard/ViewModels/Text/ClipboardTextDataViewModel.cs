@@ -4,8 +4,6 @@ using System;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Windows;
-using Shapeshifter.Core.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
