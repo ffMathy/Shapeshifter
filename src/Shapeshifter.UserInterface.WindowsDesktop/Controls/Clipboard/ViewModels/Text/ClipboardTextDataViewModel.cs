@@ -9,6 +9,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
 {
     class ClipboardTextDataViewModel : ClipboardDataViewModel<ClipboardTextData>
     {
+        private static readonly Regex whitespaceSubstitutionExpression;
+
+        static ClipboardTextDataViewModel()
+        {
+            whitespaceSubstitutionExpression = new Regex(@"\s+", RegexOptions.Compiled);
+        }
+
         public ClipboardTextDataViewModel()
         {
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
@@ -26,7 +33,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
             get
             {
                 var text = Data.Text.Trim();
-                text = Regex.Replace(text, @"\s+", " ");
+                text = whitespaceSubstitutionExpression.Replace(text, " ");
                 text = text.Substring(0, Math.Min(text.Length, 512));
 
                 return text;
