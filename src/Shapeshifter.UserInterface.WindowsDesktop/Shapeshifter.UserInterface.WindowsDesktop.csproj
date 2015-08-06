@@ -60,6 +60,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Actions\PasteAction.cs" />
     <Compile Include="Actions\PasteAsPlainTextAction.cs" />
     <Compile Include="Controls\Clipboard\ActionControl.xaml.cs">
       <DependentUpon>ActionControl.xaml</DependentUpon>

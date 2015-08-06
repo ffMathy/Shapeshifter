@@ -5,7 +5,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard
     /// <summary>
     /// Interaction logic for ClipboardFileCollectionDataControl.xaml
     /// </summary>
-    public partial class ClipboardFileCollectionDataControl : ListBoxItem
+    public partial class ClipboardFileCollectionDataControl : UserControl
     {
         public ClipboardFileCollectionDataControl()
         {

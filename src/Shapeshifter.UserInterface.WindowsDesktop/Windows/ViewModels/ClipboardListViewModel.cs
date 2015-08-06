@@ -5,6 +5,9 @@ using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Data;
 using System.ComponentModel;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Autofac;
+using System.Collections.Generic;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 {
@@ -12,8 +15,29 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
     {
         private IClipboardControlDataPackage selectedElement;
 
+        private readonly IEnumerable<IAction> allActions;
+
         public ObservableCollection<IClipboardControlDataPackage> Elements { get; private set; }
-        public ObservableCollection<IAction<IClipboardData>> Actions { get; private set; }
+        public ObservableCollection<IAction> Actions { get; private set; }
+
+        public IAction SelectedAction { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public ClipboardListViewModel(
+            IEnumerable<IAction> allActions,
+            IClipboardUserInterfaceMediator service)
+        {
+            Elements = new ObservableCollection<IClipboardControlDataPackage>();
+            Actions = new ObservableCollection<IAction>();
+
+            this.allActions = allActions;
+
+            service.ControlAdded += Service_ControlAdded;
+            service.ControlHighlighted += Service_ControlHighlighted;
+            service.ControlPinned += Service_ControlPinned;
+            service.ControlRemoved += Service_ControlRemoved;
+        }
 
         public IClipboardControlDataPackage SelectedElement
         {
@@ -24,36 +48,32 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             set
             {
                 selectedElement = value;
-                if(PropertyChanged != null)
+                if (PropertyChanged != null)
                 {
                     PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedElement)));
                 }
 
-                if(selectedElement != null)
-                {
-                    SetActions();
-                }
+                SetActions();
             }
         }
 
         private void SetActions()
         {
             Actions.Clear();
-        }
 
-        public IAction<IClipboardData> SelectedAction { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public ClipboardListViewModel(IClipboardUserInterfaceMediator service)
-        {
-            Elements = new ObservableCollection<IClipboardControlDataPackage>();
-            Actions = new ObservableCollection<IAction<IClipboardData>>();
-
-            service.ControlAdded += Service_ControlAdded;
-            service.ControlHighlighted += Service_ControlHighlighted;
-            service.ControlPinned += Service_ControlPinned;
-            service.ControlRemoved += Service_ControlRemoved;
+            if (selectedElement != null)
+            {
+                foreach (var data in selectedElement.Contents)
+                {
+                    foreach(var action in allActions)
+                    {
+                        if(action.CanPerform(data))
+                        {
+                            Actions.Add(action);
+                        }
+                    }
+                }
+            }
         }
 
         private void Service_ControlRemoved(object sender, Services.Events.ControlEventArgument e)

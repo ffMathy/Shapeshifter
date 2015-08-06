@@ -1,16 +1,20 @@
-﻿using System;
-using Shapeshifter.Core.Actions;
+﻿using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
-    class PasteAsPlainTextAction : IAction
+    class PasteAction : IAction
     {
         public string Description
         {
             get
             {
-                return "Pastes clipboard contents as plain text.";
+                return "Pastes clipboard contents as-is.";
             }
         }
 
@@ -18,13 +22,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         {
             get
             {
-                return "Paste as plain text";
+                return "Paste";
             }
         }
 
         public bool CanPerform(IClipboardData clipboardData)
         {
-            return clipboardData is ClipboardTextData;
+            return true;
         }
 
         public void Perform(IClipboardData clipboardData)

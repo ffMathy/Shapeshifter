@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Windows"
         xmlns:viewModels="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels"
+        xmlns:controls="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard"
         d:DataContext="{d:DesignInstance Type=viewModels:ClipboardListViewModel}"
         mc:Ignorable="d" SizeToContent="WidthAndHeight">
     <Grid>
@@ -12,13 +13,19 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <ListBox HorizontalAlignment="Left" SelectedItem="{Binding SelectedElement}" ItemsSource="{Binding Elements}">
+        <ListBox HorizontalAlignment="Left" SelectedItem="{Binding SelectedElement, Mode=TwoWay}" ItemsSource="{Binding Elements}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <ContentPresenter Content="{Binding Control}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ListBox Grid.Column="1" HorizontalAlignment="Left" SelectedItem="{Binding SelectedAction}" ItemsSource="{Binding Actions}" />
+        <ListBox Grid.Column="1" SelectedItem="{Binding SelectedAction, Mode=TwoWay}" ItemsSource="{Binding Actions}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <controls:ActionControl />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Window>

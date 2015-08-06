@@ -20,7 +20,7 @@
         <Setter Property="Background" Value="{DynamicResource WindowDarkBackgroundBrush}" />
     </Style>
 
-    <Style TargetType="ListBoxItem" x:Key="ActionControlContentAreaStyle">
+    <Style TargetType="UserControl" x:Key="ActionControlContentAreaStyle">
         <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
         <Setter Property="FontWeight" Value="ExtraLight" />
         <Setter Property="Foreground" Value="White" />
