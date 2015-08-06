@@ -7,7 +7,15 @@
         xmlns:viewModels="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels"
         xmlns:controls="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard"
         d:DataContext="{d:DesignInstance Type=viewModels:ClipboardListViewModel}"
-        mc:Ignorable="d" SizeToContent="WidthAndHeight">
+        Top="0"
+        Left="0"
+        mc:Ignorable="d" 
+        SizeToContent="WidthAndHeight" 
+        ResizeMode="NoResize" 
+        Title="" 
+        WindowStyle="None"
+        Background="Transparent" 
+        AllowsTransparency="True">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -23,7 +31,7 @@
         <ListBox Grid.Column="1" SelectedItem="{Binding SelectedAction, Mode=TwoWay}" ItemsSource="{Binding Actions}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <controls:ActionControl />
+                    <controls:ActionControl Margin="-1,0,0,0" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
