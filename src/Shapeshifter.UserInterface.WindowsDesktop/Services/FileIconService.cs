@@ -55,6 +55,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                     Marshal.Copy(bitmap.Bits, bytes, 0, bytes.Length);
 
                     var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(bitmapHandle, IntPtr.Zero, new Int32Rect(0, 0, bitmap.Width, bitmap.Height), BitmapSizeOptions.FromWidthAndHeight(bitmap.Width, bitmap.Height));
+                    bitmapSource.Freeze();
+
                     return imagePersistenceService.ConvertBitmapSourceToByteArray(bitmapSource);
                 }
                 finally
