@@ -11,32 +11,54 @@
         <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
         <Setter Property="BorderThickness" Value="1" />
     </Style>
+    
+    <Style p:Freeze="True" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <Setter Property="Padding" Value="2,0,0,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-    <Style TargetType="Grid" x:Key="ClipboardDataControlContentAreaStyle">
+    <Style p:Freeze="True" TargetType="ListBox">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+
+    <Style p:Freeze="True" TargetType="Grid" x:Key="ClipboardDataControlContentAreaStyle">
         <Setter Property="Margin" Value="15,10,10,10" />
     </Style>
 
-    <Style TargetType="Border" x:Key="ClipboardDataControlImageAreaStyle">
+    <Style p:Freeze="True" TargetType="Border" x:Key="ClipboardDataControlImageAreaStyle">
         <Setter Property="Background" Value="{DynamicResource WindowDarkBackgroundBrush}" />
     </Style>
 
-    <Style TargetType="UserControl" x:Key="ActionControlContentAreaStyle">
+    <Style p:Freeze="True" TargetType="UserControl" x:Key="ActionControlContentAreaStyle">
         <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
         <Setter Property="FontWeight" Value="ExtraLight" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="Padding" Value="10,5" />
     </Style>
 
-    <Style TargetType="TextBlock" x:Key="ActionControlHeaderStyle">
+    <Style p:Freeze="True" TargetType="TextBlock" x:Key="ActionControlHeaderStyle">
         <Setter Property="FontSize" Value="20" />
     </Style>
 
-    <Style TargetType="TextBlock" x:Key="ActionControlContentStyle">
+    <Style p:Freeze="True" TargetType="TextBlock" x:Key="ActionControlContentStyle">
         <Setter Property="Opacity" Value="0.9" />
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
 
-    <Style TargetType="Rectangle" x:Key="ClipboardDataControlIconContentSplitterStyle">
+    <Style p:Freeze="True" TargetType="Rectangle" x:Key="ClipboardDataControlIconContentSplitterStyle">
         <Setter Property="Fill" Value="{DynamicResource ControlBorderBrush}" />
 
         <Setter Property="VerticalAlignment" Value="Stretch" />
@@ -45,7 +67,7 @@
         <Setter Property="Width" Value="1" />
     </Style>
 
-    <Style TargetType="Image" x:Key="DataSourceIconStyle">
+    <Style p:Freeze="True" TargetType="Image" x:Key="DataSourceIconStyle">
         <Setter Property="VerticalAlignment" Value="Center" />
         
         <Setter Property="Width" Value="16" />
@@ -54,14 +76,14 @@
         <Setter Property="Stretch" Value="Uniform" />
     </Style>
 
-    <Style TargetType="TextBlock" x:Key="DataSourceTextStyle">
+    <Style p:Freeze="True" TargetType="TextBlock" x:Key="DataSourceTextStyle">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Padding" Value="5,0,0,0" />
         <Setter Property="Opacity" Value="0.5" />
         <Setter Property="FontWeight" Value="Light" />
     </Style>
-    
-    <Style TargetType="Image" x:Key="ClipboardDataImageStyle">
+
+    <Style p:Freeze="True" TargetType="Image" x:Key="ClipboardDataImageStyle">
         <Setter Property="Width" Value="64" />
         <Setter Property="Height" Value="64" />
         
