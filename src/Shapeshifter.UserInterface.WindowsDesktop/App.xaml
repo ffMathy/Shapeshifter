@@ -16,6 +16,9 @@
 
                     <Color x:Key="AccentDarkColor">#236bb2</Color>
                     <SolidColorBrush p:Freeze="True" x:Key="AccentDarkBrush" Color="{StaticResource AccentDarkColor}" />
+
+                    <Color x:Key="AccentDarkerColor">#1e5b99</Color>
+                    <SolidColorBrush p:Freeze="True" x:Key="AccentDarkerBrush" Color="{StaticResource AccentDarkerColor}" />
                 </ResourceDictionary>
                 <ResourceDictionary Source="Styles/Light.xaml" />
                 <ResourceDictionary Source="Controls/Styles/Clipboard.xaml" />

@@ -21,8 +21,10 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
+            <ColumnDefinition Width="5" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+        <!-- TODO: semi transparent border around this. it'll look sexy. -->
         <ListBox HorizontalAlignment="Left" SelectedItem="{Binding SelectedElement, Mode=TwoWay}" ItemsSource="{Binding Elements}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -30,10 +32,11 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ListBox Grid.Column="1" SelectedItem="{Binding SelectedAction, Mode=TwoWay}" ItemsSource="{Binding Actions}">
+        <Rectangle Grid.Column="1" Fill="{StaticResource AccentBrush}" />
+        <ListBox Grid.Column="2" SelectedItem="{Binding SelectedAction, Mode=TwoWay}" ItemsSource="{Binding Actions}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <controls:ActionControl Margin="-1,0,0,0" />
+                    <controls:ActionControl Margin="-1,-1,0,0" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

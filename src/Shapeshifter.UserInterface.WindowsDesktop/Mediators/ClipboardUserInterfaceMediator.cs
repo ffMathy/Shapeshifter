@@ -70,6 +70,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                 {
                     if (factory.CanBuildData(format))
                     {
+                        //TODO: add a retrying circuit breaker
                         var rawData = dataObject.GetData(format);
 
                         var clipboardData = factory.BuildData(format, rawData);

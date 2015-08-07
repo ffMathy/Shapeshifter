@@ -60,8 +60,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Actions\CopyImageLinkAction.cs" />
+    <Compile Include="Actions\OpenLinkAction.cs" />
     <Compile Include="Actions\PasteAction.cs" />
     <Compile Include="Actions\PasteAsPlainTextAction.cs" />
+    <Compile Include="Actions\UploadImageAction.cs" />
+    <Compile Include="Actions\ZipFilesAction.cs" />
     <Compile Include="Controls\Clipboard\ActionControl.xaml.cs">
       <DependentUpon>ActionControl.xaml</DependentUpon>
     </Compile>
