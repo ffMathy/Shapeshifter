@@ -17,20 +17,22 @@
             </Grid.ColumnDefinitions>
 
             <Border Style="{DynamicResource ClipboardDataControlImageAreaStyle}">
-                <Image Style="{StaticResource ClipboardDataImageStyle}" Source="Resources/ClipboardTextDataIcon.png" />
+                <Image ClipToBounds="True" Style="{StaticResource ClipboardDataImageStyle}" Source="Resources/ClipboardTextDataIcon.png" />
             </Border>
 
             <Rectangle Grid.Column="1" Style="{DynamicResource ClipboardDataControlIconContentSplitterStyle}" />
 
             <Grid Grid.Column="2" Style="{DynamicResource ClipboardDataControlContentAreaStyle}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                <Grid Style="{DynamicResource ClipboardDataControlContentAreaInnerStyle}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                <TextBlock TextTrimming="CharacterEllipsis" MaxHeight="40" TextWrapping="Wrap" VerticalAlignment="Bottom" FontWeight="Normal" FontSize="14" Text="{Binding FriendlyText}" Foreground="{DynamicResource AccentBrush}" Grid.Column="1" />
+                    <TextBlock TextTrimming="CharacterEllipsis" MaxHeight="40" TextWrapping="Wrap" VerticalAlignment="Bottom" FontWeight="Normal" FontSize="14" Text="{Binding FriendlyText}" Foreground="{DynamicResource AccentBrush}" Grid.Column="1" />
 
-                <local:DataSourceControl VerticalAlignment="Top" Margin="0,10,0,1" DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
+                    <local:DataSourceControl VerticalAlignment="Top" Margin="0,10,0,1" DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
+                </Grid>
             </Grid>
         </Grid>
     </Border>

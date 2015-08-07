@@ -25,30 +25,32 @@
             <Rectangle Grid.Column="1" Style="{DynamicResource ClipboardDataControlIconContentSplitterStyle}" />
 
             <Grid Grid.Column="2" Style="{DynamicResource ClipboardDataControlContentAreaStyle}">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                <Grid Style="{DynamicResource ClipboardDataControlContentAreaInnerStyle}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                <ItemsControl ItemsSource="{Binding FileTypeGroups}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="0,0,10,0">
-                                <Image Source="{Binding Icon, Converter={StaticResource ByteArrayToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
-                                <Border VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="{DynamicResource AccentBrush}">
-                                    <TextBlock FontWeight="Light" Padding="6,1" Foreground="#CCFFFFFF" Text="{Binding Count}" />
-                                </Border>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    <ItemsControl ItemsSource="{Binding FileTypeGroups}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,10,0">
+                                    <Image Source="{Binding Icon, Converter={StaticResource ByteArrayToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
+                                    <Border VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="{DynamicResource AccentBrush}">
+                                        <TextBlock FontWeight="Light" Padding="6,1" Foreground="#CCFFFFFF" Text="{Binding Count}" />
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-                <local:DataSourceControl Margin="0,7,0,0" VerticalAlignment="Bottom" DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
+                    <local:DataSourceControl Margin="0,7,0,0" VerticalAlignment="Bottom" DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
+                </Grid>
             </Grid>
         </Grid>
     </Border>

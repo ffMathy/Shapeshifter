@@ -23,14 +23,16 @@
             <Rectangle Grid.Column="1" Style="{DynamicResource ClipboardDataControlIconContentSplitterStyle}" />
 
             <Grid Grid.Column="2" Style="{DynamicResource ClipboardDataControlContentAreaStyle}">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+                <Grid Style="{DynamicResource ClipboardDataControlContentAreaInnerStyle}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
-                <TextBlock VerticalAlignment="Center" FontWeight="Thin" FontSize="24" Text="{Binding Data.FileName}" Foreground="{DynamicResource AccentBrush}" Grid.Column="1" />
+                    <TextBlock VerticalAlignment="Center" FontWeight="Thin" FontSize="24" Text="{Binding Data.FileName}" Foreground="{DynamicResource AccentBrush}" Grid.Column="1" />
 
-                <local:DataSourceControl DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
+                    <local:DataSourceControl DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
+                </Grid>
             </Grid>
         </Grid>
     </Border>
