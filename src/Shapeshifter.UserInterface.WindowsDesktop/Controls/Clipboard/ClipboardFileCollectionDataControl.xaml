@@ -7,8 +7,8 @@
              xmlns:viewModels="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels"
              xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
              d:DataContext="{d:DesignInstance Type=viewModels:ClipboardFileCollectionDataViewModel, IsDesignTimeCreatable=True}"
-             mc:Ignorable="d" SnapsToDevicePixels="True">
-    <Border Style="{DynamicResource ClipboardDataControlContentStyle}">
+             mc:Ignorable="d" >
+    <Border Style="{StaticResource ClipboardDataControlContentStyle}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -16,16 +16,16 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Border Style="{DynamicResource ClipboardDataControlImageAreaStyle}">
+            <Border Style="{StaticResource ClipboardDataControlImageAreaStyle}">
                 <ContentControl Width="64" Height="64" Margin="10,10,13,10">
-                    <TextBlock FontSize="60" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource AccentBrush}" Text="{Binding FileCount}" />
+                    <TextBlock FontSize="60" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource AccentBrush}" Text="{Binding FileCount}" />
                 </ContentControl>
             </Border>
 
-            <Rectangle Grid.Column="1" Style="{DynamicResource ClipboardDataControlIconContentSplitterStyle}" />
+            <Rectangle Grid.Column="1" Style="{StaticResource ClipboardDataControlIconContentSplitterStyle}" />
 
-            <Grid Grid.Column="2" Style="{DynamicResource ClipboardDataControlContentAreaStyle}">
-                <Grid Style="{DynamicResource ClipboardDataControlContentAreaInnerStyle}">
+            <Grid Grid.Column="2" Style="{StaticResource ClipboardDataControlContentAreaStyle}">
+                <Grid Style="{StaticResource ClipboardDataControlContentAreaInnerStyle}">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition Height="Auto"/>
@@ -40,8 +40,8 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0,0,10,0">
-                                    <Image Source="{Binding Icon, Converter={StaticResource ByteArrayToImageSourceConverter}}" RenderOptions.BitmapScalingMode="HighQuality" />
-                                    <Border VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="{DynamicResource AccentBrush}">
+                                    <Image Source="{Binding Icon, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
+                                    <Border VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="{StaticResource AccentBrush}">
                                         <TextBlock FontWeight="Light" Padding="6,1" Foreground="#CCFFFFFF" Text="{Binding Count}" />
                                     </Border>
                                 </Grid>

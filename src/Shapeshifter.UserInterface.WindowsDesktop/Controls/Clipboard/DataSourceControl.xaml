@@ -7,7 +7,7 @@
              xmlns:facades="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades"
              mc:Ignorable="d" 
             d:DataContext="{d:DesignInstance Type=facades:DesignerDataSourceFacade, IsDesignTimeCreatable=True}" Orientation="Horizontal"  VerticalAlignment="Center" 
-            Background="{DynamicResource WindowBackgroundBrush}">
-    <Image Style="{DynamicResource DataSourceIconStyle}" Source="{Binding Icon, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
-    <TextBlock Style="{DynamicResource DataSourceTextStyle}" Text="{Binding Text}" />
+            Background="{StaticResource WindowBackgroundBrush}">
+    <Image Style="{StaticResource DataSourceIconStyle}" Source="{Binding Icon, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
+    <TextBlock Style="{StaticResource DataSourceTextStyle}" Text="{Binding Text}" />
 </StackPanel>

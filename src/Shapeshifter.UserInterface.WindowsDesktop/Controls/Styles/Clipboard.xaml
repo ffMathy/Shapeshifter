@@ -7,27 +7,28 @@
         <Setter Property="Width" Value="600" />
         <Setter Property="Height" Value="92" />
 
-        <Setter Property="Background" Value="{DynamicResource WindowDarkBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+        <Setter Property="Background" Value="{StaticResource WindowDarkBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
         <Setter Property="BorderThickness" Value="1,1,5,1" />
 
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
-                <Setter Property="BorderThickness" Value="6,1,5,1" />
+                <Setter Property="BorderThickness" Value="7,1,5,1" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
     <Style p:Freeze="True" TargetType="{x:Type ListBoxItem}">
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Padding" Value="0"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Opacity" Value="1" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                    <Border x:Name="Bd" Background="{TemplateBinding Background}" Margin="0,-1,0,0" Padding="0" SnapsToDevicePixels="true">
-                        <ContentPresenter Name="Cp" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="true" Margin="0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" Margin="0,-1,0,0" Padding="0" >
+                        <ContentPresenter Name="Cp" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"  Margin="0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -41,9 +42,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBox}">
-                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent" SnapsToDevicePixels="True">
-                        <ScrollViewer Focusable="False" SnapsToDevicePixels="True">
-                            <ItemsPresenter Margin="0,1,0,0" SnapsToDevicePixels="True"/>
+                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent" >
+                        <ScrollViewer Focusable="False" >
+                            <ItemsPresenter Margin="0,1,0,0" />
                         </ScrollViewer>
                     </Border>
                 </ControlTemplate>
@@ -55,17 +56,25 @@
         <Setter Property="Margin" Value="15,10,10,10" />
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="False">
-                <Setter Property="Opacity" Value="0.75" />
+                <Setter Property="Opacity" Value="0.5" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style p:Freeze="True" TargetType="TextBlock" x:Key="ClipboardDataControlHeaderTextStyle">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource AccentBrush}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
     <Style p:Freeze="True" TargetType="Grid" x:Key="ClipboardDataControlContentAreaStyle">
-        <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}" />
     </Style>
 
     <Style p:Freeze="True" TargetType="Border" x:Key="ClipboardDataControlImageAreaStyle">
-        <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="False">
                 <Setter Property="Opacity" Value="0.5" />
@@ -77,7 +86,7 @@
     </Style>
 
     <Style p:Freeze="True" TargetType="UserControl" x:Key="ActionControlContentAreaStyle">
-        <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+        <Setter Property="Background" Value="{StaticResource AccentBrush}" />
         <Setter Property="FontWeight" Value="ExtraLight" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="Padding" Value="5,5,10,8" />
@@ -85,7 +94,7 @@
 
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="False">
-                <Setter Property="Background" Value="{DynamicResource AccentDarkBrush}" />
+                <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -101,7 +110,7 @@
     </Style>
 
     <Style p:Freeze="True" TargetType="Rectangle" x:Key="ClipboardDataControlIconContentSplitterStyle">
-        <Setter Property="Fill" Value="{DynamicResource ControlBorderBrush}" />
+        <Setter Property="Fill" Value="{StaticResource ControlBorderBrush}" />
 
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -116,6 +125,8 @@
         <Setter Property="Height" Value="16" />
 
         <Setter Property="Stretch" Value="Uniform" />
+
+        <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
     </Style>
 
     <Style p:Freeze="True" TargetType="TextBlock" x:Key="DataSourceTextStyle">

@@ -7,21 +7,15 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary x:Name="Styles">
-                    <Style p:Freeze="True" TargetType="Image">
-                        <Setter Property="RenderOptions.BitmapScalingMode" Value="NearestNeighbor" />
-                        <Setter Property="Stretch" Value="Uniform" />
-                    </Style>
-                </ResourceDictionary>
                 <ResourceDictionary x:Name="Converters">
                     <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Name="Aero">
                     <Color x:Key="AccentColor">#3399ff</Color>
-                    <SolidColorBrush p:Freeze="True" x:Key="AccentBrush" Color="{DynamicResource AccentColor}" />
+                    <SolidColorBrush p:Freeze="True" x:Key="AccentBrush" Color="{StaticResource AccentColor}" />
 
                     <Color x:Key="AccentDarkColor">#236bb2</Color>
-                    <SolidColorBrush p:Freeze="True" x:Key="AccentDarkBrush" Color="{DynamicResource AccentDarkColor}" />
+                    <SolidColorBrush p:Freeze="True" x:Key="AccentDarkBrush" Color="{StaticResource AccentDarkColor}" />
                 </ResourceDictionary>
                 <ResourceDictionary Source="Styles/Light.xaml" />
                 <ResourceDictionary Source="Controls/Styles/Clipboard.xaml" />

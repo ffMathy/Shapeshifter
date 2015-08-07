@@ -7,8 +7,8 @@
              xmlns:viewModels="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels"
              xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
              d:DataContext="{d:DesignInstance Type=viewModels:ClipboardFileDataViewModel, IsDesignTimeCreatable=True}"
-             mc:Ignorable="d" SnapsToDevicePixels="True">
-    <Border Style="{DynamicResource ClipboardDataControlContentStyle}">
+             mc:Ignorable="d" >
+    <Border Style="{StaticResource ClipboardDataControlContentStyle}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -16,20 +16,20 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Border Style="{DynamicResource ClipboardDataControlImageAreaStyle}">
+            <Border Style="{StaticResource ClipboardDataControlImageAreaStyle}">
                 <Image Style="{StaticResource ClipboardDataImageStyle}" Source="{Binding Data.FileIcon, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
             </Border>
 
-            <Rectangle Grid.Column="1" Style="{DynamicResource ClipboardDataControlIconContentSplitterStyle}" />
+            <Rectangle Grid.Column="1" Style="{StaticResource ClipboardDataControlIconContentSplitterStyle}" />
 
-            <Grid Grid.Column="2" Style="{DynamicResource ClipboardDataControlContentAreaStyle}">
-                <Grid Style="{DynamicResource ClipboardDataControlContentAreaInnerStyle}">
+            <Grid Grid.Column="2" Style="{StaticResource ClipboardDataControlContentAreaStyle}">
+                <Grid Style="{StaticResource ClipboardDataControlContentAreaInnerStyle}">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock VerticalAlignment="Center" FontWeight="Thin" FontSize="24" Text="{Binding Data.FileName}" Foreground="{DynamicResource AccentBrush}" Grid.Column="1" />
+                    <TextBlock VerticalAlignment="Center" FontWeight="Thin" FontSize="24" Text="{Binding Data.FileName}" Foreground="{StaticResource AccentBrush}" Grid.Column="1" />
 
                     <local:DataSourceControl DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
                 </Grid>

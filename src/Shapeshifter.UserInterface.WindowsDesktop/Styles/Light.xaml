@@ -2,11 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
     <Color p:Freeze="True"  x:Key="WindowBackgroundColor">#FEFEFE</Color>
-    <SolidColorBrush p:Freeze="True" x:Key="WindowBackgroundBrush" Color="{DynamicResource WindowBackgroundColor}" />
+    <SolidColorBrush p:Freeze="True" x:Key="WindowBackgroundBrush" Color="{StaticResource WindowBackgroundColor}" />
 
     <Color p:Freeze="True" x:Key="ControlBorderColor">#DDDDDD</Color>
-    <SolidColorBrush p:Freeze="True" x:Key="ControlBorderBrush" Color="{DynamicResource ControlBorderColor}" />
+    <SolidColorBrush p:Freeze="True" x:Key="ControlBorderBrush" Color="{StaticResource ControlBorderColor}" />
 
     <Color p:Freeze="True" x:Key="WindowDarkBackgroundColor">#F0F0F0</Color>
-    <SolidColorBrush p:Freeze="True" x:Key="WindowDarkBackgroundBrush" Color="{DynamicResource WindowDarkBackgroundColor}" />
+    <SolidColorBrush p:Freeze="True" x:Key="WindowDarkBackgroundBrush" Color="{StaticResource WindowDarkBackgroundColor}" />
 </ResourceDictionary>
