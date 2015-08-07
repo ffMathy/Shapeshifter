@@ -19,6 +19,9 @@
                 <ResourceDictionary x:Name="Aero">
                     <Color x:Key="AccentColor">#3399ff</Color>
                     <SolidColorBrush p:Freeze="True" x:Key="AccentBrush" Color="{DynamicResource AccentColor}" />
+
+                    <Color x:Key="AccentDarkColor">#236bb2</Color>
+                    <SolidColorBrush p:Freeze="True" x:Key="AccentDarkBrush" Color="{DynamicResource AccentDarkColor}" />
                 </ResourceDictionary>
                 <ResourceDictionary Source="Styles/Light.xaml" />
                 <ResourceDictionary Source="Controls/Styles/Clipboard.xaml" />

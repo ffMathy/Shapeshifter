@@ -81,14 +81,22 @@
         <Setter Property="FontWeight" Value="ExtraLight" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="Padding" Value="5,5,10,8" />
+        <Setter Property="Width" Value="300" />
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="False">
+                <Setter Property="Background" Value="{DynamicResource AccentDarkBrush}" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style p:Freeze="True" TargetType="TextBlock" x:Key="ActionControlHeaderStyle">
-        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontSize" Value="16" />
     </Style>
 
     <Style p:Freeze="True" TargetType="TextBlock" x:Key="ActionControlContentStyle">
-        <Setter Property="Opacity" Value="0.9" />
+        <Setter Property="Opacity" Value="0.8" />
+        <Setter Property="FontSize" Value="11" />
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
 
