@@ -29,7 +29,7 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock VerticalAlignment="Center" FontWeight="Thin" FontSize="24" Text="{Binding Data.FileName}" Foreground="{StaticResource AccentBrush}" Grid.Column="1" />
+                    <TextBlock VerticalAlignment="Center" FontWeight="Thin" FontSize="24" Style="{StaticResource ClipboardDataControlHeaderTextStyle}" Text="{Binding Data.FileName}" Grid.Column="1" />
 
                     <local:DataSourceControl DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
                 </Grid>
