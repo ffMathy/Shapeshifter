@@ -8,7 +8,7 @@ using Shapeshifter.Core.Data.Interfaces;
 namespace Shapeshifter.Tests.Actions
 {
     [TestClass]
-    public class CopyImageLinkActionTest : TestBase
+    public class CopyLinkActionTest : TestBase
     {
         [TestMethod]
         public void CanPerformIsFalseForNonTextTypes()
@@ -17,43 +17,43 @@ namespace Shapeshifter.Tests.Actions
 
             var someNonTextData = Substitute.For<IClipboardData>();
 
-            var action = container.Resolve<ICopyImageLinkAction>();
+            var action = container.Resolve<IOpenLinkAction>();
             Assert.IsFalse(action.CanPerform(someNonTextData));
         }
 
         [TestMethod]
-        public void CanPerformIsFalseForTextTypesWithNoImageLink()
+        public void CanPerformIsFalseForTextTypesWithNoLink()
         {
             var container = CreateContainer();
 
             var textDataWithLinkButNoImageLink = Substitute.For<IClipboardTextData>();
-            textDataWithLinkButNoImageLink.Text.Returns("hello http://example.com text");
+            textDataWithLinkButNoImageLink.Text.Returns("hello world");
 
-            var action = container.Resolve<ICopyImageLinkAction>();
+            var action = container.Resolve<IOpenLinkAction>();
             Assert.IsFalse(action.CanPerform(textDataWithLinkButNoImageLink));
         }
 
         [TestMethod]
-        public void CanPerformIsTrueForTextTypesWithHttpImageLink()
+        public void CanPerformIsTrueForTextTypesWithHttpLink()
         {
             var container = CreateContainer();
 
             var textDataWithImageLink = Substitute.For<IClipboardTextData>();
-            textDataWithImageLink.Text.Returns("hello http://example.com/image.png text");
+            textDataWithImageLink.Text.Returns("hello http://example.com text");
 
-            var action = container.Resolve<ICopyImageLinkAction>();
+            var action = container.Resolve<IOpenLinkAction>();
             Assert.IsTrue(action.CanPerform(textDataWithImageLink));
         }
 
         [TestMethod]
-        public void CanPerformIsTrueForTextTypesWithHttpsImageLink()
+        public void CanPerformIsTrueForTextTypesWithHttpsLink()
         {
             var container = CreateContainer();
 
             var textDataWithImageLink = Substitute.For<IClipboardTextData>();
-            textDataWithImageLink.Text.Returns("hello https://example.com/image.png text");
+            textDataWithImageLink.Text.Returns("hello https://example.com text");
 
-            var action = container.Resolve<ICopyImageLinkAction>();
+            var action = container.Resolve<IOpenLinkAction>();
             Assert.IsTrue(action.CanPerform(textDataWithImageLink));
         }
     }
