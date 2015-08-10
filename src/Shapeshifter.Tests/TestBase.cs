@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Ploeh.AutoFixture;
+using Shapeshifter.UserInterface.WindowsDesktop;
 using System;
 using System.Linq;
 
@@ -36,6 +37,7 @@ namespace Shapeshifter.Tests
         protected IContainer CreateContainer(Action<ContainerBuilder> setupCallback = null)
         {
             var builder = new ContainerBuilder();
+            builder.RegisterAssemblyTypes(typeof(App).Assembly).AsImplementedInterfaces();
             if (setupCallback != null)
             {
                 setupCallback(builder);

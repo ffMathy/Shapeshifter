@@ -1,7 +1,5 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Autofac;
-using Ploeh.AutoFixture;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 
 namespace Shapeshifter.Tests.Factories
