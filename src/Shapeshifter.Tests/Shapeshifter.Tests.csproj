@@ -82,8 +82,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Actions\CopyLinkActionTest.cs" />
+    <Compile Include="Actions\OpenLinkActionTest.cs" />
     <Compile Include="Actions\CopyImageLinkActionTest.cs" />
+    <Compile Include="Actions\PasteAsPlainTextActionTest.cs" />
+    <Compile Include="Actions\PasteActionTest.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\Text\ClipboardTextDataViewModelTest.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="TestBase.cs" />

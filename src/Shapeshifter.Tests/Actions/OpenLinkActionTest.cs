@@ -8,7 +8,7 @@ using Shapeshifter.Core.Data.Interfaces;
 namespace Shapeshifter.Tests.Actions
 {
     [TestClass]
-    public class CopyLinkActionTest : TestBase
+    public class OpenLinkActionTest : TestBase
     {
         [TestMethod]
         public void CanPerformIsFalseForNonTextTypes()

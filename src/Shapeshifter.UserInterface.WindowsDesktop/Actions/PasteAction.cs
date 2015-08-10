@@ -25,6 +25,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         public bool CanPerform(IClipboardData clipboardData)
         {
+            if(clipboardData == null)
+            {
+                throw new ArgumentNullException(nameof(clipboardData));
+            }
+
             return true;
         }
 

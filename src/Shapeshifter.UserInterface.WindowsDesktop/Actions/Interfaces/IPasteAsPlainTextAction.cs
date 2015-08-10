@@ -2,7 +2,7 @@
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces
 {
-    interface IPasteAsPlainTextAction : IAction
+    public interface IPasteAsPlainTextAction : IAction
     {
     }
 }
