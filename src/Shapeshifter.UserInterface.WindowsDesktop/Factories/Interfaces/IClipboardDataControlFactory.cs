@@ -3,7 +3,7 @@ using Shapeshifter.Core.Data;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces
 {
-    interface IClipboardDataControlFactory
+    public interface IClipboardDataControlFactory
     {
         bool CanBuildData(string format);
 
