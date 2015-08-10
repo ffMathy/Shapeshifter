@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Shapeshifter.Core.Factories.Interfaces;
+using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.Core.Data
 {
-    public class ClipboardFileCollectionData : IClipboardData
+    public class ClipboardFileCollectionData : IClipboardFileCollectionData
     {
         private readonly IDataSource source;
 
@@ -13,7 +14,7 @@ namespace Shapeshifter.Core.Data
             source = sourceFactory.GetDataSource();
         }
 
-        public IEnumerable<ClipboardFileData> Files { get; set; }
+        public IEnumerable<IClipboardFileData> Files { get; set; }
 
         public IDataSource Source
         {

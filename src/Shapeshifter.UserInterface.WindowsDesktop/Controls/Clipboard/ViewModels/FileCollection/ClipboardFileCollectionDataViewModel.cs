@@ -6,10 +6,11 @@ using System.Windows;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection;
+using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
-    class ClipboardFileCollectionDataViewModel : ClipboardDataViewModel<ClipboardFileCollectionData>
+    class ClipboardFileCollectionDataViewModel : ClipboardDataViewModel<IClipboardFileCollectionData>
     {
 
         public ClipboardFileCollectionDataViewModel()
@@ -20,7 +21,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
             }
         }
 
-        public ClipboardFileCollectionDataViewModel(ClipboardFileCollectionData data) : base(data)
+        public ClipboardFileCollectionDataViewModel(IClipboardFileCollectionData data) : base(data)
         {
         }
 

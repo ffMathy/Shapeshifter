@@ -2,12 +2,13 @@
 using System.IO;
 using System.Linq;
 using Shapeshifter.Core.Data;
+using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection
 {
     class FileTypeGroupViewModel
     {
-        public FileTypeGroupViewModel(IEnumerable<ClipboardFileData> data)
+        public FileTypeGroupViewModel(IEnumerable<IClipboardFileData> data)
         {
             Count = data.Count();
             FileType = Path.GetExtension(data.First().FileName);
