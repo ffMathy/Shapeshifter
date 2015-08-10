@@ -1,10 +1,6 @@
 ﻿using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Data;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {

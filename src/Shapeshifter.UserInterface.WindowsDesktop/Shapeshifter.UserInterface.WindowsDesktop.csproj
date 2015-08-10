@@ -73,6 +73,8 @@
       <DependentUpon>DataSourceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Clipboard\Designer\Facades\DesignerDataSourceFacade.cs" />
+    <Compile Include="Controls\Clipboard\ViewModels\Interfaces\IClipboardDataViewModel.cs" />
+    <Compile Include="Controls\Clipboard\ViewModels\Text\Interfaces\IClipboardTextDataViewModel.cs" />
     <Compile Include="Data\ClipboardDataControlPackage.cs" />
     <Compile Include="Data\Interfaces\IClipboardDataControlPackage.cs" />
     <Compile Include="Factories\DeviceIndependentBitmapClipboardDataControlFactory.cs" />

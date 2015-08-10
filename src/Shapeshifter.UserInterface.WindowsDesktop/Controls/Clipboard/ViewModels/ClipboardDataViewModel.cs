@@ -1,8 +1,11 @@
 ﻿using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
-    abstract class ClipboardDataViewModel<TClipboardData> where TClipboardData : IClipboardData
+    abstract class ClipboardDataViewModel<TClipboardData> :
+        IClipboardDataViewModel<TClipboardData>
+        where TClipboardData : IClipboardData
     {
         protected ClipboardDataViewModel() { }
 
@@ -11,6 +14,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
             Data = data;
         }
 
-        public TClipboardData Data { get; protected set; }
+        public TClipboardData Data { get; set; }
     }
 }

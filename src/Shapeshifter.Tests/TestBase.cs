@@ -37,6 +37,7 @@ namespace Shapeshifter.Tests
         protected IContainer CreateContainer(Action<ContainerBuilder> setupCallback = null)
         {
             var builder = new ContainerBuilder();
+            builder.RegisterAssemblyTypes(typeof(App).Assembly).AsSelf();
             builder.RegisterAssemblyTypes(typeof(App).Assembly).AsImplementedInterfaces();
             if (setupCallback != null)
             {

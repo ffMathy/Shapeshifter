@@ -1,5 +1,7 @@
 ﻿using Shapeshifter.Core.Data;
+using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Text.Interfaces;
 using System;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
@@ -7,7 +9,7 @@ using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
-    class ClipboardTextDataViewModel : ClipboardDataViewModel<ClipboardTextData>
+    class ClipboardTextDataViewModel : ClipboardDataViewModel<IClipboardTextData>, IClipboardTextDataViewModel
     {
         private static readonly Regex whitespaceSubstitutionExpression;
 

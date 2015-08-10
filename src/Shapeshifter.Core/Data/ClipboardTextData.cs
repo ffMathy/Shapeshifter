@@ -1,9 +1,10 @@
 ﻿using System.Text;
 using Shapeshifter.Core.Factories.Interfaces;
+using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.Core.Data
 {
-    public class ClipboardTextData : IClipboardData
+    public class ClipboardTextData : IClipboardTextData
     {
         private readonly IDataSource source;
 

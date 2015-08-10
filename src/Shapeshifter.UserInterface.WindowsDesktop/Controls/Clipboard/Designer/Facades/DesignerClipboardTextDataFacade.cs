@@ -1,9 +1,10 @@
 ﻿using Shapeshifter.Core.Data;
+using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Factories;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer
 {
-    class DesignerClipboardTextDataFacade : ClipboardTextData
+    class DesignerClipboardTextDataFacade : ClipboardTextData, IClipboardTextData
     {
         public DesignerClipboardTextDataFacade() : 
             base(new DesignerTextDataSourceService())
