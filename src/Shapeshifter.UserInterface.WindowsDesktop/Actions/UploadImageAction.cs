@@ -14,7 +14,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         {
             get
             {
-                return "Uploads the given to Imgur image and copies a link to it.";
+                return "Uploads the given image to Imgur and copies a link to it.";
             }
         }
 
@@ -28,7 +28,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         public bool CanPerform(IClipboardData clipboardData)
         {
-            return IsSuitableImageData(clipboardData);
+            return IsSuitableImageData(clipboardData) || IsSuitableFileData(clipboardData);
         }
 
         private static bool IsSuitableImageData(IClipboardData clipboardData)
