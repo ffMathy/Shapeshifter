@@ -1,9 +1,9 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using NSubstitute;
 using Shapeshifter.Core.Data;
+using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.Tests.Actions
 {
@@ -11,24 +11,25 @@ namespace Shapeshifter.Tests.Actions
     public class PasteAsPlainTextActionTest : TestBase
     {
         [TestMethod]
-        public void CanAlwaysPerformIfDataIsGiven()
+        public void CanNotPerformWithNonTextData()
         {
             var container = CreateContainer();
 
             var fakeData = Substitute.For<IClipboardData>();
 
             var action = container.Resolve<IPasteAsPlainTextAction>();
-            Assert.IsTrue(action.CanPerform(fakeData));
+            Assert.IsFalse(action.CanPerform(fakeData));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ThrowsExceptionIfNoDataGiven()
+        public void CanPerformWithTextData()
         {
             var container = CreateContainer();
-            
+
+            var fakeData = Substitute.For<IClipboardTextData>();
+
             var action = container.Resolve<IPasteAsPlainTextAction>();
-            action.CanPerform(null);
+            Assert.IsTrue(action.CanPerform(fakeData));
         }
     }
 }

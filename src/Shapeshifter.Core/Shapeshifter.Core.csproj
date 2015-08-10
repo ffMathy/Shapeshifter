@@ -67,6 +67,8 @@
     <Compile Include="Data\ClipboardTextData.cs" />
     <Compile Include="Data\ClipboardImageData.cs" />
     <Compile Include="Data\DataSource.cs" />
+    <Compile Include="Data\Interfaces\IClipboardFileData.cs" />
+    <Compile Include="Data\Interfaces\IClipboardImageData.cs" />
     <Compile Include="Data\Interfaces\IClipboardTextData.cs" />
     <Compile Include="Services\Interfaces\IDataSourceService.cs" />
     <Compile Include="Data\Interfaces\IClipboardData.cs" />

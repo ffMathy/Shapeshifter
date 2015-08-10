@@ -1,8 +1,8 @@
-﻿using Shapeshifter.Core.Actions;
-using System;
+﻿using System;
 using System.Linq;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
+using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -31,12 +31,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         private static bool IsSuitableImageData(IClipboardData clipboardData)
         {
-            return clipboardData is ClipboardImageData;
+            return clipboardData is IClipboardImageData;
         }
 
         private static bool IsSuitableFileData(IClipboardData clipboardData)
         {
-            var fileData = clipboardData as ClipboardFileData;
+            var fileData = clipboardData as IClipboardFileData;
             return fileData != null && HasImageFileExtension(fileData.FileName);
         }
 

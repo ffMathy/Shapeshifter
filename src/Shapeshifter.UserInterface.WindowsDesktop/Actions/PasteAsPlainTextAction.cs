@@ -1,7 +1,7 @@
 ﻿using System;
-using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
+using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -25,7 +25,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         public bool CanPerform(IClipboardData clipboardData)
         {
-            return clipboardData is ClipboardTextData;
+            return clipboardData is IClipboardTextData;
         }
 
         public void Perform(IClipboardData clipboardData)

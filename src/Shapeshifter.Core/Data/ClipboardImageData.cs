@@ -1,9 +1,10 @@
 ﻿using System;
 using Shapeshifter.Core.Factories.Interfaces;
+using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.Core.Data
 {
-    public class ClipboardImageData : IClipboardData
+    public class ClipboardImageData : IClipboardImageData
     {
         private readonly IDataSource source;
 
