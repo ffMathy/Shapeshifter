@@ -1,10 +1,11 @@
 ﻿using System;
 using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
-    class PasteAsPlainTextAction : IAction
+    class PasteAsPlainTextAction : IPasteAsPlainTextAction
     {
         public string Description
         {

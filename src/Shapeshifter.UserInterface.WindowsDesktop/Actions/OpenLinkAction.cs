@@ -2,10 +2,11 @@
 using System;
 using System.Linq;
 using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
-    class OpenLinkAction : IAction
+    class OpenLinkAction : IOpenLinkAction
     {
         public string Description
         {

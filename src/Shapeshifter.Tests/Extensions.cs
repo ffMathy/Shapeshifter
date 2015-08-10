@@ -1,12 +1,6 @@
 ﻿using Autofac;
 using NSubstitute;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Ploeh.AutoFixture;
-using System.Reflection;
-using Ploeh.AutoFixture.Kernel;
 
 namespace Shapeshifter.Tests
 {

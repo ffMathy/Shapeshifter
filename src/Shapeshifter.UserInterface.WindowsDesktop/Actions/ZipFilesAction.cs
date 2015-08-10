@@ -1,10 +1,11 @@
 ﻿using Shapeshifter.Core.Actions;
 using System;
 using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
-    class ZipFilesAction : IAction
+    class ZipFilesAction : IZipFilesAction
     {
         public string Description
         {

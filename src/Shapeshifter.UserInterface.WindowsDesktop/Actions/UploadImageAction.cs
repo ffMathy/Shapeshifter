@@ -2,10 +2,11 @@
 using System;
 using System.Linq;
 using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
-    class UploadImageAction : IAction
+    class UploadImageAction : IUploadImageAction
     {
         public string Description
         {
