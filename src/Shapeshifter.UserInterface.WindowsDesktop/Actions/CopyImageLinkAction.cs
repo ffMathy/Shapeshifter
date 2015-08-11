@@ -6,6 +6,8 @@ using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
+    //TODO: have custom preview generators as well. for instance, when copying ONLY an image link, generate the image itself as a preview (icon for the clipboard entry).
+
     class CopyImageLinkAction : ICopyImageLinkAction
     {
         public string Description

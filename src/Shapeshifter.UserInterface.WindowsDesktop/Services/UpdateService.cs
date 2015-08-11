@@ -2,6 +2,9 @@
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -17,12 +20,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         private readonly GitHubClient client;
 
         private readonly IFileDownloader fileDownloader;
+        private readonly IFileManager fileManager;
 
-        public UpdateService(IFileDownloader fileDownloader)
+        public UpdateService(
+            IFileDownloader fileDownloader,
+            IFileManager fileManager)
         {
             client = CreateClient();
 
             this.fileDownloader = fileDownloader;
+            this.fileManager = fileManager;
 
             Task.Run(StartUpdateLoop);
         }
@@ -51,12 +58,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         private Version GetCurrentVersion()
         {
-            return Assembly.GetExecutingAssembly().GetName().Version;
+            return GetAssemblyInformation().Version;
+        }
+
+        private string GetAssemblyName()
+        {
+            return GetAssemblyInformation().Name;
+        }
+
+        private static AssemblyName GetAssemblyInformation()
+        {
+            return Assembly.GetExecutingAssembly().GetName();
         }
 
         private GitHubClient CreateClient()
         {
-            var client = new GitHubClient(new ProductHeaderValue("Shapeshifter"));
+            var client = new GitHubClient(new ProductHeaderValue(GetAssemblyName()));
             return client;
         }
 
@@ -69,19 +86,49 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         private async Task UpdateFromReleaseAsync(Release pendingUpdateRelease)
         {
             var assets = await client.Release.GetAllAssets(RepositoryOwner, RepositoryName, pendingUpdateRelease.Id);
-            UpdateFromAssets(assets);
+            await UpdateFromAssets(assets);
         }
 
-        private static void UpdateFromAssets(IReadOnlyList<ReleaseAsset> assets)
+        private async Task UpdateFromAssets(IReadOnlyList<ReleaseAsset> assets)
         {
+            const string targetAssetName = "Binaries.zip";
             foreach (var asset in assets)
             {
-                if (asset.Name == "Binaries.zip")
+                if (asset.Name == targetAssetName)
                 {
-                    var url = asset.BrowserDownloadUrl;
-                    //TODO
+                    await UpdateFromAsset(asset);
                 }
             }
+        }
+
+        private async Task UpdateFromAsset(ReleaseAsset asset)
+        {
+            var localFilePath = await DownloadUpdate(asset);
+            var temporaryDirectory = ExtractUpdate(localFilePath);
+
+            StartUpdate(temporaryDirectory);
+        }
+
+        private void StartUpdate(string temporaryDirectory)
+        {
+            var concretePath = Path.Combine(temporaryDirectory, GetAssemblyName() + ".exe");
+            Process.Start(concretePath, $"update \"{Environment.CurrentDirectory}\"");
+        }
+
+        private async Task<string> DownloadUpdate(ReleaseAsset asset)
+        {
+            var url = asset.BrowserDownloadUrl;
+
+            var localFilePath = fileManager.PrepareTemporaryPath(asset.Name);
+            await fileDownloader.DownloadAsync(url, localFilePath);
+            return localFilePath;
+        }
+
+        private string ExtractUpdate(string localFilePath)
+        {
+            var temporaryDirectory = fileManager.PrepareTemporaryPath("Update");
+            ZipFile.ExtractToDirectory(localFilePath, temporaryDirectory);
+            return temporaryDirectory;
         }
 
         private bool IsUpdateToReleaseNeeded(Release release)

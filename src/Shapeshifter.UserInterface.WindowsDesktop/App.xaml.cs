@@ -7,6 +7,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Windows;
 using System.Reflection;
 using System;
 using System.Linq;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop
 {
@@ -27,6 +28,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
 
         private static IContainer CreateContainer()
         {
+            //TODO: this is not the responsibility of "App". move out to a separate class.
+
             var builder = new ContainerBuilder();
 
             RegisterAssemblyTypes(builder, typeof(IClipboardData).Assembly);
@@ -73,7 +76,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
                         typeof(ImagePersistenceService),
                         typeof(KeyboardHookService),
                         typeof(DataSourceService),
-                        typeof(FileDownloader)
+                        typeof(FileDownloader),
+                        typeof(FileManager)
                     };
         }
 
