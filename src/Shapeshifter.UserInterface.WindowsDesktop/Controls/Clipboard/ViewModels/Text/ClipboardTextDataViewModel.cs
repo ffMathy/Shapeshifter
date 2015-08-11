@@ -1,9 +1,9 @@
-﻿using Shapeshifter.Core.Data;
-using Shapeshifter.Core.Data.Interfaces;
+﻿using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Text.Interfaces;
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using System.Windows;
 
@@ -20,14 +20,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
 
         public ClipboardTextDataViewModel()
         {
+            PrepareDesignMode();
+        }
+
+        [ExcludeFromCodeCoverage]
+        private void PrepareDesignMode()
+        {
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
                 Data = new DesignerClipboardTextDataFacade();
             }
-        }
-
-        public ClipboardTextDataViewModel(ClipboardTextData data) : base(data)
-        {
         }
 
         public string FriendlyText

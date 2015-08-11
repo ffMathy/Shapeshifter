@@ -36,6 +36,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -101,6 +102,8 @@
       <DependentUpon>DataSourceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Clipboard\Designer\Facades\DesignerDataSourceFacade.cs" />
+    <Compile Include="Controls\Clipboard\ViewModels\FileCollection\Interfaces\IFileTypeGroupViewModel.cs" />
+    <Compile Include="Controls\Clipboard\ViewModels\FileCollection\Interfaces\IClipboardFileCollectionDataViewModel.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\Interfaces\IClipboardDataViewModel.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\Text\Interfaces\IClipboardTextDataViewModel.cs" />
     <Compile Include="Data\ClipboardDataControlPackage.cs" />

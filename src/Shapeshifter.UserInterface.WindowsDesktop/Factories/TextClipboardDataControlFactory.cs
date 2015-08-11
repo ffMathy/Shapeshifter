@@ -18,11 +18,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public UIElement BuildControl(IClipboardData clipboardData)
         {
-            var textData = (ClipboardTextData)clipboardData;
-
             return new ClipboardTextDataControl()
             {
-                DataContext = new ClipboardTextDataViewModel(textData)
+                DataContext = new ClipboardTextDataViewModel()
+                {
+                    Data = (ClipboardTextData)clipboardData
+                }
             };
         }
 

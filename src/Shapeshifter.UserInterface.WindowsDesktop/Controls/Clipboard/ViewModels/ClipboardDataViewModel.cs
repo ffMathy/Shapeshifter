@@ -9,11 +9,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
     {
         protected ClipboardDataViewModel() { }
 
-        protected ClipboardDataViewModel(TClipboardData data)
-        {
-            Data = data;
-        }
-
         public TClipboardData Data { get; set; }
     }
 }

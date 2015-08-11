@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Shapeshifter.Core.Data;
 using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection
 {
-    class FileTypeGroupViewModel
+    class FileTypeGroupViewModel : IFileTypeGroupViewModel
     {
         public FileTypeGroupViewModel(IEnumerable<IClipboardFileData> data)
         {
