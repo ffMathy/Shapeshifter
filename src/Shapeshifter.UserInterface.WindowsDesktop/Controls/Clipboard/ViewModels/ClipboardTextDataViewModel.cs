@@ -1,4 +1,5 @@
-﻿using Shapeshifter.Core.Data.Interfaces;
+﻿using Autofac;
+using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Text.Interfaces;
 using System;
@@ -28,7 +29,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
         {
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
-                Data = new DesignerClipboardTextDataFacade();
+                Data = App.Container.Resolve<DesignerClipboardTextDataFacade>();
             }
         }
 

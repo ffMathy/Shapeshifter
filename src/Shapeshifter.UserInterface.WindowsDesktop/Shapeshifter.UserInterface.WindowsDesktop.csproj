@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>CS1998</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -129,11 +130,14 @@
     <Compile Include="Services\Events\ControlEventArgument.cs" />
     <Compile Include="Services\Events\DataCopiedEventArgument.cs" />
     <Compile Include="Services\Events\KeyEventArgument.cs" />
-    <Compile Include="Services\ImagePersistenceService.cs" />
+    <Compile Include="Services\FileDownloader.cs" />
+    <Compile Include="Services\Images\ImageMetaInformation.cs" />
+    <Compile Include="Services\Images\ImagePersistenceService.cs" />
     <Compile Include="Services\Interfaces\IClipboardHookService.cs" />
     <Compile Include="Mediators\Interfaces\IClipboardUserInterfaceMediator.cs" />
+    <Compile Include="Services\Interfaces\IFileDownloader.cs" />
     <Compile Include="Services\Interfaces\IHookService.cs" />
-    <Compile Include="Services\Interfaces\IImagePersistenceService.cs" />
+    <Compile Include="Services\Images\Interfaces\IImagePersistenceService.cs" />
     <Compile Include="Services\Interfaces\IUpdateService.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardHookConfiguration.cs" />
     <Compile Include="Services\Keyboard\KeyboardHookConfiguration.cs" />

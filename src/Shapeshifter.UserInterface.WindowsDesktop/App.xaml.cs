@@ -5,7 +5,8 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows;
 using System.Reflection;
-using Shapeshifter.Core.Factories.Interfaces;
+using System;
+using System.Linq;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop
 {
@@ -15,48 +16,65 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
     public partial class App : Application
     {
         private static IContainer container;
+
         public static IContainer Container
         {
             get
             {
-                if (container == null)
-                {
-                    var builder = new ContainerBuilder();
-                    
-                    RegisterAssemblyTypes(builder, typeof(IClipboardData).Assembly);
-                    RegisterAssemblyTypes(builder, typeof(App).Assembly);
-
-                    //register services.
-                    builder
-                        .RegisterType<ClipboardUserInterfaceMediator>()
-                        .As<IClipboardUserInterfaceMediator>()
-                        .SingleInstance();
-
-                    builder
-                        .RegisterType<FileIconService>()
-                        .As<IFileIconService>()
-                        .SingleInstance();
-
-                    builder
-                        .RegisterType<ClipboardHookService>()
-                        .As<IClipboardHookService>()
-                        .SingleInstance();
-
-                    builder
-                        .RegisterType<KeyboardHookService>()
-                        .As<IKeyboardHookService>()
-                        .SingleInstance();
-
-                    builder
-                        .RegisterType<DataSourceService>()
-                        .As<IDataSourceService>()
-                        .SingleInstance();
-
-                    container = builder.Build();
-                }
-
                 return container;
             }
+        }
+
+        private static IContainer CreateContainer()
+        {
+            var builder = new ContainerBuilder();
+
+            RegisterAssemblyTypes(builder, typeof(IClipboardData).Assembly);
+            RegisterAssemblyTypes(builder, typeof(App).Assembly);
+
+            RegisterServices(builder);
+
+            var newContainer = builder.Build();
+            LaunchServices(newContainer);
+
+            return newContainer;
+        }
+
+        private static void LaunchServices(IContainer container)
+        {
+            var serviceTypes = GetServiceTypes();
+            foreach (var serviceType in serviceTypes)
+            {
+                var interfaces = serviceType.GetInterfaces();
+                var mainInterface = interfaces.First();
+
+                container.Resolve(mainInterface);
+            }
+        }
+
+        private static void RegisterServices(ContainerBuilder builder)
+        {
+            var serviceTypes = GetServiceTypes();
+            foreach (var serviceType in serviceTypes)
+            {
+                builder.RegisterType(serviceType)
+                    .AsImplementedInterfaces()
+                    .SingleInstance();
+            }
+        }
+
+        private static Type[] GetServiceTypes()
+        {
+            return new[] {
+                        typeof(UpdateService),
+                        typeof(ClipboardUserInterfaceMediator),
+                        typeof(FileIconService),
+                        typeof(ClipboardHookService),
+                        typeof(ImagePersistenceService),
+                        typeof(KeyboardHookService),
+                        typeof(DataSourceService),
+                        typeof(FileDownloader)
+                    };
         }
 
         private static void RegisterAssemblyTypes(ContainerBuilder builder, Assembly assembly)
@@ -70,8 +88,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
                 .AsImplementedInterfaces();
         }
 
+        static App()
+        {
+            container = CreateContainer();
+        }
+
         protected override void OnStartup(StartupEventArgs e)
         {
+
             base.OnStartup(e);
 
             //start the main window.

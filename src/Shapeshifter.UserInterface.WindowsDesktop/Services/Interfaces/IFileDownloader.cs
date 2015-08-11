@@ -2,8 +2,8 @@
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
 {
-    public interface IUpdateService
+    interface IFileDownloader
     {
-        Task UpdateAsync();
+        Task DownloadAsync(string fileUrl, string localFileDestination);
     }
 }

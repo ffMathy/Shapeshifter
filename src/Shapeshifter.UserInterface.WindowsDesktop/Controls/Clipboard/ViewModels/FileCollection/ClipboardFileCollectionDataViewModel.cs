@@ -8,6 +8,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Fi
 using Shapeshifter.Core.Data.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection.Interfaces;
+using Autofac;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
@@ -25,7 +26,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
         {
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
-                Data = new DesignerClipboardFileCollectionDataFacade();
+                Data = App.Container.Resolve<DesignerClipboardFileCollectionDataFacade>();
             }
         }
 
