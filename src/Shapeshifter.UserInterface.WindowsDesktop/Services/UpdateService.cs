@@ -32,10 +32,20 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             while (true)
             {
                 await UpdateAsync();
-
-                const int threeHoursInMilliseconds = 1 * 1000 * 60 * 60 * 3;
-                await Task.Delay(threeHoursInMilliseconds);
+                await WaitForNextCycle();
             }
+        }
+
+        private static async Task WaitForNextCycle()
+        {
+            const int updateIntervalInHours = 3;
+
+            const int milliSecondsInASecond = 1000;
+            const int secondsInAMinute = 60;
+            const int minutesInAnHour = 60;
+            const int updateIntervalInMilliseconds = milliSecondsInASecond * secondsInAMinute * minutesInAnHour * updateIntervalInHours;
+
+            await Task.Delay(updateIntervalInMilliseconds);
         }
 
         private Version GetCurrentVersion()
