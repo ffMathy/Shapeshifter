@@ -44,7 +44,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
                 return Data
                     .Files
                     .GroupBy(x => Path.GetExtension(x.FileName))
-                    .OrderBy(x => x.Count())
+                    .OrderByDescending(x => x.Count())
                     .Select(x => new FileTypeGroupViewModel(x));
             }
         }
