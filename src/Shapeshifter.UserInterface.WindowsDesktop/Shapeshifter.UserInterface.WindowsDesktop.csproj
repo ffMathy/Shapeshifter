@@ -110,6 +110,8 @@
       <DependentUpon>DataSourceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Clipboard\Designer\Facades\DesignerDataSourceFacade.cs" />
+    <Compile Include="Controls\Clipboard\Designer\Services\DesignerImageConverterService.cs" />
+    <Compile Include="Controls\Clipboard\Designer\Services\Interfaces\IDesignerImageConverterService.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\FileCollection\Interfaces\IFileTypeGroupViewModel.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\FileCollection\Interfaces\IClipboardFileCollectionDataViewModel.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\Interfaces\IClipboardDataViewModel.cs" />

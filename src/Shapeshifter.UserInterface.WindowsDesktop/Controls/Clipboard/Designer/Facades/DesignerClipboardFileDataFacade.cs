@@ -32,7 +32,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer
             };
 
             var decoratedIconBytes = imagePersistenceService.DecorateSourceWithMetaInformation(Resources.FileDataFileIcon, metaInformation);
-            FileIcon = decoratedIconBytes;
+            FileIcon = Resources.FileDataFileIcon;
         }
     }
 }
