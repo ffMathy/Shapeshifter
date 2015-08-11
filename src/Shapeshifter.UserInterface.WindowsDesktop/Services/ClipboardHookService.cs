@@ -21,60 +21,94 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public void Connect()
         {
+            EnsureWindowIsPresent();
+
             if (!IsConnected)
             {
-                lock (this)
-                {
-                    var mainWindow = App.Current.MainWindow;
-                    if (mainWindow == null)
-                    {
-                        throw new InvalidOperationException("Can't install a clipboard hook when there is no window open.");
-                    }
-
-                    var interopHelper = new WindowInteropHelper(mainWindow);
-                    var windowHandle = interopHelper.EnsureHandle();
-
-                    var hooker = PresentationSource.FromVisual(mainWindow) as HwndSource;
-                    if (hooker == null)
-                    {
-                        throw new InvalidOperationException("Could not fetch the handle of the main window.");
-                    }
-
-                    //now try installing a clipboard hook.
-                    if (!ClipboardApi.AddClipboardFormatListener(windowHandle))
-                    {
-                        throw new NotImplementedException("Could not install a clipboard hook for the main window.");
-                    }
-
-                    hooker.AddHook(WindowHookCallback);
-
-                    IsConnected = true;
-                }
+                InstallHooks();
+                IsConnected = true;
             }
+        }
+
+        private void InstallHooks()
+        {
+            InstallClipboardHook();
+            InstallWindowMessageHook();
+        }
+
+        private static void EnsureWindowIsPresent()
+        {
+            var mainWindow = App.Current.MainWindow;
+            if (mainWindow == null)
+            {
+                throw new InvalidOperationException("Can't install a clipboard hook when there is no window open.");
+            }
+        }
+
+        private void InstallWindowMessageHook()
+        {
+            var hooker = FetchHandleSource();
+            hooker.AddHook(WindowHookCallback);
+        }
+
+        private static HwndSource FetchHandleSource()
+        {
+            var hooker = PresentationSource.FromVisual(App.Current.MainWindow) as HwndSource;
+            if (hooker == null)
+            {
+                throw new InvalidOperationException("Could not fetch the handle of the main window.");
+            }
+
+            return hooker;
+        }
+
+        private static void InstallClipboardHook()
+        {
+            var windowHandle = FetchWindowHandle(App.Current.MainWindow);
+            if (!ClipboardApi.AddClipboardFormatListener(windowHandle))
+            {
+                throw new NotImplementedException("Could not install a clipboard hook for the main window.");
+            }
+        }
+
+        private static IntPtr FetchWindowHandle(Window mainWindow)
+        {
+            var interopHelper = new WindowInteropHelper(mainWindow);
+            var windowHandle = interopHelper.EnsureHandle();
+            return windowHandle;
         }
 
         private IntPtr WindowHookCallback(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             if (msg == ClipboardApi.WM_CLIPBOARDUPDATE)
             {
-
-                var clipboardItemIdentifier = ClipboardApi.GetClipboardSequenceNumber();
-                if (clipboardItemIdentifier != lastClipboardItemIdentifier)
-                {
-                    lastClipboardItemIdentifier = clipboardItemIdentifier;
-                    
-                    if (DataCopied != null)
-                    {
-                        var data = Clipboard.GetDataObject();
-                        if (data != null)
-                        {
-                            DataCopied(this, new DataCopiedEventArgument(data));
-                        }
-                    }
-                }
+                HandleClipboardUpdateWindowMessage();
             }
 
             return IntPtr.Zero;
+        }
+
+        private void HandleClipboardUpdateWindowMessage()
+        {
+            var clipboardItemIdentifier = ClipboardApi.GetClipboardSequenceNumber();
+            if (clipboardItemIdentifier != lastClipboardItemIdentifier)
+            {
+                lastClipboardItemIdentifier = clipboardItemIdentifier;
+
+                TriggerDataCopiedEvent();
+            }
+        }
+
+        private void TriggerDataCopiedEvent()
+        {
+            if (DataCopied != null)
+            {
+                var data = Clipboard.GetDataObject();
+                if (data != null)
+                {
+                    DataCopied(this, new DataCopiedEventArgument(data));
+                }
+            }
         }
 
         public void Disconnect()

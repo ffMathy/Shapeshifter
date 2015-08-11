@@ -38,6 +38,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         private static async Task WaitForNextCycle()
         {
+            //TODO: introduce a circuit breaker for this.
             const int updateIntervalInHours = 3;
 
             const int milliSecondsInASecond = 1000;
