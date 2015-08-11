@@ -1,9 +1,7 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
 {
@@ -21,15 +19,60 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             throw new NotImplementedException();
         }
 
-        public string PrepareTemporaryPath(string path)
+        private string PrepareIsolatedTemporaryFolder()
         {
-            temporaryPaths.Add(path);
-            throw new NotImplementedException();
+            const string folderName = "Shapeshifter";
+
+            var temporaryDirectory = Path.GetTempPath();
+            var path = Path.Combine(temporaryDirectory, folderName);
+
+            PrepareDirectory(path);
+
+            return path;
         }
 
-        public void WriteBytesToFile(string fileName, byte[] bytes)
+        private static void PrepareDirectory(string path)
         {
-            throw new NotImplementedException();
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+        }
+
+        public string PrepareTemporaryPath(string path)
+        {
+            var finalPath = GetFullPathFromRelativeTemporaryPath(path);
+            temporaryPaths.Add(finalPath);
+
+            if (IsDirectory(finalPath))
+            {
+                PrepareDirectory(finalPath);
+            }
+
+            return finalPath;
+        }
+
+        private static bool IsDirectory(string finalPath)
+        {
+            var fileNameWithExtension = Path.GetFileName(finalPath);
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(finalPath);
+            return fileNameWithExtension == fileNameWithoutExtension;
+        }
+
+        private string GetFullPathFromRelativeTemporaryPath(string path)
+        {
+            var isolatedFolderPath = PrepareIsolatedTemporaryFolder();
+
+            var finalPath = Path.Combine(isolatedFolderPath, path);
+            return finalPath;
+        }
+
+        public void WriteBytesToTemporaryFile(string fileName, byte[] bytes)
+        {
+            var finalPath = GetFullPathFromRelativeTemporaryPath(fileName);
+            temporaryPaths.Add(finalPath);
+
+            File.WriteAllBytes(fileName, bytes);
         }
     }
 }

@@ -86,24 +86,24 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         private async Task UpdateFromReleaseAsync(Release pendingUpdateRelease)
         {
             var assets = await client.Release.GetAllAssets(RepositoryOwner, RepositoryName, pendingUpdateRelease.Id);
-            await UpdateFromAssets(assets);
+            await UpdateFromAssetsAsync(assets);
         }
 
-        private async Task UpdateFromAssets(IReadOnlyList<ReleaseAsset> assets)
+        private async Task UpdateFromAssetsAsync(IReadOnlyList<ReleaseAsset> assets)
         {
             const string targetAssetName = "Binaries.zip";
             foreach (var asset in assets)
             {
                 if (asset.Name == targetAssetName)
                 {
-                    await UpdateFromAsset(asset);
+                    await UpdateFromAssetAsync(asset);
                 }
             }
         }
 
-        private async Task UpdateFromAsset(ReleaseAsset asset)
+        private async Task UpdateFromAssetAsync(ReleaseAsset asset)
         {
-            var localFilePath = await DownloadUpdate(asset);
+            var localFilePath = await DownloadUpdateAsync(asset);
             var temporaryDirectory = ExtractUpdate(localFilePath);
 
             StartUpdate(temporaryDirectory);
@@ -115,7 +115,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             Process.Start(concretePath, $"update \"{Environment.CurrentDirectory}\"");
         }
 
-        private async Task<string> DownloadUpdate(ReleaseAsset asset)
+        private async Task<string> DownloadUpdateAsync(ReleaseAsset asset)
         {
             var url = asset.BrowserDownloadUrl;
 

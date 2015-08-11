@@ -16,9 +16,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
     /// </summary>
     public partial class App : Application
     {
-        private static IContainer container;
+        private static ILifetimeScope container;
 
-        public static IContainer Container
+        public static ILifetimeScope Container
         {
             get
             {
@@ -26,7 +26,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
             }
         }
 
-        private static IContainer CreateContainer()
+        private static ILifetimeScope CreateContainer()
         {
             //TODO: this is not the responsibility of "App". move out to a separate class.
 
@@ -40,7 +40,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
             var newContainer = builder.Build();
             LaunchServices(newContainer);
 
-            return newContainer;
+            return newContainer.BeginLifetimeScope();
         }
 
         private static void LaunchServices(IContainer container)
@@ -97,9 +97,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
             container = CreateContainer();
         }
 
+        protected override void OnExit(ExitEventArgs e)
+        {
+            container.Dispose();
+            base.OnExit(e);
+        }
+
         protected override void OnStartup(StartupEventArgs e)
         {
-
             base.OnStartup(e);
 
             //start the main window.

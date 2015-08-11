@@ -2,7 +2,7 @@
 {
     interface IFileManager
     {
-        void WriteBytesToFile(string path, byte[] bytes);
+        void WriteBytesToTemporaryFile(string path, byte[] bytes);
 
         string PrepareTemporaryPath(string path);
     }
