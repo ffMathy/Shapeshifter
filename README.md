@@ -1,3 +1,4 @@
+<img src="https://ci.appveyor.com/api/projects/status/hnhqpn0rwcsvccng/branch/master?svg=true" />
 # Shapeshifter
 Shapeshifter is a revolutionary clipboard manager that you might know of already. It can be downloaded [here](http://flamefusion.net/software/shapeshifter),
 although that link is for Version 4. 
@@ -15,7 +16,7 @@ Every dollar matters!
 #Download alpha version
 An alpha version of a software comes before the beta version. It means that not all features have been implemented, and that nothing is expected to work.
 
-If you're aware of this and still want to try Shapeshifter 5, build download links will soon be available below.
+If you're aware of this and still want to try Shapeshifter 5, the releases can be found here: https://github.com/ffMathy/Shapeshifter/releases
 
 #Contributing
 Feel free to contribute to Shapeshifter 5 development! Create a pull request, and we'll look at it.
