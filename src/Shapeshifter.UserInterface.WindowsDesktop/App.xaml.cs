@@ -8,6 +8,8 @@ using System.Reflection;
 using System;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
+using System.ComponentModel;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop
 {
@@ -40,10 +42,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
             var newContainer = builder.Build();
             LaunchServices(newContainer);
 
-            return newContainer.BeginLifetimeScope();
+            if (App.InDesignMode)
+            {
+                return newContainer;
+            }
+            else
+            {
+                return newContainer.BeginLifetimeScope();
+            }
         }
 
-        private static void LaunchServices(IContainer container)
+        private static void LaunchServices(ILifetimeScope container)
         {
             var serviceTypes = GetServiceTypes();
             foreach (var serviceType in serviceTypes)
@@ -77,7 +86,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
                         typeof(KeyboardHookService),
                         typeof(DataSourceService),
                         typeof(FileDownloader),
-                        typeof(FileManager)
+                        typeof(FileManager),
+                        typeof(DesignerImageConverterService)
                     };
         }
 
@@ -95,6 +105,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
         static App()
         {
             container = CreateContainer();
+        }
+
+        public static bool InDesignMode
+        {
+            get
+            {
+                return !(Current is App);
+            }
         }
 
         protected override void OnExit(ExitEventArgs e)

@@ -1,7 +1,5 @@
 ﻿using Shapeshifter.Core.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using System.IO;
-using System.Windows.Media.Imaging;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades
 {
@@ -9,36 +7,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.
     {
 
         private byte[] icon;
-
-        private readonly IImagePersistenceService imagePersistenceService;
+        
+        private readonly IDesignerImageConverterService designerImageConverterService;
 
         public DesignerDataSourceFacade(
-            IImagePersistenceService imagePersistenceService)
+            IDesignerImageConverterService designerImageConverterService)
         {
-            this.imagePersistenceService = imagePersistenceService;
+            this.designerImageConverterService = designerImageConverterService;
         }
 
         private byte[] DecorateIcon(byte[] iconBytes)
         {
-            var image = ConvertFileBytesToBitmapSource(iconBytes);
-
-            var decoratedIconBytes = imagePersistenceService.ConvertBitmapSourceToByteArray(image);
-            return decoratedIconBytes;
-        }
-
-        private static BitmapSource ConvertFileBytesToBitmapSource(byte[] iconBytes)
-        {
-            using (var stream = new MemoryStream(iconBytes))
-            {
-                var image = new BitmapImage();
-                image.BeginInit();
-                image.StreamSource = stream;
-                image.EndInit();
-
-                image.Freeze();
-
-                return image;
-            }
+            return designerImageConverterService.GenerateDesignerImageBytesFromFileBytes(iconBytes);
         }
 
         public byte[] Icon

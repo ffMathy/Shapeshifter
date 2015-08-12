@@ -1,23 +1,24 @@
 ﻿using Shapeshifter.Core.Data;
 using Shapeshifter.Core.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Properties;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Factories
 {
     class DesignerTextDataSourceService : IDataSourceService
     {
-        private readonly IImagePersistenceService imagePersistenceService;
+        private readonly IDesignerImageConverterService designerImageConverterService;
 
-        public DesignerTextDataSourceService(IImagePersistenceService imagePersistenceService)
+        public DesignerTextDataSourceService(IDesignerImageConverterService designerImageConverterService)
         {
-            this.imagePersistenceService = imagePersistenceService;
+            this.designerImageConverterService = designerImageConverterService;
         }
 
         public IDataSource GetDataSource()
         {
-            return new DesignerDataSourceFacade(imagePersistenceService)
+            return new DesignerDataSourceFacade(designerImageConverterService)
             {
                 Text = "Skype",
                 Icon = Resources.TextDataSourceIcon

@@ -27,7 +27,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
         [ExcludeFromCodeCoverage]
         private void PrepareDesignMode()
         {
-            if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            if (App.InDesignMode)
             {
                 Data = App.Container.Resolve<DesignerClipboardTextDataFacade>();
             }
@@ -41,7 +41,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
                 text = whitespaceSubstitutionExpression.Replace(text, " ");
                 text = text.Substring(0, Math.Min(text.Length, 512));
 
-                return text;
+                return text + "foo";
             }
         }
     }

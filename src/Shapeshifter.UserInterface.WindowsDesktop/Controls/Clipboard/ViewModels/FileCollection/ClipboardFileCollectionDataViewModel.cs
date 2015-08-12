@@ -24,7 +24,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
         [ExcludeFromCodeCoverage]
         private void PrepareDesignerMode()
         {
-            if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            if (App.InDesignMode)
             {
                 Data = App.Container.Resolve<DesignerClipboardFileCollectionDataFacade>();
             }
