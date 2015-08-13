@@ -64,7 +64,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public bool HasLinkOfType(string text, LinkType linkType)
         {
-            throw new NotImplementedException();
+            return ExtractLinksFromText(text).Any(link => GetLinkType(link).HasFlag(linkType));
         }
 
         public bool IsValidLink(string link)

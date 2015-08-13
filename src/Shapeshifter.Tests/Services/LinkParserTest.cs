@@ -129,6 +129,18 @@ namespace Shapeshifter.Tests.Services
         }
 
         [TestMethod]
+        public void SeveralLinksCanFindProperType()
+        {
+            var container = CreateContainer();
+
+            var text = "http://google.com foo.com/img.jpg";
+
+            var linkParser = container.Resolve<ILinkParser>();
+            Assert.IsTrue(linkParser.HasLinkOfType(text, LinkType.Http));
+            Assert.IsTrue(linkParser.HasLinkOfType(text, LinkType.ImageFile));
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void GettingTypeFromInvalidLinkThrowsException()
         {
