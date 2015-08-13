@@ -9,16 +9,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.
 {
     class DesignerTextDataSourceService : IDataSourceService
     {
-        private readonly IDesignerImageConverterService designerImageConverterService;
-
-        public DesignerTextDataSourceService(IDesignerImageConverterService designerImageConverterService)
-        {
-            this.designerImageConverterService = designerImageConverterService;
-        }
-
         public IDataSource GetDataSource()
         {
-            return new DesignerDataSourceFacade(designerImageConverterService)
+            return new DesignerDataSourceFacade()
             {
                 Text = "Skype",
                 Icon = Resources.TextDataSourceIcon

@@ -10,7 +10,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer
     {
         public DesignerClipboardFileDataFacade(
             IDesignerImageConverterService designerImageConverterService) : 
-            base(new DesignerFileDataSourceService(designerImageConverterService))
+            base(new DesignerFileDataSourceService())
         {
             FileName = "Kitten.jpg";
             FileIcon = designerImageConverterService.GenerateDesignerImageBytesFromFileBytes(Resources.FileDataFileIcon);

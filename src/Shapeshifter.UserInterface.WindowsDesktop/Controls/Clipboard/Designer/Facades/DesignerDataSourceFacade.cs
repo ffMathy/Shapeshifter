@@ -1,4 +1,5 @@
-﻿using Shapeshifter.Core.Data;
+﻿using Autofac;
+using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades
@@ -7,13 +8,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.
     {
 
         private byte[] icon;
-        
+
         private readonly IDesignerImageConverterService designerImageConverterService;
 
-        public DesignerDataSourceFacade(
-            IDesignerImageConverterService designerImageConverterService)
+        public DesignerDataSourceFacade()
         {
-            this.designerImageConverterService = designerImageConverterService;
+            this.designerImageConverterService = App.Container.Resolve<IDesignerImageConverterService>();
         }
 
         private byte[] DecorateIcon(byte[] iconBytes)

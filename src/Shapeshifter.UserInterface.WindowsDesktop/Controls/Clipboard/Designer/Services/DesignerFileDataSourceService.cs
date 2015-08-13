@@ -8,17 +8,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.
 {
     class DesignerFileDataSourceService : IDataSourceService
     {
-        private readonly IDesignerImageConverterService designerImageConverterService;
-
-        public DesignerFileDataSourceService(
-            IDesignerImageConverterService designerImageConverterService)
-        {
-            this.designerImageConverterService = designerImageConverterService;
-        }
 
         public IDataSource GetDataSource()
         {
-            return new DesignerDataSourceFacade(designerImageConverterService)
+            return new DesignerDataSourceFacade()
             {
                 Text = "My pictures",
                 Icon = Resources.FileDataSourceIcon

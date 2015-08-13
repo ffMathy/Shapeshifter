@@ -7,7 +7,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer
     class DesignerClipboardFileCollectionDataFacade : ClipboardFileCollectionData
     {
         public DesignerClipboardFileCollectionDataFacade(IDesignerImageConverterService designerImageConverterService) :
-            base(new DesignerFileDataSourceService(designerImageConverterService))
+            base(new DesignerFileDataSourceService())
         {
             Files = new[] {
                 new DesignerClipboardFileDataFacade(designerImageConverterService) {FileName = "Foo.jpg" },
