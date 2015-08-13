@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Linq;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
+using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -12,11 +14,21 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
     class CopyImageLinkAction : ICopyImageLinkAction
     {
+        private readonly IClipboardInjectionService clipboardInjectionService;
+        private readonly IDownloader downloader;
+        private readonly IImageFileInterpreter imageFileInterpreter;
         private readonly ILinkParser linkParser;
 
-        public CopyImageLinkAction(ILinkParser linkParser)
+        public CopyImageLinkAction(
+            ILinkParser linkParser,
+            IImageFileInterpreter imageFileInterpreter,
+            IDownloader downloader,
+            IClipboardInjectionService clipboardInjectionService)
         {
             this.linkParser = linkParser;
+            this.downloader = downloader;
+            this.imageFileInterpreter = imageFileInterpreter;
+            this.clipboardInjectionService = clipboardInjectionService;
         }
 
         public string Description
@@ -41,11 +53,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return textData != null && linkParser.HasLinkOfType(textData.Text, LinkType.ImageFile);
         }
 
-        public void Perform(IClipboardData clipboardData)
+        public async Task PerformAsync(IClipboardData clipboardData)
         {
             var textData = clipboardData as IClipboardTextData;
             var links = linkParser.ExtractLinksFromText(textData.Text);
-
             throw new NotImplementedException();
         }
     }

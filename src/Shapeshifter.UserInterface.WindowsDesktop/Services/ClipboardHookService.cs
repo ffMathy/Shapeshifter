@@ -4,6 +4,7 @@ using System.Windows.Interop;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using WindowsClipboard = System.Windows.Clipboard;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -103,7 +104,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             if (DataCopied != null)
             {
-                var data = Clipboard.GetDataObject();
+                var data = WindowsClipboard.GetDataObject();
                 if (data != null)
                 {
                     DataCopied(this, new DataCopiedEventArgument(data));

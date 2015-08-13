@@ -1,4 +1,5 @@
 ﻿using Shapeshifter.Core.Data;
+using System.Threading.Tasks;
 
 namespace Shapeshifter.Core.Actions
 {
@@ -10,6 +11,6 @@ namespace Shapeshifter.Core.Actions
 
         bool CanPerform(IClipboardData clipboardData);
 
-        void Perform(IClipboardData clipboardData);
+        Task PerformAsync(IClipboardData clipboardData);
     }
 }

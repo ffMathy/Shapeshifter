@@ -129,6 +129,8 @@
     <Compile Include="Api\WindowApi.cs" />
     <Compile Include="Services\ClipboardHookService.cs" />
     <Compile Include="Mediators\ClipboardUserInterfaceMediator.cs" />
+    <Compile Include="Services\Clipboard\ClipboardInjectionService.cs" />
+    <Compile Include="Services\Clipboard\Interfaces\IClipboardInjectionService.cs" />
     <Compile Include="Services\DataSourceService.cs" />
     <Compile Include="Services\Events\ControlEventArgument.cs" />
     <Compile Include="Services\Events\DataCopiedEventArgument.cs" />
@@ -137,6 +139,7 @@
     <Compile Include="Services\Files\FileManager.cs" />
     <Compile Include="Services\Images\ImageMetaInformation.cs" />
     <Compile Include="Services\Images\ImagePersistenceService.cs" />
+    <Compile Include="Services\Images\Interfaces\IImageFileInterpreter.cs" />
     <Compile Include="Services\Interfaces\IClipboardHookService.cs" />
     <Compile Include="Mediators\Interfaces\IClipboardUserInterfaceMediator.cs" />
     <Compile Include="Services\Interfaces\IDownloader.cs" />

@@ -3,6 +3,7 @@ using System.Linq;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
+using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -36,7 +37,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return hints.Any(text.Contains);
         }
 
-        public void Perform(IClipboardData clipboardData)
+        public Task PerformAsync(IClipboardData clipboardData)
         {
             throw new NotImplementedException();
         }

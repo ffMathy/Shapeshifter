@@ -1,6 +1,7 @@
 ﻿using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using System;
+using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -32,7 +33,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return true;
         }
 
-        public void Perform(IClipboardData clipboardData)
+        public Task PerformAsync(IClipboardData clipboardData)
         {
             throw new NotImplementedException();
         }
