@@ -67,11 +67,5 @@ namespace Shapeshifter.Tests.Actions
             var action = container.Resolve<ICopyImageLinkAction>();
             Assert.IsTrue(action.CanPerform(Substitute.For<IClipboardTextData>()));
         }
-
-        [TestMethod]
-        public void PerformWithTextDataCopiesImageFromUrlToClipboard()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
