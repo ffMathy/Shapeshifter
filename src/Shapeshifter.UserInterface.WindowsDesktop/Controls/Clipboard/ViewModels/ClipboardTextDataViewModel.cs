@@ -41,7 +41,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
                 text = whitespaceSubstitutionExpression.Replace(text, " ");
                 text = text.Substring(0, Math.Min(text.Length, 512));
 
-                return text + "foo";
+                return text;
             }
         }
     }

@@ -34,17 +34,19 @@ namespace Shapeshifter.Tests
             return fixture;
         }
 
-        protected IContainer CreateContainer(Action<ContainerBuilder> setupCallback = null)
+        protected ILifetimeScope CreateContainer(Action<ContainerBuilder> setupCallback = null)
         {
-            var builder = new ContainerBuilder();
-            builder.RegisterAssemblyTypes(typeof(App).Assembly).AsSelf();
-            builder.RegisterAssemblyTypes(typeof(App).Assembly).AsImplementedInterfaces();
-            if (setupCallback != null)
+            App.CreateContainer(builder =>
             {
-                setupCallback(builder);
-            }
+                builder.RegisterAssemblyTypes(typeof(App).Assembly).AsSelf();
+                builder.RegisterAssemblyTypes(typeof(App).Assembly).AsImplementedInterfaces();
+                if (setupCallback != null)
+                {
+                    setupCallback(builder);
+                }
+            });
 
-            return builder.Build();
+            return App.Container;
         }
     }
 }

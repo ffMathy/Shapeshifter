@@ -16,17 +16,19 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.
 
         public BitmapSource ConvertFileBytesToBitmapSource(byte[] iconBytes)
         {
-            using (var stream = new MemoryStream(iconBytes))
-            {
-                var image = new BitmapImage();
-                image.BeginInit();
-                image.StreamSource = stream;
-                image.EndInit();
+            var stream = new MemoryStream(iconBytes);
 
-                image.Freeze();
+            var image = new BitmapImage();
+            image.CreateOptions = BitmapCreateOptions.None;
+            image.CacheOption = BitmapCacheOption.OnLoad;
 
-                return image;
-            }
+            image.BeginInit();
+            image.StreamSource = stream;
+            image.EndInit();
+
+            image.Freeze();
+
+            return image;
         }
 
         public byte[] GenerateDesignerImageBytesFromFileBytes(byte[] fileBytes)

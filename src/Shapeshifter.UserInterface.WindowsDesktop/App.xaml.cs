@@ -24,31 +24,38 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
         {
             get
             {
+                if(container == null)
+                {
+                    CreateContainer();
+                }
                 return container;
             }
         }
 
-        private static ILifetimeScope CreateContainer()
+        public static void CreateContainer(Action<ContainerBuilder> callback = null)
         {
-            //TODO: this is not the responsibility of "App". move out to a separate class.
-
-            var builder = new ContainerBuilder();
-
-            RegisterAssemblyTypes(builder, typeof(IClipboardData).Assembly);
-            RegisterAssemblyTypes(builder, typeof(App).Assembly);
-
-            RegisterServices(builder);
-
-            var newContainer = builder.Build();
-            LaunchServices(newContainer);
-
-            if (App.InDesignMode)
+            lock(typeof(App))
             {
-                return newContainer;
-            }
-            else
-            {
-                return newContainer.BeginLifetimeScope();
+                //TODO: this is not the responsibility of "App". move out to a separate class.
+                if (container == null)
+                {
+                    var builder = new ContainerBuilder();
+
+                    RegisterAssemblyTypes(builder, typeof(IClipboardData).Assembly);
+                    RegisterAssemblyTypes(builder, typeof(App).Assembly);
+
+                    RegisterServices(builder);
+
+                    if (callback != null)
+                    {
+                        callback(builder);
+                    }
+
+                    var newContainer = builder.Build();
+                    LaunchServices(newContainer);
+
+                    container = newContainer;
+                }
             }
         }
 
@@ -100,11 +107,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
             builder
                 .RegisterAssemblyTypes(assembly)
                 .AsImplementedInterfaces();
-        }
-
-        static App()
-        {
-            container = CreateContainer();
         }
 
         public static bool InDesignMode
