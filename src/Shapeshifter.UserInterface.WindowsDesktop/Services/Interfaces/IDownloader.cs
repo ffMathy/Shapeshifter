@@ -2,8 +2,8 @@
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
 {
-    interface IFileDownloader
+    interface IDownloader
     {
-        Task DownloadAsync(string fileUrl, string localFileDestination);
+        Task<byte[]> DownloadBytesAsync(string url);
     }
 }

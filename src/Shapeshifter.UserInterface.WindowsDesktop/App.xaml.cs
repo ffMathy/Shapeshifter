@@ -90,7 +90,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
                         typeof(ImagePersistenceService),
                         typeof(KeyboardHookService),
                         typeof(DataSourceService),
-                        typeof(FileDownloader),
+                        typeof(Downloader),
                         typeof(FileManager),
                         typeof(DesignerImageConverterService)
                     };

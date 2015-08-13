@@ -133,13 +133,13 @@
     <Compile Include="Services\Events\ControlEventArgument.cs" />
     <Compile Include="Services\Events\DataCopiedEventArgument.cs" />
     <Compile Include="Services\Events\KeyEventArgument.cs" />
-    <Compile Include="Services\Files\FileDownloader.cs" />
+    <Compile Include="Services\Downloader.cs" />
     <Compile Include="Services\Files\FileManager.cs" />
     <Compile Include="Services\Images\ImageMetaInformation.cs" />
     <Compile Include="Services\Images\ImagePersistenceService.cs" />
     <Compile Include="Services\Interfaces\IClipboardHookService.cs" />
     <Compile Include="Mediators\Interfaces\IClipboardUserInterfaceMediator.cs" />
-    <Compile Include="Services\Files\Interfaces\IFileDownloader.cs" />
+    <Compile Include="Services\Interfaces\IDownloader.cs" />
     <Compile Include="Services\Files\Interfaces\IFileManager.cs" />
     <Compile Include="Services\Interfaces\IHookService.cs" />
     <Compile Include="Services\Images\Interfaces\IImagePersistenceService.cs" />

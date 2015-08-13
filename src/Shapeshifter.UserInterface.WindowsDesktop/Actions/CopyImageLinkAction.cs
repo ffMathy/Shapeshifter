@@ -44,7 +44,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         public void Perform(IClipboardData clipboardData)
         {
             var textData = clipboardData as IClipboardTextData;
-            
+            var links = linkParser.ExtractLinksFromText(textData.Text);
 
             throw new NotImplementedException();
         }

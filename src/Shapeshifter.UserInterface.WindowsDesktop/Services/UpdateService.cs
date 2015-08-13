@@ -19,11 +19,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         private readonly GitHubClient client;
 
-        private readonly IFileDownloader fileDownloader;
+        private readonly IDownloader fileDownloader;
         private readonly IFileManager fileManager;
 
         public UpdateService(
-            IFileDownloader fileDownloader,
+            IDownloader fileDownloader,
             IFileManager fileManager)
         {
             client = CreateClient();
@@ -119,8 +119,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             var url = asset.BrowserDownloadUrl;
 
-            var localFilePath = fileManager.PrepareTemporaryPath(asset.Name);
-            await fileDownloader.DownloadAsync(url, localFilePath);
+            var data = await fileDownloader.DownloadBytesAsync(url);
+            var localFilePath = fileManager.WriteBytesToTemporaryFile(asset.Name, data);
+
             return localFilePath;
         }
 

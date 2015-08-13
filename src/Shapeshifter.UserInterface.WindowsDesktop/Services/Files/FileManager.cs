@@ -67,12 +67,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             return finalPath;
         }
 
-        public void WriteBytesToTemporaryFile(string fileName, byte[] bytes)
+        public string WriteBytesToTemporaryFile(string fileName, byte[] bytes)
         {
             var finalPath = GetFullPathFromRelativeTemporaryPath(fileName);
             temporaryPaths.Add(finalPath);
 
             File.WriteAllBytes(fileName, bytes);
+
+            return finalPath;
         }
     }
 }

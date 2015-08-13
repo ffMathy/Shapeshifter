@@ -2,22 +2,28 @@
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Net.Http;
 using System.IO;
+using System;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
-    class FileDownloader : IFileDownloader
+    class Downloader : IDownloader, IDisposable
     {
         private readonly HttpClient client;
 
-        public FileDownloader()
+        public Downloader()
         {
             client = new HttpClient();
         }
 
-        public async Task DownloadAsync(string fileUrl, string localFileDestination)
+        public void Dispose()
         {
-            var bytes = await client.GetByteArrayAsync(fileUrl);
-            File.WriteAllBytes(localFileDestination, bytes);
+            client.Dispose();
+        }
+
+        public async Task<byte[]> DownloadBytesAsync(string url)
+        {
+            var bytes = await client.GetByteArrayAsync(url);
+            return bytes;
         }
     }
 }
