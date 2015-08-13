@@ -3,6 +3,8 @@ using System.Linq;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -10,6 +12,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
     class CopyImageLinkAction : ICopyImageLinkAction
     {
+        private readonly ILinkParser linkParser;
+
+        public CopyImageLinkAction(ILinkParser linkParser)
+        {
+            this.linkParser = linkParser;
+        }
+
         public string Description
         {
             get
@@ -29,22 +38,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         public bool CanPerform(IClipboardData clipboardData)
         {
             var textData = clipboardData as IClipboardTextData;
-            return textData != null && HasLink(textData.Text) && ContainsImageFileExtension(textData.Text);
-        }
-
-        private bool ContainsImageFileExtension(string text)
-        {
-            return text.Contains(".png") || text.Contains(".jpg");
-        }
-
-        private static bool HasLink(string text)
-        {
-            var hints = new[] { "http://", "https://" };
-            return hints.Any(text.Contains);
+            return textData != null && linkParser.HasLinkOfType(textData.Text, LinkType.ImageFile);
         }
 
         public void Perform(IClipboardData clipboardData)
         {
+            var textData = clipboardData as IClipboardTextData;
+            
+
             throw new NotImplementedException();
         }
     }

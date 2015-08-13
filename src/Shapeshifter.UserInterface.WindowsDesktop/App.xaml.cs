@@ -24,7 +24,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
         {
             get
             {
-                if(container == null)
+                if (container == null)
                 {
                     CreateContainer();
                 }
@@ -34,28 +34,26 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
 
         public static void CreateContainer(Action<ContainerBuilder> callback = null)
         {
-            lock(typeof(App))
+            lock (typeof(App))
             {
                 //TODO: this is not the responsibility of "App". move out to a separate class.
-                if (container == null)
+
+                var builder = new ContainerBuilder();
+
+                RegisterAssemblyTypes(builder, typeof(IClipboardData).Assembly);
+                RegisterAssemblyTypes(builder, typeof(App).Assembly);
+
+                RegisterServices(builder);
+
+                if (callback != null)
                 {
-                    var builder = new ContainerBuilder();
-
-                    RegisterAssemblyTypes(builder, typeof(IClipboardData).Assembly);
-                    RegisterAssemblyTypes(builder, typeof(App).Assembly);
-
-                    RegisterServices(builder);
-
-                    if (callback != null)
-                    {
-                        callback(builder);
-                    }
-
-                    var newContainer = builder.Build();
-                    LaunchServices(newContainer);
-
-                    container = newContainer;
+                    callback(builder);
                 }
+
+                var newContainer = builder.Build();
+                LaunchServices(newContainer);
+
+                container = newContainer;
             }
         }
 

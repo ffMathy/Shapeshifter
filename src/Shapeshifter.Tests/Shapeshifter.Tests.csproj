@@ -94,6 +94,7 @@
     <Compile Include="Controls\Clipboard\ViewModels\Text\ClipboardFileCollectionDataViewModelTest.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\Text\ClipboardTextDataViewModelTest.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Services\LinkParserTest.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="Factories\TextClipboardDataControlFactoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
