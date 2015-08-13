@@ -152,6 +152,7 @@
     <Compile Include="Services\Files\FileIconService.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardHookService.cs" />
     <Compile Include="Services\Files\Interfaces\IFileIconService.cs" />
+    <Compile Include="Services\LinkParser.cs" />
     <Compile Include="Services\LinkType.cs" />
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Windows\ClipboardListWindow.xaml.cs">

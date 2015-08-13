@@ -3,6 +3,7 @@ using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Services;
+using System;
 
 namespace Shapeshifter.Tests.Services
 {
@@ -21,7 +22,6 @@ namespace Shapeshifter.Tests.Services
 
             Assert.IsTrue(links.Contains("http://google.com"));
             Assert.IsTrue(links.Contains("https://foo.com"));
-            Assert.IsTrue(links.Contains("foobar"));
             Assert.IsTrue(links.Contains("foobar.com"));
             Assert.IsTrue(links.Contains("test.net/news+list.txt?cat=pic&id=foo28"));
             Assert.IsTrue(links.Contains("blah.dk/hey/lol%20kitten.jpg"));
@@ -112,7 +112,8 @@ namespace Shapeshifter.Tests.Services
             var text = "google.com/foo/image.png";
 
             var linkParser = container.Resolve<ILinkParser>();
-            Assert.IsTrue(linkParser.GetLinkType(text).HasFlag(LinkType.ImageFile));
+            var linkType = linkParser.GetLinkType(text);
+            Assert.IsTrue(linkType.HasFlag(LinkType.ImageFile));
         }
 
         [TestMethod]
@@ -123,7 +124,20 @@ namespace Shapeshifter.Tests.Services
             var text = "http://google.com";
 
             var linkParser = container.Resolve<ILinkParser>();
-            Assert.IsTrue(linkParser.GetLinkType(text).HasFlag(LinkType.Http));
+            var linkType = linkParser.GetLinkType(text);
+            Assert.IsTrue(linkType.HasFlag(LinkType.Http));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GettingTypeFromInvalidLinkThrowsException()
+        {
+            var container = CreateContainer();
+
+            var text = "hello world";
+
+            var linkParser = container.Resolve<ILinkParser>();
+            linkParser.GetLinkType(text);
         }
 
         [TestMethod]
@@ -134,10 +148,7 @@ namespace Shapeshifter.Tests.Services
             var text = "google.com";
 
             var linkParser = container.Resolve<ILinkParser>();
-            Assert.IsFalse(!linkParser.GetLinkType(text).HasFlag(LinkType.Http));
-            Assert.IsFalse(!linkParser.GetLinkType(text).HasFlag(LinkType.Https));
-            Assert.IsFalse(!linkParser.GetLinkType(text).HasFlag(LinkType.ImageFile));
-            Assert.IsFalse(!linkParser.GetLinkType(text).HasFlag(LinkType.TextFile));
+            Assert.AreEqual(LinkType.NoType, linkParser.GetLinkType(text));
         }
 
         [TestMethod]
