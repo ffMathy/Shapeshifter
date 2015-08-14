@@ -7,6 +7,9 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Media.Imaging;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -57,7 +60,37 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         {
             var textData = clipboardData as IClipboardTextData;
             var links = linkParser.ExtractLinksFromText(textData.Text);
-            throw new NotImplementedException();
+
+            var imagesBytes = await DownloadLinks(links);
+
+            var images = InterpretImages(imagesBytes);
+            InjectImages(images);
+        }
+
+        private IEnumerable<BitmapSource> InterpretImages(IEnumerable<byte[]> imagesBytes)
+        {
+            return imagesBytes.Select(imageFileInterpreter.Interpret);
+        }
+
+        private void InjectImages(IEnumerable<BitmapSource> images)
+        {
+            foreach (var image in images)
+            {
+                clipboardInjectionService.InjectImage(image);
+            }
+        }
+
+        private async Task<IEnumerable<byte[]>> DownloadLinks(IEnumerable<string> links)
+        {
+            var downloadTasks = new List<Task<byte[]>>();
+            foreach (var link in links)
+            {
+                downloadTasks.Add(downloader.DownloadBytesAsync(link));
+            }
+
+            await Task.WhenAll(downloadTasks);
+
+            return downloadTasks.Select(x => x.Result);
         }
     }
 }

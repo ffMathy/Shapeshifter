@@ -2,7 +2,7 @@
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces
 {
-    interface IImageFileInterpreter
+    public interface IImageFileInterpreter
     {
         BitmapSource Interpret(byte[] bytes);
     }

@@ -4,8 +4,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.
 {
     public interface IDesignerImageConverterService
     {
-        BitmapSource ConvertFileBytesToBitmapSource(byte[] fileBytes);
-
         byte[] GenerateDesignerImageBytesFromFileBytes(byte[] fileBytes);
     }
 }

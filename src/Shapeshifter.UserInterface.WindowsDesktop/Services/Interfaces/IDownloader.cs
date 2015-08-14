@@ -2,7 +2,7 @@
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
 {
-    interface IDownloader
+    public interface IDownloader
     {
         Task<byte[]> DownloadBytesAsync(string url);
     }

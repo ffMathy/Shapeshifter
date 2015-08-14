@@ -2,38 +2,26 @@
 using System.IO;
 using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
     class DesignerImageConverterService : IDesignerImageConverterService
     {
+        private readonly IImageFileInterpreter imageFileInterpreter;
         private readonly IImagePersistenceService imagePersistenceService;
 
-        public DesignerImageConverterService(IImagePersistenceService imagePersistenceService)
+        public DesignerImageConverterService(
+            IImagePersistenceService imagePersistenceService,
+            IImageFileInterpreter imageFileInterpreter)
         {
             this.imagePersistenceService = imagePersistenceService;
-        }
-
-        public BitmapSource ConvertFileBytesToBitmapSource(byte[] iconBytes)
-        {
-            var stream = new MemoryStream(iconBytes);
-
-            var image = new BitmapImage();
-            image.CreateOptions = BitmapCreateOptions.None;
-            image.CacheOption = BitmapCacheOption.OnLoad;
-
-            image.BeginInit();
-            image.StreamSource = stream;
-            image.EndInit();
-
-            image.Freeze();
-
-            return image;
+            this.imageFileInterpreter = imageFileInterpreter;
         }
 
         public byte[] GenerateDesignerImageBytesFromFileBytes(byte[] fileBytes)
         {
-            var bitmapSource = ConvertFileBytesToBitmapSource(fileBytes);
+            var bitmapSource = imageFileInterpreter.Interpret(fileBytes);
             return imagePersistenceService.ConvertBitmapSourceToByteArray(bitmapSource);
         }
     }
