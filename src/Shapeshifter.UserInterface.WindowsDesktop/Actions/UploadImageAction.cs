@@ -4,11 +4,21 @@ using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
     class UploadImageAction : IUploadImageAction
     {
+        private readonly IFileTypeInterpreter fileTypeInterpreter;
+
+        public UploadImageAction(
+            IFileTypeInterpreter fileTypeInterpreter)
+        {
+            this.fileTypeInterpreter = fileTypeInterpreter;
+        }
+
         public string Description
         {
             get
@@ -35,16 +45,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return clipboardData is IClipboardImageData;
         }
 
-        private static bool IsSuitableFileData(IClipboardData clipboardData)
+        private bool IsSuitableFileData(IClipboardData clipboardData)
         {
             var fileData = clipboardData as IClipboardFileData;
-            return fileData != null && HasImageFileExtension(fileData.FileName);
-        }
-
-        private static bool HasImageFileExtension(string filename)
-        {
-            var hints = new[] { ".png", ".jpg" };
-            return hints.Any(filename.EndsWith);
+            return fileData != null && fileTypeInterpreter.GetFileTypeFromFileName(fileData.FileName) == FileType.Image;
         }
 
         public Task PerformAsync(IClipboardData clipboardData)

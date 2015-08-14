@@ -137,6 +137,8 @@
     <Compile Include="Services\Events\KeyEventArgument.cs" />
     <Compile Include="Services\Downloader.cs" />
     <Compile Include="Services\Files\FileManager.cs" />
+    <Compile Include="Services\Files\FileType.cs" />
+    <Compile Include="Services\Files\Interfaces\IFileTypeInterpreter.cs" />
     <Compile Include="Services\Images\ImageFileInterpreter.cs" />
     <Compile Include="Services\Images\ImageMetaInformation.cs" />
     <Compile Include="Services\Images\ImagePersistenceService.cs" />

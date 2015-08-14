@@ -4,6 +4,8 @@ using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using NSubstitute;
 using Shapeshifter.Core.Data;
 using Shapeshifter.Core.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
 
 namespace Shapeshifter.Tests.Actions
 {
@@ -22,36 +24,32 @@ namespace Shapeshifter.Tests.Actions
         }
 
         [TestMethod]
-        public void CanNotPerformWithFileWithNoImageExtension()
+        public void CanNotPerformWithFileWithNoImage()
         {
-            var container = CreateContainer();
+            var container = CreateContainer(c =>
+            {
+                c.RegisterFake<IFileTypeInterpreter>()
+                    .GetFileTypeFromFileName(Arg.Any<string>())
+                    .Returns(FileType.Other);
+            });
 
             var fakeData = Substitute.For<IClipboardFileData>();
-            fakeData.FileName.Returns("kitten.txt");
 
             var action = container.Resolve<IUploadImageAction>();
             Assert.IsFalse(action.CanPerform(fakeData));
         }
 
         [TestMethod]
-        public void CanPerformWithFileWithJpgExtension()
+        public void CanPerformWithImageFile()
         {
-            var container = CreateContainer();
+            var container = CreateContainer(c =>
+            {
+                c.RegisterFake<IFileTypeInterpreter>()
+                    .GetFileTypeFromFileName(Arg.Any<string>())
+                    .Returns(FileType.Image);
+            });
 
             var fakeData = Substitute.For<IClipboardFileData>();
-            fakeData.FileName.Returns("kitten.jpg");
-
-            var action = container.Resolve<IUploadImageAction>();
-            Assert.IsTrue(action.CanPerform(fakeData));
-        }
-
-        [TestMethod]
-        public void CanPerformWithFileWithPngExtension()
-        {
-            var container = CreateContainer();
-
-            var fakeData = Substitute.For<IClipboardFileData>();
-            fakeData.FileName.Returns("kitten.png");
 
             var action = container.Resolve<IUploadImageAction>();
             Assert.IsTrue(action.CanPerform(fakeData));
