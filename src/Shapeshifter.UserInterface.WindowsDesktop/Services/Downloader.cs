@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Net.Http;
-using System.IO;
 using System;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services

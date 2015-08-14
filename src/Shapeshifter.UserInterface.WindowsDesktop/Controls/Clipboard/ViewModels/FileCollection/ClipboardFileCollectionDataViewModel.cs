@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Windows;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection;
 using Shapeshifter.Core.Data.Interfaces;

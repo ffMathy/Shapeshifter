@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using System.Windows;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer;
 using Shapeshifter.Core.Data.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 using Autofac;

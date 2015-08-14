@@ -3,10 +3,8 @@ using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Text.Interfaces;
 using System;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
-using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {

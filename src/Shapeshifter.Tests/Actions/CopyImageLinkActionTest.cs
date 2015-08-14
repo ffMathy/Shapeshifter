@@ -6,10 +6,8 @@ using Shapeshifter.Core.Data;
 using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services;
-using System;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using System.Windows.Media;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 

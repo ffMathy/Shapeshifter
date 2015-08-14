@@ -8,7 +8,6 @@ using System.Reflection;
 using System;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
-using System.ComponentModel;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop

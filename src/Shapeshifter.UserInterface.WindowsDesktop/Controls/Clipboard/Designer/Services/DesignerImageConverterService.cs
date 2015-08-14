@@ -1,6 +1,4 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
-using System.IO;
-using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 

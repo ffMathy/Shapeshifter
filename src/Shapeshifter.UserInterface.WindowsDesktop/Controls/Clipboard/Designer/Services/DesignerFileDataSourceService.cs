@@ -1,7 +1,6 @@
 ﻿using Shapeshifter.Core.Data;
 using Shapeshifter.Core.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Properties;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Factories

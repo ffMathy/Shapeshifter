@@ -4,6 +4,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using NSubstitute;
 using Shapeshifter.Core.Data;
 using Shapeshifter.Core.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 
 namespace Shapeshifter.Tests.Actions
 {
@@ -24,37 +25,17 @@ namespace Shapeshifter.Tests.Actions
         [TestMethod]
         public void CanPerformIsFalseForTextTypesWithNoLink()
         {
-            var container = CreateContainer();
+            var container = CreateContainer(c =>
+            {
+                c.RegisterFake<ILinkParser>()
+                    .HasLink(Arg.Any<string>())
+                    .Returns(false);
+            });
 
             var textDataWithLinkButNoImageLink = Substitute.For<IClipboardTextData>();
-            textDataWithLinkButNoImageLink.Text.Returns("hello world");
 
             var action = container.Resolve<IOpenLinkAction>();
             Assert.IsFalse(action.CanPerform(textDataWithLinkButNoImageLink));
-        }
-
-        [TestMethod]
-        public void CanPerformIsTrueForTextTypesWithHttpLink()
-        {
-            var container = CreateContainer();
-
-            var textDataWithImageLink = Substitute.For<IClipboardTextData>();
-            textDataWithImageLink.Text.Returns("hello http://example.com text");
-
-            var action = container.Resolve<IOpenLinkAction>();
-            Assert.IsTrue(action.CanPerform(textDataWithImageLink));
-        }
-
-        [TestMethod]
-        public void CanPerformIsTrueForTextTypesWithHttpsLink()
-        {
-            var container = CreateContainer();
-
-            var textDataWithImageLink = Substitute.For<IClipboardTextData>();
-            textDataWithImageLink.Text.Returns("hello https://example.com text");
-
-            var action = container.Resolve<IOpenLinkAction>();
-            Assert.IsTrue(action.CanPerform(textDataWithImageLink));
         }
     }
 }

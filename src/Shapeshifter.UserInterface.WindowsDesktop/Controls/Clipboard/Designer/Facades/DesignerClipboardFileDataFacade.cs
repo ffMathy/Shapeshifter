@@ -2,7 +2,6 @@
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Factories;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Properties;
-using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer
 {
