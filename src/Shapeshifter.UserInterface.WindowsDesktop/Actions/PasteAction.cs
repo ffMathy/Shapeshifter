@@ -44,7 +44,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         public async Task PerformAsync(IClipboardData clipboardData)
         {
-            throw new NotImplementedException();
+            clipboardInjectionService.InjectData(clipboardData);
         }
     }
 }
