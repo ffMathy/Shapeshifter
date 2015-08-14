@@ -148,6 +148,7 @@
     <Compile Include="Services\Interfaces\IHookService.cs" />
     <Compile Include="Services\Images\Interfaces\IImagePersistenceService.cs" />
     <Compile Include="Services\Interfaces\ILinkParser.cs" />
+    <Compile Include="Services\Interfaces\IProcessManager.cs" />
     <Compile Include="Services\Interfaces\IUpdateService.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardHookConfiguration.cs" />
     <Compile Include="Services\Keyboard\KeyboardHookConfiguration.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Services\Files\Interfaces\IFileIconService.cs" />
     <Compile Include="Services\LinkParser.cs" />
     <Compile Include="Services\LinkType.cs" />
+    <Compile Include="Services\ProcessManager.cs" />
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Windows\ClipboardListWindow.xaml.cs">
       <DependentUpon>ClipboardListWindow.xaml</DependentUpon>

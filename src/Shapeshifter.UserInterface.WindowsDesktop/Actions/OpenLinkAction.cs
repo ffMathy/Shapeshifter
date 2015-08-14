@@ -10,11 +10,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
     class OpenLinkAction : IOpenLinkAction
     {
         private readonly ILinkParser linkParser;
+        private readonly IProcessManager processManager;
 
         public OpenLinkAction(
-            ILinkParser linkParser)
+            ILinkParser linkParser,
+            IProcessManager processManager)
         {
             this.linkParser = linkParser;
+            this.processManager = processManager;
         }
 
         //TODO: make the description include the links that will be opened by making a GetDescription(data) method instead.
@@ -46,7 +49,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             var links = linkParser.ExtractLinksFromText(textData.Text);
             foreach(var link in links)
             {
-                throw new NotImplementedException();
+                processManager.StartProcess(link);
             }
         }
     }
