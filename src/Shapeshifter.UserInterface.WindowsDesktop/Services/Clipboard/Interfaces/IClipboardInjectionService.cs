@@ -6,6 +6,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interface
     public interface IClipboardInjectionService
     {
         void InjectImage(BitmapSource image);
-        void InjectData(IClipboardData clipboardData);
+
+        void InjectData(IClipboardData data);
+
+        void InjectText(string text);
     }
 }

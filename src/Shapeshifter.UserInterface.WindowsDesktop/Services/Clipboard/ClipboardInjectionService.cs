@@ -16,5 +16,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
         {
             throw new NotImplementedException();
         }
+
+        public void InjectText(string text)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

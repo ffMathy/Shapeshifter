@@ -3,11 +3,19 @@ using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
     class PasteAsPlainTextAction : IPasteAsPlainTextAction
     {
+        private readonly IClipboardInjectionService clipboardInjectionService;
+
+        public PasteAsPlainTextAction(IClipboardInjectionService clipboardInjectionService)
+        {
+            this.clipboardInjectionService = clipboardInjectionService;
+        }
+
         public string Description
         {
             get
@@ -29,9 +37,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return clipboardData is IClipboardTextData;
         }
 
-        public Task PerformAsync(IClipboardData clipboardData)
+        public async Task PerformAsync(IClipboardData clipboardData)
         {
-            throw new NotImplementedException();
+            var textData = (IClipboardTextData)clipboardData;
+            clipboardInjectionService.InjectText(textData.Text);
         }
     }
 }
