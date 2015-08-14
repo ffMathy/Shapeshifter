@@ -1,5 +1,6 @@
 ﻿using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using System;
 using System.Threading.Tasks;
 
@@ -7,6 +8,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
     class PasteAction : IPasteAction
     {
+        private readonly IClipboardInjectionService clipboardInjectionService;
+
+        public PasteAction(
+            IClipboardInjectionService clipboardInjectionService)
+        {
+            this.clipboardInjectionService = clipboardInjectionService;
+        }
+
         public string Description
         {
             get
@@ -33,7 +42,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return true;
         }
 
-        public Task PerformAsync(IClipboardData clipboardData)
+        public async Task PerformAsync(IClipboardData clipboardData)
         {
             throw new NotImplementedException();
         }
