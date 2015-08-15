@@ -7,9 +7,11 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using static Shapeshifter.UserInterface.WindowsDesktop.Services.Api.KeyboardApi;
 using KeyEventHandler = Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces.KeyEventHandler;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
+    [ExcludeFromCodeCoverage]
     class KeyboardHookService : IKeyboardHookService, IDisposable
     {
         public event EventHandler<HookRecoveredEventArgument> HookRecovered;

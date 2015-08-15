@@ -2,9 +2,11 @@
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Factories;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Properties;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer
 {
+    [ExcludeFromCodeCoverage]
     class DesignerClipboardFileDataFacade : ClipboardFileData
     {
         public DesignerClipboardFileDataFacade(

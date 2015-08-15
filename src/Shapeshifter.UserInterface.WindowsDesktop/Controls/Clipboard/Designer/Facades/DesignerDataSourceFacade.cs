@@ -1,9 +1,11 @@
 ﻿using Autofac;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades
 {
+    [ExcludeFromCodeCoverage]
     class DesignerDataSourceFacade : IDataSource
     {
 

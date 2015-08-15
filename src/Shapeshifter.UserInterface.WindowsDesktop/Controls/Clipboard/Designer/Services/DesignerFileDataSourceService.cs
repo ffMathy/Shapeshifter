@@ -2,9 +2,11 @@
 using Shapeshifter.Core.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades;
 using Shapeshifter.UserInterface.WindowsDesktop.Properties;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Factories
 {
+    [ExcludeFromCodeCoverage]
     class DesignerFileDataSourceService : IDataSourceService
     {
 

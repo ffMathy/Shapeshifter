@@ -2,11 +2,13 @@
 using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Factories;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer
 {
     class DesignerClipboardTextDataFacade : ClipboardTextData, IClipboardTextData
     {
+        [ExcludeFromCodeCoverage]
         public DesignerClipboardTextDataFacade(IDesignerImageConverterService designerImageConverterService) : 
             base(new DesignerTextDataSourceService())
         {

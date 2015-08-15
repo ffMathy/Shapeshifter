@@ -1,10 +1,12 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
 {
+    [ExcludeFromCodeCoverage]
     class FileManager : IFileManager, IDisposable
     {
         private readonly ICollection<string> temporaryPaths;

@@ -2,9 +2,11 @@
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Net.Http;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
+    [ExcludeFromCodeCoverage]
     class Downloader : IDownloader, IDisposable
     {
         private readonly HttpClient client;

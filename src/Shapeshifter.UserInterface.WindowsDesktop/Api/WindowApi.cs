@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
 {
+    [ExcludeFromCodeCoverage]
     class WindowApi
     {
         [DllImport("user32.dll")]

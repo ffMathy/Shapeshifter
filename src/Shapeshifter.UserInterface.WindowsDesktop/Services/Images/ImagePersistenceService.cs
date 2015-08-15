@@ -4,10 +4,11 @@ using System;
 using System.Runtime.InteropServices;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
-
+    [ExcludeFromCodeCoverage]
     class ImagePersistenceService : IImagePersistenceService
     {
         public ImagePersistenceService()

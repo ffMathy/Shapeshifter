@@ -1,7 +1,9 @@
-﻿using System.Windows.Input;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Windows.Input;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Events
 {
+    [ExcludeFromCodeCoverage]
     class KeyEventArgument
     {
         /// <summary>

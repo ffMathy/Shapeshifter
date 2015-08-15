@@ -1,9 +1,11 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
+    [ExcludeFromCodeCoverage]
     class DesignerImageConverterService : IDesignerImageConverterService
     {
         private readonly IImageFileInterpreter imageFileInterpreter;

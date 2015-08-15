@@ -2,7 +2,7 @@
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces
 {
-    interface IZipFilesAction : IAction
+    public interface IZipFilesAction : IAction
     {
     }
 }

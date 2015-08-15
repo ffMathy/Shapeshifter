@@ -5,9 +5,11 @@ using static Shapeshifter.UserInterface.WindowsDesktop.Services.Api.IconApi;
 using System.Windows.Interop;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
+    [ExcludeFromCodeCoverage]
     class FileIconService : IFileIconService
     {
         private readonly IImagePersistenceService imagePersistenceService;

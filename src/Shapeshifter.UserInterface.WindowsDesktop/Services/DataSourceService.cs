@@ -7,9 +7,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Interop;
 using System.Windows;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
+    [ExcludeFromCodeCoverage]
     class DataSourceService : IDataSourceService
     {
         private readonly IImagePersistenceService imagePersistenceService;

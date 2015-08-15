@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
@@ -119,6 +120,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
 
         #region Nested type: SIZE
 
+        [ExcludeFromCodeCoverage]
         [StructLayout(LayoutKind.Sequential)]
         public struct SIZE
         {
