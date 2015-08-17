@@ -7,6 +7,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Int
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using System;
 using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 
 namespace Shapeshifter.Tests.Factories
 {
@@ -79,6 +80,84 @@ namespace Shapeshifter.Tests.Factories
 
             var factory = container.Resolve<IFileClipboardDataControlFactory>();
             factory.BuildControl(fakeData);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void BuildDataForIncompatibleFormatThrowsException()
+        {
+            var container = CreateContainer();
+
+            var factory = container.Resolve<IFileClipboardDataControlFactory>();
+            factory.BuildData("foobar", new object());
+        }
+
+        [TestMethod]
+        public void BuildDataForMultipleFilesReturnsFileCollectionData()
+        {
+            var container = CreateContainer();
+
+            var factory = container.Resolve<IFileClipboardDataControlFactory>();
+            var data = factory.BuildData("FileDrop", new[] { "foo.jpg", "bar.txt" });
+            Assert.IsInstanceOfType(data, typeof(ClipboardFileCollectionData));
+        }
+
+        [TestMethod]
+        public void BuildDataForSingleFileReturnsFileData()
+        {
+            var container = CreateContainer(c =>
+            {
+                c.RegisterFake<IFileIconService>();
+            });
+
+            var factory = container.Resolve<IFileClipboardDataControlFactory>();
+            var data = factory.BuildData("FileDrop", new[] { "foo.jpg" });
+            Assert.IsInstanceOfType(data, typeof(ClipboardFileData));
+        }
+
+        [TestMethod]
+        public void CanBuildDataReturnsTrueForFileDropFormat()
+        {
+            var container = CreateContainer();
+
+            var factory = container.Resolve<IFileClipboardDataControlFactory>();
+            Assert.IsTrue(factory.CanBuildData("FileDrop"));
+        }
+
+        [TestMethod]
+        public void CanBuildDataReturnsFalseForInvalidFormat()
+        {
+            var container = CreateContainer();
+
+            var factory = container.Resolve<IFileClipboardDataControlFactory>();
+            Assert.IsFalse(factory.CanBuildData("foo"));
+        }
+
+        [TestMethod]
+        public void CanBuildControlReturnsFalseForNonFileData()
+        {
+            var container = CreateContainer();
+
+            var factory = container.Resolve<IFileClipboardDataControlFactory>();
+            Assert.IsFalse(factory.CanBuildControl(Substitute.For<IClipboardData>()));
+        }
+
+        [TestMethod]
+        public void CanBuildControlReturnsTrueForFileData()
+        {
+            var container = CreateContainer();
+
+            var factory = container.Resolve<IFileClipboardDataControlFactory>();
+            Assert.IsTrue(factory.CanBuildControl(Substitute.For<IClipboardFileData>()));
+        }
+
+        [TestMethod]
+        public void CanBuildControlReturnsTrueForFileCollectionData()
+        {
+            var container = CreateContainer();
+
+            var factory = container.Resolve<IFileClipboardDataControlFactory>();
+            Assert.IsTrue(factory.CanBuildControl(Substitute.For<IClipboardFileCollectionData>()));
         }
     }
 }

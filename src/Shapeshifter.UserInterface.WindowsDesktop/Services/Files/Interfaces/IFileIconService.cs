@@ -1,7 +1,10 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
 {
-    interface IFileIconService
+    public interface IFileIconService
     {
+        [ExcludeFromCodeCoverage]
         byte[] GetIcon(string path, bool allowThumbnails, int dimensions = 256);
     }
 }

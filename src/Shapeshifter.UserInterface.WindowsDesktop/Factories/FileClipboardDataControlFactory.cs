@@ -79,7 +79,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             };
         }
 
-        private ClipboardFileData ConstructClipboardFileData(string file)
+        private IClipboardFileData ConstructClipboardFileData(string file)
         {
             return new ClipboardFileData(dataSourceService)
             {
@@ -90,7 +90,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public bool CanBuildControl(IClipboardData data)
         {
-            return data is ClipboardFileData || data is ClipboardFileCollectionData;
+            return data is IClipboardFileData || data is IClipboardFileCollectionData;
         }
 
         public bool CanBuildData(string format)
