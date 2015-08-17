@@ -12,7 +12,7 @@ namespace Shapeshifter.Tests.Factories
         {
             var container = CreateContainer();
 
-            var factory = container.Resolve<IClipboardDataControlFactory>();
+            var factory = container.Resolve<ITextClipboardDataControlFactory>();
             Assert.IsTrue(factory.CanBuildData("Text"));
         }
 
@@ -21,7 +21,7 @@ namespace Shapeshifter.Tests.Factories
         {
             var container = CreateContainer();
 
-            var factory = container.Resolve<IClipboardDataControlFactory>();
+            var factory = container.Resolve<ITextClipboardDataControlFactory>();
             Assert.IsFalse(factory.CanBuildData("foobar"));
         }
     }

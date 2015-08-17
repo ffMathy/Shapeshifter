@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Core.Data
 {
@@ -22,7 +22,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Core.Data
             }
         }
 
-        public UIElement Control
+        public IClipboardControl Control
         {
             get;set;
         }

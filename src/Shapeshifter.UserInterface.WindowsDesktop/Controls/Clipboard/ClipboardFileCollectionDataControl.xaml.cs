@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Controls;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard
@@ -7,7 +8,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard
     /// Interaction logic for ClipboardFileCollectionDataControl.xaml
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public partial class ClipboardFileCollectionDataControl : UserControl
+    public partial class ClipboardFileCollectionDataControl : UserControl, IClipboardFileCollectionDataControl
     {
         public ClipboardFileCollectionDataControl()
         {

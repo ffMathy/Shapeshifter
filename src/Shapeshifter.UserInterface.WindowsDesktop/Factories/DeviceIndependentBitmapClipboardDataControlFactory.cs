@@ -2,12 +2,13 @@
 using System.Windows;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
     class DeviceIndependentBitmapClipboardDataControlFactory : IClipboardDataControlFactory
     {
-        public UIElement BuildControl(IClipboardData clipboardData)
+        public IClipboardControl BuildControl(IClipboardData clipboardData)
         {
             throw new NotImplementedException();
         }

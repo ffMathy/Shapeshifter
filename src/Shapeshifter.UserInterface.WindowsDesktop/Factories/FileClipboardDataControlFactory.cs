@@ -4,63 +4,48 @@ using System.Linq;
 using System.Windows;
 using Shapeshifter.Core.Data;
 using Shapeshifter.Core.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
-    class FileClipboardDataControlFactory : IClipboardDataControlFactory
+    class FileClipboardDataControlFactory : IFileClipboardDataControlFactory
     {
         private readonly IDataSourceService dataSourceService;
         private readonly IFileIconService fileIconService;
 
+        private readonly IClipboardControlFactory<IClipboardFileData, IClipboardFileDataControl> clipboardFileControlFactory;
+        private readonly IClipboardControlFactory<IClipboardFileCollectionData, IClipboardFileCollectionDataControl> clipboardFileCollectionControlFactory;
+
         public FileClipboardDataControlFactory(
             IDataSourceService dataSourceService, 
-            IFileIconService fileIconService)
+            IFileIconService fileIconService,
+            IClipboardControlFactory<IClipboardFileData, IClipboardFileDataControl> clipboardFileControlFactory,
+            IClipboardControlFactory<IClipboardFileCollectionData, IClipboardFileCollectionDataControl> clipboardFileCollectionControlFactory)
         {
             this.dataSourceService = dataSourceService;
             this.fileIconService = fileIconService;
+            this.clipboardFileControlFactory = clipboardFileControlFactory;
+            this.clipboardFileCollectionControlFactory = clipboardFileCollectionControlFactory;
         }
 
-        public UIElement BuildControl(IClipboardData clipboardData)
+        public IClipboardControl BuildControl(IClipboardData clipboardData)
         {
             if(clipboardData is IClipboardFileCollectionData)
             {
-                return CreateFileCollectionControl(clipboardData);
+                return clipboardFileCollectionControlFactory.CreateControl((IClipboardFileCollectionData)clipboardData);
             }
             else if(clipboardData is IClipboardFileData)
             {
-                return CreateFileControl(clipboardData);
+                return clipboardFileControlFactory.CreateControl((IClipboardFileData)clipboardData);
             }
             else
             {
                 throw new ArgumentException("Unknown clipboard data type.", nameof(clipboardData));
             }
-        }
-
-        private static UIElement CreateFileControl(IClipboardData clipboardData)
-        {
-            return new ClipboardFileDataControl()
-            {
-                DataContext = new ClipboardFileDataViewModel()
-                {
-                    Data = (IClipboardFileData)clipboardData
-                }
-            };
-        }
-
-        private static UIElement CreateFileCollectionControl(IClipboardData clipboardData)
-        {
-            return new ClipboardFileCollectionDataControl()
-            {
-                DataContext = new ClipboardFileCollectionDataViewModel()
-                {
-                    Data = (IClipboardFileCollectionData)clipboardData
-                }
-            };
         }
 
         public IClipboardData BuildData(string format, object data)

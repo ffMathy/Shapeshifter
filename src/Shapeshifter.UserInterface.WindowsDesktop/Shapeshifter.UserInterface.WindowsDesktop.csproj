@@ -103,7 +103,14 @@
     <Compile Include="Actions\PasteAsPlainTextAction.cs" />
     <Compile Include="Actions\UploadImageAction.cs" />
     <Compile Include="Actions\ZipFilesAction.cs" />
-    <Compile Include="Controls\Clipboard\ActionControl.xaml.cs">
+    <Compile Include="Controls\Clipboard\Factories\ClipboardFileCollectionDataControlFactory.cs" />
+    <Compile Include="Controls\Clipboard\Factories\ClipboardFileDataControlFactory.cs" />
+    <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardControlFactory.cs" />
+    <Compile Include="Controls\Clipboard\Interfaces\IClipboardControl.cs" />
+    <Compile Include="Controls\Clipboard\Interfaces\IClipboardTextDataControl.cs" />
+    <Compile Include="Controls\Clipboard\Interfaces\IClipboardFileDataControl.cs" />
+    <Compile Include="Controls\Clipboard\Interfaces\IClipboardFileCollectionDataControl.cs" />
+    <Compile Include="Controls\Window\ActionControl.xaml.cs">
       <DependentUpon>ActionControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Clipboard\DataSourceControl.xaml.cs">
@@ -122,6 +129,8 @@
     <Compile Include="Factories\FileClipboardDataControlFactory.cs" />
     <Compile Include="Factories\Interfaces\IClipboardDataControlFactory.cs" />
     <Compile Include="Factories\EnhancedMetafileClipboardDataControlFactory.cs" />
+    <Compile Include="Factories\Interfaces\IFileClipboardDataControlFactory.cs" />
+    <Compile Include="Factories\Interfaces\ITextClipboardDataControlFactory.cs" />
     <Compile Include="Factories\TextClipboardDataControlFactory.cs" />
     <Compile Include="Api\IconApi.cs" />
     <Compile Include="Api\KeyboardApi.cs" />
@@ -168,7 +177,7 @@
       <DependentUpon>ClipboardListWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ViewModels\ClipboardListViewModel.cs" />
-    <Page Include="Controls\Clipboard\ActionControl.xaml">
+    <Page Include="Controls\Window\ActionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

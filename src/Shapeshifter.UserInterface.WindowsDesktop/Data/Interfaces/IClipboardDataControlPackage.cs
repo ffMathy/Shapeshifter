@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
 using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces
 {
@@ -10,6 +10,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces
 
         IEnumerable<IClipboardData> Contents { get; }
 
-        UIElement Control { get; }
+        IClipboardControl Control { get; }
     }
 }

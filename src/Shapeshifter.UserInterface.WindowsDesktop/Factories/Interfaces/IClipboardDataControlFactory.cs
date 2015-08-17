@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using Shapeshifter.Core.Data;
+﻿using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces
 {
@@ -9,7 +9,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces
 
         bool CanBuildControl(IClipboardData data);
 
-        UIElement BuildControl(IClipboardData clipboardData);
+        IClipboardControl BuildControl(IClipboardData clipboardData);
 
         IClipboardData BuildData(string format, object data);
     }
