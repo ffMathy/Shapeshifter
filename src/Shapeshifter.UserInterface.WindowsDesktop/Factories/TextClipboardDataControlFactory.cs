@@ -1,10 +1,10 @@
 ﻿using System.Windows;
 using Shapeshifter.Core.Data;
 using Shapeshifter.Core.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
+using Shapeshifter.Core.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
@@ -12,20 +12,19 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
     {
         private readonly IDataSourceService dataSourceService;
 
-        public TextClipboardDataControlFactory(IDataSourceService dataSourceService)
+        private readonly IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl> textControlFactory;
+
+        public TextClipboardDataControlFactory(
+            IDataSourceService dataSourceService,
+            IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl> textControlFactory)
         {
             this.dataSourceService = dataSourceService;
+            this.textControlFactory = textControlFactory;
         }
 
         public IClipboardControl BuildControl(IClipboardData clipboardData)
         {
-            return new ClipboardTextDataControl()
-            {
-                DataContext = new ClipboardTextDataViewModel()
-                {
-                    Data = (ClipboardTextData)clipboardData
-                }
-            };
+            return textControlFactory.CreateControl((IClipboardTextData)clipboardData);
         }
 
         public IClipboardData BuildData(string format, object data)
@@ -38,7 +37,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public bool CanBuildControl(IClipboardData data)
         {
-            return data is ClipboardTextData;
+            return data is IClipboardTextData;
         }
 
         public bool CanBuildData(string format)
