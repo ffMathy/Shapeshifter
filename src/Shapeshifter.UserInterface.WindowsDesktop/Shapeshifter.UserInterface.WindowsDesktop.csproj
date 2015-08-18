@@ -178,6 +178,7 @@
       <DependentUpon>ClipboardListWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ViewModels\ClipboardListViewModel.cs" />
+    <Compile Include="Windows\ViewModels\Interfaces\IClipboardListViewModel.cs" />
     <Page Include="Controls\Window\ActionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

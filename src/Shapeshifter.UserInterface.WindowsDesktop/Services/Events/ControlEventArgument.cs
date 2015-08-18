@@ -1,16 +1,16 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Events
 {
-    [ExcludeFromCodeCoverage]
-    class ControlEventArgument
+    public class ControlEventArgument
     {
-        public ControlEventArgument(ClipboardDataControlPackage package)
+        public ControlEventArgument(IClipboardControlDataPackage package)
         {
             Package = package;
         }
 
-        public ClipboardDataControlPackage Package { get; private set; }
+        public IClipboardControlDataPackage Package { get; private set; }
     }
 }
