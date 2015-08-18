@@ -25,7 +25,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             get
             {
-                return clipboardHook.IsConnected || keyboardHook.IsConnected;
+                return clipboardHook.IsConnected && keyboardHook.IsConnected;
             }
         }
 

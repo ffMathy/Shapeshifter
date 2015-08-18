@@ -3,7 +3,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
 {
-    interface IClipboardHookService : IHookService
+    public interface IClipboardHookService : IHookService
     {
         event EventHandler<DataCopiedEventArgument> DataCopied;
     }

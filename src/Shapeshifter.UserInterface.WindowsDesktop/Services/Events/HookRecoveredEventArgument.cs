@@ -1,6 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Events
 {
-    class HookRecoveredEventArgument
+    public class HookRecoveredEventArgument
     {
     }
 }

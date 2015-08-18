@@ -1,6 +1,4 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Core.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using System.Diagnostics.CodeAnalysis;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Events
 {
