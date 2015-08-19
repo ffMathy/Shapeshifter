@@ -5,10 +5,12 @@ using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using Autofac;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
-    class ClipboardUserInterfaceMediator : IClipboardUserInterfaceMediator
+    class ClipboardUserInterfaceMediator : 
+        IClipboardUserInterfaceMediator
     {
         private readonly IClipboardHookService clipboardHook;
         private readonly IKeyboardHookService keyboardHook;
@@ -106,6 +108,19 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             clipboardHook.Connect();
 
             clipboardHook.DataCopied += ClipboardHook_DataCopied;
+
+            keyboardHook.KeyDown += KeyboardHook_KeyDown;
+            keyboardHook.KeyUp += KeyboardHook_KeyUp;
+        }
+
+        private void KeyboardHook_KeyUp(object sender, KeyEventArgument e, ref bool blockKeystroke)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void KeyboardHook_KeyDown(object sender, KeyEventArgument e, ref bool blockKeystroke)
+        {
+            throw new NotImplementedException();
         }
 
         public IEnumerable<IClipboardControlDataPackage> ClipboardElements

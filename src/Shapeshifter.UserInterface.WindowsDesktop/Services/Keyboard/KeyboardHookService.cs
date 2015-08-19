@@ -36,7 +36,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                 return hookId != IntPtr.Zero;
             }
         }
-        
+
         public void Connect()
         {
             if (!IsConnected)
@@ -99,7 +99,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         private bool HasHookProbablyDisconnected(TimeSpan executionTime)
         {
-            const int overhead = 25;
+            var overhead = Math.Max(configuration.HookTimeout * 0.25, 100);
             return executionTime.TotalMilliseconds + overhead >= configuration.HookTimeout;
         }
 
