@@ -4,8 +4,6 @@ using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using NSubstitute;
-using Shapeshifter.Core.Data;
 
 namespace Shapeshifter.Tests.Controls.Clipboard.Factories
 {

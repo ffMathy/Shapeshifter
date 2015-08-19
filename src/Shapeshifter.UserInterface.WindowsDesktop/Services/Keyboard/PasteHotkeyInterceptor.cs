@@ -1,5 +1,4 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
-using System;
 using System.Windows.Input;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard

@@ -5,7 +5,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using Autofac;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
