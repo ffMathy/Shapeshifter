@@ -93,6 +93,9 @@
     <Compile Include="Actions\UploadImageActionTest.cs" />
     <Compile Include="Actions\PasteAsPlainTextActionTest.cs" />
     <Compile Include="Actions\PasteActionTest.cs" />
+    <Compile Include="Controls\Clipboard\Factories\ClipboardTextDataControlFactoryTest.cs" />
+    <Compile Include="Controls\Clipboard\Factories\ClipboardFileDataControlFactoryTest.cs" />
+    <Compile Include="Controls\Clipboard\Factories\ClipboardFileCollectionDataControlFactoryTest.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardFileCollectionDataViewModelTest.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardFileDataViewModelTest.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardTextDataViewModelTest.cs" />
