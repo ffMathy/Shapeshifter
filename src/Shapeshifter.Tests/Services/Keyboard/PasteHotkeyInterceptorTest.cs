@@ -21,7 +21,7 @@ namespace Shapeshifter.Tests.Services.Keyboard
         }
 
         [TestMethod]
-        public void IfLeftShiftIsDownThenCtrlVHotkeyIsNeverBlockedInOrderCtrlDownVDownVUpCtrlUp()
+        public void IfLeftShiftIsDownThenCtrlVHotkeyIsNeverBlockedInOrderShiftDownCtrlDownVDownVUpCtrlUp()
         {
             var container = CreateContainer();
 
@@ -37,7 +37,24 @@ namespace Shapeshifter.Tests.Services.Keyboard
         }
 
         [TestMethod]
-        public void IfLeftShiftIsDownThenCtrlVHotkeyIsNeverBlockedInOrderCtrlDownVDownCtrlUpVUp()
+        public void IfLeftShiftIsDownThenCtrlVHotkeyIsNeverBlockedInOrderCtrlDownShiftDownVDownVUpCtrlUp()
+        {
+            var container = CreateContainer();
+
+            var interceptor = container.Resolve<IPasteHotkeyInterceptor>();
+
+            AssertDoesNotBlockWhenKeyDownReceived(interceptor, Key.LeftCtrl);
+
+            AssertDoesNotBlockWhenKeyDownReceived(interceptor, Key.LeftShift);
+
+            AssertDoesNotBlockWhenKeyDownReceived(interceptor, Key.V);
+
+            AssertDoesNotBlockWhenKeyUpReceived(interceptor, Key.V);
+            AssertDoesNotBlockWhenKeyUpReceived(interceptor, Key.LeftCtrl);
+        }
+
+        [TestMethod]
+        public void IfLeftShiftIsDownThenCtrlVHotkeyIsNeverBlockedInOrderShiftDownCtrlDownVDownCtrlUpVUp()
         {
             var container = CreateContainer();
 
