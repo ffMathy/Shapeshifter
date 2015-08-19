@@ -42,7 +42,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             this.keyboardHook = keyboardHook;
         }
 
-        private void ClipboardHook_DataCopied(object sender, Events.DataCopiedEventArgument e)
+        private void ClipboardHook_DataCopied(object sender, DataCopiedEventArgument e)
         {
             var dataObject = e.Data;
 
@@ -50,10 +50,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             DecoratePackageWithClipboardData(dataObject, package);
             DecoratePackageWithControl(package);
 
-            if (package.Control == null)
-            {
-                throw new NotImplementedException("Can't handle unknown data formats yet.");
-            }
+            clipboardPackages.Add(package);
 
             //signal an added event.
             if (ControlAdded != null)
