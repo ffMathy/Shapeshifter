@@ -28,6 +28,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
+        public byte Order
+        {
+            get
+            {
+                return 200;
+            }
+        }
+
         public string Title
         {
             get
@@ -36,16 +44,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
-        public bool CanPerform(IClipboardData clipboardData)
+        public async Task<bool> CanPerformAsync(IClipboardData clipboardData)
         {
             var textData = clipboardData as IClipboardTextData;
-            return textData != null && linkParser.HasLink(textData.Text);
+            return textData != null && await linkParser.HasLinkAsync(textData.Text);
         }
 
         public async Task PerformAsync(IClipboardData clipboardData)
         {
             var textData = (IClipboardTextData)clipboardData;
-            var links = linkParser.ExtractLinksFromText(textData.Text);
+            var links = await linkParser.ExtractLinksFromTextAsync(textData.Text);
             foreach(var link in links)
             {
                 processManager.StartProcess(link);

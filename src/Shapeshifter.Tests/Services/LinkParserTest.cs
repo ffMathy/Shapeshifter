@@ -4,6 +4,9 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Services;
 using System;
+using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
+using NSubstitute;
 
 namespace Shapeshifter.Tests.Services
 {
@@ -11,97 +14,103 @@ namespace Shapeshifter.Tests.Services
     public class LinkParserTest : TestBase
     {
         [TestMethod]
-        public void ExtractsAllLinksFromText()
+        public async Task ExtractsAllLinksFromText()
         {
             var container = CreateContainer();
 
-            var text = "hello http://google.com world https://foo.com foobar blah.dk/hey/lol%20kitten.jpg lolz foobar.com test.net/news+list.txt?cat=pic&id=foo28";
+            var text = "hello http://google.com world https://foo.com foobar blah.dk/hey/lol%20kitten.jpg lolz foobar.com www.baz.com test.net/news+list.txt?cat=pic&id=foo28";
 
             var linkParser = container.Resolve<ILinkParser>();
-            var links = linkParser.ExtractLinksFromText(text);
+            var links = await linkParser.ExtractLinksFromTextAsync(text);
 
             Assert.IsTrue(links.Contains("http://google.com"));
             Assert.IsTrue(links.Contains("https://foo.com"));
             Assert.IsTrue(links.Contains("foobar.com"));
+            Assert.IsTrue(links.Contains("www.baz.com"));
             Assert.IsTrue(links.Contains("test.net/news+list.txt?cat=pic&id=foo28"));
             Assert.IsTrue(links.Contains("blah.dk/hey/lol%20kitten.jpg"));
         }
 
         [TestMethod]
-        public void HasLinkReturnsFalseWhenNoLinkPresent()
+        public async Task HasLinkReturnsFalseWhenNoLinkPresent()
         {
             var container = CreateContainer();
 
             var text = "hello world";
 
             var linkParser = container.Resolve<ILinkParser>();
-            Assert.IsFalse(linkParser.HasLink(text));
+            Assert.IsFalse(await linkParser.HasLinkAsync(text));
         }
 
         [TestMethod]
-        public void HasLinkReturnsTrueWithoutProtocol()
+        public async Task HasLinkReturnsTrueWithoutProtocol()
         {
             var container = CreateContainer();
 
             var text = "hello google.com world";
 
             var linkParser = container.Resolve<ILinkParser>();
-            Assert.IsTrue(linkParser.HasLink(text));
+            Assert.IsTrue(await linkParser.HasLinkAsync(text));
         }
 
         [TestMethod]
-        public void LinkWithSubdomainIsValid()
+        public async Task LinkWithSubdomainIsValid()
         {
-            var container = CreateContainer();
+            var container = CreateContainer(c =>
+            {
+                c.RegisterFake<IDomainNameResolver>()
+                    .IsValidDomainAsync("foo.subdomain.google.com")
+                    .Returns(Task.FromResult(true));
+            });
 
             var text = "http://foo.subdomain.google.com";
 
             var linkParser = container.Resolve<ILinkParser>();
-            Assert.IsTrue(linkParser.IsValidLink(text));
+            Assert.IsTrue(await linkParser.IsValidLinkAsync(text));
         }
 
         [TestMethod]
-        public void LinkWithHttpProtocolIsValid()
+        public async Task LinkWithHttpProtocolIsValid()
         {
             var container = CreateContainer();
 
             var text = "http://google.com";
 
             var linkParser = container.Resolve<ILinkParser>();
-            Assert.IsTrue(linkParser.IsValidLink(text));
+            Assert.IsTrue(await linkParser.IsValidLinkAsync(text));
         }
 
         [TestMethod]
-        public void LinkWithHttpsProtocolIsValid()
+        public async Task LinkWithHttpsProtocolIsValid()
         {
             var container = CreateContainer();
             
             var text = "https://google.com";
 
             var linkParser = container.Resolve<ILinkParser>();
-            Assert.IsTrue(linkParser.IsValidLink(text));
+            Assert.IsTrue(await linkParser.IsValidLinkAsync(text));
         }
 
         [TestMethod]
-        public void LinkWithParametersIsValid()
+        public async Task LinkWithParametersIsValid()
         {
             var container = CreateContainer();
 
             var text = "http://google.com?hello=flyp&version=1";
 
             var linkParser = container.Resolve<ILinkParser>();
-            Assert.IsTrue(linkParser.IsValidLink(text));
+            Assert.IsTrue(await linkParser.IsValidLinkAsync(text));
         }
 
         [TestMethod]
-        public void LinkWithDirectoriesIsValid()
+        public async Task LinkWithDirectoriesIsValid()
         {
             var container = CreateContainer();
 
             var text = "http://google.com/foo/bar";
 
             var linkParser = container.Resolve<ILinkParser>();
-            Assert.IsTrue(linkParser.IsValidLink(text));
+            Assert.IsTrue(await linkParser.IsValidLinkAsync(text));
         }
 
         [TestMethod]
@@ -129,27 +138,15 @@ namespace Shapeshifter.Tests.Services
         }
 
         [TestMethod]
-        public void SeveralLinksCanFindProperType()
+        public async Task SeveralLinksCanFindProperType()
         {
             var container = CreateContainer();
 
             var text = "http://google.com foo.com/img.jpg";
 
             var linkParser = container.Resolve<ILinkParser>();
-            Assert.IsTrue(linkParser.HasLinkOfType(text, LinkType.Http));
-            Assert.IsTrue(linkParser.HasLinkOfType(text, LinkType.ImageFile));
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void GettingTypeFromInvalidLinkThrowsException()
-        {
-            var container = CreateContainer();
-
-            var text = "hello world";
-
-            var linkParser = container.Resolve<ILinkParser>();
-            linkParser.GetLinkType(text);
+            Assert.IsTrue(await linkParser.HasLinkOfTypeAsync(text, LinkType.Http));
+            Assert.IsTrue(await linkParser.HasLinkOfTypeAsync(text, LinkType.ImageFile));
         }
 
         [TestMethod]

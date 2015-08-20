@@ -34,7 +34,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
-        public bool CanPerform(IClipboardData clipboardData)
+        public byte Order
+        {
+            get
+            {
+                return 50;
+            }
+        }
+
+        public async Task<bool> CanPerformAsync(IClipboardData clipboardData)
         {
             return IsSuitableImageData(clipboardData) || IsSuitableFileData(clipboardData);
         }

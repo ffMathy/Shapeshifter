@@ -107,19 +107,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             clipboardHook.Connect();
 
             clipboardHook.DataCopied += ClipboardHook_DataCopied;
-
-            keyboardHook.KeyDown += KeyboardHook_KeyDown;
-            keyboardHook.KeyUp += KeyboardHook_KeyUp;
-        }
-
-        private void KeyboardHook_KeyUp(object sender, KeyEventArgument e, ref bool blockKeystroke)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void KeyboardHook_KeyDown(object sender, KeyEventArgument e, ref bool blockKeystroke)
-        {
-            throw new NotImplementedException();
         }
 
         public IEnumerable<IClipboardControlDataPackage> ClipboardElements

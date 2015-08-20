@@ -13,25 +13,25 @@ namespace Shapeshifter.Tests.Actions
     public class PasteAsPlainTextActionTest : TestBase
     {
         [TestMethod]
-        public void CanNotPerformWithNonTextData()
+        public async Task CanNotPerformWithNonTextData()
         {
             var container = CreateContainer();
 
             var fakeData = Substitute.For<IClipboardData>();
 
             var action = container.Resolve<IPasteAsPlainTextAction>();
-            Assert.IsFalse(action.CanPerform(fakeData));
+            Assert.IsFalse(await action.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
-        public void CanPerformWithTextData()
+        public async Task CanPerformWithTextData()
         {
             var container = CreateContainer();
 
             var fakeData = Substitute.For<IClipboardTextData>();
 
             var action = container.Resolve<IPasteAsPlainTextAction>();
-            Assert.IsTrue(action.CanPerform(fakeData));
+            Assert.IsTrue(await action.CanPerformAsync(fakeData));
         }
 
         [TestMethod]

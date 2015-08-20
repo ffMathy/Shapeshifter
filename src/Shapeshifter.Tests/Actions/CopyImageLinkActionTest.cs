@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
+using System.Collections.Generic;
 
 namespace Shapeshifter.Tests.Actions
 {
@@ -17,14 +18,14 @@ namespace Shapeshifter.Tests.Actions
     public class CopyImageLinkActionTest : TestBase
     {
         [TestMethod]
-        public void CanPerformIsFalseForNonTextTypes()
+        public async Task CanPerformIsFalseForNonTextTypes()
         {
             var container = CreateContainer();
 
             var someNonTextData = Substitute.For<IClipboardData>();
 
             var action = container.Resolve<ICopyImageLinkAction>();
-            Assert.IsFalse(action.CanPerform(someNonTextData));
+            Assert.IsFalse(await action.CanPerformAsync(someNonTextData));
         }
 
         [TestMethod]
@@ -46,29 +47,29 @@ namespace Shapeshifter.Tests.Actions
         }
 
         [TestMethod]
-        public void CanPerformIsFalseForTextTypesWithNoImageLink()
+        public async Task CanPerformIsFalseForTextTypesWithNoImageLink()
         {
             var container = CreateContainer(c =>
             {
                 c.RegisterFake<ILinkParser>()
-                .HasLinkOfType(Arg.Any<string>(), LinkType.ImageFile).Returns(false);
+                .HasLinkOfTypeAsync(Arg.Any<string>(), LinkType.ImageFile).Returns(Task.FromResult(false));
             });
 
             var action = container.Resolve<ICopyImageLinkAction>();
-            Assert.IsFalse(action.CanPerform(Substitute.For<IClipboardTextData>()));
+            Assert.IsFalse(await action.CanPerformAsync(Substitute.For<IClipboardTextData>()));
         }
 
         [TestMethod]
-        public void CanPerformIsTrueForTextTypesWithImageLink()
+        public async Task CanPerformIsTrueForTextTypesWithImageLink()
         {
             var container = CreateContainer(c =>
             {
                 c.RegisterFake<ILinkParser>()
-                .HasLinkOfType(Arg.Any<string>(), LinkType.ImageFile).Returns(true);
+                .HasLinkOfTypeAsync(Arg.Any<string>(), LinkType.ImageFile).Returns(Task.FromResult(true));
             });
 
             var action = container.Resolve<ICopyImageLinkAction>();
-            Assert.IsTrue(action.CanPerform(Substitute.For<IClipboardTextData>()));
+            Assert.IsTrue(await action.CanPerformAsync(Substitute.For<IClipboardTextData>()));
         }
 
         [TestMethod]
@@ -90,8 +91,8 @@ namespace Shapeshifter.Tests.Actions
                         Task.FromResult(secondFakeDownloadedImageBytes));
 
                 c.RegisterFake<ILinkParser>()
-                    .ExtractLinksFromText(Arg.Any<string>())
-                    .Returns(new[] { "foobar.com", "example.com" });
+                    .ExtractLinksFromTextAsync(Arg.Any<string>())
+                    .Returns(Task.FromResult<IEnumerable<string>>(new[] { "foobar.com", "example.com" }));
             });
 
             var action = container.Resolve<ICopyImageLinkAction>();

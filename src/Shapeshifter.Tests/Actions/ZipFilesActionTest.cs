@@ -3,6 +3,7 @@ using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using NSubstitute;
 using Shapeshifter.Core.Data.Interfaces;
+using System.Threading.Tasks;
 
 namespace Shapeshifter.Tests.Actions
 {
@@ -10,21 +11,21 @@ namespace Shapeshifter.Tests.Actions
     public class ZipFilesActionTest : TestBase
     {
         [TestMethod]
-        public void CanPerformForFiles()
+        public async Task CanPerformForFiles()
         {
             var container = CreateContainer();
 
             var action = container.Resolve<IZipFilesAction>();
-            Assert.IsTrue(action.CanPerform(Substitute.For<IClipboardFileData>()));
+            Assert.IsTrue(await action.CanPerformAsync(Substitute.For<IClipboardFileData>()));
         }
 
         [TestMethod]
-        public void CanPerformForFileCollections()
+        public async Task CanPerformForFileCollections()
         {
             var container = CreateContainer();
 
             var action = container.Resolve<IZipFilesAction>();
-            Assert.IsTrue(action.CanPerform(Substitute.For<IClipboardFileCollectionData>()));
+            Assert.IsTrue(await action.CanPerformAsync(Substitute.For<IClipboardFileCollectionData>()));
         }
 
         [TestMethod]

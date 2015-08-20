@@ -11,5 +11,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces
         bool ShouldBlockKeyDown(Key key);
 
         bool ShouldBlockKeyUp(Key key);
+
+        void SendPasteCombination();
     }
 }

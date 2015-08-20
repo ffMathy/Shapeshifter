@@ -9,7 +9,9 @@ namespace Shapeshifter.Core.Actions
 
         string Description { get; }
 
-        bool CanPerform(IClipboardData clipboardData);
+        byte Order { get; }
+
+        Task<bool> CanPerformAsync(IClipboardData clipboardData);
 
         Task PerformAsync(IClipboardData clipboardData);
     }

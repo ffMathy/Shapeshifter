@@ -11,6 +11,7 @@ using System.ComponentModel;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Shapeshifter.Tests.Windows.ViewModels
 {
@@ -70,7 +71,7 @@ namespace Shapeshifter.Tests.Windows.ViewModels
             fakePackage.Contents.Returns(new[] { fakeData });
 
             var supportedAction = Substitute.For<IAction>();
-            supportedAction.CanPerform(fakeData).Returns(true);
+            supportedAction.CanPerformAsync(fakeData).Returns(Task.FromResult(true));
 
             var container = CreateContainer(c =>
             {
@@ -93,7 +94,7 @@ namespace Shapeshifter.Tests.Windows.ViewModels
             fakePackage.Contents.Returns(new[] { fakeData });
 
             var unsupportedAction = Substitute.For<IAction>();
-            unsupportedAction.CanPerform(fakeData).Returns(false);
+            unsupportedAction.CanPerformAsync(fakeData).Returns(Task.FromResult(false));
 
             var container = CreateContainer(c =>
             {

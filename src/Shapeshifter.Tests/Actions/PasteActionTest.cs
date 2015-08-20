@@ -13,14 +13,14 @@ namespace Shapeshifter.Tests.Actions
     public class PasteActionTest : TestBase
     {
         [TestMethod]
-        public void CanAlwaysPerformIfDataIsGiven()
+        public async Task CanAlwaysPerformIfDataIsGiven()
         {
             var container = CreateContainer();
 
             var fakeData = Substitute.For<IClipboardData>();
 
             var action = container.Resolve<IPasteAction>();
-            Assert.IsTrue(action.CanPerform(fakeData));
+            Assert.IsTrue(await action.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
@@ -60,12 +60,12 @@ namespace Shapeshifter.Tests.Actions
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void ThrowsExceptionIfNoDataGiven()
+        public async Task ThrowsExceptionIfNoDataGiven()
         {
             var container = CreateContainer();
             
             var action = container.Resolve<IPasteAction>();
-            action.CanPerform(null);
+            await action.CanPerformAsync(null);
         }
     }
 }

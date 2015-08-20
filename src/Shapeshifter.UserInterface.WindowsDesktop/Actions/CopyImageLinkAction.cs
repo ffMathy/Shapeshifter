@@ -49,18 +49,26 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
-        public bool CanPerform(IClipboardData clipboardData)
+        public byte Order
+        {
+            get
+            {
+                return 100;
+            }
+        }
+
+        public async Task<bool> CanPerformAsync(IClipboardData clipboardData)
         {
             var textData = clipboardData as IClipboardTextData;
-            return textData != null && linkParser.HasLinkOfType(textData.Text, LinkType.ImageFile);
+            return textData != null && await linkParser.HasLinkOfTypeAsync(textData.Text, LinkType.ImageFile);
         }
 
         public async Task PerformAsync(IClipboardData clipboardData)
         {
             var textData = clipboardData as IClipboardTextData;
-            var links = linkParser.ExtractLinksFromText(textData.Text);
+            var links = await linkParser.ExtractLinksFromTextAsync(textData.Text);
 
-            var imagesBytes = await DownloadLinks(links);
+            var imagesBytes = await DownloadLinksAsync(links);
 
             var images = InterpretImages(imagesBytes);
             InjectImages(images);
@@ -79,7 +87,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
-        private async Task<IEnumerable<byte[]>> DownloadLinks(IEnumerable<string> links)
+        private async Task<IEnumerable<byte[]>> DownloadLinksAsync(IEnumerable<string> links)
         {
             var downloadTasks = new List<Task<byte[]>>();
             foreach (var link in links)

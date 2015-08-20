@@ -1,5 +1,6 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
 using System.Windows.Input;
+using System;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
 {
@@ -49,6 +50,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
         public bool ShouldBlockKeyUp(Key key)
         {
             return false;
+        }
+
+        public void SendPasteCombination()
+        {
+            throw new NotImplementedException();
         }
     }
 }

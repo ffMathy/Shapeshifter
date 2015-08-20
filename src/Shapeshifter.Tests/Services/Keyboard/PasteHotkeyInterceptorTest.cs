@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
+using System;
 using System.Windows.Input;
 
 namespace Shapeshifter.Tests.Services.Keyboard

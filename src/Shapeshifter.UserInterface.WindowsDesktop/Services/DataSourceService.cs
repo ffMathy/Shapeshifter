@@ -39,7 +39,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             hIcon = WindowApi.SendMessage(windowHandle, WindowApi.WM_GETICON, WindowApi.ICON_BIG, IntPtr.Zero);
 
             if (hIcon == IntPtr.Zero)
+            {
                 hIcon = WindowApi.GetClassLongPtr(windowHandle, WindowApi.GCL_HICON);
+            }
 
             if (hIcon == IntPtr.Zero)
             {

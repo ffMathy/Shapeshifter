@@ -145,7 +145,8 @@
     <Compile Include="Services\Events\ControlEventArgument.cs" />
     <Compile Include="Services\Events\DataCopiedEventArgument.cs" />
     <Compile Include="Services\Events\KeyEventArgument.cs" />
-    <Compile Include="Services\Downloader.cs" />
+    <Compile Include="Services\Web\DomainNameResolver.cs" />
+    <Compile Include="Services\Web\Downloader.cs" />
     <Compile Include="Services\Files\FileManager.cs" />
     <Compile Include="Services\Files\FileType.cs" />
     <Compile Include="Services\Files\FileTypeInterpreter.cs" />
@@ -156,11 +157,12 @@
     <Compile Include="Services\Images\Interfaces\IImageFileInterpreter.cs" />
     <Compile Include="Services\Interfaces\IClipboardHookService.cs" />
     <Compile Include="Mediators\Interfaces\IClipboardUserInterfaceMediator.cs" />
-    <Compile Include="Services\Interfaces\IDownloader.cs" />
+    <Compile Include="Services\Web\Interfaces\IDomainNameResolver.cs" />
+    <Compile Include="Services\Web\Interfaces\IDownloader.cs" />
     <Compile Include="Services\Files\Interfaces\IFileManager.cs" />
     <Compile Include="Services\Interfaces\IHookService.cs" />
     <Compile Include="Services\Images\Interfaces\IImagePersistenceService.cs" />
-    <Compile Include="Services\Interfaces\ILinkParser.cs" />
+    <Compile Include="Services\Web\Interfaces\ILinkParser.cs" />
     <Compile Include="Services\Interfaces\IProcessManager.cs" />
     <Compile Include="Services\Interfaces\IUpdateService.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardHookConfiguration.cs" />
@@ -172,8 +174,8 @@
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardHookService.cs" />
     <Compile Include="Services\Files\Interfaces\IFileIconService.cs" />
     <Compile Include="Services\Keyboard\PasteHotkeyInterceptor.cs" />
-    <Compile Include="Services\LinkParser.cs" />
-    <Compile Include="Services\LinkType.cs" />
+    <Compile Include="Services\Web\LinkParser.cs" />
+    <Compile Include="Services\Web\LinkType.cs" />
     <Compile Include="Services\ProcessManager.cs" />
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Windows\ClipboardListWindow.xaml.cs">

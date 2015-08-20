@@ -69,7 +69,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             service.ControlRemoved += Service_ControlRemoved;
         }
 
-        private void SetActions()
+        private async void SetActions()
         {
             Actions.Clear();
             SelectedAction = null;
@@ -80,7 +80,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
                 {
                     foreach (var action in allActions)
                     {
-                        if (action.CanPerform(data))
+                        if (await action.CanPerformAsync(data))
                         {
                             Actions.Add(action);
                             if (SelectedAction == null)

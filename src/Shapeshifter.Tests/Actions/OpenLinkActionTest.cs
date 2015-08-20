@@ -6,6 +6,7 @@ using Shapeshifter.Core.Data;
 using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Shapeshifter.Tests.Actions
 {
@@ -31,30 +32,30 @@ namespace Shapeshifter.Tests.Actions
         }
 
         [TestMethod]
-        public void CanPerformIsFalseForNonTextTypes()
+        public async Task CanPerformIsFalseForNonTextTypes()
         {
             var container = CreateContainer();
 
             var someNonTextData = Substitute.For<IClipboardData>();
 
             var action = container.Resolve<IOpenLinkAction>();
-            Assert.IsFalse(action.CanPerform(someNonTextData));
+            Assert.IsFalse(await action.CanPerformAsync(someNonTextData));
         }
 
         [TestMethod]
-        public void CanPerformIsFalseForTextTypesWithNoLink()
+        public async Task CanPerformIsFalseForTextTypesWithNoLink()
         {
             var container = CreateContainer(c =>
             {
                 c.RegisterFake<ILinkParser>()
-                    .HasLink(Arg.Any<string>())
-                    .Returns(false);
+                    .HasLinkAsync(Arg.Any<string>())
+                    .Returns(Task.FromResult(false));
             });
 
             var textDataWithLinkButNoImageLink = Substitute.For<IClipboardTextData>();
 
             var action = container.Resolve<IOpenLinkAction>();
-            Assert.IsFalse(action.CanPerform(textDataWithLinkButNoImageLink));
+            Assert.IsFalse(await action.CanPerformAsync(textDataWithLinkButNoImageLink));
         }
 
         [TestMethod]
@@ -65,8 +66,8 @@ namespace Shapeshifter.Tests.Actions
                 c.RegisterFake<IProcessManager>();
 
                 c.RegisterFake<ILinkParser>()
-                    .ExtractLinksFromText(Arg.Any<string>())
-                    .Returns(new[] { "foo.com", "bar.com" });
+                    .ExtractLinksFromTextAsync(Arg.Any<string>())
+                    .Returns(Task.FromResult<IEnumerable<string>>(new[] { "foo.com", "bar.com" }));
             });
 
             var fakeData = Substitute.For<IClipboardTextData>();

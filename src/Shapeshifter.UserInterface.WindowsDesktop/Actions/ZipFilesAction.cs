@@ -16,6 +16,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
+        public byte Order
+        {
+            get
+            {
+                return 75;
+            }
+        }
+
         public string Title
         {
             get
@@ -24,7 +32,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
-        public bool CanPerform(IClipboardData clipboardData)
+        public async Task<bool> CanPerformAsync(IClipboardData clipboardData)
         {
             return clipboardData is IClipboardFileData || clipboardData is IClipboardFileCollectionData;
         }

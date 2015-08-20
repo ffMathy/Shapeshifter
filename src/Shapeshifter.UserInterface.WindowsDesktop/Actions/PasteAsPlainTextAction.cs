@@ -3,6 +3,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
+using System;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -23,6 +24,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
+        public byte Order
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public string Title
         {
             get
@@ -31,7 +40,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
-        public bool CanPerform(IClipboardData clipboardData)
+        public async Task<bool> CanPerformAsync(IClipboardData clipboardData)
         {
             return clipboardData is IClipboardTextData;
         }
