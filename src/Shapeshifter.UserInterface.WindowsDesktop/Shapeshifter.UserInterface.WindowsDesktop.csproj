@@ -165,15 +165,11 @@
     <Compile Include="Services\Web\Interfaces\ILinkParser.cs" />
     <Compile Include="Services\Interfaces\IProcessManager.cs" />
     <Compile Include="Services\Interfaces\IUpdateService.cs" />
-    <Compile Include="Services\Keyboard\Interfaces\IKeyboardHookConfiguration.cs" />
-    <Compile Include="Services\Keyboard\Interfaces\IPasteHotkeyInterceptor.cs" />
-    <Compile Include="Services\Keyboard\KeyboardHookConfiguration.cs" />
-    <Compile Include="Services\Keyboard\KeyboardHookService.cs" />
+    <Compile Include="Services\Interfaces\IPasteHotkeyInterceptor.cs" />
     <Compile Include="Services\Events\HookRecoveredEventArgument.cs" />
     <Compile Include="Services\Files\FileIconService.cs" />
-    <Compile Include="Services\Keyboard\Interfaces\IKeyboardHookService.cs" />
     <Compile Include="Services\Files\Interfaces\IFileIconService.cs" />
-    <Compile Include="Services\Keyboard\PasteHotkeyInterceptor.cs" />
+    <Compile Include="Services\PasteHotkeyInterceptor.cs" />
     <Compile Include="Services\Web\LinkParser.cs" />
     <Compile Include="Services\Web\LinkType.cs" />
     <Compile Include="Services\ProcessManager.cs" />
