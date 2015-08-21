@@ -10,6 +10,7 @@ using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services;
 using System.Diagnostics.CodeAnalysis;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop
 {
@@ -89,7 +90,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
                         typeof(FileIconService),
                         typeof(ClipboardHookService),
                         typeof(ImagePersistenceService),
-                        typeof(KeyboardHookService),
+                        typeof(PasteHotkeyInterceptor),
+                        typeof(WindowMessageHook),
                         typeof(DataSourceService),
                         typeof(Downloader),
                         typeof(FileManager),

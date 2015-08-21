@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Windows;
-using System.Windows.Interop;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
@@ -16,6 +14,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         public event EventHandler<DataCopiedEventArgument> DataCopied;
 
         private uint lastClipboardItemIdentifier;
+
+        private readonly IWindowMessageHook windowMessageHook;
+
+        public ClipboardHookService(
+            IWindowMessageHook windowMessageHook)
+        {
+            this.windowMessageHook = windowMessageHook;
+        }
 
         public bool IsConnected
         {
@@ -50,45 +56,25 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         private void InstallWindowMessageHook()
         {
-            var hooker = FetchHandleSource();
-            hooker.AddHook(WindowHookCallback);
+            windowMessageHook.MessageReceived += WindowMessageHook_MessageReceived;
+            windowMessageHook.Connect();
         }
 
-        private static HwndSource FetchHandleSource()
+        private void WindowMessageHook_MessageReceived(object sender, WindowMessageReceivedArgument e)
         {
-            var hooker = PresentationSource.FromVisual(App.Current.MainWindow) as HwndSource;
-            if (hooker == null)
+            if (e.Message == ClipboardApi.WM_CLIPBOARDUPDATE)
             {
-                throw new InvalidOperationException("Could not fetch the handle of the main window.");
+                HandleClipboardUpdateWindowMessage();
             }
-
-            return hooker;
         }
 
-        private static void InstallClipboardHook()
+        private void InstallClipboardHook()
         {
-            var windowHandle = FetchWindowHandle(App.Current.MainWindow);
+            var windowHandle = windowMessageHook.MainWindowHandle;
             if (!ClipboardApi.AddClipboardFormatListener(windowHandle))
             {
                 throw new NotImplementedException("Could not install a clipboard hook for the main window.");
             }
-        }
-
-        private static IntPtr FetchWindowHandle(Window mainWindow)
-        {
-            var interopHelper = new WindowInteropHelper(mainWindow);
-            var windowHandle = interopHelper.EnsureHandle();
-            return windowHandle;
-        }
-
-        private IntPtr WindowHookCallback(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-        {
-            if (msg == ClipboardApi.WM_CLIPBOARDUPDATE)
-            {
-                HandleClipboardUpdateWindowMessage();
-            }
-
-            return IntPtr.Zero;
         }
 
         private void HandleClipboardUpdateWindowMessage()
@@ -116,10 +102,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public void Disconnect()
         {
-            if (!IsConnected)
+            if (IsConnected)
             {
+                UninstallWindowMessageHook();
+
                 IsConnected = false;
             }
+        }
+
+        private void UninstallWindowMessageHook()
+        {
+            //TODO: we can't disconnect the window message hook here as others may be listening - what else can we do?
+            windowMessageHook.MessageReceived -= WindowMessageHook_MessageReceived;
         }
     }
 }

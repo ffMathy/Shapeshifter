@@ -5,6 +5,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -12,7 +13,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         IClipboardUserInterfaceMediator
     {
         private readonly IClipboardHookService clipboardHook;
-        private readonly IKeyboardHookService keyboardHook;
+        private readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
 
         private readonly IEnumerable<IClipboardDataControlFactory> dataFactories;
         private readonly IList<IClipboardControlDataPackage> clipboardPackages;
@@ -26,21 +27,21 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             get
             {
-                return clipboardHook.IsConnected && keyboardHook.IsConnected;
+                return clipboardHook.IsConnected && pasteHotkeyInterceptor.IsConnected;
             }
         }
 
         public ClipboardUserInterfaceMediator(
             IEnumerable<IClipboardDataControlFactory> dataFactories, 
-            IClipboardHookService clipboardHook, 
-            IKeyboardHookService keyboardHook)
+            IClipboardHookService clipboardHook,
+            IPasteHotkeyInterceptor pasteHotkeyInterceptor)
         {
             this.dataFactories = dataFactories;
 
             clipboardPackages = new List<IClipboardControlDataPackage>();
             
             this.clipboardHook = clipboardHook;
-            this.keyboardHook = keyboardHook;
+            this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
         }
 
         private void ClipboardHook_DataCopied(object sender, DataCopiedEventArgument e)
@@ -95,17 +96,42 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public void Disconnect()
         {
-            clipboardHook.DataCopied -= ClipboardHook_DataCopied;
+            UninstallClipboardHook();
+            UninstallPasteHotkeyInterceptor();
+        }
 
-            keyboardHook.Disconnect();
+        private void UninstallPasteHotkeyInterceptor()
+        {
+            pasteHotkeyInterceptor.PasteHotkeyFired -= PasteHotkeyInterceptor_PasteHotkeyFired;
+            pasteHotkeyInterceptor.Disconnect();
+        }
+
+        private void UninstallClipboardHook()
+        {
+            clipboardHook.DataCopied -= ClipboardHook_DataCopied;
             clipboardHook.Disconnect();
         }
 
         public void Connect()
         {
-            keyboardHook.Connect();
-            clipboardHook.Connect();
+            InstallClipboardHook();
+            InstallPasteHotkeyInterceptor();
+        }
 
+        private void InstallPasteHotkeyInterceptor()
+        {
+            pasteHotkeyInterceptor.PasteHotkeyFired += PasteHotkeyInterceptor_PasteHotkeyFired;
+            pasteHotkeyInterceptor.Connect();
+        }
+
+        private void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, PasteHotkeyFiredArgument e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void InstallClipboardHook()
+        {
+            clipboardHook.Connect();
             clipboardHook.DataCopied += ClipboardHook_DataCopied;
         }
 

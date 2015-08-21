@@ -1,16 +1,12 @@
-﻿using System.Windows.Input;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using System;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces
 {
-    public interface IPasteHotkeyInterceptor
+    public interface IPasteHotkeyInterceptor : IHookService
     {
-        void ReceiveKeyDown(Key key);
-
-        void ReceiveKeyUp(Key key);
-
-        bool ShouldBlockKeyDown(Key key);
-
-        bool ShouldBlockKeyUp(Key key);
+        event EventHandler<PasteHotkeyFiredArgument> PasteHotkeyFired;
 
         void SendPasteCombination();
     }

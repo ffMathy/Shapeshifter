@@ -6,6 +6,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace Shapeshifter.Tests.Mediators
                     .IsConnected
                     .Returns(false);
 
-                c.RegisterFake<IKeyboardHookService>()
+                c.RegisterFake<IPasteHotkeyInterceptor>()
                     .IsConnected
                     .Returns(true);
             });
@@ -43,7 +44,7 @@ namespace Shapeshifter.Tests.Mediators
                     .IsConnected
                     .Returns(true);
 
-                c.RegisterFake<IKeyboardHookService>()
+                c.RegisterFake<IPasteHotkeyInterceptor>()
                     .IsConnected
                     .Returns(false);
             });
@@ -61,7 +62,7 @@ namespace Shapeshifter.Tests.Mediators
                     .IsConnected
                     .Returns(true);
 
-                c.RegisterFake<IKeyboardHookService>()
+                c.RegisterFake<IPasteHotkeyInterceptor>()
                     .IsConnected
                     .Returns(true);
             });
@@ -71,19 +72,19 @@ namespace Shapeshifter.Tests.Mediators
         }
 
         [TestMethod]
-        public void ConnectConnectsKeyboardHook()
+        public void ConnectConnectsHotkeyHook()
         {
             var container = CreateContainer(c =>
             {
                 c.RegisterFake<IClipboardHookService>();
-                c.RegisterFake<IKeyboardHookService>();
+                c.RegisterFake<IPasteHotkeyInterceptor>();
             });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Connect();
 
-            var fakeKeyboardHookService = container.Resolve<IKeyboardHookService>();
-            fakeKeyboardHookService.Received().Connect();
+            var fakeHotkeyHookService = container.Resolve<IPasteHotkeyInterceptor>();
+            fakeHotkeyHookService.Received().Connect();
         }
 
         [TestMethod]
@@ -92,7 +93,7 @@ namespace Shapeshifter.Tests.Mediators
             var container = CreateContainer(c =>
             {
                 c.RegisterFake<IClipboardHookService>();
-                c.RegisterFake<IKeyboardHookService>();
+                c.RegisterFake<IPasteHotkeyInterceptor>();
             });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
@@ -108,13 +109,13 @@ namespace Shapeshifter.Tests.Mediators
             var container = CreateContainer(c =>
             {
                 c.RegisterFake<IClipboardHookService>();
-                c.RegisterFake<IKeyboardHookService>();
+                c.RegisterFake<IPasteHotkeyInterceptor>();
             });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Disconnect();
 
-            var fakeKeyboardHookService = container.Resolve<IKeyboardHookService>();
+            var fakeKeyboardHookService = container.Resolve<IPasteHotkeyInterceptor>();
             fakeKeyboardHookService.Received().Disconnect();
         }
 
@@ -124,7 +125,7 @@ namespace Shapeshifter.Tests.Mediators
             var container = CreateContainer(c =>
             {
                 c.RegisterFake<IClipboardHookService>();
-                c.RegisterFake<IKeyboardHookService>();
+                c.RegisterFake<IPasteHotkeyInterceptor>();
             });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
@@ -140,7 +141,7 @@ namespace Shapeshifter.Tests.Mediators
             var container = CreateContainer(c =>
             {
                 c.RegisterFake<IClipboardHookService>();
-                c.RegisterFake<IKeyboardHookService>();
+                c.RegisterFake<IPasteHotkeyInterceptor>();
 
                 var fakeFactory = Substitute.For<IClipboardDataControlFactory>();
                 c.RegisterInstance<IEnumerable<IClipboardDataControlFactory>>(new[] { fakeFactory });
@@ -165,7 +166,7 @@ namespace Shapeshifter.Tests.Mediators
             var container = CreateContainer(c =>
             {
                 c.RegisterFake<IClipboardHookService>();
-                c.RegisterFake<IKeyboardHookService>();
+                c.RegisterFake<IPasteHotkeyInterceptor>();
 
                 var fakeFactory = Substitute.For<IClipboardDataControlFactory>();
                 fakeFactory
@@ -202,7 +203,7 @@ namespace Shapeshifter.Tests.Mediators
             var container = CreateContainer(c =>
             {
                 c.RegisterFake<IClipboardHookService>();
-                c.RegisterFake<IKeyboardHookService>();
+                c.RegisterFake<IPasteHotkeyInterceptor>();
 
                 var fakeFactory = Substitute.For<IClipboardDataControlFactory>();
                 fakeFactory
@@ -240,7 +241,7 @@ namespace Shapeshifter.Tests.Mediators
             var container = CreateContainer(c =>
             {
                 c.RegisterFake<IClipboardHookService>();
-                c.RegisterFake<IKeyboardHookService>();
+                c.RegisterFake<IPasteHotkeyInterceptor>();
             });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();

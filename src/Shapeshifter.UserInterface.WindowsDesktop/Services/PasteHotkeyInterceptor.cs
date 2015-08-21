@@ -1,55 +1,88 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
-using System.Windows.Input;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Windows.Input;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
 {
+    [ExcludeFromCodeCoverage]
     class PasteHotkeyInterceptor : IPasteHotkeyInterceptor
     {
-        private bool isVDown;
-        private bool isCtrlDown;
+        private readonly IWindowMessageHook windowMessageHook;
 
-        public void ReceiveKeyDown(Key key)
+        public event EventHandler<PasteHotkeyFiredArgument> PasteHotkeyFired;
+
+        public bool IsConnected
         {
-            switch (key)
-            {
-                case Key.V:
-                    isVDown = true;
-                    break;
+            get;private set;
+        }
 
-                case Key.LeftCtrl:
-                    isCtrlDown = true;
-                    break;
+        public PasteHotkeyInterceptor(
+            IWindowMessageHook windowMessageHook)
+        {
+            this.windowMessageHook = windowMessageHook;
+        }
+
+        public void Connect()
+        {
+            EnsureWindowIsPresent();
+
+            if (!IsConnected)
+            {
+                InstallWindowHook();
+                InstallHotkeyHook();
+                IsConnected = true;
             }
         }
 
-        public void ReceiveKeyUp(Key key)
+        private void InstallHotkeyHook()
         {
-            switch (key)
-            {
-                case Key.V:
-                    isVDown = false;
-                    break;
+            KeyboardApi.RegisterHotKey(windowMessageHook.MainWindowHandle, GetHashCode(), KeyboardApi.MOD_CONTROL, (int)Key.V);
+        }
 
-                case Key.LeftCtrl:
-                    isCtrlDown = false;
-                    break;
+        private void InstallWindowHook()
+        {
+            windowMessageHook.MessageReceived += WindowMessageHook_MessageReceived;
+            windowMessageHook.Connect();
+        }
+
+        private void WindowMessageHook_MessageReceived(object sender, WindowMessageReceivedArgument e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void EnsureWindowIsPresent()
+        {
+            var mainWindow = App.Current.MainWindow;
+            if (mainWindow == null)
+            {
+                throw new InvalidOperationException("Can't install a clipboard hook when there is no window open.");
             }
         }
 
-        public bool ShouldBlockKeyDown(Key key)
+        public void Disconnect()
         {
-            if(!isCtrlDown || !isVDown)
+            if(IsConnected)
             {
-                return false;
-            }
+                UninstallHotkeyHook();
+                UninstallWindowHook();
 
-            return key == Key.LeftCtrl || key == Key.V;
+                IsConnected = false;
+            }
         }
 
-        public bool ShouldBlockKeyUp(Key key)
+        private void UninstallWindowHook()
         {
-            return false;
+            //can't disconnect the windowMessageHook here as it might be used somewhere else. what else can we do?
+            windowMessageHook.MessageReceived -= WindowMessageHook_MessageReceived;
+        }
+
+        private void UninstallHotkeyHook()
+        {
+            KeyboardApi.UnregisterHotKey(windowMessageHook.MainWindowHandle, GetHashCode());
         }
 
         public void SendPasteCombination()

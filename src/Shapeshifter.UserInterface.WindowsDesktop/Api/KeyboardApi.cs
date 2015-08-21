@@ -5,36 +5,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
 {
     static class KeyboardApi
     {
+        #region fields
+        public static int MOD_ALT = 0x1;
+        public static int MOD_CONTROL = 0x2;
+        public static int MOD_SHIFT = 0x4;
+        public static int MOD_WIN = 0x8;
+        public static int WM_HOTKEY = 0x312;
+        #endregion
 
-        public const int WH_KEYBOARD_LL = 13;
+        [DllImport("user32.dll")]
+        public static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
 
-        /// <summary>
-        /// Asynchronous callback hook.
-        /// </summary>
-        /// <param name="nCode"></param>
-        /// <param name="wParam"></param>
-        /// <param name="lParam"></param>
-        public delegate IntPtr KeyboardHookDelegate(int nCode, UIntPtr wParam, IntPtr lParam);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern IntPtr SetWindowsHookEx(int idHook, KeyboardHookDelegate lpfn, IntPtr hMod, uint dwThreadId);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool UnhookWindowsHookEx(IntPtr hhk);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, UIntPtr wParam, IntPtr lParam);
-
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern IntPtr GetModuleHandle(string lpModuleName);
-
-        public enum KeyEvent
-        {
-            WM_KEYDOWN = 256,
-            WM_KEYUP = 257,
-            WM_SYSKEYUP = 261,
-            WM_SYSKEYDOWN = 260
-        }
+        [DllImport("user32.dll")]
+        public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
     }
 }
