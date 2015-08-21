@@ -35,7 +35,7 @@ namespace Shapeshifter.Tests.Windows.ViewModels
                     eventArguments = e;
                 }
             };
-            viewModel.SelectedElement = Substitute.For<IClipboardControlDataPackage>();
+            viewModel.SelectedElement = Substitute.For<IClipboardDataControlPackage>();
 
             Assert.AreSame(viewModel, eventSender);
         }
@@ -67,7 +67,7 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         {
             var fakeData = Substitute.For<IClipboardData>();
 
-            var fakePackage = Substitute.For<IClipboardControlDataPackage>();
+            var fakePackage = Substitute.For<IClipboardDataControlPackage>();
             fakePackage.Contents.Returns(new[] { fakeData });
 
             var supportedAction = Substitute.For<IAction>();
@@ -90,7 +90,7 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         {
             var fakeData = Substitute.For<IClipboardData>();
 
-            var fakePackage = Substitute.For<IClipboardControlDataPackage>();
+            var fakePackage = Substitute.For<IClipboardDataControlPackage>();
             fakePackage.Contents.Returns(new[] { fakeData });
 
             var unsupportedAction = Substitute.For<IAction>();
@@ -112,7 +112,7 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         {
             var fakeUserInterfaceMediator = Substitute.For<IClipboardUserInterfaceMediator>();
 
-            var fakePackage = Substitute.For<IClipboardControlDataPackage>();
+            var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
             var container = CreateContainer(c =>
             {
@@ -130,7 +130,7 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         {
             var fakeUserInterfaceMediator = Substitute.For<IClipboardUserInterfaceMediator>();
 
-            var fakePackage = Substitute.For<IClipboardControlDataPackage>();
+            var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
             var container = CreateContainer(c =>
             {
@@ -148,7 +148,7 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         {
             var fakeUserInterfaceMediator = Substitute.For<IClipboardUserInterfaceMediator>();
 
-            var fakePackage = Substitute.For<IClipboardControlDataPackage>();
+            var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
             var container = CreateContainer(c =>
             {
@@ -168,7 +168,7 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         {
             var fakeUserInterfaceMediator = Substitute.For<IClipboardUserInterfaceMediator>();
 
-            var fakePackage = Substitute.For<IClipboardControlDataPackage>();
+            var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
             var container = CreateContainer(c =>
             {

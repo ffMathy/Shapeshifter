@@ -126,10 +126,12 @@
     <Compile Include="Controls\Clipboard\ViewModels\Interfaces\IClipboardTextDataViewModel.cs" />
     <Compile Include="Data\ClipboardDataControlPackage.cs" />
     <Compile Include="Data\Interfaces\IClipboardDataControlPackage.cs" />
+    <Compile Include="Factories\ClipboardDataControlPackageFactory.cs" />
     <Compile Include="Factories\DeviceIndependentBitmapClipboardDataControlFactory.cs" />
     <Compile Include="Factories\FileClipboardDataControlFactory.cs" />
     <Compile Include="Factories\Interfaces\IClipboardDataControlFactory.cs" />
     <Compile Include="Factories\EnhancedMetafileClipboardDataControlFactory.cs" />
+    <Compile Include="Factories\Interfaces\IClipboardDataControlPackageFactory.cs" />
     <Compile Include="Factories\Interfaces\IFileClipboardDataControlFactory.cs" />
     <Compile Include="Factories\Interfaces\ITextClipboardDataControlFactory.cs" />
     <Compile Include="Factories\TextClipboardDataControlFactory.cs" />
@@ -137,6 +139,12 @@
     <Compile Include="Api\KeyboardApi.cs" />
     <Compile Include="Api\ClipboardApi.cs" />
     <Compile Include="Api\WindowApi.cs" />
+    <Compile Include="Infrastructure\Threading\Interfaces\IThreadDelay.cs" />
+    <Compile Include="Infrastructure\Threading\Interfaces\IThreadLoop.cs" />
+    <Compile Include="Infrastructure\Threading\ThreadDelay.cs" />
+    <Compile Include="Infrastructure\Threading\ThreadLoop.cs" />
+    <Compile Include="Mediators\ClipboardCombinationMediator.cs" />
+    <Compile Include="Mediators\Interfaces\IClipboardCombinationMediator.cs" />
     <Compile Include="Services\ClipboardHookService.cs" />
     <Compile Include="Mediators\ClipboardUserInterfaceMediator.cs" />
     <Compile Include="Services\Clipboard\ClipboardInjectionService.cs" />
@@ -144,8 +152,9 @@
     <Compile Include="Services\DataSourceService.cs" />
     <Compile Include="Services\Events\ControlEventArgument.cs" />
     <Compile Include="Services\Events\DataCopiedEventArgument.cs" />
-    <Compile Include="Services\Events\KeyEventArgument.cs" />
+    <Compile Include="Services\Events\PasteCombinationReleasedEventArgument.cs" />
     <Compile Include="Services\Events\PasteHotkeyFiredArgument.cs" />
+    <Compile Include="Services\Events\PasteCombinationHeldDownEventArgument.cs" />
     <Compile Include="Services\Interfaces\IWindowMessageHook.cs" />
     <Compile Include="Services\Web\DomainNameResolver.cs" />
     <Compile Include="Services\Web\Downloader.cs" />

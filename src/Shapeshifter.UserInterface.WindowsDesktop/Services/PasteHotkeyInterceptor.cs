@@ -17,7 +17,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
 
         public bool IsConnected
         {
-            get;private set;
+            get; private set;
         }
 
         public PasteHotkeyInterceptor(
@@ -28,19 +28,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
 
         public void Connect()
         {
+            if (IsConnected)
+            {
+                throw new InvalidOperationException("The paste hotkey interceptor is already connected.");
+            }
+
             EnsureWindowIsPresent();
 
-            if (!IsConnected)
-            {
-                InstallWindowHook();
-                InstallHotkeyHook();
-                IsConnected = true;
-            }
+            InstallWindowHook();
+            InstallHotkeyHook();
+
+            IsConnected = true;
         }
 
         private void InstallHotkeyHook()
         {
-            KeyboardApi.RegisterHotKey(windowMessageHook.MainWindowHandle, GetHashCode(), KeyboardApi.MOD_CONTROL, (int)Key.V);
+            KeyboardApi.RegisterHotKey(windowMessageHook.MainWindowHandle, GetHashCode(), KeyboardApi.MOD_CONTROL | KeyboardApi.MOD_NOREPEAT, (int)Key.V);
         }
 
         private void InstallWindowHook()
@@ -65,13 +68,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
 
         public void Disconnect()
         {
-            if(IsConnected)
+            if (!IsConnected)
             {
-                UninstallHotkeyHook();
-                UninstallWindowHook();
-
-                IsConnected = false;
+                throw new InvalidOperationException("The paste hotkey interceptor is already connected.");
             }
+
+            UninstallHotkeyHook();
+            UninstallWindowHook();
+
+            IsConnected = false;
         }
 
         private void UninstallWindowHook()

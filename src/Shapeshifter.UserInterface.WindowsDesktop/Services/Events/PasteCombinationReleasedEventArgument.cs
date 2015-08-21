@@ -2,7 +2,7 @@
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Events
 {
-    public class PasteHotkeyFiredArgument : EventArgs
+    public class PasteCombinationReleasedEventArgument : EventArgs
     {
     }
 }

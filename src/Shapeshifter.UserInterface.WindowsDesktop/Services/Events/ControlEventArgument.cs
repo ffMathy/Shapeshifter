@@ -1,14 +1,15 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using System;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Events
 {
-    public class ControlEventArgument
+    public class ControlEventArgument : EventArgs
     {
-        public ControlEventArgument(IClipboardControlDataPackage package)
+        public ControlEventArgument(IClipboardDataControlPackage package)
         {
             Package = package;
         }
 
-        public IClipboardControlDataPackage Package { get; private set; }
+        public IClipboardDataControlPackage Package { get; private set; }
     }
 }

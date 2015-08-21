@@ -30,13 +30,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public void Connect()
         {
+            if(IsConnected)
+            {
+                throw new InvalidOperationException("The clipboard hook service is already connected.");
+            }
+
             EnsureWindowIsPresent();
 
-            if (!IsConnected)
-            {
-                InstallHooks();
-                IsConnected = true;
-            }
+            InstallHooks();
+            IsConnected = true;
         }
 
         private void InstallHooks()
@@ -102,12 +104,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public void Disconnect()
         {
-            if (IsConnected)
+            if (!IsConnected)
             {
-                UninstallWindowMessageHook();
-
-                IsConnected = false;
+                throw new InvalidOperationException("The clipboard hook service is already disconnected.");
             }
+
+            UninstallWindowMessageHook();
+            IsConnected = false;
         }
 
         private void UninstallWindowMessageHook()

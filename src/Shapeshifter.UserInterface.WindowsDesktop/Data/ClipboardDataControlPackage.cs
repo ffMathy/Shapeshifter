@@ -5,7 +5,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Core.Data
 {
-    public class ClipboardDataControlPackage : IClipboardControlDataPackage
+    public class ClipboardDataControlPackage : IClipboardDataControlPackage
     {
         private IList<IClipboardData> data;
 

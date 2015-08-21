@@ -1,57 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using Shapeshifter.UserInterface.WindowsDesktop.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
-    class ClipboardUserInterfaceMediator : 
+    class ClipboardUserInterfaceMediator :
         IClipboardUserInterfaceMediator
     {
         private readonly IClipboardHookService clipboardHook;
-        private readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
+        private readonly IClipboardCombinationMediator clipboardCombinationMediator;
+        private readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
 
-        private readonly IEnumerable<IClipboardDataControlFactory> dataFactories;
-        private readonly IList<IClipboardControlDataPackage> clipboardPackages;
+        private readonly IList<IClipboardDataControlPackage> clipboardPackages;
 
         public event EventHandler<ControlEventArgument> ControlAdded;
         public event EventHandler<ControlEventArgument> ControlRemoved;
         public event EventHandler<ControlEventArgument> ControlPinned;
         public event EventHandler<ControlEventArgument> ControlHighlighted;
 
-        public bool IsConnected
-        {
-            get
-            {
-                return clipboardHook.IsConnected && pasteHotkeyInterceptor.IsConnected;
-            }
-        }
+        public bool IsConnected => clipboardHook.IsConnected && clipboardCombinationMediator.IsConnected;
+
+        public IEnumerable<IClipboardDataControlPackage> ClipboardElements => clipboardPackages;
 
         public ClipboardUserInterfaceMediator(
-            IEnumerable<IClipboardDataControlFactory> dataFactories, 
             IClipboardHookService clipboardHook,
-            IPasteHotkeyInterceptor pasteHotkeyInterceptor)
+            IClipboardCombinationMediator clipboardCombinationMediator,
+            IClipboardDataControlPackageFactory clipboardDataControlPackageFactory)
         {
-            this.dataFactories = dataFactories;
-
-            clipboardPackages = new List<IClipboardControlDataPackage>();
-            
             this.clipboardHook = clipboardHook;
-            this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
+            this.clipboardCombinationMediator = clipboardCombinationMediator;
+            this.clipboardDataControlPackageFactory = clipboardDataControlPackageFactory;
+
+            clipboardPackages = new List<IClipboardDataControlPackage>();
         }
 
         private void ClipboardHook_DataCopied(object sender, DataCopiedEventArgument e)
         {
-            var dataObject = e.Data;
-
-            var package = new ClipboardDataControlPackage();
-            DecoratePackageWithClipboardData(dataObject, package);
-            DecoratePackageWithControl(package);
-
+            var package = clipboardDataControlPackageFactory.Create(e.Data);
             clipboardPackages.Add(package);
 
             //signal an added event.
@@ -61,49 +50,20 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             }
         }
 
-        private void DecoratePackageWithClipboardData(System.Windows.IDataObject dataObject, ClipboardDataControlPackage package)
-        {
-            foreach (var factory in dataFactories)
-            {
-                foreach (var format in dataObject.GetFormats(true))
-                {
-                    if (factory.CanBuildData(format))
-                    {
-                        //TODO: add a retrying circuit breaker
-                        var rawData = dataObject.GetData(format);
-
-                        var clipboardData = factory.BuildData(format, rawData);
-                        package.AddData(clipboardData);
-                    }
-                }
-            }
-        }
-
-        private void DecoratePackageWithControl(ClipboardDataControlPackage package)
-        {
-            foreach (var factory in dataFactories)
-            {
-                foreach (var data in package.Contents)
-                {
-                    if (factory.CanBuildControl(data))
-                    {
-                        package.Control = factory.BuildControl(data);
-                        break;
-                    }
-                }
-            }
-        }
-
         public void Disconnect()
         {
+            if (!IsConnected)
+            {
+                throw new InvalidOperationException("The user interface mediator is already disconnected.");
+            }
+
             UninstallClipboardHook();
             UninstallPasteHotkeyInterceptor();
         }
 
         private void UninstallPasteHotkeyInterceptor()
         {
-            pasteHotkeyInterceptor.PasteHotkeyFired -= PasteHotkeyInterceptor_PasteHotkeyFired;
-            pasteHotkeyInterceptor.Disconnect();
+            clipboardCombinationMediator.Disconnect();
         }
 
         private void UninstallClipboardHook()
@@ -114,33 +74,24 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public void Connect()
         {
+            if (IsConnected)
+            {
+                throw new InvalidOperationException("The user interface mediator is already connected.");
+            }
+
             InstallClipboardHook();
             InstallPasteHotkeyInterceptor();
         }
 
         private void InstallPasteHotkeyInterceptor()
         {
-            pasteHotkeyInterceptor.PasteHotkeyFired += PasteHotkeyInterceptor_PasteHotkeyFired;
-            pasteHotkeyInterceptor.Connect();
-        }
-
-        private void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, PasteHotkeyFiredArgument e)
-        {
-            throw new NotImplementedException();
+            clipboardCombinationMediator.Connect();
         }
 
         private void InstallClipboardHook()
         {
             clipboardHook.Connect();
             clipboardHook.DataCopied += ClipboardHook_DataCopied;
-        }
-
-        public IEnumerable<IClipboardControlDataPackage> ClipboardElements
-        {
-            get
-            {
-                return clipboardPackages;
-            }
         }
     }
 }

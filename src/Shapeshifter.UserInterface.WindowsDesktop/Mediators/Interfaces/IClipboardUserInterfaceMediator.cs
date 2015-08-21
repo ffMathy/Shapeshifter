@@ -12,6 +12,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
         event EventHandler<ControlEventArgument> ControlPinned;
         event EventHandler<ControlEventArgument> ControlHighlighted;
 
-        IEnumerable<IClipboardControlDataPackage> ClipboardElements { get; }
+        IEnumerable<IClipboardDataControlPackage> ClipboardElements { get; }
     }
 }

@@ -7,10 +7,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interface
 {
     public interface IClipboardListViewModel : INotifyPropertyChanged
     {
-        IClipboardControlDataPackage SelectedElement { get; set; }
+        IClipboardDataControlPackage SelectedElement { get; set; }
         IAction SelectedAction { get; set; }
 
-        IList<IClipboardControlDataPackage> Elements { get; }
+        IList<IClipboardDataControlPackage> Elements { get; }
         IList<IAction> Actions { get; }
     }
 }

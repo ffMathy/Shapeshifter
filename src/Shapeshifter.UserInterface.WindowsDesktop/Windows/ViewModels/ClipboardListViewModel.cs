@@ -5,18 +5,19 @@ using System.ComponentModel;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
+using Shapeshifter.Core.Data;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 {
     class ClipboardListViewModel : 
         IClipboardListViewModel
     {
-        private IClipboardControlDataPackage selectedElement;
+        private IClipboardDataControlPackage selectedElement;
         private IAction selectedAction;
 
         private readonly IEnumerable<IAction> allActions;
 
-        public IList<IClipboardControlDataPackage> Elements { get; private set; }
+        public IList<IClipboardDataControlPackage> Elements { get; private set; }
         public IList<IAction> Actions { get; private set; }
 
         public IAction SelectedAction
@@ -35,7 +36,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             }
         }
 
-        public IClipboardControlDataPackage SelectedElement
+        public IClipboardDataControlPackage SelectedElement
         {
             get
             {
@@ -59,7 +60,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             IEnumerable<IAction> allActions,
             IClipboardUserInterfaceMediator service)
         {
-            Elements = new ObservableCollection<IClipboardControlDataPackage>();
+            Elements = new ObservableCollection<IClipboardDataControlPackage>();
             Actions = new ObservableCollection<IAction>();
 
             this.allActions = allActions;
@@ -78,18 +79,28 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             {
                 foreach (var data in selectedElement.Contents)
                 {
-                    foreach (var action in allActions)
-                    {
-                        if (await action.CanPerformAsync(data))
-                        {
-                            Actions.Add(action);
-                            if (SelectedAction == null)
-                            {
-                                SelectedAction = action;
-                            }
-                        }
-                    }
+                    await AddActionsFromData(data);
                 }
+            }
+        }
+
+        private async System.Threading.Tasks.Task AddActionsFromData(IClipboardData data)
+        {
+            foreach (var action in allActions)
+            {
+                if (await action.CanPerformAsync(data))
+                {
+                    AddAction(action);
+                }
+            }
+        }
+
+        private void AddAction(IAction action)
+        {
+            Actions.Add(action);
+            if (SelectedAction == null)
+            {
+                SelectedAction = action;
             }
         }
 
