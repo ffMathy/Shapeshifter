@@ -130,9 +130,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
         {
             base.OnStartup(e);
 
+            //TODO: move all this service startup into smarter methods, maybe implementing IStartable.
+
             //start the main window.
             var window = MainWindow = Container.Resolve<ClipboardListWindow>();
             window.Show();
+
+            //start the message hook.
+            var messageHook = Container.Resolve<IWindowMessageHook>();
+            messageHook.Connect();
 
             //start the clipboard mediator.
             var mediator = Container.Resolve<IClipboardUserInterfaceMediator>();

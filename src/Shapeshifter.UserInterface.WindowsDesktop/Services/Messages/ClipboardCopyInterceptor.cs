@@ -42,7 +42,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             if (!ClipboardApi.AddClipboardFormatListener(windowHandle))
             {
-                throw new NotImplementedException("Could not install a clipboard hook for the main window.");
+                throw new InvalidOperationException("Could not install a clipboard hook for the main window.");
             }
         }
 
@@ -50,7 +50,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             if (!ClipboardApi.RemoveClipboardFormatListener(windowHandle))
             {
-                throw new NotImplementedException("Could not uninstall a clipboard hook for the main window.");
+                throw new InvalidOperationException("Could not uninstall a clipboard hook for the main window.");
             }
         }
 

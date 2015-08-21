@@ -70,8 +70,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
             EnsureWindowIsPresent();
 
-            InstallInterceptors();
             InstallWindowMessageHook();
+            InstallInterceptors();
 
             IsConnected = true;
         }
