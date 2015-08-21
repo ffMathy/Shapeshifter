@@ -1,4 +1,5 @@
-﻿using Octokit;
+﻿using Autofac;
+using Octokit;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
     [ExcludeFromCodeCoverage]
-    class UpdateService : IUpdateService
+    class UpdateService : IUpdateService, IStartable
     {
         private const string RepositoryOwner = "ffMathy";
         private const string RepositoryName = "Shapeshifter";
@@ -32,8 +33,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
             this.fileDownloader = fileDownloader;
             this.fileManager = fileManager;
-
-            Task.Run(StartUpdateLoop);
         }
 
         private async Task StartUpdateLoop()
@@ -171,6 +170,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             var allReleases = await client.Release.GetAll(RepositoryOwner, RepositoryName);
             return allReleases.Where(IsUpdateToReleaseNeeded);
+        }
+
+        public async void Start()
+        {
+            if (!Debugger.IsAttached)
+            {
+                await StartUpdateLoop();
+            }
         }
     }
 }

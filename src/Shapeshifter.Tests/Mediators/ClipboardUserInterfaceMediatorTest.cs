@@ -4,6 +4,7 @@ using NSubstitute;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
@@ -22,11 +23,7 @@ namespace Shapeshifter.Tests.Mediators
         {
             var container = CreateContainer(c =>
             {
-                c.RegisterFake<IClipboardHookService>()
-                    .IsConnected
-                    .Returns(false);
-
-                c.RegisterFake<IPasteHotkeyInterceptor>()
+                c.RegisterFake<IPasteCombinationDurationMediator>()
                     .IsConnected
                     .Returns(true);
             });
@@ -40,11 +37,7 @@ namespace Shapeshifter.Tests.Mediators
         {
             var container = CreateContainer(c =>
             {
-                c.RegisterFake<IClipboardHookService>()
-                    .IsConnected
-                    .Returns(true);
-
-                c.RegisterFake<IPasteHotkeyInterceptor>()
+                c.RegisterFake<IPasteCombinationDurationMediator>()
                     .IsConnected
                     .Returns(false);
             });
@@ -58,11 +51,7 @@ namespace Shapeshifter.Tests.Mediators
         {
             var container = CreateContainer(c =>
             {
-                c.RegisterFake<IClipboardHookService>()
-                    .IsConnected
-                    .Returns(true);
-
-                c.RegisterFake<IPasteHotkeyInterceptor>()
+                c.RegisterFake<IPasteCombinationDurationMediator>()
                     .IsConnected
                     .Returns(true);
             });
@@ -76,31 +65,15 @@ namespace Shapeshifter.Tests.Mediators
         {
             var container = CreateContainer(c =>
             {
-                c.RegisterFake<IClipboardHookService>();
-                c.RegisterFake<IPasteHotkeyInterceptor>();
+                c.RegisterFake<IClipboardCopyInterceptor>();
+                c.RegisterFake<IPasteCombinationDurationMediator>();
             });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Connect();
 
-            var fakeHotkeyHookService = container.Resolve<IPasteHotkeyInterceptor>();
+            var fakeHotkeyHookService = container.Resolve<IPasteCombinationDurationMediator>();
             fakeHotkeyHookService.Received().Connect();
-        }
-
-        [TestMethod]
-        public void ConnectConnectsClipboardHook()
-        {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IClipboardHookService>();
-                c.RegisterFake<IPasteHotkeyInterceptor>();
-            });
-
-            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
-            mediator.Connect();
-
-            var fakeClipboardHookService = container.Resolve<IClipboardHookService>();
-            fakeClipboardHookService.Received().Connect();
         }
 
         [TestMethod]
@@ -108,31 +81,16 @@ namespace Shapeshifter.Tests.Mediators
         {
             var container = CreateContainer(c =>
             {
-                c.RegisterFake<IClipboardHookService>();
-                c.RegisterFake<IPasteHotkeyInterceptor>();
+                c.RegisterFake<IPasteCombinationDurationMediator>()
+                    .IsConnected
+                    .Returns(true);
             });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Disconnect();
 
-            var fakeKeyboardHookService = container.Resolve<IPasteHotkeyInterceptor>();
+            var fakeKeyboardHookService = container.Resolve<IPasteCombinationDurationMediator>();
             fakeKeyboardHookService.Received().Disconnect();
-        }
-
-        [TestMethod]
-        public void DisconnectDisconnectsClipboardHook()
-        {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IClipboardHookService>();
-                c.RegisterFake<IPasteHotkeyInterceptor>();
-            });
-
-            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
-            mediator.Disconnect();
-
-            var fakeClipboardHookService = container.Resolve<IClipboardHookService>();
-            fakeClipboardHookService.Received().Disconnect();
         }
 
         [TestMethod]
@@ -140,8 +98,8 @@ namespace Shapeshifter.Tests.Mediators
         {
             var container = CreateContainer(c =>
             {
-                c.RegisterFake<IClipboardHookService>();
-                c.RegisterFake<IPasteHotkeyInterceptor>();
+                c.RegisterFake<IClipboardCopyInterceptor>();
+                c.RegisterFake<IPasteCombinationDurationMediator>();
 
                 var fakeFactory = Substitute.For<IClipboardDataControlFactory>();
                 c.RegisterInstance<IEnumerable<IClipboardDataControlFactory>>(new[] { fakeFactory });
@@ -152,7 +110,7 @@ namespace Shapeshifter.Tests.Mediators
 
             var fakeDataObject = Substitute.For<IDataObject>();
 
-            var fakeClipboardHookService = container.Resolve<IClipboardHookService>();
+            var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
             fakeClipboardHookService.DataCopied += Raise.Event<EventHandler<DataCopiedEventArgument>>(fakeClipboardHookService, new DataCopiedEventArgument(fakeDataObject));
 
             Assert.AreEqual(1, mediator.ClipboardElements.Count());
@@ -165,8 +123,8 @@ namespace Shapeshifter.Tests.Mediators
 
             var container = CreateContainer(c =>
             {
-                c.RegisterFake<IClipboardHookService>();
-                c.RegisterFake<IPasteHotkeyInterceptor>();
+                c.RegisterFake<IClipboardCopyInterceptor>();
+                c.RegisterFake<IPasteCombinationDurationMediator>();
 
                 var fakeFactory = Substitute.For<IClipboardDataControlFactory>();
                 fakeFactory
@@ -187,7 +145,7 @@ namespace Shapeshifter.Tests.Mediators
                 .GetFormats(true)
                 .Returns(new[] { "foobar" });
 
-            var fakeClipboardHookService = container.Resolve<IClipboardHookService>();
+            var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
             fakeClipboardHookService.DataCopied += Raise.Event<EventHandler<DataCopiedEventArgument>>(fakeClipboardHookService, new DataCopiedEventArgument(fakeDataObject));
 
             var addedPackage = mediator.ClipboardElements.Single();
@@ -202,8 +160,8 @@ namespace Shapeshifter.Tests.Mediators
 
             var container = CreateContainer(c =>
             {
-                c.RegisterFake<IClipboardHookService>();
-                c.RegisterFake<IPasteHotkeyInterceptor>();
+                c.RegisterFake<IClipboardCopyInterceptor>();
+                c.RegisterFake<IPasteCombinationDurationMediator>();
 
                 var fakeFactory = Substitute.For<IClipboardDataControlFactory>();
                 fakeFactory
@@ -228,7 +186,7 @@ namespace Shapeshifter.Tests.Mediators
                 .GetFormats(true)
                 .Returns(new[] { "foobar" });
 
-            var fakeClipboardHookService = container.Resolve<IClipboardHookService>();
+            var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
             fakeClipboardHookService.DataCopied += Raise.Event<EventHandler<DataCopiedEventArgument>>(fakeClipboardHookService, new DataCopiedEventArgument(fakeDataObject));
 
             var addedPackage = mediator.ClipboardElements.Single();
@@ -240,8 +198,8 @@ namespace Shapeshifter.Tests.Mediators
         {
             var container = CreateContainer(c =>
             {
-                c.RegisterFake<IClipboardHookService>();
-                c.RegisterFake<IPasteHotkeyInterceptor>();
+                c.RegisterFake<IClipboardCopyInterceptor>();
+                c.RegisterFake<IPasteCombinationDurationMediator>();
             });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
@@ -257,7 +215,7 @@ namespace Shapeshifter.Tests.Mediators
 
             var fakeDataObject = Substitute.For<IDataObject>();
 
-            var fakeClipboardHookService = container.Resolve<IClipboardHookService>();
+            var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
             fakeClipboardHookService.DataCopied += Raise.Event<EventHandler<DataCopiedEventArgument>>(fakeClipboardHookService, new DataCopiedEventArgument(fakeDataObject));
 
             var addedPackage = mediator.ClipboardElements.Single();

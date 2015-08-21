@@ -88,14 +88,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
                         typeof(UpdateService),
                         typeof(ClipboardUserInterfaceMediator),
                         typeof(FileIconService),
-                        typeof(ClipboardHookService),
+                        typeof(ClipboardCopyInterceptor),
                         typeof(ImagePersistenceService),
                         typeof(PasteHotkeyInterceptor),
                         typeof(WindowMessageHook),
                         typeof(DataSourceService),
                         typeof(Downloader),
                         typeof(FileManager),
-                        typeof(DesignerImageConverterService)
+                        typeof(DesignerImageConverterService),
+                        typeof(ClipboardCopyInterceptor),
+                        typeof(PasteHotkeyInterceptor)
                     };
         }
 
@@ -129,7 +131,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
             base.OnStartup(e);
 
             //start the main window.
-            var window = MainWindow = new ClipboardListWindow();
+            var window = MainWindow = Container.Resolve<ClipboardListWindow>();
             window.Show();
 
             //start the clipboard mediator.

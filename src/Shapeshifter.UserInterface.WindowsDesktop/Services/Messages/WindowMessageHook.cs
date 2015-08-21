@@ -4,6 +4,8 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using System.Windows.Interop;
 using System.Windows;
 using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -11,65 +13,76 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
     class WindowMessageHook : IWindowMessageHook, IDisposable
     {
         private HwndSource hooker;
-        private IntPtr mainWindowHandle;
-
-        public event EventHandler<WindowMessageReceivedArgument> MessageReceived;
+        private readonly IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors;
 
         public bool IsConnected
         {
             get; private set;
         }
 
-        public IntPtr MainWindowHandle
+        private IntPtr MainWindowHandle
         {
             get
             {
-                if(mainWindowHandle == default(IntPtr))
-                {
-                    throw new InvalidOperationException("The window message hook has not been installed yet.");
-                }
+                var interopHelper = new WindowInteropHelper(App.Current.MainWindow);
+                var windowHandle = interopHelper.EnsureHandle();
+                return windowHandle;
+            }
+        }
 
-                return mainWindowHandle;
-            }
-            private set
-            {
-                mainWindowHandle = value;
-            }
+        public WindowMessageHook(
+            IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors)
+        {
+            this.windowMessageInterceptors = windowMessageInterceptors;
         }
 
         public void Disconnect()
         {
             if (IsConnected)
             {
-                hooker.RemoveHook(WindowHookCallback);
+                UninstallInterceptors();
+                UninstallWindowMessageHook();
 
                 IsConnected = false;
             }
         }
 
-        private static IntPtr FetchWindowHandle(Window mainWindow)
+        private void UninstallWindowMessageHook()
         {
-            var interopHelper = new WindowInteropHelper(mainWindow);
-            var windowHandle = interopHelper.EnsureHandle();
-            return windowHandle;
+            hooker.RemoveHook(WindowHookCallback);
+        }
+
+        private void UninstallInterceptors()
+        {
+            var mainWindowHandle = MainWindowHandle;
+            foreach (var interceptor in windowMessageInterceptors)
+            {
+                interceptor.Uninstall(mainWindowHandle);
+            }
         }
 
         public void Connect()
         {
+            if (IsConnected)
+            {
+                throw new InvalidOperationException("The window message hook has already been connected.");
+            }
+
             EnsureWindowIsPresent();
 
-            if (!IsConnected)
-            {
-                FetchMainWindowHandle();
-                InstallWindowMessageHook();
+            InstallInterceptors();
+            InstallWindowMessageHook();
 
-                IsConnected = true;
-            }
+            IsConnected = true;
         }
 
-        private void FetchMainWindowHandle()
+        private void InstallInterceptors()
         {
-            MainWindowHandle = FetchWindowHandle(App.Current.MainWindow);
+            var mainWindowHandle = MainWindowHandle;
+            foreach(var interceptor in windowMessageInterceptors)
+            {
+                interceptor.Install(mainWindowHandle);
+            }
         }
 
         private static void EnsureWindowIsPresent()
@@ -102,18 +115,20 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         private IntPtr WindowHookCallback(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if (MessageReceived != null)
+            foreach (var interceptor in windowMessageInterceptors)
             {
                 var argument = new WindowMessageReceivedArgument(hwnd, msg, wParam, lParam);
-                MessageReceived(this, argument);
-                handled = argument.Handled;
+                interceptor.ReceiveMessageEvent(argument);
+
+                handled |= argument.Handled;
             }
+
             return IntPtr.Zero;
         }
 
         public void Dispose()
         {
-            if(hooker != null)
+            if (hooker != null)
             {
                 hooker.Dispose();
             }

@@ -4,10 +4,12 @@ using System;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces
 {
-    public interface IClipboardCombinationMediator : IHookService
+    public interface IPasteCombinationDurationMediator : IHookService
     {
-        event EventHandler<PasteCombinationHeldDownEventArgument> PasteCombinationHeldDown;
+        event EventHandler<PasteCombinationDurationPassedEventArgument> PasteCombinationDurationPassed;
         event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleased;
+
+        int DurationInDeciseconds { get; }
 
         bool IsCombinationHeldDown { get; }
     }

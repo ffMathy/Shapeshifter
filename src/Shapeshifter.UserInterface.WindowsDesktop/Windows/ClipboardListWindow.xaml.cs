@@ -2,6 +2,7 @@
 using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels;
 using System.Diagnostics.CodeAnalysis;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
 {
@@ -11,11 +12,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
     [ExcludeFromCodeCoverage]
     public partial class ClipboardListWindow : Window
     {
-        public ClipboardListWindow()
+        private ClipboardListWindow() { }
+
+        public ClipboardListWindow(
+            IClipboardListViewModel viewModel)
         {
             InitializeComponent();
 
-            DataContext = App.Container.Resolve<ClipboardListViewModel>();
+            DataContext = viewModel;
         }
     }
 }
