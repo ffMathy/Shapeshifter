@@ -1,9 +1,6 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 

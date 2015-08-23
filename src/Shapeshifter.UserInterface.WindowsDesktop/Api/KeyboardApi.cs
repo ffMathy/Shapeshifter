@@ -11,7 +11,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
         public const int MOD_WIN = 0x8;
         public const int MOD_NOREPEAT = 0x4000;
 
-        public const int WM_HOTKEY = 0x312;
+        public const int WM_HOTKEY = 0x0312;
 
         public const int VK_KEY_V = 0x56;
 

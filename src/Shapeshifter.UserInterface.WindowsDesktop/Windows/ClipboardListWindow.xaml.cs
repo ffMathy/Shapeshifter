@@ -15,8 +15,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
         readonly IClipboardUserInterfaceMediator mediator;
         readonly IWindowMessageHook windowMessageHook;
 
-        ClipboardListWindow() { }
-
         public ClipboardListWindow(
             IClipboardListViewModel viewModel,
             IClipboardUserInterfaceMediator mediator,

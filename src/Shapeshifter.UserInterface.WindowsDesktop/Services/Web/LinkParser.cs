@@ -2,6 +2,7 @@
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -62,11 +63,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                 linkType |= LinkType.ImageFile;
             }
 
-            if (link.StartsWith("https://"))
+            if (link.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
             {
                 linkType |= LinkType.Https;
             }
-            else if (link.StartsWith("http://"))
+            else if (link.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
             {
                 linkType |= LinkType.Http;
             }

@@ -4,7 +4,6 @@ using System.Reflection;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop
 {

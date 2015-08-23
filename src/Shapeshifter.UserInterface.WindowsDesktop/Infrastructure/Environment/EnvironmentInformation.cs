@@ -1,5 +1,4 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-using System;
 using System.Diagnostics;
 using System.Windows;
 
