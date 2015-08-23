@@ -15,10 +15,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
         {
             IsRunning = true;
 
-            while(!token.IsCancellationRequested && IsRunning)
+            var thread = new Thread(() =>
             {
-                action();
-            }
+                while (!token.IsCancellationRequested && IsRunning)
+                {
+                    action();
+                }
+            });
+            thread.IsBackground = true;
+            thread.Start();
 
             Stop();
         }
