@@ -1,9 +1,10 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using System;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces
 {
-    public interface IWindowMessageInterceptor
+    public interface IWindowMessageInterceptor : ISingleInstance
     {
         void Install(IntPtr windowHandle);
         void Uninstall(IntPtr windowHandle);

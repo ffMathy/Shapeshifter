@@ -18,11 +18,11 @@
         WindowStyle="None"
         Background="Transparent" 
         AllowsTransparency="True">
-    <Grid MinHeight="50">
+    <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="50" />
+            <ColumnDefinition />
             <ColumnDefinition Width="5" />
-            <ColumnDefinition MinWidth="50" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <!-- TODO: semi transparent border around this. it'll look sexy. -->
         <ListBox HorizontalAlignment="Left" SelectedItem="{Binding SelectedElement, Mode=TwoWay}" ItemsSource="{Binding Elements}">
