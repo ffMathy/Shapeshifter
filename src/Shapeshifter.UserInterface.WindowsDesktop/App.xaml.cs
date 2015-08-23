@@ -37,22 +37,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
             }
         }
 
-        static void RegisterAssemblyTypes(ContainerBuilder builder, Assembly assembly)
-        {
-            builder
-                .RegisterAssemblyTypes(assembly)
-                .AsSelf()
-                .AsImplementedInterfaces();
-        }
-
-        static bool InDesignMode
-        {
-            get
-            {
-                return !(Current is App);
-            }
-        }
-
         protected override void OnExit(ExitEventArgs e)
         {
             container.Dispose();
