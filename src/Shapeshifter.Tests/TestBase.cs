@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Ploeh.AutoFixture;
-using Shapeshifter.UserInterface.WindowsDesktop;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
 using System;
 using System.Linq;

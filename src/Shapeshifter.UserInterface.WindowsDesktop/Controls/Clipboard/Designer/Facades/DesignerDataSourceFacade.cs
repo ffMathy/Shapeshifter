@@ -1,7 +1,5 @@
-﻿using Autofac;
-using Shapeshifter.Core.Data;
+﻿using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades

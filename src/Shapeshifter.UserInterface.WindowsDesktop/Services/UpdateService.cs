@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Octokit;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -24,19 +25,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         readonly IDownloader fileDownloader;
         readonly IFileManager fileManager;
+        readonly IEnvironmentInformation environmentInformation;
 
         public UpdateService(
             IDownloader fileDownloader,
-            IFileManager fileManager)
+            IFileManager fileManager,
+            IEnvironmentInformation environmentInformation)
         {
-            qwd´kqwdkwq
-
-                //TODO: do not load this in designer time and other things. make fake services.
-
             client = CreateClient();
 
             this.fileDownloader = fileDownloader;
             this.fileManager = fileManager;
+            this.environmentInformation = environmentInformation;
         }
 
         async Task StartUpdateLoop()
@@ -178,7 +178,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public async void Start()
         {
-            await StartUpdateLoop();
+            if (!environmentInformation.IsInDesignTime && !environmentInformation.IsDebugging)
+            {
+                await StartUpdateLoop();
+            }
         }
     }
 }

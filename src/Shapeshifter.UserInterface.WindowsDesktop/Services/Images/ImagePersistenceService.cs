@@ -11,10 +11,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
     [ExcludeFromCodeCoverage]
     class ImagePersistenceService : IImagePersistenceService
     {
-        public ImagePersistenceService()
-        {
-        }
-
         static ImageMetaInformation ConvertByteArrayToMetaInformation(byte[] data)
         {
             var size = Marshal.SizeOf(typeof(ImageMetaInformation));

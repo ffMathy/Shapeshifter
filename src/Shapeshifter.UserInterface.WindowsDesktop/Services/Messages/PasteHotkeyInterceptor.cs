@@ -1,4 +1,5 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
@@ -11,13 +12,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
     class PasteHotkeyInterceptor : IPasteHotkeyInterceptor
     {
         readonly ILogger logger;
+        readonly IEnvironmentInformation environmentInformation;
 
         public event EventHandler<PasteHotkeyFiredArgument> PasteHotkeyFired;
 
         public PasteHotkeyInterceptor(
-            ILogger logger)
+            ILogger logger,
+            IEnvironmentInformation environmentInformation)
         {
             this.logger = logger;
+            this.environmentInformation = environmentInformation;
         }
 
         public void Install(IntPtr windowHandle)
@@ -25,7 +29,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
             UnregisterHotkey(windowHandle);
             if(RegisterHotkey(windowHandle))
             {
-                throw new InvalidOperationException("Couldn't uninstall the paste hotkey interceptor.");
+                throw new InvalidOperationException("Couldn't install the paste hotkey interceptor.");
             }
         }
 
@@ -36,7 +40,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
 
         int GetInterceptorId()
         {
-            return GetHashCode();
+            if (environmentInformation.IsDebugging)
+            {
+                return 13371337;
+            }
+            else
+            {
+                return GetHashCode();
+            }
         }
 
         public void Uninstall(IntPtr windowHandle)
