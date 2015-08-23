@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net.Sockets;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
 {
@@ -12,7 +13,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
     {
         public async Task<IEnumerable<IPAddress>> GetDomainIpAddressesAsync(string domain)
         {
-            return await Dns.GetHostAddressesAsync(domain);
+            try {
+                return await Dns.GetHostAddressesAsync(domain);
+            } catch(SocketException)
+            {
+                return new IPAddress[0];
+            }
         }
 
         public async Task<bool> IsValidDomainAsync(string domain)

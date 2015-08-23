@@ -27,7 +27,25 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
 
             InitializeComponent();
 
+            SetupViewModel(viewModel);
+        }
+
+        void SetupViewModel(IClipboardListViewModel viewModel)
+        {
+            viewModel.UserInterfaceShown += ViewModel_UserInterfaceShown;
+            viewModel.UserInterfaceHidden += ViewModel_UserInterfaceHidden;
+
             DataContext = viewModel;
+        }
+
+        void ViewModel_UserInterfaceHidden(object sender, Services.Events.UserInterfaceHiddenEventArgument e)
+        {
+            Hide();
+        }
+
+        void ViewModel_UserInterfaceShown(object sender, Services.Events.UserInterfaceShownEventArgument e)
+        {
+            Show();
         }
 
         void ClipboardListWindow_SourceInitialized(object sender, System.EventArgs e)

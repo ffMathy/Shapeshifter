@@ -109,11 +109,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 
         void UninstallPasteHotkeyInterceptor()
         {
-            pasteHotkeyInterceptor.PasteHotkeyFired += PasteHotkeyInterceptor_PasteHotkeyFired;
+            pasteHotkeyInterceptor.PasteHotkeyFired -= PasteHotkeyInterceptor_PasteHotkeyFired;
         }
 
         void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, PasteHotkeyFiredArgument e)
         {
+            threadCombinationHeldDownEvent.Set();
             if (PasteCombinationDurationPassed != null)
             {
                 PasteCombinationDurationPassed(this, new PasteCombinationDurationPassedEventArgument());
