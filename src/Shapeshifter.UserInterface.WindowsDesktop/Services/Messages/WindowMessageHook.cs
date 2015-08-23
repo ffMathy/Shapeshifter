@@ -25,9 +25,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             get; private set;
         }
 
-        IntPtr MainWindowHandle
-            => hooker.Handle;
-
         public WindowMessageHook(
             IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors,
             ILogger logger)
@@ -56,7 +53,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         void UninstallInterceptors()
         {
-            var mainWindowHandle = MainWindowHandle;
+            var mainWindowHandle = hooker.Handle;
             foreach (var interceptor in windowMessageInterceptors)
             {
                 interceptor.Uninstall(mainWindowHandle);
@@ -80,7 +77,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         void InstallInterceptors()
         {
-            var mainWindowHandle = MainWindowHandle;
+            var mainWindowHandle = hooker.Handle;
             foreach (var interceptor in windowMessageInterceptors)
             {
                 interceptor.Install(mainWindowHandle);
