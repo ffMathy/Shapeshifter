@@ -27,7 +27,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
         public void Install(IntPtr windowHandle)
         {
             UnregisterHotkey(windowHandle);
-            if(RegisterHotkey(windowHandle))
+            if(!RegisterHotkey(windowHandle))
             {
                 throw new InvalidOperationException("Couldn't install the paste hotkey interceptor.");
             }
@@ -42,7 +42,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
         {
             if (environmentInformation.IsDebugging)
             {
-                return 13371337;
+                return 1337;
             }
             else
             {

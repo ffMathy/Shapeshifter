@@ -1,6 +1,7 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,20 +12,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
     class Main : ISingleInstance
     {
         readonly IEnumerable<IArgumentProcessor> argumentProcessors;
+
         readonly IClipboardListWindow mainWindow;
-        readonly IClipboardUserInterfaceMediator mediator;
-        readonly IWindowMessageHook windowMessageHook;
 
         public Main(
-            IEnumerable<IArgumentProcessor> argumentProcessors,
             IClipboardListWindow mainWindow,
-            IClipboardUserInterfaceMediator mediator,
-            IWindowMessageHook windowMessageHook)
+            IEnumerable<IArgumentProcessor> argumentProcessors)
         {
             this.argumentProcessors = argumentProcessors;
             this.mainWindow = mainWindow;
-            this.mediator = mediator;
-            this.windowMessageHook = windowMessageHook;
         }
 
         public void Start(string[] arguments)
@@ -35,14 +31,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
                 return;
             }
 
-            Run();
-        }
-
-        void Run()
-        {
             mainWindow.Show();
-            windowMessageHook.Connect();
-            mediator.Connect();
         }
 
         IEnumerable<IArgumentProcessor> ProcessArguments(string[] arguments)

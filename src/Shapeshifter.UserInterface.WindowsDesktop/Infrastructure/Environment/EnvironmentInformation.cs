@@ -1,6 +1,7 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using System;
 using System.Diagnostics;
+using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment
 {
@@ -10,7 +11,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment
         {
             get
             {
-                throw new NotImplementedException();
+                return Debugger.IsAttached;
             }
         }
 
@@ -18,7 +19,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment
         {
             get
             {
-                return Debugger.IsAttached;
+                return !(Application.Current is App);
             }
         }
     }

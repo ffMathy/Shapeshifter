@@ -4,6 +4,7 @@ using System.Reflection;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop
 {
@@ -61,8 +62,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
-
             var main = Container.Resolve<Main>();
 
             Current.DispatcherUnhandledException += (sender, exceptionEventArguments) =>

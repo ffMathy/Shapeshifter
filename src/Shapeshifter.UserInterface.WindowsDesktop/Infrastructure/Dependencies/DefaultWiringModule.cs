@@ -38,6 +38,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
                 if (type.IsClass && !type.IsAbstract)
                 {
                     var registration = builder.RegisterType(type);
+                    registration.FindConstructorsWith(new PublicConstructorFinder());
                     registration.AsSelf();
                     registration.AsImplementedInterfaces();
 

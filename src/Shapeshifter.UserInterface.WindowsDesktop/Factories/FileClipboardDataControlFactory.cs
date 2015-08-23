@@ -17,7 +17,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         readonly IDataSourceService dataSourceService;
         readonly IFileIconService fileIconService;
 
-        private readonly IClipboardControlFactory<IClipboardFileData, IClipboardFileDataControl> clipboardFileControlFactory;
+        readonly IClipboardControlFactory<IClipboardFileData, IClipboardFileDataControl> clipboardFileControlFactory;
         readonly IClipboardControlFactory<IClipboardFileCollectionData, IClipboardFileCollectionDataControl> clipboardFileCollectionControlFactory;
 
         public FileClipboardDataControlFactory(

@@ -15,7 +15,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         static readonly Regex whitespaceExpression;
 
         readonly IDomainNameResolver domainNameResolver;
-        private readonly IFileTypeInterpreter fileTypeInterpreter;
+        readonly IFileTypeInterpreter fileTypeInterpreter;
 
         static LinkParser()
         {
@@ -39,7 +39,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             return ExtractValidLinksFromWords(words, await Task.WhenAll(validationTasks));
         }
 
-        private static List<string> ExtractValidLinksFromWords(string[] words, bool[] validationResults)
+        static List<string> ExtractValidLinksFromWords(string[] words, bool[] validationResults)
         {
             var extractedLinks = new List<string>();
             for (var i = 0; i < validationResults.Length; i++)

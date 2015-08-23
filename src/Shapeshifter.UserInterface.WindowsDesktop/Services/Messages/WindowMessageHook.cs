@@ -90,7 +90,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         static void EnsureWindowIsPresent()
         {
-            var mainWindow = App.Current.MainWindow;
+            var mainWindow = Application.Current.MainWindow;
             if (mainWindow == null)
             {
                 throw new InvalidOperationException("Can't install a window hook when there is no window open.");
@@ -109,7 +109,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         static HwndSource FetchHandleSource()
         {
-            var hooker = PresentationSource.FromVisual(App.Current.MainWindow) as HwndSource;
+            var mainWindowHandle = new WindowInteropHelper(Application.Current.MainWindow).Handle;
+
+            var hooker = HwndSource.FromHwnd(mainWindowHandle);
             if (hooker == null)
             {
                 throw new InvalidOperationException("Could not fetch the handle of the main window.");
