@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard"
              xmlns:viewModels="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels"
+             xmlns:converters="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Converters"
              xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
              d:DataContext="{d:DesignInstance Type=viewModels:ClipboardFileDataViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" >
@@ -17,7 +18,7 @@
             </Grid.ColumnDefinitions>
 
             <Border Style="{StaticResource ClipboardDataControlImageAreaStyle}">
-                <Image Style="{StaticResource ClipboardDataImageStyle}" Source="{Binding Data.FileIcon, Converter={StaticResource ByteArrayToImageSourceConverter}}" />
+                <Image Style="{StaticResource ClipboardDataImageStyle}" Source="{Binding Data.FileIcon, Converter={converters:ByteArrayToImageSourceConverter}}" />
             </Border>
 
             <Rectangle Grid.Column="1" Style="{StaticResource ClipboardDataControlIconContentSplitterStyle}" />

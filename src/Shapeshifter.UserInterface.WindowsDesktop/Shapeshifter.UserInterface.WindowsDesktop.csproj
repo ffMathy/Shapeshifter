@@ -103,6 +103,7 @@
     <Compile Include="Actions\PasteAsPlainTextAction.cs" />
     <Compile Include="Actions\UploadImageAction.cs" />
     <Compile Include="Actions\ZipFilesAction.cs" />
+    <Compile Include="Controls\Clipboard\Designer\Helpers\DesignTimeContainerHelper.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardFileCollectionDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardFileDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardTextDataControlFactory.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Controls\Clipboard\ViewModels\FileCollection\Interfaces\IClipboardFileCollectionDataViewModel.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\Interfaces\IClipboardDataViewModel.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\Interfaces\IClipboardTextDataViewModel.cs" />
+    <Compile Include="Converters\InjectedConverterMarkupExtension.cs" />
     <Compile Include="Data\ClipboardDataControlPackage.cs" />
     <Compile Include="Data\Interfaces\IClipboardDataControlPackage.cs" />
     <Compile Include="Factories\ClipboardDataControlPackageFactory.cs" />
@@ -139,12 +141,19 @@
     <Compile Include="Api\KeyboardApi.cs" />
     <Compile Include="Api\ClipboardApi.cs" />
     <Compile Include="Api\WindowApi.cs" />
+    <Compile Include="Infrastructure\Dependencies\DefaultWiringModule.cs" />
+    <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
+    <Compile Include="Infrastructure\Environment\EnvironmentInformation.cs" />
+    <Compile Include="Infrastructure\Environment\Interfaces\IEnvironmentInformation.cs" />
     <Compile Include="Infrastructure\Events\UserInterfaceHiddenEventArgument.cs" />
     <Compile Include="Infrastructure\Events\UserInterfaceShownEventArgument.cs" />
+    <Compile Include="Infrastructure\Logging\Interfaces\ILogger.cs" />
+    <Compile Include="Infrastructure\Logging\Logger.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IThreadDelay.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\ThreadDelay.cs" />
     <Compile Include="Infrastructure\Threading\ThreadLoop.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="Mediators\PasteCombinationDurationMediator.cs" />
     <Compile Include="Mediators\Interfaces\IPasteCombinationDurationMediator.cs" />
     <Compile Include="Services\Messages\ClipboardCopyInterceptor.cs" />
@@ -192,6 +201,7 @@
     <Compile Include="Windows\ClipboardListWindow.xaml.cs">
       <DependentUpon>ClipboardListWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Interfaces\IClipboardListWindow.cs" />
     <Compile Include="Windows\ViewModels\ClipboardListViewModel.cs" />
     <Compile Include="Windows\ViewModels\Interfaces\IClipboardListViewModel.cs" />
     <Page Include="Controls\Window\ActionControl.xaml">

@@ -1,8 +1,7 @@
 ﻿using System.Windows;
-using Autofac;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
 {
@@ -10,9 +9,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
     /// Interaction logic for ClipboardListWindow.xaml
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public partial class ClipboardListWindow : Window
+    public partial class ClipboardListWindow : Window, IClipboardListWindow
     {
-        private ClipboardListWindow() { }
+        ClipboardListWindow() { }
 
         public ClipboardListWindow(
             IClipboardListViewModel viewModel)

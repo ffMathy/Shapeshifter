@@ -67,7 +67,7 @@ namespace Shapeshifter.Tests.Controls.Clipboard.ViewModels.Text
             Assert.AreEqual(1, groups[1].Count);
         }
 
-        private static IClipboardFileData GenerateFakeFileData(string fileName)
+        static IClipboardFileData GenerateFakeFileData(string fileName)
         {
             var fakeFileData = Substitute.For<IClipboardFileData>();
             fakeFileData.FileName.Returns(fileName);

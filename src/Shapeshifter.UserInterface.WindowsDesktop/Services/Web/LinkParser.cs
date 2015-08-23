@@ -11,10 +11,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
     class LinkParser : ILinkParser
     {
-        private static readonly Regex linkValidationExpression;
-        private static readonly Regex whitespaceExpression;
+        static readonly Regex linkValidationExpression;
+        static readonly Regex whitespaceExpression;
 
-        private readonly IDomainNameResolver domainNameResolver;
+        readonly IDomainNameResolver domainNameResolver;
         private readonly IFileTypeInterpreter fileTypeInterpreter;
 
         static LinkParser()

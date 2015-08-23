@@ -4,6 +4,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using WindowsClipboard = System.Windows.Clipboard;
 using System.Diagnostics.CodeAnalysis;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -13,9 +14,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public event EventHandler<DataCopiedEventArgument> DataCopied;
 
-        private uint lastClipboardItemIdentifier;
+        uint lastClipboardItemIdentifier;
 
-        private void HandleClipboardUpdateWindowMessage()
+        readonly ILogger logger;
+
+        public ClipboardCopyInterceptor(
+            ILogger logger)
+        {
+            this.logger = logger;
+        }
+
+        void HandleClipboardUpdateWindowMessage()
         {
             var clipboardItemIdentifier = ClipboardApi.GetClipboardSequenceNumber();
             if (clipboardItemIdentifier != lastClipboardItemIdentifier)
@@ -26,7 +35,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             }
         }
 
-        private void TriggerDataCopiedEvent()
+        void TriggerDataCopiedEvent()
         {
             if (DataCopied != null)
             {
@@ -42,7 +51,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             if (!ClipboardApi.AddClipboardFormatListener(windowHandle))
             {
-                throw new InvalidOperationException("Could not install a clipboard hook for the main window.");
+                var existingOwner = ClipboardApi.GetClipboardOwner();
+                var ownerTitle = WindowApi.GetWindowTitle(existingOwner);
+
+                throw new InvalidOperationException($"Could not install a clipboard hook for the main window. The window {ownerTitle} currently owns the clipboard.");
             }
         }
 
@@ -58,6 +70,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             if (eventArgument.Message == ClipboardApi.WM_CLIPBOARDUPDATE)
             {
+                logger.Information("Clipboard update message received.");
+
                 HandleClipboardUpdateWindowMessage();
             }
         }

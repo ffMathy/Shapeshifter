@@ -12,7 +12,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
     [ExcludeFromCodeCoverage]
     class FileIconService : IFileIconService
     {
-        private readonly IImagePersistenceService imagePersistenceService;
+        readonly IImagePersistenceService imagePersistenceService;
 
         public FileIconService(IImagePersistenceService imagePersistenceService)
         {
@@ -32,7 +32,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             }
         }
 
-        private byte[] GenerateByteArrayFromBitmapHandle(IntPtr bitmapHandle)
+        byte[] GenerateByteArrayFromBitmapHandle(IntPtr bitmapHandle)
         {
             var bitmap = new BITMAP();
             AllocateBitmapSpace(bitmapHandle, ref bitmap);
@@ -50,26 +50,26 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             }
         }
 
-        private static void FillBitmapBitsIntoHandle(BITMAP bitmap)
+        static void FillBitmapBitsIntoHandle(BITMAP bitmap)
         {
             var bytes = new byte[bitmap.WidthBytes * bitmap.Height];
             Marshal.Copy(bitmap.Bits, bytes, 0, bytes.Length);
         }
 
-        private static BitmapSource CreateBitmapSourceFromHandle(IntPtr bitmapHandle, BITMAP bitmap)
+        static BitmapSource CreateBitmapSourceFromHandle(IntPtr bitmapHandle, BITMAP bitmap)
         {
             var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(bitmapHandle, IntPtr.Zero, new Int32Rect(0, 0, bitmap.Width, bitmap.Height), BitmapSizeOptions.FromWidthAndHeight(bitmap.Width, bitmap.Height));
             bitmapSource.Freeze();
             return bitmapSource;
         }
 
-        private static void AllocateBitmapSpace(IntPtr bitmapHandle, ref BITMAP bitmap)
+        static void AllocateBitmapSpace(IntPtr bitmapHandle, ref BITMAP bitmap)
         {
             var bufferSize = Marshal.SizeOf(bitmap);
             GetObject(bitmapHandle, bufferSize, out bitmap);
         }
 
-        private static IntPtr GenerateBitmapHandle(string filePath, bool allowThumbnails, int dimensions)
+        static IntPtr GenerateBitmapHandle(string filePath, bool allowThumbnails, int dimensions)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             }
         }
 
-        private static IntPtr GetFactoryImage(int dimensions, string path, bool allowThumbnails)
+        static IntPtr GetFactoryImage(int dimensions, string path, bool allowThumbnails)
         {
             var factory = GenerateShellItemImageFactory(path);
 
@@ -93,7 +93,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             return bitmapHandle;
         }
 
-        private static IShellItemImageFactory GenerateShellItemImageFactory(string path)
+        static IShellItemImageFactory GenerateShellItemImageFactory(string path)
         {
             var uniqueId = new Guid("43826d1e-e718-42ee-bc55-a1e261c37bfe");
 
@@ -104,10 +104,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             return factory;
         }
 
-        private static SIIGBF GenerateScopeFromThumbnailInformation(bool allowThumbnails)
+        static SIIGBF GenerateScopeFromThumbnailInformation(bool allowThumbnails)
         {
-            var type = allowThumbnails ? 
-                SIIGBF.SIIGBF_THUMBNAILONLY : 
+            var type = allowThumbnails ?
+                SIIGBF.SIIGBF_THUMBNAILONLY :
                 SIIGBF.SIIGBF_ICONONLY;
             return type | SIIGBF.SIIGBF_BIGGERSIZEOK;
         }

@@ -16,10 +16,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
     class CopyImageLinkAction : ICopyImageLinkAction
     {
-        private readonly IClipboardInjectionService clipboardInjectionService;
-        private readonly IDownloader downloader;
-        private readonly IImageFileInterpreter imageFileInterpreter;
-        private readonly ILinkParser linkParser;
+        readonly IClipboardInjectionService clipboardInjectionService;
+        readonly IDownloader downloader;
+        readonly IImageFileInterpreter imageFileInterpreter;
+        readonly ILinkParser linkParser;
 
         public CopyImageLinkAction(
             ILinkParser linkParser,
@@ -74,12 +74,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             InjectImages(images);
         }
 
-        private IEnumerable<BitmapSource> InterpretImages(IEnumerable<byte[]> imagesBytes)
+        IEnumerable<BitmapSource> InterpretImages(IEnumerable<byte[]> imagesBytes)
         {
             return imagesBytes.Select(imageFileInterpreter.Interpret);
         }
 
-        private void InjectImages(IEnumerable<BitmapSource> images)
+        void InjectImages(IEnumerable<BitmapSource> images)
         {
             foreach (var image in images)
             {
@@ -87,7 +87,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
-        private async Task<IEnumerable<byte[]>> DownloadLinksAsync(IEnumerable<string> links)
+        async Task<IEnumerable<byte[]>> DownloadLinksAsync(IEnumerable<string> links)
         {
             var downloadTasks = new List<Task<byte[]>>();
             foreach (var link in links)

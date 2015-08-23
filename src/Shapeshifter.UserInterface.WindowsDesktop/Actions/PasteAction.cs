@@ -8,7 +8,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
     class PasteAction : IPasteAction
     {
-        private readonly IClipboardInjectionService clipboardInjectionService;
+        readonly IClipboardInjectionService clipboardInjectionService;
 
         public PasteAction(
             IClipboardInjectionService clipboardInjectionService)

@@ -7,6 +7,8 @@ using Shapeshifter.Core.Data.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection.Interfaces;
 using Autofac;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
@@ -14,18 +16,20 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
         IClipboardFileCollectionDataViewModel
     {
 
-        public ClipboardFileCollectionDataViewModel()
+        public ClipboardFileCollectionDataViewModel(
+            IEnvironmentInformation environmentInformation)
         {
-            PrepareDesignerMode();
+            if (environmentInformation.IsInDesignTime)
+            {
+                PrepareDesignerMode();
+            }
         }
 
         [ExcludeFromCodeCoverage]
-        private void PrepareDesignerMode()
+        void PrepareDesignerMode()
         {
-            if (App.InDesignMode)
-            {
-                Data = App.Container.Resolve<DesignerClipboardFileCollectionDataFacade>();
-            }
+            var container = DesignTimeContainerHelper.CreateDesignTimeContainer();
+            Data = container.Resolve<DesignerClipboardFileCollectionDataFacade>();
         }
 
         public int FileCount

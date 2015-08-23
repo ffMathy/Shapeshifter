@@ -8,7 +8,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
     class ClipboardDataControlPackageFactory : IClipboardDataControlPackageFactory
     {
-        private readonly IEnumerable<IClipboardDataControlFactory> dataFactories;
+        readonly IEnumerable<IClipboardDataControlFactory> dataFactories;
 
         public ClipboardDataControlPackageFactory(
             IEnumerable<IClipboardDataControlFactory> dataFactories)
@@ -24,8 +24,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
             return package;
         }
-        
-        private void DecoratePackageWithClipboardData(ClipboardDataControlPackage package, IDataObject dataObject)
+
+        void DecoratePackageWithClipboardData(ClipboardDataControlPackage package, IDataObject dataObject)
         {
             foreach (var factory in dataFactories)
             {
@@ -42,7 +42,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             }
         }
 
-        private void DecoratePackageWithControl(ClipboardDataControlPackage package)
+        void DecoratePackageWithControl(ClipboardDataControlPackage package)
         {
             foreach (var factory in dataFactories)
             {

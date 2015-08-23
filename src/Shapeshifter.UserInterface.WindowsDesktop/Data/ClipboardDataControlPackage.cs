@@ -7,7 +7,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Core.Data
 {
     public class ClipboardDataControlPackage : IClipboardDataControlPackage
     {
-        private IList<IClipboardData> data;
+        IList<IClipboardData> data;
 
         public ClipboardDataControlPackage()
         {

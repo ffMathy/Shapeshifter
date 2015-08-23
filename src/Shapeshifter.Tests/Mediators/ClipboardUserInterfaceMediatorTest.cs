@@ -7,7 +7,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

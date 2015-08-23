@@ -14,11 +14,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
     class FileClipboardDataControlFactory : IFileClipboardDataControlFactory
     {
-        private readonly IDataSourceService dataSourceService;
-        private readonly IFileIconService fileIconService;
+        readonly IDataSourceService dataSourceService;
+        readonly IFileIconService fileIconService;
 
         private readonly IClipboardControlFactory<IClipboardFileData, IClipboardFileDataControl> clipboardFileControlFactory;
-        private readonly IClipboardControlFactory<IClipboardFileCollectionData, IClipboardFileCollectionDataControl> clipboardFileCollectionControlFactory;
+        readonly IClipboardControlFactory<IClipboardFileCollectionData, IClipboardFileCollectionDataControl> clipboardFileCollectionControlFactory;
 
         public FileClipboardDataControlFactory(
             IDataSourceService dataSourceService, 
@@ -59,7 +59,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             return ConstructDataFromFiles(files);
         }
 
-        private IClipboardData ConstructDataFromFiles(string[] files)
+        IClipboardData ConstructDataFromFiles(string[] files)
         {
             if (files.Length == 1)
             {
@@ -71,7 +71,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             }
         }
 
-        private IClipboardData ConstructClipboardFileCollectionData(string[] files)
+        IClipboardData ConstructClipboardFileCollectionData(string[] files)
         {
             return new ClipboardFileCollectionData(dataSourceService)
             {
@@ -79,7 +79,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             };
         }
 
-        private IClipboardFileData ConstructClipboardFileData(string file)
+        IClipboardFileData ConstructClipboardFileData(string file)
         {
             return new ClipboardFileData(dataSourceService)
             {

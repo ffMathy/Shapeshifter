@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades
@@ -9,16 +10,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.
     class DesignerDataSourceFacade : IDataSource
     {
 
-        private byte[] icon;
+        byte[] icon;
 
-        private readonly IDesignerImageConverterService designerImageConverterService;
+        readonly IDesignerImageConverterService designerImageConverterService;
 
-        public DesignerDataSourceFacade()
+        public DesignerDataSourceFacade(
+            IDesignerImageConverterService designerImageConverterService)
         {
-            this.designerImageConverterService = App.Container.Resolve<IDesignerImageConverterService>();
+            this.designerImageConverterService = designerImageConverterService;
         }
 
-        private byte[] DecorateIcon(byte[] iconBytes)
+        byte[] DecorateIcon(byte[] iconBytes)
         {
             return designerImageConverterService.GenerateDesignerImageBytesFromFileBytes(iconBytes);
         }

@@ -11,11 +11,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
     class ClipboardUserInterfaceMediator :
         IClipboardUserInterfaceMediator
     {
-        private readonly IClipboardCopyInterceptor clipboardHook;
-        private readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
-        private readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
+        readonly IClipboardCopyInterceptor clipboardHook;
+        readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
+        readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
 
-        private readonly IList<IClipboardDataControlPackage> clipboardPackages;
+        readonly IList<IClipboardDataControlPackage> clipboardPackages;
 
         public event EventHandler<ControlEventArgument> ControlAdded;
         public event EventHandler<ControlEventArgument> ControlRemoved;
@@ -43,7 +43,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             clipboardPackages = new List<IClipboardDataControlPackage>();
         }
 
-        private void OnPasteCombinationHeldDownForLongTime()
+        void OnPasteCombinationHeldDownForLongTime()
         {
             if (UserInterfaceShown != null)
             {
@@ -51,8 +51,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             }
         }
 
-        private void ClipboardHook_DataCopied(
-            object sender, 
+        void ClipboardHook_DataCopied(
+            object sender,
             DataCopiedEventArgument e)
         {
             var package = clipboardDataControlPackageFactory.Create(e.Data);
@@ -76,7 +76,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             UninstallPasteHotkeyInterceptor();
         }
 
-        private void UninstallPasteHotkeyInterceptor()
+        void UninstallPasteHotkeyInterceptor()
         {
             pasteCombinationDurationMediator.Disconnect();
 
@@ -84,7 +84,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             pasteCombinationDurationMediator.PasteCombinationReleased -= PasteCombinationDurationMediator_PasteCombinationReleased;
         }
 
-        private void UninstallClipboardHook()
+        void UninstallClipboardHook()
         {
             clipboardHook.DataCopied -= ClipboardHook_DataCopied;
         }
@@ -100,7 +100,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             InstallPastecombinationDurationMediator();
         }
 
-        private void InstallPastecombinationDurationMediator()
+        void InstallPastecombinationDurationMediator()
         {
             pasteCombinationDurationMediator.PasteCombinationDurationPassed += PasteCombinationDurationMediator_PasteCombinationDurationPassed;
             pasteCombinationDurationMediator.PasteCombinationReleased += PasteCombinationDurationMediator_PasteCombinationReleased;
@@ -108,26 +108,26 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             pasteCombinationDurationMediator.Connect();
         }
 
-        private void InstallClipboardHook()
+        void InstallClipboardHook()
         {
             clipboardHook.DataCopied += ClipboardHook_DataCopied;
         }
 
-        private void PasteCombinationDurationMediator_PasteCombinationDurationPassed(
-            object sender, 
+        void PasteCombinationDurationMediator_PasteCombinationDurationPassed(
+            object sender,
             PasteCombinationDurationPassedEventArgument e)
         {
-            if(UserInterfaceShown != null)
+            if (UserInterfaceShown != null)
             {
                 UserInterfaceShown(this, new UserInterfaceShownEventArgument());
             }
         }
 
-        private void PasteCombinationDurationMediator_PasteCombinationReleased(
+        void PasteCombinationDurationMediator_PasteCombinationReleased(
             object sender,
             PasteCombinationReleasedEventArgument e)
         {
-            if(UserInterfaceHidden != null)
+            if (UserInterfaceHidden != null)
             {
                 UserInterfaceHidden(this, new UserInterfaceHiddenEventArgument());
             }

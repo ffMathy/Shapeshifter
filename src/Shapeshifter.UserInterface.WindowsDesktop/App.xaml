@@ -7,9 +7,6 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary x:Name="Converters">
-                    <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
-                </ResourceDictionary>
                 <ResourceDictionary x:Name="Aero">
                     <Color x:Key="AccentColor">#3399ff</Color>
                     <SolidColorBrush p:Freeze="True" x:Key="AccentBrush" Color="{StaticResource AccentColor}" />

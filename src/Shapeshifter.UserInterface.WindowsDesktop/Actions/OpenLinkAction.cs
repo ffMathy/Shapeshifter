@@ -8,8 +8,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
     class OpenLinkAction : IOpenLinkAction
     {
-        private readonly ILinkParser linkParser;
-        private readonly IProcessManager processManager;
+        readonly ILinkParser linkParser;
+        readonly IProcessManager processManager;
 
         public OpenLinkAction(
             ILinkParser linkParser,

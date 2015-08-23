@@ -1,6 +1,8 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
+
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
 {
-    public interface IHookService
+    public interface IHookService : ISingleInstance
     {
 
         bool IsConnected { get; }

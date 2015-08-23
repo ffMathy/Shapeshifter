@@ -10,7 +10,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
     class UploadImageAction : IUploadImageAction
     {
-        private readonly IFileTypeInterpreter fileTypeInterpreter;
+        readonly IFileTypeInterpreter fileTypeInterpreter;
 
         public UploadImageAction(
             IFileTypeInterpreter fileTypeInterpreter)
@@ -47,12 +47,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return IsSuitableImageData(clipboardData) || IsSuitableFileData(clipboardData);
         }
 
-        private static bool IsSuitableImageData(IClipboardData clipboardData)
+        static bool IsSuitableImageData(IClipboardData clipboardData)
         {
             return clipboardData is IClipboardImageData;
         }
 
-        private bool IsSuitableFileData(IClipboardData clipboardData)
+        bool IsSuitableFileData(IClipboardData clipboardData)
         {
             var fileData = clipboardData as IClipboardFileData;
             return fileData != null && fileTypeInterpreter.GetFileTypeFromFileName(fileData.FileName) == FileType.Image;

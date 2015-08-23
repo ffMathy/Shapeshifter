@@ -1,6 +1,5 @@
 ﻿using Shapeshifter.Core.Factories.Interfaces;
 using System;
-using System.Text;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using System.Windows.Media.Imaging;
@@ -8,32 +7,21 @@ using System.Windows.Interop;
 using System.Windows;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Diagnostics.CodeAnalysis;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
     [ExcludeFromCodeCoverage]
-    class DataSourceService : IDataSourceService
+    class DataSourceService : IDataSourceService, ISingleInstance
     {
-        private readonly IImagePersistenceService imagePersistenceService;
+        readonly IImagePersistenceService imagePersistenceService;
 
         public DataSourceService(IImagePersistenceService imagePersistenceService)
         {
             this.imagePersistenceService = imagePersistenceService;
         }
 
-        private static string GetWindowTitle(IntPtr windowHandle)
-        {
-            const int numberOfCharacters = 256;
-            var buffer = new StringBuilder(numberOfCharacters);
-
-            if (WindowApi.GetWindowText(windowHandle, buffer, numberOfCharacters) > 0)
-            {
-                return buffer.ToString();
-            }
-            return null;
-        }
-
-        private static BitmapSource GetWindowIcon(IntPtr windowHandle)
+        static BitmapSource GetWindowIcon(IntPtr windowHandle)
         {
             var hIcon = default(IntPtr);
             hIcon = WindowApi.SendMessage(windowHandle, WindowApi.WM_GETICON, WindowApi.ICON_BIG, IntPtr.Zero);
@@ -51,7 +39,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             if (hIcon != IntPtr.Zero)
             {
                 return Imaging.CreateBitmapSourceFromHIcon(hIcon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            } else {
+            }
+            else
+            {
                 throw new InvalidOperationException("Could not load window icon.");
             }
         }
@@ -60,7 +50,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             var activeWindowHandle = WindowApi.GetForegroundWindow();
 
-            var windowTitle = GetWindowTitle(activeWindowHandle);
+            var windowTitle = WindowApi.GetWindowTitle(activeWindowHandle);
             var windowIcon = GetWindowIcon(activeWindowHandle);
 
             var iconBytes = imagePersistenceService.ConvertBitmapSourceToByteArray(windowIcon);

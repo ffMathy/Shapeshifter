@@ -6,34 +6,36 @@ using System.Windows;
 using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+using System.Linq;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
     [ExcludeFromCodeCoverage]
     class WindowMessageHook : IWindowMessageHook, IDisposable
     {
-        private HwndSource hooker;
-        private readonly IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors;
+        HwndSource hooker;
+
+        readonly IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors;
+
+        readonly ILogger logger;
 
         public bool IsConnected
         {
             get; private set;
         }
 
-        private IntPtr MainWindowHandle
-        {
-            get
-            {
-                var interopHelper = new WindowInteropHelper(App.Current.MainWindow);
-                var windowHandle = interopHelper.EnsureHandle();
-                return windowHandle;
-            }
-        }
+        IntPtr MainWindowHandle
+            => hooker.Handle;
 
         public WindowMessageHook(
-            IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors)
+            IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors,
+            ILogger logger)
         {
             this.windowMessageInterceptors = windowMessageInterceptors;
+            this.logger = logger;
+
+            logger.Information($"Window message hook was constructed using {windowMessageInterceptors.Count()} interceptors.");
         }
 
         public void Disconnect()
@@ -47,12 +49,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             }
         }
 
-        private void UninstallWindowMessageHook()
+        void UninstallWindowMessageHook()
         {
             hooker.RemoveHook(WindowHookCallback);
         }
 
-        private void UninstallInterceptors()
+        void UninstallInterceptors()
         {
             var mainWindowHandle = MainWindowHandle;
             foreach (var interceptor in windowMessageInterceptors)
@@ -76,16 +78,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             IsConnected = true;
         }
 
-        private void InstallInterceptors()
+        void InstallInterceptors()
         {
             var mainWindowHandle = MainWindowHandle;
-            foreach(var interceptor in windowMessageInterceptors)
+            foreach (var interceptor in windowMessageInterceptors)
             {
                 interceptor.Install(mainWindowHandle);
+                logger.Information($"Installed interceptor {interceptor.GetType().Name}.");
             }
         }
 
-        private static void EnsureWindowIsPresent()
+        static void EnsureWindowIsPresent()
         {
             var mainWindow = App.Current.MainWindow;
             if (mainWindow == null)
@@ -94,15 +97,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             }
         }
 
-        private void InstallWindowMessageHook()
+        void InstallWindowMessageHook()
         {
             var hooker = FetchHandleSource();
             hooker.AddHook(WindowHookCallback);
 
+            logger.Information($"Installed message hook.");
+
             this.hooker = hooker;
         }
 
-        private static HwndSource FetchHandleSource()
+        static HwndSource FetchHandleSource()
         {
             var hooker = PresentationSource.FromVisual(App.Current.MainWindow) as HwndSource;
             if (hooker == null)
@@ -113,12 +118,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             return hooker;
         }
 
-        private IntPtr WindowHookCallback(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        IntPtr WindowHookCallback(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
+            logger.Information($"Message received: [{hwnd}, {msg}, {wParam}, {lParam}]");
+
             foreach (var interceptor in windowMessageInterceptors)
             {
                 var argument = new WindowMessageReceivedArgument(hwnd, msg, wParam, lParam);
                 interceptor.ReceiveMessageEvent(argument);
+
+                logger.Information($"Message passed to interceptor {interceptor.GetType().Name}.");
 
                 handled |= argument.Handled;
             }

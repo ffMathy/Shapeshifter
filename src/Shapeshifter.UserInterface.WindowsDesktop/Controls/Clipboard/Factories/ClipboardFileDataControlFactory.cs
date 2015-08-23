@@ -4,12 +4,21 @@ using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
 {
     class ClipboardFileDataControlFactory
         : IClipboardControlFactory<IClipboardFileData, IClipboardFileDataControl>
     {
+        readonly IEnvironmentInformation environmentInformation;
+
+        public ClipboardFileDataControlFactory(
+            IEnvironmentInformation environmentInformation)
+        {
+            this.environmentInformation = environmentInformation;
+        }
+
         public IClipboardFileDataControl CreateControl(IClipboardFileData data)
         {
             if (data == null)
@@ -21,11 +30,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
         }
 
         [ExcludeFromCodeCoverage]
-        private static IClipboardFileDataControl CreateFileDataControl(IClipboardFileData data)
+        IClipboardFileDataControl CreateFileDataControl(IClipboardFileData data)
         {
             return new ClipboardFileDataControl()
             {
-                DataContext = new ClipboardFileDataViewModel()
+                DataContext = new ClipboardFileDataViewModel(environmentInformation)
                 {
                     Data = data
                 }

@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Ploeh.AutoFixture;
 using Shapeshifter.UserInterface.WindowsDesktop;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
 using System;
 using System.Linq;
 
@@ -15,20 +16,18 @@ namespace Shapeshifter.Tests
             fixture = CreateFixture();
         }
 
-        private Fixture CreateFixture()
+        Fixture CreateFixture()
         {
             var fixture = new Fixture();
             fixture.OmitAutoProperties = true;
-            fixture.RepeatCount = 2;
-
-            //we remove throwing behaviors on circular structures, since this is based on an ORM.
+            fixture.RepeatCount = 5;
+            
             var behavior = fixture
                 .Behaviors
                 .OfType<ThrowingRecursionBehavior>()
                 .Single();
             fixture.Behaviors.Remove(behavior);
-
-            //we want circular class definitions because this is based on an ORM.
+            
             fixture.Behaviors.Add(new OmitOnRecursionBehavior(1));
 
             return fixture;
@@ -36,17 +35,14 @@ namespace Shapeshifter.Tests
 
         protected ILifetimeScope CreateContainer(Action<ContainerBuilder> setupCallback = null)
         {
-            App.CreateContainer(builder =>
-            {
-                builder.RegisterAssemblyTypes(typeof(App).Assembly).AsSelf();
-                builder.RegisterAssemblyTypes(typeof(App).Assembly).AsImplementedInterfaces();
-                if (setupCallback != null)
-                {
-                    setupCallback(builder);
-                }
-            });
+            var builder = new ContainerBuilder();
+            builder.RegisterModule(new DefaultWiringModule());
 
-            return App.Container;
+            if(setupCallback != null) {
+                setupCallback(builder);
+            }
+
+            return builder.Build();
         }
     }
 }

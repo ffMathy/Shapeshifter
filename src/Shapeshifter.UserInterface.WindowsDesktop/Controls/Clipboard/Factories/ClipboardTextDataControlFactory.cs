@@ -2,6 +2,7 @@
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -9,6 +10,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
 {
     class ClipboardTextDataControlFactory : IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl>
     {
+        readonly IEnvironmentInformation environmentInformation;
+
+        public ClipboardTextDataControlFactory(
+            IEnvironmentInformation environmentInformation)
+        {
+            this.environmentInformation = environmentInformation;
+        }
+
         public IClipboardTextDataControl CreateControl(IClipboardTextData data)
         {
             if (data == null)
@@ -20,11 +29,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
         }
 
         [ExcludeFromCodeCoverage]
-        private static IClipboardTextDataControl CreateClipboardTextDataControl(IClipboardTextData data)
+        IClipboardTextDataControl CreateClipboardTextDataControl(IClipboardTextData data)
         {
             return new ClipboardTextDataControl()
             {
-                DataContext = new ClipboardTextDataViewModel()
+                DataContext = new ClipboardTextDataViewModel(environmentInformation)
                 {
                     Data = data
                 }

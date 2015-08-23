@@ -9,7 +9,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
     [ExcludeFromCodeCoverage]
     class FileManager : IFileManager, IDisposable
     {
-        private readonly ICollection<string> temporaryPaths;
+        readonly ICollection<string> temporaryPaths;
 
         public FileManager()
         {
@@ -21,7 +21,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             throw new NotImplementedException();
         }
 
-        private string PrepareIsolatedTemporaryFolder()
+        string PrepareIsolatedTemporaryFolder()
         {
             const string folderName = "Shapeshifter";
 
@@ -33,7 +33,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             return path;
         }
 
-        private static void PrepareDirectory(string path)
+        static void PrepareDirectory(string path)
         {
             if (!Directory.Exists(path))
             {
@@ -54,14 +54,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             return finalPath;
         }
 
-        private static bool IsDirectory(string finalPath)
+        static bool IsDirectory(string finalPath)
         {
             var fileNameWithExtension = Path.GetFileName(finalPath);
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(finalPath);
             return fileNameWithExtension == fileNameWithoutExtension;
         }
 
-        private string GetFullPathFromRelativeTemporaryPath(string path)
+        string GetFullPathFromRelativeTemporaryPath(string path)
         {
             var isolatedFolderPath = PrepareIsolatedTemporaryFolder();
 

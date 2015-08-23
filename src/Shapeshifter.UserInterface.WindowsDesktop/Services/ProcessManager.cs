@@ -9,7 +9,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
     [ExcludeFromCodeCoverage]
     class ProcessManager : IProcessManager, IDisposable
     {
-        private readonly ICollection<Process> processes;
+        readonly ICollection<Process> processes;
 
         public ProcessManager()
         {

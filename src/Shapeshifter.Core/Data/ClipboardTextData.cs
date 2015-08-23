@@ -6,7 +6,7 @@ namespace Shapeshifter.Core.Data
 {
     public class ClipboardTextData : IClipboardTextData
     {
-        private readonly IDataSource source;
+        readonly IDataSource source;
 
         public ClipboardTextData(IDataSourceService sourceFactory)
         {

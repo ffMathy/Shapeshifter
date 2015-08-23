@@ -10,9 +10,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
     class TextClipboardDataControlFactory : ITextClipboardDataControlFactory
     {
-        private readonly IDataSourceService dataSourceService;
+        readonly IDataSourceService dataSourceService;
 
-        private readonly IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl> textControlFactory;
+        readonly IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl> textControlFactory;
 
         public TextClipboardDataControlFactory(
             IDataSourceService dataSourceService,

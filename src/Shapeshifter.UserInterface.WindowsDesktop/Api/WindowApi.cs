@@ -15,7 +15,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
         public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
         [DllImport("user32.dll")]
-        public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
 
         [DllImport("user32.dll")]
         public static extern IntPtr LoadIcon(IntPtr hInstance, IntPtr lpIconName);
@@ -34,9 +34,24 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
                 return GetClassLong64(hWnd, nIndex);
         }
         
-        public static uint WM_GETICON = 0x007f;
-        public static IntPtr ICON_BIG = new IntPtr(1);
-        public static IntPtr IDI_APPLICATION = new IntPtr(0x7F00);
-        public static int GCL_HICON = -14;
+        public const int WM_GETICON = 0x007f;
+
+        public static IntPtr ICON_BIG => new IntPtr(1);
+
+        public static IntPtr IDI_APPLICATION => new IntPtr(0x7F00);
+
+        public const int GCL_HICON = -14;
+
+        public static string GetWindowTitle(IntPtr windowHandle)
+        {
+            const int numberOfCharacters = 512;
+            var buffer = new StringBuilder(numberOfCharacters);
+
+            if (WindowApi.GetWindowText(windowHandle, buffer, numberOfCharacters) > 0)
+            {
+                return buffer.ToString();
+            }
+            return null;
+        }
     }
 }

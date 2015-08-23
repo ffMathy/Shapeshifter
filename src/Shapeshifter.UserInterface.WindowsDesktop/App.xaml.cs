@@ -1,16 +1,9 @@
 ﻿using System.Windows;
 using Autofac;
-using Shapeshifter.Core.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Services;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows;
 using System.Reflection;
 using System;
-using System.Linq;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services;
 using System.Diagnostics.CodeAnalysis;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop
 {
@@ -20,9 +13,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
     [ExcludeFromCodeCoverage]
     public partial class App : Application
     {
-        private static ILifetimeScope container;
+        static ILifetimeScope container;
 
-        public static ILifetimeScope Container
+        static ILifetimeScope Container
         {
             get
             {
@@ -38,81 +31,21 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
         {
             lock (typeof(App))
             {
-                //TODO: this is not the responsibility of "App". move out to a separate class.
-
                 var builder = new ContainerBuilder();
-
-                RegisterAssemblyTypes(builder, typeof(IClipboardData).Assembly);
-                RegisterAssemblyTypes(builder, typeof(App).Assembly);
-
-                RegisterServices(builder);
-
-                if (callback != null)
-                {
-                    callback(builder);
-                }
-
-                var newContainer = builder.Build();
-                LaunchServices(newContainer);
-
-                container = newContainer;
+                builder.RegisterModule(new DefaultWiringModule());
+                container = builder.Build();
             }
         }
 
-        private static void LaunchServices(ILifetimeScope container)
-        {
-            var serviceTypes = GetServiceTypes();
-            foreach (var serviceType in serviceTypes)
-            {
-                var interfaces = serviceType.GetInterfaces();
-                var mainInterface = interfaces.First();
-
-                container.Resolve(mainInterface);
-            }
-        }
-
-        private static void RegisterServices(ContainerBuilder builder)
-        {
-            var serviceTypes = GetServiceTypes();
-            foreach (var serviceType in serviceTypes)
-            {
-                builder.RegisterType(serviceType)
-                    .AsImplementedInterfaces()
-                    .SingleInstance();
-            }
-        }
-
-        private static Type[] GetServiceTypes()
-        {
-            return new[] {
-                        typeof(UpdateService),
-                        typeof(ClipboardUserInterfaceMediator),
-                        typeof(FileIconService),
-                        typeof(ClipboardCopyInterceptor),
-                        typeof(ImagePersistenceService),
-                        typeof(PasteHotkeyInterceptor),
-                        typeof(WindowMessageHook),
-                        typeof(DataSourceService),
-                        typeof(Downloader),
-                        typeof(FileManager),
-                        typeof(DesignerImageConverterService),
-                        typeof(ClipboardCopyInterceptor),
-                        typeof(PasteHotkeyInterceptor)
-                    };
-        }
-
-        private static void RegisterAssemblyTypes(ContainerBuilder builder, Assembly assembly)
+        static void RegisterAssemblyTypes(ContainerBuilder builder, Assembly assembly)
         {
             builder
                 .RegisterAssemblyTypes(assembly)
-                .AsSelf();
-
-            builder
-                .RegisterAssemblyTypes(assembly)
+                .AsSelf()
                 .AsImplementedInterfaces();
         }
 
-        public static bool InDesignMode
+        static bool InDesignMode
         {
             get
             {
@@ -130,19 +63,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
         {
             base.OnStartup(e);
 
-            //TODO: move all this service startup into smarter methods, maybe implementing IStartable.
-
-            //start the main window.
-            var window = MainWindow = Container.Resolve<ClipboardListWindow>();
-            window.Show();
-
-            //start the message hook.
-            var messageHook = Container.Resolve<IWindowMessageHook>();
-            messageHook.Connect();
-
-            //start the clipboard mediator.
-            var mediator = Container.Resolve<IClipboardUserInterfaceMediator>();
-            mediator.Connect();
+            var main = Container.Resolve<Main>();
+            main.Start();
         }
     }
 }

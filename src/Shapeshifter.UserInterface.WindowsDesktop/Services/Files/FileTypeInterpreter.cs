@@ -18,13 +18,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             return FileType.Other;
         }
 
-        private bool IsTextFileType(string name)
+        bool IsTextFileType(string name)
         {
             var imageFileTypes = new[] { ".txt" };
             return imageFileTypes.Any(name.EndsWith);
         }
 
-        private static bool IsImageFileType(string name)
+        static bool IsImageFileType(string name)
         {
             var imageFileTypes = new[] { ".png", ".jpg" };
             return imageFileTypes.Any(name.EndsWith);

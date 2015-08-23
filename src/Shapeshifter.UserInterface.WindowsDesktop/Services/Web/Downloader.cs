@@ -9,7 +9,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
     [ExcludeFromCodeCoverage]
     class Downloader : IDownloader, IDisposable
     {
-        private readonly HttpClient client;
+        readonly HttpClient client;
 
         public Downloader()
         {

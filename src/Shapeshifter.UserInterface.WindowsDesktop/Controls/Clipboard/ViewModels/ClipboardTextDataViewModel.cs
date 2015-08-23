@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Text.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
@@ -10,25 +12,27 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
 {
     class ClipboardTextDataViewModel : ClipboardDataViewModel<IClipboardTextData>, IClipboardTextDataViewModel
     {
-        private static readonly Regex whitespaceSubstitutionExpression;
+        static readonly Regex whitespaceSubstitutionExpression;
 
         static ClipboardTextDataViewModel()
         {
             whitespaceSubstitutionExpression = new Regex(@"\s+", RegexOptions.Compiled);
         }
 
-        public ClipboardTextDataViewModel()
+        public ClipboardTextDataViewModel(
+            IEnvironmentInformation environmentInformation)
         {
-            PrepareDesignMode();
+            if (environmentInformation.IsInDesignTime)
+            {
+                PrepareDesignMode();
+            }
         }
 
         [ExcludeFromCodeCoverage]
-        private void PrepareDesignMode()
+        void PrepareDesignMode()
         {
-            if (App.InDesignMode)
-            {
-                Data = App.Container.Resolve<DesignerClipboardTextDataFacade>();
-            }
+            var container = DesignTimeContainerHelper.CreateDesignTimeContainer();
+            Data = container.Resolve<DesignerClipboardTextDataFacade>();
         }
 
         public string FriendlyText

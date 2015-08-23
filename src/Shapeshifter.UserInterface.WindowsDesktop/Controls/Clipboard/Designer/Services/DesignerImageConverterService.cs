@@ -8,8 +8,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.
     [ExcludeFromCodeCoverage]
     class DesignerImageConverterService : IDesignerImageConverterService
     {
-        private readonly IImageFileInterpreter imageFileInterpreter;
-        private readonly IImagePersistenceService imagePersistenceService;
+        readonly IImageFileInterpreter imageFileInterpreter;
+        readonly IImagePersistenceService imagePersistenceService;
 
         public DesignerImageConverterService(
             IImagePersistenceService imagePersistenceService,

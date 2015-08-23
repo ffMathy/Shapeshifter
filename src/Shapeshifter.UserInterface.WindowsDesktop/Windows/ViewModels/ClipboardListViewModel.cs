@@ -15,10 +15,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
     class ClipboardListViewModel : 
         IClipboardListViewModel
     {
-        private IClipboardDataControlPackage selectedElement;
-        private IAction selectedAction;
+        IClipboardDataControlPackage selectedElement;
+        IAction selectedAction;
 
-        private readonly IEnumerable<IAction> allActions;
+        readonly IEnumerable<IAction> allActions;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
@@ -74,7 +74,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             RegisterMediatorEvents(mediator);
         }
 
-        private void RegisterMediatorEvents(IClipboardUserInterfaceMediator mediator)
+        void RegisterMediatorEvents(IClipboardUserInterfaceMediator mediator)
         {
             mediator.ControlAdded += Service_ControlAdded;
             mediator.ControlHighlighted += Service_ControlHighlighted;
@@ -84,15 +84,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             mediator.UserInterfaceShown += Service_UserInterfaceShown;
         }
 
-        private void Service_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
+        void Service_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
         {
-            if(UserInterfaceShown != null)
+            if (UserInterfaceShown != null)
             {
                 UserInterfaceShown(this, e);
             }
         }
 
-        private void Service_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
+        void Service_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
         {
             if (UserInterfaceHidden != null)
             {
@@ -100,7 +100,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             }
         }
 
-        private async void SetActions()
+        async void SetActions()
         {
             Actions.Clear();
             SelectedAction = null;
@@ -114,7 +114,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             }
         }
 
-        private async Task AddActionsFromDataAsync(IClipboardData data)
+        async Task AddActionsFromDataAsync(IClipboardData data)
         {
             foreach (var action in allActions)
             {
@@ -125,7 +125,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             }
         }
 
-        private void AddAction(IAction action)
+        void AddAction(IAction action)
         {
             Actions.Add(action);
             if (SelectedAction == null)
@@ -134,26 +134,26 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             }
         }
 
-        private void Service_ControlRemoved(object sender, Services.Events.ControlEventArgument e)
+        void Service_ControlRemoved(object sender, ControlEventArgument e)
         {
-            lock(Elements)
+            lock (Elements)
             {
                 Elements.Remove(e.Package);
             }
         }
 
-        private void Service_ControlHighlighted(object sender, Services.Events.ControlEventArgument e)
+        void Service_ControlHighlighted(object sender, ControlEventArgument e)
         {
-            lock(Elements)
+            lock (Elements)
             {
                 Elements.Remove(e.Package);
                 Elements.Insert(0, e.Package);
             }
         }
 
-        private void Service_ControlAdded(object sender, Services.Events.ControlEventArgument e)
+        void Service_ControlAdded(object sender, ControlEventArgument e)
         {
-            lock(Elements)
+            lock (Elements)
             {
                 Elements.Insert(0, e.Package);
                 SelectedElement = e.Package;
