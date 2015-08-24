@@ -8,7 +8,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {
     class ClipboardInjectionService : IClipboardInjectionService
     {
-        private readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
+        readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
 
         public ClipboardInjectionService(
             IClipboardCopyInterceptor clipboardCopyInterceptor)

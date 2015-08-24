@@ -25,6 +25,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             get; private set;
         }
 
+        public IntPtr MainWindowHandle
+            => hooker.Handle;
+
         public WindowMessageHook(
             IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors,
             ILogger logger)

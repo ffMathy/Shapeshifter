@@ -7,9 +7,5 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces
     public interface IPasteHotkeyInterceptor : IWindowMessageInterceptor
     {
         event EventHandler<PasteHotkeyFiredArgument> PasteHotkeyFired;
-
-        void Disable();
-
-        void Enable();
     }
 }
