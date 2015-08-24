@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows.Media.Imaging;
-using Shapeshifter.Core.Data;
+﻿using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using WindowsClipboard = System.Windows.Clipboard;

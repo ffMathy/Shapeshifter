@@ -1,7 +1,6 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
-using System.Threading;
 using static Shapeshifter.UserInterface.WindowsDesktop.Services.Api.KeyboardApi;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
