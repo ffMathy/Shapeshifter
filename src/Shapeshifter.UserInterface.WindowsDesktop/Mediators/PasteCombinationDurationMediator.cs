@@ -49,6 +49,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         public bool IsCombinationHeldDown 
             => Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.V);
 
+        public bool IsOneCombinationKeyDown
+            => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.V);
+
         CancellationToken Token
             => threadCancellationTokenSource.Token;
 
@@ -74,6 +77,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         void MonitorClipboardCombinationState()
         {
             threadCombinationHeldDownEvent.Wait(Token);
+            threadCombinationHeldDownEvent.Reset();
             if (IsCancellationRequested) return;
 
             WaitForCombinationRelease();
@@ -93,7 +97,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         void WaitForCombinationRelease()
         {
             var decisecondsPassed = 0;
-            while (!IsCancellationRequested && IsCombinationHeldDown)
+            while (!IsCancellationRequested && IsOneCombinationKeyDown)
             {
                 threadDelay.Execute(100);
                 decisecondsPassed++;

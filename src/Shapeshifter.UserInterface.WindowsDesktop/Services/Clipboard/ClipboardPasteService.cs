@@ -1,7 +1,8 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
-using System;
+using System.Threading;
+using static Shapeshifter.UserInterface.WindowsDesktop.Services.Api.KeyboardApi;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {
@@ -37,7 +38,31 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 
         void SendPasteCombination()
         {
-            throw new NotImplementedException();
+            var inputs = new[]
+            {
+                GenerateKeystoke(VirtualKeyShort.LCONTROL),
+                GenerateKeystoke(VirtualKeyShort.KEY_V),
+                GenerateKeystoke(VirtualKeyShort.KEY_V, KEYEVENTF.KEYUP),
+                GenerateKeystoke(VirtualKeyShort.LCONTROL, KEYEVENTF.KEYUP)
+            };
+            SendInput((uint)inputs.Length, inputs, INPUT.Size);
+        }
+
+        static INPUT GenerateKeystoke(VirtualKeyShort key, KEYEVENTF flags = 0)
+        {
+            return new INPUT()
+            {
+                type = 1,
+                U = new InputUnion()
+                {
+                    ki = new KEYBDINPUT()
+                    {
+                        wVk = key,
+                        dwFlags = flags,
+                        wScan = 0
+                    }
+                }
+            };
         }
     }
 }

@@ -956,6 +956,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
             public HARDWAREINPUT hi;
         }
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct HARDWAREINPUT
+        {
+            public int uMsg;
+            public short wParamL;
+            public short wParamH;
+        }
+
         [DllImport("user32.dll")]
         public static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
         
