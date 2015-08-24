@@ -5,6 +5,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -14,6 +15,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         readonly IClipboardCopyInterceptor clipboardHook;
         readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
         readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
+        readonly IClipboardPasteService clipboardPasteService;
 
         readonly IList<IClipboardDataControlPackage> clipboardPackages;
 
@@ -34,11 +36,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         public ClipboardUserInterfaceMediator(
             IClipboardCopyInterceptor clipboardHook,
             IPasteCombinationDurationMediator pasteCombinationDurationMediator,
-            IClipboardDataControlPackageFactory clipboardDataControlPackageFactory)
+            IClipboardDataControlPackageFactory clipboardDataControlPackageFactory,
+            IClipboardPasteService clipboardPasteService)
         {
             this.clipboardHook = clipboardHook;
             this.pasteCombinationDurationMediator = pasteCombinationDurationMediator;
             this.clipboardDataControlPackageFactory = clipboardDataControlPackageFactory;
+            this.clipboardPasteService = clipboardPasteService;
 
             clipboardPackages = new List<IClipboardDataControlPackage>();
         }
@@ -117,6 +121,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             object sender,
             PasteCombinationDurationPassedEventArgument e)
         {
+            RaiseUserInterfaceShownEvent();
+        }
+
+        void RaiseUserInterfaceShownEvent()
+        {
             if (UserInterfaceShown != null)
             {
                 UserInterfaceShown(this, new UserInterfaceShownEventArgument());
@@ -126,6 +135,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         void PasteCombinationDurationMediator_PasteCombinationReleased(
             object sender,
             PasteCombinationReleasedEventArgument e)
+        {
+            RaiseUserInterfaceHiddenEvent();
+            SimulatePaste();
+        }
+
+        void SimulatePaste()
+        {
+            clipboardPasteService.PasteClipboardContents();
+        }
+
+        void RaiseUserInterfaceHiddenEvent()
         {
             if (UserInterfaceHidden != null)
             {

@@ -75,5 +75,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
                 }
             }
         }
+
+        public void Disable()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Enable()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

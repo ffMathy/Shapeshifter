@@ -7,5 +7,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
     public interface IClipboardCopyInterceptor : IWindowMessageInterceptor
     {
         event EventHandler<DataCopiedEventArgument> DataCopied;
+
+        void SkipNext();
     }
 }

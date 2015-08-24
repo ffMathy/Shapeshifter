@@ -75,5 +75,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                 HandleClipboardUpdateWindowMessage();
             }
         }
+
+        public void SkipNext()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

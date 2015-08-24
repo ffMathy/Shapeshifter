@@ -164,6 +164,8 @@
     <Compile Include="Mediators\PasteCombinationDurationMediator.cs" />
     <Compile Include="Mediators\Interfaces\IPasteCombinationDurationMediator.cs" />
     <Compile Include="Services\Arguments\Interfaces\IArgumentProcessor.cs" />
+    <Compile Include="Services\Clipboard\ClipboardPasteService.cs" />
+    <Compile Include="Services\Clipboard\Interfaces\IClipboardPasteService.cs" />
     <Compile Include="Services\Messages\ClipboardCopyInterceptor.cs" />
     <Compile Include="Mediators\ClipboardUserInterfaceMediator.cs" />
     <Compile Include="Services\Clipboard\ClipboardInjectionService.cs" />

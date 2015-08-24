@@ -24,7 +24,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
             this.windowMessageHook = windowMessageHook;
 
             SourceInitialized += ClipboardListWindow_SourceInitialized;
-
+            
             InitializeComponent();
 
             SetupViewModel(viewModel);
