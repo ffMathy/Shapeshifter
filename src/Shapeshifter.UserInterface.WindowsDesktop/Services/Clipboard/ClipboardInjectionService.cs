@@ -4,6 +4,7 @@ using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using WindowsClipboard = System.Windows.Clipboard;
+using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {
@@ -17,10 +18,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;
         }
 
-        public void InjectData(IClipboardData clipboardData)
+        public void InjectData(IDataObject rawClipboardData)
         {
             clipboardCopyInterceptor.SkipNext();
-            throw new NotImplementedException();
+            WindowsClipboard.SetDataObject(rawClipboardData, true);
         }
 
         public void InjectImage(BitmapSource image)

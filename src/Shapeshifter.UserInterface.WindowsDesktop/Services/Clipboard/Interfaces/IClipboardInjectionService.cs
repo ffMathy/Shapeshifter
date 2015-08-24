@@ -1,5 +1,5 @@
 ﻿using System.Windows.Media.Imaging;
-using Shapeshifter.Core.Data;
+using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces
 {
@@ -7,7 +7,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interface
     {
         void InjectImage(BitmapSource image);
 
-        void InjectData(IClipboardData data);
+        void InjectData(IDataObject data);
 
         void InjectText(string text);
     }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Imaging;
+using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -63,9 +64,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return textData != null && await linkParser.HasLinkOfTypeAsync(textData.Text, LinkType.ImageFile);
         }
 
-        public async Task PerformAsync(IClipboardData clipboardData)
+        public async Task PerformAsync(
+            IClipboardData processedData,
+            IDataObject rawData)
         {
-            var textData = clipboardData as IClipboardTextData;
+            var textData = processedData as IClipboardTextData;
             var links = await linkParser.ExtractLinksFromTextAsync(textData.Text);
 
             var imagesBytes = await DownloadLinksAsync(links);

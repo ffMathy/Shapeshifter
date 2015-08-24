@@ -3,6 +3,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using System;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -50,9 +51,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return true;
         }
 
-        public async Task PerformAsync(IClipboardData clipboardData)
+        public async Task PerformAsync(
+            IClipboardData processedData, 
+            IDataObject rawData)
         {
-            clipboardInjectionService.InjectData(clipboardData);
+            clipboardInjectionService.InjectData(rawData);
         }
     }
 }

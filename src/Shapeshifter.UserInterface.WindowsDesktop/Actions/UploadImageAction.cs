@@ -5,6 +5,7 @@ using Shapeshifter.Core.Data.Interfaces;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
+using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -58,7 +59,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return fileData != null && fileTypeInterpreter.GetFileTypeFromFileName(fileData.FileName) == FileType.Image;
         }
 
-        public Task PerformAsync(IClipboardData clipboardData)
+        public Task PerformAsync(
+            IClipboardData processedData,
+            IDataObject rawData)
         {
             throw new NotImplementedException();
         }

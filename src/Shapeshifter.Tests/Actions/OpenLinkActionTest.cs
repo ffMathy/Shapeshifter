@@ -73,7 +73,7 @@ namespace Shapeshifter.Tests.Actions
             var fakeData = Substitute.For<IClipboardTextData>();
 
             var action = container.Resolve<IOpenLinkAction>();
-            await action.PerformAsync(fakeData);
+            await action.PerformAsync(fakeData, null);
 
             var fakeProcessManager = container.Resolve<IProcessManager>();
             fakeProcessManager.Received(1)

@@ -6,6 +6,7 @@ using NSubstitute;
 using Shapeshifter.Core.Data;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
+using System.Windows;
 
 namespace Shapeshifter.Tests.Actions
 {
@@ -49,10 +50,10 @@ namespace Shapeshifter.Tests.Actions
                 c.RegisterFake<IClipboardInjectionService>();
             });
 
-            var fakeData = Substitute.For<IClipboardData>();
+            var fakeData = Substitute.For<IDataObject>();
 
             var action = container.Resolve<IPasteAction>();
-            await action.PerformAsync(fakeData);
+            await action.PerformAsync(null, fakeData);
 
             var fakeClipboardInjectionService = container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService.InjectData(fakeData);

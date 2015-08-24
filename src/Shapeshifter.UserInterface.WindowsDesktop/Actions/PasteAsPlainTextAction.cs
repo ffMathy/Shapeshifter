@@ -4,6 +4,7 @@ using Shapeshifter.Core.Data.Interfaces;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using System;
+using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -28,7 +29,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         {
             get
             {
-                throw new NotImplementedException();
+                return 25;
             }
         }
 
@@ -45,9 +46,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return clipboardData is IClipboardTextData;
         }
 
-        public async Task PerformAsync(IClipboardData clipboardData)
+        public async Task PerformAsync(
+            IClipboardData processedData,
+            IDataObject rawData)
         {
-            var textData = (IClipboardTextData)clipboardData;
+            var textData = (IClipboardTextData)processedData;
             clipboardInjectionService.InjectText(textData.Text);
         }
     }
