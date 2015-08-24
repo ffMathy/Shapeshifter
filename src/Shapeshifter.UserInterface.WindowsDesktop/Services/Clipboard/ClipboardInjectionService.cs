@@ -3,6 +3,7 @@ using System.Windows.Media.Imaging;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using WindowsClipboard = System.Windows.Clipboard;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {
@@ -25,13 +26,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
         public void InjectImage(BitmapSource image)
         {
             clipboardCopyInterceptor.SkipNext();
-            throw new NotImplementedException();
+            WindowsClipboard.SetImage(image);
         }
 
         public void InjectText(string text)
         {
             clipboardCopyInterceptor.SkipNext();
-            throw new NotImplementedException();
+            WindowsClipboard.SetText(text);
         }
     }
 }
