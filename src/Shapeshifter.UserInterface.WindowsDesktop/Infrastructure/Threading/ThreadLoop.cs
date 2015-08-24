@@ -21,11 +21,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
                 {
                     action();
                 }
+
+                Stop();
             });
+            thread.SetApartmentState(ApartmentState.STA);
             thread.IsBackground = true;
             thread.Start();
-
-            Stop();
         }
 
         public void Stop()

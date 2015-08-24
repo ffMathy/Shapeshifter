@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using Autofac;
-using System.Reflection;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;

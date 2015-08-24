@@ -5,6 +5,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using System.Threading;
 using System.Windows.Input;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 {
@@ -13,6 +14,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
         readonly IThreadLoop threadLoop;
         readonly IThreadDelay threadDelay;
+        readonly ILogger logger;
+        readonly IMainThreadInvoker mainThreadInvoker;
 
         readonly CancellationTokenSource threadCancellationTokenSource;
         readonly ManualResetEventSlim threadCombinationHeldDownEvent;
@@ -23,11 +26,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         public PasteCombinationDurationMediator(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
             IThreadLoop threadLoop,
-            IThreadDelay threadDelay)
+            IThreadDelay threadDelay,
+            IMainThreadInvoker mainThreadInvoker,
+            ILogger logger)
         {
             this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
             this.threadLoop = threadLoop;
             this.threadDelay = threadDelay;
+            this.mainThreadInvoker = mainThreadInvoker;
+            this.logger = logger;
 
             threadCancellationTokenSource = new CancellationTokenSource();
             threadCombinationHeldDownEvent = new ManualResetEventSlim();
@@ -45,7 +52,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         CancellationToken Token
             => threadCancellationTokenSource.Token;
 
-        public int DurationInDeciseconds { get; }
+        public int DurationInDeciseconds
+            => 3;
 
         public void Connect()
         {
@@ -78,7 +86,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         {
             if (PasteCombinationReleased != null)
             {
-                PasteCombinationReleased(this, new PasteCombinationReleasedEventArgument());
+                mainThreadInvoker.Invoke(() => PasteCombinationReleased(this, new PasteCombinationReleasedEventArgument()));
             }
         }
 
@@ -90,15 +98,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
                 threadDelay.Execute(100);
                 decisecondsPassed++;
 
+                logger.Information($"Paste combination held down for {decisecondsPassed}.");
+
                 RaiseDurationPassedEventIfNeeded(decisecondsPassed);
             }
         }
 
         void RaiseDurationPassedEventIfNeeded(int decisecondsPassed)
         {
-            if (decisecondsPassed > DurationInDeciseconds && PasteCombinationDurationPassed != null)
+            if (decisecondsPassed == DurationInDeciseconds && PasteCombinationDurationPassed != null)
             {
-                PasteCombinationDurationPassed(this, new PasteCombinationDurationPassedEventArgument());
+                mainThreadInvoker.Invoke(() => PasteCombinationDurationPassed(this, new PasteCombinationDurationPassedEventArgument()));
+                logger.Information("Paste duration passed event raised.");
             }
         }
 
@@ -115,10 +126,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, PasteHotkeyFiredArgument e)
         {
             threadCombinationHeldDownEvent.Set();
-            if (PasteCombinationDurationPassed != null)
-            {
-                PasteCombinationDurationPassed(this, new PasteCombinationDurationPassedEventArgument());
-            }
         }
 
         public void Disconnect()

@@ -35,7 +35,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
 
         bool RegisterHotkey(IntPtr windowHandle)
         {
-            return KeyboardApi.RegisterHotKey(windowHandle, GetInterceptorId(), KeyboardApi.MOD_CONTROL, KeyboardApi.VK_KEY_V);
+            return KeyboardApi.RegisterHotKey(windowHandle, GetInterceptorId(), KeyboardApi.MOD_CONTROL | KeyboardApi.MOD_NOREPEAT, KeyboardApi.VK_KEY_V);
         }
 
         int GetInterceptorId()
