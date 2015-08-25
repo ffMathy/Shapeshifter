@@ -9,16 +9,17 @@ using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using System.Threading.Tasks;
 using System;
+using System.Linq;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 {
-    class ClipboardListViewModel : 
+    class ClipboardListViewModel :
         IClipboardListViewModel
     {
         IClipboardDataControlPackage selectedElement;
         IAction selectedAction;
 
-        readonly IEnumerable<IAction> allActions;
+        readonly IAction[] allActions;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
@@ -63,7 +64,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
         }
 
         public ClipboardListViewModel(
-            IEnumerable<IAction> allActions,
+            IAction[] allActions,
             IClipboardUserInterfaceMediator mediator)
         {
             Elements = new ObservableCollection<IClipboardDataControlPackage>();
@@ -92,11 +93,25 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             }
         }
 
-        void Service_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
+        async void Service_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
         {
             if (UserInterfaceHidden != null)
             {
                 UserInterfaceHidden(this, e);
+            }
+
+            await InvokeSelectedActionOnSelectedClipboardData();
+        }
+
+        async Task InvokeSelectedActionOnSelectedClipboardData()
+        {
+            foreach (var clipboardData in SelectedElement.Contents)
+            {
+                if (await SelectedAction.CanPerformAsync(clipboardData))
+                {
+                    await SelectedAction.PerformAsync(
+                        clipboardData);
+                }
             }
         }
 
@@ -116,12 +131,31 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 
         async Task AddActionsFromDataAsync(IClipboardData data)
         {
-            foreach (var action in allActions)
+            var actionPerformResults = await Task.WhenAll(allActions.Select(x => x.CanPerformAsync(data)));
+
+            var allowedActions = GetAllowedActionsFromPerformResults(actionPerformResults);
+            AddActions(allowedActions);
+        }
+
+        IEnumerable<IAction> GetAllowedActionsFromPerformResults(bool[] actionPerformResults)
+        {
+            var allowedActions = new List<IAction>();
+            for (var i = 0; i < allActions.Length; i++)
             {
-                if (await action.CanPerformAsync(data))
+                if (actionPerformResults[i])
                 {
-                    AddAction(action);
+                    allowedActions.Add(allActions[i]);
                 }
+            }
+
+            return allowedActions;
+        }
+
+        void AddActions(IEnumerable<IAction> actions)
+        {
+            foreach (var action in actions.OrderBy(x => x.Order))
+            {
+                AddAction(action);
             }
         }
 

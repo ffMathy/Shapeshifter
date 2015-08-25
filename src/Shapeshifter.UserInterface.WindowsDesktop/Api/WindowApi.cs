@@ -42,6 +42,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
 
         public const int GCL_HICON = -14;
 
+        //TODO: refactor this into custom service.
         public static string GetWindowTitle(IntPtr windowHandle)
         {
             const int numberOfCharacters = 512;

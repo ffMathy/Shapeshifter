@@ -8,6 +8,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using System;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using System.Windows;
 
 namespace Shapeshifter.Tests.Factories
 {
@@ -89,7 +90,7 @@ namespace Shapeshifter.Tests.Factories
             var container = CreateContainer();
 
             var factory = container.Resolve<IFileClipboardDataControlFactory>();
-            factory.BuildData("foobar", new object());
+            factory.BuildData("foobar", new byte[0]);
         }
 
         [TestMethod]
@@ -98,7 +99,7 @@ namespace Shapeshifter.Tests.Factories
             var container = CreateContainer();
 
             var factory = container.Resolve<IFileClipboardDataControlFactory>();
-            var data = factory.BuildData("FileDrop", new[] { "foo.jpg", "bar.txt" });
+            var data = factory.BuildData("FileDrop", new byte[0]);
             Assert.IsInstanceOfType(data, typeof(ClipboardFileCollectionData));
         }
 
@@ -111,7 +112,7 @@ namespace Shapeshifter.Tests.Factories
             });
 
             var factory = container.Resolve<IFileClipboardDataControlFactory>();
-            var data = factory.BuildData("FileDrop", new[] { "foo.jpg" });
+            var data = factory.BuildData("FileDrop", new byte[0]);
             Assert.IsInstanceOfType(data, typeof(ClipboardFileData));
         }
 

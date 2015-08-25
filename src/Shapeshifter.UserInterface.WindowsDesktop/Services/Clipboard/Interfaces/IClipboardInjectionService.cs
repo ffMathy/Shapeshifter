@@ -7,7 +7,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interface
     {
         void InjectImage(BitmapSource image);
 
-        void InjectData(IDataObject data);
+        void InjectData(byte[] data);
 
         void InjectText(string text);
     }

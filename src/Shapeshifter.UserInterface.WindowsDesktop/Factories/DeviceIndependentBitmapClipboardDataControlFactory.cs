@@ -13,7 +13,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             throw new NotImplementedException();
         }
 
-        public IClipboardData BuildData(string format, object data)
+        public IClipboardData BuildData(string format, byte[] rawData)
         {
             throw new NotImplementedException();
         }

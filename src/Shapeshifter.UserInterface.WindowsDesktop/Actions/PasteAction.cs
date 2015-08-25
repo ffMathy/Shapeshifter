@@ -10,11 +10,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
     class PasteAction : IPasteAction
     {
         readonly IClipboardInjectionService clipboardInjectionService;
+        readonly IClipboardPasteService clipboardPasteService;
 
         public PasteAction(
-            IClipboardInjectionService clipboardInjectionService)
+            IClipboardInjectionService clipboardInjectionService,
+            IClipboardPasteService clipboardPasteService)
         {
             this.clipboardInjectionService = clipboardInjectionService;
+            this.clipboardPasteService = clipboardPasteService;
         }
 
         public string Description
@@ -52,10 +55,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         }
 
         public async Task PerformAsync(
-            IClipboardData processedData, 
-            IDataObject rawData)
+            IClipboardData processedData)
         {
-            clipboardInjectionService.InjectData(rawData);
+            clipboardInjectionService.InjectData(processedData.RawData);
+            clipboardPasteService.PasteClipboardContents();
         }
     }
 }

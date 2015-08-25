@@ -96,7 +96,7 @@ namespace Shapeshifter.Tests.Actions
             });
 
             var action = container.Resolve<ICopyImageLinkAction>();
-            await action.PerformAsync(Substitute.For<IClipboardTextData>(), null);
+            await action.PerformAsync(Substitute.For<IClipboardTextData>());
 
             var fakeClipboardInjectionService = container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService.Received(2)

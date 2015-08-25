@@ -75,7 +75,6 @@
     <Compile Include="Services\Interfaces\IDataSourceService.cs" />
     <Compile Include="Data\Interfaces\IClipboardData.cs" />
     <Compile Include="Data\Interfaces\IDataSource.cs" />
-    <Compile Include="Data\Interfaces\ISerializable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Shapeshifter.Core.Factories.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
+using System;
 
 namespace Shapeshifter.Core.Data
 {
@@ -23,9 +24,9 @@ namespace Shapeshifter.Core.Data
             }
         }
 
-        public byte[] Serialize()
+        public byte[] RawData
         {
-            return Encoding.UTF8.GetBytes(Text);
+            get; set;
         }
     }
 }

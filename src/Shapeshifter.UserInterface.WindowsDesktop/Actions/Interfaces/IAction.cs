@@ -14,8 +14,6 @@ namespace Shapeshifter.Core.Actions
 
         Task<bool> CanPerformAsync(IClipboardData clipboardData);
 
-        Task PerformAsync(
-            IClipboardData processedData,
-            IDataObject rawData);
+        Task PerformAsync(IClipboardData clipboardData);
     }
 }

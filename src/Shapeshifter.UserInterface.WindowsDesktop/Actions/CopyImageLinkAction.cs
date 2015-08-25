@@ -65,8 +65,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         }
 
         public async Task PerformAsync(
-            IClipboardData processedData,
-            IDataObject rawData)
+            IClipboardData processedData)
         {
             var textData = processedData as IClipboardTextData;
             var links = await linkParser.ExtractLinksFromTextAsync(textData.Text);

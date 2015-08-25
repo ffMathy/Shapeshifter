@@ -24,9 +24,9 @@ namespace Shapeshifter.Core.Data
             }
         }
 
-        public byte[] Serialize()
+        public byte[] RawData
         {
-            throw new NotImplementedException();
+            get; set;
         }
     }
 }

@@ -3,6 +3,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using System.Windows;
 using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
@@ -16,26 +17,27 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             this.dataFactories = dataFactories;
         }
 
-        public IClipboardDataControlPackage Create(IDataObject data)
+        public IClipboardDataControlPackage Create()
         {
             var package = new ClipboardDataControlPackage();
-            DecoratePackageWithClipboardData(package, data);
+            DecoratePackageWithClipboardData(package);
             DecoratePackageWithControl(package);
 
             return package;
         }
 
-        void DecoratePackageWithClipboardData(ClipboardDataControlPackage package, IDataObject dataObject)
+        void DecoratePackageWithClipboardData(ClipboardDataControlPackage package)
         {
             foreach (var factory in dataFactories)
             {
-                foreach (var format in dataObject.GetFormats(true))
+                foreach (var format in ClipboardApi.GetClipboardFormats())
                 {
-                    if (factory.CanBuildData(format))
+                    var formatName = ClipboardApi.GetClipboardFormatName(format);
+                    if (factory.CanBuildData(formatName))
                     {
-                        var rawData = dataObject.GetData(format);
+                        var rawData = ClipboardApi.GetClipboardDataBytes(format);
 
-                        var clipboardData = factory.BuildData(format, rawData);
+                        var clipboardData = factory.BuildData(formatName, rawData);
                         package.AddData(clipboardData);
                     }
                 }

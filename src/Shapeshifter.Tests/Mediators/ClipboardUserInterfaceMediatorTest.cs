@@ -107,10 +107,8 @@ namespace Shapeshifter.Tests.Mediators
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Connect();
 
-            var fakeDataObject = Substitute.For<IDataObject>();
-
             var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
-            fakeClipboardHookService.DataCopied += Raise.Event<EventHandler<DataCopiedEventArgument>>(fakeClipboardHookService, new DataCopiedEventArgument(fakeDataObject));
+            fakeClipboardHookService.DataCopied += Raise.Event<EventHandler<DataCopiedEventArgument>>(fakeClipboardHookService, new DataCopiedEventArgument());
 
             Assert.AreEqual(1, mediator.ClipboardElements.Count());
         }
@@ -131,7 +129,7 @@ namespace Shapeshifter.Tests.Mediators
                     .Returns(true);
 
                 fakeFactory
-                    .BuildData(Arg.Any<string>(), Arg.Any<object>())
+                    .BuildData(Arg.Any<string>(), Arg.Any<byte[]>())
                     .Returns(fakeData);
                 c.RegisterInstance<IEnumerable<IClipboardDataControlFactory>>(new[] { fakeFactory });
             });
@@ -139,13 +137,8 @@ namespace Shapeshifter.Tests.Mediators
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Connect();
 
-            var fakeDataObject = Substitute.For<IDataObject>();
-            fakeDataObject
-                .GetFormats(true)
-                .Returns(new[] { "foobar" });
-
             var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
-            fakeClipboardHookService.DataCopied += Raise.Event<EventHandler<DataCopiedEventArgument>>(fakeClipboardHookService, new DataCopiedEventArgument(fakeDataObject));
+            fakeClipboardHookService.DataCopied += Raise.Event<EventHandler<DataCopiedEventArgument>>(fakeClipboardHookService, new DataCopiedEventArgument());
 
             var addedPackage = mediator.ClipboardElements.Single();
             var content = addedPackage.Contents.Single();
@@ -180,13 +173,8 @@ namespace Shapeshifter.Tests.Mediators
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Connect();
 
-            var fakeDataObject = Substitute.For<IDataObject>();
-            fakeDataObject
-                .GetFormats(true)
-                .Returns(new[] { "foobar" });
-
             var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
-            fakeClipboardHookService.DataCopied += Raise.Event<EventHandler<DataCopiedEventArgument>>(fakeClipboardHookService, new DataCopiedEventArgument(fakeDataObject));
+            fakeClipboardHookService.DataCopied += Raise.Event<EventHandler<DataCopiedEventArgument>>(fakeClipboardHookService, new DataCopiedEventArgument());
 
             var addedPackage = mediator.ClipboardElements.Single();
             Assert.AreSame(fakeControl, addedPackage.Control);
@@ -211,11 +199,9 @@ namespace Shapeshifter.Tests.Mediators
                 eventSender = sender;
                 eventArgument = e;
             };
-
-            var fakeDataObject = Substitute.For<IDataObject>();
-
+            
             var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
-            fakeClipboardHookService.DataCopied += Raise.Event<EventHandler<DataCopiedEventArgument>>(fakeClipboardHookService, new DataCopiedEventArgument(fakeDataObject));
+            fakeClipboardHookService.DataCopied += Raise.Event<EventHandler<DataCopiedEventArgument>>(fakeClipboardHookService, new DataCopiedEventArgument());
 
             var addedPackage = mediator.ClipboardElements.Single();
             Assert.IsNotNull(addedPackage);

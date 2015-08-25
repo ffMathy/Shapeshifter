@@ -13,17 +13,17 @@ namespace Shapeshifter.Core.Data
             source = sourceFactory.GetDataSource();
         }
 
+        public byte[] RawData
+        {
+            get; set;
+        }
+
         public IDataSource Source
         {
             get
             {
                 return source;
             }
-        }
-
-        public byte[] Serialize()
-        {
-            throw new NotImplementedException();
         }
     }
 }

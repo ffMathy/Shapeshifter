@@ -54,7 +54,7 @@ namespace Shapeshifter.Tests.Factories
             var container = CreateContainer();
 
             var factory = container.Resolve<ITextClipboardDataControlFactory>();
-            var data = factory.BuildData("Text", "foo");
+            var data = factory.BuildData("Text", new byte[0]);
 
             Assert.IsInstanceOfType(data, typeof(ClipboardTextData));
         }

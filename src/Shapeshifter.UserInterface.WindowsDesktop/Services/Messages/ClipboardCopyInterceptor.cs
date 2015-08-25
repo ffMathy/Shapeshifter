@@ -15,6 +15,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         public event EventHandler<DataCopiedEventArgument> DataCopied;
 
         uint lastClipboardItemIdentifier;
+        bool shouldSkipNext;
 
         readonly ILogger logger;
 
@@ -26,6 +27,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         void HandleClipboardUpdateWindowMessage()
         {
+            logger.Information("Clipboard update message received.");
+
             var clipboardItemIdentifier = ClipboardApi.GetClipboardSequenceNumber();
             if (clipboardItemIdentifier != lastClipboardItemIdentifier)
             {
@@ -39,11 +42,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             if (DataCopied != null)
             {
-                var data = WindowsClipboard.GetDataObject();
-                if (data != null)
-                {
-                    DataCopied(this, new DataCopiedEventArgument(data));
-                }
+                DataCopied(this, new DataCopiedEventArgument());
             }
         }
 
@@ -70,7 +69,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             if (eventArgument.Message == ClipboardApi.WM_CLIPBOARDUPDATE)
             {
-                logger.Information("Clipboard update message received.");
+                if (shouldSkipNext)
+                {
+                    logger.Information("Clipboard update message skipped.");
+                    shouldSkipNext = false;
+                    return;
+                }
 
                 HandleClipboardUpdateWindowMessage();
             }
@@ -78,7 +82,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public void SkipNext()
         {
-            throw new NotImplementedException();
+            shouldSkipNext = true;
         }
     }
 }

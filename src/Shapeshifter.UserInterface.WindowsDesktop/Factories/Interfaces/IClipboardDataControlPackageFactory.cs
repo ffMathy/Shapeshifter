@@ -5,6 +5,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces
 {
     interface IClipboardDataControlPackageFactory
     {
-        IClipboardDataControlPackage Create(IDataObject data);
+        IClipboardDataControlPackage Create();
     }
 }

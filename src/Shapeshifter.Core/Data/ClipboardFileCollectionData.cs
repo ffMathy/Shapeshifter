@@ -16,17 +16,17 @@ namespace Shapeshifter.Core.Data
 
         public IEnumerable<IClipboardFileData> Files { get; set; }
 
+        public byte[] RawData
+        {
+            get; set;
+        }
+
         public IDataSource Source
         {
             get
             {
                 return source;
             }
-        }
-
-        public byte[] Serialize()
-        {
-            throw new NotImplementedException();
         }
     }
 }

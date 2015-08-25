@@ -1,5 +1,6 @@
 ﻿using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
+using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces
 {
@@ -11,6 +12,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces
 
         IClipboardControl BuildControl(IClipboardData clipboardData);
 
-        IClipboardData BuildData(string format, object data);
+        IClipboardData BuildData(string format, byte[] rawData);
     }
 }

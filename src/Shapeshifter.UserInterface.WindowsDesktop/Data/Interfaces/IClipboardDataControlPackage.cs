@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
+using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces
 {

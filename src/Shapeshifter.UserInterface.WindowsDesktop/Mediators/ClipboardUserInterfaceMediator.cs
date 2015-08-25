@@ -12,10 +12,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
     class ClipboardUserInterfaceMediator :
         IClipboardUserInterfaceMediator
     {
-        readonly IClipboardCopyInterceptor clipboardHook;
+        readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
         readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
         readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
-        readonly IClipboardPasteService clipboardPasteService;
 
         readonly IList<IClipboardDataControlPackage> clipboardPackages;
 
@@ -34,15 +33,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             => clipboardPackages;
 
         public ClipboardUserInterfaceMediator(
-            IClipboardCopyInterceptor clipboardHook,
+            IClipboardCopyInterceptor clipboardCopyInterceptor,
             IPasteCombinationDurationMediator pasteCombinationDurationMediator,
-            IClipboardDataControlPackageFactory clipboardDataControlPackageFactory,
-            IClipboardPasteService clipboardPasteService)
+            IClipboardDataControlPackageFactory clipboardDataControlPackageFactory)
         {
-            this.clipboardHook = clipboardHook;
+            this.clipboardCopyInterceptor = clipboardCopyInterceptor;
             this.pasteCombinationDurationMediator = pasteCombinationDurationMediator;
             this.clipboardDataControlPackageFactory = clipboardDataControlPackageFactory;
-            this.clipboardPasteService = clipboardPasteService;
 
             clipboardPackages = new List<IClipboardDataControlPackage>();
         }
@@ -59,7 +56,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             object sender,
             DataCopiedEventArgument e)
         {
-            var package = clipboardDataControlPackageFactory.Create(e.Data);
+            var package = clipboardDataControlPackageFactory.Create();
             clipboardPackages.Add(package);
 
             //signal an added event.
@@ -90,7 +87,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         void UninstallClipboardHook()
         {
-            clipboardHook.DataCopied -= ClipboardHook_DataCopied;
+            clipboardCopyInterceptor.DataCopied -= ClipboardHook_DataCopied;
         }
 
         public void Connect()
@@ -114,7 +111,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         void InstallClipboardHook()
         {
-            clipboardHook.DataCopied += ClipboardHook_DataCopied;
+            clipboardCopyInterceptor.DataCopied += ClipboardHook_DataCopied;
         }
 
         void PasteCombinationDurationMediator_PasteCombinationDurationPassed(
@@ -137,12 +134,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             PasteCombinationReleasedEventArgument e)
         {
             RaiseUserInterfaceHiddenEvent();
-            SimulatePaste();
-        }
-
-        void SimulatePaste()
-        {
-            clipboardPasteService.PasteClipboardContents();
         }
 
         void RaiseUserInterfaceHiddenEvent()

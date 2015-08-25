@@ -9,6 +9,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
+using System.Runtime.InteropServices;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
@@ -48,14 +49,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             }
         }
 
-        public IClipboardData BuildData(string format, object data)
+        public IClipboardData BuildData(string format, byte[] rawData)
         {
             if (!CanBuildData(format))
             {
-                throw new ArgumentException("Can't construct data from this format.", nameof(data));
+                throw new ArgumentException("Can't construct data from this format.", nameof(format));
             }
 
-            var files = (string[])data;
+            //var files = rawData;
+            var files = new string[0];
             return ConstructDataFromFiles(files);
         }
 

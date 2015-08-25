@@ -60,8 +60,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         }
 
         public Task PerformAsync(
-            IClipboardData processedData,
-            IDataObject rawData)
+            IClipboardData processedData)
         {
             throw new NotImplementedException();
         }

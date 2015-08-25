@@ -16,7 +16,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;
         }
 
-        public void InjectData(IDataObject rawClipboardData)
+        public void InjectData(
+            byte[] rawClipboardData)
         {
             clipboardCopyInterceptor.SkipNext();
             WindowsClipboard.SetDataObject(rawClipboardData, true);

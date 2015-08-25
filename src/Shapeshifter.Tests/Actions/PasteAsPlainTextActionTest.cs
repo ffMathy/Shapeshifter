@@ -64,7 +64,7 @@ namespace Shapeshifter.Tests.Actions
             fakeData.Text.Returns("foobar hello");
 
             var action = container.Resolve<IPasteAsPlainTextAction>();
-            await action.PerformAsync(fakeData, null);
+            await action.PerformAsync(fakeData);
 
             var fakeClipboardInjectionService = container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService.Received(1)

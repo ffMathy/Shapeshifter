@@ -50,13 +50,14 @@ namespace Shapeshifter.Tests.Actions
                 c.RegisterFake<IClipboardInjectionService>();
             });
 
-            var fakeData = Substitute.For<IDataObject>();
+            var fakeData = Substitute.For<IClipboardData>();
+            fakeData.RawData.Returns(new byte[1]);
 
             var action = container.Resolve<IPasteAction>();
-            await action.PerformAsync(null, fakeData);
+            await action.PerformAsync(fakeData);
 
             var fakeClipboardInjectionService = container.Resolve<IClipboardInjectionService>();
-            fakeClipboardInjectionService.InjectData(fakeData);
+            fakeClipboardInjectionService.InjectData(fakeData.RawData);
         }
 
         [TestMethod]
