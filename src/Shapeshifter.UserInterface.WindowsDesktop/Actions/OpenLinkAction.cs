@@ -3,6 +3,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -44,16 +45,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
-        public async Task<bool> CanPerformAsync(IClipboardData clipboardData)
+        public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
         {
-            var textData = clipboardData as IClipboardTextData;
+            var textData = package as IClipboardTextData;
             return textData != null && await linkParser.HasLinkAsync(textData.Text);
         }
 
         public async Task PerformAsync(
-            IClipboardData processedData)
+            IClipboardDataPackage package)
         {
-            var textData = (IClipboardTextData)processedData;
+            var textData = (IClipboardTextData)package;
             var links = await linkParser.ExtractLinksFromTextAsync(textData.Text);
             foreach(var link in links)
             {

@@ -111,10 +111,6 @@
     <Compile Include="Windows\ViewModels\ClipboardListViewModelTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Shapeshifter.Core\Shapeshifter.Core.csproj">
-      <Project>{a2c09237-a254-446b-aa1d-26da072743cf}</Project>
-      <Name>Shapeshifter.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Shapeshifter.UserInterface.WindowsDesktop\Shapeshifter.UserInterface.WindowsDesktop.csproj">
       <Project>{c8afeb5b-5197-4f7d-90f1-dc1dcd795be1}</Project>
       <Name>Shapeshifter.UserInterface.WindowsDesktop</Name>

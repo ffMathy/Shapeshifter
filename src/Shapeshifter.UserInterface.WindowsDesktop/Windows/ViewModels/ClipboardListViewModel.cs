@@ -59,7 +59,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
                     PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedElement)));
                 }
 
-                SetActions();
+                SetActionsAsync();
             }
         }
 
@@ -105,31 +105,21 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 
         async Task InvokeSelectedActionOnSelectedClipboardData()
         {
-            foreach (var clipboardData in SelectedElement.Contents)
+            if (await SelectedAction.CanPerformAsync(SelectedElement))
             {
-                if (await SelectedAction.CanPerformAsync(clipboardData))
-                {
-                    await SelectedAction.PerformAsync(
-                        clipboardData);
-                }
+                await SelectedAction.PerformAsync(SelectedElement);
             }
         }
 
-        async void SetActions()
+        async Task SetActionsAsync()
         {
             Actions.Clear();
             SelectedAction = null;
 
-            if (selectedElement != null)
-            {
-                foreach (var data in selectedElement.Contents)
-                {
-                    await AddActionsFromDataAsync(data);
-                }
-            }
+            await AddActionsFromDataAsync(SelectedElement);
         }
 
-        async Task AddActionsFromDataAsync(IClipboardData data)
+        async Task AddActionsFromDataAsync(IClipboardDataPackage data)
         {
             var actionPerformResults = await Task.WhenAll(allActions.Select(x => x.CanPerformAsync(data)));
 

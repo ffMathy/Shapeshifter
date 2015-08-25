@@ -20,12 +20,9 @@ namespace Shapeshifter.Core.Data
             get; set;
         }
 
+        public uint RawFormat { get; set; }
+
         public IDataSource Source
-        {
-            get
-            {
-                return source;
-            }
-        }
+            => source;
     }
 }

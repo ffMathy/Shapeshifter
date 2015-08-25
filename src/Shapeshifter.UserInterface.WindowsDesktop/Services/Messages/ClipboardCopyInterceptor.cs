@@ -52,7 +52,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                 var existingOwner = ClipboardApi.GetClipboardOwner();
                 var ownerTitle = WindowApi.GetWindowTitle(existingOwner);
 
-                throw new InvalidOperationException($"Could not install a clipboard hook for the main window. The window {ownerTitle} currently owns the clipboard.");
+                throw new InvalidOperationException($"Could not install a clipboard hook for the main window. The window '{ownerTitle}' currently owns the clipboard.");
             }
         }
 

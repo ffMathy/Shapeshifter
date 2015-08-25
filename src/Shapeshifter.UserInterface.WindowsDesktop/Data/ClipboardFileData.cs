@@ -3,16 +3,17 @@ using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.Core.Data
 {
-    public class ClipboardTextData : IClipboardTextData
+    public class ClipboardFileData : IClipboardFileData
     {
         readonly IDataSource source;
 
-        public ClipboardTextData(IDataSourceService sourceFactory)
+        public ClipboardFileData(IDataSourceService sourceFactory)
         {
             source = sourceFactory.GetDataSource();
         }
 
-        public string Text { get; set; }
+        public string FileName { get; set; }
+        public byte[] FileIcon { get; set; }
 
         public IDataSource Source
         {
@@ -26,5 +27,7 @@ namespace Shapeshifter.Core.Data
         {
             get; set;
         }
+
+        public uint RawFormat { get; set; }
     }
 }

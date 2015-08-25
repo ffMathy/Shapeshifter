@@ -3,6 +3,7 @@ using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -32,13 +33,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
-        public async Task<bool> CanPerformAsync(IClipboardData clipboardData)
+        public async Task<bool> CanPerformAsync(
+            IClipboardDataPackage package)
         {
-            return clipboardData is IClipboardFileData || clipboardData is IClipboardFileCollectionData;
+            return 
+                package is IClipboardFileData || 
+                package is IClipboardFileCollectionData;
         }
 
         public Task PerformAsync(
-            IClipboardData processedData)
+            IClipboardDataPackage processedData)
         {
             throw new NotImplementedException();
         }

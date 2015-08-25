@@ -3,6 +3,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -39,15 +40,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
-        public async Task<bool> CanPerformAsync(IClipboardData clipboardData)
+        public async Task<bool> CanPerformAsync(
+            IClipboardDataPackage package)
         {
-            return clipboardData is IClipboardTextData;
+            return package is IClipboardTextData;
         }
 
         public async Task PerformAsync(
-            IClipboardData processedData)
+            IClipboardDataPackage package)
         {
-            var textData = (IClipboardTextData)processedData;
+            var textData = (IClipboardTextData)package;
             clipboardInjectionService.InjectText(textData.Text);
         }
     }

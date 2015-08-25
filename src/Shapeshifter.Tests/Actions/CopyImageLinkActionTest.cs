@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using System.Collections.Generic;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
 namespace Shapeshifter.Tests.Actions
 {
@@ -22,7 +23,7 @@ namespace Shapeshifter.Tests.Actions
         {
             var container = CreateContainer();
 
-            var someNonTextData = Substitute.For<IClipboardData>();
+            var someNonTextData = Substitute.For<IClipboardDataPackage>();
 
             var action = container.Resolve<ICopyImageLinkAction>();
             Assert.IsFalse(await action.CanPerformAsync(someNonTextData));
@@ -56,7 +57,7 @@ namespace Shapeshifter.Tests.Actions
             });
 
             var action = container.Resolve<ICopyImageLinkAction>();
-            Assert.IsFalse(await action.CanPerformAsync(Substitute.For<IClipboardTextData>()));
+            Assert.IsFalse(await action.CanPerformAsync(Substitute.For<IClipboardDataPackage>()));
         }
 
         [TestMethod]
@@ -69,7 +70,7 @@ namespace Shapeshifter.Tests.Actions
             });
 
             var action = container.Resolve<ICopyImageLinkAction>();
-            Assert.IsTrue(await action.CanPerformAsync(Substitute.For<IClipboardTextData>()));
+            Assert.IsTrue(await action.CanPerformAsync(Substitute.For<IClipboardDataPackage>()));
         }
 
         [TestMethod]
@@ -96,7 +97,7 @@ namespace Shapeshifter.Tests.Actions
             });
 
             var action = container.Resolve<ICopyImageLinkAction>();
-            await action.PerformAsync(Substitute.For<IClipboardTextData>());
+            await action.PerformAsync(Substitute.For<IClipboardDataPackage>());
 
             var fakeClipboardInjectionService = container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService.Received(2)

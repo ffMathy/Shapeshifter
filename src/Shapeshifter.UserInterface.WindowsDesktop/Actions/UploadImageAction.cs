@@ -5,6 +5,7 @@ using Shapeshifter.Core.Data.Interfaces;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -42,24 +43,27 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
-        public async Task<bool> CanPerformAsync(IClipboardData clipboardData)
+        public async Task<bool> CanPerformAsync(
+            IClipboardDataPackage clipboardData)
         {
             return IsSuitableImageData(clipboardData) || IsSuitableFileData(clipboardData);
         }
 
-        static bool IsSuitableImageData(IClipboardData clipboardData)
+        static bool IsSuitableImageData(
+            IClipboardDataPackage clipboardData)
         {
             return clipboardData is IClipboardImageData;
         }
 
-        bool IsSuitableFileData(IClipboardData clipboardData)
+        bool IsSuitableFileData(
+            IClipboardDataPackage clipboardData)
         {
             var fileData = clipboardData as IClipboardFileData;
             return fileData != null && fileTypeInterpreter.GetFileTypeFromFileName(fileData.FileName) == FileType.Image;
         }
 
         public Task PerformAsync(
-            IClipboardData processedData)
+            IClipboardDataPackage package)
         {
             throw new NotImplementedException();
         }

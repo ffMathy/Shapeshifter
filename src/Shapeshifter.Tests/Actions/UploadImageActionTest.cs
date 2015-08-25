@@ -7,6 +7,7 @@ using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
 namespace Shapeshifter.Tests.Actions
 {
@@ -18,7 +19,7 @@ namespace Shapeshifter.Tests.Actions
         {
             var container = CreateContainer();
 
-            var fakeData = Substitute.For<IClipboardData>();
+            var fakeData = Substitute.For<IClipboardDataPackage>();
 
             var action = container.Resolve<IUploadImageAction>();
             Assert.IsFalse(await action.CanPerformAsync(fakeData));
@@ -52,7 +53,7 @@ namespace Shapeshifter.Tests.Actions
                     .Returns(FileType.Other);
             });
 
-            var fakeData = Substitute.For<IClipboardFileData>();
+            var fakeData = Substitute.For<IClipboardDataPackage>();
 
             var action = container.Resolve<IUploadImageAction>();
             Assert.IsFalse(await action.CanPerformAsync(fakeData));
@@ -68,7 +69,7 @@ namespace Shapeshifter.Tests.Actions
                     .Returns(FileType.Image);
             });
 
-            var fakeData = Substitute.For<IClipboardFileData>();
+            var fakeData = Substitute.For<IClipboardDataPackage>();
 
             var action = container.Resolve<IUploadImageAction>();
             Assert.IsTrue(await action.CanPerformAsync(fakeData));
@@ -79,7 +80,7 @@ namespace Shapeshifter.Tests.Actions
         {
             var container = CreateContainer();
 
-            var fakeData = Substitute.For<IClipboardImageData>();
+            var fakeData = Substitute.For<IClipboardDataPackage>();
 
             var action = container.Resolve<IUploadImageAction>();
             Assert.IsTrue(await action.CanPerformAsync(fakeData));

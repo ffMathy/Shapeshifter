@@ -2,24 +2,54 @@
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using WindowsClipboard = System.Windows.Clipboard;
+using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
+using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {
     class ClipboardInjectionService : IClipboardInjectionService
     {
         readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
+        readonly IClipboardHandleFactory clipboardHandleFactory;
+        readonly IMemoryHandleFactory memoryHandleFactory;
 
         public ClipboardInjectionService(
-            IClipboardCopyInterceptor clipboardCopyInterceptor)
+            IClipboardCopyInterceptor clipboardCopyInterceptor,
+            IClipboardHandleFactory clipboardHandleFactory,
+            IMemoryHandleFactory memoryHandleFactory)
         {
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;
+            this.clipboardHandleFactory = clipboardHandleFactory;
+            this.memoryHandleFactory = memoryHandleFactory;
         }
 
-        public void InjectData(
-            byte[] rawClipboardData)
+        public void InjectData(IClipboardDataPackage package)
         {
             clipboardCopyInterceptor.SkipNext();
-            WindowsClipboard.SetDataObject(rawClipboardData, true);
+
+            using (clipboardHandleFactory.StartNewSession())
+            {
+                InjectPackageContents(package);
+            }
+        }
+
+        void InjectPackageContents(IClipboardDataPackage package)
+        {
+            foreach (var clipboardData in package.Contents)
+            {
+                InjectClipboardData(clipboardData);
+            }
+        }
+
+        void InjectClipboardData(IClipboardData clipboardData)
+        {
+            using (var memoryHandle = memoryHandleFactory.AllocateInMemory(clipboardData.RawData))
+            {
+                ClipboardApi.SetClipboardData(clipboardData.RawFormat, memoryHandle.Pointer);
+            }
         }
 
         public void InjectImage(BitmapSource image)

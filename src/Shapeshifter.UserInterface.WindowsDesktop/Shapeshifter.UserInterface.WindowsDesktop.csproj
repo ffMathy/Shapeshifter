@@ -133,7 +133,19 @@
     <Compile Include="Controls\Clipboard\ViewModels\Interfaces\IClipboardTextDataViewModel.cs" />
     <Compile Include="Converters\InjectedConverterMarkupExtension.cs" />
     <Compile Include="Data\ClipboardDataControlPackage.cs" />
+    <Compile Include="Data\ClipboardFileCollectionData.cs" />
+    <Compile Include="Data\ClipboardFileData.cs" />
+    <Compile Include="Data\ClipboardImageData.cs" />
+    <Compile Include="Data\ClipboardTextData.cs" />
+    <Compile Include="Data\DataSource.cs" />
+    <Compile Include="Data\Interfaces\IClipboardData.cs" />
     <Compile Include="Data\Interfaces\IClipboardDataControlPackage.cs" />
+    <Compile Include="Data\Interfaces\IClipboardDataPackage.cs" />
+    <Compile Include="Data\Interfaces\IClipboardFileCollectionData.cs" />
+    <Compile Include="Data\Interfaces\IClipboardFileData.cs" />
+    <Compile Include="Data\Interfaces\IClipboardImageData.cs" />
+    <Compile Include="Data\Interfaces\IClipboardTextData.cs" />
+    <Compile Include="Data\Interfaces\IDataSource.cs" />
     <Compile Include="Factories\ClipboardDataControlPackageFactory.cs" />
     <Compile Include="Handles\Factories\ClipboardHandleFactory.cs" />
     <Compile Include="Factories\DeviceIndependentBitmapClipboardDataControlFactory.cs" />
@@ -177,6 +189,7 @@
     <Compile Include="Handles\ClipboardHandle.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IClipboardPasteService.cs" />
     <Compile Include="Handles\Interfaces\IHandle.cs" />
+    <Compile Include="Services\Interfaces\IDataSourceService.cs" />
     <Compile Include="Services\Messages\ClipboardCopyInterceptor.cs" />
     <Compile Include="Mediators\ClipboardUserInterfaceMediator.cs" />
     <Compile Include="Services\Clipboard\ClipboardInjectionService.cs" />
@@ -319,12 +332,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Shapeshifter.Core\Shapeshifter.Core.csproj">
-      <Project>{a2c09237-a254-446b-aa1d-26da072743cf}</Project>
-      <Name>Shapeshifter.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

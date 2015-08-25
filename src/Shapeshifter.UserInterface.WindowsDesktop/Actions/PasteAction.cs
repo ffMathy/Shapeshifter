@@ -1,5 +1,6 @@
 ﻿using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using System;
 using System.Threading.Tasks;
@@ -43,20 +44,21 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
-        public async Task<bool> CanPerformAsync(IClipboardData clipboardData)
+        public async Task<bool> CanPerformAsync(
+            IClipboardDataPackage package)
         {
-            if(clipboardData == null)
+            if(package == null)
             {
-                throw new ArgumentNullException(nameof(clipboardData));
+                throw new ArgumentNullException(nameof(package));
             }
 
             return true;
         }
 
         public async Task PerformAsync(
-            IClipboardData processedData)
+            IClipboardDataPackage package)
         {
-            clipboardInjectionService.InjectData(processedData.RawData);
+            clipboardInjectionService.InjectData(package);
             clipboardPasteService.PasteClipboardContents();
         }
     }

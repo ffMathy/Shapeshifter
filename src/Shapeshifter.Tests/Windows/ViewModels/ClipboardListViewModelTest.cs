@@ -71,7 +71,7 @@ namespace Shapeshifter.Tests.Windows.ViewModels
             fakePackage.Contents.Returns(new[] { fakeData });
 
             var supportedAction = Substitute.For<IAction>();
-            supportedAction.CanPerformAsync(fakeData).Returns(Task.FromResult(true));
+            supportedAction.CanPerformAsync(fakePackage).Returns(Task.FromResult(true));
 
             var container = CreateContainer(c =>
             {
@@ -94,7 +94,7 @@ namespace Shapeshifter.Tests.Windows.ViewModels
             fakePackage.Contents.Returns(new[] { fakeData });
 
             var unsupportedAction = Substitute.For<IAction>();
-            unsupportedAction.CanPerformAsync(fakeData).Returns(Task.FromResult(false));
+            unsupportedAction.CanPerformAsync(fakePackage).Returns(Task.FromResult(false));
 
             var container = CreateContainer(c =>
             {

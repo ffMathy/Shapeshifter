@@ -1,4 +1,5 @@
 ﻿using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using System.Threading.Tasks;
 
 namespace Shapeshifter.Core.Actions
@@ -11,8 +12,8 @@ namespace Shapeshifter.Core.Actions
 
         byte Order { get; }
 
-        Task<bool> CanPerformAsync(IClipboardData clipboardData);
+        Task<bool> CanPerformAsync(IClipboardDataPackage package);
 
-        Task PerformAsync(IClipboardData clipboardData);
+        Task PerformAsync(IClipboardDataPackage package);
     }
 }

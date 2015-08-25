@@ -7,6 +7,7 @@ using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
 namespace Shapeshifter.Tests.Actions
 {
@@ -36,7 +37,7 @@ namespace Shapeshifter.Tests.Actions
         {
             var container = CreateContainer();
 
-            var someNonTextData = Substitute.For<IClipboardData>();
+            var someNonTextData = Substitute.For<IClipboardDataPackage>();
 
             var action = container.Resolve<IOpenLinkAction>();
             Assert.IsFalse(await action.CanPerformAsync(someNonTextData));
@@ -52,7 +53,7 @@ namespace Shapeshifter.Tests.Actions
                     .Returns(Task.FromResult(false));
             });
 
-            var textDataWithLinkButNoImageLink = Substitute.For<IClipboardTextData>();
+            var textDataWithLinkButNoImageLink = Substitute.For<IClipboardDataPackage>();
 
             var action = container.Resolve<IOpenLinkAction>();
             Assert.IsFalse(await action.CanPerformAsync(textDataWithLinkButNoImageLink));
@@ -70,7 +71,7 @@ namespace Shapeshifter.Tests.Actions
                     .Returns(Task.FromResult<IEnumerable<string>>(new[] { "foo.com", "bar.com" }));
             });
 
-            var fakeData = Substitute.For<IClipboardTextData>();
+            var fakeData = Substitute.For<IClipboardDataPackage>();
 
             var action = container.Resolve<IOpenLinkAction>();
             await action.PerformAsync(fakeData);

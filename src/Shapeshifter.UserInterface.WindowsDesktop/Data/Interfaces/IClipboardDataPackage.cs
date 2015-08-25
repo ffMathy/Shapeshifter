@@ -4,8 +4,10 @@ using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces
 {
-    public interface IClipboardDataControlPackage : IClipboardDataPackage
+    public interface IClipboardDataPackage
     {
-        IClipboardControl Control { get; }
+        void AddData(IClipboardData data);
+
+        IEnumerable<IClipboardData> Contents { get; }
     }
 }
