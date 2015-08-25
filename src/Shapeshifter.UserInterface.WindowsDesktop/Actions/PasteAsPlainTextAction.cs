@@ -3,7 +3,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {

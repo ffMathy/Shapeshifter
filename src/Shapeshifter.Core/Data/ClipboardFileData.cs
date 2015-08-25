@@ -1,5 +1,4 @@
-﻿using System;
-using Shapeshifter.Core.Factories.Interfaces;
+﻿using Shapeshifter.Core.Factories.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.Core.Data

@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Windows;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
@@ -13,7 +13,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             throw new NotImplementedException();
         }
 
-        public IClipboardData BuildData(string format, byte[] rawData)
+        public IClipboardData BuildData(uint format, byte[] rawData)
         {
             throw new NotImplementedException();
         }
@@ -23,9 +23,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             return false;
         }
 
-        public bool CanBuildData(string format)
+        public bool CanBuildData(uint format)
         {
-            return format == DataFormats.Dib;
+            return 
+                format == ClipboardApi.CF_DIB ||
+                format == ClipboardApi.CF_DIBV5;
         }
     }
 }

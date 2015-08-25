@@ -6,7 +6,7 @@ using System.Text;
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
 {
     [ExcludeFromCodeCoverage]
-    class WindowApi
+    public class WindowApi
     {
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();

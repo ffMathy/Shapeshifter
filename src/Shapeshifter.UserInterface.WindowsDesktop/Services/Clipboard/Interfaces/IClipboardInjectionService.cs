@@ -1,5 +1,4 @@
 ﻿using System.Windows.Media.Imaging;
-using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces
 {

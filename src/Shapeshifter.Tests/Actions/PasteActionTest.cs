@@ -6,7 +6,6 @@ using NSubstitute;
 using Shapeshifter.Core.Data;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-using System.Windows;
 
 namespace Shapeshifter.Tests.Actions
 {

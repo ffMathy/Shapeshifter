@@ -1,6 +1,5 @@
 ﻿using Shapeshifter.Core.Data;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Shapeshifter.Core.Actions
 {

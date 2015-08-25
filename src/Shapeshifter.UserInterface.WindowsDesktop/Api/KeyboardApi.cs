@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
 {
-    static class KeyboardApi
+    public static class KeyboardApi
     {
         public const int MOD_ALT = 0x1;
         public const int MOD_CONTROL = 0x2;

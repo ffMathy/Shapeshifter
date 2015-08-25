@@ -2,8 +2,6 @@
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using System;
-using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Core.Data
 {

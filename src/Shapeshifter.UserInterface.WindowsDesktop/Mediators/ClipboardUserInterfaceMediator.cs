@@ -5,7 +5,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {

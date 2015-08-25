@@ -1,7 +1,5 @@
-﻿using System.Text;
-using Shapeshifter.Core.Factories.Interfaces;
+﻿using Shapeshifter.Core.Factories.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
-using System;
 
 namespace Shapeshifter.Core.Data
 {

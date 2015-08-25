@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Imaging;
-using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {

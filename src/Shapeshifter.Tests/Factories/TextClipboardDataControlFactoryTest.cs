@@ -6,6 +6,7 @@ using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 
 namespace Shapeshifter.Tests.Factories
 {
@@ -18,7 +19,7 @@ namespace Shapeshifter.Tests.Factories
             var container = CreateContainer();
 
             var factory = container.Resolve<ITextClipboardDataControlFactory>();
-            Assert.IsTrue(factory.CanBuildData("Text"));
+            Assert.IsTrue(factory.CanBuildData(ClipboardApi.CF_TEXT));
         }
 
         [TestMethod]
@@ -27,7 +28,7 @@ namespace Shapeshifter.Tests.Factories
             var container = CreateContainer();
 
             var factory = container.Resolve<ITextClipboardDataControlFactory>();
-            Assert.IsFalse(factory.CanBuildData("foobar"));
+            Assert.IsFalse(factory.CanBuildData(uint.MaxValue));
         }
 
         [TestMethod]
@@ -54,7 +55,7 @@ namespace Shapeshifter.Tests.Factories
             var container = CreateContainer();
 
             var factory = container.Resolve<ITextClipboardDataControlFactory>();
-            var data = factory.BuildData("Text", new byte[0]);
+            var data = factory.BuildData(ClipboardApi.CF_TEXT, new byte[0]);
 
             Assert.IsInstanceOfType(data, typeof(ClipboardTextData));
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Shapeshifter.Core.Factories.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
 

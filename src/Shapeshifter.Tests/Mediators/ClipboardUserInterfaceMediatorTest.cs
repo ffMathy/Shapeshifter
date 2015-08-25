@@ -10,7 +10,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 
 namespace Shapeshifter.Tests.Mediators
 {
@@ -125,11 +124,11 @@ namespace Shapeshifter.Tests.Mediators
 
                 var fakeFactory = Substitute.For<IClipboardDataControlFactory>();
                 fakeFactory
-                    .CanBuildData(Arg.Any<string>())
+                    .CanBuildData(Arg.Any<uint>())
                     .Returns(true);
 
                 fakeFactory
-                    .BuildData(Arg.Any<string>(), Arg.Any<byte[]>())
+                    .BuildData(Arg.Any<uint>(), Arg.Any<byte[]>())
                     .Returns(fakeData);
                 c.RegisterInstance<IEnumerable<IClipboardDataControlFactory>>(new[] { fakeFactory });
             });
@@ -157,7 +156,7 @@ namespace Shapeshifter.Tests.Mediators
 
                 var fakeFactory = Substitute.For<IClipboardDataControlFactory>();
                 fakeFactory
-                    .CanBuildData(Arg.Any<string>())
+                    .CanBuildData(Arg.Any<uint>())
                     .Returns(true);
 
                 fakeFactory

@@ -7,8 +7,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Int
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using System;
 using Shapeshifter.Core.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using System.Windows;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 
 namespace Shapeshifter.Tests.Factories
 {
@@ -21,7 +20,7 @@ namespace Shapeshifter.Tests.Factories
             var container = CreateContainer();
 
             var factory = container.Resolve<IFileClipboardDataControlFactory>();
-            Assert.IsTrue(factory.CanBuildData("FileDrop"));
+            Assert.IsTrue(factory.CanBuildData(ClipboardApi.CF_HDROP));
         }
 
         [TestMethod]
@@ -30,7 +29,7 @@ namespace Shapeshifter.Tests.Factories
             var container = CreateContainer();
 
             var factory = container.Resolve<IFileClipboardDataControlFactory>();
-            Assert.IsFalse(factory.CanBuildData("foobar"));
+            Assert.IsFalse(factory.CanBuildData(uint.MaxValue));
         }
 
         [TestMethod]
@@ -90,30 +89,17 @@ namespace Shapeshifter.Tests.Factories
             var container = CreateContainer();
 
             var factory = container.Resolve<IFileClipboardDataControlFactory>();
-            factory.BuildData("foobar", new byte[0]);
+            factory.BuildData(uint.MaxValue, new byte[0]);
         }
 
         [TestMethod]
-        public void BuildDataForMultipleFilesReturnsFileCollectionData()
+        public void BuildDataForFileDropReturnsFileCollectionData()
         {
             var container = CreateContainer();
 
             var factory = container.Resolve<IFileClipboardDataControlFactory>();
-            var data = factory.BuildData("FileDrop", new byte[0]);
+            var data = factory.BuildData(ClipboardApi.CF_HDROP, new byte[0]);
             Assert.IsInstanceOfType(data, typeof(ClipboardFileCollectionData));
-        }
-
-        [TestMethod]
-        public void BuildDataForSingleFileReturnsFileData()
-        {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IFileIconService>();
-            });
-
-            var factory = container.Resolve<IFileClipboardDataControlFactory>();
-            var data = factory.BuildData("FileDrop", new byte[0]);
-            Assert.IsInstanceOfType(data, typeof(ClipboardFileData));
         }
 
         [TestMethod]
@@ -122,7 +108,7 @@ namespace Shapeshifter.Tests.Factories
             var container = CreateContainer();
 
             var factory = container.Resolve<IFileClipboardDataControlFactory>();
-            Assert.IsTrue(factory.CanBuildData("FileDrop"));
+            Assert.IsTrue(factory.CanBuildData(ClipboardApi.CF_HDROP));
         }
 
         [TestMethod]
@@ -131,7 +117,7 @@ namespace Shapeshifter.Tests.Factories
             var container = CreateContainer();
 
             var factory = container.Resolve<IFileClipboardDataControlFactory>();
-            Assert.IsFalse(factory.CanBuildData("foo"));
+            Assert.IsFalse(factory.CanBuildData(uint.MaxValue));
         }
 
         [TestMethod]

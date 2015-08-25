@@ -1,6 +1,5 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using System.Windows;
 using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
@@ -9,12 +8,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
     class ClipboardDataControlPackageFactory : IClipboardDataControlPackageFactory
     {
+        readonly IClipboardHandleFactory clipboardSessionFactory;
         readonly IEnumerable<IClipboardDataControlFactory> dataFactories;
 
         public ClipboardDataControlPackageFactory(
-            IEnumerable<IClipboardDataControlFactory> dataFactories)
+            IEnumerable<IClipboardDataControlFactory> dataFactories,
+            IClipboardHandleFactory clipboardSessionFactory)
         {
             this.dataFactories = dataFactories;
+            this.clipboardSessionFactory = clipboardSessionFactory;
         }
 
         public IClipboardDataControlPackage Create()
@@ -28,19 +30,26 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         void DecoratePackageWithClipboardData(ClipboardDataControlPackage package)
         {
-            foreach (var factory in dataFactories)
+            using (clipboardSessionFactory.StartNewSession())
             {
-                foreach (var format in ClipboardApi.GetClipboardFormats())
+                foreach (var factory in dataFactories)
                 {
-                    var formatName = ClipboardApi.GetClipboardFormatName(format);
-                    if (factory.CanBuildData(formatName))
+                    foreach (var format in ClipboardApi.GetClipboardFormats())
                     {
-                        var rawData = ClipboardApi.GetClipboardDataBytes(format);
-
-                        var clipboardData = factory.BuildData(formatName, rawData);
-                        package.AddData(clipboardData);
+                        DecoratePackageWithFormatDataUsingFactory(package, factory, format);
                     }
                 }
+            }
+        }
+
+        static void DecoratePackageWithFormatDataUsingFactory(ClipboardDataControlPackage package, IClipboardDataControlFactory factory, uint format)
+        {
+            if (factory.CanBuildData(format))
+            {
+                var rawData = ClipboardApi.GetClipboardDataBytes(format);
+
+                var clipboardData = factory.BuildData(format, rawData);
+                package.AddData(clipboardData);
             }
         }
 

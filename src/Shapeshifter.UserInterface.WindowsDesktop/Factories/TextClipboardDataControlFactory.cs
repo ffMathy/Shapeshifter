@@ -1,11 +1,12 @@
-﻿using System.Windows;
-using Shapeshifter.Core.Data;
+﻿using Shapeshifter.Core.Data;
 using Shapeshifter.Core.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
 using System.Text;
+using System;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
@@ -28,12 +29,36 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             return textControlFactory.CreateControl((IClipboardTextData)clipboardData);
         }
 
-        public IClipboardData BuildData(string format, byte[] data)
+        public IClipboardData BuildData(uint format, byte[] data)
         {
+            if (!CanBuildData(format))
+            {
+                throw new ArgumentException("Can't construct data from this format.", nameof(format));
+            }
+
+            var text = GetTextFromRawData(format, data);
             return new ClipboardTextData(dataSourceService)
             {
-                Text = Encoding.UTF8.GetString(data)
+                Text = text
             };
+        }
+
+        string GetTextFromRawData(uint format, byte[] data)
+        {
+            switch (format)
+            {
+                case ClipboardApi.CF_TEXT:
+                    return Encoding.UTF8.GetString(data);
+
+                case ClipboardApi.CF_OEMTEXT:
+                    return Encoding.Default.GetString(data);
+
+                case ClipboardApi.CF_UNICODETEXT:
+                    return Encoding.Unicode.GetString(data);
+
+                default:
+                    throw new InvalidOperationException("Unknown format.");
+            }
         }
 
         public bool CanBuildControl(IClipboardData data)
@@ -41,9 +66,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             return data is IClipboardTextData;
         }
 
-        public bool CanBuildData(string format)
+        public bool CanBuildData(uint format)
         {
-            return format == DataFormats.Text;
+            return 
+                format == ClipboardApi.CF_TEXT ||
+                format == ClipboardApi.CF_OEMTEXT ||
+                format == ClipboardApi.CF_UNICODETEXT;
         }
     }
 }

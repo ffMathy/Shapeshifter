@@ -5,7 +5,6 @@ using Shapeshifter.Core.Data.Interfaces;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
-using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
