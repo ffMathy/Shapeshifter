@@ -18,8 +18,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         readonly ILogger logger;
 
-        public bool IsManagedAutomatically => true;
-
         public ClipboardCopyInterceptor(
             ILogger logger)
         {

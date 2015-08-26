@@ -13,7 +13,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
 
         public const int WM_HOTKEY = 0x0312;
 
+        //TODO: turn into an enum. not just here, but everywhere.
         public const int VK_KEY_V = 0x56;
+        public const int VK_KEY_UP = 0x26;
+        public const int VK_KEY_DOWN = 0x28;
+        public const int VK_KEY_LEFT = 0x25;
+        public const int VK_KEY_RIGHT = 0x27;
 
         [StructLayout(LayoutKind.Sequential)]
         public struct INPUT

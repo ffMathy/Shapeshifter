@@ -21,7 +21,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
             get; set;
         }
 
-        public int Hotkey
+        public int KeyCode
         {
             get; set;
         }
@@ -33,28 +33,33 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
 
         public void Start(IntPtr windowHandle)
         {
-            Stop(windowHandle);
+            UnregisterHotkey(windowHandle);
 
             var modifier = 0;
             if(ControlNeeded) modifier |= KeyboardApi.MOD_CONTROL;
             if(NoRepeat) modifier |= KeyboardApi.MOD_NOREPEAT;
 
             var registrationResult = KeyboardApi.RegisterHotKey(
-                windowHandle, InterceptionId, modifier, Hotkey);
+                windowHandle, InterceptionId, modifier, KeyCode);
             if(!registrationResult)
             {
-                throw new InvalidOperationException($"Couldn't install the hotkey interceptor for key {Hotkey}.");
+                throw new InvalidOperationException($"Couldn't install the hotkey interceptor for key {KeyCode}.");
             }
         }
 
         public void Stop(IntPtr windowHandle)
         {
-            var registrationResult = KeyboardApi.UnregisterHotKey(
-                windowHandle, InterceptionId);
-            if(!registrationResult)
+            bool registrationResult = UnregisterHotkey(windowHandle);
+            if (!registrationResult)
             {
-                throw new InvalidOperationException($"Couldn't uninstall the hotkey interceptor for key {Hotkey}.");
+                throw new InvalidOperationException($"Couldn't uninstall the hotkey interceptor for key {KeyCode}.");
             }
+        }
+
+        bool UnregisterHotkey(IntPtr windowHandle)
+        {
+            return KeyboardApi.UnregisterHotKey(
+                            windowHandle, InterceptionId);
         }
     }
 }

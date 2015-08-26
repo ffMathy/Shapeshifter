@@ -2,8 +2,6 @@
 using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using NSubstitute;
-using Shapeshifter.Core.Data;
-using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
 using System.Threading.Tasks;

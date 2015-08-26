@@ -10,7 +10,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces
 
         int InterceptionId { get; }
 
-        int Hotkey { get; }
+        int KeyCode { get; }
 
         bool ControlNeeded { get; }
 

@@ -5,11 +5,12 @@ using System.ComponentModel;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
-using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 {
@@ -65,14 +66,21 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 
         public ClipboardListViewModel(
             IAction[] allActions,
-            IClipboardUserInterfaceMediator mediator)
+            IClipboardUserInterfaceMediator clipboardUserInterfaceMediator,
+            IKeyInterceptor hotkeyInterceptor)
         {
             Elements = new ObservableCollection<IClipboardDataControlPackage>();
             Actions = new ObservableCollection<IAction>();
 
             this.allActions = allActions;
 
-            RegisterMediatorEvents(mediator);
+            RegisterMediatorEvents(clipboardUserInterfaceMediator);
+            RegisterKeyEvents(hotkeyInterceptor);
+        }
+
+        void RegisterKeyEvents(IKeyInterceptor hotkeyInterceptor)
+        {
+            hotkeyInterceptor.HotkeyFired += HotkeyInterceptor_HotkeyFired;
         }
 
         void RegisterMediatorEvents(IClipboardUserInterfaceMediator mediator)
@@ -83,6 +91,60 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 
             mediator.UserInterfaceHidden += Service_UserInterfaceHidden;
             mediator.UserInterfaceShown += Service_UserInterfaceShown;
+        }
+
+        void HotkeyInterceptor_HotkeyFired(object sender, HotkeyFiredArgument e)
+        {
+            switch(e.KeyCode)
+            {
+                case KeyboardApi.VK_KEY_DOWN:
+                    HandleDownPressed();
+                    break;
+
+                case KeyboardApi.VK_KEY_UP:
+                    HandleUpPressed();
+                    break;
+
+                case KeyboardApi.VK_KEY_LEFT:
+                    HandleLeftPressed();
+                    break;
+
+                case KeyboardApi.VK_KEY_RIGHT:
+                    HandleRightPressed();
+                    break;
+            }
+        }
+
+        void HandleRightPressed()
+        {
+            throw new NotImplementedException();
+        }
+
+        void HandleLeftPressed()
+        {
+            throw new NotImplementedException();
+        }
+
+        void HandleUpPressed()
+        {
+            var indexToUse = Elements.IndexOf(SelectedElement) - 1;
+            if (indexToUse < 0)
+            {
+                indexToUse = Elements.Count-1;
+            }
+
+            SelectedElement = Elements[indexToUse];
+        }
+
+        void HandleDownPressed()
+        {
+            var indexToUse = Elements.IndexOf(SelectedElement) + 1;
+            if(indexToUse == Elements.Count)
+            {
+                indexToUse = 0;
+            }
+
+            SelectedElement = Elements[indexToUse];
         }
 
         void Service_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)

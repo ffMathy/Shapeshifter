@@ -15,8 +15,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
         readonly ILogger logger;
         readonly IHotkeyInterception hotkeyInterception;
 
-        public bool IsManagedAutomatically => true;
-
         public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
         public PasteHotkeyInterceptor(
@@ -47,7 +45,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
 
                 if (HotkeyFired != null)
                 {
-                    HotkeyFired(this, new HotkeyFiredArgument());
+                    HotkeyFired(this, new HotkeyFiredArgument(
+                        hotkeyInterception.KeyCode, hotkeyInterception.ControlNeeded));
                 }
             }
         }

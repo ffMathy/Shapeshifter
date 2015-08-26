@@ -12,7 +12,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Factories
             {
                 ControlNeeded = controlNeeded,
                 NoRepeat = noRepeat,
-                Hotkey = hotkey
+                KeyCode = hotkey
             };
         }
     }

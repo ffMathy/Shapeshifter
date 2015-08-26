@@ -24,7 +24,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         static BitmapSource GetWindowIcon(IntPtr windowHandle)
         {
             var hIcon = default(IntPtr);
-            hIcon = WindowApi.SendMessage(windowHandle, WindowApi.WM_GETICON, WindowApi.ICON_BIG, IntPtr.Zero);
+            hIcon = WindowApi.SendMessage(windowHandle, IconApi.WM_GETICON, WindowApi.ICON_BIG, IntPtr.Zero);
 
             if (hIcon == IntPtr.Zero)
             {
@@ -33,6 +33,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
             if (hIcon == IntPtr.Zero)
             {
+                //TODO: define this constant in the api. it's messy in here.
                 hIcon = WindowApi.LoadIcon(IntPtr.Zero, (IntPtr)0x7F00/*IDI_APPLICATION*/);
             }
 

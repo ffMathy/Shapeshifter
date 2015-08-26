@@ -1,5 +1,4 @@
-﻿using Shapeshifter.Core.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using System.Threading.Tasks;
 
 namespace Shapeshifter.Core.Actions

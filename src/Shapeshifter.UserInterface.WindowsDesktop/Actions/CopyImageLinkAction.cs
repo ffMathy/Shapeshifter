@@ -1,5 +1,4 @@
-﻿using Shapeshifter.Core.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services;

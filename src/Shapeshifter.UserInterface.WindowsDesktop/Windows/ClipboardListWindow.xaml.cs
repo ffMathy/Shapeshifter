@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
 {
@@ -13,24 +14,20 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
     public partial class ClipboardListWindow : Window, IClipboardListWindow
     {
         readonly IClipboardUserInterfaceMediator mediator;
-        readonly IWindowMessageHook windowMessageHook;
 
         public ClipboardListWindow(
             IClipboardListViewModel viewModel,
-            IClipboardUserInterfaceMediator mediator,
-            IWindowMessageHook windowMessageHook)
+            IClipboardUserInterfaceMediator mediator)
         {
             this.mediator = mediator;
-            this.windowMessageHook = windowMessageHook;
-
-            SourceInitialized += ClipboardListWindow_SourceInitialized;
             
             InitializeComponent();
 
             SetupViewModel(viewModel);
         }
 
-        void SetupViewModel(IClipboardListViewModel viewModel)
+        void SetupViewModel(
+            IClipboardListViewModel viewModel)
         {
             viewModel.UserInterfaceShown += ViewModel_UserInterfaceShown;
             viewModel.UserInterfaceHidden += ViewModel_UserInterfaceHidden;
@@ -38,20 +35,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
             DataContext = viewModel;
         }
 
-        void ViewModel_UserInterfaceHidden(object sender, Services.Events.UserInterfaceHiddenEventArgument e)
+        void ViewModel_UserInterfaceHidden(
+            object sender, 
+            UserInterfaceHiddenEventArgument e)
         {
             Hide();
         }
 
-        void ViewModel_UserInterfaceShown(object sender, Services.Events.UserInterfaceShownEventArgument e)
+        void ViewModel_UserInterfaceShown(
+            object sender, 
+            UserInterfaceShownEventArgument e)
         {
             Show();
-        }
-
-        void ClipboardListWindow_SourceInitialized(object sender, System.EventArgs e)
-        {
-            windowMessageHook.Connect();
-            mediator.Connect();
         }
     }
 }

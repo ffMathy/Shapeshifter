@@ -57,16 +57,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         void UninstallInterceptors()
         {
             var mainWindowHandle = hooker.Handle;
-            foreach (var interceptor in GetManagedInterceptors())
+            foreach (var interceptor in windowMessageInterceptors)
             {
                 interceptor.Uninstall(mainWindowHandle);
             }
-        }
-
-        IEnumerable<IWindowMessageInterceptor> GetManagedInterceptors()
-        {
-            return windowMessageInterceptors
-                .Where(x => x.IsManagedAutomatically);
         }
 
         public void Connect()
@@ -87,7 +81,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         void InstallInterceptors()
         {
             var mainWindowHandle = hooker.Handle;
-            foreach (var interceptor in GetManagedInterceptors())
+            foreach (var interceptor in windowMessageInterceptors)
             {
                 interceptor.Install(mainWindowHandle);
                 logger.Information($"Installed interceptor {interceptor.GetType().Name}.");

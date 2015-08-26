@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using NSubstitute;
-using Shapeshifter.Core.Data;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;

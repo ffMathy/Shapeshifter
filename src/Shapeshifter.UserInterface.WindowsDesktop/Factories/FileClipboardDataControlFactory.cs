@@ -9,10 +9,8 @@ using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
-using System.Runtime.InteropServices;
 using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
 using System.Text;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories

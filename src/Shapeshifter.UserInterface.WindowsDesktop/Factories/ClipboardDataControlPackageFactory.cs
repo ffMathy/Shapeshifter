@@ -3,6 +3,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
+using System.Linq;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
@@ -19,25 +20,47 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             this.clipboardSessionFactory = clipboardSessionFactory;
         }
 
+        bool IsAnyFormatSupported(
+            IEnumerable<uint> formats)
+        {
+            return dataFactories.Any(
+                x => formats.Any(x.CanBuildData));
+        }
+
         public IClipboardDataControlPackage Create()
         {
+            using (clipboardSessionFactory.StartNewSession())
+            {
+                var formats = ClipboardApi.GetClipboardFormats();
+                if (IsAnyFormatSupported(formats))
+                {
+                    return ConstructPackage(formats);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        IClipboardDataControlPackage ConstructPackage(IEnumerable<uint> formats)
+        {
             var package = new ClipboardDataControlPackage();
-            DecoratePackageWithClipboardData(package);
+            DecoratePackageWithClipboardData(formats, package);
             DecoratePackageWithControl(package);
 
             return package;
         }
 
-        void DecoratePackageWithClipboardData(ClipboardDataControlPackage package)
+        void DecoratePackageWithClipboardData(
+            IEnumerable<uint> formats,
+            ClipboardDataControlPackage package)
         {
-            using (clipboardSessionFactory.StartNewSession())
+            foreach (var format in formats)
             {
                 foreach (var factory in dataFactories)
                 {
-                    foreach (var format in ClipboardApi.GetClipboardFormats())
-                    {
-                        DecoratePackageWithFormatDataUsingFactory(package, factory, format);
-                    }
+                    DecoratePackageWithFormatDataUsingFactory(package, factory, format);
                 }
             }
         }

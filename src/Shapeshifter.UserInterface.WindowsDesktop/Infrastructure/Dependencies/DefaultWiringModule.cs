@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 using System;
 using System.Linq;

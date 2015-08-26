@@ -56,12 +56,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             DataCopiedEventArgument e)
         {
             var package = clipboardDataControlPackageFactory.Create();
-            clipboardPackages.Add(package);
-
-            //signal an added event.
-            if (ControlAdded != null)
+            if (package != null)
             {
-                ControlAdded(this, new ControlEventArgument(package));
+                clipboardPackages.Add(package);
+
+                //signal an added event.
+                if (ControlAdded != null)
+                {
+                    ControlAdded(this, new ControlEventArgument(package));
+                }
             }
         }
 
