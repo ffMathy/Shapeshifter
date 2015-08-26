@@ -1,5 +1,4 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
@@ -16,7 +15,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
         readonly ILogger logger;
         readonly IHotkeyInterception hotkeyInterception;
 
-        public event EventHandler<PasteHotkeyFiredArgument> HotkeyFired;
+        public bool IsManagedAutomatically => true;
+
+        public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
         public PasteHotkeyInterceptor(
             ILogger logger,
@@ -42,11 +43,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
         {
             if (e.Message == KeyboardApi.WM_HOTKEY && (int)e.WordParameter == hotkeyInterception.InterceptionId)
             {
-                logger.Information("Hotkey message received.");
+                logger.Information("Paste hotkey message received.");
 
                 if (HotkeyFired != null)
                 {
-                    HotkeyFired(this, new PasteHotkeyFiredArgument());
+                    HotkeyFired(this, new HotkeyFiredArgument());
                 }
             }
         }

@@ -7,8 +7,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
 {
     class HotkeyInterception : IHotkeyInterception
     {
-        const int InterceptionIdOffset = 13371337;
-
         static int interceptionId;
 
         public int InterceptionId { get; }

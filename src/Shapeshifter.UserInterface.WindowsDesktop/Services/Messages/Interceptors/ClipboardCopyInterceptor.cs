@@ -11,13 +11,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
     [ExcludeFromCodeCoverage]
     class ClipboardCopyInterceptor : IClipboardCopyInterceptor
     {
-
         public event EventHandler<DataCopiedEventArgument> DataCopied;
 
         uint lastClipboardItemIdentifier;
         bool shouldSkipNext;
 
         readonly ILogger logger;
+
+        public bool IsManagedAutomatically => true;
 
         public ClipboardCopyInterceptor(
             ILogger logger)

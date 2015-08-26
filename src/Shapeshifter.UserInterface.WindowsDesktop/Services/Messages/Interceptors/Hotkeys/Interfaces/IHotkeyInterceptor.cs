@@ -6,6 +6,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces
 {
     public interface IHotkeyInterceptor : IWindowMessageInterceptor
     {
-        event EventHandler<PasteHotkeyFiredArgument> HotkeyFired;
+        event EventHandler<HotkeyFiredArgument> HotkeyFired;
     }
 }

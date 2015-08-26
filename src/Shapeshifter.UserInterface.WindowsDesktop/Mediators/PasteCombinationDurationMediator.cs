@@ -127,7 +127,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
             pasteHotkeyInterceptor.HotkeyFired -= PasteHotkeyInterceptor_PasteHotkeyFired;
         }
 
-        void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, PasteHotkeyFiredArgument e)
+        void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, HotkeyFiredArgument e)
         {
             threadCombinationHeldDownEvent.Set();
         }
