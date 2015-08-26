@@ -19,8 +19,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
 
         protected override void Load(ContainerBuilder builder)
         {
-            RegisterAssemblyTypes(builder, typeof(IClipboardData).Assembly);
-            RegisterAssemblyTypes(builder, typeof(App).Assembly);
+            RegisterAssemblyTypes(builder, typeof(DefaultWiringModule).Assembly);
 
             if (callback != null)
             {

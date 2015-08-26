@@ -18,7 +18,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            foreach(var temporaryPath in temporaryPaths)
+            {
+                if(File.Exists(temporaryPath))
+                {
+                    File.Delete(temporaryPath);
+                } else if(Directory.Exists(temporaryPath))
+                {
+                    Directory.Delete(temporaryPath);
+                }
+            }
         }
 
         string PrepareIsolatedTemporaryFolder()

@@ -4,6 +4,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+using System.Runtime.InteropServices;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -49,11 +50,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             if (!ClipboardApi.AddClipboardFormatListener(windowHandle))
             {
-                var existingOwner = ClipboardApi.GetClipboardOwner();
-                var ownerTitle = WindowApi.GetWindowTitle(existingOwner);
-
-                throw new InvalidOperationException($"Could not install a clipboard hook for the main window. The window '{ownerTitle}' currently owns the clipboard.");
+                throw GenerateInstallFailureException();
             }
+        }
+
+        static Exception GenerateInstallFailureException()
+        {
+            var errorCode = Marshal.GetLastWin32Error();
+
+            var existingOwner = ClipboardApi.GetClipboardOwner();
+            var ownerTitle = WindowApi.GetWindowTitle(existingOwner);
+
+            return new InvalidOperationException($"Could not install a clipboard hook for the main window. The window '{ownerTitle}' currently owns the clipboard. The last error code was {errorCode}.");
         }
 
         public void Uninstall(IntPtr windowHandle)

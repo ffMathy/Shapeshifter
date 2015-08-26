@@ -36,11 +36,27 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
                 throw new ArgumentException("Can't construct data from this format.", nameof(format));
             }
 
-            var text = GetTextFromRawData(format, data);
+            var text = GetProcessedTextFromRawData(format, data);
             return new ClipboardTextData(dataSourceService)
             {
-                Text = text
+                Text = text,
+                RawData = data,
+                RawFormat = format
             };
+        }
+
+        string GetProcessedTextFromRawData(uint format, byte[] data)
+        {
+            var text = GetTextFromRawData(format, data);
+
+            var terminaryNullCharacterPosition = text.IndexOf('\0');
+            if (terminaryNullCharacterPosition > -1)
+            {
+                return text.Substring(0, terminaryNullCharacterPosition);
+            } else
+            {
+                return text;
+            }
         }
 
         string GetTextFromRawData(uint format, byte[] data)
@@ -63,7 +79,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public bool CanBuildControl(IClipboardData data)
         {
-            return data is IClipboardTextData;
+            return 
+                data is IClipboardTextData;
         }
 
         public bool CanBuildData(uint format)

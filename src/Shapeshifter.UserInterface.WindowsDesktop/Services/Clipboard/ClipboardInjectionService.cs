@@ -7,6 +7,8 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using System;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {
@@ -48,7 +50,23 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
         {
             using (var memoryHandle = memoryHandleFactory.AllocateInMemory(clipboardData.RawData))
             {
-                ClipboardApi.SetClipboardData(clipboardData.RawFormat, memoryHandle.Pointer);
+                var globalPointer = GeneralApi.GlobalAlloc(GeneralApi.GMEM_ZEROINIT | GeneralApi.GMEM_MOVABLE, (UIntPtr)clipboardData.RawData.Length);
+                var target = GeneralApi.GlobalLock(globalPointer);
+                if (target == IntPtr.Zero)
+                {
+                    throw new InvalidOperationException("Could not allocate memory.");
+                }
+
+                try
+                {
+                    GeneralApi.CopyMemory(target, memoryHandle.Pointer, (uint)clipboardData.RawData.Length);
+                }
+                finally
+                {
+                    GeneralApi.GlobalUnlock(target);
+                }
+
+                ClipboardApi.SetClipboardData(clipboardData.RawFormat, globalPointer);
             }
         }
 
