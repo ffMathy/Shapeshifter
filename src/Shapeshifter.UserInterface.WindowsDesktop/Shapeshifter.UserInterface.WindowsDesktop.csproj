@@ -190,7 +190,7 @@
     <Compile Include="Services\Clipboard\Interfaces\IClipboardPasteService.cs" />
     <Compile Include="Handles\Interfaces\IHandle.cs" />
     <Compile Include="Services\Interfaces\IDataSourceService.cs" />
-    <Compile Include="Services\Messages\ClipboardCopyInterceptor.cs" />
+    <Compile Include="Services\Messages\Interceptors\ClipboardCopyInterceptor.cs" />
     <Compile Include="Mediators\ClipboardUserInterfaceMediator.cs" />
     <Compile Include="Services\Clipboard\ClipboardInjectionService.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IClipboardInjectionService.cs" />
@@ -200,6 +200,13 @@
     <Compile Include="Infrastructure\Events\PasteCombinationReleasedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\PasteHotkeyFiredArgument.cs" />
     <Compile Include="Infrastructure\Events\PasteCombinationDurationPassedEventArgument.cs" />
+    <Compile Include="Services\Messages\Interceptors\Hotkeys\Factories\HotkeyInterceptionFactory.cs" />
+    <Compile Include="Services\Messages\Interceptors\Hotkeys\Factories\Interfaces\IHotkeyInterceptionFactory.cs" />
+    <Compile Include="Services\Messages\Interceptors\Hotkeys\HotkeyInterception.cs" />
+    <Compile Include="Services\Messages\Interceptors\Hotkeys\Interfaces\IDownHotkeyInterceptor.cs" />
+    <Compile Include="Services\Messages\Interceptors\Hotkeys\Interfaces\IHotkeyInterception.cs" />
+    <Compile Include="Services\Messages\Interceptors\Hotkeys\Interfaces\IHotkeyInterceptor.cs" />
+    <Compile Include="Services\Messages\Interceptors\Hotkeys\Interfaces\IUpHotkeyInterceptor.cs" />
     <Compile Include="Services\Messages\Interfaces\IWindowMessageInterceptor.cs" />
     <Compile Include="Services\Messages\Interfaces\IWindowMessageHook.cs" />
     <Compile Include="Services\Web\DomainNameResolver.cs" />
@@ -212,7 +219,7 @@
     <Compile Include="Services\Images\ImageMetaInformation.cs" />
     <Compile Include="Services\Images\ImagePersistenceService.cs" />
     <Compile Include="Services\Images\Interfaces\IImageFileInterpreter.cs" />
-    <Compile Include="Services\Messages\Interfaces\IClipboardCopyInterceptor.cs" />
+    <Compile Include="Services\Messages\Interceptors\Interfaces\IClipboardCopyInterceptor.cs" />
     <Compile Include="Mediators\Interfaces\IClipboardUserInterfaceMediator.cs" />
     <Compile Include="Services\Web\Interfaces\IDomainNameResolver.cs" />
     <Compile Include="Services\Web\Interfaces\IDownloader.cs" />
@@ -222,11 +229,11 @@
     <Compile Include="Services\Web\Interfaces\ILinkParser.cs" />
     <Compile Include="Services\Interfaces\IProcessManager.cs" />
     <Compile Include="Services\Interfaces\IUpdateService.cs" />
-    <Compile Include="Services\Messages\Interfaces\IPasteHotkeyInterceptor.cs" />
+    <Compile Include="Services\Messages\Interceptors\Hotkeys\Interfaces\IPasteHotkeyInterceptor.cs" />
     <Compile Include="Infrastructure\Events\WindowMessageReceivedArgument.cs" />
     <Compile Include="Services\Files\FileIconService.cs" />
     <Compile Include="Services\Files\Interfaces\IFileIconService.cs" />
-    <Compile Include="Services\Messages\PasteHotkeyInterceptor.cs" />
+    <Compile Include="Services\Messages\Interceptors\Hotkeys\PasteHotkeyInterceptor.cs" />
     <Compile Include="Services\Web\LinkParser.cs" />
     <Compile Include="Services\Web\LinkType.cs" />
     <Compile Include="Services\ProcessManager.cs" />

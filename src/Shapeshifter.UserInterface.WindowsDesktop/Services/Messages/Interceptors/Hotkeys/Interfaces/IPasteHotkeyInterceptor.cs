@@ -4,8 +4,7 @@ using System;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces
 {
-    public interface IPasteHotkeyInterceptor : IWindowMessageInterceptor
+    public interface IPasteHotkeyInterceptor : IHotkeyInterceptor
     {
-        event EventHandler<PasteHotkeyFiredArgument> PasteHotkeyFired;
     }
 }

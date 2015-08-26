@@ -50,7 +50,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
         {
             using (var memoryHandle = memoryHandleFactory.AllocateInMemory(clipboardData.RawData))
             {
-                var globalPointer = GeneralApi.GlobalAlloc(GeneralApi.GMEM_ZEROINIT | GeneralApi.GMEM_MOVABLE, (UIntPtr)clipboardData.RawData.Length);
+                var globalPointer = AllocateInMemory(clipboardData);
+
                 var target = GeneralApi.GlobalLock(globalPointer);
                 if (target == IntPtr.Zero)
                 {
@@ -68,6 +69,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 
                 ClipboardApi.SetClipboardData(clipboardData.RawFormat, globalPointer);
             }
+        }
+
+        static IntPtr AllocateInMemory(IClipboardData clipboardData)
+        {
+            return GeneralApi.GlobalAlloc(
+                GeneralApi.GMEM_ZEROINIT | GeneralApi.GMEM_MOVABLE, 
+                (UIntPtr)clipboardData.RawData.Length);
         }
 
         public void InjectImage(BitmapSource image)

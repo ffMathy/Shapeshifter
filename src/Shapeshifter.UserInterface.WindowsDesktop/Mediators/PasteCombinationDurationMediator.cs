@@ -119,12 +119,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 
         void InstallPasteHotkeyInterceptor()
         {
-            pasteHotkeyInterceptor.PasteHotkeyFired += PasteHotkeyInterceptor_PasteHotkeyFired;
+            pasteHotkeyInterceptor.HotkeyFired += PasteHotkeyInterceptor_PasteHotkeyFired;
         }
 
         void UninstallPasteHotkeyInterceptor()
         {
-            pasteHotkeyInterceptor.PasteHotkeyFired -= PasteHotkeyInterceptor_PasteHotkeyFired;
+            pasteHotkeyInterceptor.HotkeyFired -= PasteHotkeyInterceptor_PasteHotkeyFired;
         }
 
         void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, PasteHotkeyFiredArgument e)
