@@ -11,6 +11,7 @@
         Left="0"
         Topmost="True"
         mc:Ignorable="d" 
+        ShowInTaskbar="False"
         SnapsToDevicePixels="True"
         UseLayoutRounding="True"
         SizeToContent="WidthAndHeight" 

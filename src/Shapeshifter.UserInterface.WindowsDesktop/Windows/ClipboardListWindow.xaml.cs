@@ -20,10 +20,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
             IClipboardUserInterfaceMediator mediator)
         {
             this.mediator = mediator;
+
+            Activated += ClipboardListWindow_Activated;
             
             InitializeComponent();
 
             SetupViewModel(viewModel);
+        }
+
+        void ClipboardListWindow_Activated(object sender, System.EventArgs e)
+        {
+            Activated -= ClipboardListWindow_Activated;
+            Hide();
         }
 
         void SetupViewModel(
