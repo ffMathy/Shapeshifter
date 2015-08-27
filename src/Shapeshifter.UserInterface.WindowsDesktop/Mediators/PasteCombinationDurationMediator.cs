@@ -20,6 +20,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         readonly CancellationTokenSource threadCancellationTokenSource;
         readonly ManualResetEventSlim threadCombinationHeldDownEvent;
 
+        bool isCombinationDown;
+
         public event EventHandler<PasteCombinationDurationPassedEventArgument> PasteCombinationDurationPassed;
         public event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleased;
 
@@ -88,6 +90,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 
         void RegisterCombinationReleased()
         {
+            isCombinationDown = false;
             if (PasteCombinationReleased != null)
             {
                 mainThreadInvoker.Invoke(() => PasteCombinationReleased(this, new PasteCombinationReleasedEventArgument()));
@@ -129,7 +132,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 
         void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, HotkeyFiredArgument e)
         {
-            threadCombinationHeldDownEvent.Set();
+            if (!isCombinationDown)
+            {
+                logger.Information("Paste combination duration mediator reacted to paste hotkey.", 1);
+
+                isCombinationDown = true;
+                threadCombinationHeldDownEvent.Set();
+            } else
+            {
+                logger.Information("Paste combination duration mediator ignored paste hotkey because the paste combination was already held down.", 1);
+            }
         }
 
         public void Disconnect()
