@@ -15,6 +15,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
         readonly ILogger logger;
         readonly IHotkeyInterception hotkeyInterception;
 
+        const int MinimumHotkeyIntervalInMilliseconds = 1000;
+        DateTime lastHotkeyTime;
+
         public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
         public PasteHotkeyInterceptor(
@@ -41,14 +44,38 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
         {
             if (e.Message == KeyboardApi.WM_HOTKEY && (int)e.WordParameter == hotkeyInterception.InterceptionId)
             {
-                logger.Information("Paste hotkey message received.");
-
-                if (HotkeyFired != null)
-                {
-                    HotkeyFired(this, new HotkeyFiredArgument(
-                        hotkeyInterception.KeyCode, hotkeyInterception.ControlNeeded));
-                }
+                OnHotkeyMessageReceived();
             }
+        }
+
+        void OnHotkeyMessageReceived()
+        {
+            if (DidHotkeyOccurOutsideInterval())
+            {
+                HandleHotkeyMessage();
+            }
+            else
+            {
+                logger.Information("Paste hotkey message skipped. It was within the hotkey interval.", 1);
+            }
+        }
+
+        void HandleHotkeyMessage()
+        {
+            lastHotkeyTime = DateTime.UtcNow;
+
+            logger.Information("Paste hotkey message received.", 1);
+
+            if (HotkeyFired != null)
+            {
+                HotkeyFired(this, new HotkeyFiredArgument(
+                    hotkeyInterception.KeyCode, hotkeyInterception.ControlNeeded));
+            }
+        }
+
+        bool DidHotkeyOccurOutsideInterval()
+        {
+            return lastHotkeyTime == default(DateTime) || (DateTime.UtcNow - lastHotkeyTime).TotalMilliseconds > MinimumHotkeyIntervalInMilliseconds;
         }
     }
 }

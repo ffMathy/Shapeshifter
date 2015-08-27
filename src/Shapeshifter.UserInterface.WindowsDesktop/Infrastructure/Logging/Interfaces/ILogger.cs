@@ -2,7 +2,7 @@
 {
     interface ILogger
     {
-        void Information(string text);
+        void Information(string text, int importanceFactor = 0);
 
         void Warning(string text);
 

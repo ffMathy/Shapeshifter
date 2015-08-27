@@ -5,6 +5,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging
 {
     class Logger : ILogger
     {
+        const int MinimumImportanceFactor = 1;
+
         void Log(string text)
         {
             Debug.WriteLine($"{text}");
@@ -15,9 +17,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging
             Log("Error: " + text);
         }
 
-        public void Information(string text)
+        public void Information(
+            string text, int importanceFactor = 0)
         {
-            Log("Information: " + text);
+            if (importanceFactor >= MinimumImportanceFactor)
+            {
+                Log("Information: " + text);
+            }
         }
 
         public void Warning(string text)

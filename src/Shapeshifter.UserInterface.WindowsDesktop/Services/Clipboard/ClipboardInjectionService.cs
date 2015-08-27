@@ -9,6 +9,7 @@ using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using System;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {
@@ -17,15 +18,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
         readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
         readonly IClipboardHandleFactory clipboardHandleFactory;
         readonly IMemoryHandleFactory memoryHandleFactory;
+        readonly ILogger logger;
 
         public ClipboardInjectionService(
             IClipboardCopyInterceptor clipboardCopyInterceptor,
             IClipboardHandleFactory clipboardHandleFactory,
-            IMemoryHandleFactory memoryHandleFactory)
+            IMemoryHandleFactory memoryHandleFactory,
+            ILogger logger)
         {
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;
             this.clipboardHandleFactory = clipboardHandleFactory;
             this.memoryHandleFactory = memoryHandleFactory;
+            this.logger = logger;
         }
 
         public void InjectData(IClipboardDataPackage package)
@@ -36,6 +40,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
             {
                 InjectPackageContents(package);
             }
+
+            logger.Information("Clipboard package has been injected to the clipboard.", 1);
         }
 
         void InjectPackageContents(IClipboardDataPackage package)
