@@ -62,11 +62,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             }
 
             var files = GetFilesCopiedFromRawData(rawData);
-            return ConstructDataFromFiles(files);
+            return ConstructDataFromFiles(files, format, rawData);
         }
 
         IEnumerable<string> GetFilesCopiedFromRawData(byte[] data)
         {
+            var files = new List<string>();
             using (var memoryHandle = memoryHandleFactory.AllocateInMemory(data))
             {
                 var count = ClipboardApi.DragQueryFile(memoryHandle.Pointer, uint.MaxValue, null, 0);
@@ -75,38 +76,55 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
                     var filenameBuilder = new StringBuilder(256);
                     ClipboardApi.DragQueryFile(memoryHandle.Pointer, i, filenameBuilder, filenameBuilder.Capacity);
 
-                    yield return filenameBuilder.ToString();
+                    files.Add(filenameBuilder.ToString());
                 }
             }
+
+            return files;
         }
 
-        IClipboardData ConstructDataFromFiles(IEnumerable<string> files)
+        IClipboardData ConstructDataFromFiles(
+            IEnumerable<string> files, uint format, byte[] rawData)
         {
             if (files.Count() == 1)
             {
-                return ConstructClipboardFileData(files.Single());
+                return ConstructClipboardFileData(
+                    files.Single(), format, rawData);
             }
             else
             {
-                return ConstructClipboardFileCollectionData(files);
+                return ConstructClipboardFileCollectionData(
+                    files, format, rawData);
             }
         }
 
-        IClipboardData ConstructClipboardFileCollectionData(IEnumerable<string> files)
+        IClipboardData ConstructClipboardFileCollectionData(
+            IEnumerable<string> files, uint format, byte[] rawData)
         {
             return new ClipboardFileCollectionData(dataSourceService)
             {
-                Files = files.Select(ConstructClipboardFileData)
+                Files = files.Select(ConstructClipboardFileData),
+                RawFormat = format,
+                RawData = rawData
             };
         }
 
-        IClipboardFileData ConstructClipboardFileData(string file)
+        IClipboardFileData ConstructClipboardFileData(
+            string file, uint format, byte[] rawData)
         {
             return new ClipboardFileData(dataSourceService)
             {
                 FileName = Path.GetFileName(file),
-                FileIcon = fileIconService.GetIcon(file, false)
+                FileIcon = fileIconService.GetIcon(file, false),
+                RawFormat = format,
+                RawData = rawData
             };
+        }
+
+        IClipboardFileData ConstructClipboardFileData(
+            string file)
+        {
+            return ConstructClipboardFileData(file, 0, null);
         }
 
         public bool CanBuildControl(IClipboardData data)
