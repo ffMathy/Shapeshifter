@@ -69,11 +69,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         async Task<IClipboardData> GetFirstSupportedDataAsync(IClipboardDataPackage package)
         {
-            var validItems = await asyncFilter.FilterAsync(package.Contents, IsDataSupported);
+            var validItems = await asyncFilter.FilterAsync(package.Contents, PerformAsync);
             return validItems.FirstOrDefault();
         }
 
-        async Task<bool> IsDataSupported(IClipboardData data)
+        async Task<bool> PerformAsync(IClipboardData data)
         {
             var textData = data as IClipboardTextData;
             return textData != null && await linkParser.HasLinkOfTypeAsync(textData.Text, LinkType.ImageFile);

@@ -5,17 +5,23 @@ using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+using Shapeshifter.Core.Data;
+using System.Linq;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
     class UploadImageAction : IUploadImageAction
     {
         readonly IFileTypeInterpreter fileTypeInterpreter;
+        readonly IAsyncFilter asyncFilter;
 
         public UploadImageAction(
-            IFileTypeInterpreter fileTypeInterpreter)
+            IFileTypeInterpreter fileTypeInterpreter,
+            IAsyncFilter asyncFilter)
         {
             this.fileTypeInterpreter = fileTypeInterpreter;
+            this.asyncFilter = asyncFilter;
         }
 
         public string Description
@@ -43,19 +49,26 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         }
 
         public async Task<bool> CanPerformAsync(
-            IClipboardDataPackage clipboardData)
+            IClipboardDataPackage package)
+        {
+            var supportedData = await asyncFilter.FilterAsync(package.Contents, CanPerformAsync);
+            return supportedData.Any();
+        }
+
+        async Task<bool> CanPerformAsync(
+            IClipboardData clipboardData)
         {
             return IsSuitableImageData(clipboardData) || IsSuitableFileData(clipboardData);
         }
 
         static bool IsSuitableImageData(
-            IClipboardDataPackage clipboardData)
+            IClipboardData clipboardData)
         {
             return clipboardData is IClipboardImageData;
         }
 
         bool IsSuitableFileData(
-            IClipboardDataPackage clipboardData)
+            IClipboardData clipboardData)
         {
             var fileData = clipboardData as IClipboardFileData;
             return fileData != null && fileTypeInterpreter.GetFileTypeFromFileName(fileData.FileName) == FileType.Image;

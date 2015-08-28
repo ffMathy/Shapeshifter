@@ -3,11 +3,21 @@ using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.Core.Data.Interfaces;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+using System.Linq;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
     class ZipFilesAction : IZipFilesAction
     {
+        readonly IAsyncFilter asyncFilter;
+
+        public ZipFilesAction(IAsyncFilter asyncFilter)
+        {
+            this.asyncFilter = asyncFilter;
+        }
+
         public string Description
         {
             get
@@ -35,9 +45,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         public async Task<bool> CanPerformAsync(
             IClipboardDataPackage package)
         {
+            var supportedData = await asyncFilter.FilterAsync(package.Contents, CanPerformAsync);
+            return supportedData.Any();
+        }
+
+        async Task<bool> CanPerformAsync(
+            IClipboardData data)
+        {
             return 
-                package is IClipboardFileData || 
-                package is IClipboardFileCollectionData;
+                data is IClipboardFileData || 
+                data is IClipboardFileCollectionData;
         }
 
         public Task PerformAsync(

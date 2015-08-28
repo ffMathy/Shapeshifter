@@ -46,10 +46,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
         {
             var main = Container.Resolve<Main>();
 
-            Current.DispatcherUnhandledException += (sender, exceptionEventArguments) =>
+            AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) =>
             {
-                MessageBox.Show(exceptionEventArguments.Exception.ToString(), "Shapeshifter error", MessageBoxButton.OK);
-                exceptionEventArguments.Handled = true;
+                MessageBox.Show(exceptionEventArguments.ExceptionObject.ToString(), "Shapeshifter error", MessageBoxButton.OK);
                 Current.Shutdown();
             };
 

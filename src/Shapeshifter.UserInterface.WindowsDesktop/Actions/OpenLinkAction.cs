@@ -3,6 +3,9 @@ using Shapeshifter.Core.Data.Interfaces;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+using System.Linq;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -10,13 +13,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
     {
         readonly ILinkParser linkParser;
         readonly IProcessManager processManager;
+        readonly IAsyncFilter asyncFilter;
 
         public OpenLinkAction(
             ILinkParser linkParser,
-            IProcessManager processManager)
+            IProcessManager processManager,
+            IAsyncFilter asyncFilter)
         {
             this.linkParser = linkParser;
             this.processManager = processManager;
+            this.asyncFilter = asyncFilter;
         }
 
         //TODO: make the description include the links that will be opened by making a GetDescription(data) method instead.
@@ -46,7 +52,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
         {
-            var textData = package as IClipboardTextData;
+            var supportedItems = await asyncFilter.FilterAsync(package.Contents, CanPerformAsync);
+            return supportedItems.Any();
+        }
+
+        async Task<bool> CanPerformAsync(IClipboardData data)
+        {
+            var textData = data as IClipboardTextData;
             return textData != null && await linkParser.HasLinkAsync(textData.Text);
         }
 
