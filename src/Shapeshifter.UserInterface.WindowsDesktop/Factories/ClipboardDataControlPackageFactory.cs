@@ -47,6 +47,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         {
             var package = new ClipboardDataControlPackage();
             DecoratePackageWithClipboardData(formats, package);
+            if(!package.Contents.Any())
+            {
+                return null;
+            }
+
             DecoratePackageWithControl(package);
 
             return package;
@@ -58,21 +63,24 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         {
             foreach (var format in formats)
             {
+                var rawData = ClipboardApi.GetClipboardDataBytes(format);
                 foreach (var factory in dataFactories)
                 {
-                    DecoratePackageWithFormatDataUsingFactory(package, factory, format);
+                    DecoratePackageWithFormatDataUsingFactory(package, factory, format, rawData);
                 }
             }
         }
 
-        static void DecoratePackageWithFormatDataUsingFactory(ClipboardDataControlPackage package, IClipboardDataControlFactory factory, uint format)
+        static void DecoratePackageWithFormatDataUsingFactory(
+            ClipboardDataControlPackage package, IClipboardDataControlFactory factory, uint format, byte[] rawData)
         {
             if (factory.CanBuildData(format))
             {
-                var rawData = ClipboardApi.GetClipboardDataBytes(format);
-
                 var clipboardData = factory.BuildData(format, rawData);
-                package.AddData(clipboardData);
+                if (clipboardData != null)
+                {
+                    package.AddData(clipboardData);
+                }
             }
         }
 

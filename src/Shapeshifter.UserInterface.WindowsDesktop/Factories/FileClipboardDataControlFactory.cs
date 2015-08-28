@@ -70,6 +70,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             }
 
             var files = GetFilesCopiedFromRawData(rawData);
+            if(!files.Any())
+            {
+                return null;
+            }
+
             return ConstructDataFromFiles(files, format, rawData);
         }
 
@@ -78,11 +83,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             var files = new List<string>();
             using (var memoryHandle = memoryHandleFactory.AllocateInMemory(data))
             {
-                var count = ClipboardApi.DragQueryFile(memoryHandle.Pointer, uint.MaxValue, null, 0);
-                if (count == 0)
-                {
-                    throw new InvalidOperationException("No files were in the clipboard.");
-                }
+                var count = ClipboardApi.DragQueryFile(memoryHandle.Pointer, 0xFFFFFFFF, null, 0);
+                //if (count == 0)
+                //{
+                //    throw new InvalidOperationException("No files were in the clipboard.");
+                //}
 
                 FetchFilesFromMemory(files, memoryHandle, count);
             }
@@ -100,7 +105,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
                 length = ClipboardApi.DragQueryFile(memoryHandle.Pointer, i, filenameBuilder, length + 1);
 
                 var fileName = filenameBuilder.ToString();
-                files.Add(fileName.Substring(0, length));
+                files.Add(fileName);
             }
         }
 

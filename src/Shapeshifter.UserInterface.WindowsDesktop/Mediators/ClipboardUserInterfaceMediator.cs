@@ -60,11 +60,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             {
                 clipboardPackages.Add(package);
 
-                //signal an added event.
-                if (ControlAdded != null)
-                {
-                    ControlAdded(this, new ControlEventArgument(package));
-                }
+                FireControlAddedEvent(package);
+            }
+        }
+
+        void FireControlAddedEvent(IClipboardDataControlPackage package)
+        {
+            if (ControlAdded != null)
+            {
+                ControlAdded(this, new ControlEventArgument(package));
             }
         }
 

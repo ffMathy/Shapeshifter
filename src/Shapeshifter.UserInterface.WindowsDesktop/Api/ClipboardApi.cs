@@ -58,6 +58,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
         [DllImport("shell32.dll", CharSet = CharSet.Auto)]
         public static extern int DragQueryFile(IntPtr hDrop, uint iFile, StringBuilder lpszFile, int cch);
 
+        [DllImport("shell32.dll")]
+        public static extern void DragFinish(IntPtr hDrop);
+
         [DllImport("user32.dll")]
         public static extern IntPtr SetClipboardData(uint uFormat, IntPtr hMem);
 
@@ -81,10 +84,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
             var buffer = new byte[(int)length];
 
             Marshal.Copy(lockedMemory, buffer, 0, (int)length);
-
+            
             return buffer;
         }
-
+        
         static IntPtr GetClipboardDataPointer(uint format)
         {
             return GetClipboardData(format);
