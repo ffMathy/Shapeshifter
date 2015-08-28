@@ -1,4 +1,5 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
@@ -15,6 +16,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         static readonly Regex linkValidationExpression;
         static readonly Regex whitespaceExpression;
 
+        readonly IAsyncFilter asyncFilter;
         readonly IDomainNameResolver domainNameResolver;
         readonly IFileTypeInterpreter fileTypeInterpreter;
 
@@ -26,32 +28,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public LinkParser(
             IFileTypeInterpreter fileTypeInterpreter,
-            IDomainNameResolver domainNameResolver)
+            IDomainNameResolver domainNameResolver,
+            IAsyncFilter asyncFilter)
         {
             this.fileTypeInterpreter = fileTypeInterpreter;
             this.domainNameResolver = domainNameResolver;
+            this.asyncFilter = asyncFilter;
         }
 
         public async Task<IEnumerable<string>> ExtractLinksFromTextAsync(string text)
         {
             var words = whitespaceExpression.Split(text);
-
-            var validationTasks = words.Select(IsValidLinkAsync);
-            return ExtractValidLinksFromWords(words, await Task.WhenAll(validationTasks));
-        }
-
-        static List<string> ExtractValidLinksFromWords(string[] words, bool[] validationResults)
-        {
-            var extractedLinks = new List<string>();
-            for (var i = 0; i < validationResults.Length; i++)
-            {
-                if (validationResults[i])
-                {
-                    extractedLinks.Add(words[i]);
-                }
-            }
-
-            return extractedLinks;
+            return await asyncFilter.FilterAsync(words, IsValidLinkAsync);
         }
 
         public LinkType GetLinkType(string link)

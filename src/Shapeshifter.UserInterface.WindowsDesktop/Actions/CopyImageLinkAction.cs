@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -20,13 +22,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         readonly IDownloader downloader;
         readonly IImageFileInterpreter imageFileInterpreter;
         readonly ILinkParser linkParser;
+        readonly IAsyncFilter asyncFilter;
 
         public CopyImageLinkAction(
             ILinkParser linkParser,
             IImageFileInterpreter imageFileInterpreter,
             IDownloader downloader,
-            IClipboardInjectionService clipboardInjectionService)
+            IClipboardInjectionService clipboardInjectionService,
+            IAsyncFilter asyncFilter)
         {
+            this.asyncFilter = asyncFilter;
             this.linkParser = linkParser;
             this.downloader = downloader;
             this.imageFileInterpreter = imageFileInterpreter;
@@ -59,7 +64,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
         {
-            var textData = package as IClipboardTextData;
+            return GetFirstSupportedDataAsync(package) != null;
+        }
+
+        async Task<IClipboardData> GetFirstSupportedDataAsync(IClipboardDataPackage package)
+        {
+            var validItems = await asyncFilter.FilterAsync(package.Contents, IsDataSupported);
+            return validItems.FirstOrDefault();
+        }
+
+        async Task<bool> IsDataSupported(IClipboardData data)
+        {
+            var textData = data as IClipboardTextData;
             return textData != null && await linkParser.HasLinkOfTypeAsync(textData.Text, LinkType.ImageFile);
         }
 
