@@ -84,11 +84,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             using (var memoryHandle = memoryHandleFactory.AllocateInMemory(data))
             {
                 var count = ClipboardApi.DragQueryFile(memoryHandle.Pointer, 0xFFFFFFFF, null, 0);
-                //if (count == 0)
-                //{
-                //    throw new InvalidOperationException("No files were in the clipboard.");
-                //}
-
                 FetchFilesFromMemory(files, memoryHandle, count);
             }
 

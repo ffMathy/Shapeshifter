@@ -26,9 +26,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         void HandleClipboardUpdateWindowMessage()
         {
-            logger.Information("Clipboard update message received.", 1);
-
             var clipboardItemIdentifier = ClipboardApi.GetClipboardSequenceNumber();
+
+            logger.Information($"Clipboard update message received with sequence #{clipboardItemIdentifier}.", 1);
+
             if (clipboardItemIdentifier != lastClipboardItemIdentifier)
             {
                 lastClipboardItemIdentifier = clipboardItemIdentifier;

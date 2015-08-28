@@ -38,6 +38,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 
             using (clipboardHandleFactory.StartNewSession())
             {
+                ClipboardApi.EmptyClipboard();
                 InjectPackageContents(package);
             }
 
@@ -64,23 +65,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
                     throw new InvalidOperationException("Could not allocate memory.");
                 }
 
-                try
-                {
-                    GeneralApi.CopyMemory(target, memoryHandle.Pointer, (uint)clipboardData.RawData.Length);
-                }
-                finally
-                {
-                    GeneralApi.GlobalUnlock(target);
-                }
+                GeneralApi.CopyMemory(target, memoryHandle.Pointer, (uint)clipboardData.RawData.Length);
 
-                ClipboardApi.SetClipboardData(clipboardData.RawFormat, globalPointer);
+                GeneralApi.GlobalUnlock(target);
+
+                if (ClipboardApi.SetClipboardData(clipboardData.RawFormat, globalPointer) == IntPtr.Zero)
+                {
+                    GeneralApi.GlobalFree(globalPointer);
+                    throw new Exception("Could not set clipboard data.");
+                }
             }
         }
 
         static IntPtr AllocateInMemory(IClipboardData clipboardData)
         {
             return GeneralApi.GlobalAlloc(
-                GeneralApi.GMEM_ZEROINIT | GeneralApi.GMEM_MOVABLE, 
+                GeneralApi.GMEM_ZEROINIT | GeneralApi.GMEM_MOVABLE,
                 (UIntPtr)clipboardData.RawData.Length);
         }
 

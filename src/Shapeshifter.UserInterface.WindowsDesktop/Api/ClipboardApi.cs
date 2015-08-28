@@ -53,6 +53,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
         public static extern bool CloseClipboard();
 
         [DllImport("user32.dll")]
+        public static extern bool EmptyClipboard();
+
+        [DllImport("user32.dll")]
         public static extern int GetClipboardFormatName(uint format, [Out] StringBuilder lpszFormatName, int cchMaxCount);
 
         [DllImport("shell32.dll", CharSet = CharSet.Auto)]
@@ -84,6 +87,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
             var buffer = new byte[(int)length];
 
             Marshal.Copy(lockedMemory, buffer, 0, (int)length);
+
+            GeneralApi.GlobalUnlock(dataPointer);
             
             return buffer;
         }
