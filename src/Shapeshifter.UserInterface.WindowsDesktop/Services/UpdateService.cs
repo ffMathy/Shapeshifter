@@ -178,7 +178,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public async void Start()
         {
-            if (!environmentInformation.IsInDesignTime && !environmentInformation.IsDebugging)
+            if (!environmentInformation.IsDebugging)
             {
                 await StartUpdateLoop();
             }
