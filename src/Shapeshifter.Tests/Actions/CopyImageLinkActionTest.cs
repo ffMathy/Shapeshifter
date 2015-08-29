@@ -10,18 +10,22 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+using System;
+using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.Tests.Actions
 {
     [TestClass]
-    public class CopyImageLinkActionTest : TestBase
+    public class CopyImageLinkActionTest : ActionTestBase
     {
         [TestMethod]
         public async Task CanPerformIsFalseForNonTextTypes()
         {
             var container = CreateContainer();
 
-            var someNonTextData = Substitute.For<IClipboardDataPackage>();
+            var someNonTextData = GetPackageContaining<IClipboardData>();
 
             var action = container.Resolve<ICopyImageLinkAction>();
             Assert.IsFalse(await action.CanPerformAsync(someNonTextData));
@@ -51,11 +55,17 @@ namespace Shapeshifter.Tests.Actions
             var container = CreateContainer(c =>
             {
                 c.RegisterFake<ILinkParser>()
-                .HasLinkOfTypeAsync(Arg.Any<string>(), LinkType.ImageFile).Returns(Task.FromResult(false));
+                    .HasLinkOfTypeAsync(Arg.Any<string>(), LinkType.ImageFile)
+                    .Returns(Task.FromResult(false));
+
+                c.RegisterFake<IAsyncFilter>()
+                    .FilterAsync(Arg.Any<IEnumerable<IClipboardData>>(), Arg.Any<Func<IClipboardData, Task<bool>>>())
+                    .Returns(Task.FromResult<IEnumerable<IClipboardData>>(new IClipboardData[0]));
             });
 
             var action = container.Resolve<ICopyImageLinkAction>();
-            Assert.IsFalse(await action.CanPerformAsync(Substitute.For<IClipboardDataPackage>()));
+            var canPerform = await action.CanPerformAsync(Substitute.For<IClipboardDataPackage>());
+            Assert.IsFalse(canPerform);
         }
 
         [TestMethod]

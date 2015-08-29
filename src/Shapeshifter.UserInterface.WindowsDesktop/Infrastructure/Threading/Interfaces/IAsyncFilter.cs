@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces
 {
-    interface IAsyncFilter
+    public interface IAsyncFilter
     {
         Task<IEnumerable<TResult>> FilterAsync<TResult>(IEnumerable<Task<TResult>> candidates, Func<TResult, Task<bool>> filter);
 

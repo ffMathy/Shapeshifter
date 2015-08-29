@@ -87,6 +87,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Actions\ActionTestBase.cs" />
     <Compile Include="Actions\OpenLinkActionTest.cs" />
     <Compile Include="Actions\CopyImageLinkActionTest.cs" />
     <Compile Include="Actions\ZipFilesActionTest.cs" />

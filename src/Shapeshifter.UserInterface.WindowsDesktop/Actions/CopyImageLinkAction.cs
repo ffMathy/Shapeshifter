@@ -81,7 +81,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         public async Task PerformAsync(IClipboardDataPackage package)
         {
-            var textData = package as IClipboardTextData;
+            var textData = GetFirstSupportedDataAsync(package) as IClipboardTextData;
             var links = await linkParser.ExtractLinksFromTextAsync(textData.Text);
 
             var imagesBytes = await DownloadLinksAsync(links);

@@ -3,6 +3,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces
@@ -15,7 +16,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interface
         IClipboardDataControlPackage SelectedElement { get; set; }
         IAction SelectedAction { get; set; }
 
-        IList<IClipboardDataControlPackage> Elements { get; }
-        IList<IAction> Actions { get; }
+        ObservableCollection<IClipboardDataControlPackage> Elements { get; }
+        ObservableCollection<IAction> Actions { get; }
     }
 }

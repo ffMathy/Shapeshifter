@@ -11,6 +11,8 @@ using System;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 {
@@ -21,14 +23,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
         IAction selectedAction;
 
         readonly IAction[] allActions;
+        readonly IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder;
+        readonly IAsyncFilter asyncFilter;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public IList<IClipboardDataControlPackage> Elements { get; private set; }
-        public IList<IAction> Actions { get; private set; }
+        public ObservableCollection<IClipboardDataControlPackage> Elements { get; private set; }
+        public ObservableCollection<IAction> Actions { get; private set; }
 
         public IAction SelectedAction
         {
@@ -60,22 +64,38 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
                     PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedElement)));
                 }
 
-                SetActionsAsync();
+                packageActionBinder.LoadFromKey(value);
             }
         }
 
         public ClipboardListViewModel(
             IAction[] allActions,
             IClipboardUserInterfaceMediator clipboardUserInterfaceMediator,
-            IKeyInterceptor hotkeyInterceptor)
+            IKeyInterceptor hotkeyInterceptor,
+            IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder,
+            IAsyncFilter asyncFilter)
         {
             Elements = new ObservableCollection<IClipboardDataControlPackage>();
             Actions = new ObservableCollection<IAction>();
 
-            this.allActions = allActions;
+            Actions.CollectionChanged += Actions_CollectionChanged;
 
+            this.allActions = allActions;
+            this.packageActionBinder = packageActionBinder;
+            this.asyncFilter = asyncFilter;
+
+            packageActionBinder.Bind(Elements, Actions, GetSupportedActionsFromDataAsync);
+            
             RegisterMediatorEvents(clipboardUserInterfaceMediator);
             RegisterKeyEvents(hotkeyInterceptor);
+        }
+
+        void Actions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if(SelectedAction == null && Actions.Count > 0)
+            {
+                SelectedAction = Actions.First();
+            }
         }
 
         void RegisterKeyEvents(IKeyInterceptor hotkeyInterceptor)
@@ -95,7 +115,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 
         void HotkeyInterceptor_HotkeyFired(object sender, HotkeyFiredArgument e)
         {
-            switch(e.KeyCode)
+            switch (e.KeyCode)
             {
                 case KeyboardApi.VK_KEY_DOWN:
                     HandleDownPressed();
@@ -130,7 +150,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             var indexToUse = Elements.IndexOf(SelectedElement) - 1;
             if (indexToUse < 0)
             {
-                indexToUse = Elements.Count-1;
+                indexToUse = Elements.Count - 1;
             }
 
             SelectedElement = Elements[indexToUse];
@@ -139,7 +159,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
         void HandleDownPressed()
         {
             var indexToUse = Elements.IndexOf(SelectedElement) + 1;
-            if(indexToUse == Elements.Count)
+            if (indexToUse == Elements.Count)
             {
                 indexToUse = 0;
             }
@@ -167,48 +187,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 
         async Task InvokeSelectedActionOnSelectedClipboardData()
         {
-            if (await SelectedAction.CanPerformAsync(SelectedElement))
-            {
-                await SelectedAction.PerformAsync(SelectedElement);
-            }
+            await SelectedAction.PerformAsync(SelectedElement);
         }
 
-        async Task SetActionsAsync()
+        async Task<IEnumerable<IAction>> GetSupportedActionsFromDataAsync(IClipboardDataPackage data)
         {
-            Actions.Clear();
-            SelectedAction = null;
-
-            await AddActionsFromDataAsync(SelectedElement);
-        }
-
-        async Task AddActionsFromDataAsync(IClipboardDataPackage data)
-        {
-            var actionPerformResults = await Task.WhenAll(allActions.Select(x => x.CanPerformAsync(data)));
-
-            var allowedActions = GetAllowedActionsFromPerformResults(actionPerformResults);
-            AddActions(allowedActions);
-        }
-
-        IEnumerable<IAction> GetAllowedActionsFromPerformResults(bool[] actionPerformResults)
-        {
-            var allowedActions = new List<IAction>();
-            for (var i = 0; i < allActions.Length; i++)
-            {
-                if (actionPerformResults[i])
-                {
-                    allowedActions.Add(allActions[i]);
-                }
-            }
-
-            return allowedActions;
-        }
-
-        void AddActions(IEnumerable<IAction> actions)
-        {
-            foreach (var action in actions.OrderBy(x => x.Order))
-            {
-                AddAction(action);
-            }
+            var allowedActions = await asyncFilter.FilterAsync(allActions, action => action.CanPerformAsync(data));
+            return allowedActions.OrderBy(x => x.Order);
         }
 
         void AddAction(IAction action)

@@ -241,9 +241,11 @@
     <Compile Include="Services\ProcessManager.cs" />
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Services\Messages\WindowMessageHook.cs" />
+    <Compile Include="Windows\Binders\PackageToActionBinder.cs" />
     <Compile Include="Windows\ClipboardListWindow.xaml.cs">
       <DependentUpon>ClipboardListWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Binders\Interfaces\IAsyncListDictionaryBinder.cs" />
     <Compile Include="Windows\Interfaces\IClipboardListWindow.cs" />
     <Compile Include="Windows\ViewModels\ClipboardListViewModel.cs" />
     <Compile Include="Windows\ViewModels\Interfaces\IClipboardListViewModel.cs" />
