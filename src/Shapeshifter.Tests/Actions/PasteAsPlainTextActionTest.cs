@@ -5,11 +5,12 @@ using NSubstitute;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.Tests.Actions
 {
     [TestClass]
-    public class PasteAsPlainTextActionTest : TestBase
+    public class PasteAsPlainTextActionTest : ActionTestBase
     {
         [TestMethod]
         public async Task CanNotPerformWithNonTextData()
@@ -27,7 +28,7 @@ namespace Shapeshifter.Tests.Actions
         {
             var container = CreateContainer();
 
-            var fakeData = Substitute.For<IClipboardDataPackage>();
+            var fakeData = GetPackageContaining<IClipboardTextData>();
 
             var action = container.Resolve<IPasteAsPlainTextAction>();
             Assert.IsTrue(await action.CanPerformAsync(fakeData));
@@ -59,7 +60,10 @@ namespace Shapeshifter.Tests.Actions
                 c.RegisterFake<IClipboardInjectionService>();
             });
 
-            var fakeData = Substitute.For<IClipboardDataPackage>();
+            var fakeTextData = Substitute.For<IClipboardTextData>();
+            fakeTextData.Text.Returns("foobar hello");
+
+            var fakeData = GetPackageContaining(fakeTextData);
 
             var action = container.Resolve<IPasteAsPlainTextAction>();
             await action.PerformAsync(fakeData);

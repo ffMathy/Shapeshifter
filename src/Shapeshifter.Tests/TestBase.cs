@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ploeh.AutoFixture;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
 using System;
@@ -9,6 +10,12 @@ namespace Shapeshifter.Tests
     public abstract class TestBase
     {
         protected Fixture fixture;
+
+        [TestCleanup]
+        public void ClearCacheOnEnd()
+        {
+            Extensions.ClearCache();
+        }
 
         protected TestBase()
         {

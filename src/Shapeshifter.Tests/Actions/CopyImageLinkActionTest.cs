@@ -68,7 +68,8 @@ namespace Shapeshifter.Tests.Actions
             var container = CreateContainer(c =>
             {
                 c.RegisterFake<ILinkParser>()
-                    .HasLinkOfTypeAsync(Arg.Any<string>(), LinkType.ImageFile).Returns(Task.FromResult(true));
+                    .HasLinkOfTypeAsync(Arg.Any<string>(), LinkType.ImageFile)
+                    .Returns(Task.FromResult(true));
             });
 
             var action = container.Resolve<ICopyImageLinkAction>();
@@ -92,6 +93,10 @@ namespace Shapeshifter.Tests.Actions
                     .Returns(
                         Task.FromResult(firstFakeDownloadedImageBytes),
                         Task.FromResult(secondFakeDownloadedImageBytes));
+                
+                c.RegisterFake<ILinkParser>()
+                    .HasLinkOfTypeAsync(Arg.Any<string>(), LinkType.ImageFile)
+                    .Returns(Task.FromResult(true));
 
                 c.RegisterFake<ILinkParser>()
                     .ExtractLinksFromTextAsync(Arg.Any<string>())

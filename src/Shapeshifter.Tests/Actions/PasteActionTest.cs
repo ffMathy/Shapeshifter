@@ -6,11 +6,12 @@ using NSubstitute;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.Core.Data;
 
 namespace Shapeshifter.Tests.Actions
 {
     [TestClass]
-    public class PasteActionTest : TestBase
+    public class PasteActionTest : ActionTestBase
     {
         [TestMethod]
         public async Task CanAlwaysPerformIfDataIsGiven()
@@ -47,15 +48,18 @@ namespace Shapeshifter.Tests.Actions
             var container = CreateContainer(c =>
             {
                 c.RegisterFake<IClipboardInjectionService>();
+                c.RegisterFake<IClipboardPasteService>();
             });
 
-            var fakeData = Substitute.For<IClipboardDataPackage>();
+            var fakeData = GetPackageContaining<IClipboardData>();
 
             var action = container.Resolve<IPasteAction>();
             await action.PerformAsync(fakeData);
 
             var fakeClipboardInjectionService = container.Resolve<IClipboardInjectionService>();
-            fakeClipboardInjectionService.InjectData(fakeData);
+            fakeClipboardInjectionService
+                .Received()
+                .InjectData(fakeData);
         }
 
         [TestMethod]

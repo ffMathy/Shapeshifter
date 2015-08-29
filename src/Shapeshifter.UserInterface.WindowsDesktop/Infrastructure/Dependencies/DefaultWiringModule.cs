@@ -52,10 +52,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
                     else
                     {
                         var standardRegistration = builder.RegisterType(type);
-                        registration = standardRegistration;
-
                         standardRegistration.AsSelf();
                         standardRegistration.AsImplementedInterfaces();
+
+                        registration = standardRegistration;
                     }
 
                     registration.FindConstructorsWith(new PublicConstructorFinder());

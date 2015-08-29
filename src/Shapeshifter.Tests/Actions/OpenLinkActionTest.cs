@@ -6,11 +6,12 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.Tests.Actions
 {
     [TestClass]
-    public class OpenLinkActionTest : TestBase
+    public class OpenLinkActionTest : ActionTestBase
     {
         [TestMethod]
         public void CanReadDescription()
@@ -65,6 +66,10 @@ namespace Shapeshifter.Tests.Actions
                 c.RegisterFake<IProcessManager>();
 
                 c.RegisterFake<ILinkParser>()
+                    .HasLinkAsync(Arg.Any<string>())
+                    .Returns(Task.FromResult(true));
+
+                c.RegisterFake<ILinkParser>()
                     .ExtractLinksFromTextAsync(Arg.Any<string>())
                     .Returns(Task.FromResult<IEnumerable<string>>(new[] { "foo.com", "bar.com" }));
             });
@@ -72,7 +77,7 @@ namespace Shapeshifter.Tests.Actions
             var fakeData = Substitute.For<IClipboardDataPackage>();
 
             var action = container.Resolve<IOpenLinkAction>();
-            await action.PerformAsync(fakeData);
+            await action.PerformAsync(GetPackageContaining<IClipboardTextData>());
 
             var fakeProcessManager = container.Resolve<IProcessManager>();
             fakeProcessManager.Received(1)

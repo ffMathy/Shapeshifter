@@ -93,16 +93,6 @@ namespace Shapeshifter.Tests.Factories
         }
 
         [TestMethod]
-        public void BuildDataForFileDropReturnsFileCollectionData()
-        {
-            var container = CreateContainer();
-
-            var factory = container.Resolve<IFileClipboardDataControlFactory>();
-            var data = factory.BuildData(ClipboardApi.CF_HDROP, new byte[0]);
-            Assert.IsInstanceOfType(data, typeof(ClipboardFileCollectionData));
-        }
-
-        [TestMethod]
         public void CanBuildDataReturnsTrueForFileDropFormat()
         {
             var container = CreateContainer();

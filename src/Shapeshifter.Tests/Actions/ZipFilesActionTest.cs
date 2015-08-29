@@ -4,11 +4,12 @@ using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using NSubstitute;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.Tests.Actions
 {
     [TestClass]
-    public class ZipFilesActionTest : TestBase
+    public class ZipFilesActionTest : ActionTestBase
     {
         [TestMethod]
         public async Task CanPerformForFiles()
@@ -16,7 +17,7 @@ namespace Shapeshifter.Tests.Actions
             var container = CreateContainer();
 
             var action = container.Resolve<IZipFilesAction>();
-            Assert.IsTrue(await action.CanPerformAsync(Substitute.For<IClipboardDataPackage>()));
+            Assert.IsTrue(await action.CanPerformAsync(GetPackageContaining<IClipboardFileData>()));
         }
 
         [TestMethod]
@@ -24,8 +25,10 @@ namespace Shapeshifter.Tests.Actions
         {
             var container = CreateContainer();
 
+            var fakeData = GetPackageContaining<IClipboardFileCollectionData>();
+
             var action = container.Resolve<IZipFilesAction>();
-            Assert.IsTrue(await action.CanPerformAsync(Substitute.For<IClipboardDataPackage>()));
+            Assert.IsTrue(await action.CanPerformAsync(fakeData));
         }
 
         [TestMethod]

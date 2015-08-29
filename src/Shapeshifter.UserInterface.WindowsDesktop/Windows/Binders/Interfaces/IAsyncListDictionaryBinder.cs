@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces
 {
-    interface IAsyncListDictionaryBinder<TKey, TData> where TKey : class
+    public interface IAsyncListDictionaryBinder<TKey, TData> where TKey : class
     {
         void Bind(
             ObservableCollection<TKey> sourceCollection, 

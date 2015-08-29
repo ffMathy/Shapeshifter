@@ -12,6 +12,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using System.Linq;
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 
 namespace Shapeshifter.Tests.Windows.ViewModels
 {
@@ -21,7 +22,10 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         [TestMethod]
         public void SelectedElementChangedTriggersChangedEvent()
         {
-            var container = CreateContainer();
+            var container = CreateContainer(c =>
+            {
+                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
+            });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
 
@@ -43,7 +47,10 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         [TestMethod]
         public void SelectedActionChangedTriggersChangedEvent()
         {
-            var container = CreateContainer();
+            var container = CreateContainer(c =>
+            {
+                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
+            });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
 
@@ -71,18 +78,20 @@ namespace Shapeshifter.Tests.Windows.ViewModels
             fakePackage.Contents.Returns(new[] { fakeData });
 
             var supportedAction = Substitute.For<IAction>();
-            supportedAction.CanPerformAsync(fakePackage).Returns(Task.FromResult(true));
+            supportedAction
+                .CanPerformAsync(fakePackage)
+                .Returns(Task.FromResult(true));
 
             var container = CreateContainer(c =>
             {
-
-                c.RegisterInstance<IEnumerable<IAction>>(new[] { supportedAction });
+                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
             });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
             viewModel.SelectedElement = fakePackage;
 
-            Assert.IsTrue(viewModel.Actions.Contains(supportedAction));
+            var fakeBinder = container.Resolve<IAsyncListDictionaryBinder< IClipboardDataControlPackage, IAction>>();
+            fakeBinder.Received(1).LoadFromKey(fakePackage);
         }
 
         [TestMethod]
@@ -98,6 +107,7 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var container = CreateContainer(c =>
             {
+                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
                 c.RegisterInstance<IEnumerable<IAction>>(new[] { unsupportedAction });
             });
 
@@ -152,6 +162,7 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var container = CreateContainer(c =>
             {
+                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
                 c.RegisterInstance(fakeUserInterfaceMediator);
             });
 

@@ -1,6 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces
 {
-    interface IClipboardPasteService
+    public interface IClipboardPasteService
     {
         void PasteClipboardContents();
     }

@@ -6,11 +6,12 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.Tests.Actions
 {
     [TestClass]
-    public class UploadImageActionTest : TestBase
+    public class UploadImageActionTest : ActionTestBase
     {
         [TestMethod]
         public async Task CanNotPerformWithUnknownDataType()
@@ -27,7 +28,7 @@ namespace Shapeshifter.Tests.Actions
         public void CanReadTitle()
         {
             var container = CreateContainer();
-            
+
             var action = container.Resolve<IUploadImageAction>();
             Assert.IsNotNull(action.Title);
         }
@@ -66,8 +67,8 @@ namespace Shapeshifter.Tests.Actions
                     .GetFileTypeFromFileName(Arg.Any<string>())
                     .Returns(FileType.Image);
             });
-
-            var fakeData = Substitute.For<IClipboardDataPackage>();
+            
+            var fakeData = GetPackageContaining<IClipboardFileData>();
 
             var action = container.Resolve<IUploadImageAction>();
             Assert.IsTrue(await action.CanPerformAsync(fakeData));
@@ -78,7 +79,7 @@ namespace Shapeshifter.Tests.Actions
         {
             var container = CreateContainer();
 
-            var fakeData = Substitute.For<IClipboardDataPackage>();
+            var fakeData = GetPackageContaining<IClipboardImageData>();
 
             var action = container.Resolve<IUploadImageAction>();
             Assert.IsTrue(await action.CanPerformAsync(fakeData));

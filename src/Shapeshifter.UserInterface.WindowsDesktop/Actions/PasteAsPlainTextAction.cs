@@ -49,8 +49,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         public async Task<bool> CanPerformAsync(
             IClipboardDataPackage data)
         {
+            return await GetFirstSupportedItem(data) != null;
+        }
+
+        async Task<IClipboardData> GetFirstSupportedItem(IClipboardDataPackage data)
+        {
             var supportedData = await asyncFilter.FilterAsync(data.Contents, CanPerformAsync);
-            return supportedData.Any();
+            return supportedData.FirstOrDefault();
         }
 
         async Task<bool> CanPerformAsync(
@@ -62,7 +67,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         public async Task PerformAsync(
             IClipboardDataPackage package)
         {
-            var textData = (IClipboardTextData)package;
+            var textData = (IClipboardTextData)await GetFirstSupportedItem(package);
             clipboardInjectionService.InjectText(textData.Text);
         }
     }

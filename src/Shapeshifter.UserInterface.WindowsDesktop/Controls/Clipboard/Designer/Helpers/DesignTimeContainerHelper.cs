@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers
 {
@@ -7,7 +8,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.
         public static IContainer CreateDesignTimeContainer()
         {
             var builder = new ContainerBuilder();
-
+            builder.RegisterModule(new DefaultWiringModule());
 
             return builder.Build();
         }

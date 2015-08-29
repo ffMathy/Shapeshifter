@@ -15,11 +15,10 @@ namespace Shapeshifter.Tests.Actions
             return fakePackage;
         }
 
-        protected IClipboardDataPackage GetPackageContaining<TData>(TData data) where TData : class, IClipboardData
+        protected IClipboardDataPackage GetPackageContaining<TData>(params TData[] data) where TData : class, IClipboardData
         {
             var fakePackage = Substitute.For<IClipboardDataPackage>();
-            fakePackage.Contents.Returns(
-                new IClipboardData[] { data });
+            fakePackage.Contents.Returns(data);
 
             return fakePackage;
         }
