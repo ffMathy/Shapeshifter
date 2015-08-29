@@ -45,31 +45,6 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         }
 
         [TestMethod]
-        public void SelectedActionChangedTriggersChangedEvent()
-        {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-            });
-
-            var viewModel = container.Resolve<IClipboardListViewModel>();
-
-            object eventSender = null;
-            PropertyChangedEventArgs eventArguments = null;
-
-            viewModel.PropertyChanged += (sender, e) => {
-                if (e.PropertyName == nameof(viewModel.SelectedAction))
-                {
-                    eventSender = sender;
-                    eventArguments = e;
-                }
-            };
-            viewModel.SelectedAction = Substitute.For<IAction>();
-
-            Assert.AreSame(viewModel, eventSender);
-        }
-
-        [TestMethod]
         public void SelectedElementChangesToSupportedActions()
         {
             var fakeData = Substitute.For<IClipboardData>();
@@ -92,29 +67,6 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakeBinder = container.Resolve<IAsyncListDictionaryBinder< IClipboardDataControlPackage, IAction>>();
             fakeBinder.Received(1).LoadFromKey(fakePackage);
-        }
-
-        [TestMethod]
-        public void SelectedElementChangesActionsWithoutUnsupportedActions()
-        {
-            var fakeData = Substitute.For<IClipboardData>();
-
-            var fakePackage = Substitute.For<IClipboardDataControlPackage>();
-            fakePackage.Contents.Returns(new[] { fakeData });
-
-            var unsupportedAction = Substitute.For<IAction>();
-            unsupportedAction.CanPerformAsync(fakePackage).Returns(Task.FromResult(false));
-
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-                c.RegisterInstance<IEnumerable<IAction>>(new[] { unsupportedAction });
-            });
-
-            var viewModel = container.Resolve<IClipboardListViewModel>();
-            viewModel.SelectedElement = fakePackage;
-
-            Assert.IsFalse(viewModel.Actions.Contains(unsupportedAction));
         }
 
         [TestMethod]
@@ -151,27 +103,6 @@ namespace Shapeshifter.Tests.Windows.ViewModels
             fakeUserInterfaceMediator.ControlAdded += Raise.Event<EventHandler<ControlEventArgument>>(viewModel, new ControlEventArgument(fakePackage));
 
             Assert.AreSame(fakePackage, viewModel.Elements.Single());
-        }
-
-        [TestMethod]
-        public void ControlRemovedRemovesElement()
-        {
-            var fakeUserInterfaceMediator = Substitute.For<IClipboardUserInterfaceMediator>();
-
-            var fakePackage = Substitute.For<IClipboardDataControlPackage>();
-
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-                c.RegisterInstance(fakeUserInterfaceMediator);
-            });
-
-            var viewModel = container.Resolve<IClipboardListViewModel>();
-            viewModel.Elements.Add(fakePackage);
-
-            fakeUserInterfaceMediator.ControlRemoved += Raise.Event<EventHandler<ControlEventArgument>>(viewModel, new ControlEventArgument(fakePackage));
-
-            Assert.IsFalse(viewModel.Elements.Any());
         }
 
         [TestMethod]

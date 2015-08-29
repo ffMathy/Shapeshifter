@@ -2,6 +2,8 @@
 {
     public interface IProcessManager
     {
-        void StartProcess(string fileName, string arguments = null);
+        void LaunchFile(string fileName, string arguments = null);
+
+        void LaunchCommand(string command);
     }
 }

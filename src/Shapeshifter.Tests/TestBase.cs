@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ploeh.AutoFixture;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System;
 using System.Linq;
 
@@ -43,6 +44,8 @@ namespace Shapeshifter.Tests
         {
             var builder = new ContainerBuilder();
             builder.RegisterModule(new DefaultWiringModule());
+
+            builder.RegisterFake<IUpdateService>();
 
             if(setupCallback != null) {
                 setupCallback(builder);

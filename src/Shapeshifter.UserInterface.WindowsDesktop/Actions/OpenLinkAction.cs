@@ -74,7 +74,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             var links = await linkParser.ExtractLinksFromTextAsync(textData.Text);
             foreach(var link in links)
             {
-                processManager.StartProcess(link);
+                processManager.LaunchCommand(link);
             }
         }
     }

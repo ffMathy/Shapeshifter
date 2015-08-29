@@ -6,6 +6,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
+using System.Diagnostics;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop
 {
@@ -34,6 +35,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
 
         public void Start(string[] arguments)
         {
+            CloseAllProcessesExceptCurrent();
+
             var processorsUsed = ProcessArguments(arguments);
             if (processorsUsed.Any(x => x.Terminates))
             {
@@ -41,6 +44,27 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
             }
 
             LaunchMainWindow();
+        }
+        
+        static void CloseAllProcessesExceptCurrent()
+        {
+            using (var currentProcess = Process.GetCurrentProcess())
+            {
+                var processes = Process.GetProcessesByName(currentProcess.ProcessName);
+                CloseProcessesExceptProcessWithId(currentProcess.Id, processes);
+            }
+        }
+
+        static void CloseProcessesExceptProcessWithId(int processId, params Process[] processes)
+        {
+            foreach (var process in processes)
+            {
+                if (process.Id != processId)
+                {
+                    process.CloseMainWindow();
+                    process.WaitForExit();
+                }
+            }
         }
 
         void LaunchMainWindow()

@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Octokit;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -26,17 +27,23 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         readonly IDownloader fileDownloader;
         readonly IFileManager fileManager;
         readonly IEnvironmentInformation environmentInformation;
+        readonly IProcessManager processManager;
+        readonly ILogger logger;
 
         public UpdateService(
             IDownloader fileDownloader,
             IFileManager fileManager,
-            IEnvironmentInformation environmentInformation)
+            IProcessManager processManager,
+            IEnvironmentInformation environmentInformation,
+            ILogger logger)
         {
             client = CreateClient();
 
             this.fileDownloader = fileDownloader;
             this.fileManager = fileManager;
+            this.processManager = processManager;
             this.environmentInformation = environmentInformation;
+            this.logger = logger;
         }
 
         async Task StartUpdateLoop()
@@ -51,7 +58,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         static async Task WaitForNextCycle()
         {
             //TODO: introduce a circuit breaker for this.
-            const int updateIntervalInHours = 3;
+            const int updateIntervalInHours = 6;
 
             const int milliSecondsInASecond = 1000;
             const int secondsInAMinute = 60;
@@ -84,8 +91,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public async Task UpdateAsync()
         {
-            var pendingUpdateRelease = await GetAvailableUpdateAsync();
-            await UpdateFromReleaseAsync(pendingUpdateRelease);
+            try {
+                var pendingUpdateRelease = await GetAvailableUpdateAsync();
+                await UpdateFromReleaseAsync(pendingUpdateRelease);
+            } catch(RateLimitExceededException)
+            {
+                logger.Warning("Did not search for updates due to the GitHub rate limit being exceed.");
+            }
         }
 
         async Task UpdateFromReleaseAsync(Release pendingUpdateRelease)
@@ -117,7 +129,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         void StartUpdate(string temporaryDirectory)
         {
             var concretePath = Path.Combine(temporaryDirectory, GetAssemblyName() + ".exe");
-            Process.Start(concretePath, $"update \"{Environment.CurrentDirectory}\"");
+            processManager.LaunchFile(concretePath, $"update \"{Environment.CurrentDirectory}\"");
         }
 
         async Task<string> DownloadUpdateAsync(ReleaseAsset asset)
@@ -164,13 +176,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         async Task<Release> GetAvailableUpdateAsync()
         {
-            var updates = await GetReleasesWithUpdatesÄsync();
+            var updates = await GetReleasesWithUpdatesAsync();
             return updates
                 .OrderByDescending(GetReleaseVersion)
                 .FirstOrDefault();
         }
 
-        async Task<IEnumerable<Release>> GetReleasesWithUpdatesÄsync()
+        async Task<IEnumerable<Release>> GetReleasesWithUpdatesAsync()
         {
             var allReleases = await client.Release.GetAll(RepositoryOwner, RepositoryName);
             return allReleases.Where(IsUpdateToReleaseNeeded);

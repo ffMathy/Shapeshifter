@@ -80,10 +80,8 @@ namespace Shapeshifter.Tests.Actions
             await action.PerformAsync(GetPackageContaining<IClipboardTextData>());
 
             var fakeProcessManager = container.Resolve<IProcessManager>();
-            fakeProcessManager.Received(1)
-                .StartProcess("foo.com", null);
-            fakeProcessManager.Received(1)
-                .StartProcess("bar.com", null);
+            fakeProcessManager.Received(1).LaunchCommand("foo.com");
+            fakeProcessManager.Received(1).LaunchCommand("bar.com");
         }
     }
 }

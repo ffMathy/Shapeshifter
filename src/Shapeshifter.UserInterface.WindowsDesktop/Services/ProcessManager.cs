@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -26,9 +27,25 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         }
 
         [ExcludeFromCodeCoverage]
-        public void StartProcess(string fileName, string arguments = null)
+        public void LaunchCommand(string command)
         {
-            var process = Process.Start(fileName, arguments ?? string.Empty);
+            var process = Process.Start(command);
+            processes.Add(process);
+        }
+        
+        [ExcludeFromCodeCoverage]
+        public void LaunchFile(string fileName, string arguments = null)
+        {
+            if(!File.Exists(fileName))
+            {
+                throw new ArgumentException("The given file did not exist.", nameof(fileName));
+            }
+
+            var process = Process.Start(new ProcessStartInfo()
+            {
+                FileName = fileName,
+                WorkingDirectory = Path.GetDirectoryName(fileName)
+            });
             processes.Add(process);
         }
     }
