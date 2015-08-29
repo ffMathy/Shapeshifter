@@ -11,8 +11,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.Core.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-using System;
 using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.Tests.Actions
@@ -57,10 +55,6 @@ namespace Shapeshifter.Tests.Actions
                 c.RegisterFake<ILinkParser>()
                     .HasLinkOfTypeAsync(Arg.Any<string>(), LinkType.ImageFile)
                     .Returns(Task.FromResult(false));
-
-                c.RegisterFake<IAsyncFilter>()
-                    .FilterAsync(Arg.Any<IEnumerable<IClipboardData>>(), Arg.Any<Func<IClipboardData, Task<bool>>>())
-                    .Returns(Task.FromResult<IEnumerable<IClipboardData>>(new IClipboardData[0]));
             });
 
             var action = container.Resolve<ICopyImageLinkAction>();
@@ -74,11 +68,11 @@ namespace Shapeshifter.Tests.Actions
             var container = CreateContainer(c =>
             {
                 c.RegisterFake<ILinkParser>()
-                .HasLinkOfTypeAsync(Arg.Any<string>(), LinkType.ImageFile).Returns(Task.FromResult(true));
+                    .HasLinkOfTypeAsync(Arg.Any<string>(), LinkType.ImageFile).Returns(Task.FromResult(true));
             });
 
             var action = container.Resolve<ICopyImageLinkAction>();
-            Assert.IsTrue(await action.CanPerformAsync(Substitute.For<IClipboardDataPackage>()));
+            Assert.IsTrue(await action.CanPerformAsync(GetPackageContaining<IClipboardTextData>()));
         }
 
         [TestMethod]
@@ -105,7 +99,7 @@ namespace Shapeshifter.Tests.Actions
             });
 
             var action = container.Resolve<ICopyImageLinkAction>();
-            await action.PerformAsync(Substitute.For<IClipboardDataPackage>());
+            await action.PerformAsync(GetPackageContaining<IClipboardTextData>());
 
             var fakeClipboardInjectionService = container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService.Received(2)

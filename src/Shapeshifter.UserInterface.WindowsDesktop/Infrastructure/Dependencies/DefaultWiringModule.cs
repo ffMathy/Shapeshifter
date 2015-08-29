@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Builder;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 using System;
 using System.Linq;
@@ -35,10 +36,29 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
             {
                 if (type.IsClass && !type.IsAbstract)
                 {
-                    var registration = builder.RegisterType(type);
+                    IRegistrationBuilder<object, ReflectionActivatorData, object> registration;
+                    if (type.IsGenericType)
+                    {
+                        registration = builder.RegisterGeneric(type);
+
+                        var genericInterfaces = type
+                            .GetInterfaces()
+                            .Where(x => x.IsGenericType);
+                        foreach(var genericInterface in genericInterfaces)
+                        {
+                            registration.As(genericInterface);
+                        }
+                    }
+                    else
+                    {
+                        var standardRegistration = builder.RegisterType(type);
+                        registration = standardRegistration;
+
+                        standardRegistration.AsSelf();
+                        standardRegistration.AsImplementedInterfaces();
+                    }
+
                     registration.FindConstructorsWith(new PublicConstructorFinder());
-                    registration.AsSelf();
-                    registration.AsImplementedInterfaces();
 
                     var interfaces = type.GetInterfaces();
                     if (interfaces.Contains(typeof(ISingleInstance)))

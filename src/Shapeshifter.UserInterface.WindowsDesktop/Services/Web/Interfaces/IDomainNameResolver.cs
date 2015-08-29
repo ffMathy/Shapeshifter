@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces
@@ -8,6 +7,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces
     {
         Task<bool> IsValidDomainAsync(string domain);
 
-        Task<IEnumerable<IPAddress>> GetDomainIpAddressesAsync(string domain);
+        Task<IPAddress[]> GetDomainIpAddressesAsync(string domain);
     }
 }

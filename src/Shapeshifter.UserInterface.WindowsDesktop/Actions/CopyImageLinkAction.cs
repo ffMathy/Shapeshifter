@@ -64,16 +64,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
         {
-            return GetFirstSupportedDataAsync(package) != null;
+            return await GetFirstSupportedDataAsync(package) != null;
         }
 
         async Task<IClipboardData> GetFirstSupportedDataAsync(IClipboardDataPackage package)
         {
-            var validItems = await asyncFilter.FilterAsync(package.Contents, PerformAsync);
+            var validItems = await asyncFilter.FilterAsync(package.Contents, CanPerformAsync);
             return validItems.FirstOrDefault();
         }
 
-        async Task<bool> PerformAsync(IClipboardData data)
+        async Task<bool> CanPerformAsync(IClipboardData data)
         {
             var textData = data as IClipboardTextData;
             return textData != null && await linkParser.HasLinkOfTypeAsync(textData.Text, LinkType.ImageFile);
@@ -81,7 +81,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         public async Task PerformAsync(IClipboardDataPackage package)
         {
-            var textData = GetFirstSupportedDataAsync(package) as IClipboardTextData;
+            var textData = (IClipboardTextData)await GetFirstSupportedDataAsync(package);
             var links = await linkParser.ExtractLinksFromTextAsync(textData.Text);
 
             var imagesBytes = await DownloadLinksAsync(links);

@@ -166,6 +166,8 @@
     <Compile Include="Handles\Interfaces\IMemoryHandle.cs" />
     <Compile Include="Handles\Interfaces\IClipboardHandle.cs" />
     <Compile Include="Handles\MemoryHandle.cs" />
+    <Compile Include="Infrastructure\Caching\Interfaces\IKeyValueCache.cs" />
+    <Compile Include="Infrastructure\Caching\KeyValueCache.cs" />
     <Compile Include="Infrastructure\Dependencies\DefaultWiringModule.cs" />
     <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
     <Compile Include="Infrastructure\Dependencies\PublicConstructorFinder.cs" />
