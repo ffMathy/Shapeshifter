@@ -26,6 +26,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
         readonly IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder;
         readonly IAsyncFilter asyncFilter;
 
+        bool isFocusInActionsList;
+
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
 
@@ -137,34 +139,57 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 
         void HandleRightPressed()
         {
-            throw new NotImplementedException();
+            isFocusInActionsList = true;
         }
 
         void HandleLeftPressed()
         {
-            throw new NotImplementedException();
+            isFocusInActionsList = false;
         }
 
         void HandleUpPressed()
         {
-            var indexToUse = Elements.IndexOf(SelectedElement) - 1;
-            if (indexToUse < 0)
+            if(isFocusInActionsList)
             {
-                indexToUse = Elements.Count - 1;
+                SelectedAction = GetNewSelectedElementAfterHandlingUpKey(Actions, SelectedAction);
+            } else
+            {
+                SelectedElement = GetNewSelectedElementAfterHandlingUpKey(Elements, SelectedElement);
             }
-
-            SelectedElement = Elements[indexToUse];
         }
 
         void HandleDownPressed()
         {
-            var indexToUse = Elements.IndexOf(SelectedElement) + 1;
-            if (indexToUse == Elements.Count)
+            if (isFocusInActionsList)
+            {
+                SelectedAction = GetNewSelectedElementAfterHandlingDownKey(Actions, SelectedAction);
+            }
+            else
+            {
+                SelectedElement = GetNewSelectedElementAfterHandlingDownKey(Elements, SelectedElement);
+            }
+        }
+
+        T GetNewSelectedElementAfterHandlingUpKey<T>(IList<T> list, T selectedElement)
+        {
+            var indexToUse = list.IndexOf(selectedElement) - 1;
+            if (indexToUse < 0)
+            {
+                indexToUse = list.Count - 1;
+            }
+
+            return list[indexToUse];
+        }
+
+        T GetNewSelectedElementAfterHandlingDownKey<T>(IList<T> list, T selectedElement)
+        {
+            var indexToUse = list.IndexOf(selectedElement) + 1;
+            if (indexToUse == list.Count)
             {
                 indexToUse = 0;
             }
 
-            SelectedElement = Elements[indexToUse];
+            return list[indexToUse];
         }
 
         void Service_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
