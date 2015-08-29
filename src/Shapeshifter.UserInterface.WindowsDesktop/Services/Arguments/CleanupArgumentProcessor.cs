@@ -3,7 +3,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System;
 using System.IO;
 using System.Linq;
-using WindowsProcess = System.Diagnostics.Process;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
 {

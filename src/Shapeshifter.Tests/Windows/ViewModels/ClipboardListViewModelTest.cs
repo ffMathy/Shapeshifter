@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
 using Shapeshifter.Core.Actions;
-using System.Collections.Generic;
 using NSubstitute;
 using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
