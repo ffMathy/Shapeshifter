@@ -128,6 +128,9 @@
     <Compile Include="Controls\Clipboard\Interfaces\IClipboardTextDataControl.cs" />
     <Compile Include="Controls\Clipboard\Interfaces\IClipboardFileDataControl.cs" />
     <Compile Include="Controls\Clipboard\Interfaces\IClipboardFileCollectionDataControl.cs" />
+    <Compile Include="Controls\Clipboard\Unwrappers\BitmapUnwrapper.cs" />
+    <Compile Include="Controls\Clipboard\Unwrappers\GeneralUnwrapper.cs" />
+    <Compile Include="Controls\Clipboard\Unwrappers\Interfaces\IMemoryUnwrapper.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardImageDataViewModel.cs" />
     <Compile Include="Controls\Window\ActionControl.xaml.cs">
       <DependentUpon>ActionControl.xaml</DependentUpon>
@@ -159,7 +162,7 @@
     <Compile Include="Data\Interfaces\IDataSource.cs" />
     <Compile Include="Factories\ClipboardDataControlPackageFactory.cs" />
     <Compile Include="Handles\Factories\ClipboardHandleFactory.cs" />
-    <Compile Include="Factories\DeviceIndependentBitmapClipboardDataControlFactory.cs" />
+    <Compile Include="Factories\BitmapClipboardDataControlFactory.cs" />
     <Compile Include="Factories\FileClipboardDataControlFactory.cs" />
     <Compile Include="Factories\Interfaces\IClipboardDataControlFactory.cs" />
     <Compile Include="Factories\EnhancedMetafileClipboardDataControlFactory.cs" />

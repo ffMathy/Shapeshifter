@@ -25,7 +25,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public bool CanBuildData(uint format)
         {
-            return 
+            return false &&
                 format == ClipboardApi.CF_ENHMETAFILE;
         }
     }

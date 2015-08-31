@@ -14,7 +14,10 @@ namespace Shapeshifter.Core.Data
 
         public byte[] Image
         {
-            get; set;
+            get
+            {
+                return RawData;
+            }
         }
 
         public byte[] RawData

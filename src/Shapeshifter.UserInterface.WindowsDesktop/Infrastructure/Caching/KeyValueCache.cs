@@ -30,10 +30,24 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching
             }
         }
 
+        public TValue Thunkify(TKey argument, Func<TKey, TValue> method)
+        {
+            var cachedResult = Get(argument);
+            if (!Equals(cachedResult, default(TValue)))
+            {
+                return cachedResult;
+            }
+
+            var result = method(argument);
+            Set(argument, result);
+
+            return result;
+        }
+
         public async Task<TValue> ThunkifyAsync(TKey argument, Func<TKey, Task<TValue>> method)
         {
             var cachedResult = Get(argument);
-            if(!Equals(cachedResult, default(TValue)))
+            if (!Equals(cachedResult, default(TValue)))
             {
                 return cachedResult;
             }

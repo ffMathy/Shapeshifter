@@ -9,6 +9,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Inter
 
         void Set(TKey key, TValue value);
 
+        TValue Thunkify(TKey argument, Func<TKey, TValue> method);
+
         Task<TValue> ThunkifyAsync(TKey argument, Func<TKey, Task<TValue>> method);
     }
 }

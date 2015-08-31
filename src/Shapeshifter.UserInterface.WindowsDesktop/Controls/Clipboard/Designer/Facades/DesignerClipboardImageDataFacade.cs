@@ -13,7 +13,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer
             IDesignerImageConverterService designerImageConverterService) : 
             base(new DesignerFileDataSourceService(designerImageConverterService))
         {
-            Image = designerImageConverterService.GenerateDesignerImageBytesFromFileBytes(Resources.FileImageSample);
+            RawData = designerImageConverterService.GenerateDesignerImageBytesFromFileBytes(Resources.FileImageSample);
         }
     }
 }

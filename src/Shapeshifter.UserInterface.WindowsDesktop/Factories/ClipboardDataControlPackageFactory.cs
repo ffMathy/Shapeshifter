@@ -4,19 +4,27 @@ using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using System.Linq;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
     class ClipboardDataControlPackageFactory : IClipboardDataControlPackageFactory
     {
         readonly IClipboardHandleFactory clipboardSessionFactory;
+        readonly IEnumerable<IMemoryUnwrapper> memoryUnwrappers;
         readonly IEnumerable<IClipboardDataControlFactory> dataFactories;
+        readonly IKeyValueCache<uint, byte[]> clipboardCache;
 
         public ClipboardDataControlPackageFactory(
             IEnumerable<IClipboardDataControlFactory> dataFactories,
+            IEnumerable<IMemoryUnwrapper> memoryUnwrappers,
+            IKeyValueCache<uint, byte[]> clipboardCache,
             IClipboardHandleFactory clipboardSessionFactory)
         {
             this.dataFactories = dataFactories;
+            this.memoryUnwrappers = memoryUnwrappers;
+            this.clipboardCache = clipboardCache;
             this.clipboardSessionFactory = clipboardSessionFactory;
         }
 
@@ -47,11 +55,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         {
             var package = new ClipboardDataControlPackage();
             DecoratePackageWithClipboardData(formats, package);
-            if(!package.Contents.Any())
-            {
-                return null;
-            }
-
             DecoratePackageWithControl(package);
 
             return package;
@@ -63,38 +66,41 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         {
             foreach (var format in formats)
             {
-                var rawData = ClipboardApi.GetClipboardDataBytes(format);
-                foreach (var factory in dataFactories)
+                var dataFactory = dataFactories.FirstOrDefault(x => x.CanBuildData(format));
+                if (dataFactory != null)
                 {
-                    DecoratePackageWithFormatDataUsingFactory(package, factory, format, rawData);
+                    DecoratePackageWithFormatDataUsingFactory(package, dataFactory, format);
                 }
             }
         }
 
-        static void DecoratePackageWithFormatDataUsingFactory(
-            ClipboardDataControlPackage package, IClipboardDataControlFactory factory, uint format, byte[] rawData)
+        void DecoratePackageWithFormatDataUsingFactory(
+            ClipboardDataControlPackage package, IClipboardDataControlFactory factory, uint format)
         {
-            if (factory.CanBuildData(format))
+            var unwrapper = memoryUnwrappers.FirstOrDefault(x => x.CanUnwrap(format));
+            if (unwrapper != null)
             {
-                var clipboardData = factory.BuildData(format, rawData);
-                if (clipboardData != null)
+                var rawData = unwrapper.UnwrapStructure(format);
+                if (rawData != null)
                 {
-                    package.AddData(clipboardData);
+                    var clipboardData = factory.BuildData(format, rawData);
+                    if (clipboardData != null)
+                    {
+                        package.AddData(clipboardData);
+                    }
                 }
             }
         }
 
         void DecoratePackageWithControl(ClipboardDataControlPackage package)
         {
-            foreach (var factory in dataFactories)
+            foreach (var data in package.Contents)
             {
-                foreach (var data in package.Contents)
+                var dataFactory = dataFactories.FirstOrDefault(x => x.CanBuildControl(data));
+                if (dataFactory != null)
                 {
-                    if (factory.CanBuildControl(data))
-                    {
-                        package.Control = factory.BuildControl(data);
-                        break;
-                    }
+                    package.Control = dataFactory.BuildControl(data);
+                    break;
                 }
             }
         }

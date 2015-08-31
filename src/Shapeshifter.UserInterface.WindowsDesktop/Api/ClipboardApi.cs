@@ -1,6 +1,7 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -82,7 +83,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
             var dataPointer = GetClipboardDataPointer(format);
 
             var length = GetPointerDataLength(dataPointer);
+            if(length == UIntPtr.Zero)
+            {
+                return null;
+            }
+
             var lockedMemory = GetLockedMemoryBlockPointer(dataPointer);
+            if(lockedMemory == IntPtr.Zero)
+            {
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
 
             var buffer = new byte[(int)length];
 
