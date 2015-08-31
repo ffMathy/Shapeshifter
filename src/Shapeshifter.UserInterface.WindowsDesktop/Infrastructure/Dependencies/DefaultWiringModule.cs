@@ -1,6 +1,9 @@
 ﻿using Autofac;
 using Autofac.Builder;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -21,12 +24,28 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
         {
             RegisterAssemblyTypes(builder, typeof(DefaultWiringModule).Assembly);
 
+            var environmentInformation = RegisterEnvironmentInformation(builder);
+            if (environmentInformation.IsInDesignTime)
+            {
+                DesignTimeContainerHelper.RegisterFakes(builder);
+            }
+
             if (callback != null)
             {
                 callback(builder);
             }
 
             base.Load(builder);
+        }
+
+        private static EnvironmentInformation RegisterEnvironmentInformation(ContainerBuilder builder)
+        {
+            var environmentInformation = new EnvironmentInformation();
+            builder
+                .RegisterInstance(environmentInformation)
+                .As<IEnvironmentInformation>()
+                .SingleInstance();
+            return environmentInformation;
         }
 
         static void RegisterAssemblyTypes(ContainerBuilder builder, Assembly assembly)

@@ -2,5 +2,6 @@
 {
     public interface IClipboardImageData : IClipboardData
     {
+        byte[] Image { get; }
     }
 }

@@ -124,6 +124,9 @@
   <data name="FileDataSourceIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\controls\clipboard\designer\resources\filedatasourceicon.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="FileImageSample" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\controls\clipboard\designer\resources\fileimagesample.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="TextDataSourceIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\controls\clipboard\designer\resources\textdatasourceicon.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

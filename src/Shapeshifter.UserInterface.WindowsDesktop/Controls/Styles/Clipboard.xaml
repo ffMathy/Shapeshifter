@@ -80,6 +80,14 @@
         </Style.Triggers>
     </Style>
 
+    <Style p:Freeze="True" TargetType="Grid" x:Key="ClipboardDataControlContentAreaStyleFaded" BasedOn="{StaticResource ClipboardDataControlContentAreaStyle}">
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Opacity="0.25" Color="{StaticResource WindowBackgroundColor}" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style p:Freeze="True" TargetType="Border" x:Key="ClipboardDataControlImageAreaStyle">
         <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
         <Style.Triggers>
@@ -90,6 +98,10 @@
                 <Setter Property="Margin" Value="-5,0,0,0" />
             </DataTrigger>
         </Style.Triggers>
+    </Style>
+
+    <Style p:Freeze="True" TargetType="Border" x:Key="ClipboardDataControlImageAreaStyleFaded" BasedOn="{StaticResource ClipboardDataControlImageAreaStyle}">
+        <Setter Property="Opacity" Value="0.9" />
     </Style>
 
     <Style p:Freeze="True" TargetType="TextBlock" x:Key="ClipboardFileCollectionControlCountForeground">

@@ -2,7 +2,7 @@
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
 {
-    interface IFileManager : ISingleInstance
+    public interface IFileManager : ISingleInstance
     {
         string WriteBytesToTemporaryFile(string path, byte[] bytes);
 

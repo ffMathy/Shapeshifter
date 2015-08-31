@@ -17,6 +17,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Converters
         {
             var builder = new ContainerBuilder();
             builder.RegisterModule(new DefaultWiringModule());
+
             return builder.Build();
         }
     }

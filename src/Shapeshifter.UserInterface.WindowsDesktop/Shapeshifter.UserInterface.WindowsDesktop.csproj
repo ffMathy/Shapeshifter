@@ -113,15 +113,22 @@
     <Compile Include="Actions\UploadImageAction.cs" />
     <Compile Include="Actions\ZipFilesAction.cs" />
     <Compile Include="Api\GeneralApi.cs" />
+    <Compile Include="Controls\Clipboard\ClipboardImageDataControl.xaml.cs">
+      <DependentUpon>ClipboardImageDataControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Clipboard\Designer\Facades\DesignerClipboardImageDataFacade.cs" />
     <Compile Include="Controls\Clipboard\Designer\Helpers\DesignTimeContainerHelper.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardFileCollectionDataControlFactory.cs" />
+    <Compile Include="Controls\Clipboard\Factories\ClipboardImageDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardFileDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardTextDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Interfaces\IClipboardControl.cs" />
+    <Compile Include="Controls\Clipboard\Interfaces\IClipboardImageDataControl.cs" />
     <Compile Include="Controls\Clipboard\Interfaces\IClipboardTextDataControl.cs" />
     <Compile Include="Controls\Clipboard\Interfaces\IClipboardFileDataControl.cs" />
     <Compile Include="Controls\Clipboard\Interfaces\IClipboardFileCollectionDataControl.cs" />
+    <Compile Include="Controls\Clipboard\ViewModels\ClipboardImageDataViewModel.cs" />
     <Compile Include="Controls\Window\ActionControl.xaml.cs">
       <DependentUpon>ActionControl.xaml</DependentUpon>
     </Compile>
@@ -257,6 +264,10 @@
     <Compile Include="Windows\Interfaces\IClipboardListWindow.cs" />
     <Compile Include="Windows\ViewModels\ClipboardListViewModel.cs" />
     <Compile Include="Windows\ViewModels\Interfaces\IClipboardListViewModel.cs" />
+    <Page Include="Controls\Clipboard\ClipboardImageDataControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Window\ActionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -352,7 +363,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileImageSample.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

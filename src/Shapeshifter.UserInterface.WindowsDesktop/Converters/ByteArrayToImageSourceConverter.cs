@@ -10,10 +10,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Converters
     {
         readonly IImagePersistenceService imagePersistenceService;
 
-        public ByteArrayToImageSourceConverter()
-        {
-        }
-
         public ByteArrayToImageSourceConverter(
             IImagePersistenceService imagePersistenceService)
         {

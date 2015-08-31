@@ -16,9 +16,5 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer
             FileName = "Kitten.jpg";
             FileIcon = designerImageConverterService.GenerateDesignerImageBytesFromFileBytes(Resources.FileDataFileIcon);
         }
-
-        void ConfigureIcon()
-        {
-        }
     }
 }

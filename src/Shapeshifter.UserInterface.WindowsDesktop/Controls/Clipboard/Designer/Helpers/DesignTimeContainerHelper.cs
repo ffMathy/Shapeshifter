@@ -13,16 +13,25 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.
             var builder = new ContainerBuilder();
             builder.RegisterModule(new DefaultWiringModule());
 
-            SubstituteFake<IUpdateService>(builder);
-            SubstituteFake<IProcessManager>(builder);
-            SubstituteFake<IDomainNameResolver>(builder);
+            RegisterFakes(builder);
 
             return builder.Build();
         }
 
+        public static void RegisterFakes(ContainerBuilder builder)
+        {
+            SubstituteFake<IUpdateService>(builder);
+            SubstituteFake<IFileManager>(builder);
+            SubstituteFake<IProcessManager>(builder);
+            SubstituteFake<IDomainNameResolver>(builder);
+        }
+
         static void SubstituteFake<TInterface>(ContainerBuilder builder) where TInterface : class
         {
-            builder.RegisterInstance(Substitute.For<TInterface>()).As<TInterface>();
+            builder
+                .RegisterInstance((TInterface)Substitute.For<TInterface>())
+                .As<TInterface>()
+                .SingleInstance();
         }
     }
 }
