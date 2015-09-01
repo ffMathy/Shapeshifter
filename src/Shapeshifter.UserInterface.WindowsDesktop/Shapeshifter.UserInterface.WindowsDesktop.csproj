@@ -113,6 +113,7 @@
     <Compile Include="Actions\UploadImageAction.cs" />
     <Compile Include="Actions\ZipFilesAction.cs" />
     <Compile Include="Api\GeneralApi.cs" />
+    <Compile Include="Api\ImageApi.cs" />
     <Compile Include="Controls\Clipboard\ClipboardImageDataControl.xaml.cs">
       <DependentUpon>ClipboardImageDataControl.xaml</DependentUpon>
     </Compile>
