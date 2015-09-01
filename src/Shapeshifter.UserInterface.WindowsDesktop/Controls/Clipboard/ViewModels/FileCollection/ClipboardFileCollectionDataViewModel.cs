@@ -9,12 +9,14 @@ using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Fi
 using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
     class ClipboardFileCollectionDataViewModel : ClipboardDataViewModel<IClipboardFileCollectionData>,
         IClipboardFileCollectionDataViewModel
     {
+        public ClipboardFileCollectionDataViewModel() : this(new EnvironmentInformation()) { }
 
         public ClipboardFileCollectionDataViewModel(
             IEnvironmentInformation environmentInformation)

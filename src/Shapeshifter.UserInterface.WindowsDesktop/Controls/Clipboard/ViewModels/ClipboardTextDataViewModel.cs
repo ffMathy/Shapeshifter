@@ -3,6 +3,7 @@ using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Text.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -17,6 +18,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
         static ClipboardTextDataViewModel()
         {
             whitespaceSubstitutionExpression = new Regex(@"\s+", RegexOptions.Compiled);
+        }
+
+        public ClipboardTextDataViewModel() : this(new EnvironmentInformation())
+        {
         }
 
         public ClipboardTextDataViewModel(
