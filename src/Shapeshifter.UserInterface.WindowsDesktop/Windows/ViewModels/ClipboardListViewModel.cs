@@ -207,7 +207,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
                 UserInterfaceHidden(this, e);
             }
 
-            await InvokeSelectedActionOnSelectedClipboardData();
+            if (SelectedAction != null)
+            {
+                await InvokeSelectedActionOnSelectedClipboardData();
+            }
         }
 
         async Task InvokeSelectedActionOnSelectedClipboardData()
