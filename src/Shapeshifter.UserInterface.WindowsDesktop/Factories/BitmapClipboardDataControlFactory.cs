@@ -7,6 +7,7 @@ using Shapeshifter.Core.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
+using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
@@ -28,6 +29,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             return new ClipboardImageDataControl()
             {
                 DataContext = new ClipboardImageDataViewModel(environmentInformation)
+                {
+                    Data = (IClipboardImageData)clipboardData
+                }
             };
         }
 
@@ -47,7 +51,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public bool CanBuildControl(IClipboardData data)
         {
-            return data is ClipboardImageData;
+            return data is IClipboardImageData;
         }
 
         public bool CanBuildData(uint format)
