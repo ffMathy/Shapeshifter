@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard"
              xmlns:viewModels="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels"
+             xmlns:converters="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Converters"
              d:DataContext="{d:DesignInstance Type=viewModels:ClipboardImageDataViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d">
 
@@ -15,8 +16,8 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            
-            <Image Source="{Binding Data.Image}" Grid.ColumnSpan="3" />
+
+            <Image Stretch="UniformToFill" Source="{Binding Data.Image, Converter={converters:ByteArrayToImageSourceConverter}}" Grid.ColumnSpan="3" />
 
             <Border Style="{StaticResource ClipboardDataControlImageAreaStyleFaded}">
                 <Image ClipToBounds="True" Style="{StaticResource ClipboardDataImageStyle}" />
@@ -26,14 +27,7 @@
 
             <Grid Grid.Column="2" Style="{StaticResource ClipboardDataControlContentAreaStyleFaded}">
                 <Grid Style="{StaticResource ClipboardDataControlContentAreaInnerStyle}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock TextTrimming="CharacterEllipsis" MaxHeight="40" TextWrapping="Wrap" VerticalAlignment="Bottom" FontWeight="Normal" FontSize="14" Text="{Binding FriendlyText}" Style="{StaticResource ClipboardDataControlHeaderTextStyle}" Grid.Column="1" />
-
-                    <local:DataSourceControl VerticalAlignment="Top" Margin="0,10,0,1" DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
+                    <local:DataSourceControl VerticalAlignment="Bottom" DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
                 </Grid>
             </Grid>
         </Grid>

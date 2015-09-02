@@ -5,6 +5,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interface
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Compression;
@@ -12,6 +13,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -189,7 +191,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public async void Start()
         {
-            if (!environmentInformation.IsDebugging)
+            if (!environmentInformation.IsDebugging && !environmentInformation.IsInDesignTime)
             {
                 await StartUpdateLoop();
             }

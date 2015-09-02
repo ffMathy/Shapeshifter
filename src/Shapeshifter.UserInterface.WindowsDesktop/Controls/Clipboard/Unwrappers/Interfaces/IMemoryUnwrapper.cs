@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces
 {
     public interface IMemoryUnwrapper
     {

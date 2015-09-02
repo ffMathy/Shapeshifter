@@ -83,7 +83,7 @@
     <Style p:Freeze="True" TargetType="Grid" x:Key="ClipboardDataControlContentAreaStyleFaded" BasedOn="{StaticResource ClipboardDataControlContentAreaStyle}">
         <Setter Property="Background">
             <Setter.Value>
-                <SolidColorBrush Opacity="0.25" Color="{StaticResource WindowBackgroundColor}" />
+                <SolidColorBrush Opacity="0.9" Color="{StaticResource WindowBackgroundColor}" />
             </Setter.Value>
         </Setter>
     </Style>

@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using NSubstitute;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
@@ -13,25 +13,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.
             var builder = new ContainerBuilder();
             builder.RegisterModule(new DefaultWiringModule());
 
-            RegisterFakes(builder);
-
             return builder.Build();
         }
 
         public static void RegisterFakes(ContainerBuilder builder)
         {
-            SubstituteFake<IUpdateService>(builder);
-            SubstituteFake<IFileManager>(builder);
-            SubstituteFake<IProcessManager>(builder);
-            SubstituteFake<IDomainNameResolver>(builder);
-        }
-
-        static void SubstituteFake<TInterface>(ContainerBuilder builder) where TInterface : class
-        {
-            builder
-                .RegisterInstance((TInterface)Substitute.For<TInterface>())
-                .As<TInterface>()
-                .SingleInstance();
+            builder.RegisterType<DesignerUpdateService>().AsSelf().As<IUpdateService>().SingleInstance();
+            builder.RegisterType<DesignerFileManager>().AsSelf().As<IFileManager>().SingleInstance();
+            builder.RegisterType<DesignerProcessManager>().AsSelf().As<IProcessManager>().SingleInstance();
+            builder.RegisterType<DesignerDomainNameResolver>().AsSelf().As<IDomainNameResolver>().SingleInstance();
         }
     }
 }
