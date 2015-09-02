@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Installer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Shapeshifter installer" Height="191.224" Width="423.56">
     <Grid>
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" TextWrapping="Wrap" FontWeight="UltraLight" TextAlignment="Center">Downloading Shapeshifter ...</TextBlock>
+        <TextBlock Foreground="#39f" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" TextWrapping="Wrap" FontWeight="UltraLight" TextAlignment="Center">Downloading Shapeshifter ...</TextBlock>
+        <ProgressBar Name="Progress" VerticalAlignment="Bottom" Height="5" BorderThickness="0" />
     </Grid>
 </Window>
