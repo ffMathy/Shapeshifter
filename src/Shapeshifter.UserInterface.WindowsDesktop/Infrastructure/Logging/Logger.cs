@@ -17,6 +17,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging
             Log("Error: " + text);
         }
 
+        public void Performance(string text)
+        {
+            Log("Performance information: " + text);
+        }
+
         public void Information(
             string text, int importanceFactor = 0)
         {

@@ -177,10 +177,14 @@
     <Compile Include="Api\ClipboardApi.cs" />
     <Compile Include="Api\WindowApi.cs" />
     <Compile Include="Handles\Factories\Interfaces\IMemoryHandleFactory.cs" />
+    <Compile Include="Handles\Factories\Interfaces\IPerformanceHandleFactory.cs" />
     <Compile Include="Handles\Factories\MemoryHandleFactory.cs" />
+    <Compile Include="Handles\Factories\PerformanceHandleFactory.cs" />
     <Compile Include="Handles\Interfaces\IMemoryHandle.cs" />
     <Compile Include="Handles\Interfaces\IClipboardHandle.cs" />
+    <Compile Include="Handles\Interfaces\IPerformanceHandle.cs" />
     <Compile Include="Handles\MemoryHandle.cs" />
+    <Compile Include="Handles\PerformanceHandle.cs" />
     <Compile Include="Infrastructure\Caching\Interfaces\IKeyValueCache.cs" />
     <Compile Include="Infrastructure\Caching\KeyValueCache.cs" />
     <Compile Include="Infrastructure\Dependencies\DefaultWiringModule.cs" />

@@ -13,6 +13,8 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.H
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 {
@@ -25,6 +27,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
         readonly IAction[] allActions;
         readonly IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder;
         readonly IAsyncFilter asyncFilter;
+        readonly IPerformanceHandleFactory performanceHandleFactory;
 
         bool isFocusInActionsList;
 
@@ -75,7 +78,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             IClipboardUserInterfaceMediator clipboardUserInterfaceMediator,
             IKeyInterceptor hotkeyInterceptor,
             IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder,
-            IAsyncFilter asyncFilter)
+            IAsyncFilter asyncFilter,
+            IPerformanceHandleFactory performanceHandleFactory)
         {
             Elements = new ObservableCollection<IClipboardDataControlPackage>();
             Actions = new ObservableCollection<IAction>();
@@ -85,6 +89,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             this.allActions = allActions;
             this.packageActionBinder = packageActionBinder;
             this.asyncFilter = asyncFilter;
+            this.performanceHandleFactory = performanceHandleFactory;
 
             packageActionBinder.Bind(Elements, Actions, GetSupportedActionsFromDataAsync);
             
@@ -192,7 +197,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             return list[indexToUse];
         }
 
-        void Service_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
+        async void Service_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
         {
             if (UserInterfaceShown != null)
             {
@@ -209,19 +214,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 
             if (SelectedAction != null)
             {
-                await InvokeSelectedActionOnSelectedClipboardData();
+                await SelectedAction.PerformAsync(SelectedElement);
             }
-        }
-
-        async Task InvokeSelectedActionOnSelectedClipboardData()
-        {
-            await SelectedAction.PerformAsync(SelectedElement);
         }
 
         async Task<IEnumerable<IAction>> GetSupportedActionsFromDataAsync(IClipboardDataPackage data)
         {
-            var allowedActions = await asyncFilter.FilterAsync(allActions, action => action.CanPerformAsync(data));
-            return allowedActions.OrderBy(x => x.Order);
+            using (performanceHandleFactory.StartMeasuringPerformance())
+            {
+                var allowedActions = await asyncFilter.FilterAsync(allActions, action => action.CanPerformAsync(data));
+                return allowedActions.OrderBy(x => x.Order);
+            }
         }
 
         void AddAction(IAction action)

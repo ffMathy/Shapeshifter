@@ -7,5 +7,7 @@
         void Warning(string text);
 
         void Error(string text);
+
+        void Performance(string text);
     }
 }
