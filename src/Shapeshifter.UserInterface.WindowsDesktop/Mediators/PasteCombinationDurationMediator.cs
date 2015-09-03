@@ -58,7 +58,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
             => threadCancellationTokenSource.Token;
 
         public int DurationInDeciseconds
-            => 3;
+            => 2;
 
         public void Connect()
         {
