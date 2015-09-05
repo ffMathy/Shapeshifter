@@ -45,7 +45,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             using (performanceHandleFactory.StartMeasuringPerformance())
             {
                 var words = GetWords(text);
-                return await asyncFilter.FilterAsync(words, IsValidLinkAsync);
+                return await asyncFilter.FilterAsync(words, IsValidLinkAsync).ConfigureAwait(false);
             }
         }
 
@@ -94,7 +94,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public async Task<bool> HasLinkOfTypeAsync(string text, LinkType linkType)
         {
-            var links = await ExtractLinksFromTextAsync(text);
+            var links = await ExtractLinksFromTextAsync(text).ConfigureAwait(false);
             return links.Any(link => GetLinkType(link).HasFlag(linkType));
         }
 
@@ -109,7 +109,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                 }
 
                 var domain = match.Groups[1].Value;
-                return linkValidationExpression.IsMatch(link) && await domainNameResolver.IsValidDomainAsync(domain);
+                return linkValidationExpression.IsMatch(link) && await domainNameResolver.IsValidDomainAsync(domain).ConfigureAwait(false);
             }
             catch (RegexMatchTimeoutException)
             {

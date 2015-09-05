@@ -87,7 +87,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
 
         void SetupWindowKeyInterception()
         {
-            var mainWindowHandle = windowMessageHook.MainWindowHandle;
+            var mainWindowHandle = mainWindow.HandleSource.Handle;
             keyInterceptor.AddInterceptingKey(
                 mainWindowHandle, KeyboardApi.VK_KEY_UP);
             keyInterceptor.AddInterceptingKey(

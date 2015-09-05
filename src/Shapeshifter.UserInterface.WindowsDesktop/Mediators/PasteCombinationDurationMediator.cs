@@ -74,12 +74,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         void InstallThreadLoop()
         {
             threadLoop.Start(MonitorClipboardCombinationState, Token);
+            logger.Information("Clipboard combination monitoring loop installed.", 1);
         }
 
         void MonitorClipboardCombinationState()
         {
             threadCombinationHeldDownEvent.Wait(Token);
             threadCombinationHeldDownEvent.Reset();
+
             if (IsCancellationRequested) return;
 
             WaitForCombinationRelease();

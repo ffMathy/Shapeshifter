@@ -3,6 +3,8 @@ using Autofac;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop
 {
@@ -44,7 +46,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            var main = Container.Resolve<Main>();
 
             AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) =>
             {
@@ -52,7 +53,20 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
                 Current.Shutdown();
             };
 
-            main.Start(e.Args);
+            var newWindowThread = new Thread(new ThreadStart(() =>
+            {
+                SynchronizationContext.SetSynchronizationContext(
+                    new DispatcherSynchronizationContext(
+                        Dispatcher.CurrentDispatcher));
+                
+                var main = Container.Resolve<Main>();
+                main.Start(e.Args);
+
+                Dispatcher.Run();
+            }));
+            newWindowThread.SetApartmentState(ApartmentState.STA);
+            newWindowThread.IsBackground = true;
+            newWindowThread.Start();
         }
     }
 }

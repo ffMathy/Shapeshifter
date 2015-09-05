@@ -201,9 +201,11 @@
     <Compile Include="Infrastructure\Threading\Interfaces\IMainThreadInvoker.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IThreadDelay.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IThreadLoop.cs" />
+    <Compile Include="Infrastructure\Threading\Interfaces\IUserInterfaceThread.cs" />
     <Compile Include="Infrastructure\Threading\MainThreadInvoker.cs" />
     <Compile Include="Infrastructure\Threading\ThreadDelay.cs" />
     <Compile Include="Infrastructure\Threading\ThreadLoop.cs" />
+    <Compile Include="Infrastructure\Threading\UserInterfaceThread.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Mediators\PasteCombinationDurationMediator.cs" />
     <Compile Include="Mediators\Interfaces\IPasteCombinationDurationMediator.cs" />

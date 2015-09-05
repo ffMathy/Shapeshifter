@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using System.Linq;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
+using System.Windows.Media;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -19,21 +21,24 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         readonly IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors;
 
         readonly ILogger logger;
+        readonly IClipboardListWindow mainWindow;
 
         public bool IsConnected
         {
             get; private set;
         }
 
-        public IntPtr MainWindowHandle
+        private IntPtr MainWindowHandle
             => hooker.Handle;
 
         public WindowMessageHook(
             IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors,
-            ILogger logger)
+            ILogger logger,
+            IClipboardListWindow mainWindow)
         {
             this.windowMessageInterceptors = windowMessageInterceptors;
             this.logger = logger;
+            this.mainWindow = mainWindow;
 
             logger.Information($"Window message hook was constructed using {windowMessageInterceptors.Count()} interceptors.");
         }
@@ -69,9 +74,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             {
                 throw new InvalidOperationException("The window message hook has already been connected.");
             }
-
-            EnsureWindowIsPresent();
-
+            
             InstallWindowMessageHook();
             InstallInterceptors();
 
@@ -88,34 +91,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             }
         }
 
-        static void EnsureWindowIsPresent()
-        {
-            var mainWindow = Application.Current.MainWindow;
-            if (mainWindow == null)
-            {
-                throw new InvalidOperationException("Can't install a window hook when there is no window open.");
-            }
-        }
-
         void InstallWindowMessageHook()
         {
-            var hooker = FetchHandleSource();
+            var hooker = mainWindow.HandleSource;
             hooker.AddHook(WindowHookCallback);
 
             logger.Information($"Installed message hook.");
 
             this.hooker = hooker;
-        }
-
-        static HwndSource FetchHandleSource()
-        {
-            var hooker = PresentationSource.FromVisual(Application.Current.MainWindow) as HwndSource;
-            if (hooker == null)
-            {
-                throw new InvalidOperationException("Could not fetch the handle of the main window.");
-            }
-
-            return hooker;
         }
 
         IntPtr WindowHookCallback(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -127,9 +110,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                 var argument = new WindowMessageReceivedArgument(hwnd, msg, wParam, lParam);
                 interceptor.ReceiveMessageEvent(argument);
 
-                logger.Information($"Message passed to interceptor {interceptor.GetType().Name}.");
-
                 handled |= argument.Handled;
+
+                logger.Information($"Message passed to interceptor {interceptor.GetType().Name}.");
             }
 
             return IntPtr.Zero;

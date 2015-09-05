@@ -5,6 +5,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -14,6 +15,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
         readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
         readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
+        readonly IUserInterfaceThread userInterfaceThread;
 
         readonly IList<IClipboardDataControlPackage> clipboardPackages;
 
@@ -25,20 +27,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
 
-        public bool IsConnected 
+        public bool IsConnected
             => pasteCombinationDurationMediator.IsConnected;
 
-        public IEnumerable<IClipboardDataControlPackage> ClipboardElements 
+        public IEnumerable<IClipboardDataControlPackage> ClipboardElements
             => clipboardPackages;
 
         public ClipboardUserInterfaceMediator(
             IClipboardCopyInterceptor clipboardCopyInterceptor,
             IPasteCombinationDurationMediator pasteCombinationDurationMediator,
-            IClipboardDataControlPackageFactory clipboardDataControlPackageFactory)
+            IClipboardDataControlPackageFactory clipboardDataControlPackageFactory,
+            IUserInterfaceThread userInterfaceThread)
         {
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;
             this.pasteCombinationDurationMediator = pasteCombinationDurationMediator;
             this.clipboardDataControlPackageFactory = clipboardDataControlPackageFactory;
+            this.userInterfaceThread = userInterfaceThread;
 
             clipboardPackages = new List<IClipboardDataControlPackage>();
         }
@@ -69,6 +73,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             if (ControlAdded != null)
             {
                 ControlAdded(this, new ControlEventArgument(package));
+                //userInterfaceThread.Invoke(() => ControlAdded(this, new ControlEventArgument(package)));
             }
         }
 

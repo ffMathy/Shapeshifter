@@ -5,6 +5,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -42,7 +43,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             if (DataCopied != null)
             {
-                DataCopied(this, new DataCopiedEventArgument());
+                var thread = new Thread(() => DataCopied(this, new DataCopiedEventArgument()));
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
             }
         }
 
@@ -79,6 +82,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                 if (shouldSkipNext)
                 {
                     logger.Information("Clipboard update message skipped.");
+
                     shouldSkipNext = false;
                     return;
                 }

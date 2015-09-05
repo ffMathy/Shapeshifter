@@ -4,9 +4,11 @@ using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Help
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Threading;
 using AutofacModule = Autofac.Module;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
@@ -24,6 +26,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
         {
             RegisterAssemblyTypes(builder, typeof(DefaultWiringModule).Assembly);
 
+            RegisterMainThread(builder);
+
             var environmentInformation = RegisterEnvironmentInformation(builder);
             if (environmentInformation.IsInDesignTime)
             {
@@ -36,6 +40,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
             }
 
             base.Load(builder);
+        }
+
+        private static void RegisterMainThread(ContainerBuilder builder)
+        {
+            builder.RegisterInstance(new UserInterfaceThread(Dispatcher.CurrentDispatcher)).AsImplementedInterfaces();
         }
 
         private static EnvironmentInformation RegisterEnvironmentInformation(ContainerBuilder builder)

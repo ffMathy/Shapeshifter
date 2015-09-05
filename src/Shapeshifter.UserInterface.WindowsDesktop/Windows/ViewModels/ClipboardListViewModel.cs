@@ -28,6 +28,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
         readonly IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder;
         readonly IAsyncFilter asyncFilter;
         readonly IPerformanceHandleFactory performanceHandleFactory;
+        readonly IUserInterfaceThread userInterfaceThread;
 
         bool isFocusInActionsList;
 
@@ -69,7 +70,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
                     PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedElement)));
                 }
                 
-                packageActionBinder.LoadFromKey(value);
+                userInterfaceThread.Invoke(() => packageActionBinder.LoadFromKey(value));
             }
         }
 
@@ -79,7 +80,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             IKeyInterceptor hotkeyInterceptor,
             IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder,
             IAsyncFilter asyncFilter,
-            IPerformanceHandleFactory performanceHandleFactory)
+            IPerformanceHandleFactory performanceHandleFactory,
+            IUserInterfaceThread userInterfaceThread)
         {
             Elements = new ObservableCollection<IClipboardDataControlPackage>();
             Actions = new ObservableCollection<IAction>();
@@ -92,6 +94,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             this.packageActionBinder = packageActionBinder;
             this.asyncFilter = asyncFilter;
             this.performanceHandleFactory = performanceHandleFactory;
+            this.userInterfaceThread = userInterfaceThread;
 
             PreparePackageBinder(packageActionBinder, pasteAction);
 
@@ -232,7 +235,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
         {
             using (performanceHandleFactory.StartMeasuringPerformance())
             {
-                var allowedActions = await asyncFilter.FilterAsync(allActions, action => action.CanPerformAsync(data));
+                var allowedActions = await asyncFilter.FilterAsync(allActions, action => action.CanPerformAsync(data)).ConfigureAwait(false);
                 return allowedActions.OrderBy(x => x.Order);
             }
         }
@@ -267,7 +270,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
         {
             lock (Elements)
             {
-                Elements.Insert(0, e.Package);
+                userInterfaceThread.Invoke(() => Elements.Insert(0, e.Package));
                 SelectedElement = e.Package;
             }
         }
