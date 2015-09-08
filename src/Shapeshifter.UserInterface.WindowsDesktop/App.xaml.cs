@@ -53,20 +53,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
                 Current.Shutdown();
             };
 
-            var newWindowThread = new Thread(new ThreadStart(() =>
-            {
-                SynchronizationContext.SetSynchronizationContext(
-                    new DispatcherSynchronizationContext(
-                        Dispatcher.CurrentDispatcher));
-                
-                var main = Container.Resolve<Main>();
-                main.Start(e.Args);
-
-                Dispatcher.Run();
-            }));
-            newWindowThread.SetApartmentState(ApartmentState.STA);
-            newWindowThread.IsBackground = true;
-            newWindowThread.Start();
+            var main = Container.Resolve<Main>();
+            main.Start(e.Args);
         }
     }
 }
