@@ -17,6 +17,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         uint lastClipboardItemIdentifier;
         bool shouldSkipNext;
 
+        IntPtr windowHandle;
+
         readonly ILogger logger;
 
         public ClipboardCopyInterceptor(
@@ -51,6 +53,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public void Install(IntPtr windowHandle)
         {
+            this.windowHandle = windowHandle;
             if (!ClipboardApi.AddClipboardFormatListener(windowHandle))
             {
                 throw GenerateInstallFailureException();
@@ -67,7 +70,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             return new InvalidOperationException($"Could not install a clipboard hook for the main window. The window '{ownerTitle}' currently owns the clipboard. The last error code was {errorCode}.");
         }
 
-        public void Uninstall(IntPtr windowHandle)
+        public void Uninstall()
         {
             if (!ClipboardApi.RemoveClipboardFormatListener(windowHandle))
             {

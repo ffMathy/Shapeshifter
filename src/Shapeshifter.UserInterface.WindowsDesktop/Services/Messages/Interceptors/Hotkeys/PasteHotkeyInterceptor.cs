@@ -15,6 +15,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
         readonly ILogger logger;
         readonly IHotkeyInterception hotkeyInterception;
 
+        IntPtr windowHandle;
+
         public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
         public PasteHotkeyInterceptor(
@@ -29,11 +31,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
 
         public void Install(IntPtr windowHandle)
         {
+            //TODO: proper exceptions for install for ALL installs (don't install when already installed etc).
+            this.windowHandle = windowHandle;
             hotkeyInterception.Start(windowHandle);
         }
 
-        public void Uninstall(IntPtr windowHandle)
+        public void Uninstall()
         {
+            //TODO: proper exceptions for uninstall for ALL uninstalls (don't uninstall when already uninstalled etc).
             hotkeyInterception.Stop(windowHandle);
         }
 

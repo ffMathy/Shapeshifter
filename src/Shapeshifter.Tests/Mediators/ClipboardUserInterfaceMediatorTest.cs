@@ -54,10 +54,10 @@ namespace Shapeshifter.Tests.Mediators
             });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
-            mediator.Connect();
+            mediator.Connect(null);
 
             var fakeHotkeyHookService = container.Resolve<IPasteCombinationDurationMediator>();
-            fakeHotkeyHookService.Received().Connect();
+            fakeHotkeyHookService.Received().Connect(null);
         }
 
         [TestMethod]
@@ -94,7 +94,7 @@ namespace Shapeshifter.Tests.Mediators
             });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
-            mediator.Connect();
+            mediator.Connect(null);
 
             var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
             fakeClipboardHookService.DataCopied += Raise.Event<EventHandler<DataCopiedEventArgument>>(fakeClipboardHookService, new DataCopiedEventArgument());
@@ -123,7 +123,7 @@ namespace Shapeshifter.Tests.Mediators
             });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
-            mediator.Connect();
+            mediator.Connect(null);
 
             var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
             fakeClipboardHookService.DataCopied += Raise.Event<EventHandler<DataCopiedEventArgument>>(fakeClipboardHookService, new DataCopiedEventArgument());
@@ -145,7 +145,7 @@ namespace Shapeshifter.Tests.Mediators
             });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
-            mediator.Connect();
+            mediator.Connect(null);
 
             object eventSender = null;
             ControlEventArgument eventArgument = null;

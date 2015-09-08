@@ -7,7 +7,6 @@ using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {

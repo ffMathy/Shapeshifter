@@ -3,8 +3,6 @@ using Autofac;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
-using System.Threading;
-using System.Windows.Threading;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop
 {

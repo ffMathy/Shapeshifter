@@ -1,6 +1,5 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using System;
-using System.Threading.Tasks;
 using System.Windows.Threading;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading

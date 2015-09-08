@@ -272,7 +272,9 @@
     </Compile>
     <Compile Include="Windows\Binders\Interfaces\IAsyncListDictionaryBinder.cs" />
     <Compile Include="Windows\Interfaces\IClipboardListWindow.cs" />
+    <Compile Include="Windows\Interfaces\IMainWindowHandleContainer.cs" />
     <Compile Include="Windows\Interfaces\IWindow.cs" />
+    <Compile Include="Windows\MainWindowHandleContainer.cs" />
     <Compile Include="Windows\ViewModels\ClipboardListViewModel.cs" />
     <Compile Include="Windows\ViewModels\Interfaces\IClipboardListViewModel.cs" />
     <Page Include="Controls\Clipboard\ClipboardImageDataControl.xaml">

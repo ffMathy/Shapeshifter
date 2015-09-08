@@ -6,6 +6,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -101,7 +102,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             clipboardCopyInterceptor.DataCopied -= ClipboardHook_DataCopied;
         }
 
-        public void Connect()
+        public void Connect(IWindow targetWindow)
         {
             if (IsConnected)
             {
@@ -109,15 +110,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             }
 
             InstallClipboardHook();
-            InstallPastecombinationDurationMediator();
+            InstallPastecombinationDurationMediator(targetWindow);
         }
 
-        void InstallPastecombinationDurationMediator()
+        void InstallPastecombinationDurationMediator(IWindow targetWindow)
         {
             pasteCombinationDurationMediator.PasteCombinationDurationPassed += PasteCombinationDurationMediator_PasteCombinationDurationPassed;
             pasteCombinationDurationMediator.PasteCombinationReleased += PasteCombinationDurationMediator_PasteCombinationReleased;
 
-            pasteCombinationDurationMediator.Connect();
+            pasteCombinationDurationMediator.Connect(targetWindow);
         }
 
         void InstallClipboardHook()

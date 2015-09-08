@@ -17,6 +17,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
 
         bool isInstalled;
 
+        IntPtr windowHandle;
+
         public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
         public KeyInterceptor(
@@ -29,6 +31,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
 
         public void Install(IntPtr windowHandle)
         {
+            this.windowHandle = windowHandle;
+
             foreach(var interception in keyInterceptions.Values)
             {
                 interception.Start(windowHandle);
@@ -79,12 +83,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
                     break;
 
                 case Hidden:
-                    Uninstall(e.WindowHandle);
+                    Uninstall();
                     break;
             }
         }
 
-        public void Uninstall(IntPtr windowHandle)
+        public void Uninstall()
         {
             foreach (var interception in keyInterceptions.Values)
             {

@@ -7,9 +7,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Handles
     class ClipboardHandle : IClipboardHandle
     {
         public ClipboardHandle(
-            IClipboardListWindow mainWindow)
+            IMainWindowHandleContainer mainWindow)
         {
-            ClipboardApi.OpenClipboard(mainWindow.HandleSource.Handle);
+            ClipboardApi.OpenClipboard(mainWindow.Handle);
         }
 
         public void Dispose()

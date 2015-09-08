@@ -6,6 +6,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfa
 using System.Threading;
 using System.Windows.Input;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 {
@@ -60,7 +61,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         public int DurationInDeciseconds
             => 2;
 
-        public void Connect()
+        public void Connect(IWindow targetWindow)
         {
             if (IsConnected)
             {
