@@ -15,14 +15,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
         {
             IsRunning = true;
 
-            //var thread = new Thread(() => Run(action, token));
-            //thread.SetApartmentState(ApartmentState.STA);
-            //thread.IsBackground = true;
-            //thread.Start();
-            Run(action, token);
+            var thread = new Thread(() => Run(action, token));
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.IsBackground = true;
+            thread.Start();
         }
 
-        private async void Run(Action action, CancellationToken token)
+        void Run(Action action, CancellationToken token)
         {
             while (!token.IsCancellationRequested && IsRunning)
             {

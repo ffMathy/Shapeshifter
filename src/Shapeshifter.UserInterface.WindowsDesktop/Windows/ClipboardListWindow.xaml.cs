@@ -36,11 +36,19 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
             this.viewModel = viewModel;
             this.windowMessageHook = windowMessageHook;
 
+            SourceInitialized += ClipboardListWindow_SourceInitialized;
             Activated += ClipboardListWindow_Activated;
 
             InitializeComponent();
 
             SetupViewModel();
+        }
+
+        private void ClipboardListWindow_SourceInitialized(object sender, EventArgs e)
+        {
+            handleContainer.Handle = HandleSource.Handle;
+
+            OnWindowHandleReady();
         }
 
         void SetupKeyInterception()
@@ -67,10 +75,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
         {
             Activated -= ClipboardListWindow_Activated;
             Hide();
-
-            handleContainer.Handle = HandleSource.Handle;
-
-            OnWindowHandleReady();
         }
 
         void OnWindowHandleReady()
