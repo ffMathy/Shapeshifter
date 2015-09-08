@@ -59,7 +59,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         {
             var package = new ClipboardDataControlPackage();
             DecoratePackageWithClipboardData(formats, package);
-            //DecoratePackageWithControl(package);
             userInterfaceThread.Invoke(() => DecoratePackageWithControl(package));
 
             return package;

@@ -7,6 +7,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces
     public interface IWindowMessageInterceptor : ISingleInstance
     {
         void Install(IntPtr windowHandle);
+
         void Uninstall();
 
         void ReceiveMessageEvent(WindowMessageReceivedArgument e);

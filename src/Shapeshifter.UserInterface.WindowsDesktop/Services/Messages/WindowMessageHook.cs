@@ -8,6 +8,8 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
+using System.Threading;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -19,6 +21,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         IWindow connectedWindow;
 
         readonly IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors;
+
+        readonly Queue<WindowMessageReceivedArgument> pendingMessages;
+        readonly CancellationTokenSource cancellationTokenSource;
 
         readonly ILogger logger;
 
@@ -32,10 +37,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public WindowMessageHook(
             IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors,
-            ILogger logger)
+            ILogger logger,
+            IThreadLoop threadLoop)
         {
             this.windowMessageInterceptors = windowMessageInterceptors;
             this.logger = logger;
+            this.threadLoop = threadLoop;
+
+            pendingMessages = new Queue<WindowMessageReceivedArgument>();
+            cancellationTokenSource = new CancellationTokenSource();
 
             logger.Information($"Window message hook was constructed using {windowMessageInterceptors.Count()} interceptors.");
         }
@@ -76,7 +86,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             InstallWindowMessageHook();
             InstallInterceptors();
 
+            StartMessageConsumer();
+
             IsConnected = true;
+        }
+
+        void StartMessageConsumer()
+        {
         }
 
         void InstallInterceptors()
@@ -106,7 +122,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             foreach (var interceptor in windowMessageInterceptors)
             {
                 var argument = new WindowMessageReceivedArgument(hwnd, msg, wParam, lParam);
-                interceptor.ReceiveMessageEvent(argument);
+                pendingMessages.Enqueue(argument);
 
                 handled |= argument.Handled;
 
@@ -114,6 +130,19 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             }
 
             return IntPtr.Zero;
+        }
+
+        private static void InvokeInterceptorSynchronously(IWindowMessageInterceptor interceptor, WindowMessageReceivedArgument argument)
+        {
+            interceptor.ReceiveMessageEvent(argument);
+        }
+
+        private static void InvokeInterceptorAsynchronously(IWindowMessageInterceptor interceptor, WindowMessageReceivedArgument argument)
+        {
+            var thread = new Thread(() => interceptor.ReceiveMessageEvent(argument));
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.IsBackground = true;
+            thread.Start();
         }
 
         public void Dispose()

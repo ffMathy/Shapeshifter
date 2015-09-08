@@ -19,7 +19,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         readonly IMainThreadInvoker mainThreadInvoker;
 
         readonly CancellationTokenSource threadCancellationTokenSource;
-        readonly ManualResetEventSlim threadCombinationHeldDownEvent;
 
         bool isCombinationDown;
 
@@ -40,7 +39,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
             this.logger = logger;
 
             threadCancellationTokenSource = new CancellationTokenSource();
-            threadCombinationHeldDownEvent = new ManualResetEventSlim();
         }
 
         public bool IsConnected 
@@ -80,9 +78,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 
         void MonitorClipboardCombinationState()
         {
-            threadCombinationHeldDownEvent.Wait(Token);
-            threadCombinationHeldDownEvent.Reset();
-
             if (IsCancellationRequested) return;
 
             WaitForCombinationRelease();
@@ -140,7 +135,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
                 logger.Information("Paste combination duration mediator reacted to paste hotkey.", 1);
 
                 isCombinationDown = true;
-                threadCombinationHeldDownEvent.Set();
+                threadLoop.Notify();
             } else
             {
                 logger.Information("Paste combination duration mediator ignored paste hotkey because the paste combination was already held down.", 1);

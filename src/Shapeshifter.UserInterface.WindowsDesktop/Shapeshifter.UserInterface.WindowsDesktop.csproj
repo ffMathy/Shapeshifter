@@ -197,7 +197,9 @@
     <Compile Include="Infrastructure\Logging\Interfaces\ILogger.cs" />
     <Compile Include="Infrastructure\Logging\Logger.cs" />
     <Compile Include="Infrastructure\Threading\AsyncFilter.cs" />
+    <Compile Include="Infrastructure\Threading\ConsumerThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IAsyncFilter.cs" />
+    <Compile Include="Infrastructure\Threading\Interfaces\IConsumerThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IMainThreadInvoker.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IThreadDelay.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IThreadLoop.cs" />
