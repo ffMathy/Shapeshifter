@@ -69,13 +69,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
 
         void HandleWindowVisibilityChangedMessage(WindowMessageReceivedArgument e)
         {
+            const int Shown = 1;
+            const int Hidden = 0;
+
             switch ((int)e.WordParameter)
             {
-                case 1:
+                case Shown:
                     Install(e.WindowHandle);
                     break;
 
-                case 0:
+                case Hidden:
                     Uninstall(e.WindowHandle);
                     break;
             }
