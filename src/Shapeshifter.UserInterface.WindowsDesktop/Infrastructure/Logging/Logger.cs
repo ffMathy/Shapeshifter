@@ -5,7 +5,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging
 {
     class Logger : ILogger
     {
-        const int MinimumImportanceFactor = 1;
+        const int MinimumImportanceFactor = 0;
 
         void Log(string text)
         {

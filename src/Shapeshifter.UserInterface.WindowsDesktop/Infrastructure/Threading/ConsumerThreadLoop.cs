@@ -12,20 +12,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
     {
         readonly IThreadLoop internalLoop;
 
-        readonly CountdownEvent dataReadySemaphore;
+        readonly ManualResetEventSlim dataReadyEvent;
+
+        int countAvailable;
 
         public ConsumerThreadLoop(IThreadLoop internalLoop)
         {
             this.internalLoop = internalLoop;
 
-            dataReadySemaphore = new CountdownEvent(0);
+            dataReadyEvent = new ManualResetEventSlim();
         }
 
         public bool IsRunning
         {
             get
             {
-                throw new NotImplementedException();
+                return internalLoop.IsRunning;
             }
         }
 
@@ -33,19 +35,33 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
         {
             internalLoop.Start(() =>
             {
-                dataReadySemaphore.Signal();
-                action();
+                dataReadyEvent.Wait(token);
+                dataReadyEvent.Reset();
+
+                if(token.IsCancellationRequested || !IsRunning)
+                {
+                    return;
+                }
+
+                if (countAvailable > 0)
+                {
+                    Interlocked.Decrement(ref countAvailable);
+
+                    action();
+                }
             }, token);
         }
 
         public void Stop()
         {
-            throw new NotImplementedException();
+            internalLoop.Stop();
+            countAvailable = 0;
         }
 
         public void Notify()
         {
-            dataReadySemaphore.AddCount(1);
+            Interlocked.Increment(ref countAvailable);
+            dataReadyEvent.Set();
         }
     }
 }

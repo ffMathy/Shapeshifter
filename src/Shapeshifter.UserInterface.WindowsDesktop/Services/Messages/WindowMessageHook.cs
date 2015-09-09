@@ -26,6 +26,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         readonly CancellationTokenSource cancellationTokenSource;
 
         readonly ILogger logger;
+        readonly IConsumerThreadLoop consumerLoop;
 
         public bool IsConnected
         {
@@ -38,11 +39,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         public WindowMessageHook(
             IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors,
             ILogger logger,
-            IThreadLoop threadLoop)
+            IConsumerThreadLoop consumerLoop)
         {
             this.windowMessageInterceptors = windowMessageInterceptors;
             this.logger = logger;
-            this.threadLoop = threadLoop;
+            this.consumerLoop = consumerLoop;
 
             pendingMessages = new Queue<WindowMessageReceivedArgument>();
             cancellationTokenSource = new CancellationTokenSource();
@@ -57,8 +58,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                 UninstallInterceptors();
                 UninstallWindowMessageHook();
 
+                StopMessageConsumer();
+
                 IsConnected = false;
             }
+        }
+
+        void StopMessageConsumer()
+        {
+            cancellationTokenSource.Cancel();
         }
 
         void UninstallWindowMessageHook()
@@ -93,6 +101,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         void StartMessageConsumer()
         {
+            consumerLoop.Start(HandleNextMessage, cancellationTokenSource.Token);
+        }
+
+        private void HandleNextMessage()
+        {
+            var nextMessage = pendingMessages.Dequeue();
+            foreach (var interceptor in windowMessageInterceptors)
+            {
+                interceptor.ReceiveMessageEvent(nextMessage);
+
+                logger.Information($"Message passed to interceptor {interceptor.GetType().Name}.");
+            }
         }
 
         void InstallInterceptors()
@@ -119,30 +139,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             logger.Information($"Message received: [{hwnd}, {msg}, {wParam}, {lParam}]");
 
-            foreach (var interceptor in windowMessageInterceptors)
-            {
-                var argument = new WindowMessageReceivedArgument(hwnd, msg, wParam, lParam);
-                pendingMessages.Enqueue(argument);
+            var argument = new WindowMessageReceivedArgument(hwnd, msg, wParam, lParam);
+            pendingMessages.Enqueue(argument);
 
-                handled |= argument.Handled;
-
-                logger.Information($"Message passed to interceptor {interceptor.GetType().Name}.");
-            }
+            consumerLoop.Notify();
 
             return IntPtr.Zero;
-        }
-
-        private static void InvokeInterceptorSynchronously(IWindowMessageInterceptor interceptor, WindowMessageReceivedArgument argument)
-        {
-            interceptor.ReceiveMessageEvent(argument);
-        }
-
-        private static void InvokeInterceptorAsynchronously(IWindowMessageInterceptor interceptor, WindowMessageReceivedArgument argument)
-        {
-            var thread = new Thread(() => interceptor.ReceiveMessageEvent(argument));
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.IsBackground = true;
-            thread.Start();
         }
 
         public void Dispose()

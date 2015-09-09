@@ -13,7 +13,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
     class PasteCombinationDurationMediator : IPasteCombinationDurationMediator
     {
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
-        readonly IThreadLoop threadLoop;
+        readonly IConsumerThreadLoop threadLoop;
         readonly IThreadDelay threadDelay;
         readonly ILogger logger;
         readonly IMainThreadInvoker mainThreadInvoker;
@@ -27,7 +27,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 
         public PasteCombinationDurationMediator(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
-            IThreadLoop threadLoop,
+            IConsumerThreadLoop threadLoop,
             IThreadDelay threadDelay,
             IMainThreadInvoker mainThreadInvoker,
             ILogger logger)
@@ -78,8 +78,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 
         void MonitorClipboardCombinationState()
         {
-            if (IsCancellationRequested) return;
-
             WaitForCombinationRelease();
             if (IsCancellationRequested) return;
 
