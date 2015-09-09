@@ -6,12 +6,14 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
 using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using System.Linq;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
     class KeyInterceptor : IKeyInterceptor
     {
         readonly IHotkeyInterceptionFactory hotkeyInterceptionFactory;
+        readonly IUserInterfaceThread userInterfaceThread;
 
         IDictionary<int, IHotkeyInterception> keyInterceptions;
 
@@ -22,9 +24,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
         public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
         public KeyInterceptor(
-            IHotkeyInterceptionFactory hotkeyInterceptionFactory)
+            IHotkeyInterceptionFactory hotkeyInterceptionFactory,
+            IUserInterfaceThread userInterfaceThread)
         {
             this.hotkeyInterceptionFactory = hotkeyInterceptionFactory;
+            this.userInterfaceThread = userInterfaceThread;
 
             keyInterceptions = new Dictionary<int, IHotkeyInterception>();
         }
@@ -46,7 +50,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
             switch(e.Message)
             {
                 case WindowApi.WM_SHOWWINDOW:
-                    HandleWindowVisibilityChangedMessage(e);
+                    userInterfaceThread.Invoke(() => HandleWindowVisibilityChangedMessage(e));
                     break;
 
                 case KeyboardApi.WM_HOTKEY:

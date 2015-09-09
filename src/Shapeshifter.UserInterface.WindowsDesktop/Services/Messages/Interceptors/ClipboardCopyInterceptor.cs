@@ -5,7 +5,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using System.Runtime.InteropServices;
-using System.Threading;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -45,9 +44,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             if (DataCopied != null)
             {
-                var thread = new Thread(() => DataCopied(this, new DataCopiedEventArgument()));
-                thread.SetApartmentState(ApartmentState.STA);
-                thread.Start();
+                DataCopied(this, new DataCopiedEventArgument());
             }
         }
 
