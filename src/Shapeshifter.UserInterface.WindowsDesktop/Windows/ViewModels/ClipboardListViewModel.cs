@@ -15,6 +15,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
+using System.Threading;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 {

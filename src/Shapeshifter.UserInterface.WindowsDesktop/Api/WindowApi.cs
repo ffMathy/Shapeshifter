@@ -34,8 +34,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
                 return GetClassLong64(hWnd, nIndex);
         }
 
-        public const int WM_SHOWWINDOW = 0x0018;
-
         public static IntPtr ICON_BIG => new IntPtr(1);
 
         public static IntPtr IDI_APPLICATION => new IntPtr(0x7F00);

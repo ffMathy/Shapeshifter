@@ -5,6 +5,8 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using System.Runtime.InteropServices;
+using System.Threading;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -44,7 +46,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             if (DataCopied != null)
             {
-                DataCopied(this, new DataCopiedEventArgument());
+                var thread = new Thread(() => DataCopied(this, new DataCopiedEventArgument()));
+                thread.IsBackground = true;
+                thread.Start();
             }
         }
 
@@ -77,7 +81,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public void ReceiveMessageEvent(WindowMessageReceivedArgument eventArgument)
         {
-            if (eventArgument.Message == ClipboardApi.WM_CLIPBOARDUPDATE)
+            if (eventArgument.Message == Message.WM_CLIPBOARDUPDATE)
             {
                 if (shouldSkipNext)
                 {

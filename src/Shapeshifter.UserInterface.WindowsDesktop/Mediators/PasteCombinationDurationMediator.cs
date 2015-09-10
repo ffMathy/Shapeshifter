@@ -7,6 +7,7 @@ using System.Threading;
 using System.Windows.Input;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
+using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 {
@@ -67,18 +68,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
             }
 
             InstallPasteHotkeyInterceptor();
-            InstallThreadLoop();
         }
 
-        void InstallThreadLoop()
+        async Task MonitorClipboardCombinationStateAsync()
         {
-            threadLoop.Start(MonitorClipboardCombinationState, Token);
-            logger.Information("Clipboard combination monitoring loop installed.", 1);
-        }
-
-        void MonitorClipboardCombinationState()
-        {
-            WaitForCombinationRelease();
+            await WaitForCombinationRelease();
             if (IsCancellationRequested) return;
 
             RegisterCombinationReleased();
@@ -93,12 +87,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
             }
         }
 
-        void WaitForCombinationRelease()
+        async Task WaitForCombinationRelease()
         {
             var decisecondsPassed = 0;
             while (!IsCancellationRequested && IsOneCombinationKeyDown)
             {
-                threadDelay.Execute(100);
+                await threadDelay.ExecuteAsync(100);
                 decisecondsPassed++;
 
                 logger.Information($"Paste combination held down for {decisecondsPassed}.");
@@ -133,7 +127,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
                 logger.Information("Paste combination duration mediator reacted to paste hotkey.", 1);
 
                 isCombinationDown = true;
-                threadLoop.Notify();
+                threadLoop.Notify(MonitorClipboardCombinationStateAsync, Token);
             } else
             {
                 logger.Information("Paste combination duration mediator ignored paste hotkey because the paste combination was already held down.", 1);

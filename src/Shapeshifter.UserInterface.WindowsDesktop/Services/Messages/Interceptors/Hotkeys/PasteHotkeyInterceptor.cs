@@ -6,6 +6,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Factories.Inte
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
 {
@@ -44,7 +45,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
 
         public void ReceiveMessageEvent(WindowMessageReceivedArgument e)
         {
-            if (e.Message == KeyboardApi.WM_HOTKEY && (int)e.WordParameter == hotkeyInterception.InterceptionId)
+            if (e.Message == Message.WM_HOTKEY && (int)e.WordParameter == hotkeyInterception.InterceptionId)
             {
                 HandleHotkeyMessage();
             }

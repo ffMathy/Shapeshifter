@@ -4,9 +4,9 @@ using System;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
 using System.Collections.Generic;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
@@ -49,11 +49,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
         {
             switch(e.Message)
             {
-                case WindowApi.WM_SHOWWINDOW:
+                case Message.WM_SHOWWINDOW:
                     userInterfaceThread.Invoke(() => HandleWindowVisibilityChangedMessage(e));
                     break;
 
-                case KeyboardApi.WM_HOTKEY:
+                case Message.WM_HOTKEY:
                     HandleHotkeyMessage(e);
                     break;
             }

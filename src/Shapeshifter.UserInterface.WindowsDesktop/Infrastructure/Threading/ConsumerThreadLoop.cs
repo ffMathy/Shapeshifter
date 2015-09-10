@@ -2,6 +2,7 @@
 using System;
 using System.Threading;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
@@ -9,8 +10,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
     {
         readonly IThreadLoop internalLoop;
         readonly ILogger logger;
-
-        readonly ManualResetEventSlim dataReadyEvent;
 
         int countAvailable;
 
@@ -20,8 +19,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
         {
             this.internalLoop = internalLoop;
             this.logger = logger;
-
-            dataReadyEvent = new ManualResetEventSlim();
         }
 
         public bool IsRunning
@@ -32,42 +29,54 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
             }
         }
 
-        public void Start(Action action, CancellationToken token)
-        {
-            internalLoop.Start(() =>
-            {
-                dataReadyEvent.Wait(token);
-
-                if (token.IsCancellationRequested || !IsRunning)
-                {
-                    return;
-                }
-                
-                if (countAvailable > 0)
-                {
-                    Interlocked.Decrement(ref countAvailable);
-                    if(countAvailable == 0)
-                    {
-                        dataReadyEvent.Reset();
-                    }
-
-                    logger.Information($"Consumer count decremented to {countAvailable}.");
-                    action();
-                }
-            }, token);
-        }
-
         public void Stop()
         {
             internalLoop.Stop();
             countAvailable = 0;
         }
 
-        public void Notify()
+        public void Notify(Func<Task> action, CancellationToken token)
         {
-            Interlocked.Increment(ref countAvailable);
-            logger.Information($"Consumer count incremented to {countAvailable}.");
-            dataReadyEvent.Set();
+            lock (this)
+            {
+                var newCount = Interlocked.Increment(ref countAvailable);
+                logger.Information($"Consumer count incremented to {countAvailable}.");
+
+                if(newCount > 0 && !internalLoop.IsRunning)
+                {
+                    SpawnThread(action, token);
+                }
+            }
+        }
+
+        void SpawnThread(Func<Task> action, CancellationToken token)
+        {
+            internalLoop.StartAsync(async () =>
+            {
+                lock (this)
+                {
+                    if (ShouldAbort(token))
+                    {
+                        internalLoop.Stop();
+                        return;
+                    }
+
+                    DecrementAvailableWorkCount();
+                }
+
+                await action();
+            }, token);
+        }
+
+        private bool ShouldAbort(CancellationToken token)
+        {
+            return token.IsCancellationRequested || !IsRunning || countAvailable == 0;
+        }
+
+        void DecrementAvailableWorkCount()
+        {
+            Interlocked.Decrement(ref countAvailable);
+            logger.Information($"Consumer count decremented to {countAvailable}.");
         }
     }
 }

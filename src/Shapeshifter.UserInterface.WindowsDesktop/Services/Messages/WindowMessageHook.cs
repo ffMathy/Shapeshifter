@@ -10,6 +10,8 @@ using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 using System.Threading;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -94,24 +96,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             InstallWindowMessageHook();
             InstallInterceptors();
 
-            StartMessageConsumer();
-
             IsConnected = true;
         }
 
-        void StartMessageConsumer()
-        {
-            consumerLoop.Start(HandleNextMessage, cancellationTokenSource.Token);
-        }
-
-        private void HandleNextMessage()
+        async Task HandleNextMessageAsync()
         {
             var nextMessage = pendingMessages.Dequeue();
             foreach (var interceptor in windowMessageInterceptors)
             {
+                var messageName = FormatMessage(nextMessage.Message);
+                var interceptorName = interceptor.GetType().Name;
+
+                logger.Information($"Passing message {messageName} to interceptor {interceptorName}.");
+
                 interceptor.ReceiveMessageEvent(nextMessage);
 
-                logger.Information($"Message passed to interceptor {interceptor.GetType().Name}.");
+                logger.Information($"Message of type {messageName} passed to interceptor {interceptorName}.");
             }
         }
 
@@ -137,14 +137,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         IntPtr WindowHookCallback(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            logger.Information($"Message received: [{hwnd}, {msg}, {wParam}, {lParam}]");
+            if (Enum.IsDefined(typeof(Message), msg))
+            {
+                logger.Information($"Message received: [{hwnd}, {FormatMessage((Message)msg)}, {wParam}, {lParam}]");
 
-            var argument = new WindowMessageReceivedArgument(hwnd, msg, wParam, lParam);
-            pendingMessages.Enqueue(argument);
+                var argument = new WindowMessageReceivedArgument(hwnd, (Message)msg, wParam, lParam);
+                pendingMessages.Enqueue(argument);
 
-            consumerLoop.Notify();
+                consumerLoop.Notify(HandleNextMessageAsync, cancellationTokenSource.Token);
+            }
 
             return IntPtr.Zero;
+        }
+
+        private string FormatMessage(Message msg)
+        {
+            return Enum.GetName(typeof(Message), msg);
         }
 
         public void Dispose()

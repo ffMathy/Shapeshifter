@@ -8,6 +8,7 @@ using System.Windows;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -24,7 +25,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         static BitmapSource GetWindowIcon(IntPtr windowHandle)
         {
             var hIcon = default(IntPtr);
-            hIcon = WindowApi.SendMessage(windowHandle, IconApi.WM_GETICON, WindowApi.ICON_BIG, IntPtr.Zero);
+            hIcon = WindowApi.SendMessage(windowHandle, (int)Message.WM_GETICON, WindowApi.ICON_BIG, IntPtr.Zero);
 
             if (hIcon == IntPtr.Zero)
             {

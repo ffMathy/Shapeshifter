@@ -11,8 +11,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
         public const int MOD_WIN = 0x8;
         public const int MOD_NOREPEAT = 0x4000;
 
-        public const int WM_HOTKEY = 0x0312;
-
         //TODO: turn into an enum. not just here, but everywhere.
         public const int VK_KEY_V = 0x56;
         public const int VK_KEY_UP = 0x26;
