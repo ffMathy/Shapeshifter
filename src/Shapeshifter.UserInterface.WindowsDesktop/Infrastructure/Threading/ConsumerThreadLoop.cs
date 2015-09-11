@@ -42,7 +42,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
                 var newCount = Interlocked.Increment(ref countAvailable);
                 logger.Information($"Consumer count incremented to {countAvailable}.");
 
-                if(newCount > 0 && !internalLoop.IsRunning)
+                if (newCount > 0 && !internalLoop.IsRunning)
                 {
                     SpawnThread(action, token);
                 }
