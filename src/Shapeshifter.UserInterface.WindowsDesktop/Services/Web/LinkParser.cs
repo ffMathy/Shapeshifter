@@ -90,19 +90,23 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public async Task<bool> IsValidLinkAsync(string link)
         {
-            try {
-                var match = linkValidationExpression.Match(link);
-                if (!match.Success)
+            return await Task<bool>.Factory.StartNew(() => {
+                try {
+                    var match = linkValidationExpression.Match(link);
+                    if (!match.Success)
+                    {
+                        return false;
+                    }
+
+                    var domain = match.Groups[1].Value;
+                    return linkValidationExpression.IsMatch(link);
+                    //return linkValidationExpression.IsMatch(link) && await domainNameResolver.IsValidDomainAsync(domain);
+                }
+                catch (RegexMatchTimeoutException)
                 {
                     return false;
                 }
-
-                var domain = match.Groups[1].Value;
-                return linkValidationExpression.IsMatch(link) && await domainNameResolver.IsValidDomainAsync(domain);
-            } catch(RegexMatchTimeoutException)
-            {
-                return false;
-            }
+            });
         }
     }
 }
