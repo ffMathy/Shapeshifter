@@ -61,6 +61,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
                 handleContainer.Handle, KeyboardApi.VK_KEY_LEFT);
             keyInterceptor.AddInterceptingKey(
                 handleContainer.Handle, KeyboardApi.VK_KEY_RIGHT);
+            keyInterceptor.AddInterceptingKey(
+                handleContainer.Handle, KeyboardApi.VK_HOME);
+            keyInterceptor.AddInterceptingKey(
+                handleContainer.Handle, KeyboardApi.VK_DELETE);
         }
 
         public HwndSource HandleSource

@@ -17,6 +17,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
         public const int VK_KEY_DOWN = 0x28;
         public const int VK_KEY_LEFT = 0x25;
         public const int VK_KEY_RIGHT = 0x27;
+        public const int VK_HOME = 0x24;
+        public const int VK_DELETE = 0x2E;
 
         [StructLayout(LayoutKind.Sequential)]
         public struct INPUT
