@@ -37,10 +37,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
         public const int CF_UNICODETEXT = 13;
         public const int CF_WAVE = 12;
 
-        public const int WM_CLIPBOARDUPDATE = 0x031D;
-        public const int WM_CHANGECBCHAIN = 0x0003;
-        public const int WM_DRAWCLIPBOARD = 0x0308;
-
         [DllImport("user32.dll")]
         public static extern uint EnumClipboardFormats(uint format);
 

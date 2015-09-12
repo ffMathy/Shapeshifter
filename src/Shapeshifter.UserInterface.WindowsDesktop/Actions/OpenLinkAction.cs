@@ -52,26 +52,26 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
         {
-            return await GetFirstSupportedItem(package) != null;
+            return await GetFirstSupportedItem(package).ConfigureAwait(false) != null;
         }
 
         async Task<IClipboardData> GetFirstSupportedItem(IClipboardDataPackage package)
         {
-            var supportedItems = await asyncFilter.FilterAsync(package.Contents, CanPerformAsync);
+            var supportedItems = await asyncFilter.FilterAsync(package.Contents, CanPerformAsync).ConfigureAwait(false);
             return supportedItems.FirstOrDefault();
         }
 
         async Task<bool> CanPerformAsync(IClipboardData data)
         {
             var textData = data as IClipboardTextData;
-            return textData != null && await linkParser.HasLinkAsync(textData.Text);
+            return textData != null && await linkParser.HasLinkAsync(textData.Text).ConfigureAwait(false);
         }
 
         public async Task PerformAsync(
             IClipboardDataPackage package)
         {
-            var textData = (IClipboardTextData)await GetFirstSupportedItem(package);
-            var links = await linkParser.ExtractLinksFromTextAsync(textData.Text);
+            var textData = (IClipboardTextData)await GetFirstSupportedItem(package).ConfigureAwait(false);
+            var links = await linkParser.ExtractLinksFromTextAsync(textData.Text).ConfigureAwait(false);
             foreach(var link in links)
             {
                 processManager.LaunchCommand(link);

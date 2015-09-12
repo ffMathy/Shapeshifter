@@ -10,8 +10,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
         public const uint SHGFI_ICON = 0x100;
         public const uint SHGFI_LARGEICON = 0x0;
 
-        public const int WM_GETICON = 0x007f;
-
         [StructLayout(LayoutKind.Sequential)]
         public struct SHFILEINFO
         {

@@ -64,27 +64,27 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
         {
-            return await GetFirstSupportedDataAsync(package) != null;
+            return await GetFirstSupportedDataAsync(package).ConfigureAwait(false) != null;
         }
 
         async Task<IClipboardData> GetFirstSupportedDataAsync(IClipboardDataPackage package)
         {
-            var validItems = await asyncFilter.FilterAsync(package.Contents, CanPerformAsync);
+            var validItems = await asyncFilter.FilterAsync(package.Contents, CanPerformAsync).ConfigureAwait(false);
             return validItems.FirstOrDefault();
         }
 
         async Task<bool> CanPerformAsync(IClipboardData data)
         {
             var textData = data as IClipboardTextData;
-            return textData != null && await linkParser.HasLinkOfTypeAsync(textData.Text, LinkType.ImageFile);
+            return textData != null && await linkParser.HasLinkOfTypeAsync(textData.Text, LinkType.ImageFile).ConfigureAwait(false);
         }
 
         public async Task PerformAsync(IClipboardDataPackage package)
         {
-            var textData = (IClipboardTextData)await GetFirstSupportedDataAsync(package);
-            var links = await linkParser.ExtractLinksFromTextAsync(textData.Text);
+            var textData = (IClipboardTextData)await GetFirstSupportedDataAsync(package).ConfigureAwait(false);
+            var links = await linkParser.ExtractLinksFromTextAsync(textData.Text).ConfigureAwait(false);
 
-            var imagesBytes = await DownloadLinksAsync(links);
+            var imagesBytes = await DownloadLinksAsync(links).ConfigureAwait(false);
 
             var images = InterpretImages(imagesBytes);
             InjectImages(images);
@@ -111,7 +111,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
                 downloadTasks.Add(downloader.DownloadBytesAsync(link));
             }
 
-            await Task.WhenAll(downloadTasks);
+            await Task.WhenAll(downloadTasks).ConfigureAwait(false);
 
             return downloadTasks.Select(x => x.Result);
         }

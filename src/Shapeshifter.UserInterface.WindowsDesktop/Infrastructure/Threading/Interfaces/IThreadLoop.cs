@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces
 {
@@ -7,7 +8,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Int
     {
         bool IsRunning { get; }
 
-        void Start(Action action, CancellationToken token);
+        void StartAsync(Func<Task> action, CancellationToken token);
 
         void Stop();
     }

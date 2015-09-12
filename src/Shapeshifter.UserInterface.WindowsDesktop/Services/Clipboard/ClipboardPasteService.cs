@@ -1,7 +1,7 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 using static Shapeshifter.UserInterface.WindowsDesktop.Services.Api.KeyboardApi;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
@@ -9,17 +9,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
     class ClipboardPasteService : IClipboardPasteService
     {
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
-        readonly IWindowMessageHook windowMessageHook;
         readonly ILogger logger;
+        readonly IMainWindowHandleContainer handleContainer;
 
         public ClipboardPasteService(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
-            IWindowMessageHook windowMessageHook,
-            ILogger logger)
+            ILogger logger,
+            IMainWindowHandleContainer handleContainer)
         {
             this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
-            this.windowMessageHook = windowMessageHook;
             this.logger = logger;
+            this.handleContainer = handleContainer;
         }
 
         public void PasteClipboardContents()
@@ -33,12 +33,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 
         void EnablePasteHotkeyInterceptor()
         {
-            pasteHotkeyInterceptor.Install(windowMessageHook.MainWindowHandle);
+            pasteHotkeyInterceptor.Install(handleContainer.Handle);
         }
 
         void DisablePasteHotkeyInterceptor()
         {
-            pasteHotkeyInterceptor.Uninstall(windowMessageHook.MainWindowHandle);
+            pasteHotkeyInterceptor.Uninstall();
         }
 
         void SendPasteCombination()

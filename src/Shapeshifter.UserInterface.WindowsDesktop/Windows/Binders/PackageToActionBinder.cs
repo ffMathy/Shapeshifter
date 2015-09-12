@@ -17,6 +17,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
         ObservableCollection<IAction> destinationCollection;
         Func<IClipboardDataControlPackage, Task<IEnumerable<IAction>>> mappingFunction;
 
+        public IAction Default
+        {
+            get; set;
+        }
+
         public PackageToActionBinder()
         {
             dictionaryStates = new Dictionary<IClipboardDataControlPackage, ICollection<IAction>>();
@@ -37,6 +42,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
         public void LoadFromKey(IClipboardDataControlPackage key)
         {
             destinationCollection.Clear();
+            destinationCollection.Add(Default);
 
             this.key = key;
             foreach (var item in dictionaryStates[key])

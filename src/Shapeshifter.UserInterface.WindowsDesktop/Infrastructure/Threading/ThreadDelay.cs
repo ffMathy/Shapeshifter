@@ -1,13 +1,13 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-using System.Threading;
+using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
     class ThreadDelay : IThreadDelay
     {
-        public void Execute(int millisecondsDelay)
+        public async Task ExecuteAsync(int millisecondsDelay)
         {
-            Thread.Sleep(millisecondsDelay);
+            await Task.Delay(millisecondsDelay);
         }
     }
 }

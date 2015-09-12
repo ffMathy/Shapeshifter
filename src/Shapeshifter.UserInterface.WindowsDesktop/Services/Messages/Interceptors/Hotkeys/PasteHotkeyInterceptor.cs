@@ -6,6 +6,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Factories.Inte
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
 {
@@ -14,6 +15,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
     {
         readonly ILogger logger;
         readonly IHotkeyInterception hotkeyInterception;
+
+        IntPtr windowHandle;
 
         public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
@@ -29,17 +32,20 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
 
         public void Install(IntPtr windowHandle)
         {
+            //TODO: proper exceptions for install for ALL installs (don't install when already installed etc).
+            this.windowHandle = windowHandle;
             hotkeyInterception.Start(windowHandle);
         }
 
-        public void Uninstall(IntPtr windowHandle)
+        public void Uninstall()
         {
+            //TODO: proper exceptions for uninstall for ALL uninstalls (don't uninstall when already uninstalled etc).
             hotkeyInterception.Stop(windowHandle);
         }
 
         public void ReceiveMessageEvent(WindowMessageReceivedArgument e)
         {
-            if (e.Message == KeyboardApi.WM_HOTKEY && (int)e.WordParameter == hotkeyInterception.InterceptionId)
+            if (e.Message == Message.WM_HOTKEY && (int)e.WordParameter == hotkeyInterception.InterceptionId)
             {
                 HandleHotkeyMessage();
             }

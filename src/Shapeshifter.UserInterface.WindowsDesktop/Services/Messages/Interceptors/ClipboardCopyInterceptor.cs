@@ -5,6 +5,8 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using System.Runtime.InteropServices;
+using System.Threading;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -15,6 +17,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         uint lastClipboardItemIdentifier;
         bool shouldSkipNext;
+
+        IntPtr windowHandle;
 
         readonly ILogger logger;
 
@@ -42,12 +46,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             if (DataCopied != null)
             {
-                DataCopied(this, new DataCopiedEventArgument());
+                var thread = new Thread(() => DataCopied(this, new DataCopiedEventArgument()));
+                thread.IsBackground = true;
+                thread.Start();
             }
         }
 
         public void Install(IntPtr windowHandle)
         {
+            this.windowHandle = windowHandle;
             if (!ClipboardApi.AddClipboardFormatListener(windowHandle))
             {
                 throw GenerateInstallFailureException();
@@ -64,7 +71,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             return new InvalidOperationException($"Could not install a clipboard hook for the main window. The window '{ownerTitle}' currently owns the clipboard. The last error code was {errorCode}.");
         }
 
-        public void Uninstall(IntPtr windowHandle)
+        public void Uninstall()
         {
             if (!ClipboardApi.RemoveClipboardFormatListener(windowHandle))
             {
@@ -74,11 +81,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public void ReceiveMessageEvent(WindowMessageReceivedArgument eventArgument)
         {
-            if (eventArgument.Message == ClipboardApi.WM_CLIPBOARDUPDATE)
+            if (eventArgument.Message == Message.WM_CLIPBOARDUPDATE)
             {
                 if (shouldSkipNext)
                 {
                     logger.Information("Clipboard update message skipped.");
+
                     shouldSkipNext = false;
                     return;
                 }

@@ -4,31 +4,39 @@ using System;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
 using System.Collections.Generic;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using System.Linq;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
     class KeyInterceptor : IKeyInterceptor
     {
         readonly IHotkeyInterceptionFactory hotkeyInterceptionFactory;
+        readonly IUserInterfaceThread userInterfaceThread;
 
         IDictionary<int, IHotkeyInterception> keyInterceptions;
 
         bool isInstalled;
 
+        IntPtr windowHandle;
+
         public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
         public KeyInterceptor(
-            IHotkeyInterceptionFactory hotkeyInterceptionFactory)
+            IHotkeyInterceptionFactory hotkeyInterceptionFactory,
+            IUserInterfaceThread userInterfaceThread)
         {
             this.hotkeyInterceptionFactory = hotkeyInterceptionFactory;
+            this.userInterfaceThread = userInterfaceThread;
 
             keyInterceptions = new Dictionary<int, IHotkeyInterception>();
         }
 
         public void Install(IntPtr windowHandle)
         {
+            this.windowHandle = windowHandle;
+
             foreach(var interception in keyInterceptions.Values)
             {
                 interception.Start(windowHandle);
@@ -41,11 +49,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
         {
             switch(e.Message)
             {
-                case WindowApi.WM_SHOWWINDOW:
-                    HandleWindowVisibilityChangedMessage(e);
+                case Message.WM_SHOWWINDOW:
+                    userInterfaceThread.Invoke(() => HandleWindowVisibilityChangedMessage(e));
                     break;
 
-                case KeyboardApi.WM_HOTKEY:
+                case Message.WM_HOTKEY:
                     HandleHotkeyMessage(e);
                     break;
             }
@@ -69,19 +77,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
 
         void HandleWindowVisibilityChangedMessage(WindowMessageReceivedArgument e)
         {
+            const int Shown = 1;
+            const int Hidden = 0;
+
             switch ((int)e.WordParameter)
             {
-                case 1:
+                case Shown:
                     Install(e.WindowHandle);
                     break;
 
-                case 0:
-                    Uninstall(e.WindowHandle);
+                case Hidden:
+                    Uninstall();
                     break;
             }
         }
 
-        public void Uninstall(IntPtr windowHandle)
+        public void Uninstall()
         {
             foreach (var interception in keyInterceptions.Values)
             {

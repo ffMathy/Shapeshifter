@@ -1,9 +1,6 @@
-﻿using System;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
 {
     public interface IWindowMessageHook : IHookService
     {
-        IntPtr MainWindowHandle { get; }
     }
 }

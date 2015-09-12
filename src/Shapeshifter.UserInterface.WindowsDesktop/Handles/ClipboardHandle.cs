@@ -1,15 +1,15 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Handles
 {
     class ClipboardHandle : IClipboardHandle
     {
         public ClipboardHandle(
-            IWindowMessageHook windowMessageHook)
+            IMainWindowHandleContainer mainWindow)
         {
-            ClipboardApi.OpenClipboard(windowMessageHook.MainWindowHandle);
+            ClipboardApi.OpenClipboard(mainWindow.Handle);
         }
 
         public void Dispose()

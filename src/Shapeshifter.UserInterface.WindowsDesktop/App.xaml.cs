@@ -44,7 +44,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            var main = Container.Resolve<Main>();
 
             AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) =>
             {
@@ -52,6 +51,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
                 Current.Shutdown();
             };
 
+            var main = Container.Resolve<Main>();
             main.Start(e.Args);
         }
     }

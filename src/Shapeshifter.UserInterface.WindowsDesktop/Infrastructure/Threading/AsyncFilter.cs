@@ -10,18 +10,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
     {
         public async Task<IEnumerable<TResult>> FilterAsync<TResult>(IEnumerable<Task<TResult>> candidatesTask, Func<TResult, bool> filter)
         {
-            return await FilterAsync(candidatesTask, result => Task.FromResult(filter(result)));
+            return await FilterAsync(candidatesTask, result => Task.FromResult(filter(result))).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<TResult>> FilterAsync<TResult>(IEnumerable<TResult> candidatesTask, Func<TResult, Task<bool>> filter)
         {
-            return await FilterAsync(candidatesTask.Select(result => Task.FromResult(result)), filter);
+            return await FilterAsync(candidatesTask.Select(result => Task.FromResult(result)), filter).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<TResult>> FilterAsync<TResult>(IEnumerable<Task<TResult>> candidatesTask, Func<TResult, Task<bool>> filter)
         {
-            var candidates = await Task.WhenAll(candidatesTask);
-            var validations = await GetValidationsAsync(filter, candidates);
+            var candidates = await Task.WhenAll(candidatesTask).ConfigureAwait(false);
+            var validations = await GetValidationsAsync(filter, candidates).ConfigureAwait(false);
 
             return FilterUsingValidations(candidates, validations);
         }
@@ -34,7 +34,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
                 validationsTask.Add(filter(candidate));
             }
 
-            var validations = await Task.WhenAll(validationsTask);
+            var validations = await Task.WhenAll(validationsTask).ConfigureAwait(false);
             return validations;
         }
 

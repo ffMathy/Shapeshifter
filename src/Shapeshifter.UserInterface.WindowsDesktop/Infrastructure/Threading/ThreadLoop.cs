@@ -1,6 +1,7 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
@@ -11,22 +12,20 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
             get; private set;
         }
 
-        public void Start(Action action, CancellationToken token)
+        public void StartAsync(Func<Task> action, CancellationToken token)
         {
             IsRunning = true;
+            RunAsync(action, token);
+        }
 
-            var thread = new Thread(() =>
+        async void RunAsync(Func<Task> action, CancellationToken token)
+        {
+            while (!token.IsCancellationRequested && IsRunning)
             {
-                while (!token.IsCancellationRequested && IsRunning)
-                {
-                    action();
-                }
+                await action();
+            }
 
-                Stop();
-            });
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.IsBackground = true;
-            thread.Start();
+            Stop();
         }
 
         public void Stop()

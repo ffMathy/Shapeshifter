@@ -110,6 +110,7 @@
     <Compile Include="Actions\ZipFilesAction.cs" />
     <Compile Include="Api\GeneralApi.cs" />
     <Compile Include="Api\ImageApi.cs" />
+    <Compile Include="Api\Message.cs" />
     <Compile Include="Controls\Clipboard\ClipboardImageDataControl.xaml.cs">
       <DependentUpon>ClipboardImageDataControl.xaml</DependentUpon>
     </Compile>
@@ -197,13 +198,17 @@
     <Compile Include="Infrastructure\Logging\Interfaces\ILogger.cs" />
     <Compile Include="Infrastructure\Logging\Logger.cs" />
     <Compile Include="Infrastructure\Threading\AsyncFilter.cs" />
+    <Compile Include="Infrastructure\Threading\ConsumerThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IAsyncFilter.cs" />
+    <Compile Include="Infrastructure\Threading\Interfaces\IConsumerThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IMainThreadInvoker.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IThreadDelay.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IThreadLoop.cs" />
+    <Compile Include="Infrastructure\Threading\Interfaces\IUserInterfaceThread.cs" />
     <Compile Include="Infrastructure\Threading\MainThreadInvoker.cs" />
     <Compile Include="Infrastructure\Threading\ThreadDelay.cs" />
     <Compile Include="Infrastructure\Threading\ThreadLoop.cs" />
+    <Compile Include="Infrastructure\Threading\UserInterfaceThread.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Mediators\PasteCombinationDurationMediator.cs" />
     <Compile Include="Mediators\Interfaces\IPasteCombinationDurationMediator.cs" />
@@ -270,6 +275,9 @@
     </Compile>
     <Compile Include="Windows\Binders\Interfaces\IAsyncListDictionaryBinder.cs" />
     <Compile Include="Windows\Interfaces\IClipboardListWindow.cs" />
+    <Compile Include="Windows\Interfaces\IMainWindowHandleContainer.cs" />
+    <Compile Include="Windows\Interfaces\IWindow.cs" />
+    <Compile Include="Windows\MainWindowHandleContainer.cs" />
     <Compile Include="Windows\ViewModels\ClipboardListViewModel.cs" />
     <Compile Include="Windows\ViewModels\Interfaces\IClipboardListViewModel.cs" />
     <Page Include="Controls\Clipboard\ClipboardImageDataControl.xaml">

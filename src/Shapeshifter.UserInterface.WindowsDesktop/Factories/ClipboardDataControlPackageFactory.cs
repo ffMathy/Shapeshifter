@@ -6,6 +6,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
@@ -15,17 +16,20 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         readonly IEnumerable<IMemoryUnwrapper> memoryUnwrappers;
         readonly IEnumerable<IClipboardDataControlFactory> dataFactories;
         readonly IKeyValueCache<uint, byte[]> clipboardCache;
+        readonly IUserInterfaceThread userInterfaceThread;
 
         public ClipboardDataControlPackageFactory(
             IEnumerable<IClipboardDataControlFactory> dataFactories,
             IEnumerable<IMemoryUnwrapper> memoryUnwrappers,
             IKeyValueCache<uint, byte[]> clipboardCache,
-            IClipboardHandleFactory clipboardSessionFactory)
+            IClipboardHandleFactory clipboardSessionFactory,
+            IUserInterfaceThread userInterfaceThread)
         {
             this.dataFactories = dataFactories;
             this.memoryUnwrappers = memoryUnwrappers;
             this.clipboardCache = clipboardCache;
             this.clipboardSessionFactory = clipboardSessionFactory;
+            this.userInterfaceThread = userInterfaceThread;
         }
 
         bool IsAnyFormatSupported(
@@ -55,7 +59,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         {
             var package = new ClipboardDataControlPackage();
             DecoratePackageWithClipboardData(formats, package);
-            DecoratePackageWithControl(package);
+            userInterfaceThread.Invoke(() => DecoratePackageWithControl(package));
 
             return package;
         }

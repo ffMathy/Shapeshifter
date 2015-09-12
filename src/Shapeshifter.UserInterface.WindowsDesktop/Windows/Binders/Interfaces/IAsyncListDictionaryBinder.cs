@@ -7,6 +7,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces
 {
     public interface IAsyncListDictionaryBinder<TKey, TData> where TKey : class
     {
+        TData Default { get; set; }
+
         void Bind(
             ObservableCollection<TKey> sourceCollection, 
             ObservableCollection<TData> destinationCollection,

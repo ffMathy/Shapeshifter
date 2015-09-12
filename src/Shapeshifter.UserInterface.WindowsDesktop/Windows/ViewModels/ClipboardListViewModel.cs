@@ -13,8 +13,9 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.H
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
+using System.Threading;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 {
@@ -28,6 +29,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
         readonly IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder;
         readonly IAsyncFilter asyncFilter;
         readonly IPerformanceHandleFactory performanceHandleFactory;
+        readonly IUserInterfaceThread userInterfaceThread;
 
         bool isFocusInActionsList;
 
@@ -68,8 +70,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
                 {
                     PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedElement)));
                 }
-
-                packageActionBinder.LoadFromKey(value);
+                
+                userInterfaceThread.Invoke(() => packageActionBinder.LoadFromKey(value));
             }
         }
 
@@ -79,22 +81,32 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             IKeyInterceptor hotkeyInterceptor,
             IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder,
             IAsyncFilter asyncFilter,
-            IPerformanceHandleFactory performanceHandleFactory)
+            IPerformanceHandleFactory performanceHandleFactory,
+            IUserInterfaceThread userInterfaceThread)
         {
             Elements = new ObservableCollection<IClipboardDataControlPackage>();
             Actions = new ObservableCollection<IAction>();
 
             Actions.CollectionChanged += Actions_CollectionChanged;
 
-            this.allActions = allActions;
+            var pasteAction = allActions.OfType<IPasteAction>().Single();
+
+            this.allActions = allActions.Where(x => x != pasteAction).ToArray();
             this.packageActionBinder = packageActionBinder;
             this.asyncFilter = asyncFilter;
             this.performanceHandleFactory = performanceHandleFactory;
+            this.userInterfaceThread = userInterfaceThread;
 
-            packageActionBinder.Bind(Elements, Actions, GetSupportedActionsFromDataAsync);
-            
+            PreparePackageBinder(packageActionBinder, pasteAction);
+
             RegisterMediatorEvents(clipboardUserInterfaceMediator);
             RegisterKeyEvents(hotkeyInterceptor);
+        }
+
+        private void PreparePackageBinder(IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder, IPasteAction defaultAction)
+        {
+            packageActionBinder.Default = defaultAction;
+            packageActionBinder.Bind(Elements, Actions, GetSupportedActionsFromDataAsync);
         }
 
         void Actions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -105,12 +117,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             }
         }
 
-        void RegisterKeyEvents(IKeyInterceptor hotkeyInterceptor)
+        void RegisterKeyEvents(
+            IKeyInterceptor hotkeyInterceptor)
         {
             hotkeyInterceptor.HotkeyFired += HotkeyInterceptor_HotkeyFired;
         }
 
-        void RegisterMediatorEvents(IClipboardUserInterfaceMediator mediator)
+        void RegisterMediatorEvents(
+            IClipboardUserInterfaceMediator mediator)
         {
             mediator.ControlAdded += Service_ControlAdded;
             mediator.ControlHighlighted += Service_ControlHighlighted;
@@ -222,7 +236,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
         {
             using (performanceHandleFactory.StartMeasuringPerformance())
             {
-                var allowedActions = await asyncFilter.FilterAsync(allActions, action => action.CanPerformAsync(data));
+                var allowedActions = await asyncFilter.FilterAsync(allActions, action => action.CanPerformAsync(data)).ConfigureAwait(false);
                 return allowedActions.OrderBy(x => x.Order);
             }
         }
@@ -257,7 +271,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
         {
             lock (Elements)
             {
-                Elements.Insert(0, e.Package);
+                userInterfaceThread.Invoke(() => Elements.Insert(0, e.Package));
                 SelectedElement = e.Package;
             }
         }
