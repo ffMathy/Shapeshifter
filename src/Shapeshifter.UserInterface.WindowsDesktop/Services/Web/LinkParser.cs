@@ -7,6 +7,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -49,15 +50,44 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             });
         }
 
-        private static string[] GetWords(string text)
+        static string[] GetWords(string text)
         {
             return whitespaceExpression.Split(text);
+        }
+
+        static IEnumerable<string> ExtractSuspiciousWords(string[] words)
+        {
+            foreach(var word in words)
+            {
+                if(IsSuspiciousWord(word))
+                {
+                    yield return word;
+                }
+            }
+        }
+
+        static IEnumerable<string> ExtractNonSuspiciousWords(string[] words)
+        {
+            foreach (var word in words)
+            {
+                if (!IsSuspiciousWord(word))
+                {
+                    yield return word;
+                }
+            }
+        }
+
+        static bool IsSuspiciousWord(string word)
+        {
+            return
+                word.StartsWith("www.", StringComparison.OrdinalIgnoreCase) ||
+                word.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                word.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
         }
 
         public LinkType GetLinkType(string link)
         {
             var linkType = default(LinkType);
-
             if (fileTypeInterpreter.GetFileTypeFromFileName(link) == FileType.Image)
             {
                 linkType |= LinkType.ImageFile;
@@ -75,27 +105,51 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             return linkType;
         }
 
+        public bool IsLinkOfType(string link, LinkType type)
+        {
+            var linkType = GetLinkType(link);
+            return linkType == type || linkType.HasFlag(type);
+        }
+
         public async Task<bool> HasLinkAsync(string text)
         {
             using (performanceHandleFactory.StartMeasuringPerformance())
             {
-                var words = GetWords(text);
-                foreach (var word in words)
+                return await Task.Run(async () =>
                 {
-                    if (await IsValidLinkAsync(word))
+                    var words = GetWords(text);
+
+                    var suspiciousWords = ExtractSuspiciousWords(words);
+                    if(await asyncFilter.HasMatchAsync(suspiciousWords, IsValidLinkAsync))
                     {
                         return true;
                     }
-                }
 
-                return false;
+                    var nonSuspiciousWords = ExtractNonSuspiciousWords(words);
+                    return await asyncFilter.HasMatchAsync(nonSuspiciousWords, IsValidLinkAsync);
+                });
             }
         }
 
         public async Task<bool> HasLinkOfTypeAsync(string text, LinkType linkType)
         {
-            var links = await ExtractLinksFromTextAsync(text).ConfigureAwait(false);
-            return links.Any(link => GetLinkType(link).HasFlag(linkType));
+            using (performanceHandleFactory.StartMeasuringPerformance())
+            {
+                Func<string, Task<bool>> validationFunction = async (string word) => IsLinkOfType(word, linkType) && await IsValidLinkAsync(word);
+                return await Task.Run(async () =>
+                {
+                    var words = GetWords(text);
+
+                    var suspiciousWords = ExtractSuspiciousWords(words);
+                    if (await asyncFilter.HasMatchAsync(suspiciousWords, validationFunction))
+                    {
+                        return true;
+                    }
+
+                    var nonSuspiciousWords = ExtractNonSuspiciousWords(words);
+                    return await asyncFilter.HasMatchAsync(nonSuspiciousWords, validationFunction);
+                });
+            }
         }
 
         public async Task<bool> IsValidLinkAsync(string link)

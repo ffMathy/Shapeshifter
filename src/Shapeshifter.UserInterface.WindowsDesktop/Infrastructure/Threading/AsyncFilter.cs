@@ -51,5 +51,30 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 
             return results;
         }
+
+        public async Task<bool> HasMatchAsync<TResult>(IEnumerable<Task<TResult>> candidatesTask, Func<TResult, bool> filter)
+        {
+            return await HasMatchAsync(candidatesTask, (result) => Task.FromResult(filter(result)));
+        }
+
+        public async Task<bool> HasMatchAsync<TResult>(IEnumerable<TResult> candidatesTask, Func<TResult, Task<bool>> filter)
+        {
+            return await HasMatchAsync(candidatesTask.Select(result => Task.FromResult(result)), filter);
+        }
+
+        public async Task<bool> HasMatchAsync<TResult>(IEnumerable<Task<TResult>> candidatesTask, Func<TResult, Task<bool>> filter)
+        {
+            //TODO: this can be optimized more by running all tasks in parallel and returning the first succeeding.
+            foreach(var candidate in candidatesTask)
+            {
+                var result = await candidate;
+                if(await filter(result))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

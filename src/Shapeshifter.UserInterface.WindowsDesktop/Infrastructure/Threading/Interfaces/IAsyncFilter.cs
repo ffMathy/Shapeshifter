@@ -11,5 +11,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Int
         Task<IEnumerable<TResult>> FilterAsync<TResult>(IEnumerable<TResult> candidates, Func<TResult, Task<bool>> filter);
 
         Task<IEnumerable<TResult>> FilterAsync<TResult>(IEnumerable<Task<TResult>> candidates, Func<TResult, bool> filter);
+
+        Task<bool> HasMatchAsync<TResult>(IEnumerable<Task<TResult>> candidates, Func<TResult, Task<bool>> filter);
+
+        Task<bool> HasMatchAsync<TResult>(IEnumerable<TResult> candidates, Func<TResult, Task<bool>> filter);
+
+        Task<bool> HasMatchAsync<TResult>(IEnumerable<Task<TResult>> candidates, Func<TResult, bool> filter);
     }
 }

@@ -14,6 +14,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
 
         Task<bool> IsValidLinkAsync(string link);
 
+        bool IsLinkOfType(string link, LinkType type);
+
         LinkType GetLinkType(string link);
     }
 }
