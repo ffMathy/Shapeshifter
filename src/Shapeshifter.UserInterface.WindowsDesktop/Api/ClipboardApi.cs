@@ -91,9 +91,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
             }
 
             var buffer = new byte[(int)length];
-
             Marshal.Copy(lockedMemory, buffer, 0, (int)length);
-
             GeneralApi.GlobalUnlock(dataPointer);
             
             return buffer;

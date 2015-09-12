@@ -26,5 +26,40 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
         [DllImport("kernel32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GlobalUnlock(IntPtr hMem);
+
+        public static T ByteArrayToStructure<T>(byte[] data)
+        {
+            var size = Marshal.SizeOf(typeof(T));
+
+            var pointer = Marshal.AllocHGlobal(size);
+            try
+            {
+                Marshal.Copy(data, 0, pointer, size);
+
+                return (T)Marshal.PtrToStructure(pointer, typeof(T));
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(pointer);
+            }
+        }
+        
+        public static byte[] StructureToByteArray<T>(T structure)
+        {
+            var size = Marshal.SizeOf(structure);
+            var buffer = new byte[size];
+
+            var pointer = Marshal.AllocHGlobal(size);
+            Marshal.StructureToPtr(structure, pointer, true);
+            try
+            {
+                Marshal.Copy(pointer, buffer, 0, size);
+                return buffer;
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(pointer);
+            }
+        }
     }
 }

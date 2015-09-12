@@ -5,6 +5,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
     public static class ImageApi
     {
+        public const uint BI_RGB = 0x00;
 
         [DllImport("gdi32.dll")]
         public static extern bool DeleteObject(IntPtr hObject);

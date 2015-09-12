@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images;
 using System.Diagnostics.CodeAnalysis;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -13,37 +14,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
     {
         static ImageMetaInformation ConvertByteArrayToMetaInformation(byte[] data)
         {
-            var size = Marshal.SizeOf(typeof(ImageMetaInformation));
-
-            var pointer = Marshal.AllocHGlobal(size);
-            try
-            {
-                Marshal.Copy(data, 0, pointer, size);
-
-                return (ImageMetaInformation)Marshal.PtrToStructure(pointer, typeof(ImageMetaInformation));
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(pointer);
-            }
+            return GeneralApi.ByteArrayToStructure<ImageMetaInformation>(data);
         }
 
         byte[] ConvertMetaInformationToByteArray(ImageMetaInformation metaInformation)
         {
-            var size = Marshal.SizeOf(metaInformation);
-            var buffer = new byte[size];
-
-            var pointer = Marshal.AllocHGlobal(size);
-            Marshal.StructureToPtr(metaInformation, pointer, true);
-            try
-            {
-                Marshal.Copy(pointer, buffer, 0, size);
-                return buffer;
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(pointer);
-            }
+            return GeneralApi.StructureToByteArray(metaInformation);
         }
 
         public byte[] ConvertBitmapSourceToByteArray(BitmapSource bitmap)
