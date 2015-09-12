@@ -42,11 +42,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public async Task<IEnumerable<string>> ExtractLinksFromTextAsync(string text)
         {
-            using (performanceHandleFactory.StartMeasuringPerformance())
+            return await Task.Run(async () =>
             {
                 var words = GetWords(text);
-                return await asyncFilter.FilterAsync(words, IsValidLinkAsync).ConfigureAwait(false);
-            }
+                return await asyncFilter.FilterAsync(words, IsValidLinkAsync);
+            });
         }
 
         private static string[] GetWords(string text)
@@ -109,7 +109,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                 }
 
                 var domain = match.Groups[1].Value;
-                return linkValidationExpression.IsMatch(link) && await domainNameResolver.IsValidDomainAsync(domain).ConfigureAwait(false);
+                return linkValidationExpression.IsMatch(link) && await domainNameResolver.IsValidDomainAsync(domain);
             }
             catch (RegexMatchTimeoutException)
             {
