@@ -38,8 +38,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public async Task<IEnumerable<string>> ExtractLinksFromTextAsync(string text)
         {
-            var words = GetWords(text);
-            return await asyncFilter.FilterAsync(words, IsValidLinkAsync);
+            return await Task.Run(async () =>
+            {
+                var words = GetWords(text);
+                return await asyncFilter.FilterAsync(words, IsValidLinkAsync);
+            });
         }
 
         private static string[] GetWords(string text)
@@ -73,7 +76,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             var words = GetWords(text);
             foreach (var word in words)
             {
-                if(await IsValidLinkAsync(word))
+                if (await IsValidLinkAsync(word))
                 {
                     return true;
                 }
@@ -90,23 +93,21 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         public async Task<bool> IsValidLinkAsync(string link)
         {
-            return await Task<bool>.Factory.StartNew(() => {
-                try {
-                    var match = linkValidationExpression.Match(link);
-                    if (!match.Success)
-                    {
-                        return false;
-                    }
-
-                    var domain = match.Groups[1].Value;
-                    return linkValidationExpression.IsMatch(link);
-                    //return linkValidationExpression.IsMatch(link) && await domainNameResolver.IsValidDomainAsync(domain);
-                }
-                catch (RegexMatchTimeoutException)
+            try
+            {
+                var match = linkValidationExpression.Match(link);
+                if (!match.Success)
                 {
                     return false;
                 }
-            });
+
+                var domain = match.Groups[1].Value;
+                return linkValidationExpression.IsMatch(link) && await domainNameResolver.IsValidDomainAsync(domain);
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
         }
     }
 }
