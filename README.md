@@ -1,9 +1,9 @@
 <img src="https://ci.appveyor.com/api/projects/status/hnhqpn0rwcsvccng/branch/master?svg=true" />
 # Shapeshifter
 Shapeshifter is a revolutionary clipboard manager that you might know of already. It can be downloaded [here](http://flamefusion.net/software/shapeshifter),
-although that link is for Version 4. 
+although that link is for Version 5. 
 
-Version 5 is the first version to go Open Source, on this repository. It is a complete rewrite, so expect it to take some time to get it ready.
+Version 6 is the first version to go Open Source, on this repository. It is a complete rewrite, so expect it to take some time to get it ready.
 
 ## Accelerate development
 We represent a small group of friends working on Shapeshifter in our spare time (which we don't have a lot of). If you like our effort, feel free to tip us a bit.
