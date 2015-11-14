@@ -1,6 +1,4 @@
-﻿#region
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
@@ -9,8 +7,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
@@ -45,11 +41,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             using (clipboardSessionFactory.StartNewSession())
             {
                 var formats = ClipboardApi.GetClipboardFormats();
-                if (IsAnyFormatSupported(formats))
-                {
-                    return ConstructPackage(formats);
-                }
-                return null;
+                return IsAnyFormatSupported(formats) ? 
+                    ConstructPackage(formats) : null;
             }
         }
 
@@ -80,17 +73,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             ClipboardDataControlPackage package, IClipboardDataControlFactory factory, uint format)
         {
             var unwrapper = memoryUnwrappers.FirstOrDefault(x => x.CanUnwrap(format));
-            if (unwrapper != null)
+
+            var rawData = unwrapper?.UnwrapStructure(format);
+            if (rawData == null) return;
+
+            var clipboardData = factory.BuildData(format, rawData);
+            if (clipboardData != null)
             {
-                var rawData = unwrapper.UnwrapStructure(format);
-                if (rawData != null)
-                {
-                    var clipboardData = factory.BuildData(format, rawData);
-                    if (clipboardData != null)
-                    {
-                        package.AddData(clipboardData);
-                    }
-                }
+                package.AddData(clipboardData);
             }
         }
 
@@ -99,11 +89,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             foreach (var data in package.Contents)
             {
                 var dataFactory = dataFactories.FirstOrDefault(x => x.CanBuildControl(data));
-                if (dataFactory != null)
-                {
-                    package.Control = dataFactory.BuildControl(data);
-                    break;
-                }
+                if (dataFactory == null) continue;
+
+                package.Control = dataFactory.BuildControl(data);
+                break;
             }
         }
     }

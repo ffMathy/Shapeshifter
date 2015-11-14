@@ -1,13 +1,9 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -20,20 +16,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             this.asyncFilter = asyncFilter;
         }
 
-        public string Description
-        {
-            get { return "Compress the clipboard contents into a ZIP-file and copy it."; }
-        }
+        public string Description => "Compress the clipboard contents into a ZIP-file and copy it.";
 
-        public byte Order
-        {
-            get { return 75; }
-        }
+        public byte Order => 75;
 
-        public string Title
-        {
-            get { return "Copy as compressed folder"; }
-        }
+        public string Title => "Copy as compressed folder";
 
         public async Task<bool> CanPerformAsync(
             IClipboardDataPackage package)
@@ -42,7 +29,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return supportedData.Any();
         }
 
-        private async Task<bool> CanPerformAsync(
+        private static async Task<bool> CanPerformAsync(
             IClipboardData data)
         {
             return

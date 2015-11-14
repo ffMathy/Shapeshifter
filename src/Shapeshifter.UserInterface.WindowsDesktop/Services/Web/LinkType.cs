@@ -1,8 +1,4 @@
-﻿#region
-
-using System;
-
-#endregion
+﻿using System;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
 {

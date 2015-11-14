@@ -1,13 +1,9 @@
-﻿#region
-
-using System.Linq;
+﻿using System.Linq;
 using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.Tests.Controls.Clipboard.ViewModels
 {

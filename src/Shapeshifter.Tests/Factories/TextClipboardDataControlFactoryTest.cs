@@ -1,6 +1,4 @@
-﻿#region
-
-using Autofac;
+﻿using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
@@ -9,8 +7,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.Tests.Factories
 {

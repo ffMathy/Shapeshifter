@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
@@ -8,8 +6,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
@@ -22,7 +18,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
 
         private bool isInstalled;
 
-        private IntPtr windowHandle;
+        private IntPtr mainWindowHandle;
 
         public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
@@ -38,7 +34,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
 
         public void Install(IntPtr windowHandle)
         {
-            this.windowHandle = windowHandle;
+            if (isInstalled)
+            {
+                throw new InvalidOperationException("This interceptor has already been installed.");
+            }
+
+            this.mainWindowHandle = windowHandle;
 
             foreach (var interception in keyInterceptions.Values)
             {
@@ -71,9 +72,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
         private void HandleHotkeyMessage(WindowMessageReceivedArgument e)
         {
             var interception = GetInterceptionForInterceptionId((int) e.WordParameter);
-            if (interception != null && HotkeyFired != null)
+            if (interception != null)
             {
-                HotkeyFired(this, new HotkeyFiredArgument(
+                HotkeyFired?.Invoke(this, new HotkeyFiredArgument(
                     interception.KeyCode, interception.ControlNeeded));
             }
         }
@@ -97,9 +98,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
 
         public void Uninstall()
         {
+            if (!isInstalled)
+            {
+                throw new InvalidOperationException("This interceptor has already been uninstalled.");
+            }
+
             foreach (var interception in keyInterceptions.Values)
             {
-                interception.Stop(windowHandle);
+                interception.Stop(mainWindowHandle);
             }
 
             isInstalled = false;

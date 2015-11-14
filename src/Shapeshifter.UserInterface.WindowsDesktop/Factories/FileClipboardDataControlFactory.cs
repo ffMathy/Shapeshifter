@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,8 +13,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
@@ -49,18 +45,20 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public IClipboardControl BuildControl(IClipboardData clipboardData)
         {
-            if (clipboardData
-                is IClipboardFileCollectionData)
+            var clipboardFileCollectionData = clipboardData as IClipboardFileCollectionData;
+            if (clipboardFileCollectionData != null)
             {
                 return clipboardFileCollectionControlFactory.CreateControl(
-                    (IClipboardFileCollectionData) clipboardData);
+                    clipboardFileCollectionData);
             }
-            if (clipboardData
-                is IClipboardFileData)
+
+            var clipboardFileData = clipboardData as IClipboardFileData;
+            if (clipboardFileData != null)
             {
                 return clipboardFileControlFactory.CreateControl(
-                    (IClipboardFileData) clipboardData);
+                    clipboardFileData);
             }
+
             throw new ArgumentException(
                 "Unknown clipboard data type.", nameof(clipboardData));
         }
@@ -83,7 +81,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             return ConstructDataFromFiles(files, format, rawData);
         }
 
-        private IEnumerable<string> GetFilesCopiedFromRawData(byte[] data)
+        private IReadOnlyCollection<string> GetFilesCopiedFromRawData(byte[] data)
         {
             var files = new List<string>();
             using (var memoryHandle = memoryHandleFactory.AllocateInMemory(data))
@@ -104,15 +102,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
                 length = ClipboardApi.DragQueryFile(memoryHandle.Pointer, i, filenameBuilder, length + 1);
 
-                var fileName = filenameBuilder.ToString();
+                var fileName = filenameBuilder.ToString(0, length);
                 files.Add(fileName);
             }
         }
 
         private IClipboardData ConstructDataFromFiles(
-            IEnumerable<string> files, uint format, byte[] rawData)
+            IReadOnlyCollection<string> files, uint format, byte[] rawData)
         {
-            if (files.Count() == 1)
+            if (files.Count == 1)
             {
                 return ConstructClipboardFileData(
                     files.Single(), format, rawData);
@@ -126,7 +124,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         {
             return new ClipboardFileCollectionData(dataSourceService)
             {
-                Files = files.Select(ConstructClipboardFileData),
+                Files = files.Select(ConstructClipboardFileData).ToArray(),
                 RawFormat = format,
                 RawData = rawData
             };

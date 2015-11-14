@@ -1,11 +1,7 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces
 {

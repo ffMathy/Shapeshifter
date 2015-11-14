@@ -1,11 +1,7 @@
-﻿#region
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers
 {
@@ -29,7 +25,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
 
         public bool CanUnwrap(uint format)
         {
-            return !excludedFormats.Any(x => x == format);
+            return excludedFormats.All(x => x != format);
         }
 
         public byte[] UnwrapStructure(uint format)

@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
@@ -10,8 +8,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {

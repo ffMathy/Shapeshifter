@@ -1,32 +1,25 @@
-﻿#region
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Data
 {
     public class ClipboardDataControlPackage : IClipboardDataControlPackage
     {
-        private readonly IList<IClipboardData> data;
+        private readonly IList<IClipboardData> dataCollection;
 
         public ClipboardDataControlPackage()
         {
-            data = new List<IClipboardData>();
+            dataCollection = new List<IClipboardData>();
         }
 
-        public IEnumerable<IClipboardData> Contents
-        {
-            get { return data; }
-        }
+        public IEnumerable<IClipboardData> Contents => dataCollection;
 
         public IClipboardControl Control { get; set; }
 
         public void AddData(IClipboardData data)
         {
-            this.data.Add(data);
+            dataCollection.Add(data);
         }
     }
 }

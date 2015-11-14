@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
@@ -8,8 +6,6 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
 {
@@ -41,7 +37,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
             }
         }
 
-        private string NormalizeDomain(string domain)
+        private static string NormalizeDomain(string domain)
         {
             return domain
                 .Trim()

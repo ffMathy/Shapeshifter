@@ -1,8 +1,4 @@
-﻿#region
-
-using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
-
-#endregion
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces
 {

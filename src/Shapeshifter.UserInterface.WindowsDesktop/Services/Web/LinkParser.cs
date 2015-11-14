@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -9,8 +7,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfa
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
 {
@@ -46,7 +42,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
             this.performanceHandleFactory = performanceHandleFactory;
         }
 
-        public async Task<IEnumerable<string>> ExtractLinksFromTextAsync(string text)
+        public async Task<IReadOnlyCollection<string>> ExtractLinksFromTextAsync(string text)
         {
             return await Task.Run(async () =>
             {
@@ -141,7 +137,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
             using (performanceHandleFactory.StartMeasuringPerformance())
             {
                 Func<string, Task<bool>> validationFunction =
-                    async (string word) => IsLinkOfType(word, linkType) && await IsValidLinkAsync(word);
+                    async word => IsLinkOfType(word, linkType) && await IsValidLinkAsync(word);
                 return await Task.Run(async () =>
                 {
                     var words = GetWords(text);

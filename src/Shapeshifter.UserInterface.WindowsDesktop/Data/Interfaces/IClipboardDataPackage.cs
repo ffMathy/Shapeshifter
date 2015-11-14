@@ -1,8 +1,4 @@
-﻿#region
-
-using System.Collections.Generic;
-
-#endregion
+﻿using System.Collections.Generic;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces
 {

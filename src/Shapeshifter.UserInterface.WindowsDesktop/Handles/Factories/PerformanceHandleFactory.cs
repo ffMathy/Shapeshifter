@@ -1,11 +1,7 @@
-﻿#region
-
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories
 {

@@ -1,9 +1,5 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Threading.Tasks;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces
 {

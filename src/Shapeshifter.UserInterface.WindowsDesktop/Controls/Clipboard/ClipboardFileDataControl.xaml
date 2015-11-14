@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard"
              xmlns:viewModels="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels"
              xmlns:converters="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Converters"
-             xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
              d:DataContext="{d:DesignInstance Type=viewModels:ClipboardFileDataViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d">
     <Border Style="{StaticResource ClipboardDataControlContentStyle}">
@@ -33,9 +32,9 @@
 
                     <TextBlock VerticalAlignment="Center" FontWeight="Thin" FontSize="24"
                                Style="{StaticResource ClipboardDataControlHeaderTextStyle}"
-                               Text="{Binding Data.FileName}" Grid.Column="1" />
+                               Text="{Binding Data.FileName}" />
 
-                    <local:DataSourceControl DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
+                    <local:DataSourceControl DataContext="{Binding Data.Source}" Grid.Row="1" />
                 </Grid>
             </Grid>
         </Grid>

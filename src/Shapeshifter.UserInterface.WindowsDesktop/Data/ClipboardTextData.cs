@@ -1,9 +1,5 @@
-﻿#region
-
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Data
 {

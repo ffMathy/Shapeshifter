@@ -1,9 +1,5 @@
-﻿#region
-
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Windows.Controls;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard
 {

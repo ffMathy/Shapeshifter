@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Linq;
 using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,8 +9,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.Tests.Mediators
 {

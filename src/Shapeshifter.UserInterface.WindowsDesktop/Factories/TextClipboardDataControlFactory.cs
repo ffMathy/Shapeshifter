@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Text;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
@@ -9,8 +7,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
@@ -49,7 +45,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             };
         }
 
-        private string GetProcessedTextFromRawData(uint format, byte[] data)
+        private static string GetProcessedTextFromRawData(uint format, byte[] data)
         {
             var text = GetTextFromRawData(format, data);
 
@@ -61,7 +57,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             return text;
         }
 
-        private string GetTextFromRawData(uint format, byte[] data)
+        private static string GetTextFromRawData(uint format, byte[] data)
         {
             switch (format)
             {

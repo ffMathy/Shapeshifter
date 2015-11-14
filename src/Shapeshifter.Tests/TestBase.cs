@@ -1,14 +1,10 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Linq;
 using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ploeh.AutoFixture;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.Tests
 {
@@ -27,11 +23,13 @@ namespace Shapeshifter.Tests
             fixture = CreateFixture();
         }
 
-        private Fixture CreateFixture()
+        private static Fixture CreateFixture()
         {
-            var fixture = new Fixture();
-            fixture.OmitAutoProperties = true;
-            fixture.RepeatCount = 5;
+            var fixture = new Fixture
+            {
+                OmitAutoProperties = true,
+                RepeatCount = 5
+            };
 
             var behavior = fixture
                 .Behaviors
@@ -51,10 +49,7 @@ namespace Shapeshifter.Tests
 
             builder.RegisterFake<IUpdateService>();
 
-            if (setupCallback != null)
-            {
-                setupCallback(builder);
-            }
+            setupCallback?.Invoke(builder);
 
             return builder.Build();
         }

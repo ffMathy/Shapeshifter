@@ -1,10 +1,6 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
@@ -56,8 +52,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
             [In] [MarshalAs(UnmanagedType.LPStruct)] Guid riid,
             [Out] [MarshalAs(UnmanagedType.Interface, IidParameterIndex = 2)] out IShellItem ppv);
 
-        #region Nested type: IShellItem
-
         [ComImport]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         [Guid("43826d1e-e718-42ee-bc55-a1e261c37bfe")]
@@ -77,19 +71,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
             void Compare(IShellItem psi, uint hint, out int piOrder);
         };
 
-        #endregion
-
-        #region Nested type: IShellItemImageFactory
-
         [ComImport, Guid("bcc18b79-ba16-442f-80c4-8a59c30c463b"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IShellItemImageFactory
         {
             void GetImage(SIZE size, SIIGBF flags, ref IntPtr phbm);
         }
-
-        #endregion
-
-        #region Nested type: SIGDN
 
         public enum SIGDN : uint
         {
@@ -103,10 +89,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
             URL = 0x80068000u
         }
 
-        #endregion
-
-        #region Nested type: SIIGBF
-
         [Flags]
         public enum SIIGBF
         {
@@ -117,10 +99,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
             SIIGBF_THUMBNAILONLY = 8,
             SIIGBF_INCACHEONLY = 16
         }
-
-        #endregion
-
-        #region Nested type: SIZE
 
         [ExcludeFromCodeCoverage]
         [StructLayout(LayoutKind.Sequential)]
@@ -135,7 +113,5 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
                 this.cy = cy;
             }
         }
-
-        #endregion
     }
 }

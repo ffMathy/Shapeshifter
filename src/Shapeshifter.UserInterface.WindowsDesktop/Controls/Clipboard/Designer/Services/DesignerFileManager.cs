@@ -1,8 +1,4 @@
-﻿#region
-
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-
-#endregion
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {

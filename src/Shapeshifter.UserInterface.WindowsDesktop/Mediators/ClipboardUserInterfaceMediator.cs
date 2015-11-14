@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
@@ -8,8 +6,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 {
@@ -48,34 +44,21 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
             clipboardPackages = new List<IClipboardDataControlPackage>();
         }
 
-        private void OnPasteCombinationHeldDownForLongTime()
-        {
-            if (UserInterfaceShown != null)
-            {
-                UserInterfaceShown(this, new UserInterfaceShownEventArgument());
-            }
-        }
-
         private void ClipboardHook_DataCopied(
             object sender,
             DataCopiedEventArgument e)
         {
             var package = clipboardDataControlPackageFactory.Create();
-            if (package != null)
-            {
-                clipboardPackages.Add(package);
+            if (package == null) return;
 
-                FireControlAddedEvent(package);
-            }
+            clipboardPackages.Add(package);
+
+            FireControlAddedEvent(package);
         }
 
         private void FireControlAddedEvent(IClipboardDataControlPackage package)
         {
-            if (ControlAdded != null)
-            {
-                ControlAdded(this, new ControlEventArgument(package));
-                //userInterfaceThread.Invoke(() => ControlAdded(this, new ControlEventArgument(package)));
-            }
+            ControlAdded?.Invoke(this, new ControlEventArgument(package));
         }
 
         public void Disconnect()
@@ -139,10 +122,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 
         private void RaiseUserInterfaceShownEvent()
         {
-            if (UserInterfaceShown != null)
-            {
-                UserInterfaceShown(this, new UserInterfaceShownEventArgument());
-            }
+            UserInterfaceShown?.Invoke(this, new UserInterfaceShownEventArgument());
         }
 
         private void PasteCombinationDurationMediator_PasteCombinationReleased(
@@ -154,10 +134,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 
         private void RaiseUserInterfaceHiddenEvent()
         {
-            if (UserInterfaceHidden != null)
-            {
-                UserInterfaceHidden(this, new UserInterfaceHiddenEventArgument());
-            }
+            UserInterfaceHidden?.Invoke(this, new UserInterfaceHiddenEventArgument());
         }
     }
 }

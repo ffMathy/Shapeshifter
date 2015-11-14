@@ -1,12 +1,8 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {

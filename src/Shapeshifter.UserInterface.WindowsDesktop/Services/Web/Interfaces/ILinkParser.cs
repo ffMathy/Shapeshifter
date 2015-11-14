@@ -1,16 +1,12 @@
-﻿#region
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces
 {
     public interface ILinkParser : ISingleInstance
     {
-        Task<IEnumerable<string>> ExtractLinksFromTextAsync(string text);
+        Task<IReadOnlyCollection<string>> ExtractLinksFromTextAsync(string text);
 
         Task<bool> HasLinkAsync(string text);
 

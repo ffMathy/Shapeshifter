@@ -1,13 +1,9 @@
-﻿#region
-
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -24,20 +20,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             this.asyncFilter = asyncFilter;
         }
 
-        public string Description
-        {
-            get { return "Pastes clipboard contents as plain text."; }
-        }
+        public string Description => "Pastes clipboard contents as plain text.";
 
-        public byte Order
-        {
-            get { return 25; }
-        }
+        public byte Order => 25;
 
-        public string Title
-        {
-            get { return "Paste as plain text"; }
-        }
+        public string Title => "Paste as plain text";
 
         public async Task<bool> CanPerformAsync(
             IClipboardDataPackage data)
@@ -51,7 +38,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return supportedData.FirstOrDefault();
         }
 
-        private async Task<bool> CanPerformAsync(
+        private static async Task<bool> CanPerformAsync(
             IClipboardData data)
         {
             return data is IClipboardTextData;

@@ -1,11 +1,7 @@
-﻿#region
-
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
 {
@@ -16,9 +12,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
         {
             var stream = new MemoryStream(bytes);
 
-            var image = new BitmapImage();
-            image.CreateOptions = BitmapCreateOptions.None;
-            image.CacheOption = BitmapCacheOption.OnLoad;
+            var image = new BitmapImage
+            {
+                CreateOptions = BitmapCreateOptions.None,
+                CacheOption = BitmapCacheOption.OnLoad
+            };
 
             image.BeginInit();
             image.StreamSource = stream;

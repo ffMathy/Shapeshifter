@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -16,8 +14,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interface
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -51,13 +47,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             this.logger = logger;
         }
 
-        private async Task StartUpdateLoop()
+        private async void StartUpdateLoop()
         {
             while (true)
             {
                 await UpdateAsync();
                 await WaitForNextCycle();
             }
+
+            // ReSharper disable once FunctionNeverReturns
         }
 
         private static async Task WaitForNextCycle()
@@ -74,12 +72,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             await Task.Delay(updateIntervalInMilliseconds);
         }
 
-        private Version GetCurrentVersion()
+        private static Version GetCurrentVersion()
         {
             return GetAssemblyInformation().Version;
         }
 
-        private string GetAssemblyName()
+        private static string GetAssemblyName()
         {
             return GetAssemblyInformation().Name;
         }
@@ -89,7 +87,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             return Assembly.GetExecutingAssembly().GetName();
         }
 
-        private GitHubClient CreateClient()
+        private static GitHubClient CreateClient()
         {
             var client = new GitHubClient(new ProductHeaderValue(GetAssemblyName()));
             return client;
@@ -119,12 +117,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         private async Task UpdateFromAssetsAsync(IReadOnlyList<ReleaseAsset> assets)
         {
             const string targetAssetName = "Binaries.zip";
-            foreach (var asset in assets)
+            foreach (var asset in assets.Where(asset => asset.Name == targetAssetName))
             {
-                if (asset.Name == targetAssetName)
-                {
-                    await UpdateFromAssetAsync(asset);
-                }
+                await UpdateFromAssetAsync(asset);
             }
         }
 
@@ -159,7 +154,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             return temporaryDirectory;
         }
 
-        private bool IsUpdateToReleaseNeeded(Release release)
+        private static bool IsUpdateToReleaseNeeded(Release release)
         {
             if (release.Prerelease)
             {
@@ -170,7 +165,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             return IsUpdateToVersionNeeded(releaseVersion);
         }
 
-        private bool IsUpdateToVersionNeeded(Version releaseVersion)
+        private static bool IsUpdateToVersionNeeded(Version releaseVersion)
         {
             return releaseVersion > GetCurrentVersion();
         }
@@ -198,11 +193,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             return allReleases.Where(IsUpdateToReleaseNeeded);
         }
 
-        public async void Start()
+        public void Start()
         {
             if (!environmentInformation.IsDebugging && !environmentInformation.IsInDesignTime)
             {
-                await StartUpdateLoop();
+                StartUpdateLoop();
             }
         }
     }

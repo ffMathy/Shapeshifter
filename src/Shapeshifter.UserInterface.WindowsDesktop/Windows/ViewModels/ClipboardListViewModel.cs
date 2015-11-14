@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -17,8 +15,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 {
@@ -50,10 +46,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             set
             {
                 selectedAction = value;
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedAction)));
-                }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedAction)));
             }
         }
 
@@ -63,10 +56,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             set
             {
                 selectedElement = value;
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedElement)));
-                }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedElement)));
 
                 userInterfaceThread.Invoke(() => packageActionBinder.LoadFromKey(value));
             }
@@ -94,14 +84,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             this.performanceHandleFactory = performanceHandleFactory;
             this.userInterfaceThread = userInterfaceThread;
 
-            PreparePackageBinder(packageActionBinder, pasteAction);
+            PreparePackageBinder(pasteAction);
 
             RegisterMediatorEvents(clipboardUserInterfaceMediator);
             RegisterKeyEvents(hotkeyInterceptor);
         }
 
         private void PreparePackageBinder(
-            IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder,
             IPasteAction defaultAction)
         {
             packageActionBinder.Default = defaultAction;
@@ -189,7 +178,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             }
         }
 
-        private T GetNewSelectedElementAfterHandlingUpKey<T>(IList<T> list, T selectedElement)
+        private static T GetNewSelectedElementAfterHandlingUpKey<T>(IList<T> list, T selectedElement)
         {
             var indexToUse = list.IndexOf(selectedElement) - 1;
             if (indexToUse < 0)
@@ -200,7 +189,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             return list[indexToUse];
         }
 
-        private T GetNewSelectedElementAfterHandlingDownKey<T>(IList<T> list, T selectedElement)
+        private static T GetNewSelectedElementAfterHandlingDownKey<T>(IList<T> list, T selectedElement)
         {
             var indexToUse = list.IndexOf(selectedElement) + 1;
             if (indexToUse == list.Count)
@@ -213,18 +202,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 
         private async void Service_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
         {
-            if (UserInterfaceShown != null)
-            {
-                UserInterfaceShown(this, e);
-            }
+            UserInterfaceShown?.Invoke(this, e);
         }
 
         private async void Service_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
         {
-            if (UserInterfaceHidden != null)
-            {
-                UserInterfaceHidden(this, e);
-            }
+            UserInterfaceHidden?.Invoke(this, e);
 
             if (SelectedAction != null)
             {
@@ -241,15 +224,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
                         asyncFilter.FilterAsync(allActions, action => action.CanPerformAsync(data))
                             .ConfigureAwait(false);
                 return allowedActions.OrderBy(x => x.Order);
-            }
-        }
-
-        private void AddAction(IAction action)
-        {
-            Actions.Add(action);
-            if (SelectedAction == null)
-            {
-                SelectedAction = action;
             }
         }
 

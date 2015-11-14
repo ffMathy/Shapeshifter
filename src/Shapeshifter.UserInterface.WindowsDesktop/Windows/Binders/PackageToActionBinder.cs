@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -9,17 +7,16 @@ using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces;
 
-#endregion
-
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders
 {
     internal class PackageToActionBinder : IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>
     {
         private readonly IDictionary<IClipboardDataControlPackage, ICollection<IAction>> dictionaryStates;
 
-        private IClipboardDataControlPackage key;
-        private ObservableCollection<IAction> destinationCollection;
-        private Func<IClipboardDataControlPackage, Task<IEnumerable<IAction>>> mappingFunction;
+        private IClipboardDataControlPackage currentKey;
+
+        private ObservableCollection<IAction> boundDestinationCollection;
+        private Func<IClipboardDataControlPackage, Task<IEnumerable<IAction>>> currentMappingFunction;
 
         public IAction Default { get; set; }
 
@@ -27,53 +24,51 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders
         {
             dictionaryStates = new Dictionary<IClipboardDataControlPackage, ICollection<IAction>>();
         }
-
-        //TODO: use a factory for this instead.
+        
         public void Bind(
             ObservableCollection<IClipboardDataControlPackage> sourceCollection,
             ObservableCollection<IAction> destinationCollection,
             Func<IClipboardDataControlPackage, Task<IEnumerable<IAction>>> mappingFunction)
         {
-            this.destinationCollection = destinationCollection;
-            this.mappingFunction = mappingFunction;
+            this.boundDestinationCollection = destinationCollection;
+            this.currentMappingFunction = mappingFunction;
 
             sourceCollection.CollectionChanged += SourceCollection_CollectionChanged;
         }
 
         public void LoadFromKey(IClipboardDataControlPackage key)
         {
-            destinationCollection.Clear();
-            destinationCollection.Add(Default);
+            boundDestinationCollection.Clear();
+            boundDestinationCollection.Add(Default);
 
-            this.key = key;
+            this.currentKey = key;
             foreach (var item in dictionaryStates[key])
             {
-                destinationCollection.Add(item);
+                boundDestinationCollection.Add(item);
             }
         }
 
         private async void SourceCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.NewItems.Count > 0)
+            if (e.NewItems.Count <= 0) return;
+
+            foreach (IClipboardDataControlPackage item in e.NewItems)
             {
-                foreach (IClipboardDataControlPackage item in e.NewItems)
-                {
-                    PrepareDictionaryStateKey(item);
-                    await AddResultsToDictionary(item);
-                }
+                PrepareDictionaryStateKey(item);
+                await AddResultsToDictionary(item);
             }
         }
 
         private async Task AddResultsToDictionary(IClipboardDataControlPackage item)
         {
             var collection = dictionaryStates[item];
-            var results = await mappingFunction(item);
+            var results = await currentMappingFunction(item);
             foreach (var result in results)
             {
                 collection.Add(result);
-                if (key == item)
+                if (currentKey == item)
                 {
-                    destinationCollection.Add(result);
+                    boundDestinationCollection.Add(result);
                 }
             }
         }

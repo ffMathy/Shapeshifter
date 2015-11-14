@@ -1,14 +1,10 @@
-﻿#region
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop
 {
@@ -55,11 +51,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
         {
             foreach (var process in processes)
             {
-                if (process.Id != processId)
-                {
-                    process.CloseMainWindow();
-                    process.WaitForExit();
-                }
+                if (process.Id == processId) continue;
+
+                process.CloseMainWindow();
+                process.WaitForExit();
             }
         }
 
@@ -74,11 +69,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
             var processorsUsed = new List<IArgumentProcessor>();
             foreach (var processor in argumentProcessors)
             {
-                if (processor.CanProcess(arguments))
-                {
-                    processor.Process(arguments);
-                    processorsUsed.Add(processor);
-                }
+                if (!processor.CanProcess(arguments)) continue;
+
+                processor.Process(arguments);
+                processorsUsed.Add(processor);
             }
 
             return processorsUsed;

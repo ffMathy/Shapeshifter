@@ -1,12 +1,8 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop
 {

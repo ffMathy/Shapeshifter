@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard"
              xmlns:viewModels="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels"
-             xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
              d:DataContext="{d:DesignInstance Type=viewModels:ClipboardTextDataViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d">
     <Border Style="{StaticResource ClipboardDataControlContentStyle}">
@@ -34,10 +33,10 @@
                     <TextBlock TextTrimming="CharacterEllipsis" MaxHeight="40" TextWrapping="Wrap"
                                VerticalAlignment="Bottom" FontWeight="Normal" FontSize="14"
                                Text="{Binding FriendlyText}"
-                               Style="{StaticResource ClipboardDataControlHeaderTextStyle}" Grid.Column="1" />
+                               Style="{StaticResource ClipboardDataControlHeaderTextStyle}" />
 
                     <local:DataSourceControl VerticalAlignment="Top" Margin="0,10,0,1"
-                                             DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
+                                             DataContext="{Binding Data.Source}" Grid.Row="1" />
                 </Grid>
             </Grid>
         </Grid>

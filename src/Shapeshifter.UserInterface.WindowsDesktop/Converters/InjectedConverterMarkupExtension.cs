@@ -1,14 +1,10 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Windows.Markup;
 using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Converters
 {

@@ -1,9 +1,5 @@
-﻿#region
-
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Data
 {
@@ -14,10 +10,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Data
             Source = sourceFactory.GetDataSource();
         }
 
-        public byte[] Image
-        {
-            get { return RawData; }
-        }
+        public byte[] Image => RawData;
 
         public byte[] RawData { get; set; }
 

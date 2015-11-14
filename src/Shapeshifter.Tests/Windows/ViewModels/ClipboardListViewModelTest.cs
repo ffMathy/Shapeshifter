@@ -1,7 +1,4 @@
-﻿#region
-
-using System;
-using System.ComponentModel;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
@@ -13,8 +10,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.Tests.Windows.ViewModels
 {
@@ -31,14 +26,12 @@ namespace Shapeshifter.Tests.Windows.ViewModels
             var viewModel = container.Resolve<IClipboardListViewModel>();
 
             object eventSender = null;
-            PropertyChangedEventArgs eventArguments = null;
 
             viewModel.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName == nameof(viewModel.SelectedElement))
                 {
                     eventSender = sender;
-                    eventArguments = e;
                 }
             };
             viewModel.SelectedElement = Substitute.For<IClipboardDataControlPackage>();

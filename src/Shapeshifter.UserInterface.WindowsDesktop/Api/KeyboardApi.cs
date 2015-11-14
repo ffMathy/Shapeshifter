@@ -1,9 +1,5 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
@@ -30,10 +26,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
             public uint type;
             public InputUnion U;
 
-            public static int Size
-            {
-                get { return Marshal.SizeOf(typeof (INPUT)); }
-            }
+            public static int Size => Marshal.SizeOf(typeof (INPUT));
         }
 
         [Flags]

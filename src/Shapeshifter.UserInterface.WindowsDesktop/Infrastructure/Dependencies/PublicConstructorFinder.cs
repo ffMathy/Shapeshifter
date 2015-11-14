@@ -1,11 +1,7 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using Autofac.Core.Activators.Reflection;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
 {
@@ -15,7 +11,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
         {
             return targetType.GetConstructors()
                 .Where(x => x.IsPublic)
-                .OrderByDescending(x => x.GetParameters().Count())
+                .OrderByDescending(x => x.GetParameters().Length)
                 .ToArray();
         }
     }

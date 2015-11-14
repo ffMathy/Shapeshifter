@@ -1,6 +1,4 @@
-﻿#region
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
@@ -11,8 +9,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -40,20 +36,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             this.clipboardInjectionService = clipboardInjectionService;
         }
 
-        public string Description
-        {
-            get { return "Copies the image that the link in the clipboard text points to."; }
-        }
+        public string Description => "Copies the image that the link in the clipboard text points to.";
 
-        public string Title
-        {
-            get { return "Copy image from link"; }
-        }
+        public string Title => "Copy image from link";
 
-        public byte Order
-        {
-            get { return 100; }
-        }
+        public byte Order => 100;
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
         {

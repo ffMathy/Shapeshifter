@@ -1,14 +1,11 @@
-﻿#region
-
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
 {
@@ -20,7 +17,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
             return GeneralApi.ByteArrayToStructure<ImageMetaInformation>(data);
         }
 
-        private byte[] ConvertMetaInformationToByteArray(ImageMetaInformation metaInformation)
+        private static IEnumerable<byte> ConvertMetaInformationToByteArray(ImageMetaInformation metaInformation)
         {
             return GeneralApi.StructureToByteArray(metaInformation);
         }

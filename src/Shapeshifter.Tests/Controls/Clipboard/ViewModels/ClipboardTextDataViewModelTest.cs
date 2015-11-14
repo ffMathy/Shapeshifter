@@ -1,12 +1,8 @@
-﻿#region
-
-using Autofac;
+﻿using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.Tests.Controls.Clipboard.ViewModels
 {

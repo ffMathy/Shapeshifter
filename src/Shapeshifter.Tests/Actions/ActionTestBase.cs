@@ -1,9 +1,5 @@
-﻿#region
-
-using NSubstitute;
+﻿using NSubstitute;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.Tests.Actions
 {

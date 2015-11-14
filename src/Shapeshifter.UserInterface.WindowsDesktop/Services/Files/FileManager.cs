@@ -1,12 +1,8 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
 {
@@ -35,7 +31,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             }
         }
 
-        private string PrepareIsolatedTemporaryFolder()
+        private static string PrepareIsolatedTemporaryFolder()
         {
             const string folderName = "Shapeshifter";
 
@@ -75,7 +71,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             return fileNameWithExtension == fileNameWithoutExtension;
         }
 
-        private string GetFullPathFromRelativeTemporaryPath(string path)
+        private static string GetFullPathFromRelativeTemporaryPath(string path)
         {
             var isolatedFolderPath = PrepareIsolatedTemporaryFolder();
 

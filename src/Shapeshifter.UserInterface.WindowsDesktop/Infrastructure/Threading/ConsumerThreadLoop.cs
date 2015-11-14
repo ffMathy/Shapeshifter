@@ -1,12 +1,8 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
@@ -25,15 +21,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
             this.logger = logger;
         }
 
-        public bool IsRunning
-        {
-            get { return internalLoop.IsRunning; }
-        }
+        public bool IsRunning => internalLoop.IsRunning;
 
         public void Stop()
         {
-            internalLoop.Stop();
-            countAvailable = 0;
+            lock (this)
+            {
+                internalLoop.Stop();
+                countAvailable = 0;
+            }
         }
 
         public void Notify(Func<Task> action, CancellationToken token)

@@ -21,7 +21,7 @@
                    Source="{Binding Data.Image, Converter={converters:ByteArrayToImageSourceConverter}}"
                    Grid.ColumnSpan="3" />
 
-            <Border Style="{StaticResource ClipboardDataControlImageAreaStyleFaded}">
+            <Border Grid.Column="0" Style="{StaticResource ClipboardDataControlImageAreaStyleFaded}">
                 <Image ClipToBounds="True" Style="{StaticResource ClipboardDataImageStyle}" />
             </Border>
 
@@ -29,8 +29,7 @@
 
             <Grid Grid.Column="2" Style="{StaticResource ClipboardDataControlContentAreaStyleFaded}">
                 <Grid Style="{StaticResource ClipboardDataControlContentAreaInnerStyle}">
-                    <local:DataSourceControl VerticalAlignment="Bottom" DataContext="{Binding Data.Source}"
-                                             Grid.Row="1" Grid.Column="1" />
+                    <local:DataSourceControl VerticalAlignment="Bottom" DataContext="{Binding Data.Source}" />
                 </Grid>
             </Grid>
         </Grid>

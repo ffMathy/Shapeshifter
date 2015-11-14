@@ -1,8 +1,4 @@
-﻿#region
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-#endregion
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Shapeshifter.Tests.Services
 {

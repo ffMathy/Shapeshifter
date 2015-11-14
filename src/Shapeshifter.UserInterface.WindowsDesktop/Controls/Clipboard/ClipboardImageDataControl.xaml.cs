@@ -1,9 +1,5 @@
-﻿#region
-
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard
 {

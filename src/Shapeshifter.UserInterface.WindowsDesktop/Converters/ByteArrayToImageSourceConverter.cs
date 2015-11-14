@@ -1,12 +1,8 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Converters
 {

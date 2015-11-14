@@ -1,13 +1,9 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -27,20 +23,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             this.logger = logger;
         }
 
-        public string Description
-        {
-            get { return "Pastes clipboard contents as-is."; }
-        }
+        public string Description => "Pastes clipboard contents as-is.";
 
-        public byte Order
-        {
-            get { return 0; }
-        }
+        public byte Order => 0;
 
-        public string Title
-        {
-            get { return "Paste"; }
-        }
+        public string Title => "Paste";
 
         public async Task<bool> CanPerformAsync(
             IClipboardDataPackage package)

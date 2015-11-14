@@ -4,9 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard"
-             xmlns:viewModels="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels"
              xmlns:converters="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Converters"
-             xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
              xmlns:fileCollection="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection"
              d:DataContext="{d:DesignInstance Type=fileCollection:ClipboardFileCollectionDataViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d">
@@ -59,7 +57,7 @@
                     </ItemsControl>
 
                     <local:DataSourceControl Margin="0,7,0,0" VerticalAlignment="Bottom"
-                                             DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
+                                             DataContext="{Binding Data.Source}" Grid.Row="1" />
                 </Grid>
             </Grid>
         </Grid>

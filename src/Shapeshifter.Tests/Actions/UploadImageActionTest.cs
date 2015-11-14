@@ -1,6 +1,4 @@
-﻿#region
-
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
@@ -8,8 +6,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.Tests.Actions
 {

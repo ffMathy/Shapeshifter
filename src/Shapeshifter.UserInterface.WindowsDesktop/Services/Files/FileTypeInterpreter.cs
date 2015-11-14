@@ -1,9 +1,5 @@
-﻿#region
-
-using System.Linq;
+﻿using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
 {
@@ -23,7 +19,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             return FileType.Other;
         }
 
-        private bool IsTextFileType(string name)
+        private static bool IsTextFileType(string name)
         {
             var imageFileTypes = new[] {".txt"};
             return imageFileTypes.Any(name.EndsWith);

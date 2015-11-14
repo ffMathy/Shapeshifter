@@ -1,18 +1,13 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Interop;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
-using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
 {
@@ -24,7 +19,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
     {
         private readonly IMainWindowHandleContainer handleContainer;
         private readonly IKeyInterceptor keyInterceptor;
-        private readonly IClipboardUserInterfaceMediator mediator;
         private readonly IClipboardListViewModel viewModel;
         private readonly IWindowMessageHook windowMessageHook;
 
@@ -32,10 +26,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
             IClipboardListViewModel viewModel,
             IKeyInterceptor keyInterceptor,
             IWindowMessageHook windowMessageHook,
-            IMainWindowHandleContainer handleContainer,
-            IClipboardUserInterfaceMediator mediator)
+            IMainWindowHandleContainer handleContainer)
         {
-            this.mediator = mediator;
             this.handleContainer = handleContainer;
             this.keyInterceptor = keyInterceptor;
             this.viewModel = viewModel;
@@ -72,10 +64,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
                 handleContainer.Handle, KeyboardApi.VK_DELETE);
         }
 
-        public HwndSource HandleSource
-        {
-            get { return PresentationSource.FromVisual(this) as HwndSource; }
-        }
+        public HwndSource HandleSource => PresentationSource.FromVisual(this) as HwndSource;
 
         private void ClipboardListWindow_Activated(object sender, EventArgs e)
         {

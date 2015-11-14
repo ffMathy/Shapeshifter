@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -10,8 +8,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfa
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 {
@@ -108,12 +104,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 
         private void RaiseDurationPassedEventIfNeeded(int decisecondsPassed)
         {
-            if (decisecondsPassed == DurationInDeciseconds && PasteCombinationDurationPassed != null)
-            {
-                mainThreadInvoker.Invoke(
-                    () => PasteCombinationDurationPassed(this, new PasteCombinationDurationPassedEventArgument()));
-                logger.Information("Paste duration passed event raised.");
-            }
+            if (decisecondsPassed != DurationInDeciseconds || PasteCombinationDurationPassed == null) return;
+
+            mainThreadInvoker.Invoke(
+                () => PasteCombinationDurationPassed(this, new PasteCombinationDurationPassedEventArgument()));
+            logger.Information("Paste duration passed event raised.");
         }
 
         private void InstallPasteHotkeyInterceptor()

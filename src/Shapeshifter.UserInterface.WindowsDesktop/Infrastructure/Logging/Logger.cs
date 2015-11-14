@@ -1,9 +1,5 @@
-﻿#region
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging
 {
@@ -11,7 +7,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging
     {
         private const int MinimumImportanceFactor = 0;
 
-        private void Log(string text)
+        private static void Log(string text)
         {
             Debug.WriteLine($"{text}");
         }

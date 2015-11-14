@@ -1,8 +1,4 @@
-﻿#region
-
-using System.Windows;
-
-#endregion
+﻿using System.Windows;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Installer
 {

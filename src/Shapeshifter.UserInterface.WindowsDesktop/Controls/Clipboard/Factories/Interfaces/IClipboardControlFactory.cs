@@ -1,13 +1,9 @@
-﻿#region
-
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces
 {
-    public interface IClipboardControlFactory<TData, TControl>
+    public interface IClipboardControlFactory<in TData, out TControl>
         where TData : IClipboardData
         where TControl : IClipboardControl
     {

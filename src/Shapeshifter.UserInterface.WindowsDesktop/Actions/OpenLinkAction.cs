@@ -1,14 +1,10 @@
-﻿#region
-
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
@@ -29,20 +25,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         }
 
         //TODO: make the description include the links that will be opened by making a GetDescription(data) method instead.
-        public string Description
-        {
-            get { return "Open the link that is present in the clipboard."; }
-        }
+        public string Description => "Open the link that is present in the clipboard.";
 
-        public byte Order
-        {
-            get { return 200; }
-        }
+        public byte Order => 200;
 
-        public string Title
-        {
-            get { return "Open link"; }
-        }
+        public string Title => "Open link";
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
         {

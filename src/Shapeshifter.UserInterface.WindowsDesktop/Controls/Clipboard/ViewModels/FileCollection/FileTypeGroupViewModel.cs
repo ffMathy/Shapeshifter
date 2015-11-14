@@ -1,22 +1,26 @@
-﻿#region
-
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection
 {
     internal class FileTypeGroupViewModel : IFileTypeGroupViewModel
     {
-        public FileTypeGroupViewModel(IEnumerable<IClipboardFileData> data)
+        public FileTypeGroupViewModel(
+            IReadOnlyList<IClipboardFileData> data)
         {
-            Count = data.Count();
-            FileType = Path.GetExtension(data.First().FileName);
-            Icon = data.First().FileIcon;
+            if (data.Count == 0)
+            {
+                throw new ArgumentException("There are no files in the collecton given.", nameof(data));
+            }
+
+            Count = data.Count;
+
+            var firstData = data[0];
+            FileType = Path.GetExtension(firstData.FileName);
+            Icon = firstData.FileIcon;
         }
 
         public int Count { get; }

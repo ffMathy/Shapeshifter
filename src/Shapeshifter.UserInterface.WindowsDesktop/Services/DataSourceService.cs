@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Interop;
@@ -11,8 +9,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
@@ -28,9 +24,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         private static BitmapSource GetWindowIcon(IntPtr windowHandle)
         {
-            var hIcon = default(IntPtr);
-            hIcon = WindowApi.SendMessage(windowHandle, (int) Message.WM_GETICON, WindowApi.ICON_BIG, IntPtr.Zero);
-
+            var hIcon = WindowApi.SendMessage(windowHandle, (int) Message.WM_GETICON, WindowApi.ICON_BIG, IntPtr.Zero);
             if (hIcon == IntPtr.Zero)
             {
                 hIcon = WindowApi.GetClassLongPtr(windowHandle, WindowApi.GCL_HICON);

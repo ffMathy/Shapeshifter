@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Threading;
@@ -12,8 +10,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading;
 using AutofacModule = Autofac.Module;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
 {
@@ -38,10 +34,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
                 DesignTimeContainerHelper.RegisterFakes(builder);
             }
 
-            if (callback != null)
-            {
-                callback(builder);
-            }
+            callback?.Invoke(builder);
 
             base.Load(builder);
         }
@@ -66,37 +59,36 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
             var types = assembly.GetTypes();
             foreach (var type in types)
             {
-                if (type.IsClass && !type.IsAbstract)
+                if (!type.IsClass || type.IsAbstract) continue;
+
+                IRegistrationBuilder<object, ReflectionActivatorData, object> registration;
+                if (type.IsGenericType)
                 {
-                    IRegistrationBuilder<object, ReflectionActivatorData, object> registration;
-                    if (type.IsGenericType)
+                    registration = builder.RegisterGeneric(type);
+
+                    var genericInterfaces = type
+                        .GetInterfaces()
+                        .Where(x => x.IsGenericType);
+                    foreach (var genericInterface in genericInterfaces)
                     {
-                        registration = builder.RegisterGeneric(type);
-
-                        var genericInterfaces = type
-                            .GetInterfaces()
-                            .Where(x => x.IsGenericType);
-                        foreach (var genericInterface in genericInterfaces)
-                        {
-                            registration.As(genericInterface);
-                        }
+                        registration.As(genericInterface);
                     }
-                    else
-                    {
-                        var standardRegistration = builder.RegisterType(type);
-                        standardRegistration.AsSelf();
-                        standardRegistration.AsImplementedInterfaces();
+                }
+                else
+                {
+                    var standardRegistration = builder.RegisterType(type);
+                    standardRegistration.AsSelf();
+                    standardRegistration.AsImplementedInterfaces();
 
-                        registration = standardRegistration;
-                    }
+                    registration = standardRegistration;
+                }
 
-                    registration.FindConstructorsWith(new PublicConstructorFinder());
+                registration.FindConstructorsWith(new PublicConstructorFinder());
 
-                    var interfaces = type.GetInterfaces();
-                    if (interfaces.Contains(typeof (ISingleInstance)))
-                    {
-                        registration.SingleInstance();
-                    }
+                var interfaces = type.GetInterfaces();
+                if (interfaces.Contains(typeof (ISingleInstance)))
+                {
+                    registration.SingleInstance();
                 }
             }
         }

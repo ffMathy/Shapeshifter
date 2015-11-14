@@ -1,10 +1,6 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Windows.Threading;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {

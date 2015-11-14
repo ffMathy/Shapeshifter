@@ -1,13 +1,10 @@
-﻿#region
-
-using System;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using WindowsProcess = System.Diagnostics.Process;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
 {
@@ -60,6 +57,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
         private static void HandleNewFile(string targetDirectory, string currentFile)
         {
             var currentFileName = Path.GetFileName(currentFile);
+            Debug.Assert(currentFileName != null, "currentFileName != null");
 
             var targetFile = Path.Combine(targetDirectory, currentFileName);
             DeleteFileIfExists(targetFile);

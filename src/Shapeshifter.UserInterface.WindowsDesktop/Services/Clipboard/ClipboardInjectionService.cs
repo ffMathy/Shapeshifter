@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
@@ -9,8 +7,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interface
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces;
 using WindowsClipboard = System.Windows.Clipboard;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {
@@ -70,11 +66,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 
                 GeneralApi.GlobalUnlock(target);
 
-                if (ClipboardApi.SetClipboardData(clipboardData.RawFormat, globalPointer) == IntPtr.Zero)
-                {
-                    GeneralApi.GlobalFree(globalPointer);
-                    throw new Exception("Could not set clipboard data.");
-                }
+                if (ClipboardApi.SetClipboardData(clipboardData.RawFormat, globalPointer) != IntPtr.Zero) return;
+
+                GeneralApi.GlobalFree(globalPointer);
+                throw new Exception("Could not set clipboard data.");
             }
         }
 

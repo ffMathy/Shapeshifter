@@ -1,6 +1,4 @@
-﻿#region
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Autofac;
@@ -12,8 +10,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.Tests.Actions
 {
@@ -102,7 +98,7 @@ namespace Shapeshifter.Tests.Actions
 
                 c.RegisterFake<ILinkParser>()
                     .ExtractLinksFromTextAsync(Arg.Any<string>())
-                    .Returns(Task.FromResult<IEnumerable<string>>(new[] {"foobar.com", "example.com"}));
+                    .Returns(Task.FromResult<IReadOnlyCollection<string>>(new[] {"foobar.com", "example.com"}));
             });
 
             var action = container.Resolve<ICopyImageLinkAction>();

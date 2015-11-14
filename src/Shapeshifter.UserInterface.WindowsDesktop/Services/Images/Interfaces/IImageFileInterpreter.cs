@@ -1,8 +1,4 @@
-﻿#region
-
-using System.Windows.Media.Imaging;
-
-#endregion
+﻿using System.Windows.Media.Imaging;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces
 {

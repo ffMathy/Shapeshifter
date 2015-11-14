@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -13,8 +11,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.In
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 using static Shapeshifter.UserInterface.WindowsDesktop.Api.ImageApi;
 using DrawingPixelFormat = System.Drawing.Imaging.PixelFormat;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers
 {
@@ -43,14 +39,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
             var bitmapVersionFivePointer = ClipboardApi.GetClipboardData(ClipboardApi.CF_DIBV5);
             var bitmapVersionFiveHeader =
                 (BITMAPV5HEADER) Marshal.PtrToStructure(bitmapVersionFivePointer, typeof (BITMAPV5HEADER));
-            if (bitmapVersionFiveHeader.bV5Compression == BI_RGB)
-            {
-                var bitmapVersionOneBytes = ClipboardApi.GetClipboardDataBytes(ClipboardApi.CF_DIB);
-                var bitmapVersionOneHeader = GeneralApi.ByteArrayToStructure<BITMAPINFOHEADER>(bitmapVersionOneBytes);
 
-                return HandleBitmapVersionOne(bitmapVersionOneBytes, bitmapVersionOneHeader);
-            }
-            return HandleBitmapVersionFive(bitmapVersionFivePointer, bitmapVersionFiveHeader);
+            if (bitmapVersionFiveHeader.bV5Compression != BI_RGB)
+                return HandleBitmapVersionFive(bitmapVersionFivePointer, bitmapVersionFiveHeader);
+
+            var bitmapVersionOneBytes = ClipboardApi.GetClipboardDataBytes(ClipboardApi.CF_DIB);
+            var bitmapVersionOneHeader = GeneralApi.ByteArrayToStructure<BITMAPINFOHEADER>(bitmapVersionOneBytes);
+
+            return HandleBitmapVersionOne(bitmapVersionOneBytes, bitmapVersionOneHeader);
         }
 
         private byte[] HandleBitmapVersionOne(byte[] bitmapVersionOneBytes, BITMAPINFOHEADER bitmapVersionOneHeader)
@@ -66,12 +62,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
             var infoHeaderSize = bitmapVersionOneHeader.biSize;
             var fileSize = fileHeaderSize + bitmapVersionOneHeader.biSize + bitmapVersionOneHeader.biSizeImage;
 
-            var fileHeader = new BITMAPFILEHEADER();
-            fileHeader.bfType = BITMAPFILEHEADER.BM;
-            fileHeader.bfSize = fileSize;
-            fileHeader.bfReserved1 = 0;
-            fileHeader.bfReserved2 = 0;
-            fileHeader.bfOffBits = fileHeaderSize + infoHeaderSize + bitmapVersionOneHeader.biClrUsed*4;
+            var fileHeader = new BITMAPFILEHEADER
+            {
+                bfType = BITMAPFILEHEADER.BM,
+                bfSize = fileSize,
+                bfReserved1 = 0,
+                bfReserved2 = 0,
+                bfOffBits = fileHeaderSize + infoHeaderSize + bitmapVersionOneHeader.biClrUsed*4
+            };
 
             var fileHeaderBytes = GeneralApi.StructureToByteArray(fileHeader);
 

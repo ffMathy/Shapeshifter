@@ -1,9 +1,5 @@
-﻿#region
-
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {

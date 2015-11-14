@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -8,8 +6,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors
 {
@@ -21,7 +17,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
         private uint lastClipboardItemIdentifier;
         private bool shouldSkipNext;
 
-        private IntPtr windowHandle;
+        private IntPtr mainWindowHandle;
 
         private readonly ILogger logger;
 
@@ -37,27 +33,27 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
 
             logger.Information($"Clipboard update message received with sequence #{clipboardItemIdentifier}.", 1);
 
-            if (clipboardItemIdentifier != lastClipboardItemIdentifier)
-            {
-                lastClipboardItemIdentifier = clipboardItemIdentifier;
+            if (clipboardItemIdentifier == lastClipboardItemIdentifier) return;
 
-                TriggerDataCopiedEvent();
-            }
+            lastClipboardItemIdentifier = clipboardItemIdentifier;
+
+            TriggerDataCopiedEvent();
         }
 
         private void TriggerDataCopiedEvent()
         {
-            if (DataCopied != null)
+            if (DataCopied == null) return;
+
+            var thread = new Thread(() => DataCopied(this, new DataCopiedEventArgument()))
             {
-                var thread = new Thread(() => DataCopied(this, new DataCopiedEventArgument()));
-                thread.IsBackground = true;
-                thread.Start();
-            }
+                IsBackground = true
+            };
+            thread.Start();
         }
 
         public void Install(IntPtr windowHandle)
         {
-            this.windowHandle = windowHandle;
+            this.mainWindowHandle = windowHandle;
             if (!ClipboardApi.AddClipboardFormatListener(windowHandle))
             {
                 throw GenerateInstallFailureException();
@@ -78,7 +74,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
 
         public void Uninstall()
         {
-            if (!ClipboardApi.RemoveClipboardFormatListener(windowHandle))
+            if (!ClipboardApi.RemoveClipboardFormatListener(mainWindowHandle))
             {
                 throw new InvalidOperationException("Could not uninstall a clipboard hook for the main window.");
             }
@@ -86,18 +82,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
 
         public void ReceiveMessageEvent(WindowMessageReceivedArgument eventArgument)
         {
-            if (eventArgument.Message == Message.WM_CLIPBOARDUPDATE)
+            if (eventArgument.Message != Message.WM_CLIPBOARDUPDATE) return;
+
+            if (shouldSkipNext)
             {
-                if (shouldSkipNext)
-                {
-                    logger.Information("Clipboard update message skipped.");
+                logger.Information("Clipboard update message skipped.");
 
-                    shouldSkipNext = false;
-                    return;
-                }
-
-                HandleClipboardUpdateWindowMessage();
+                shouldSkipNext = false;
+                return;
             }
+
+            HandleClipboardUpdateWindowMessage();
         }
 
         public void SkipNext()

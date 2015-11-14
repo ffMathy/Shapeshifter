@@ -1,6 +1,4 @@
-﻿#region
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -11,8 +9,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Fi
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection
 {
@@ -39,10 +35,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
             Data = container.Resolve<DesignerClipboardFileCollectionDataFacade>();
         }
 
-        public int FileCount
-        {
-            get { return Data.Files.Count(); }
-        }
+        public int FileCount => Data.Files.Count;
 
         public IEnumerable<IFileTypeGroupViewModel> FileTypeGroups
         {
@@ -52,7 +45,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
                     .Files
                     .GroupBy(x => Path.GetExtension(x.FileName))
                     .OrderByDescending(x => x.Count())
-                    .Select(x => new FileTypeGroupViewModel(x));
+                    .Select(x => new FileTypeGroupViewModel(x.ToArray()));
             }
         }
     }

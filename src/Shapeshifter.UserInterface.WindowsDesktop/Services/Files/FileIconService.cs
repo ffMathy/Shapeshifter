@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -9,8 +7,6 @@ using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
 {
@@ -104,7 +100,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             IconApi.IShellItem rawFactory;
             IconApi.SHCreateItemFromParsingName(path, IntPtr.Zero, uniqueId, out rawFactory);
 
+            // ReSharper disable once SuspiciousTypeConversion.Global
             var factory = (IconApi.IShellItemImageFactory) rawFactory;
+
             return factory;
         }
 

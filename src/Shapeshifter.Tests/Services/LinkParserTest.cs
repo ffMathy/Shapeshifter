@@ -1,14 +1,10 @@
-﻿#region
-
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.Tests.Services
 {

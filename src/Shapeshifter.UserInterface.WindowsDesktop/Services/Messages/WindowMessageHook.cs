@@ -1,9 +1,6 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Interop;
@@ -13,8 +10,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interface
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
-
-#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
 {
@@ -35,11 +30,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
 
         public bool IsConnected { get; private set; }
 
-        private IntPtr MainWindowHandle
-            => hooker.Handle;
-
         public WindowMessageHook(
-            IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors,
+            IReadOnlyCollection<IWindowMessageInterceptor> windowMessageInterceptors,
             ILogger logger,
             IConsumerThreadLoop consumerLoop)
         {
@@ -51,20 +43,19 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
             cancellationTokenSource = new CancellationTokenSource();
 
             logger.Information(
-                $"Window message hook was constructed using {windowMessageInterceptors.Count()} interceptors.");
+                $"Window message hook was constructed using {windowMessageInterceptors.Count} interceptors.");
         }
 
         public void Disconnect()
         {
-            if (IsConnected)
-            {
-                UninstallInterceptors();
-                UninstallWindowMessageHook();
+            if (!IsConnected) return;
 
-                StopMessageConsumer();
+            UninstallInterceptors();
+            UninstallWindowMessageHook();
 
-                IsConnected = false;
-            }
+            StopMessageConsumer();
+
+            IsConnected = false;
         }
 
         private void StopMessageConsumer()
@@ -131,37 +122,33 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
             var hooker = connectedWindow.HandleSource;
             hooker.AddHook(WindowHookCallback);
 
-            logger.Information($"Installed message hook.");
+            logger.Information("Installed message hook.");
 
             this.hooker = hooker;
         }
 
         private IntPtr WindowHookCallback(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if (Enum.IsDefined(typeof (Message), msg))
-            {
-                logger.Information($"Message received: [{hwnd}, {FormatMessage((Message) msg)}, {wParam}, {lParam}]");
+            if (!Enum.IsDefined(typeof (Message), msg)) return IntPtr.Zero;
 
-                var argument = new WindowMessageReceivedArgument(hwnd, (Message) msg, wParam, lParam);
-                pendingMessages.Enqueue(argument);
+            logger.Information($"Message received: [{hwnd}, {FormatMessage((Message) msg)}, {wParam}, {lParam}]");
 
-                consumerLoop.Notify(HandleNextMessageAsync, cancellationTokenSource.Token);
-            }
+            var argument = new WindowMessageReceivedArgument(hwnd, (Message) msg, wParam, lParam);
+            pendingMessages.Enqueue(argument);
+
+            consumerLoop.Notify(HandleNextMessageAsync, cancellationTokenSource.Token);
 
             return IntPtr.Zero;
         }
 
-        private string FormatMessage(Message msg)
+        private static string FormatMessage(Message msg)
         {
             return Enum.GetName(typeof (Message), msg);
         }
 
         public void Dispose()
         {
-            if (hooker != null)
-            {
-                hooker.Dispose();
-            }
+            hooker?.Dispose();
         }
     }
 }
