@@ -19,7 +19,7 @@ An alpha version of a software comes before the beta version. It means that not 
 If you're aware of this and still want to try Shapeshifter 5, the releases can be found here: https://github.com/ffMathy/Shapeshifter/releases
 
 #Contributing
-Feel free to contribute to Shapeshifter 5 development! Create a pull request, and we'll look at it.
+Feel free to contribute to Shapeshifter 5 development! Create a pull request, and we'll look at it. *The repository has a DotSettings ReSharper file included, which comes with the conventions we want to use for this repository.*
 
 # License
 Shapeshifter is licensed under the 
