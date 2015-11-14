@@ -8,3 +8,4 @@ packages/
 bin/
 obj/
 /src/_NCrunch_Shapeshifter
+/src/Shapeshifter.sln.DotSettings.user
