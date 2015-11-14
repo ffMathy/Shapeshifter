@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Windows"
         xmlns:viewModels="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels"
         xmlns:controls="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard"
+        xmlns:window="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Window"
         d:DataContext="{d:DesignInstance Type=viewModels:ClipboardListViewModel}"
         Top="0"
         Left="0"
@@ -38,7 +39,7 @@
         <ListBox Grid.Column="2" SelectedItem="{Binding SelectedAction, Mode=TwoWay}" ItemsSource="{Binding Actions}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <controls:ActionControl Margin="-1,-1,0,0" />
+                    <window:ActionControl Margin="-1,-1,0,0" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

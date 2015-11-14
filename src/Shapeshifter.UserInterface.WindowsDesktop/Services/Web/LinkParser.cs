@@ -1,17 +1,14 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
 {
     class LinkParser : ILinkParser
     {

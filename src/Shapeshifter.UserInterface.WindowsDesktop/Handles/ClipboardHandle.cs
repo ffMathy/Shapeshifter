@@ -1,5 +1,5 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Handles

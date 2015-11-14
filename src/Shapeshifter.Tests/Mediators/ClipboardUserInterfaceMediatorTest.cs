@@ -1,15 +1,15 @@
 ﻿using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
-using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System;
 using System.Linq;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces;
 
 namespace Shapeshifter.Tests.Mediators
 {

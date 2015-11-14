@@ -1,7 +1,7 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using System;
+﻿using System;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Events
+namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events
 {
     public class WindowMessageReceivedArgument : EventArgs
     {

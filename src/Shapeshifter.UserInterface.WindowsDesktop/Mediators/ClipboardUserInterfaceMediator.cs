@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services
+namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 {
     class ClipboardUserInterfaceMediator :
         IClipboardUserInterfaceMediator
@@ -16,7 +15,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
         readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
         readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
-        readonly IUserInterfaceThread userInterfaceThread;
 
         readonly IList<IClipboardDataControlPackage> clipboardPackages;
 
@@ -37,13 +35,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         public ClipboardUserInterfaceMediator(
             IClipboardCopyInterceptor clipboardCopyInterceptor,
             IPasteCombinationDurationMediator pasteCombinationDurationMediator,
-            IClipboardDataControlPackageFactory clipboardDataControlPackageFactory,
-            IUserInterfaceThread userInterfaceThread)
+            IClipboardDataControlPackageFactory clipboardDataControlPackageFactory)
         {
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;
             this.pasteCombinationDurationMediator = pasteCombinationDurationMediator;
             this.clipboardDataControlPackageFactory = clipboardDataControlPackageFactory;
-            this.userInterfaceThread = userInterfaceThread;
 
             clipboardPackages = new List<IClipboardDataControlPackage>();
         }

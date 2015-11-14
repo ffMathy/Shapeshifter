@@ -1,10 +1,10 @@
 ﻿using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
-using Shapeshifter.Core.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Text.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
-namespace Shapeshifter.Tests.Controls.Clipboard.ViewModels.Text
+namespace Shapeshifter.Tests.Controls.Clipboard.ViewModels
 {
     [TestClass]
     public class ClipboardTextDataViewModelTest : TestBase

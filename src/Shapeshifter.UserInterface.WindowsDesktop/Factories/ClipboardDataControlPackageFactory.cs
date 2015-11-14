@@ -1,11 +1,11 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using System.Collections.Generic;
-using Shapeshifter.UserInterface.WindowsDesktop.Core.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using System.Linq;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
@@ -15,19 +15,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         readonly IClipboardHandleFactory clipboardSessionFactory;
         readonly IEnumerable<IMemoryUnwrapper> memoryUnwrappers;
         readonly IEnumerable<IClipboardDataControlFactory> dataFactories;
-        readonly IKeyValueCache<uint, byte[]> clipboardCache;
         readonly IUserInterfaceThread userInterfaceThread;
 
         public ClipboardDataControlPackageFactory(
             IEnumerable<IClipboardDataControlFactory> dataFactories,
             IEnumerable<IMemoryUnwrapper> memoryUnwrappers,
-            IKeyValueCache<uint, byte[]> clipboardCache,
             IClipboardHandleFactory clipboardSessionFactory,
             IUserInterfaceThread userInterfaceThread)
         {
             this.dataFactories = dataFactories;
             this.memoryUnwrappers = memoryUnwrappers;
-            this.clipboardCache = clipboardCache;
             this.clipboardSessionFactory = clipboardSessionFactory;
             this.userInterfaceThread = userInterfaceThread;
         }

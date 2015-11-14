@@ -10,8 +10,8 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.Core.Data;
-using Shapeshifter.Core.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Web;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
 
 namespace Shapeshifter.Tests.Actions
 {

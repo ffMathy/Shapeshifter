@@ -1,10 +1,11 @@
-﻿using Shapeshifter.Core.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
 {

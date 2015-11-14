@@ -1,7 +1,6 @@
 ﻿using System;
 using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
 using System.Runtime.InteropServices;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Handles

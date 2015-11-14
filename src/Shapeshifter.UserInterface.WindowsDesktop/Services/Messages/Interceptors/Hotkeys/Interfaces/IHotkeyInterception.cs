@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces
 {
     public interface IHotkeyInterception
     {

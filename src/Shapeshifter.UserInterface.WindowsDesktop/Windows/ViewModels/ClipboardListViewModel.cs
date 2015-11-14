@@ -1,21 +1,22 @@
 ﻿using System.Collections.ObjectModel;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using Shapeshifter.Core.Actions;
 using System.ComponentModel;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using System.Threading;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
+using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 {

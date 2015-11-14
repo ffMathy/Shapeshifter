@@ -1,8 +1,8 @@
 ﻿using System;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces
 {
     public interface IClipboardCopyInterceptor : IWindowMessageInterceptor
     {

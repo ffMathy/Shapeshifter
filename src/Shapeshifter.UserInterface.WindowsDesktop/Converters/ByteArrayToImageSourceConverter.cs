@@ -3,6 +3,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Converters
 {

@@ -1,6 +1,6 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Factories.Interfaces
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Factories.Interfaces
 {
     public interface IHotkeyInterceptionFactory
     {

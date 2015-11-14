@@ -2,15 +2,16 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
-using Shapeshifter.Core.Actions;
 using NSubstitute;
-using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using System.ComponentModel;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using System.Linq;
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
+using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 
 namespace Shapeshifter.Tests.Windows.ViewModels

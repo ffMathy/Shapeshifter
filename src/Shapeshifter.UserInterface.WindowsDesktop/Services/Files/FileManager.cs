@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
 {

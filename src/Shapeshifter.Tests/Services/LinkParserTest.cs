@@ -6,6 +6,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
 using NSubstitute;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Web;
 
 namespace Shapeshifter.Tests.Services
 {

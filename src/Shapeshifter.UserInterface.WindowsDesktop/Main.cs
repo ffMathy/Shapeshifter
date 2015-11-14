@@ -5,6 +5,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop
 {

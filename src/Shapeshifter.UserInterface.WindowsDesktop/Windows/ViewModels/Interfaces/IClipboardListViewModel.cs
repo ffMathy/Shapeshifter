@@ -1,9 +1,9 @@
-﻿using Shapeshifter.Core.Actions;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces
 {

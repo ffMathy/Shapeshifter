@@ -1,7 +1,7 @@
-﻿using Shapeshifter.Core.Factories.Interfaces;
-using Shapeshifter.Core.Data.Interfaces;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 
-namespace Shapeshifter.Core.Data
+namespace Shapeshifter.UserInterface.WindowsDesktop.Data
 {
     public class ClipboardTextData : IClipboardTextData
     {

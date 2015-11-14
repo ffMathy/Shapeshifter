@@ -1,6 +1,5 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System;
 using System.Drawing;
@@ -10,6 +9,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 using static Shapeshifter.UserInterface.WindowsDesktop.Api.ImageApi;
 using DrawingPixelFormat = System.Drawing.Imaging.PixelFormat;
 

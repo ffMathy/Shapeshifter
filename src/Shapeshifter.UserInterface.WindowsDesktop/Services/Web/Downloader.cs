@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using System.Net.Http;
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
 {
     [ExcludeFromCodeCoverage]
     class Downloader : IDownloader, IDisposable

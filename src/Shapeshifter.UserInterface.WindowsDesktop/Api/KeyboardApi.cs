@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
+namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
     public static class KeyboardApi
     {

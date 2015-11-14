@@ -1,5 +1,4 @@
 ﻿using NSubstitute;
-using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
 namespace Shapeshifter.Tests.Actions

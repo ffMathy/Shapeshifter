@@ -6,7 +6,6 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.Core.Data.Interfaces;
 
 namespace Shapeshifter.Tests.Actions
 {

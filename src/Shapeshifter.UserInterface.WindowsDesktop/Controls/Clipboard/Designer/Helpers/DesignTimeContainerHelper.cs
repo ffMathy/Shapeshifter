@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
 

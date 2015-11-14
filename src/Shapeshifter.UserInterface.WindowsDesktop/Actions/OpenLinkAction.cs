@@ -1,11 +1,10 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.Core.Data.Interfaces;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using System.Linq;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {

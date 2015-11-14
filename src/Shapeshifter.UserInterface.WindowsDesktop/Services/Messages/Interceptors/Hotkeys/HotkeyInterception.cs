@@ -1,9 +1,9 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
-using System;
+﻿using System;
 using System.Threading;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
     class HotkeyInterception : IHotkeyInterception
     {

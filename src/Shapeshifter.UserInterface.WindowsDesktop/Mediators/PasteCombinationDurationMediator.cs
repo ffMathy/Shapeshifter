@@ -1,13 +1,13 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
 using System;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using System.Threading;
 using System.Windows.Input;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 {

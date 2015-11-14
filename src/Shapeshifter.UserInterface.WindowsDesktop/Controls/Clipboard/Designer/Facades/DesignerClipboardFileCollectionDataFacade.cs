@@ -1,9 +1,9 @@
-﻿using Shapeshifter.Core.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Factories;
+﻿using System.Diagnostics.CodeAnalysis;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
-using System.Diagnostics.CodeAnalysis;
+using Shapeshifter.UserInterface.WindowsDesktop.Data;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer
+namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades
 {
     [ExcludeFromCodeCoverage]
     class DesignerClipboardFileCollectionDataFacade : ClipboardFileCollectionData

@@ -1,4 +1,4 @@
-﻿using Shapeshifter.Core.Data;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Interfaces
 {

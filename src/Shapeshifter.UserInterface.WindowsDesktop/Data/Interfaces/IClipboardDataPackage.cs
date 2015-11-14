@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Shapeshifter.Core.Data;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces
 {

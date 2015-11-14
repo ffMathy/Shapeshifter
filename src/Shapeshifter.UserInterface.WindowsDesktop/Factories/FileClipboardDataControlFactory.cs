@@ -1,18 +1,18 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Shapeshifter.Core.Data;
-using Shapeshifter.Core.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
 using System.Text;
 using System.Collections.Generic;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {

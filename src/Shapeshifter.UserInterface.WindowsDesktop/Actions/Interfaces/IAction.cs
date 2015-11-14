@@ -1,7 +1,7 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
-namespace Shapeshifter.Core.Actions
+namespace Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces
 {
     public interface IAction
     {

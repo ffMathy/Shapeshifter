@@ -1,8 +1,7 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Images;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces
 {
     public interface IImagePersistenceService : ISingleInstance
     {

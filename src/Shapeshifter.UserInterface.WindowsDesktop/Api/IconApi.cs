@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
+namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
     public static class IconApi
     {
@@ -22,7 +22,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
             public string szTypeName;
         };
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct BITMAP
         {
             public Int32 Type;

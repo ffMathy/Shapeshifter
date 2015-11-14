@@ -3,13 +3,12 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using WindowsClipboard = System.Windows.Clipboard;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
-using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using System;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {

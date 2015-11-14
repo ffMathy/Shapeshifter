@@ -1,8 +1,8 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces
 {
     public interface ILinkParser : ISingleInstance
     {

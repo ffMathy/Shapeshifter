@@ -12,6 +12,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {

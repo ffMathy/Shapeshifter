@@ -1,11 +1,10 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
+namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
     public static class ClipboardApi
     {
@@ -64,13 +63,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
         [DllImport("user32.dll")]
         public static extern IntPtr SetClipboardData(uint uFormat, IntPtr hMem);
 
-        public static IEnumerable<uint> GetClipboardFormats()
+        public static IReadOnlyCollection<uint> GetClipboardFormats()
         {
+            var formats = new List<uint>();
             var lastRetrievedFormat = 0u;
             while (0 != (lastRetrievedFormat = EnumClipboardFormats(lastRetrievedFormat)))
             {
-                yield return lastRetrievedFormat;
+                formats.Add(lastRetrievedFormat);
             }
+            return formats;
         }
 
         //TODO: refactor this into custom service.

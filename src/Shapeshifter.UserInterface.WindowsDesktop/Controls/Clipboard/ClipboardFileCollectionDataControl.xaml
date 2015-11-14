@@ -7,7 +7,8 @@
              xmlns:viewModels="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels"
              xmlns:converters="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Converters"
              xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-             d:DataContext="{d:DesignInstance Type=viewModels:ClipboardFileCollectionDataViewModel, IsDesignTimeCreatable=True}"
+             xmlns:fileCollection="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection"
+             d:DataContext="{d:DesignInstance Type=fileCollection:ClipboardFileCollectionDataViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" >
     <Border Style="{StaticResource ClipboardDataControlContentStyle}">
         <Grid>

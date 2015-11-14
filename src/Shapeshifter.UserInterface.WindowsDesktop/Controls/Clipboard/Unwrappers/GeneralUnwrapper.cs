@@ -1,7 +1,7 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
 using System.Collections.Generic;
 using System.Linq;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers
 {

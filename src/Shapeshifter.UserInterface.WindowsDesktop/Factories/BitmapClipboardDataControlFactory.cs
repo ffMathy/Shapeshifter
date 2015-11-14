@@ -1,13 +1,13 @@
 ﻿using System;
-using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
-using Shapeshifter.Core.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
+using Shapeshifter.UserInterface.WindowsDesktop.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-using Shapeshifter.Core.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {

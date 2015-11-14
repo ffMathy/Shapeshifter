@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.Core.Data.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces
 {
     public interface IClipboardFileData : IClipboardData
     {

@@ -1,7 +1,7 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using System;
+﻿using System;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Events
+namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events
 {
     public class ControlEventArgument : EventArgs
     {

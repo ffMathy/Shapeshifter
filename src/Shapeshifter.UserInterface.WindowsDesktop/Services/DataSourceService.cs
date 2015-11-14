@@ -1,7 +1,4 @@
-﻿using Shapeshifter.Core.Factories.Interfaces;
-using System;
-using Shapeshifter.Core.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
+﻿using System;
 using System.Windows.Media.Imaging;
 using System.Windows.Interop;
 using System.Windows;
@@ -9,6 +6,9 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {

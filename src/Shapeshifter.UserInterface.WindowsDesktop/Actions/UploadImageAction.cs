@@ -1,12 +1,10 @@
 ﻿using System;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.Core.Data.Interfaces;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-using Shapeshifter.Core.Data;
 using System.Linq;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions

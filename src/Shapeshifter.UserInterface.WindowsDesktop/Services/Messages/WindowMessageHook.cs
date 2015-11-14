@@ -1,19 +1,18 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using System;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
-using System.Windows.Interop;
-using System.Diagnostics.CodeAnalysis;
+﻿using System;
 using System.Collections.Generic;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 using System.Threading;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using System.Threading.Tasks;
+using System.Windows.Interop;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
 {
     [ExcludeFromCodeCoverage]
     class WindowMessageHook : IWindowMessageHook, IDisposable

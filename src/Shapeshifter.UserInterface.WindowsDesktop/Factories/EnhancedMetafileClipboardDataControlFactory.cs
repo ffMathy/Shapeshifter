@@ -1,8 +1,8 @@
 ﻿using System;
-using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {

@@ -2,11 +2,11 @@
 using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using NSubstitute;
-using Shapeshifter.Core.Data.Interfaces;
-using Shapeshifter.Core.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
 namespace Shapeshifter.Tests.Factories
 {

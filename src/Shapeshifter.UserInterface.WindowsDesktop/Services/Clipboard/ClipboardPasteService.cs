@@ -1,8 +1,8 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
-using static Shapeshifter.UserInterface.WindowsDesktop.Services.Api.KeyboardApi;
+using static Shapeshifter.UserInterface.WindowsDesktop.Api.KeyboardApi;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {

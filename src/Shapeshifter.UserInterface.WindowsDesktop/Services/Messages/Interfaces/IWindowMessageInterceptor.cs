@@ -1,6 +1,6 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using System;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces
 {

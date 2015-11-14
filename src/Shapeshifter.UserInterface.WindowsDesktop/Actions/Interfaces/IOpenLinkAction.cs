@@ -1,6 +1,4 @@
-﻿using Shapeshifter.Core.Actions;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces
 {
     public interface IOpenLinkAction : IAction
     {

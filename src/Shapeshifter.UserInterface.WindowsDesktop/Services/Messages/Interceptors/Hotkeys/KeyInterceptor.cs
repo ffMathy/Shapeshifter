@@ -1,12 +1,12 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
 using System;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Factories.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {

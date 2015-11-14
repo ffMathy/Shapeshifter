@@ -1,5 +1,4 @@
 ﻿using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.Core.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
@@ -9,8 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.Core.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Web;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {

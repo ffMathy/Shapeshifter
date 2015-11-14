@@ -1,9 +1,8 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Handles;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
+namespace Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories
 {
     class ClipboardHandleFactory : IClipboardHandleFactory
     {

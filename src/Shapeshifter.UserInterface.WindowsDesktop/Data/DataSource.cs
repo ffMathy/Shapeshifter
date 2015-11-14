@@ -1,4 +1,6 @@
-﻿namespace Shapeshifter.Core.Data
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+
+namespace Shapeshifter.UserInterface.WindowsDesktop.Data
 {
     public class DataSource : IDataSource
     {

@@ -1,8 +1,8 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
+﻿using System;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
-using System;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces
 {
     public interface IHotkeyInterceptor : IWindowMessageInterceptor
     {

@@ -2,7 +2,7 @@
 using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using System.Threading.Tasks;
-using Shapeshifter.Core.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
 namespace Shapeshifter.Tests.Actions
 {

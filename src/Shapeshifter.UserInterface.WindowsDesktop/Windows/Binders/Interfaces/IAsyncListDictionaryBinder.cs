@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces
+namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces
 {
     public interface IAsyncListDictionaryBinder<TKey, TData> where TKey : class
     {

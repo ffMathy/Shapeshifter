@@ -1,14 +1,12 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Factories.Interfaces;
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Factories.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
     [ExcludeFromCodeCoverage]
     class PasteHotkeyInterceptor : IPasteHotkeyInterceptor

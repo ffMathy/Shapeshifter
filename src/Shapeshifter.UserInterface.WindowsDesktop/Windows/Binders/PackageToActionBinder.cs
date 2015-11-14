@@ -1,13 +1,13 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.Core.Actions;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
+namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders
 {
     class PackageToActionBinder : IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>
     {

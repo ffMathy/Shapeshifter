@@ -1,11 +1,11 @@
-﻿using Shapeshifter.Core.Data;
-using Shapeshifter.Core.Factories.Interfaces;
+﻿using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Properties;
-using System.Diagnostics.CodeAnalysis;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Factories
+namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
     [ExcludeFromCodeCoverage]
     class DesignerTextDataSourceService : IDataSourceService

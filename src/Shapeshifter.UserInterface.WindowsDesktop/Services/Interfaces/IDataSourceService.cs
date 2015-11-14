@@ -1,6 +1,6 @@
-﻿using Shapeshifter.Core.Data;
+﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
-namespace Shapeshifter.Core.Factories.Interfaces
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
 {
     public interface IDataSourceService
     {

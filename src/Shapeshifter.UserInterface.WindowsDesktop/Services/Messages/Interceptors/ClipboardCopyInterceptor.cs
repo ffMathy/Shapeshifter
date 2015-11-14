@@ -1,14 +1,13 @@
 ﻿using System;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Events;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Diagnostics.CodeAnalysis;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors
 {
     [ExcludeFromCodeCoverage]
     class ClipboardCopyInterceptor : IClipboardCopyInterceptor

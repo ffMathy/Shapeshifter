@@ -1,7 +1,7 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces
 {
     public interface IFileIconService : ISingleInstance
     {

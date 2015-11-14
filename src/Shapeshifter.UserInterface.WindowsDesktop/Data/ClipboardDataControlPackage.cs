@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using Shapeshifter.Core.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Core.Data
+namespace Shapeshifter.UserInterface.WindowsDesktop.Data
 {
     public class ClipboardDataControlPackage : IClipboardDataControlPackage
     {

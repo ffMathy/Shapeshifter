@@ -1,13 +1,12 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using System.Windows.Media.Imaging;
-using System;
-using System.Runtime.InteropServices;
-using System.Linq;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Images;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services
+namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
 {
     [ExcludeFromCodeCoverage]
     class ImagePersistenceService : IImagePersistenceService

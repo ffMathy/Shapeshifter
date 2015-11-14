@@ -1,9 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Autofac;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
+﻿using Autofac;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 
-namespace Shapeshifter.Tests.Services
+namespace Shapeshifter.Tests.Services.Files
 {
     [TestClass]
     public class FileTypeInterpreterTest : TestBase

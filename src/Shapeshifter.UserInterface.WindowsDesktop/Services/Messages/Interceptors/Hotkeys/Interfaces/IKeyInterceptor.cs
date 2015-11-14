@@ -1,5 +1,4 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Keyboard.Interfaces;
-using System;
+﻿using System;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces
 {

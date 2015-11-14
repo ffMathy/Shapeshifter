@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Api
+namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
     [ExcludeFromCodeCoverage]
     public class WindowApi
