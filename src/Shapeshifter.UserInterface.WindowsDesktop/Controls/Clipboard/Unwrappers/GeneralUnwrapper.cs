@@ -13,9 +13,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
         {
             excludedFormats = new[]
             {
-                ClipboardApi.CF_BITMAP,
-                ClipboardApi.CF_DIB,
-                ClipboardApi.CF_DIBV5,
                 ClipboardApi.CF_DSPBITMAP,
                 ClipboardApi.CF_DSPENHMETAFILE,
                 ClipboardApi.CF_ENHMETAFILE,
@@ -25,7 +22,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
 
         public bool CanUnwrap(uint format)
         {
-            return excludedFormats.All(x => x != format);
+            return excludedFormats.Any(x => x == format);
         }
 
         public byte[] UnwrapStructure(uint format)

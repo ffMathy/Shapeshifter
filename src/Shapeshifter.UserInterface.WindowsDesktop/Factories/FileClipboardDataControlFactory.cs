@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -63,6 +64,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
                 "Unknown clipboard data type.", nameof(clipboardData));
         }
 
+        [ExcludeFromCodeCoverage]
         public IClipboardData BuildData(
             uint format, byte[] rawData)
         {
@@ -81,6 +83,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             return ConstructDataFromFiles(files, format, rawData);
         }
 
+        [ExcludeFromCodeCoverage]
         private IReadOnlyCollection<string> GetFilesCopiedFromRawData(byte[] data)
         {
             var files = new List<string>();
@@ -93,7 +96,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             return files;
         }
 
-        private static void FetchFilesFromMemory(List<string> files, IMemoryHandle memoryHandle, int count)
+        [ExcludeFromCodeCoverage]
+        private static void FetchFilesFromMemory(ICollection<string> files, IMemoryHandle memoryHandle, int count)
         {
             for (var i = 0u; i < count; i++)
             {
@@ -107,6 +111,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private IClipboardData ConstructDataFromFiles(
             IReadOnlyCollection<string> files, uint format, byte[] rawData)
         {
@@ -119,6 +124,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
                 files, format, rawData);
         }
 
+        [ExcludeFromCodeCoverage]
         private IClipboardData ConstructClipboardFileCollectionData(
             IEnumerable<string> files, uint format, byte[] rawData)
         {
@@ -130,6 +136,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             };
         }
 
+        [ExcludeFromCodeCoverage]
         private IClipboardFileData ConstructClipboardFileData(
             string file, uint format, byte[] rawData)
         {
@@ -142,6 +149,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             };
         }
 
+        [ExcludeFromCodeCoverage]
         private IClipboardFileData ConstructClipboardFileData(
             string file)
         {

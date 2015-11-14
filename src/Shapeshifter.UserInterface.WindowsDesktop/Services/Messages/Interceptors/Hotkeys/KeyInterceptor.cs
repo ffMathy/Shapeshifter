@@ -18,7 +18,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
 
         private bool isInstalled;
 
-        private IntPtr mainWindowHandle;
+        private IntPtr installedWindowHandle;
 
         public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
@@ -39,7 +39,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
                 throw new InvalidOperationException("This interceptor has already been installed.");
             }
 
-            this.mainWindowHandle = windowHandle;
+            installedWindowHandle = windowHandle;
 
             foreach (var interception in keyInterceptions.Values)
             {
@@ -71,6 +71,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
 
         private void HandleHotkeyMessage(WindowMessageReceivedArgument e)
         {
+            if (!isInstalled) return;
+
             var interception = GetInterceptionForInterceptionId((int) e.WordParameter);
             if (interception != null)
             {
@@ -105,7 +107,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
 
             foreach (var interception in keyInterceptions.Values)
             {
-                interception.Stop(mainWindowHandle);
+                interception.Stop(installedWindowHandle);
             }
 
             isInstalled = false;

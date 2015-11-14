@@ -1,18 +1,28 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
+    [ExcludeFromCodeCoverage]
     internal class ThreadLoop : IThreadLoop
     {
         public bool IsRunning { get; private set; }
 
-        public void StartAsync(Func<Task> action, CancellationToken token)
+        public void Start(Func<Task> action, CancellationToken token)
         {
-            IsRunning = true;
-            RunAsync(action, token);
+            lock (this)
+            {
+                if (IsRunning)
+                {
+                    throw new InvalidOperationException("Can't start the thread loop twice.");
+                }
+
+                IsRunning = true;
+                RunAsync(action, token);
+            }
         }
 
         private async void RunAsync(Func<Task> action, CancellationToken token)
@@ -27,7 +37,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 
         public void Stop()
         {
-            IsRunning = false;
+            lock (this)
+            {
+                IsRunning = false;
+            }
         }
     }
 }

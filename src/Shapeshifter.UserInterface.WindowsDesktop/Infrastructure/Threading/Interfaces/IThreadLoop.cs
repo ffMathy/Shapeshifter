@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces
 {
-    internal interface IThreadLoop
+    public interface IThreadLoop
     {
         bool IsRunning { get; }
 
-        void StartAsync(Func<Task> action, CancellationToken token);
+        void Start(Func<Task> action, CancellationToken token);
 
         void Stop();
     }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
@@ -10,6 +11,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfa
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
+    [ExcludeFromCodeCoverage]
     internal class ClipboardDataControlPackageFactory : IClipboardDataControlPackageFactory
     {
         private readonly IClipboardHandleFactory clipboardSessionFactory;
@@ -46,7 +48,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             }
         }
 
-        private IClipboardDataControlPackage ConstructPackage(IEnumerable<uint> formats)
+        private IClipboardDataControlPackage ConstructPackage(
+            IEnumerable<uint> formats)
         {
             var package = new ClipboardDataControlPackage();
             DecoratePackageWithClipboardData(formats, package);
@@ -57,7 +60,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         private void DecoratePackageWithClipboardData(
             IEnumerable<uint> formats,
-            ClipboardDataControlPackage package)
+            IClipboardDataPackage package)
         {
             foreach (var format in formats)
             {
@@ -70,7 +73,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         }
 
         private void DecoratePackageWithFormatDataUsingFactory(
-            ClipboardDataControlPackage package, IClipboardDataControlFactory factory, uint format)
+            IClipboardDataPackage package, 
+            IClipboardDataControlFactory factory, 
+            uint format)
         {
             var unwrapper = memoryUnwrappers.FirstOrDefault(x => x.CanUnwrap(format));
 
@@ -84,7 +89,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             }
         }
 
-        private void DecoratePackageWithControl(ClipboardDataControlPackage package)
+        private void DecoratePackageWithControl(
+            ClipboardDataControlPackage package)
         {
             foreach (var data in package.Contents)
             {

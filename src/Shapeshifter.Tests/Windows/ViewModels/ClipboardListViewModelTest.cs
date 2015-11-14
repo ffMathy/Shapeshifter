@@ -17,35 +17,12 @@ namespace Shapeshifter.Tests.Windows.ViewModels
     public class ClipboardListViewModelTest : TestBase
     {
         [TestMethod]
-        public void SelectedElementChangedTriggersChangedEvent()
-        {
-            var container =
-                CreateContainer(
-                    c => { c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>(); });
-
-            var viewModel = container.Resolve<IClipboardListViewModel>();
-
-            object eventSender = null;
-
-            viewModel.PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName == nameof(viewModel.SelectedElement))
-                {
-                    eventSender = sender;
-                }
-            };
-            viewModel.SelectedElement = Substitute.For<IClipboardDataControlPackage>();
-
-            Assert.AreSame(viewModel, eventSender);
-        }
-
-        [TestMethod]
         public void SelectedElementChangesToSupportedActions()
         {
             var fakeData = Substitute.For<IClipboardData>();
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
-            fakePackage.Contents.Returns(new[] {fakeData});
+            fakePackage.Contents.Returns(new[] { fakeData });
 
             var supportedAction = Substitute.For<IAction>();
             supportedAction

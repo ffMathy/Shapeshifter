@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -14,6 +15,7 @@ using DrawingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers
 {
+    [ExcludeFromCodeCoverage]
     internal class BitmapUnwrapper : IMemoryUnwrapper
     {
         private readonly IImagePersistenceService imagePersistenceService;

@@ -1,4 +1,5 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+﻿using System.Diagnostics.CodeAnalysis;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
@@ -22,6 +23,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
             this.handleContainer = handleContainer;
         }
 
+        [ExcludeFromCodeCoverage]
         public void PasteClipboardContents()
         {
             DisablePasteHotkeyInterceptor();
@@ -31,16 +33,19 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
             logger.Information("Paste simulated.", 1);
         }
 
+        [ExcludeFromCodeCoverage]
         private void EnablePasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.Install(handleContainer.Handle);
         }
 
+        [ExcludeFromCodeCoverage]
         private void DisablePasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.Uninstall();
         }
 
+        [ExcludeFromCodeCoverage]
         private static void SendPasteCombination()
         {
             var inputs = new[]
@@ -53,6 +58,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
             SendInput((uint) inputs.Length, inputs, INPUT.Size);
         }
 
+        [ExcludeFromCodeCoverage]
         private static INPUT GenerateKeystoke(VirtualKeyShort key, KEYEVENTF flags = 0)
         {
             return new INPUT

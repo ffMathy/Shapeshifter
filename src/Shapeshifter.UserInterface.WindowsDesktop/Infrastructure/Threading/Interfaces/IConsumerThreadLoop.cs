@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces
 {
-    internal interface IConsumerThreadLoop
+    public interface IConsumerThreadLoop
     {
         bool IsRunning { get; }
 

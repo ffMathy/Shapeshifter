@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
@@ -45,29 +46,31 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
                 }
             }
         }
-
+        
         private void SpawnThread(Func<Task> action, CancellationToken token)
         {
-            internalLoop.StartAsync(async () =>
+            internalLoop.Start(async () => await Tick(action, token), token);
+        }
+        
+        private async Task Tick(Func<Task> action, CancellationToken token)
+        {
+            lock (this)
             {
-                lock (this)
+                DecrementAvailableWorkCount();
+
+                if (ShouldAbort(token))
                 {
-                    if (ShouldAbort(token))
-                    {
-                        internalLoop.Stop();
-                        return;
-                    }
-
-                    DecrementAvailableWorkCount();
+                    internalLoop.Stop();
+                    return;
                 }
+            }
 
-                await action();
-            }, token);
+            await action();
         }
 
         private bool ShouldAbort(CancellationToken token)
         {
-            return token.IsCancellationRequested || !IsRunning || countAvailable == 0;
+            return token.IsCancellationRequested || countAvailable == 0;
         }
 
         private void DecrementAvailableWorkCount()

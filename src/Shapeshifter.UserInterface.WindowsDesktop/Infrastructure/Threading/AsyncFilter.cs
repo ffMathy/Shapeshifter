@@ -8,12 +8,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
     internal class AsyncFilter : IAsyncFilter
     {
-        public async Task<IReadOnlyCollection<TResult>> FilterAsync<TResult>(IEnumerable<Task<TResult>> candidatesTask,
-            Func<TResult, bool> filter)
-        {
-            return await FilterAsync(candidatesTask, result => Task.FromResult(filter(result))).ConfigureAwait(false);
-        }
-
         public async Task<IReadOnlyCollection<TResult>> FilterAsync<TResult>(IEnumerable<TResult> candidatesTask,
             Func<TResult, Task<bool>> filter)
         {
@@ -43,10 +37,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
             return validations;
         }
 
-        private static IReadOnlyCollection<TResult> FilterUsingValidations<TResult>(TResult[] candidates, bool[] validations)
+        private static IReadOnlyCollection<TResult> FilterUsingValidations<TResult>(
+            IReadOnlyList<TResult> candidates, 
+            IReadOnlyList<bool> validations)
         {
             var results = new List<TResult>();
-            for (var i = 0; i < validations.Length; i++)
+            for (var i = 0; i < validations.Count; i++)
             {
                 if (validations[i])
                 {
@@ -55,12 +51,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
             }
 
             return results;
-        }
-
-        public async Task<bool> HasMatchAsync<TResult>(IEnumerable<Task<TResult>> candidatesTask,
-            Func<TResult, bool> filter)
-        {
-            return await HasMatchAsync(candidatesTask, result => Task.FromResult(filter(result)));
         }
 
         public async Task<bool> HasMatchAsync<TResult>(IEnumerable<TResult> candidatesTask,
@@ -72,17 +62,30 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
         public async Task<bool> HasMatchAsync<TResult>(IEnumerable<Task<TResult>> candidatesTask,
             Func<TResult, Task<bool>> filter)
         {
-            //TODO: this can be optimized more by running all tasks in parallel and returning the first succeeding.
+            var matchTasks = new List<Task<bool>>();
             foreach (var candidate in candidatesTask)
             {
-                var result = await candidate;
-                if (await filter(result))
+                matchTasks.Add(IsMatch(filter, candidate));
+            }
+
+            while (matchTasks.Count > 0)
+            {
+                var finishedTask = await Task.WhenAny(matchTasks);
+                if (finishedTask.Result)
                 {
                     return true;
                 }
+
+                matchTasks.Remove(finishedTask);
             }
 
             return false;
+        }
+
+        private static async Task<bool> IsMatch<TResult>(Func<TResult, Task<bool>> filter, Task<TResult> candidate)
+        {
+            var result = await candidate;
+            return await filter(result);
         }
     }
 }
