@@ -40,6 +40,7 @@ namespace Shapeshifter.Tests.Mediators
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void DisconnectingWhileNotConnectedThrowsError()
         {
             var container = CreateContainer(c =>
@@ -50,18 +51,11 @@ namespace Shapeshifter.Tests.Mediators
             });
 
             var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-
-            try
-            {
-                mediator.Disconnect();
-                Assert.Fail("Did not throw an exception.");
-            }
-            catch (InvalidOperationException)
-            {
-            }
+            mediator.Disconnect();
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void ConnectingWhileAlreadyConnectedThrowsError()
         {
             var container = CreateContainer(c =>
@@ -72,15 +66,7 @@ namespace Shapeshifter.Tests.Mediators
             });
 
             var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-
-            try
-            {
-                mediator.Connect(Substitute.For<IWindow>());
-                Assert.Fail("Did not throw an exception.");
-            }
-            catch (InvalidOperationException)
-            {
-            }
+            mediator.Connect(Substitute.For<IWindow>());
         }
     }
 }

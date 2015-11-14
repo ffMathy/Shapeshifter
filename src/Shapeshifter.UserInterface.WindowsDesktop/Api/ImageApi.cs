@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
+    [ExcludeFromCodeCoverage]
     public static class ImageApi
     {
         public const uint BI_RGB = 0x00;

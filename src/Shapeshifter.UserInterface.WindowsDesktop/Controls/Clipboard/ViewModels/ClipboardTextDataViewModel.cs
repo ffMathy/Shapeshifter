@@ -20,6 +20,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
             whitespaceSubstitutionExpression = new Regex(@"\s+", RegexOptions.Compiled);
         }
 
+        [ExcludeFromCodeCoverage]
         public ClipboardTextDataViewModel() : this(new EnvironmentInformation())
         {
         }

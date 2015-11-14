@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
@@ -48,6 +50,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
         
         private void SpawnThread(Func<Task> action, CancellationToken token)
         {
+            logger.Information("Spawning consumption thread.");
             internalLoop.Start(async () => await Tick(action, token), token);
         }
         
@@ -55,20 +58,23 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
         {
             lock (this)
             {
-                DecrementAvailableWorkCount();
-
                 if (ShouldAbort(token))
                 {
+                    logger.Information("Stopping consumer loop.");
                     internalLoop.Stop();
                     return;
                 }
+
+                DecrementAvailableWorkCount();
             }
 
+            logger.Information("Consuming.");
             await action();
         }
 
         private bool ShouldAbort(CancellationToken token)
         {
+            Debug.Assert(countAvailable >= 0, "countAvailable >= 0");
             return token.IsCancellationRequested || countAvailable == 0;
         }
 

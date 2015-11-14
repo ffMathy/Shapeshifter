@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
+    [ExcludeFromCodeCoverage]
     public static class GeneralApi
     {
         public const int GMEM_MOVABLE = 0x0002;

@@ -8,6 +8,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Inter
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
+    [ExcludeFromCodeCoverage]
     internal class ClipboardImageDataViewModel : ClipboardDataViewModel<IClipboardImageData>
     {
         public ClipboardImageDataViewModel() : this(new EnvironmentInformation())

@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Diagnostics.CodeAnalysis;
+using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
@@ -7,6 +8,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers
 {
+    [ExcludeFromCodeCoverage]
     internal static class DesignTimeContainerHelper
     {
         public static IContainer CreateDesignTimeContainer()

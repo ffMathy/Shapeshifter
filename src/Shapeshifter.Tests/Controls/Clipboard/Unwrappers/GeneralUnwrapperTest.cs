@@ -9,39 +9,39 @@ namespace Shapeshifter.Tests.Controls.Clipboard.Unwrappers
     public class GeneralUnwrapperTest : TestBase
     {
         [TestMethod]
-        public void CanUnwrapDspBitmaps()
+        public void CantUnwrapDspBitmaps()
         {
             var container = CreateContainer();
 
             var unwrapper = container.Resolve<IMemoryUnwrapper>();
-            Assert.IsTrue(unwrapper.CanUnwrap(ClipboardApi.CF_DSPBITMAP));
+            Assert.IsFalse(unwrapper.CanUnwrap(ClipboardApi.CF_DSPBITMAP));
         }
 
         [TestMethod]
-        public void CanUnwrapDspEnhancedMetafile()
+        public void CantUnwrapDspEnhancedMetafile()
         {
             var container = CreateContainer();
 
             var unwrapper = container.Resolve<IMemoryUnwrapper>();
-            Assert.IsTrue(unwrapper.CanUnwrap(ClipboardApi.CF_DSPENHMETAFILE));
+            Assert.IsFalse(unwrapper.CanUnwrap(ClipboardApi.CF_DSPENHMETAFILE));
         }
 
         [TestMethod]
-        public void CanUnwrapEnhancedMetafile()
+        public void CantUnwrapEnhancedMetafile()
         {
             var container = CreateContainer();
 
             var unwrapper = container.Resolve<IMemoryUnwrapper>();
-            Assert.IsTrue(unwrapper.CanUnwrap(ClipboardApi.CF_ENHMETAFILE));
+            Assert.IsFalse(unwrapper.CanUnwrap(ClipboardApi.CF_ENHMETAFILE));
         }
 
         [TestMethod]
-        public void CanUnwrapMetafilePicture()
+        public void CantUnwrapMetafilePicture()
         {
             var container = CreateContainer();
 
             var unwrapper = container.Resolve<IMemoryUnwrapper>();
-            Assert.IsTrue(unwrapper.CanUnwrap(ClipboardApi.CF_METAFILEPICT));
+            Assert.IsFalse(unwrapper.CanUnwrap(ClipboardApi.CF_METAFILEPICT));
         }
     }
 }

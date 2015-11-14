@@ -22,7 +22,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
 
         public bool CanUnwrap(uint format)
         {
-            return excludedFormats.Any(x => x == format);
+            return excludedFormats.All(x => x != format);
         }
 
         public byte[] UnwrapStructure(uint format)

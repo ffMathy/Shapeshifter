@@ -95,6 +95,7 @@
     <Compile Include="Actions\PasteAsPlainTextActionTest.cs" />
     <Compile Include="Actions\PasteActionTest.cs" />
     <Compile Include="Controls\Clipboard\ClipboardPasteServiceTest.cs" />
+    <Compile Include="Controls\Clipboard\Factories\ClipboardImageDataControlFactoryTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardTextDataControlFactoryTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardFileDataControlFactoryTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardFileCollectionDataControlFactoryTest.cs" />
@@ -105,7 +106,9 @@
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardTextDataViewModelTest.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Factories\FileClipboardDataControlFactoryTest.cs" />
+    <Compile Include="Infrastructure\Caching\KeyValueCacheTest.cs" />
     <Compile Include="Infrastructure\Threading\ConsumerThreadLoopTest.cs" />
+    <Compile Include="MainTest.cs" />
     <Compile Include="Mediators\PasteCombinationDurationMediatorTest.cs" />
     <Compile Include="Mediators\ClipboardUserInterfaceMediatorTest.cs" />
     <Compile Include="Services\Files\FileTypeInterpreterTest.cs" />

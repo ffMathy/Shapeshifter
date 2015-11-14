@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces
 {
-    internal interface IKeyValueCache<TKey, TValue>
+    public interface IKeyValueCache<TKey, TValue>
     {
         TValue Get(TKey key);
 

@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging
 {
+    [ExcludeFromCodeCoverage]
     internal class Logger : ILogger
     {
         private const int MinimumImportanceFactor = 0;

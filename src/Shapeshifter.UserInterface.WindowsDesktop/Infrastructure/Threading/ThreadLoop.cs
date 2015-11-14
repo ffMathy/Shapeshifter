@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
@@ -9,6 +10,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
     [ExcludeFromCodeCoverage]
     internal class ThreadLoop : IThreadLoop
     {
+        private readonly ILogger logger;
+
+        public ThreadLoop(ILogger logger)
+        {
+            this.logger = logger;
+        }
+
         public bool IsRunning { get; private set; }
 
         public void Start(Func<Task> action, CancellationToken token)
@@ -21,15 +29,25 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
                 }
 
                 IsRunning = true;
-                RunAsync(action, token);
             }
+
+            RunAsync(action, token).ConfigureAwait(false);
         }
 
-        private async void RunAsync(Func<Task> action, CancellationToken token)
+        private async Task RunAsync(Func<Task> action, CancellationToken token)
         {
             while (!token.IsCancellationRequested && IsRunning)
             {
-                await action();
+                try
+                {
+                    await action();
+                }
+                catch (Exception ex)
+                {
+                    logger.Error("An error occured in the thread loop: " + ex);
+                    Stop();
+                    throw;
+                }
             }
 
             Stop();

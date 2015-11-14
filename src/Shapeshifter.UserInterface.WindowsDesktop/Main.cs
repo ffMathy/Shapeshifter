@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
@@ -8,6 +9,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop
 {
+    [ExcludeFromCodeCoverage]
     internal class Main : ISingleInstance
     {
         private readonly IEnumerable<IArgumentProcessor> argumentProcessors;
@@ -40,6 +42,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
 
         private static void CloseAllProcessesExceptCurrent()
         {
+            //TODO: if this method gets isolated, the whole class can be unit tested.
             using (var currentProcess = Process.GetCurrentProcess())
             {
                 var processes = Process.GetProcessesByName(currentProcess.ProcessName);

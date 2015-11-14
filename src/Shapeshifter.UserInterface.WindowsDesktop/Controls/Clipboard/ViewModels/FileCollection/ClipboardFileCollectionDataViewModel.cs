@@ -15,6 +15,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
     internal class ClipboardFileCollectionDataViewModel : ClipboardDataViewModel<IClipboardFileCollectionData>,
         IClipboardFileCollectionDataViewModel
     {
+        [ExcludeFromCodeCoverage]
         public ClipboardFileCollectionDataViewModel() : this(new EnvironmentInformation())
         {
         }

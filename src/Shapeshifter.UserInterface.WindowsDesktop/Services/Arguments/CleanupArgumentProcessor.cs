@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments.Interfaces;
@@ -15,6 +16,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
             return arguments.Contains("cleanup");
         }
 
+        [ExcludeFromCodeCoverage]
         public void Process(string[] arguments)
         {
             var updateIndex = Array.IndexOf(arguments, "cleanup");

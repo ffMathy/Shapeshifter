@@ -6,6 +6,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades
 {
+    [ExcludeFromCodeCoverage]
     internal class DesignerClipboardTextDataFacade : ClipboardTextData, IClipboardTextData
     {
         [ExcludeFromCodeCoverage]

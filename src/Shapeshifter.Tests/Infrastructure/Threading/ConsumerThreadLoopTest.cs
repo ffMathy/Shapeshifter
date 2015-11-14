@@ -91,6 +91,7 @@ namespace Shapeshifter.Tests.Infrastructure.Threading
 
             await innerLoopTick();
             await innerLoopTick();
+            await innerLoopTick();
 
             fakeInnerLoop.DidNotReceive().Stop();
 

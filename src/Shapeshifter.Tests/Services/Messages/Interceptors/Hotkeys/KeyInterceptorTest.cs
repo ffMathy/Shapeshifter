@@ -13,38 +13,24 @@ namespace Shapeshifter.Tests.Services.Messages.Interceptors.Hotkeys
     public class KeyInterceptorTest : TestBase
     {
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void InstallWhenAlreadyInstalledThrowsException()
         {
             var container = CreateContainer();
 
             var systemUnderTest = container.Resolve<IKeyInterceptor>();
             systemUnderTest.Install(IntPtr.Zero);
-
-            try
-            {
-                systemUnderTest.Install(IntPtr.Zero);
-                Assert.Fail("Did not throw an exception.");
-            }
-            catch (InvalidOperationException)
-            {
-            }
+            systemUnderTest.Install(IntPtr.Zero);
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void UninstallWhenNotInstalledThrowsException()
         {
             var container = CreateContainer();
 
             var systemUnderTest = container.Resolve<IKeyInterceptor>();
-
-            try
-            {
-                systemUnderTest.Uninstall();
-                Assert.Fail("Did not throw an exception.");
-            }
-            catch (InvalidOperationException)
-            {
-            }
+            systemUnderTest.Uninstall();
         }
 
         [TestMethod]

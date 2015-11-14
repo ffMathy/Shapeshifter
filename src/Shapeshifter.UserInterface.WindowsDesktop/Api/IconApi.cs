@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
+    [ExcludeFromCodeCoverage]
     public static class IconApi
     {
         public const uint SHGFI_ICON = 0x100;
