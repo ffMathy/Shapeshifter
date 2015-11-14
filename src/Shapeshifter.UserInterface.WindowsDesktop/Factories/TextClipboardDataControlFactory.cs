@@ -1,20 +1,24 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
-using System.Text;
+﻿#region
+
 using System;
+using System.Text;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
-    class TextClipboardDataControlFactory : ITextClipboardDataControlFactory
+    internal class TextClipboardDataControlFactory : ITextClipboardDataControlFactory
     {
-        readonly IDataSourceService dataSourceService;
+        private readonly IDataSourceService dataSourceService;
 
-        readonly IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl> textControlFactory;
+        private readonly IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl> textControlFactory;
 
         public TextClipboardDataControlFactory(
             IDataSourceService dataSourceService,
@@ -26,7 +30,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public IClipboardControl BuildControl(IClipboardData clipboardData)
         {
-            return textControlFactory.CreateControl((IClipboardTextData)clipboardData);
+            return textControlFactory.CreateControl((IClipboardTextData) clipboardData);
         }
 
         public IClipboardData BuildData(uint format, byte[] data)
@@ -45,7 +49,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             };
         }
 
-        string GetProcessedTextFromRawData(uint format, byte[] data)
+        private string GetProcessedTextFromRawData(uint format, byte[] data)
         {
             var text = GetTextFromRawData(format, data);
 
@@ -53,13 +57,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             if (terminaryNullCharacterPosition > -1)
             {
                 return text.Substring(0, terminaryNullCharacterPosition);
-            } else
-            {
-                return text;
             }
+            return text;
         }
 
-        string GetTextFromRawData(uint format, byte[] data)
+        private string GetTextFromRawData(uint format, byte[] data)
         {
             switch (format)
             {
@@ -79,13 +81,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public bool CanBuildControl(IClipboardData data)
         {
-            return 
+            return
                 data is IClipboardTextData;
         }
 
         public bool CanBuildData(uint format)
         {
-            return 
+            return
                 format == ClipboardApi.CF_TEXT ||
                 format == ClipboardApi.CF_OEMTEXT ||
                 format == ClipboardApi.CF_UNICODETEXT;

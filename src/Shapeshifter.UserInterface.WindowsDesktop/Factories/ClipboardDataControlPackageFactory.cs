@@ -1,21 +1,25 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+﻿#region
+
 using System.Collections.Generic;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
-    class ClipboardDataControlPackageFactory : IClipboardDataControlPackageFactory
+    internal class ClipboardDataControlPackageFactory : IClipboardDataControlPackageFactory
     {
-        readonly IClipboardHandleFactory clipboardSessionFactory;
-        readonly IEnumerable<IMemoryUnwrapper> memoryUnwrappers;
-        readonly IEnumerable<IClipboardDataControlFactory> dataFactories;
-        readonly IUserInterfaceThread userInterfaceThread;
+        private readonly IClipboardHandleFactory clipboardSessionFactory;
+        private readonly IEnumerable<IMemoryUnwrapper> memoryUnwrappers;
+        private readonly IEnumerable<IClipboardDataControlFactory> dataFactories;
+        private readonly IUserInterfaceThread userInterfaceThread;
 
         public ClipboardDataControlPackageFactory(
             IEnumerable<IClipboardDataControlFactory> dataFactories,
@@ -29,7 +33,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             this.userInterfaceThread = userInterfaceThread;
         }
 
-        bool IsAnyFormatSupported(
+        private bool IsAnyFormatSupported(
             IEnumerable<uint> formats)
         {
             return dataFactories.Any(
@@ -45,14 +49,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
                 {
                     return ConstructPackage(formats);
                 }
-                else
-                {
-                    return null;
-                }
+                return null;
             }
         }
 
-        IClipboardDataControlPackage ConstructPackage(IEnumerable<uint> formats)
+        private IClipboardDataControlPackage ConstructPackage(IEnumerable<uint> formats)
         {
             var package = new ClipboardDataControlPackage();
             DecoratePackageWithClipboardData(formats, package);
@@ -61,7 +62,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             return package;
         }
 
-        void DecoratePackageWithClipboardData(
+        private void DecoratePackageWithClipboardData(
             IEnumerable<uint> formats,
             ClipboardDataControlPackage package)
         {
@@ -75,7 +76,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             }
         }
 
-        void DecoratePackageWithFormatDataUsingFactory(
+        private void DecoratePackageWithFormatDataUsingFactory(
             ClipboardDataControlPackage package, IClipboardDataControlFactory factory, uint format)
         {
             var unwrapper = memoryUnwrappers.FirstOrDefault(x => x.CanUnwrap(format));
@@ -93,7 +94,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             }
         }
 
-        void DecoratePackageWithControl(ClipboardDataControlPackage package)
+        private void DecoratePackageWithControl(ClipboardDataControlPackage package)
         {
             foreach (var data in package.Contents)
             {

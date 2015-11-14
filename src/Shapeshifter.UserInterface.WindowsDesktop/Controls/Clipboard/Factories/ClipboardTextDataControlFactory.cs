@@ -1,16 +1,21 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
+﻿#region
+
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
 {
-    class ClipboardTextDataControlFactory : IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl>
+    internal class ClipboardTextDataControlFactory :
+        IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl>
     {
-        readonly IEnvironmentInformation environmentInformation;
+        private readonly IEnvironmentInformation environmentInformation;
 
         public ClipboardTextDataControlFactory(
             IEnvironmentInformation environmentInformation)
@@ -24,14 +29,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
             {
                 throw new ArgumentException("Data must be set when constructing a clipboard control.", nameof(data));
             }
-            
+
             return CreateClipboardTextDataControl(data);
         }
 
         [ExcludeFromCodeCoverage]
-        IClipboardTextDataControl CreateClipboardTextDataControl(IClipboardTextData data)
+        private IClipboardTextDataControl CreateClipboardTextDataControl(IClipboardTextData data)
         {
-            return new ClipboardTextDataControl()
+            return new ClipboardTextDataControl
             {
                 DataContext = new ClipboardTextDataViewModel(environmentInformation)
                 {

@@ -1,16 +1,21 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
+﻿#region
+
 using System.Linq;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
 {
-    class FileTypeInterpreter : IFileTypeInterpreter
+    internal class FileTypeInterpreter : IFileTypeInterpreter
     {
         public FileType GetFileTypeFromFileName(string name)
         {
             if (IsImageFileType(name))
             {
                 return FileType.Image;
-            } else if(IsTextFileType(name))
+            }
+            if (IsTextFileType(name))
             {
                 return FileType.Text;
             }
@@ -18,15 +23,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             return FileType.Other;
         }
 
-        bool IsTextFileType(string name)
+        private bool IsTextFileType(string name)
         {
-            var imageFileTypes = new[] { ".txt" };
+            var imageFileTypes = new[] {".txt"};
             return imageFileTypes.Any(name.EndsWith);
         }
 
-        static bool IsImageFileType(string name)
+        private static bool IsImageFileType(string name)
         {
-            var imageFileTypes = new[] { ".png", ".jpg" };
+            var imageFileTypes = new[] {".png", ".jpg"};
             return imageFileTypes.Any(name.EndsWith);
         }
     }

@@ -1,9 +1,13 @@
-﻿using System.Linq;
+﻿#region
+
+using System.Linq;
 using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.Tests.Controls.Clipboard.ViewModels
 {
@@ -67,7 +71,7 @@ namespace Shapeshifter.Tests.Controls.Clipboard.ViewModels
             Assert.AreEqual(1, groups[1].Count);
         }
 
-        static IClipboardFileData GenerateFakeFileData(string fileName)
+        private static IClipboardFileData GenerateFakeFileData(string fileName)
         {
             var fakeFileData = Substitute.For<IClipboardFileData>();
             fakeFileData.FileName.Returns(fileName);

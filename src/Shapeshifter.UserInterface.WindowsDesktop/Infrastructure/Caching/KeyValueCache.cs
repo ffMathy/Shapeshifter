@@ -1,13 +1,17 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces;
+﻿#region
+
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching
 {
-    class KeyValueCache<TKey, TValue> : IKeyValueCache<TKey, TValue>
+    internal class KeyValueCache<TKey, TValue> : IKeyValueCache<TKey, TValue>
     {
-        IDictionary<TKey, TValue> data;
+        private readonly IDictionary<TKey, TValue> data;
 
         public KeyValueCache()
         {
@@ -21,10 +25,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching
 
         public void Set(TKey key, TValue value)
         {
-            if(data.ContainsKey(key))
+            if (data.ContainsKey(key))
             {
                 data[key] = value;
-            } else
+            }
+            else
             {
                 data.Add(key, value);
             }

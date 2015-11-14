@@ -1,8 +1,12 @@
-﻿using Autofac;
+﻿#region
+
+using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.Tests.Controls.Clipboard.ViewModels
 {
@@ -59,7 +63,7 @@ namespace Shapeshifter.Tests.Controls.Clipboard.ViewModels
             var fakeTextData = Substitute.For<IClipboardTextData>();
 
             var repeatText = "hello world";
-            while(repeatText.Length < 512)
+            while (repeatText.Length < 512)
             {
                 repeatText += repeatText;
             }

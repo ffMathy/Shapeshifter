@@ -1,16 +1,20 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+﻿#region
+
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 using static Shapeshifter.UserInterface.WindowsDesktop.Api.KeyboardApi;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {
-    class ClipboardPasteService : IClipboardPasteService
+    internal class ClipboardPasteService : IClipboardPasteService
     {
-        readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
-        readonly ILogger logger;
-        readonly IMainWindowHandleContainer handleContainer;
+        private readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
+        private readonly ILogger logger;
+        private readonly IMainWindowHandleContainer handleContainer;
 
         public ClipboardPasteService(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
@@ -31,17 +35,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
             logger.Information("Paste simulated.", 1);
         }
 
-        void EnablePasteHotkeyInterceptor()
+        private void EnablePasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.Install(handleContainer.Handle);
         }
 
-        void DisablePasteHotkeyInterceptor()
+        private void DisablePasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.Uninstall();
         }
 
-        void SendPasteCombination()
+        private void SendPasteCombination()
         {
             var inputs = new[]
             {
@@ -50,17 +54,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
                 GenerateKeystoke(VirtualKeyShort.KEY_V, KEYEVENTF.KEYUP),
                 GenerateKeystoke(VirtualKeyShort.LCONTROL, KEYEVENTF.KEYUP)
             };
-            SendInput((uint)inputs.Length, inputs, INPUT.Size);
+            SendInput((uint) inputs.Length, inputs, INPUT.Size);
         }
 
-        static INPUT GenerateKeystoke(VirtualKeyShort key, KEYEVENTF flags = 0)
+        private static INPUT GenerateKeystoke(VirtualKeyShort key, KEYEVENTF flags = 0)
         {
-            return new INPUT()
+            return new INPUT
             {
                 type = 1,
-                U = new InputUnion()
+                U = new InputUnion
                 {
-                    ki = new KEYBDINPUT()
+                    ki = new KEYBDINPUT
                     {
                         wVk = key,
                         dwFlags = flags,

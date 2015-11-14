@@ -1,5 +1,9 @@
-﻿using NSubstitute;
+﻿#region
+
+using NSubstitute;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.Tests.Actions
 {
@@ -9,12 +13,13 @@ namespace Shapeshifter.Tests.Actions
         {
             var fakePackage = Substitute.For<IClipboardDataPackage>();
             fakePackage.Contents.Returns(
-                new IClipboardData[] { Substitute.For<TData>() });
+                new IClipboardData[] {Substitute.For<TData>()});
 
             return fakePackage;
         }
 
-        protected IClipboardDataPackage GetPackageContaining<TData>(params TData[] data) where TData : class, IClipboardData
+        protected IClipboardDataPackage GetPackageContaining<TData>(params TData[] data)
+            where TData : class, IClipboardData
         {
             var fakePackage = Substitute.For<IClipboardDataPackage>();
             fakePackage.Contents.Returns(data);

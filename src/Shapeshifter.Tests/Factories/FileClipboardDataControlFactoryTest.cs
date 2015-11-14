@@ -1,12 +1,16 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿#region
+
+using System;
 using Autofac;
-using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using System;
-using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.Tests.Factories
 {
@@ -40,8 +44,8 @@ namespace Shapeshifter.Tests.Factories
             var container = CreateContainer(c =>
             {
                 c.RegisterFake<IClipboardControlFactory<IClipboardFileData, IClipboardFileDataControl>>()
-                .CreateControl(fakeSingleFileData)
-                .Returns(fakeControl);
+                    .CreateControl(fakeSingleFileData)
+                    .Returns(fakeControl);
             });
 
             var factory = container.Resolve<IFileClipboardDataControlFactory>();
@@ -58,9 +62,11 @@ namespace Shapeshifter.Tests.Factories
 
             var container = CreateContainer(c =>
             {
-                c.RegisterFake<IClipboardControlFactory<IClipboardFileCollectionData, IClipboardFileCollectionDataControl>>()
-                .CreateControl(fakeSingleFileData)
-                .Returns(fakeControl);
+                c
+                    .RegisterFake
+                    <IClipboardControlFactory<IClipboardFileCollectionData, IClipboardFileCollectionDataControl>>()
+                    .CreateControl(fakeSingleFileData)
+                    .Returns(fakeControl);
             });
 
             var factory = container.Resolve<IFileClipboardDataControlFactory>();
@@ -70,7 +76,7 @@ namespace Shapeshifter.Tests.Factories
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof (ArgumentException))]
         public void BuildControlForUnknownTypeThrowsException()
         {
             var fakeData = Substitute.For<IClipboardData>();
@@ -82,7 +88,7 @@ namespace Shapeshifter.Tests.Factories
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof (ArgumentException))]
         public void BuildDataForIncompatibleFormatThrowsException()
         {
             var container = CreateContainer();

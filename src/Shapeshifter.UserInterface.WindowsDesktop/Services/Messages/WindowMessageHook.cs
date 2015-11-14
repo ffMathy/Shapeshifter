@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -12,27 +14,26 @@ using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfa
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
 {
     [ExcludeFromCodeCoverage]
-    class WindowMessageHook : IWindowMessageHook, IDisposable
+    internal class WindowMessageHook : IWindowMessageHook, IDisposable
     {
-        HwndSource hooker;
+        private HwndSource hooker;
 
-        IWindow connectedWindow;
+        private IWindow connectedWindow;
 
-        readonly IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors;
+        private readonly IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors;
 
-        readonly Queue<WindowMessageReceivedArgument> pendingMessages;
-        readonly CancellationTokenSource cancellationTokenSource;
+        private readonly Queue<WindowMessageReceivedArgument> pendingMessages;
+        private readonly CancellationTokenSource cancellationTokenSource;
 
-        readonly ILogger logger;
-        readonly IConsumerThreadLoop consumerLoop;
+        private readonly ILogger logger;
+        private readonly IConsumerThreadLoop consumerLoop;
 
-        public bool IsConnected
-        {
-            get; private set;
-        }
+        public bool IsConnected { get; private set; }
 
         private IntPtr MainWindowHandle
             => hooker.Handle;
@@ -49,7 +50,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
             pendingMessages = new Queue<WindowMessageReceivedArgument>();
             cancellationTokenSource = new CancellationTokenSource();
 
-            logger.Information($"Window message hook was constructed using {windowMessageInterceptors.Count()} interceptors.");
+            logger.Information(
+                $"Window message hook was constructed using {windowMessageInterceptors.Count()} interceptors.");
         }
 
         public void Disconnect()
@@ -65,17 +67,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
             }
         }
 
-        void StopMessageConsumer()
+        private void StopMessageConsumer()
         {
             cancellationTokenSource.Cancel();
         }
 
-        void UninstallWindowMessageHook()
+        private void UninstallWindowMessageHook()
         {
             hooker.RemoveHook(WindowHookCallback);
         }
 
-        void UninstallInterceptors()
+        private void UninstallInterceptors()
         {
             foreach (var interceptor in windowMessageInterceptors)
             {
@@ -98,7 +100,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
             IsConnected = true;
         }
 
-        async Task HandleNextMessageAsync()
+        private async Task HandleNextMessageAsync()
         {
             var nextMessage = pendingMessages.Dequeue();
             foreach (var interceptor in windowMessageInterceptors)
@@ -114,7 +116,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
             }
         }
 
-        void InstallInterceptors()
+        private void InstallInterceptors()
         {
             var mainWindowHandle = hooker.Handle;
             foreach (var interceptor in windowMessageInterceptors)
@@ -124,7 +126,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
             }
         }
 
-        void InstallWindowMessageHook()
+        private void InstallWindowMessageHook()
         {
             var hooker = connectedWindow.HandleSource;
             hooker.AddHook(WindowHookCallback);
@@ -134,13 +136,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
             this.hooker = hooker;
         }
 
-        IntPtr WindowHookCallback(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        private IntPtr WindowHookCallback(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if (Enum.IsDefined(typeof(Message), msg))
+            if (Enum.IsDefined(typeof (Message), msg))
             {
-                logger.Information($"Message received: [{hwnd}, {FormatMessage((Message)msg)}, {wParam}, {lParam}]");
+                logger.Information($"Message received: [{hwnd}, {FormatMessage((Message) msg)}, {wParam}, {lParam}]");
 
-                var argument = new WindowMessageReceivedArgument(hwnd, (Message)msg, wParam, lParam);
+                var argument = new WindowMessageReceivedArgument(hwnd, (Message) msg, wParam, lParam);
                 pendingMessages.Enqueue(argument);
 
                 consumerLoop.Notify(HandleNextMessageAsync, cancellationTokenSource.Token);
@@ -151,7 +153,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages
 
         private string FormatMessage(Message msg)
         {
-            return Enum.GetName(typeof(Message), msg);
+            return Enum.GetName(typeof (Message), msg);
         }
 
         public void Dispose()

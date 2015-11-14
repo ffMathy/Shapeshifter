@@ -1,11 +1,15 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Autofac;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
+﻿#region
+
 using System.Threading.Tasks;
+using Autofac;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.Tests.Actions
 {
@@ -66,7 +70,7 @@ namespace Shapeshifter.Tests.Actions
                     .GetFileTypeFromFileName(Arg.Any<string>())
                     .Returns(FileType.Image);
             });
-            
+
             var fakeData = GetPackageContaining<IClipboardFileData>();
 
             var action = container.Resolve<IUploadImageAction>();

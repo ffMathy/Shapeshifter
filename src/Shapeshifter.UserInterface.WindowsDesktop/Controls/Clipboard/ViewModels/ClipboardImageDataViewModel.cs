@@ -1,17 +1,22 @@
-﻿using Autofac;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer;
+﻿#region
+
+using System.Diagnostics.CodeAnalysis;
+using Autofac;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-using System.Diagnostics.CodeAnalysis;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
-    class ClipboardImageDataViewModel : ClipboardDataViewModel<IClipboardImageData>
+    internal class ClipboardImageDataViewModel : ClipboardDataViewModel<IClipboardImageData>
     {
-        public ClipboardImageDataViewModel() : this(new EnvironmentInformation()) { }
+        public ClipboardImageDataViewModel() : this(new EnvironmentInformation())
+        {
+        }
 
         public ClipboardImageDataViewModel(
             IEnvironmentInformation environmentInformation)
@@ -23,7 +28,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
         }
 
         [ExcludeFromCodeCoverage]
-        void PrepareDesignerMode()
+        private void PrepareDesignerMode()
         {
             var container = DesignTimeContainerHelper.CreateDesignTimeContainer();
             Data = container.Resolve<DesignerClipboardImageDataFacade>();

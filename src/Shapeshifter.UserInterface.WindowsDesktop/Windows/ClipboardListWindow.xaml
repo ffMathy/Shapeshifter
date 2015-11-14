@@ -11,15 +11,15 @@
         Top="0"
         Left="0"
         Topmost="True"
-        mc:Ignorable="d" 
+        mc:Ignorable="d"
         ShowInTaskbar="False"
         SnapsToDevicePixels="True"
         UseLayoutRounding="True"
-        SizeToContent="WidthAndHeight" 
-        ResizeMode="NoResize" 
-        Title="" 
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize"
+        Title=""
         WindowStyle="None"
-        Background="Transparent" 
+        Background="Transparent"
         AllowsTransparency="True">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -28,7 +28,8 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <!-- TODO: semi transparent border around this. it'll look sexy. -->
-        <ListBox HorizontalAlignment="Left" SelectedItem="{Binding SelectedElement, Mode=TwoWay}" ItemsSource="{Binding Elements}">
+        <ListBox HorizontalAlignment="Left" SelectedItem="{Binding SelectedElement, Mode=TwoWay}"
+                 ItemsSource="{Binding Elements}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <ContentPresenter Content="{Binding Control}" />

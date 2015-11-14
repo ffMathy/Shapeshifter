@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
@@ -6,15 +8,17 @@ using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interface
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
     [ExcludeFromCodeCoverage]
-    class PasteHotkeyInterceptor : IPasteHotkeyInterceptor
+    internal class PasteHotkeyInterceptor : IPasteHotkeyInterceptor
     {
-        readonly ILogger logger;
-        readonly IHotkeyInterception hotkeyInterception;
+        private readonly ILogger logger;
+        private readonly IHotkeyInterception hotkeyInterception;
 
-        IntPtr windowHandle;
+        private IntPtr windowHandle;
 
         public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
@@ -43,13 +47,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
 
         public void ReceiveMessageEvent(WindowMessageReceivedArgument e)
         {
-            if (e.Message == Message.WM_HOTKEY && (int)e.WordParameter == hotkeyInterception.InterceptionId)
+            if (e.Message == Message.WM_HOTKEY && (int) e.WordParameter == hotkeyInterception.InterceptionId)
             {
                 HandleHotkeyMessage();
             }
         }
 
-        void HandleHotkeyMessage()
+        private void HandleHotkeyMessage()
         {
             logger.Information("Paste hotkey message received.", 1);
 

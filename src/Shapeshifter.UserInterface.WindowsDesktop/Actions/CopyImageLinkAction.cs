@@ -1,28 +1,30 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
-using System.Threading.Tasks;
+﻿#region
+
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
     //TODO: have custom preview generators as well. for instance, when copying ONLY an image link, generate the image itself as a preview (icon for the clipboard entry).
 
-    class CopyImageLinkAction : ICopyImageLinkAction
+    internal class CopyImageLinkAction : ICopyImageLinkAction
     {
-        readonly IClipboardInjectionService clipboardInjectionService;
-        readonly IDownloader downloader;
-        readonly IImageFileInterpreter imageFileInterpreter;
-        readonly ILinkParser linkParser;
-        readonly IAsyncFilter asyncFilter;
+        private readonly IClipboardInjectionService clipboardInjectionService;
+        private readonly IDownloader downloader;
+        private readonly IImageFileInterpreter imageFileInterpreter;
+        private readonly ILinkParser linkParser;
+        private readonly IAsyncFilter asyncFilter;
 
         public CopyImageLinkAction(
             ILinkParser linkParser,
@@ -40,26 +42,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         public string Description
         {
-            get
-            {
-                return "Copies the image that the link in the clipboard text points to.";
-            }
+            get { return "Copies the image that the link in the clipboard text points to."; }
         }
 
         public string Title
         {
-            get
-            {
-                return "Copy image from link";
-            }
+            get { return "Copy image from link"; }
         }
 
         public byte Order
         {
-            get
-            {
-                return 100;
-            }
+            get { return 100; }
         }
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
@@ -67,21 +60,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return await GetFirstSupportedDataAsync(package).ConfigureAwait(false) != null;
         }
 
-        async Task<IClipboardData> GetFirstSupportedDataAsync(IClipboardDataPackage package)
+        private async Task<IClipboardData> GetFirstSupportedDataAsync(IClipboardDataPackage package)
         {
             var validItems = await asyncFilter.FilterAsync(package.Contents, CanPerformAsync).ConfigureAwait(false);
             return validItems.FirstOrDefault();
         }
 
-        async Task<bool> CanPerformAsync(IClipboardData data)
+        private async Task<bool> CanPerformAsync(IClipboardData data)
         {
             var textData = data as IClipboardTextData;
-            return textData != null && await linkParser.HasLinkOfTypeAsync(textData.Text, LinkType.ImageFile).ConfigureAwait(false);
+            return textData != null &&
+                   await linkParser.HasLinkOfTypeAsync(textData.Text, LinkType.ImageFile).ConfigureAwait(false);
         }
 
         public async Task PerformAsync(IClipboardDataPackage package)
         {
-            var textData = (IClipboardTextData)await GetFirstSupportedDataAsync(package).ConfigureAwait(false);
+            var textData = (IClipboardTextData) await GetFirstSupportedDataAsync(package).ConfigureAwait(false);
             var links = await linkParser.ExtractLinksFromTextAsync(textData.Text).ConfigureAwait(false);
 
             var imagesBytes = await DownloadLinksAsync(links).ConfigureAwait(false);
@@ -90,12 +84,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             InjectImages(images);
         }
 
-        IEnumerable<BitmapSource> InterpretImages(IEnumerable<byte[]> imagesBytes)
+        private IEnumerable<BitmapSource> InterpretImages(IEnumerable<byte[]> imagesBytes)
         {
             return imagesBytes.Select(imageFileInterpreter.Interpret);
         }
 
-        void InjectImages(IEnumerable<BitmapSource> images)
+        private void InjectImages(IEnumerable<BitmapSource> images)
         {
             foreach (var image in images)
             {
@@ -103,7 +97,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
-        async Task<IEnumerable<byte[]>> DownloadLinksAsync(IEnumerable<string> links)
+        private async Task<IEnumerable<byte[]>> DownloadLinksAsync(IEnumerable<string> links)
         {
             var downloadTasks = new List<Task<byte[]>>();
             foreach (var link in links)

@@ -1,16 +1,17 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+﻿#region
+
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
-    class ThreadLoop : IThreadLoop
+    internal class ThreadLoop : IThreadLoop
     {
-        public bool IsRunning
-        {
-            get; private set;
-        }
+        public bool IsRunning { get; private set; }
 
         public void StartAsync(Func<Task> action, CancellationToken token)
         {
@@ -18,7 +19,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
             RunAsync(action, token);
         }
 
-        async void RunAsync(Func<Task> action, CancellationToken token)
+        private async void RunAsync(Func<Task> action, CancellationToken token)
         {
             while (!token.IsCancellationRequested && IsRunning)
             {

@@ -1,5 +1,9 @@
-﻿using System;
+﻿#region
+
+using System;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events
 {

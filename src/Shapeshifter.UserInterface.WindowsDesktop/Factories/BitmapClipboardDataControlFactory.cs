@@ -1,20 +1,24 @@
-﻿using System;
+﻿#region
+
+using System;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
 using Shapeshifter.UserInterface.WindowsDesktop.Data;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
-    class BitmapClipboardDataControlFactory : IClipboardDataControlFactory
+    internal class BitmapClipboardDataControlFactory : IClipboardDataControlFactory
     {
-        readonly IDataSourceService dataSourceService;
-        readonly IEnvironmentInformation environmentInformation;
+        private readonly IDataSourceService dataSourceService;
+        private readonly IEnvironmentInformation environmentInformation;
 
         public BitmapClipboardDataControlFactory(
             IDataSourceService dataSourceService,
@@ -26,22 +30,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public IClipboardControl BuildControl(IClipboardData clipboardData)
         {
-            return new ClipboardImageDataControl()
+            return new ClipboardImageDataControl
             {
                 DataContext = new ClipboardImageDataViewModel(environmentInformation)
                 {
-                    Data = (IClipboardImageData)clipboardData
+                    Data = (IClipboardImageData) clipboardData
                 }
             };
         }
 
         public IClipboardData BuildData(uint format, byte[] rawData)
         {
-            if(!CanBuildData(format))
+            if (!CanBuildData(format))
             {
                 throw new InvalidOperationException("The given format is not supported.");
             }
-            
+
             return new ClipboardImageData(dataSourceService)
             {
                 RawData = rawData,
@@ -56,7 +60,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public bool CanBuildData(uint format)
         {
-            return 
+            return
                 format == ClipboardApi.CF_BITMAP;
         }
     }

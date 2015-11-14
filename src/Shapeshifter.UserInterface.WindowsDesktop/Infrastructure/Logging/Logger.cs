@@ -1,13 +1,17 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+﻿#region
+
 using System.Diagnostics;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging
 {
-    class Logger : ILogger
+    internal class Logger : ILogger
     {
-        const int MinimumImportanceFactor = 0;
+        private const int MinimumImportanceFactor = 0;
 
-        void Log(string text)
+        private void Log(string text)
         {
             Debug.WriteLine($"{text}");
         }

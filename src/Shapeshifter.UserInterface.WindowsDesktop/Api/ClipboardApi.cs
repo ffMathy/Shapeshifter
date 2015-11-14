@@ -1,14 +1,17 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
     public static class ClipboardApi
     {
-
         public const int CF_BITMAP = 2;
         public const int CF_DIB = 8;
         public const int CF_DIBV5 = 17;
@@ -80,42 +83,42 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
             var dataPointer = GetClipboardDataPointer(format);
 
             var length = GetPointerDataLength(dataPointer);
-            if(length == UIntPtr.Zero)
+            if (length == UIntPtr.Zero)
             {
                 return null;
             }
 
             var lockedMemory = GetLockedMemoryBlockPointer(dataPointer);
-            if(lockedMemory == IntPtr.Zero)
+            if (lockedMemory == IntPtr.Zero)
             {
                 throw new Win32Exception(Marshal.GetLastWin32Error());
             }
 
-            var buffer = new byte[(int)length];
-            Marshal.Copy(lockedMemory, buffer, 0, (int)length);
+            var buffer = new byte[(int) length];
+            Marshal.Copy(lockedMemory, buffer, 0, (int) length);
             GeneralApi.GlobalUnlock(dataPointer);
-            
+
             return buffer;
         }
-        
-        static IntPtr GetClipboardDataPointer(uint format)
+
+        private static IntPtr GetClipboardDataPointer(uint format)
         {
             return GetClipboardData(format);
         }
 
-        static UIntPtr GetPointerDataLength(IntPtr dataPointer)
+        private static UIntPtr GetPointerDataLength(IntPtr dataPointer)
         {
             return GeneralApi.GlobalSize(dataPointer);
         }
 
-        static IntPtr GetLockedMemoryBlockPointer(IntPtr dataPointer)
+        private static IntPtr GetLockedMemoryBlockPointer(IntPtr dataPointer)
         {
             return GeneralApi.GlobalLock(dataPointer);
         }
 
         public static string GetClipboardFormatName(uint ClipboardFormat)
         {
-            StringBuilder sb = new StringBuilder(512);
+            var sb = new StringBuilder(512);
             GetClipboardFormatName(ClipboardFormat, sb, sb.Capacity);
             return sb.ToString();
         }

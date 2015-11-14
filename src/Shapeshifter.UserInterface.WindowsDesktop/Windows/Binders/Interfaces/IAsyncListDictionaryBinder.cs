@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces
 {
@@ -10,7 +14,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces
         TData Default { get; set; }
 
         void Bind(
-            ObservableCollection<TKey> sourceCollection, 
+            ObservableCollection<TKey> sourceCollection,
             ObservableCollection<TData> destinationCollection,
             Func<TKey, Task<IEnumerable<TData>>> mappingFunction);
 

@@ -1,9 +1,13 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Threading.Tasks;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces
 {
-    interface IKeyValueCache<TKey, TValue>
+    internal interface IKeyValueCache<TKey, TValue>
     {
         TValue Get(TKey key);
 

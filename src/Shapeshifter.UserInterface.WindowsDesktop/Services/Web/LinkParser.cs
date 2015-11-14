@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -8,21 +10,27 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
 {
-    class LinkParser : ILinkParser
+    internal class LinkParser : ILinkParser
     {
-        static readonly Regex linkValidationExpression;
-        static readonly Regex whitespaceExpression;
+        private static readonly Regex linkValidationExpression;
+        private static readonly Regex whitespaceExpression;
 
-        readonly IAsyncFilter asyncFilter;
-        readonly IDomainNameResolver domainNameResolver;
-        readonly IFileTypeInterpreter fileTypeInterpreter;
-        readonly IPerformanceHandleFactory performanceHandleFactory;
+        private readonly IAsyncFilter asyncFilter;
+        private readonly IDomainNameResolver domainNameResolver;
+        private readonly IFileTypeInterpreter fileTypeInterpreter;
+        private readonly IPerformanceHandleFactory performanceHandleFactory;
 
         static LinkParser()
         {
-            linkValidationExpression = new Regex(@"^(?:(?:https?|ftp):\/\/)?((?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00A1-\uFFFF0-9]+-?)*[a-z\u00A1-\uFFFF0-9]+)(?:\.(?:[a-z\u00A1-\uFFFF0-9]+-?)*[a-z\u00A1-\uFFFF0-9]+)*(?:\.(?:[a-z\u00A1-\uFFFF]{2,})))(?::\d{2,5})?)(?:\/?[^\s]*)?$", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.CultureInvariant, TimeSpan.FromMilliseconds(25));
+            linkValidationExpression =
+                new Regex(
+                    @"^(?:(?:https?|ftp):\/\/)?((?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00A1-\uFFFF0-9]+-?)*[a-z\u00A1-\uFFFF0-9]+)(?:\.(?:[a-z\u00A1-\uFFFF0-9]+-?)*[a-z\u00A1-\uFFFF0-9]+)*(?:\.(?:[a-z\u00A1-\uFFFF]{2,})))(?::\d{2,5})?)(?:\/?[^\s]*)?$",
+                    RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline |
+                    RegexOptions.CultureInvariant, TimeSpan.FromMilliseconds(25));
             whitespaceExpression = new Regex(@"\s", RegexOptions.Compiled);
         }
 
@@ -47,23 +55,23 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
             });
         }
 
-        static string[] GetWords(string text)
+        private static string[] GetWords(string text)
         {
             return whitespaceExpression.Split(text);
         }
 
-        static IEnumerable<string> ExtractSuspiciousWords(string[] words)
+        private static IEnumerable<string> ExtractSuspiciousWords(string[] words)
         {
-            foreach(var word in words)
+            foreach (var word in words)
             {
-                if(IsSuspiciousWord(word))
+                if (IsSuspiciousWord(word))
                 {
                     yield return word;
                 }
             }
         }
 
-        static IEnumerable<string> ExtractNonSuspiciousWords(string[] words)
+        private static IEnumerable<string> ExtractNonSuspiciousWords(string[] words)
         {
             foreach (var word in words)
             {
@@ -74,7 +82,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
             }
         }
 
-        static bool IsSuspiciousWord(string word)
+        private static bool IsSuspiciousWord(string word)
         {
             return
                 word.StartsWith("www.", StringComparison.OrdinalIgnoreCase) ||
@@ -117,7 +125,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
                     var words = GetWords(text);
 
                     var suspiciousWords = ExtractSuspiciousWords(words);
-                    if(await asyncFilter.HasMatchAsync(suspiciousWords, IsValidLinkAsync))
+                    if (await asyncFilter.HasMatchAsync(suspiciousWords, IsValidLinkAsync))
                     {
                         return true;
                     }
@@ -132,7 +140,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
         {
             using (performanceHandleFactory.StartMeasuringPerformance())
             {
-                Func<string, Task<bool>> validationFunction = async (string word) => IsLinkOfType(word, linkType) && await IsValidLinkAsync(word);
+                Func<string, Task<bool>> validationFunction =
+                    async (string word) => IsLinkOfType(word, linkType) && await IsValidLinkAsync(word);
                 return await Task.Run(async () =>
                 {
                     var words = GetWords(text);

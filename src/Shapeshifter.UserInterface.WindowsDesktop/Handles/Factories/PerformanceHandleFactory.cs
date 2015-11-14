@@ -1,11 +1,15 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
+﻿#region
+
 using System.Runtime.CompilerServices;
+using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories
 {
-    class PerformanceHandleFactory : IPerformanceHandleFactory
+    internal class PerformanceHandleFactory : IPerformanceHandleFactory
     {
         private readonly ILogger logger;
 

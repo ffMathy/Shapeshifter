@@ -1,9 +1,13 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+﻿#region
+
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
-    class ThreadDelay : IThreadDelay
+    internal class ThreadDelay : IThreadDelay
     {
         public async Task ExecuteAsync(int millisecondsDelay)
         {

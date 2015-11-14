@@ -1,8 +1,12 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+﻿#region
+
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
-    class DesignerProcessManager : IProcessManager
+    internal class DesignerProcessManager : IProcessManager
     {
         public void LaunchCommand(string command)
         {

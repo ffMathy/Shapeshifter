@@ -1,6 +1,10 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+﻿#region
+
 using System;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces
 {

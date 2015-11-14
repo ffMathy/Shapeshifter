@@ -1,25 +1,23 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
+﻿#region
+
 using System.Diagnostics;
 using System.Windows;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment
 {
-    class EnvironmentInformation : IEnvironmentInformation
+    internal class EnvironmentInformation : IEnvironmentInformation
     {
         public bool IsDebugging
         {
-            get
-            {
-                return Debugger.IsAttached;
-            }
+            get { return Debugger.IsAttached; }
         }
 
         public bool IsInDesignTime
         {
-            get
-            {
-                return !(Application.Current is App);
-            }
+            get { return !(Application.Current is App); }
         }
     }
 }

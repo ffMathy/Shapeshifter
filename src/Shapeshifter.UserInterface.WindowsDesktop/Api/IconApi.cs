@@ -1,12 +1,15 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
     public static class IconApi
     {
-
         public const uint SHGFI_ICON = 0x100;
         public const uint SHGFI_LARGEICON = 0x0;
 
@@ -16,33 +19,32 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
             public IntPtr hIcon;
             public IntPtr iIcon;
             public uint dwAttributes;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
-            public string szDisplayName;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
-            public string szTypeName;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)] public string szDisplayName;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)] public string szTypeName;
         };
 
         [StructLayout(LayoutKind.Sequential)]
         public struct BITMAP
         {
-            public Int32 Type;
-            public Int32 Width;
-            public Int32 Height;
-            public Int32 WidthBytes;
-            public UInt16 Planes;
-            public UInt16 BitsPixel;
+            public int Type;
+            public int Width;
+            public int Height;
+            public int WidthBytes;
+            public ushort Planes;
+            public ushort BitsPixel;
             public IntPtr Bits;
         }
 
         [DllImport("gdi32", CharSet = CharSet.Auto)]
-        public extern static int GetObject(
-            IntPtr hgdiobj, 
+        public static extern int GetObject(
+            IntPtr hgdiobj,
             int cbBuffer,
-            out BITMAP lpvObject 
-        );
+            out BITMAP lpvObject
+            );
 
         [DllImport("shell32.dll", SetLastError = true)]
-        public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
+        public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi,
+            uint cbSizeFileInfo, uint uFlags);
 
         [DllImport("gdi32.dll", SetLastError = true)]
         public static extern bool DeleteObject(IntPtr hObject);
@@ -62,9 +64,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
         public interface IShellItem
         {
             void BindToHandler(IntPtr pbc,
-                               [MarshalAs(UnmanagedType.LPStruct)] Guid bhid,
-                               [MarshalAs(UnmanagedType.LPStruct)] Guid riid,
-                               out IntPtr ppv);
+                [MarshalAs(UnmanagedType.LPStruct)] Guid bhid,
+                [MarshalAs(UnmanagedType.LPStruct)] Guid riid,
+                out IntPtr ppv);
 
             void GetParent(out IShellItem ppsi);
 
@@ -135,6 +137,5 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
         }
 
         #endregion
-
     }
 }

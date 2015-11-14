@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿#region
+
+using System.Threading.Tasks;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces
 {

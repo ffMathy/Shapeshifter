@@ -1,31 +1,26 @@
-﻿using System;
-using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
+﻿#region
+
+using System;
 using System.Runtime.InteropServices;
-using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Handles
 {
-    class MemoryHandle : IMemoryHandle
+    internal class MemoryHandle : IMemoryHandle
     {
-        readonly IntPtr pointer;
-
         public MemoryHandle(byte[] bytes)
         {
-            pointer = Marshal.AllocHGlobal(bytes.Length);
-            Marshal.Copy(bytes, 0, pointer, bytes.Length);
+            Pointer = Marshal.AllocHGlobal(bytes.Length);
+            Marshal.Copy(bytes, 0, Pointer, bytes.Length);
         }
 
-        public IntPtr Pointer
-        {
-            get
-            {
-                return pointer;
-            }
-        }
+        public IntPtr Pointer { get; }
 
         public void Dispose()
         {
-            Marshal.FreeHGlobal(pointer);
+            Marshal.FreeHGlobal(Pointer);
         }
     }
 }

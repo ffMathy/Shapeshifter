@@ -1,35 +1,25 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+﻿#region
+
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Data
 {
     public class ClipboardTextData : IClipboardTextData
     {
-        readonly IDataSource source;
-
         public ClipboardTextData(IDataSourceService sourceFactory)
         {
-            source = sourceFactory.GetDataSource();
+            Source = sourceFactory.GetDataSource();
         }
 
         public string Text { get; set; }
 
-        public IDataSource Source
-        {
-            get
-            {
-                return source;
-            }
-        }
+        public IDataSource Source { get; }
 
-        public byte[] RawData
-        {
-            get; set;
-        }
+        public byte[] RawData { get; set; }
 
-        public uint RawFormat
-        {
-            get; set;
-        }
+        public uint RawFormat { get; set; }
     }
 }

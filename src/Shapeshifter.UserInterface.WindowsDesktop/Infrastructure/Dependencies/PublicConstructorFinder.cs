@@ -1,11 +1,15 @@
-﻿using Autofac.Core.Activators.Reflection;
+﻿#region
+
 using System;
 using System.Linq;
 using System.Reflection;
+using Autofac.Core.Activators.Reflection;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
 {
-    class PublicConstructorFinder : IConstructorFinder
+    internal class PublicConstructorFinder : IConstructorFinder
     {
         public ConstructorInfo[] FindConstructors(Type targetType)
         {

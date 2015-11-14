@@ -1,17 +1,21 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
+﻿#region
+
+using System;
+using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-using System;
-using System.Threading.Tasks;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
-    class PasteAction : IPasteAction
+    internal class PasteAction : IPasteAction
     {
-        readonly IClipboardInjectionService clipboardInjectionService;
-        readonly IClipboardPasteService clipboardPasteService;
-        readonly ILogger logger;
+        private readonly IClipboardInjectionService clipboardInjectionService;
+        private readonly IClipboardPasteService clipboardPasteService;
+        private readonly ILogger logger;
 
         public PasteAction(
             IClipboardInjectionService clipboardInjectionService,
@@ -25,32 +29,23 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         public string Description
         {
-            get
-            {
-                return "Pastes clipboard contents as-is.";
-            }
+            get { return "Pastes clipboard contents as-is."; }
         }
 
         public byte Order
         {
-            get
-            {
-                return 0;
-            }
+            get { return 0; }
         }
 
         public string Title
         {
-            get
-            {
-                return "Paste";
-            }
+            get { return "Paste"; }
         }
 
         public async Task<bool> CanPerformAsync(
             IClipboardDataPackage package)
         {
-            if(package == null)
+            if (package == null)
             {
                 throw new ArgumentNullException(nameof(package));
             }

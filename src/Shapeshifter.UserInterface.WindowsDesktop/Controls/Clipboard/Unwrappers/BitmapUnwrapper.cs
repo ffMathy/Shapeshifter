@@ -1,6 +1,5 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+﻿#region
+
 using System;
 using System.Drawing;
 using System.IO;
@@ -9,15 +8,19 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 using static Shapeshifter.UserInterface.WindowsDesktop.Api.ImageApi;
 using DrawingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers
 {
-    class BitmapUnwrapper : IMemoryUnwrapper
+    internal class BitmapUnwrapper : IMemoryUnwrapper
     {
-        readonly IImagePersistenceService imagePersistenceService;
+        private readonly IImagePersistenceService imagePersistenceService;
 
         public BitmapUnwrapper(
             IImagePersistenceService imagePersistenceService)
@@ -28,9 +31,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
         public bool CanUnwrap(uint format)
         {
             return format == ClipboardApi.CF_DIBV5 ||
-                format == ClipboardApi.CF_DIB ||
-                format == ClipboardApi.CF_BITMAP ||
-                format == ClipboardApi.CF_DIF;
+                   format == ClipboardApi.CF_DIB ||
+                   format == ClipboardApi.CF_BITMAP ||
+                   format == ClipboardApi.CF_DIF;
         }
 
         public byte[] UnwrapStructure(uint format)
@@ -38,7 +41,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
             //TODO: it is very sad that we invoke System.Drawing here to get the job done. probably not very optimal.
 
             var bitmapVersionFivePointer = ClipboardApi.GetClipboardData(ClipboardApi.CF_DIBV5);
-            var bitmapVersionFiveHeader = (BITMAPV5HEADER)Marshal.PtrToStructure(bitmapVersionFivePointer, typeof(BITMAPV5HEADER));
+            var bitmapVersionFiveHeader =
+                (BITMAPV5HEADER) Marshal.PtrToStructure(bitmapVersionFivePointer, typeof (BITMAPV5HEADER));
             if (bitmapVersionFiveHeader.bV5Compression == BI_RGB)
             {
                 var bitmapVersionOneBytes = ClipboardApi.GetClipboardDataBytes(ClipboardApi.CF_DIB);
@@ -46,21 +50,19 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
 
                 return HandleBitmapVersionOne(bitmapVersionOneBytes, bitmapVersionOneHeader);
             }
-            else
-            {
-                return HandleBitmapVersionFive(bitmapVersionFivePointer, bitmapVersionFiveHeader);
-            }
+            return HandleBitmapVersionFive(bitmapVersionFivePointer, bitmapVersionFiveHeader);
         }
 
-        byte[] HandleBitmapVersionOne(byte[] bitmapVersionOneBytes, BITMAPINFOHEADER bitmapVersionOneHeader)
+        private byte[] HandleBitmapVersionOne(byte[] bitmapVersionOneBytes, BITMAPINFOHEADER bitmapVersionOneHeader)
         {
             var bitmap = CreateBitmapVersionOne(bitmapVersionOneBytes, bitmapVersionOneHeader);
             return imagePersistenceService.ConvertBitmapSourceToByteArray(bitmap);
         }
 
-        static BitmapFrame CreateBitmapVersionOne(byte[] bitmapVersionOneBytes, BITMAPINFOHEADER bitmapVersionOneHeader)
+        private static BitmapFrame CreateBitmapVersionOne(byte[] bitmapVersionOneBytes,
+            BITMAPINFOHEADER bitmapVersionOneHeader)
         {
-            var fileHeaderSize = Marshal.SizeOf(typeof(BITMAPFILEHEADER));
+            var fileHeaderSize = Marshal.SizeOf(typeof (BITMAPFILEHEADER));
             var infoHeaderSize = bitmapVersionOneHeader.biSize;
             var fileSize = fileHeaderSize + bitmapVersionOneHeader.biSize + bitmapVersionOneHeader.biSizeImage;
 
@@ -69,7 +71,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
             fileHeader.bfSize = fileSize;
             fileHeader.bfReserved1 = 0;
             fileHeader.bfReserved2 = 0;
-            fileHeader.bfOffBits = fileHeaderSize + infoHeaderSize + bitmapVersionOneHeader.biClrUsed * 4;
+            fileHeader.bfOffBits = fileHeaderSize + infoHeaderSize + bitmapVersionOneHeader.biClrUsed*4;
 
             var fileHeaderBytes = GeneralApi.StructureToByteArray(fileHeader);
 
@@ -82,19 +84,19 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
             return bitmap;
         }
 
-        byte[] HandleBitmapVersionFive(IntPtr pointer, BITMAPV5HEADER infoHeader)
+        private byte[] HandleBitmapVersionFive(IntPtr pointer, BITMAPV5HEADER infoHeader)
         {
             using (var drawingBitmap = CreateDrawingBitmapFromVersionOnePointer(pointer, infoHeader))
             {
                 var renderTargetBitmapSource = new RenderTargetBitmap(infoHeader.bV5Width,
-                                                          infoHeader.bV5Height,
-                                                          96, 96, PixelFormats.Pbgra32);
+                    infoHeader.bV5Height,
+                    96, 96, PixelFormats.Pbgra32);
                 var visual = new DrawingVisual();
                 var drawingContext = visual.RenderOpen();
 
                 drawingContext.DrawImage(CreateBitmapSourceFromBitmap(drawingBitmap),
-                                         new Rect(0, 0, infoHeader.bV5Width,
-                                                  infoHeader.bV5Height));
+                    new Rect(0, 0, infoHeader.bV5Width,
+                        infoHeader.bV5Height));
 
                 renderTargetBitmapSource.Render(visual);
 
@@ -102,9 +104,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
             }
         }
 
-        static Bitmap ConvertBitmapTo32Bit(Bitmap sourceBitmap)
+        private static Bitmap ConvertBitmapTo32Bit(Bitmap sourceBitmap)
         {
-            if(sourceBitmap.PixelFormat == DrawingPixelFormat.Format32bppPArgb)
+            if (sourceBitmap.PixelFormat == DrawingPixelFormat.Format32bppPArgb)
             {
                 return sourceBitmap;
             }
@@ -118,9 +120,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
             return targetBitmap;
         }
 
-        static Bitmap CreateDrawingBitmapFromVersionOnePointer(IntPtr pointer, BITMAPV5HEADER infoHeader)
+        private static Bitmap CreateDrawingBitmapFromVersionOnePointer(IntPtr pointer, BITMAPV5HEADER infoHeader)
         {
-            var stride = (int)(infoHeader.bV5SizeImage / infoHeader.bV5Height);
+            var stride = (int) (infoHeader.bV5SizeImage/infoHeader.bV5Height);
             var bitmap = new Bitmap(
                 infoHeader.bV5Width,
                 infoHeader.bV5Height,
@@ -130,7 +132,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
             return ConvertBitmapTo32Bit(bitmap);
         }
 
-        static BitmapSource CreateBitmapSourceFromBitmap(Bitmap bitmap)
+        private static BitmapSource CreateBitmapSourceFromBitmap(Bitmap bitmap)
         {
             if (bitmap == null)
                 throw new ArgumentNullException(nameof(bitmap));

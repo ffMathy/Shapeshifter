@@ -1,10 +1,14 @@
-﻿using Autofac;
+﻿#region
+
+using System;
+using System.Linq;
+using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ploeh.AutoFixture;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using System;
-using System.Linq;
+
+#endregion
 
 namespace Shapeshifter.Tests
 {
@@ -23,18 +27,18 @@ namespace Shapeshifter.Tests
             fixture = CreateFixture();
         }
 
-        Fixture CreateFixture()
+        private Fixture CreateFixture()
         {
             var fixture = new Fixture();
             fixture.OmitAutoProperties = true;
             fixture.RepeatCount = 5;
-            
+
             var behavior = fixture
                 .Behaviors
                 .OfType<ThrowingRecursionBehavior>()
                 .Single();
             fixture.Behaviors.Remove(behavior);
-            
+
             fixture.Behaviors.Add(new OmitOnRecursionBehavior(1));
 
             return fixture;
@@ -47,7 +51,8 @@ namespace Shapeshifter.Tests
 
             builder.RegisterFake<IUpdateService>();
 
-            if(setupCallback != null) {
+            if (setupCallback != null)
+            {
                 setupCallback(builder);
             }
 

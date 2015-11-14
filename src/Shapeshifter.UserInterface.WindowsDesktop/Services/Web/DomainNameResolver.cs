@@ -1,18 +1,22 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-using System.Threading.Tasks;
-using System.Net;
+﻿#region
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces;
-using System;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
 {
     [ExcludeFromCodeCoverage]
-    class DomainNameResolver : IDomainNameResolver
+    internal class DomainNameResolver : IDomainNameResolver
     {
-        readonly IKeyValueCache<string, IPAddress[]> domainResolveCache;
+        private readonly IKeyValueCache<string, IPAddress[]> domainResolveCache;
 
         public DomainNameResolver(
             IKeyValueCache<string, IPAddress[]> domainResolveCache)
@@ -22,20 +26,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
 
         public async Task<IPAddress[]> GetDomainIpAddressesAsync(string domain)
         {
-            if(domain == null)
+            if (domain == null)
             {
                 throw new ArgumentNullException(nameof(domain));
             }
 
-            try {
+            try
+            {
                 return await domainResolveCache.ThunkifyAsync(NormalizeDomain(domain), Dns.GetHostAddressesAsync);
-            } catch(SocketException)
+            }
+            catch (SocketException)
             {
                 return new IPAddress[0];
             }
         }
 
-        string NormalizeDomain(string domain)
+        private string NormalizeDomain(string domain)
         {
             return domain
                 .Trim()

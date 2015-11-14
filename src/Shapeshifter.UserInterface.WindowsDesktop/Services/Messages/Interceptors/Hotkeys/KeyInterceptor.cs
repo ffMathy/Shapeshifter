@@ -1,25 +1,28 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
+﻿#region
+
 using System;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Factories.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
-    class KeyInterceptor : IKeyInterceptor
+    internal class KeyInterceptor : IKeyInterceptor
     {
-        readonly IHotkeyInterceptionFactory hotkeyInterceptionFactory;
-        readonly IUserInterfaceThread userInterfaceThread;
+        private readonly IHotkeyInterceptionFactory hotkeyInterceptionFactory;
+        private readonly IUserInterfaceThread userInterfaceThread;
 
-        IDictionary<int, IHotkeyInterception> keyInterceptions;
+        private readonly IDictionary<int, IHotkeyInterception> keyInterceptions;
 
-        bool isInstalled;
+        private bool isInstalled;
 
-        IntPtr windowHandle;
+        private IntPtr windowHandle;
 
         public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
@@ -37,7 +40,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
         {
             this.windowHandle = windowHandle;
 
-            foreach(var interception in keyInterceptions.Values)
+            foreach (var interception in keyInterceptions.Values)
             {
                 interception.Start(windowHandle);
             }
@@ -47,7 +50,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
 
         public void ReceiveMessageEvent(WindowMessageReceivedArgument e)
         {
-            switch(e.Message)
+            switch (e.Message)
             {
                 case Message.WM_SHOWWINDOW:
                     userInterfaceThread.Invoke(() => HandleWindowVisibilityChangedMessage(e));
@@ -59,28 +62,28 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
             }
         }
 
-        IHotkeyInterception GetInterceptionForInterceptionId(int interceptionId)
+        private IHotkeyInterception GetInterceptionForInterceptionId(int interceptionId)
         {
             return keyInterceptions.Values
                 .SingleOrDefault(x => x.InterceptionId == interceptionId);
         }
 
-        void HandleHotkeyMessage(WindowMessageReceivedArgument e)
+        private void HandleHotkeyMessage(WindowMessageReceivedArgument e)
         {
-            var interception = GetInterceptionForInterceptionId((int)e.WordParameter);
-            if(interception != null && HotkeyFired != null)
+            var interception = GetInterceptionForInterceptionId((int) e.WordParameter);
+            if (interception != null && HotkeyFired != null)
             {
                 HotkeyFired(this, new HotkeyFiredArgument(
                     interception.KeyCode, interception.ControlNeeded));
             }
         }
 
-        void HandleWindowVisibilityChangedMessage(WindowMessageReceivedArgument e)
+        private void HandleWindowVisibilityChangedMessage(WindowMessageReceivedArgument e)
         {
             const int Shown = 1;
             const int Hidden = 0;
 
-            switch ((int)e.WordParameter)
+            switch ((int) e.WordParameter)
             {
                 case Shown:
                     Install(e.WindowHandle);
@@ -103,7 +106,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
         }
 
         public void AddInterceptingKey(
-            IntPtr windowHandle, 
+            IntPtr windowHandle,
             int keyCode)
         {
             if (keyInterceptions.ContainsKey(keyCode))
@@ -112,7 +115,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
             }
 
             var interception = CreateNewInterception(keyCode);
-            if(isInstalled)
+            if (isInstalled)
             {
                 interception.Start(windowHandle);
             }
@@ -120,10 +123,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
             keyInterceptions.Add(keyCode, interception);
         }
 
-        IHotkeyInterception CreateNewInterception(int keyCode)
+        private IHotkeyInterception CreateNewInterception(int keyCode)
         {
             var interception = hotkeyInterceptionFactory.CreateInterception(
-                            keyCode, true, false);
+                keyCode, true, false);
             return interception;
         }
 
@@ -131,7 +134,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
             IntPtr windowHandle,
             int keyCode)
         {
-            if(!keyInterceptions.ContainsKey(keyCode))
+            if (!keyInterceptions.ContainsKey(keyCode))
             {
                 return;
             }

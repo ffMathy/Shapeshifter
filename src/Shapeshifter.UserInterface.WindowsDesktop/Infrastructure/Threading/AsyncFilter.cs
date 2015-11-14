@@ -1,24 +1,33 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+﻿#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
-    class AsyncFilter : IAsyncFilter
+    internal class AsyncFilter : IAsyncFilter
     {
-        public async Task<IEnumerable<TResult>> FilterAsync<TResult>(IEnumerable<Task<TResult>> candidatesTask, Func<TResult, bool> filter)
+        public async Task<IEnumerable<TResult>> FilterAsync<TResult>(IEnumerable<Task<TResult>> candidatesTask,
+            Func<TResult, bool> filter)
         {
             return await FilterAsync(candidatesTask, result => Task.FromResult(filter(result))).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<TResult>> FilterAsync<TResult>(IEnumerable<TResult> candidatesTask, Func<TResult, Task<bool>> filter)
+        public async Task<IEnumerable<TResult>> FilterAsync<TResult>(IEnumerable<TResult> candidatesTask,
+            Func<TResult, Task<bool>> filter)
         {
-            return await FilterAsync(candidatesTask.Select(result => Task.FromResult(result)), filter).ConfigureAwait(false);
+            return
+                await
+                    FilterAsync(candidatesTask.Select(result => Task.FromResult(result)), filter).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<TResult>> FilterAsync<TResult>(IEnumerable<Task<TResult>> candidatesTask, Func<TResult, Task<bool>> filter)
+        public async Task<IEnumerable<TResult>> FilterAsync<TResult>(IEnumerable<Task<TResult>> candidatesTask,
+            Func<TResult, Task<bool>> filter)
         {
             var candidates = await Task.WhenAll(candidatesTask).ConfigureAwait(false);
             var validations = await GetValidationsAsync(filter, candidates).ConfigureAwait(false);
@@ -26,7 +35,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
             return FilterUsingValidations(candidates, validations);
         }
 
-        static async Task<bool[]> GetValidationsAsync<TResult>(Func<TResult, Task<bool>> filter, TResult[] candidates)
+        private static async Task<bool[]> GetValidationsAsync<TResult>(Func<TResult, Task<bool>> filter,
+            TResult[] candidates)
         {
             var validationsTask = new List<Task<bool>>();
             foreach (var candidate in candidates)
@@ -38,7 +48,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
             return validations;
         }
 
-        static IEnumerable<TResult> FilterUsingValidations<TResult>(TResult[] candidates, bool[] validations)
+        private static IEnumerable<TResult> FilterUsingValidations<TResult>(TResult[] candidates, bool[] validations)
         {
             var results = new List<TResult>();
             for (var i = 0; i < validations.Length; i++)
@@ -52,23 +62,26 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
             return results;
         }
 
-        public async Task<bool> HasMatchAsync<TResult>(IEnumerable<Task<TResult>> candidatesTask, Func<TResult, bool> filter)
+        public async Task<bool> HasMatchAsync<TResult>(IEnumerable<Task<TResult>> candidatesTask,
+            Func<TResult, bool> filter)
         {
-            return await HasMatchAsync(candidatesTask, (result) => Task.FromResult(filter(result)));
+            return await HasMatchAsync(candidatesTask, result => Task.FromResult(filter(result)));
         }
 
-        public async Task<bool> HasMatchAsync<TResult>(IEnumerable<TResult> candidatesTask, Func<TResult, Task<bool>> filter)
+        public async Task<bool> HasMatchAsync<TResult>(IEnumerable<TResult> candidatesTask,
+            Func<TResult, Task<bool>> filter)
         {
             return await HasMatchAsync(candidatesTask.Select(result => Task.FromResult(result)), filter);
         }
 
-        public async Task<bool> HasMatchAsync<TResult>(IEnumerable<Task<TResult>> candidatesTask, Func<TResult, Task<bool>> filter)
+        public async Task<bool> HasMatchAsync<TResult>(IEnumerable<Task<TResult>> candidatesTask,
+            Func<TResult, Task<bool>> filter)
         {
             //TODO: this can be optimized more by running all tasks in parallel and returning the first succeeding.
-            foreach(var candidate in candidatesTask)
+            foreach (var candidate in candidatesTask)
             {
                 var result = await candidate;
-                if(await filter(result))
+                if (await filter(result))
                 {
                     return true;
                 }

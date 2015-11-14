@@ -1,10 +1,14 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces
 {
-    interface IThreadLoop
+    internal interface IThreadLoop
     {
         bool IsRunning { get; }
 

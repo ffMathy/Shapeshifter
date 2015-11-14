@@ -1,18 +1,20 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Autofac;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
-using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+﻿#region
+
+using System;
 using System.ComponentModel;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.Tests.Windows.ViewModels
 {
@@ -22,17 +24,17 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         [TestMethod]
         public void SelectedElementChangedTriggersChangedEvent()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-            });
+            var container =
+                CreateContainer(
+                    c => { c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>(); });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
 
             object eventSender = null;
             PropertyChangedEventArgs eventArguments = null;
 
-            viewModel.PropertyChanged += (sender, e) => {
+            viewModel.PropertyChanged += (sender, e) =>
+            {
                 if (e.PropertyName == nameof(viewModel.SelectedElement))
                 {
                     eventSender = sender;
@@ -50,22 +52,21 @@ namespace Shapeshifter.Tests.Windows.ViewModels
             var fakeData = Substitute.For<IClipboardData>();
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
-            fakePackage.Contents.Returns(new[] { fakeData });
+            fakePackage.Contents.Returns(new[] {fakeData});
 
             var supportedAction = Substitute.For<IAction>();
             supportedAction
                 .CanPerformAsync(fakePackage)
                 .Returns(Task.FromResult(true));
 
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-            });
+            var container =
+                CreateContainer(
+                    c => { c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>(); });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
             viewModel.SelectedElement = fakePackage;
 
-            var fakeBinder = container.Resolve<IAsyncListDictionaryBinder< IClipboardDataControlPackage, IAction>>();
+            var fakeBinder = container.Resolve<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
             fakeBinder.Received(1).LoadFromKey(fakePackage);
         }
 
@@ -76,13 +77,11 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
-            var container = CreateContainer(c =>
-            {
-                c.RegisterInstance(fakeUserInterfaceMediator);
-            });
+            var container = CreateContainer(c => { c.RegisterInstance(fakeUserInterfaceMediator); });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
-            fakeUserInterfaceMediator.ControlAdded += Raise.Event<EventHandler<ControlEventArgument>>(viewModel, new ControlEventArgument(fakePackage));
+            fakeUserInterfaceMediator.ControlAdded += Raise.Event<EventHandler<ControlEventArgument>>(viewModel,
+                new ControlEventArgument(fakePackage));
 
             Assert.AreSame(fakePackage, viewModel.SelectedElement);
         }
@@ -94,13 +93,11 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
-            var container = CreateContainer(c =>
-            {
-                c.RegisterInstance(fakeUserInterfaceMediator);
-            });
+            var container = CreateContainer(c => { c.RegisterInstance(fakeUserInterfaceMediator); });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
-            fakeUserInterfaceMediator.ControlAdded += Raise.Event<EventHandler<ControlEventArgument>>(viewModel, new ControlEventArgument(fakePackage));
+            fakeUserInterfaceMediator.ControlAdded += Raise.Event<EventHandler<ControlEventArgument>>(viewModel,
+                new ControlEventArgument(fakePackage));
 
             Assert.AreSame(fakePackage, viewModel.Elements.Single());
         }
@@ -112,15 +109,13 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
-            var container = CreateContainer(c =>
-            {
-                c.RegisterInstance(fakeUserInterfaceMediator);
-            });
+            var container = CreateContainer(c => { c.RegisterInstance(fakeUserInterfaceMediator); });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
             viewModel.Elements.Add(fakePackage);
 
-            fakeUserInterfaceMediator.ControlHighlighted += Raise.Event<EventHandler<ControlEventArgument>>(viewModel, new ControlEventArgument(fakePackage));
+            fakeUserInterfaceMediator.ControlHighlighted += Raise.Event<EventHandler<ControlEventArgument>>(viewModel,
+                new ControlEventArgument(fakePackage));
 
             Assert.AreSame(fakePackage, viewModel.Elements.Single());
         }

@@ -1,14 +1,18 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+﻿#region
+
 using System;
 using System.IO;
 using System.Linq;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
 {
-    class CleanupArgumentProcessor : IArgumentProcessor
+    internal class CleanupArgumentProcessor : IArgumentProcessor
     {
-        readonly IProcessManager processManager;
+        private readonly IProcessManager processManager;
 
         public CleanupArgumentProcessor(
             IProcessManager processManager)
@@ -28,7 +32,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
         {
             var updateIndex = Array.IndexOf(arguments, "cleanup");
             var targetDirectory = arguments[updateIndex + 1];
-            
+
             Directory.Delete(targetDirectory);
         }
     }

@@ -1,21 +1,25 @@
-﻿using Autofac;
+﻿#region
+
+using System;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Threading;
+using Autofac;
 using Autofac.Builder;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading;
-using System;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Threading;
 using AutofacModule = Autofac.Module;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
 {
     public class DefaultWiringModule : AutofacModule
     {
-        readonly Action<ContainerBuilder> callback;
+        private readonly Action<ContainerBuilder> callback;
 
         public DefaultWiringModule(Action<ContainerBuilder> callback = null)
         {
@@ -24,7 +28,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
 
         protected override void Load(ContainerBuilder builder)
         {
-            RegisterAssemblyTypes(builder, typeof(DefaultWiringModule).Assembly);
+            RegisterAssemblyTypes(builder, typeof (DefaultWiringModule).Assembly);
 
             RegisterMainThread(builder);
 
@@ -57,7 +61,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
             return environmentInformation;
         }
 
-        static void RegisterAssemblyTypes(ContainerBuilder builder, Assembly assembly)
+        private static void RegisterAssemblyTypes(ContainerBuilder builder, Assembly assembly)
         {
             var types = assembly.GetTypes();
             foreach (var type in types)
@@ -72,7 +76,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
                         var genericInterfaces = type
                             .GetInterfaces()
                             .Where(x => x.IsGenericType);
-                        foreach(var genericInterface in genericInterfaces)
+                        foreach (var genericInterface in genericInterfaces)
                         {
                             registration.As(genericInterface);
                         }
@@ -89,7 +93,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
                     registration.FindConstructorsWith(new PublicConstructorFinder());
 
                     var interfaces = type.GetInterfaces();
-                    if (interfaces.Contains(typeof(ISingleInstance)))
+                    if (interfaces.Contains(typeof (ISingleInstance)))
                     {
                         registration.SingleInstance();
                     }

@@ -7,7 +7,10 @@
         mc:Ignorable="d"
         Title="Shapeshifter installer" Height="191.224" Width="423.56">
     <Grid>
-        <TextBlock Foreground="#39f" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" TextWrapping="Wrap" FontWeight="UltraLight" TextAlignment="Center">Downloading Shapeshifter ...</TextBlock>
+        <TextBlock Foreground="#39f" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20"
+                   TextWrapping="Wrap" FontWeight="UltraLight" TextAlignment="Center">
+            Downloading Shapeshifter ...
+        </TextBlock>
         <ProgressBar Name="Progress" VerticalAlignment="Bottom" Height="5" BorderThickness="0" />
     </Grid>
 </Window>

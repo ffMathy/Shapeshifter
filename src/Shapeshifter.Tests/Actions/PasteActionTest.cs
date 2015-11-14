@@ -1,11 +1,15 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Autofac;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using NSubstitute;
+﻿#region
+
+using System;
 using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
+using Autofac;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.Tests.Actions
 {
@@ -62,11 +66,11 @@ namespace Shapeshifter.Tests.Actions
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof (ArgumentNullException))]
         public async Task ThrowsExceptionIfNoDataGiven()
         {
             var container = CreateContainer();
-            
+
             var action = container.Resolve<IPasteAction>();
             await action.CanPerformAsync(null);
         }

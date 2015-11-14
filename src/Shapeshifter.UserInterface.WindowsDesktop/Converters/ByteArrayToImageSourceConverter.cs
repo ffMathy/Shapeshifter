@@ -1,19 +1,21 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+﻿#region
+
 using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Converters
 {
     public class ByteArrayToImageSourceConverter : InjectedConverterMarkupExtension, IValueConverter
     {
-        readonly IImagePersistenceService imagePersistenceService;
+        private readonly IImagePersistenceService imagePersistenceService;
 
-        public ByteArrayToImageSourceConverter() : base()
+        public ByteArrayToImageSourceConverter()
         {
-
         }
 
         public ByteArrayToImageSourceConverter(
@@ -24,12 +26,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return imagePersistenceService.ConvertByteArrayToBitmapSource((byte[])value);
+            return imagePersistenceService.ConvertByteArrayToBitmapSource((byte[]) value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return imagePersistenceService.ConvertBitmapSourceToByteArray((BitmapSource)value);
+            return imagePersistenceService.ConvertBitmapSourceToByteArray((BitmapSource) value);
         }
     }
 }

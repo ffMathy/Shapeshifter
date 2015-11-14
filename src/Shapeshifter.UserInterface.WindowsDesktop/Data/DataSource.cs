@@ -1,4 +1,8 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+﻿#region
+
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Data
 {
@@ -10,14 +14,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Data
             Text = text;
         }
 
-        public byte[] Icon
-        {
-            get;private set;
-        }
+        public byte[] Icon { get; }
 
-        public string Text
-        {
-            get; private set;
-        }
+        public string Text { get; }
     }
 }

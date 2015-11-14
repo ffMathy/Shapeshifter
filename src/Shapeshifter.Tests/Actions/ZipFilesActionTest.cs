@@ -1,8 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Autofac;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
+﻿#region
+
 using System.Threading.Tasks;
+using Autofac;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.Tests.Actions
 {

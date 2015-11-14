@@ -1,17 +1,21 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+﻿#region
+
 using System;
 using System.Threading;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
-    class ConsumerThreadLoop : IConsumerThreadLoop
+    internal class ConsumerThreadLoop : IConsumerThreadLoop
     {
-        readonly IThreadLoop internalLoop;
-        readonly ILogger logger;
+        private readonly IThreadLoop internalLoop;
+        private readonly ILogger logger;
 
-        int countAvailable;
+        private int countAvailable;
 
         public ConsumerThreadLoop(
             IThreadLoop internalLoop,
@@ -23,10 +27,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 
         public bool IsRunning
         {
-            get
-            {
-                return internalLoop.IsRunning;
-            }
+            get { return internalLoop.IsRunning; }
         }
 
         public void Stop()
@@ -49,7 +50,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
             }
         }
 
-        void SpawnThread(Func<Task> action, CancellationToken token)
+        private void SpawnThread(Func<Task> action, CancellationToken token)
         {
             internalLoop.StartAsync(async () =>
             {
@@ -73,7 +74,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
             return token.IsCancellationRequested || !IsRunning || countAvailable == 0;
         }
 
-        void DecrementAvailableWorkCount()
+        private void DecrementAvailableWorkCount()
         {
             Interlocked.Decrement(ref countAvailable);
             logger.Information($"Consumer count decremented to {countAvailable}.");

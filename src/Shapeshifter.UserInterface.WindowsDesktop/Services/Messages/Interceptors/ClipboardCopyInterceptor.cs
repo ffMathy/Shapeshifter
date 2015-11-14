@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -7,19 +9,21 @@ using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors
 {
     [ExcludeFromCodeCoverage]
-    class ClipboardCopyInterceptor : IClipboardCopyInterceptor
+    internal class ClipboardCopyInterceptor : IClipboardCopyInterceptor
     {
         public event EventHandler<DataCopiedEventArgument> DataCopied;
 
-        uint lastClipboardItemIdentifier;
-        bool shouldSkipNext;
+        private uint lastClipboardItemIdentifier;
+        private bool shouldSkipNext;
 
-        IntPtr windowHandle;
+        private IntPtr windowHandle;
 
-        readonly ILogger logger;
+        private readonly ILogger logger;
 
         public ClipboardCopyInterceptor(
             ILogger logger)
@@ -27,7 +31,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
             this.logger = logger;
         }
 
-        void HandleClipboardUpdateWindowMessage()
+        private void HandleClipboardUpdateWindowMessage()
         {
             var clipboardItemIdentifier = ClipboardApi.GetClipboardSequenceNumber();
 
@@ -41,7 +45,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
             }
         }
 
-        void TriggerDataCopiedEvent()
+        private void TriggerDataCopiedEvent()
         {
             if (DataCopied != null)
             {
@@ -60,14 +64,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
             }
         }
 
-        static Exception GenerateInstallFailureException()
+        private static Exception GenerateInstallFailureException()
         {
             var errorCode = Marshal.GetLastWin32Error();
 
             var existingOwner = ClipboardApi.GetClipboardOwner();
             var ownerTitle = WindowApi.GetWindowTitle(existingOwner);
 
-            return new InvalidOperationException($"Could not install a clipboard hook for the main window. The window '{ownerTitle}' currently owns the clipboard. The last error code was {errorCode}.");
+            return
+                new InvalidOperationException(
+                    $"Could not install a clipboard hook for the main window. The window '{ownerTitle}' currently owns the clipboard. The last error code was {errorCode}.");
         }
 
         public void Uninstall()

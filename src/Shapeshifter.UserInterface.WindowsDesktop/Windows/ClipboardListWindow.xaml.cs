@@ -1,29 +1,32 @@
-﻿using System.Windows;
-using System.Diagnostics.CodeAnalysis;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using System.Windows.Interop;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
+﻿#region
+
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Windows;
+using System.Windows.Interop;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
 {
     /// <summary>
-    /// Interaction logic for ClipboardListWindow.xaml
+    ///     Interaction logic for ClipboardListWindow.xaml
     /// </summary>
     [ExcludeFromCodeCoverage]
     public partial class ClipboardListWindow : Window, IClipboardListWindow
     {
-        readonly IMainWindowHandleContainer handleContainer;
-        readonly IKeyInterceptor keyInterceptor;
-        readonly IClipboardUserInterfaceMediator mediator;
-        readonly IClipboardListViewModel viewModel;
-        readonly IWindowMessageHook windowMessageHook;
+        private readonly IMainWindowHandleContainer handleContainer;
+        private readonly IKeyInterceptor keyInterceptor;
+        private readonly IClipboardUserInterfaceMediator mediator;
+        private readonly IClipboardListViewModel viewModel;
+        private readonly IWindowMessageHook windowMessageHook;
 
         public ClipboardListWindow(
             IClipboardListViewModel viewModel,
@@ -53,7 +56,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
             OnWindowHandleReady();
         }
 
-        void SetupKeyInterception()
+        private void SetupKeyInterception()
         {
             keyInterceptor.AddInterceptingKey(
                 handleContainer.Handle, KeyboardApi.VK_KEY_UP);
@@ -71,30 +74,27 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
 
         public HwndSource HandleSource
         {
-            get
-            {
-                return PresentationSource.FromVisual(this) as HwndSource;
-            }
+            get { return PresentationSource.FromVisual(this) as HwndSource; }
         }
 
-        void ClipboardListWindow_Activated(object sender, System.EventArgs e)
+        private void ClipboardListWindow_Activated(object sender, EventArgs e)
         {
             Activated -= ClipboardListWindow_Activated;
             Hide();
         }
 
-        void OnWindowHandleReady()
+        private void OnWindowHandleReady()
         {
             SetupKeyInterception();
             SetupWindowMessageHook();
         }
 
-        void SetupWindowMessageHook()
+        private void SetupWindowMessageHook()
         {
             windowMessageHook.Connect(this);
         }
 
-        void SetupViewModel()
+        private void SetupViewModel()
         {
             viewModel.UserInterfaceShown += ViewModel_UserInterfaceShown;
             viewModel.UserInterfaceHidden += ViewModel_UserInterfaceHidden;
@@ -102,14 +102,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
             DataContext = viewModel;
         }
 
-        void ViewModel_UserInterfaceHidden(
+        private void ViewModel_UserInterfaceHidden(
             object sender,
             UserInterfaceHiddenEventArgument e)
         {
             Hide();
         }
 
-        void ViewModel_UserInterfaceShown(
+        private void ViewModel_UserInterfaceShown(
             object sender,
             UserInterfaceShownEventArgument e)
         {

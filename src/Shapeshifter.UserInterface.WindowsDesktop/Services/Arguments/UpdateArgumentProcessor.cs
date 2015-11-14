@@ -1,15 +1,19 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+﻿#region
+
 using System;
 using System.IO;
 using System.Linq;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using WindowsProcess = System.Diagnostics.Process;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
 {
-    class UpdateArgumentProcessor : IArgumentProcessor
+    internal class UpdateArgumentProcessor : IArgumentProcessor
     {
-        readonly IProcessManager processManager;
+        private readonly IProcessManager processManager;
 
         public UpdateArgumentProcessor(
             IProcessManager processManager)
@@ -34,7 +38,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
             InstallNewVersion(targetDirectory, currentDirectory);
         }
 
-        void InstallNewVersion(string targetDirectory, string currentDirectory)
+        private void InstallNewVersion(string targetDirectory, string currentDirectory)
         {
             foreach (var currentFile in Directory.GetFiles(currentDirectory))
             {
@@ -44,7 +48,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
             LaunchNewExecutable(targetDirectory);
         }
 
-        void LaunchNewExecutable(string targetDirectory)
+        private void LaunchNewExecutable(string targetDirectory)
         {
             using (var currentProcess = WindowsProcess.GetCurrentProcess())
             {
@@ -53,7 +57,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
             }
         }
 
-        static void HandleNewFile(string targetDirectory, string currentFile)
+        private static void HandleNewFile(string targetDirectory, string currentFile)
         {
             var currentFileName = Path.GetFileName(currentFile);
 
@@ -63,7 +67,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
             File.Copy(currentFile, targetFile);
         }
 
-        static void DeleteFileIfExists(string targetFile)
+        private static void DeleteFileIfExists(string targetFile)
         {
             if (File.Exists(targetFile))
             {

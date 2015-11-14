@@ -1,17 +1,19 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Autofac;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services;
+﻿#region
+
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-using System.Collections.Generic;
+using Autofac;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.Tests.Actions
 {
@@ -79,8 +81,8 @@ namespace Shapeshifter.Tests.Actions
         [TestMethod]
         public async Task PerformTriggersImageDownload()
         {
-            var firstFakeDownloadedImageBytes = new byte[] { 1 };
-            var secondFakeDownloadedImageBytes = new byte[] { 2 };
+            var firstFakeDownloadedImageBytes = new byte[] {1};
+            var secondFakeDownloadedImageBytes = new byte[] {2};
 
             var container = CreateContainer(c =>
             {
@@ -93,14 +95,14 @@ namespace Shapeshifter.Tests.Actions
                     .Returns(
                         Task.FromResult(firstFakeDownloadedImageBytes),
                         Task.FromResult(secondFakeDownloadedImageBytes));
-                
+
                 c.RegisterFake<ILinkParser>()
                     .HasLinkOfTypeAsync(Arg.Any<string>(), LinkType.ImageFile)
                     .Returns(Task.FromResult(true));
 
                 c.RegisterFake<ILinkParser>()
                     .ExtractLinksFromTextAsync(Arg.Any<string>())
-                    .Returns(Task.FromResult<IEnumerable<string>>(new[] { "foobar.com", "example.com" }));
+                    .Returns(Task.FromResult<IEnumerable<string>>(new[] {"foobar.com", "example.com"}));
             });
 
             var action = container.Resolve<ICopyImageLinkAction>();

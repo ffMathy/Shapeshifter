@@ -1,12 +1,16 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Autofac;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using System.Threading.Tasks;
+﻿#region
+
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Autofac;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.Tests.Actions
 {
@@ -71,7 +75,7 @@ namespace Shapeshifter.Tests.Actions
 
                 c.RegisterFake<ILinkParser>()
                     .ExtractLinksFromTextAsync(Arg.Any<string>())
-                    .Returns(Task.FromResult<IEnumerable<string>>(new[] { "foo.com", "bar.com" }));
+                    .Returns(Task.FromResult<IEnumerable<string>>(new[] {"foo.com", "bar.com"}));
             });
 
             var fakeData = Substitute.For<IClipboardDataPackage>();

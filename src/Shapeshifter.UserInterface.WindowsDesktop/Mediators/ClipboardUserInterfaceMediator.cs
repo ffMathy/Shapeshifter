@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
@@ -7,16 +9,18 @@ using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 {
-    class ClipboardUserInterfaceMediator :
+    internal class ClipboardUserInterfaceMediator :
         IClipboardUserInterfaceMediator
     {
-        readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
-        readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
-        readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
+        private readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
+        private readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
+        private readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
 
-        readonly IList<IClipboardDataControlPackage> clipboardPackages;
+        private readonly IList<IClipboardDataControlPackage> clipboardPackages;
 
         public event EventHandler<ControlEventArgument> ControlAdded;
         public event EventHandler<ControlEventArgument> ControlRemoved;
@@ -44,7 +48,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
             clipboardPackages = new List<IClipboardDataControlPackage>();
         }
 
-        void OnPasteCombinationHeldDownForLongTime()
+        private void OnPasteCombinationHeldDownForLongTime()
         {
             if (UserInterfaceShown != null)
             {
@@ -52,7 +56,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
             }
         }
 
-        void ClipboardHook_DataCopied(
+        private void ClipboardHook_DataCopied(
             object sender,
             DataCopiedEventArgument e)
         {
@@ -65,7 +69,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
             }
         }
 
-        void FireControlAddedEvent(IClipboardDataControlPackage package)
+        private void FireControlAddedEvent(IClipboardDataControlPackage package)
         {
             if (ControlAdded != null)
             {
@@ -85,15 +89,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
             UninstallPasteHotkeyInterceptor();
         }
 
-        void UninstallPasteHotkeyInterceptor()
+        private void UninstallPasteHotkeyInterceptor()
         {
             pasteCombinationDurationMediator.Disconnect();
 
-            pasteCombinationDurationMediator.PasteCombinationDurationPassed -= PasteCombinationDurationMediator_PasteCombinationDurationPassed;
-            pasteCombinationDurationMediator.PasteCombinationReleased -= PasteCombinationDurationMediator_PasteCombinationReleased;
+            pasteCombinationDurationMediator.PasteCombinationDurationPassed -=
+                PasteCombinationDurationMediator_PasteCombinationDurationPassed;
+            pasteCombinationDurationMediator.PasteCombinationReleased -=
+                PasteCombinationDurationMediator_PasteCombinationReleased;
         }
 
-        void UninstallClipboardHook()
+        private void UninstallClipboardHook()
         {
             clipboardCopyInterceptor.DataCopied -= ClipboardHook_DataCopied;
         }
@@ -109,27 +115,29 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
             InstallPastecombinationDurationMediator(targetWindow);
         }
 
-        void InstallPastecombinationDurationMediator(IWindow targetWindow)
+        private void InstallPastecombinationDurationMediator(IWindow targetWindow)
         {
-            pasteCombinationDurationMediator.PasteCombinationDurationPassed += PasteCombinationDurationMediator_PasteCombinationDurationPassed;
-            pasteCombinationDurationMediator.PasteCombinationReleased += PasteCombinationDurationMediator_PasteCombinationReleased;
+            pasteCombinationDurationMediator.PasteCombinationDurationPassed +=
+                PasteCombinationDurationMediator_PasteCombinationDurationPassed;
+            pasteCombinationDurationMediator.PasteCombinationReleased +=
+                PasteCombinationDurationMediator_PasteCombinationReleased;
 
             pasteCombinationDurationMediator.Connect(targetWindow);
         }
 
-        void InstallClipboardHook()
+        private void InstallClipboardHook()
         {
             clipboardCopyInterceptor.DataCopied += ClipboardHook_DataCopied;
         }
 
-        void PasteCombinationDurationMediator_PasteCombinationDurationPassed(
+        private void PasteCombinationDurationMediator_PasteCombinationDurationPassed(
             object sender,
             PasteCombinationDurationPassedEventArgument e)
         {
             RaiseUserInterfaceShownEvent();
         }
 
-        void RaiseUserInterfaceShownEvent()
+        private void RaiseUserInterfaceShownEvent()
         {
             if (UserInterfaceShown != null)
             {
@@ -137,14 +145,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
             }
         }
 
-        void PasteCombinationDurationMediator_PasteCombinationReleased(
+        private void PasteCombinationDurationMediator_PasteCombinationReleased(
             object sender,
             PasteCombinationReleasedEventArgument e)
         {
             RaiseUserInterfaceHiddenEvent();
         }
 
-        void RaiseUserInterfaceHiddenEvent()
+        private void RaiseUserInterfaceHiddenEvent()
         {
             if (UserInterfaceHidden != null)
             {

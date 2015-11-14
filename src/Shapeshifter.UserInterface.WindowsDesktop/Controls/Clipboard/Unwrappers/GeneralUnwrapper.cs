@@ -1,11 +1,15 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
+﻿#region
+
 using System.Collections.Generic;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers
 {
-    class GeneralUnwrapper : IMemoryUnwrapper
+    internal class GeneralUnwrapper : IMemoryUnwrapper
     {
         private readonly IEnumerable<int> excludedFormats;
 

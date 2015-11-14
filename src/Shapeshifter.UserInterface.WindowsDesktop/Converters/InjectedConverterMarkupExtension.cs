@@ -1,16 +1,20 @@
-﻿using Autofac;
+﻿#region
+
+using System;
+using System.Windows.Markup;
+using Autofac;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-using System;
-using System.Windows.Markup;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Converters
 {
     public class InjectedConverterMarkupExtension : MarkupExtension
     {
-        static ILifetimeScope container;
+        private static ILifetimeScope container;
 
         public InjectedConverterMarkupExtension()
         {
@@ -22,9 +26,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Converters
             return container.Resolve(GetType());
         }
 
-        static void CreateContainerIfNotExists()
+        private static void CreateContainerIfNotExists()
         {
-            if(container != null)
+            if (container != null)
             {
                 return;
             }

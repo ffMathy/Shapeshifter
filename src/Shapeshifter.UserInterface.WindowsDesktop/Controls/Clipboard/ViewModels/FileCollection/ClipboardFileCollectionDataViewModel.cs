@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -10,12 +12,16 @@ using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection
 {
-    class ClipboardFileCollectionDataViewModel : ClipboardDataViewModel<IClipboardFileCollectionData>,
+    internal class ClipboardFileCollectionDataViewModel : ClipboardDataViewModel<IClipboardFileCollectionData>,
         IClipboardFileCollectionDataViewModel
     {
-        public ClipboardFileCollectionDataViewModel() : this(new EnvironmentInformation()) { }
+        public ClipboardFileCollectionDataViewModel() : this(new EnvironmentInformation())
+        {
+        }
 
         public ClipboardFileCollectionDataViewModel(
             IEnvironmentInformation environmentInformation)
@@ -27,7 +33,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
         }
 
         [ExcludeFromCodeCoverage]
-        void PrepareDesignerMode()
+        private void PrepareDesignerMode()
         {
             var container = DesignTimeContainerHelper.CreateDesignTimeContainer();
             Data = container.Resolve<DesignerClipboardFileCollectionDataFacade>();
@@ -35,10 +41,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
 
         public int FileCount
         {
-            get
-            {
-                return Data.Files.Count();
-            }
+            get { return Data.Files.Count(); }
         }
 
         public IEnumerable<IFileTypeGroupViewModel> FileTypeGroups

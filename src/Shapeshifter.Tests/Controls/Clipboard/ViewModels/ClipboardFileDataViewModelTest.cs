@@ -1,4 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿#region
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+#endregion
 
 namespace Shapeshifter.Tests.Controls.Clipboard.ViewModels
 {

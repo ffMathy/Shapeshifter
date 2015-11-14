@@ -1,15 +1,19 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+﻿#region
+
 using System;
+using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Handles
 {
-    class PerformanceHandle : IPerformanceHandle
+    internal class PerformanceHandle : IPerformanceHandle
     {
-        readonly ILogger logger;
+        private readonly ILogger logger;
 
-        readonly string methodName;
-        readonly DateTime startTime;
+        private readonly string methodName;
+        private readonly DateTime startTime;
 
         public PerformanceHandle(ILogger logger, string methodName)
         {
@@ -24,7 +28,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Handles
         public void Dispose()
         {
             var now = DateTime.UtcNow;
-            logger.Performance("Finished executing " + methodName + " in " + (now - startTime).TotalMilliseconds + " milliseconds.");
+            logger.Performance("Finished executing " + methodName + " in " + (now - startTime).TotalMilliseconds +
+                               " milliseconds.");
         }
     }
 }

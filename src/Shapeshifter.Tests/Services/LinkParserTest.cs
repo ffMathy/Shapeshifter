@@ -1,12 +1,14 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Autofac;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+﻿#region
+
 using System.Linq;
-using Shapeshifter.UserInterface.WindowsDesktop.Services;
 using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
+using Autofac;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.Tests.Services
 {
@@ -23,7 +25,8 @@ namespace Shapeshifter.Tests.Services
                     .Returns(Task.FromResult(true));
             });
 
-            var text = "hello http://google.com world https://foo.com foobar blah.dk/hey/lol%20kitten.jpg lolz foobar.com www.baz.com test.net/news+list.txt?cat=pic&id=foo28";
+            var text =
+                "hello http://google.com world https://foo.com foobar blah.dk/hey/lol%20kitten.jpg lolz foobar.com www.baz.com test.net/news+list.txt?cat=pic&id=foo28";
 
             var linkParser = container.Resolve<ILinkParser>();
             var links = await linkParser.ExtractLinksFromTextAsync(text);

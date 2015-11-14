@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection
 {
-    class FileTypeGroupViewModel : IFileTypeGroupViewModel
+    internal class FileTypeGroupViewModel : IFileTypeGroupViewModel
     {
         public FileTypeGroupViewModel(IEnumerable<IClipboardFileData> data)
         {
@@ -15,10 +19,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
             Icon = data.First().FileIcon;
         }
 
-        public int Count { get; private set; }
+        public int Count { get; }
 
-        public string FileType { get; private set; }
+        public string FileType { get; }
 
-        public byte[] Icon { get; private set; }
+        public byte[] Icon { get; }
     }
 }

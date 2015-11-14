@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ClipboardTextDataControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard"
              xmlns:viewModels="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels"
              xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
@@ -11,14 +11,15 @@
     <Border Style="{StaticResource ClipboardDataControlContentStyle}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
             <Border Style="{StaticResource ClipboardDataControlImageAreaStyle}">
                 <!-- TODO: use a proper icon for this that looks more "modern" maybe even have original text in it with super-small font -->
-                <Image ClipToBounds="True" Style="{StaticResource ClipboardDataImageStyle}" Source="Resources/ClipboardTextDataIcon.png" />
+                <Image ClipToBounds="True" Style="{StaticResource ClipboardDataImageStyle}"
+                       Source="Resources/ClipboardTextDataIcon.png" />
             </Border>
 
             <Rectangle Grid.Column="1" Style="{StaticResource ClipboardDataControlIconContentSplitterStyle}" />
@@ -26,13 +27,17 @@
             <Grid Grid.Column="2" Style="{StaticResource ClipboardDataControlContentAreaStyle}">
                 <Grid Style="{StaticResource ClipboardDataControlContentAreaInnerStyle}">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock TextTrimming="CharacterEllipsis" MaxHeight="40" TextWrapping="Wrap" VerticalAlignment="Bottom" FontWeight="Normal" FontSize="14" Text="{Binding FriendlyText}" Style="{StaticResource ClipboardDataControlHeaderTextStyle}" Grid.Column="1" />
+                    <TextBlock TextTrimming="CharacterEllipsis" MaxHeight="40" TextWrapping="Wrap"
+                               VerticalAlignment="Bottom" FontWeight="Normal" FontSize="14"
+                               Text="{Binding FriendlyText}"
+                               Style="{StaticResource ClipboardDataControlHeaderTextStyle}" Grid.Column="1" />
 
-                    <local:DataSourceControl VerticalAlignment="Top" Margin="0,10,0,1" DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
+                    <local:DataSourceControl VerticalAlignment="Top" Margin="0,10,0,1"
+                                             DataContext="{Binding Data.Source}" Grid.Row="1" Grid.Column="1" />
                 </Grid>
             </Grid>
         </Grid>

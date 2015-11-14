@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
@@ -25,13 +29,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 
         [DllImport("user32.dll", EntryPoint = "GetClassLongPtr")]
         public static extern IntPtr GetClassLong64(IntPtr hWnd, int nIndex);
-        
+
         public static IntPtr GetClassLongPtr(IntPtr hWnd, int nIndex)
         {
             if (IntPtr.Size == 4)
                 return new IntPtr(GetClassLong32(hWnd, nIndex));
-            else
-                return GetClassLong64(hWnd, nIndex);
+            return GetClassLong64(hWnd, nIndex);
         }
 
         public static IntPtr ICON_BIG => new IntPtr(1);
@@ -46,7 +49,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
             const int numberOfCharacters = 512;
             var buffer = new StringBuilder(numberOfCharacters);
 
-            if (WindowApi.GetWindowText(windowHandle, buffer, numberOfCharacters) > 0)
+            if (GetWindowText(windowHandle, buffer, numberOfCharacters) > 0)
             {
                 return buffer.ToString();
             }

@@ -1,16 +1,19 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+﻿#region
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
 {
     [ExcludeFromCodeCoverage]
-    class FileManager : IFileManager, IDisposable
+    internal class FileManager : IFileManager, IDisposable
     {
-        readonly ICollection<string> temporaryPaths;
+        private readonly ICollection<string> temporaryPaths;
 
         public FileManager()
         {
@@ -19,19 +22,20 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
 
         public void Dispose()
         {
-            foreach(var temporaryPath in temporaryPaths)
+            foreach (var temporaryPath in temporaryPaths)
             {
-                if(File.Exists(temporaryPath))
+                if (File.Exists(temporaryPath))
                 {
                     File.Delete(temporaryPath);
-                } else if(Directory.Exists(temporaryPath))
+                }
+                else if (Directory.Exists(temporaryPath))
                 {
                     Directory.Delete(temporaryPath);
                 }
             }
         }
 
-        string PrepareIsolatedTemporaryFolder()
+        private string PrepareIsolatedTemporaryFolder()
         {
             const string folderName = "Shapeshifter";
 
@@ -43,7 +47,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             return path;
         }
 
-        static void PrepareDirectory(string path)
+        private static void PrepareDirectory(string path)
         {
             if (!Directory.Exists(path))
             {
@@ -64,14 +68,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             return finalPath;
         }
 
-        static bool IsDirectory(string finalPath)
+        private static bool IsDirectory(string finalPath)
         {
             var fileNameWithExtension = Path.GetFileName(finalPath);
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(finalPath);
             return fileNameWithExtension == fileNameWithoutExtension;
         }
 
-        string GetFullPathFromRelativeTemporaryPath(string path)
+        private string GetFullPathFromRelativeTemporaryPath(string path)
         {
             var isolatedFolderPath = PrepareIsolatedTemporaryFolder();
 

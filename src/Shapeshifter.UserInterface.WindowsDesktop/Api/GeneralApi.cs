@@ -1,5 +1,9 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Runtime.InteropServices;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
@@ -29,21 +33,21 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 
         public static T ByteArrayToStructure<T>(byte[] data)
         {
-            var size = Marshal.SizeOf(typeof(T));
+            var size = Marshal.SizeOf(typeof (T));
 
             var pointer = Marshal.AllocHGlobal(size);
             try
             {
                 Marshal.Copy(data, 0, pointer, size);
 
-                return (T)Marshal.PtrToStructure(pointer, typeof(T));
+                return (T) Marshal.PtrToStructure(pointer, typeof (T));
             }
             finally
             {
                 Marshal.FreeHGlobal(pointer);
             }
         }
-        
+
         public static byte[] StructureToByteArray<T>(T structure)
         {
             var size = Marshal.SizeOf(structure);

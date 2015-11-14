@@ -1,8 +1,12 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
+﻿#region
+
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces
 {
-    interface IClipboardListWindow : IWindow, ISingleInstance
+    internal interface IClipboardListWindow : IWindow, ISingleInstance
     {
     }
 }

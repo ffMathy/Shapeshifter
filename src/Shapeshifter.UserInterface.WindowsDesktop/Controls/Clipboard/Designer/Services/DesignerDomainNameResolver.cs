@@ -1,10 +1,14 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-using System.Threading.Tasks;
+﻿#region
+
 using System.Net;
+using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
-    class DesignerDomainNameResolver : IDomainNameResolver
+    internal class DesignerDomainNameResolver : IDomainNameResolver
     {
         public async Task<IPAddress[]> GetDomainIpAddressesAsync(string domain)
         {

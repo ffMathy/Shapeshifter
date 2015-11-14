@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -8,12 +10,14 @@ using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
 {
     [ExcludeFromCodeCoverage]
-    class FileIconService : IFileIconService
+    internal class FileIconService : IFileIconService
     {
-        readonly IImagePersistenceService imagePersistenceService;
+        private readonly IImagePersistenceService imagePersistenceService;
 
         public FileIconService(IImagePersistenceService imagePersistenceService)
         {
@@ -27,13 +31,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             {
                 return GenerateByteArrayFromBitmapHandle(bitmapHandle);
             }
-            else
-            {
-                throw new InvalidOperationException("Could not fetch an icon from the given path.");
-            }
+            throw new InvalidOperationException("Could not fetch an icon from the given path.");
         }
 
-        byte[] GenerateByteArrayFromBitmapHandle(IntPtr bitmapHandle)
+        private byte[] GenerateByteArrayFromBitmapHandle(IntPtr bitmapHandle)
         {
             var bitmap = new IconApi.BITMAP();
             AllocateBitmapSpace(bitmapHandle, ref bitmap);
@@ -51,26 +52,28 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             }
         }
 
-        static void FillBitmapBitsIntoHandle(IconApi.BITMAP bitmap)
+        private static void FillBitmapBitsIntoHandle(IconApi.BITMAP bitmap)
         {
-            var bytes = new byte[bitmap.WidthBytes * bitmap.Height];
+            var bytes = new byte[bitmap.WidthBytes*bitmap.Height];
             Marshal.Copy(bitmap.Bits, bytes, 0, bytes.Length);
         }
 
-        static BitmapSource CreateBitmapSourceFromHandle(IntPtr bitmapHandle, IconApi.BITMAP bitmap)
+        private static BitmapSource CreateBitmapSourceFromHandle(IntPtr bitmapHandle, IconApi.BITMAP bitmap)
         {
-            var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(bitmapHandle, IntPtr.Zero, new Int32Rect(0, 0, bitmap.Width, bitmap.Height), BitmapSizeOptions.FromWidthAndHeight(bitmap.Width, bitmap.Height));
+            var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(bitmapHandle, IntPtr.Zero,
+                new Int32Rect(0, 0, bitmap.Width, bitmap.Height),
+                BitmapSizeOptions.FromWidthAndHeight(bitmap.Width, bitmap.Height));
             bitmapSource.Freeze();
             return bitmapSource;
         }
 
-        static void AllocateBitmapSpace(IntPtr bitmapHandle, ref IconApi.BITMAP bitmap)
+        private static void AllocateBitmapSpace(IntPtr bitmapHandle, ref IconApi.BITMAP bitmap)
         {
             var bufferSize = Marshal.SizeOf(bitmap);
             IconApi.GetObject(bitmapHandle, bufferSize, out bitmap);
         }
 
-        static IntPtr GenerateBitmapHandle(string filePath, bool allowThumbnails, int dimensions)
+        private static IntPtr GenerateBitmapHandle(string filePath, bool allowThumbnails, int dimensions)
         {
             try
             {
@@ -82,7 +85,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             }
         }
 
-        static IntPtr GetFactoryImage(int dimensions, string path, bool allowThumbnails)
+        private static IntPtr GetFactoryImage(int dimensions, string path, bool allowThumbnails)
         {
             var factory = GenerateShellItemImageFactory(path);
 
@@ -94,22 +97,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             return bitmapHandle;
         }
 
-        static IconApi.IShellItemImageFactory GenerateShellItemImageFactory(string path)
+        private static IconApi.IShellItemImageFactory GenerateShellItemImageFactory(string path)
         {
             var uniqueId = new Guid("43826d1e-e718-42ee-bc55-a1e261c37bfe");
 
             IconApi.IShellItem rawFactory;
             IconApi.SHCreateItemFromParsingName(path, IntPtr.Zero, uniqueId, out rawFactory);
 
-            var factory = (IconApi.IShellItemImageFactory)rawFactory;
+            var factory = (IconApi.IShellItemImageFactory) rawFactory;
             return factory;
         }
 
-        static IconApi.SIIGBF GenerateScopeFromThumbnailInformation(bool allowThumbnails)
+        private static IconApi.SIIGBF GenerateScopeFromThumbnailInformation(bool allowThumbnails)
         {
-            var type = allowThumbnails ?
-                IconApi.SIIGBF.SIIGBF_THUMBNAILONLY :
-                IconApi.SIIGBF.SIIGBF_ICONONLY;
+            var type = allowThumbnails
+                ? IconApi.SIIGBF.SIIGBF_THUMBNAILONLY
+                : IconApi.SIIGBF.SIIGBF_ICONONLY;
             return type | IconApi.SIIGBF.SIIGBF_BIGGERSIZEOK;
         }
     }

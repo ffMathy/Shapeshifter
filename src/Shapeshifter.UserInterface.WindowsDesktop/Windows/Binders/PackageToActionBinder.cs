@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -7,20 +9,19 @@ using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders
 {
-    class PackageToActionBinder : IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>
+    internal class PackageToActionBinder : IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>
     {
-        readonly IDictionary<IClipboardDataControlPackage, ICollection<IAction>> dictionaryStates;
+        private readonly IDictionary<IClipboardDataControlPackage, ICollection<IAction>> dictionaryStates;
 
-        IClipboardDataControlPackage key;
-        ObservableCollection<IAction> destinationCollection;
-        Func<IClipboardDataControlPackage, Task<IEnumerable<IAction>>> mappingFunction;
+        private IClipboardDataControlPackage key;
+        private ObservableCollection<IAction> destinationCollection;
+        private Func<IClipboardDataControlPackage, Task<IEnumerable<IAction>>> mappingFunction;
 
-        public IAction Default
-        {
-            get; set;
-        }
+        public IAction Default { get; set; }
 
         public PackageToActionBinder()
         {
@@ -51,7 +52,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders
             }
         }
 
-        async void SourceCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private async void SourceCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.NewItems.Count > 0)
             {
@@ -63,7 +64,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders
             }
         }
 
-        async Task AddResultsToDictionary(IClipboardDataControlPackage item)
+        private async Task AddResultsToDictionary(IClipboardDataControlPackage item)
         {
             var collection = dictionaryStates[item];
             var results = await mappingFunction(item);
@@ -77,7 +78,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders
             }
         }
 
-        void PrepareDictionaryStateKey(IClipboardDataControlPackage item)
+        private void PrepareDictionaryStateKey(IClipboardDataControlPackage item)
         {
             if (!dictionaryStates.ContainsKey(item))
             {

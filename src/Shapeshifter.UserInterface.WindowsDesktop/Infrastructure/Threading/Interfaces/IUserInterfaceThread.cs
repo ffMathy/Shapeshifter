@@ -1,8 +1,12 @@
-﻿using System;
+﻿#region
+
+using System;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces
 {
-    interface IUserInterfaceThread
+    internal interface IUserInterfaceThread
     {
         void Invoke(Action action);
     }

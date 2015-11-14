@@ -1,18 +1,21 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
+﻿#region
+
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
 {
-    class ClipboardFileCollectionDataControlFactory
+    internal class ClipboardFileCollectionDataControlFactory
         : IClipboardControlFactory<IClipboardFileCollectionData, IClipboardFileCollectionDataControl>
     {
-        readonly IEnvironmentInformation environmentInformation;
+        private readonly IEnvironmentInformation environmentInformation;
 
         public ClipboardFileCollectionDataControlFactory(
             IEnvironmentInformation environmentInformation)
@@ -31,9 +34,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
         }
 
         [ExcludeFromCodeCoverage]
-        IClipboardFileCollectionDataControl CreateClipboardFileCollectionDataControl(IClipboardFileCollectionData data)
+        private IClipboardFileCollectionDataControl CreateClipboardFileCollectionDataControl(
+            IClipboardFileCollectionData data)
         {
-            return new ClipboardFileCollectionDataControl()
+            return new ClipboardFileCollectionDataControl
             {
                 DataContext = new ClipboardFileCollectionDataViewModel(environmentInformation)
                 {

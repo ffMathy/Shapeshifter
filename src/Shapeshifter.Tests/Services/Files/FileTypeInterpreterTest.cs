@@ -1,7 +1,11 @@
-﻿using Autofac;
+﻿#region
+
+using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.Tests.Services.Files
 {

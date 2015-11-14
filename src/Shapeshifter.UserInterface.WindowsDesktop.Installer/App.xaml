@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Installer"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+
     </Application.Resources>
 </Application>

@@ -1,20 +1,23 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
+﻿#region
+
 using System.Collections.Generic;
-using System.Linq;
 using System.Diagnostics;
+using System.Linq;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop
 {
-    class Main : ISingleInstance
+    internal class Main : ISingleInstance
     {
-        readonly IEnumerable<IArgumentProcessor> argumentProcessors;
+        private readonly IEnumerable<IArgumentProcessor> argumentProcessors;
 
-        readonly IClipboardListWindow mainWindow;
-        readonly IClipboardUserInterfaceMediator clipboardUserInterfaceMediator;
+        private readonly IClipboardListWindow mainWindow;
+        private readonly IClipboardUserInterfaceMediator clipboardUserInterfaceMediator;
 
         public Main(
             IEnumerable<IArgumentProcessor> argumentProcessors,
@@ -38,8 +41,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
 
             LaunchMainWindow();
         }
-        
-        static void CloseAllProcessesExceptCurrent()
+
+        private static void CloseAllProcessesExceptCurrent()
         {
             using (var currentProcess = Process.GetCurrentProcess())
             {
@@ -48,7 +51,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
             }
         }
 
-        static void CloseProcessesExceptProcessWithId(int processId, params Process[] processes)
+        private static void CloseProcessesExceptProcessWithId(int processId, params Process[] processes)
         {
             foreach (var process in processes)
             {
@@ -60,13 +63,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
             }
         }
 
-        void LaunchMainWindow()
+        private void LaunchMainWindow()
         {
             mainWindow.SourceInitialized += (sender, e) => clipboardUserInterfaceMediator.Connect(mainWindow);
             mainWindow.Show();
         }
 
-        IEnumerable<IArgumentProcessor> ProcessArguments(string[] arguments)
+        private IEnumerable<IArgumentProcessor> ProcessArguments(string[] arguments)
         {
             var processorsUsed = new List<IArgumentProcessor>();
             foreach (var processor in argumentProcessors)

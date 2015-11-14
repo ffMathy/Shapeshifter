@@ -1,6 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
-    public enum Message : int
+    public enum Message
     {
         WM_CLIPBOARDUPDATE = 0x031D,
         WM_CHANGECBCHAIN = 0x0003,

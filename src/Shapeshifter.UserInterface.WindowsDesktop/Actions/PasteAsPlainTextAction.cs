@@ -1,16 +1,20 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+﻿#region
+
 using System.Linq;
+using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
-    class PasteAsPlainTextAction : IPasteAsPlainTextAction
+    internal class PasteAsPlainTextAction : IPasteAsPlainTextAction
     {
-        readonly IClipboardInjectionService clipboardInjectionService;
-        readonly IAsyncFilter asyncFilter;
+        private readonly IClipboardInjectionService clipboardInjectionService;
+        private readonly IAsyncFilter asyncFilter;
 
         public PasteAsPlainTextAction(
             IClipboardInjectionService clipboardInjectionService,
@@ -22,26 +26,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         public string Description
         {
-            get
-            {
-                return "Pastes clipboard contents as plain text.";
-            }
+            get { return "Pastes clipboard contents as plain text."; }
         }
 
         public byte Order
         {
-            get
-            {
-                return 25;
-            }
+            get { return 25; }
         }
 
         public string Title
         {
-            get
-            {
-                return "Paste as plain text";
-            }
+            get { return "Paste as plain text"; }
         }
 
         public async Task<bool> CanPerformAsync(
@@ -50,13 +45,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return await GetFirstSupportedItem(data) != null;
         }
 
-        async Task<IClipboardData> GetFirstSupportedItem(IClipboardDataPackage data)
+        private async Task<IClipboardData> GetFirstSupportedItem(IClipboardDataPackage data)
         {
             var supportedData = await asyncFilter.FilterAsync(data.Contents, CanPerformAsync);
             return supportedData.FirstOrDefault();
         }
 
-        async Task<bool> CanPerformAsync(
+        private async Task<bool> CanPerformAsync(
             IClipboardData data)
         {
             return data is IClipboardTextData;
@@ -65,7 +60,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         public async Task PerformAsync(
             IClipboardDataPackage package)
         {
-            var textData = (IClipboardTextData)await GetFirstSupportedItem(package);
+            var textData = (IClipboardTextData) await GetFirstSupportedItem(package);
             clipboardInjectionService.InjectText(textData.Text);
         }
     }

@@ -1,9 +1,12 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+﻿#region
+
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
-    class DesignerFileManager : IFileManager
+    internal class DesignerFileManager : IFileManager
     {
         public string PrepareTemporaryPath(string path)
         {

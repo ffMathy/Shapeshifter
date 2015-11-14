@@ -1,53 +1,52 @@
-﻿using System.Collections.ObjectModel;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using System.ComponentModel;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using System.Collections.Generic;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
-using System.Threading.Tasks;
+﻿#region
+
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
+using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using System.Threading;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 {
-    class ClipboardListViewModel :
+    internal class ClipboardListViewModel :
         IClipboardListViewModel
     {
-        IClipboardDataControlPackage selectedElement;
-        IAction selectedAction;
+        private IClipboardDataControlPackage selectedElement;
+        private IAction selectedAction;
 
-        readonly IAction[] allActions;
-        readonly IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder;
-        readonly IAsyncFilter asyncFilter;
-        readonly IPerformanceHandleFactory performanceHandleFactory;
-        readonly IUserInterfaceThread userInterfaceThread;
+        private readonly IAction[] allActions;
+        private readonly IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder;
+        private readonly IAsyncFilter asyncFilter;
+        private readonly IPerformanceHandleFactory performanceHandleFactory;
+        private readonly IUserInterfaceThread userInterfaceThread;
 
-        bool isFocusInActionsList;
+        private bool isFocusInActionsList;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ObservableCollection<IClipboardDataControlPackage> Elements { get; private set; }
-        public ObservableCollection<IAction> Actions { get; private set; }
+        public ObservableCollection<IClipboardDataControlPackage> Elements { get; }
+        public ObservableCollection<IAction> Actions { get; }
 
         public IAction SelectedAction
         {
-            get
-            {
-                return selectedAction;
-            }
+            get { return selectedAction; }
             set
             {
                 selectedAction = value;
@@ -60,10 +59,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 
         public IClipboardDataControlPackage SelectedElement
         {
-            get
-            {
-                return selectedElement;
-            }
+            get { return selectedElement; }
             set
             {
                 selectedElement = value;
@@ -71,7 +67,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
                 {
                     PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedElement)));
                 }
-                
+
                 userInterfaceThread.Invoke(() => packageActionBinder.LoadFromKey(value));
             }
         }
@@ -104,27 +100,29 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             RegisterKeyEvents(hotkeyInterceptor);
         }
 
-        private void PreparePackageBinder(IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder, IPasteAction defaultAction)
+        private void PreparePackageBinder(
+            IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder,
+            IPasteAction defaultAction)
         {
             packageActionBinder.Default = defaultAction;
             packageActionBinder.Bind(Elements, Actions, GetSupportedActionsFromDataAsync);
         }
 
-        void Actions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Actions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if(SelectedAction == null && Actions.Count > 0)
+            if (SelectedAction == null && Actions.Count > 0)
             {
                 SelectedAction = Actions.First();
             }
         }
 
-        void RegisterKeyEvents(
+        private void RegisterKeyEvents(
             IKeyInterceptor hotkeyInterceptor)
         {
             hotkeyInterceptor.HotkeyFired += HotkeyInterceptor_HotkeyFired;
         }
 
-        void RegisterMediatorEvents(
+        private void RegisterMediatorEvents(
             IClipboardUserInterfaceMediator mediator)
         {
             mediator.ControlAdded += Service_ControlAdded;
@@ -135,7 +133,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             mediator.UserInterfaceShown += Service_UserInterfaceShown;
         }
 
-        void HotkeyInterceptor_HotkeyFired(object sender, HotkeyFiredArgument e)
+        private void HotkeyInterceptor_HotkeyFired(object sender, HotkeyFiredArgument e)
         {
             switch (e.KeyCode)
             {
@@ -157,28 +155,29 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             }
         }
 
-        void HandleRightPressed()
+        private void HandleRightPressed()
         {
             isFocusInActionsList = true;
         }
 
-        void HandleLeftPressed()
+        private void HandleLeftPressed()
         {
             isFocusInActionsList = false;
         }
 
-        void HandleUpPressed()
+        private void HandleUpPressed()
         {
-            if(isFocusInActionsList)
+            if (isFocusInActionsList)
             {
                 SelectedAction = GetNewSelectedElementAfterHandlingUpKey(Actions, SelectedAction);
-            } else
+            }
+            else
             {
                 SelectedElement = GetNewSelectedElementAfterHandlingUpKey(Elements, SelectedElement);
             }
         }
 
-        void HandleDownPressed()
+        private void HandleDownPressed()
         {
             if (isFocusInActionsList)
             {
@@ -190,7 +189,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             }
         }
 
-        T GetNewSelectedElementAfterHandlingUpKey<T>(IList<T> list, T selectedElement)
+        private T GetNewSelectedElementAfterHandlingUpKey<T>(IList<T> list, T selectedElement)
         {
             var indexToUse = list.IndexOf(selectedElement) - 1;
             if (indexToUse < 0)
@@ -201,7 +200,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             return list[indexToUse];
         }
 
-        T GetNewSelectedElementAfterHandlingDownKey<T>(IList<T> list, T selectedElement)
+        private T GetNewSelectedElementAfterHandlingDownKey<T>(IList<T> list, T selectedElement)
         {
             var indexToUse = list.IndexOf(selectedElement) + 1;
             if (indexToUse == list.Count)
@@ -212,7 +211,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             return list[indexToUse];
         }
 
-        async void Service_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
+        private async void Service_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
         {
             if (UserInterfaceShown != null)
             {
@@ -220,7 +219,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             }
         }
 
-        async void Service_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
+        private async void Service_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
         {
             if (UserInterfaceHidden != null)
             {
@@ -233,16 +232,19 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             }
         }
 
-        async Task<IEnumerable<IAction>> GetSupportedActionsFromDataAsync(IClipboardDataPackage data)
+        private async Task<IEnumerable<IAction>> GetSupportedActionsFromDataAsync(IClipboardDataPackage data)
         {
             using (performanceHandleFactory.StartMeasuringPerformance())
             {
-                var allowedActions = await asyncFilter.FilterAsync(allActions, action => action.CanPerformAsync(data)).ConfigureAwait(false);
+                var allowedActions =
+                    await
+                        asyncFilter.FilterAsync(allActions, action => action.CanPerformAsync(data))
+                            .ConfigureAwait(false);
                 return allowedActions.OrderBy(x => x.Order);
             }
         }
 
-        void AddAction(IAction action)
+        private void AddAction(IAction action)
         {
             Actions.Add(action);
             if (SelectedAction == null)
@@ -251,7 +253,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             }
         }
 
-        void Service_ControlRemoved(object sender, ControlEventArgument e)
+        private void Service_ControlRemoved(object sender, ControlEventArgument e)
         {
             lock (Elements)
             {
@@ -259,7 +261,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             }
         }
 
-        void Service_ControlHighlighted(object sender, ControlEventArgument e)
+        private void Service_ControlHighlighted(object sender, ControlEventArgument e)
         {
             lock (Elements)
             {
@@ -268,7 +270,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             }
         }
 
-        void Service_ControlAdded(object sender, ControlEventArgument e)
+        private void Service_ControlAdded(object sender, ControlEventArgument e)
         {
             lock (Elements)
             {

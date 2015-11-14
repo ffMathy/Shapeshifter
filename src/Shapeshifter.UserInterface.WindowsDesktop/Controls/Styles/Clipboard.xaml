@@ -12,7 +12,8 @@
         <Setter Property="BorderThickness" Value="0,1,0,1" />
 
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="True">
                 <Setter Property="BorderThickness" Value="6,1,0,1" />
                 <Setter Property="Background" Value="{StaticResource AccentBrush}" />
                 <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
@@ -21,16 +22,17 @@
     </Style>
 
     <Style p:Freeze="True" TargetType="{x:Type ListBoxItem}">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Padding" Value="0"/>
-        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0" />
         <Setter Property="Opacity" Value="1" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                    <Border x:Name="Bd" Background="{TemplateBinding Background}" Margin="0,-1,0,0" Padding="0" >
-                        <ContentPresenter Name="Cp" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"  Margin="0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" Margin="0,-1,0,0" Padding="0">
+                        <ContentPresenter Name="Cp" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -44,8 +46,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBox}">
-                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent" >
-                        <ScrollViewer Focusable="False" >
+                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
+                        <ScrollViewer Focusable="False">
                             <ItemsPresenter Margin="0,1,0,0" />
                         </ScrollViewer>
                     </Border>
@@ -57,7 +60,8 @@
     <Style p:Freeze="True" TargetType="Grid" x:Key="ClipboardDataControlContentAreaInnerStyle">
         <Setter Property="Margin" Value="15,10,10,10" />
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="False">
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="False">
                 <Setter Property="Opacity" Value="0.75" />
             </DataTrigger>
         </Style.Triggers>
@@ -65,7 +69,8 @@
 
     <Style p:Freeze="True" TargetType="TextBlock" x:Key="ClipboardDataControlHeaderTextStyle">
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="True">
                 <Setter Property="Foreground" Value="White" />
             </DataTrigger>
         </Style.Triggers>
@@ -74,13 +79,15 @@
     <Style p:Freeze="True" TargetType="Grid" x:Key="ClipboardDataControlContentAreaStyle">
         <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}" />
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="True">
                 <Setter Property="Background" Value="{StaticResource AccentBrush}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
-    <Style p:Freeze="True" TargetType="Grid" x:Key="ClipboardDataControlContentAreaStyleFaded" BasedOn="{StaticResource ClipboardDataControlContentAreaStyle}">
+    <Style p:Freeze="True" TargetType="Grid" x:Key="ClipboardDataControlContentAreaStyleFaded"
+           BasedOn="{StaticResource ClipboardDataControlContentAreaStyle}">
         <Setter Property="Background">
             <Setter.Value>
                 <SolidColorBrush Opacity="0.9" Color="{StaticResource WindowBackgroundColor}" />
@@ -91,23 +98,27 @@
     <Style p:Freeze="True" TargetType="Border" x:Key="ClipboardDataControlImageAreaStyle">
         <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="False">
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="False">
                 <Setter Property="Opacity" Value="0.5" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="True">
                 <Setter Property="Margin" Value="-5,0,0,0" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
-    <Style p:Freeze="True" TargetType="Border" x:Key="ClipboardDataControlImageAreaStyleFaded" BasedOn="{StaticResource ClipboardDataControlImageAreaStyle}">
+    <Style p:Freeze="True" TargetType="Border" x:Key="ClipboardDataControlImageAreaStyleFaded"
+           BasedOn="{StaticResource ClipboardDataControlImageAreaStyle}">
         <Setter Property="Opacity" Value="0.9" />
     </Style>
 
     <Style p:Freeze="True" TargetType="TextBlock" x:Key="ClipboardFileCollectionControlCountForeground">
         <Setter Property="Foreground" Value="{StaticResource AccentBrush}" />
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="True">
                 <Setter Property="Foreground" Value="White" />
             </DataTrigger>
         </Style.Triggers>
@@ -116,7 +127,8 @@
     <Style p:Freeze="True" TargetType="Border" x:Key="ClipboardFileCollectionControlCountBackground">
         <Setter Property="Background" Value="{StaticResource AccentBrush}" />
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="True">
                 <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
             </DataTrigger>
         </Style.Triggers>
@@ -132,7 +144,8 @@
         <Setter Property="Width" Value="300" />
 
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="False">
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="False">
                 <Setter Property="BorderBrush" Value="#10000000" />
                 <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
                 <Setter Property="Padding" Value="10,5,10,8" />
@@ -161,7 +174,8 @@
         <Setter Property="Width" Value="1" />
 
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="True">
                 <Setter Property="Fill" Value="{StaticResource AccentDarkBrush}" />
                 <Setter Property="Margin" Value="0,-1" />
             </DataTrigger>
@@ -187,7 +201,8 @@
         <Setter Property="FontWeight" Value="Light" />
 
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="True">
                 <Setter Property="Foreground" Value="White" />
             </DataTrigger>
         </Style.Triggers>

@@ -1,12 +1,16 @@
-﻿using System;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+﻿#region
+
+using System;
 using System.Windows.Threading;
+using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
-    class MainThreadInvoker : IMainThreadInvoker
+    internal class MainThreadInvoker : IMainThreadInvoker
     {
-        readonly Dispatcher dispatcher;
+        private readonly Dispatcher dispatcher;
 
         public MainThreadInvoker()
         {

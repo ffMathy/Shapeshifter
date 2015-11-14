@@ -1,17 +1,21 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
+﻿#region
+
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
 {
-    class ClipboardImageDataControlFactory
+    internal class ClipboardImageDataControlFactory
         : IClipboardControlFactory<IClipboardImageData, IClipboardImageDataControl>
     {
-        readonly IEnvironmentInformation environmentInformation;
+        private readonly IEnvironmentInformation environmentInformation;
 
         public ClipboardImageDataControlFactory(
             IEnvironmentInformation environmentInformation)
@@ -30,9 +34,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
         }
 
         [ExcludeFromCodeCoverage]
-        IClipboardImageDataControl CreateImageDataControl(IClipboardImageData data)
+        private IClipboardImageDataControl CreateImageDataControl(IClipboardImageData data)
         {
-            return new ClipboardImageDataControl()
+            return new ClipboardImageDataControl
             {
                 DataContext = new ClipboardImageDataViewModel(environmentInformation)
                 {

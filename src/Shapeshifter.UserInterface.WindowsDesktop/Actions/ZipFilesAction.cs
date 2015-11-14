@@ -1,15 +1,19 @@
-﻿using System;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
+﻿#region
+
+using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-using System.Linq;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
-    class ZipFilesAction : IZipFilesAction
+    internal class ZipFilesAction : IZipFilesAction
     {
-        readonly IAsyncFilter asyncFilter;
+        private readonly IAsyncFilter asyncFilter;
 
         public ZipFilesAction(IAsyncFilter asyncFilter)
         {
@@ -18,26 +22,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         public string Description
         {
-            get
-            {
-                return "Compress the clipboard contents into a ZIP-file and copy it.";
-            }
+            get { return "Compress the clipboard contents into a ZIP-file and copy it."; }
         }
 
         public byte Order
         {
-            get
-            {
-                return 75;
-            }
+            get { return 75; }
         }
 
         public string Title
         {
-            get
-            {
-                return "Copy as compressed folder";
-            }
+            get { return "Copy as compressed folder"; }
         }
 
         public async Task<bool> CanPerformAsync(
@@ -47,11 +42,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return supportedData.Any();
         }
 
-        async Task<bool> CanPerformAsync(
+        private async Task<bool> CanPerformAsync(
             IClipboardData data)
         {
-            return 
-                data is IClipboardFileData || 
+            return
+                data is IClipboardFileData ||
                 data is IClipboardFileCollectionData;
         }
 

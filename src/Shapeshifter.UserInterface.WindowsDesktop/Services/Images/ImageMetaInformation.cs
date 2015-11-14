@@ -1,8 +1,11 @@
-﻿using System.Windows.Media;
+﻿#region
+
+using System.Windows.Media;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
 {
-
     public struct ImageMetaInformation
     {
         public int Width { get; set; }

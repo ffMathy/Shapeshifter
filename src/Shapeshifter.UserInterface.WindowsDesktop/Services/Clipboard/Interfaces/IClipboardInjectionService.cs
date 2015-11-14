@@ -1,5 +1,9 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+﻿#region
+
 using System.Windows.Media.Imaging;
+using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces
 {

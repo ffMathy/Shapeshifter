@@ -1,5 +1,9 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Windows.Interop;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces
 {

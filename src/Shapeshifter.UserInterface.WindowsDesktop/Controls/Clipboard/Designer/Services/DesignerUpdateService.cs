@@ -1,9 +1,13 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+﻿#region
+
 using System.Threading.Tasks;
+using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
-    class DesignerUpdateService : IUpdateService
+    internal class DesignerUpdateService : IUpdateService
     {
         public async Task UpdateAsync()
         {

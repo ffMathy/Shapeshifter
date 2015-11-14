@@ -1,15 +1,19 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
 {
     [ExcludeFromCodeCoverage]
-    class Downloader : IDownloader, IDisposable
+    internal class Downloader : IDownloader, IDisposable
     {
-        readonly HttpClient client;
+        private readonly HttpClient client;
 
         public Downloader()
         {

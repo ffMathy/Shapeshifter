@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
+
+#endregion
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Data
 {
     public class ClipboardDataControlPackage : IClipboardDataControlPackage
     {
-        IList<IClipboardData> data;
+        private readonly IList<IClipboardData> data;
 
         public ClipboardDataControlPackage()
         {
@@ -15,16 +19,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Data
 
         public IEnumerable<IClipboardData> Contents
         {
-            get
-            {
-                return data;
-            }
+            get { return data; }
         }
 
-        public IClipboardControl Control
-        {
-            get;set;
-        }
+        public IClipboardControl Control { get; set; }
 
         public void AddData(IClipboardData data)
         {

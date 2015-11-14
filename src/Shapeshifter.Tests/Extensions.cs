@@ -1,14 +1,18 @@
-﻿using Autofac;
-using NSubstitute;
+﻿#region
+
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Autofac;
+using NSubstitute;
+
+#endregion
 
 namespace Shapeshifter.Tests
 {
-    static class Extensions
+    internal static class Extensions
     {
-        static IDictionary<Type, object> fakeCache;
+        private static readonly IDictionary<Type, object> fakeCache;
 
         static Extensions()
         {
@@ -22,21 +26,18 @@ namespace Shapeshifter.Tests
 
         public static TInterface RegisterFake<TInterface>(this ContainerBuilder builder) where TInterface : class
         {
-            if (!fakeCache.ContainsKey(typeof(TInterface)))
+            if (!fakeCache.ContainsKey(typeof (TInterface)))
             {
                 var fake = Substitute.For<TInterface>();
-                fakeCache.Add(typeof(TInterface), fake);
+                fakeCache.Add(typeof (TInterface), fake);
                 builder.RegisterInstance(fake);
                 return fake;
-            } else
-            {
-                return (TInterface)fakeCache[typeof(TInterface)];
             }
+            return (TInterface) fakeCache[typeof (TInterface)];
         }
 
         public static void IgnoreAwait(this Task task)
         {
-
         }
     }
 }

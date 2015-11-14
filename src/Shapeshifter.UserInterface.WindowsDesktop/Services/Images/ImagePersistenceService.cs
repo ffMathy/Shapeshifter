@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -6,17 +8,19 @@ using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
 using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 
+#endregion
+
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
 {
     [ExcludeFromCodeCoverage]
-    class ImagePersistenceService : IImagePersistenceService
+    internal class ImagePersistenceService : IImagePersistenceService
     {
-        static ImageMetaInformation ConvertByteArrayToMetaInformation(byte[] data)
+        private static ImageMetaInformation ConvertByteArrayToMetaInformation(byte[] data)
         {
             return GeneralApi.ByteArrayToStructure<ImageMetaInformation>(data);
         }
 
-        byte[] ConvertMetaInformationToByteArray(ImageMetaInformation metaInformation)
+        private byte[] ConvertMetaInformationToByteArray(ImageMetaInformation metaInformation)
         {
             return GeneralApi.StructureToByteArray(metaInformation);
         }
@@ -25,7 +29,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
         {
             if (bitmap == null) return null;
 
-            var metaInformation = new ImageMetaInformation()
+            var metaInformation = new ImageMetaInformation
             {
                 DpiX = bitmap.DpiX,
                 DpiY = bitmap.DpiY,
@@ -46,11 +50,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
                 .ToArray();
         }
 
-        static byte[] ConvertImageDataToByteArray(BitmapSource bitmap)
+        private static byte[] ConvertImageDataToByteArray(BitmapSource bitmap)
         {
-            var stride = bitmap.PixelWidth * ((bitmap.Format.BitsPerPixel + 7) / 8);
+            var stride = bitmap.PixelWidth*((bitmap.Format.BitsPerPixel + 7)/8);
 
-            var imageData = new byte[bitmap.PixelHeight * stride];
+            var imageData = new byte[bitmap.PixelHeight*stride];
             bitmap.CopyPixels(imageData, stride, 0);
             return imageData;
         }
@@ -67,47 +71,48 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
             return GenerateBitmapSourceFromSource(bytes);
         }
 
-        static bool DoesSourceHaveMetaInformation(byte[] source)
+        private static bool DoesSourceHaveMetaInformation(byte[] source)
         {
             var metaInformation = GetMetaInformationFromSource(source);
             return metaInformation.Width > 0 && metaInformation.Height > 0;
         }
 
-        static ImageMetaInformation GetMetaInformationFromSource(byte[] bytes)
+        private static ImageMetaInformation GetMetaInformationFromSource(byte[] bytes)
         {
             var metaInformationData = ExtractMetaInformationFromSource(bytes);
             var metaInformation = ConvertByteArrayToMetaInformation(metaInformationData);
             return metaInformation;
         }
 
-        static byte[] ExtractMetaInformationFromSource(byte[] bytes)
+        private static byte[] ExtractMetaInformationFromSource(byte[] bytes)
         {
             var metaInformationSize = GetImageMetaInformationStructureSize();
             var metaInformationData = bytes.Take(metaInformationSize).ToArray();
             return metaInformationData;
         }
 
-        static int GetImageMetaInformationStructureSize()
+        private static int GetImageMetaInformationStructureSize()
         {
             return Marshal.SizeOf<ImageMetaInformation>();
         }
 
-        static BitmapSource GenerateBitmapSourceFromSource(byte[] bytes)
+        private static BitmapSource GenerateBitmapSourceFromSource(byte[] bytes)
         {
             var metaInformation = GetMetaInformationFromSource(bytes);
             var imageData = ExtractImageDataFromSource(bytes);
             return GenerateBitmapSource(metaInformation, imageData);
         }
 
-        static BitmapSource GenerateBitmapSource(ImageMetaInformation metaInformation, byte[] imageData)
+        private static BitmapSource GenerateBitmapSource(ImageMetaInformation metaInformation, byte[] imageData)
         {
-            var bytesPerPixel = (metaInformation.PixelFormat.BitsPerPixel + 7) / 8;
-            var stride = bytesPerPixel * metaInformation.Width;
+            var bytesPerPixel = (metaInformation.PixelFormat.BitsPerPixel + 7)/8;
+            var stride = bytesPerPixel*metaInformation.Width;
 
-            return BitmapSource.Create(metaInformation.Width, metaInformation.Height, metaInformation.DpiX, metaInformation.DpiY, metaInformation.PixelFormat, null, imageData, stride);
+            return BitmapSource.Create(metaInformation.Width, metaInformation.Height, metaInformation.DpiX,
+                metaInformation.DpiY, metaInformation.PixelFormat, null, imageData, stride);
         }
 
-        static byte[] ExtractImageDataFromSource(byte[] bytes)
+        private static byte[] ExtractImageDataFromSource(byte[] bytes)
         {
             var metaInformationSize = GetImageMetaInformationStructureSize();
             return bytes.Skip(metaInformationSize).ToArray();
