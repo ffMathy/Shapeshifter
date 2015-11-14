@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
@@ -91,7 +92,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
         }
 
         private void PreparePackageBinder(
-            IPasteAction defaultAction)
+            IAction defaultAction)
         {
             packageActionBinder.Default = defaultAction;
             packageActionBinder.Bind(Elements, Actions, GetSupportedActionsFromDataAsync);
@@ -106,7 +107,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
         }
 
         private void RegisterKeyEvents(
-            IKeyInterceptor hotkeyInterceptor)
+            IHotkeyInterceptor hotkeyInterceptor)
         {
             hotkeyInterceptor.HotkeyFired += HotkeyInterceptor_HotkeyFired;
         }
@@ -135,23 +136,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
                     break;
 
                 case KeyboardApi.VK_KEY_LEFT:
-                    HandleLeftPressed();
+                    HandleRightOrLeftPressed();
                     break;
 
                 case KeyboardApi.VK_KEY_RIGHT:
-                    HandleRightPressed();
+                    HandleRightOrLeftPressed();
                     break;
             }
         }
 
-        private void HandleRightPressed()
+        private void HandleRightOrLeftPressed()
         {
-            isFocusInActionsList = true;
-        }
-
-        private void HandleLeftPressed()
-        {
-            isFocusInActionsList = false;
+            isFocusInActionsList = !isFocusInActionsList;
         }
 
         private void HandleUpPressed()
@@ -200,11 +196,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
             return list[indexToUse];
         }
 
+        [ExcludeFromCodeCoverage]
         private async void Service_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
         {
             UserInterfaceShown?.Invoke(this, e);
         }
 
+        [ExcludeFromCodeCoverage]
         private async void Service_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
         {
             UserInterfaceHidden?.Invoke(this, e);

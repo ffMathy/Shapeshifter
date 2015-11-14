@@ -50,7 +50,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders
 
         private async void SourceCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.NewItems.Count <= 0) return;
+            if(e?.NewItems == null || e.NewItems.Count <= 0) return;
 
             foreach (IClipboardDataControlPackage item in e.NewItems)
             {
