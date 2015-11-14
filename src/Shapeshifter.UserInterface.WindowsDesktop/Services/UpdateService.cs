@@ -92,6 +92,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
         {
             try {
                 var pendingUpdateRelease = await GetAvailableUpdateAsync();
+                if (pendingUpdateRelease == null) return;
+
                 await UpdateFromReleaseAsync(pendingUpdateRelease);
             } catch(RateLimitExceededException)
             {
