@@ -50,14 +50,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
             }
         }
 
-        private static void CloseProcessesExceptProcessWithId(int processId, params Process[] processes)
+        private static void CloseProcessesExceptProcessWithId(
+            int processId, params Process[] processes)
         {
             foreach (var process in processes)
             {
                 if (process.Id == processId) continue;
 
                 process.CloseMainWindow();
-                process.WaitForExit();
+                if (!process.WaitForExit(3000))
+                {
+                    process.Kill();
+                }
             }
         }
 
