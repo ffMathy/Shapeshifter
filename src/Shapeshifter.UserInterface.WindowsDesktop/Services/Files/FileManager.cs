@@ -56,7 +56,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             var finalPath = GetFullPathFromRelativeTemporaryPath(path);
             temporaryPaths.Add(finalPath);
 
-            PrepareDirectory(path);
+            PrepareDirectory(finalPath);
 
             return finalPath;
         }
