@@ -77,12 +77,65 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
                 throw new ArgumentException("There must be at least one item to compress.", nameof(fileDataItems));
             }
 
-            var firstItem = fileDataItems.First();
-            var directory = fileManager.PrepareTemporaryPath(firstItem.Source.Text);
-            CopyFilesToTemporaryFolder(fileDataItems, directory);
+            var filePaths = fileDataItems
+                .Select(x => x.FullPath)
+                .ToArray();
+            var commonPath = FindCommonFolder(filePaths);
+            var directoryName = Path.GetFileName(commonPath);
+            var directoryPath = fileManager.PrepareFolder(directoryName);
+            CopyFilesToTemporaryFolder(fileDataItems, directoryPath);
 
-            var zipFile = ZipDirectory(directory);
+            var zipFile = ZipDirectory(directoryPath);
             return zipFile;
+        }
+
+        private static string FindCommonFolder(IReadOnlyCollection<string> paths)
+        {
+            var pathSimilarityIndex = GetPathSegmentsInCommonCount(paths);
+
+            var firstPath = paths.First();
+            var segments = GetPathSegments(firstPath);
+
+            var commonPath = Path.Combine(segments
+                    .Take(pathSimilarityIndex)
+                    .ToArray());
+
+            return commonPath;
+        }
+
+        private static int GetPathSegmentsInCommonCount(IReadOnlyCollection<string> paths)
+        {
+            var commonIndex = 0;
+            foreach (var originPath in paths)
+            {
+                var originSegments = GetPathSegments(originPath);
+                for (var index = 0; index < originSegments.Length; index++)
+                {
+                    var originSegment = originSegments[index];
+                    foreach (var referencePath in paths)
+                    {
+                        var referenceSegments = GetPathSegments(referencePath);
+                        if (referenceSegments.Length < originSegments.Length)
+                        {
+                            return commonIndex;
+                        }
+
+                        var referenceSegment = referenceSegments[index];
+                        if (originSegment != referenceSegment)
+                        {
+                            return commonIndex;
+                        }
+                    }
+                    commonIndex++;
+                }
+            }
+
+            return commonIndex;
+        }
+
+        private static string[] GetPathSegments(string originPath)
+        {
+            return originPath.Split('\\', '/');
         }
 
         private static void CopyFilesToTemporaryFolder(IEnumerable<IClipboardFileData> fileDataItems, string directory)
@@ -97,7 +150,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         private string ZipDirectory(string directory)
         {
             var directoryName = Path.GetFileName(directory);
-            var zipFile = fileManager.PrepareTemporaryPath($"{directoryName}.zip");
+            var zipFile = fileManager.PrepareFolder($"{directoryName}.zip");
 
             ZipFile.CreateFromDirectory(directory, zipFile);
 

@@ -8,7 +8,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.
     [ExcludeFromCodeCoverage]
     internal class DesignerFileManager : IFileManager, IDesignerService
     {
-        public string PrepareTemporaryPath(string path)
+        public string PrepareFolder(string path)
         {
             return null;
         }
