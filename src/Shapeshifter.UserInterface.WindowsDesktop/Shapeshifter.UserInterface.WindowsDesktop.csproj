@@ -190,6 +190,7 @@
     <Compile Include="Handles\Interfaces\IPerformanceHandle.cs" />
     <Compile Include="Handles\MemoryHandle.cs" />
     <Compile Include="Handles\PerformanceHandle.cs" />
+    <Compile Include="Controls\Clipboard\Designer\Services\Interfaces\IDesignerService.cs" />
     <Compile Include="Infrastructure\Caching\Interfaces\IKeyValueCache.cs" />
     <Compile Include="Infrastructure\Caching\KeyValueCache.cs" />
     <Compile Include="Infrastructure\Dependencies\DefaultWiringModule.cs" />

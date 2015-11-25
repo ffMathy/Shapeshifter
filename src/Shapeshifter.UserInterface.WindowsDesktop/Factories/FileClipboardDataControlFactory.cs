@@ -143,6 +143,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             return new ClipboardFileData(dataSourceService)
             {
                 FileName = Path.GetFileName(file),
+                FullPath = file,
                 FileIcon = fileIconService.GetIcon(file, false),
                 RawFormat = format,
                 RawData = rawData

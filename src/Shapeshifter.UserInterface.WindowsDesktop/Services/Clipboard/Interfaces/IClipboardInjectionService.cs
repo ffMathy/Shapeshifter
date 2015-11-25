@@ -8,5 +8,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interface
         void InjectData(IClipboardDataPackage package);
         void InjectImage(BitmapSource image);
         void InjectText(string text);
+        void InjectFiles(params string[] files);
     }
 }

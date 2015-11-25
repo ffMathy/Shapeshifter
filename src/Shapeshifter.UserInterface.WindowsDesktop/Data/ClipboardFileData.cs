@@ -11,6 +11,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Data
         }
 
         public string FileName { get; set; }
+        public string FullPath { get; set; }
         public byte[] FileIcon { get; set; }
 
         public IDataSource Source { get; }
