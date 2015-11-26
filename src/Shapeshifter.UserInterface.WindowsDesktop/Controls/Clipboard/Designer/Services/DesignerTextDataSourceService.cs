@@ -8,7 +8,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
     [ExcludeFromCodeCoverage]
-    internal class DesignerTextDataSourceService : IDataSourceService
+    internal class DesignerTextDataSourceService : IDataSourceService, IDesignerService
     {
         private readonly IDesignerImageConverterService designerImageConverterService;
 

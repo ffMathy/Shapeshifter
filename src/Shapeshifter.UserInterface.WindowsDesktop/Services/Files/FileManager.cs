@@ -51,24 +51,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             }
         }
 
-        public string PrepareTemporaryPath(string path)
+        public string PrepareFolder(string path)
         {
             var finalPath = GetFullPathFromRelativeTemporaryPath(path);
             temporaryPaths.Add(finalPath);
 
-            if (IsDirectory(finalPath))
-            {
-                PrepareDirectory(finalPath);
-            }
+            PrepareDirectory(finalPath);
 
             return finalPath;
-        }
-
-        private static bool IsDirectory(string finalPath)
-        {
-            var fileNameWithExtension = Path.GetFileName(finalPath);
-            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(finalPath);
-            return fileNameWithExtension == fileNameWithoutExtension;
         }
 
         private static string GetFullPathFromRelativeTemporaryPath(string path)

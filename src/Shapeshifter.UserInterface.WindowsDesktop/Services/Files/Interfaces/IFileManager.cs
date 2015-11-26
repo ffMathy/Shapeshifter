@@ -6,6 +6,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces
     {
         string WriteBytesToTemporaryFile(string path, byte[] bytes);
 
-        string PrepareTemporaryPath(string path);
+        string PrepareFolder(string path);
     }
 }

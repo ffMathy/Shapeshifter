@@ -149,7 +149,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 
         private string ExtractUpdate(string localFilePath)
         {
-            var temporaryDirectory = fileManager.PrepareTemporaryPath("Update");
+            var temporaryDirectory = fileManager.PrepareFolder("Update");
             ZipFile.ExtractToDirectory(localFilePath, temporaryDirectory);
             return temporaryDirectory;
         }

@@ -126,7 +126,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         [ExcludeFromCodeCoverage]
         private IClipboardData ConstructClipboardFileCollectionData(
-            IEnumerable<string> files, uint format, byte[] rawData)
+            IEnumerable<string> files, 
+            uint format, 
+            byte[] rawData)
         {
             return new ClipboardFileCollectionData(dataSourceService)
             {
@@ -138,11 +140,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         [ExcludeFromCodeCoverage]
         private IClipboardFileData ConstructClipboardFileData(
-            string file, uint format, byte[] rawData)
+            string file, 
+            uint format, 
+            byte[] rawData)
         {
             return new ClipboardFileData(dataSourceService)
             {
                 FileName = Path.GetFileName(file),
+                FullPath = file,
                 FileIcon = fileIconService.GetIcon(file, false),
                 RawFormat = format,
                 RawData = rawData
@@ -158,7 +163,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public bool CanBuildControl(IClipboardData data)
         {
-            return data is IClipboardFileData || data is IClipboardFileCollectionData;
+            return 
+                data is IClipboardFileData || 
+                data is IClipboardFileCollectionData;
         }
 
         public bool CanBuildData(uint format)

@@ -5,6 +5,7 @@ using System.Windows.Threading;
 using Autofac;
 using Autofac.Builder;
 using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers;
+using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment;
 using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
@@ -59,15 +60,23 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
             var types = assembly.GetTypes();
             foreach (var type in types)
             {
-                if (!type.IsClass || type.IsAbstract) continue;
+                if (!type.IsClass || type.IsAbstract)
+                {
+                    continue;
+                }
+
+                var interfaces = type.GetInterfaces();
+                if(interfaces.Contains(typeof(IDesignerService)))
+                {
+                    continue;
+                }
 
                 IRegistrationBuilder<object, ReflectionActivatorData, object> registration;
                 if (type.IsGenericType)
                 {
                     registration = builder.RegisterGeneric(type);
 
-                    var genericInterfaces = type
-                        .GetInterfaces()
+                    var genericInterfaces = interfaces
                         .Where(x => x.IsGenericType);
                     foreach (var genericInterface in genericInterfaces)
                     {
@@ -84,8 +93,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
                 }
 
                 registration.FindConstructorsWith(new PublicConstructorFinder());
-
-                var interfaces = type.GetInterfaces();
+                
                 if (interfaces.Contains(typeof (ISingleInstance)))
                 {
                     registration.SingleInstance();

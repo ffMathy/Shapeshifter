@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Media.Imaging;
 using Shapeshifter.UserInterface.WindowsDesktop.Api;
@@ -96,6 +97,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
         {
             clipboardCopyInterceptor.SkipNext();
             WindowsClipboard.SetText(text);
+        }
+
+        [ExcludeFromCodeCoverage]
+        public void InjectFiles(params string[] files)
+        {
+            clipboardCopyInterceptor.SkipNext();
+
+            var collection = new StringCollection();
+            collection.AddRange(files);
+
+            WindowsClipboard.SetFileDropList(collection);
         }
     }
 }

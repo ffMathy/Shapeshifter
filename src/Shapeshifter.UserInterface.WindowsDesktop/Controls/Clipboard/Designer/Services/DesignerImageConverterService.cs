@@ -5,7 +5,7 @@ using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
     [ExcludeFromCodeCoverage]
-    internal class DesignerImageConverterService : IDesignerImageConverterService
+    internal class DesignerImageConverterService : IDesignerImageConverterService, IDesignerService
     {
         private readonly IImageFileInterpreter imageFileInterpreter;
         private readonly IImagePersistenceService imagePersistenceService;
