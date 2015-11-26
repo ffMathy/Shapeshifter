@@ -142,16 +142,32 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         {
             foreach (var fileData in fileDataItems)
             {
-                var destinationFilePath = Path.Combine(directory, fileData.FileName);
-                File.Copy(fileData.FullPath, destinationFilePath);
+                CopyFileToTemporaryFolder(directory, fileData);
+            }
+        }
+
+        private static void CopyFileToTemporaryFolder(string directory, IClipboardFileData fileData)
+        {
+            var destinationFilePath = Path.Combine(directory, fileData.FileName);
+            DeleteFileIfExists(destinationFilePath);
+            File.Copy(fileData.FullPath, destinationFilePath);
+        }
+
+        private static void DeleteFileIfExists(string destinationFilePath)
+        {
+            if (File.Exists(destinationFilePath))
+            {
+                File.Delete(destinationFilePath);
             }
         }
 
         private string ZipDirectory(string directory)
         {
             var directoryName = Path.GetFileName(directory);
-            var zipFile = fileManager.PrepareFolder($"{directoryName}.zip");
+            var compressedFolderDirectory = fileManager.PrepareFolder($"Compressed folders");
+            var zipFile = Path.Combine(compressedFolderDirectory, $"{directoryName}.zip");
 
+            DeleteFileIfExists(zipFile);
             ZipFile.CreateFromDirectory(directory, zipFile);
 
             return zipFile;
