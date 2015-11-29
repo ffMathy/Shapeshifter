@@ -120,6 +120,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
                 return ConstructClipboardFileData(
                     files.Single(), format, rawData);
             }
+
             return ConstructClipboardFileCollectionData(
                 files, format, rawData);
         }

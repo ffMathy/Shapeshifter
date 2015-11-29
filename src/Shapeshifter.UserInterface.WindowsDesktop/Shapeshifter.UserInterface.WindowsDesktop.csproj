@@ -110,6 +110,7 @@
     <Compile Include="Actions\OpenLinkAction.cs" />
     <Compile Include="Actions\PasteAction.cs" />
     <Compile Include="Actions\PasteAsPlainTextAction.cs" />
+    <Compile Include="Actions\PinClipboardDataAction.cs" />
     <Compile Include="Actions\UploadImageAction.cs" />
     <Compile Include="Actions\ZipFilesAction.cs" />
     <Compile Include="Api\GeneralApi.cs" />
@@ -222,8 +223,10 @@
     <Compile Include="Services\Arguments\UpdateArgumentProcessor.cs" />
     <Compile Include="Services\Clipboard\ClipboardPasteService.cs" />
     <Compile Include="Handles\ClipboardHandle.cs" />
+    <Compile Include="Services\Clipboard\ClipboardPersistanceService.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IClipboardPasteService.cs" />
     <Compile Include="Handles\Interfaces\IHandle.cs" />
+    <Compile Include="Services\Clipboard\Interfaces\IClipboardPersistanceService.cs" />
     <Compile Include="Services\Interfaces\IDataSourceService.cs" />
     <Compile Include="Services\Messages\Interceptors\ClipboardCopyInterceptor.cs" />
     <Compile Include="Mediators\ClipboardUserInterfaceMediator.cs" />
