@@ -8,14 +8,15 @@
 
     public class ClipboardDataControlPackage: IClipboardDataControlPackage
     {
-        readonly IList<IClipboardData> dataCollection;
+        readonly List<IClipboardData> dataCollection;
 
         public ClipboardDataControlPackage()
         {
             dataCollection = new List<IClipboardData>();
         }
 
-        public IEnumerable<IClipboardData> Contents => dataCollection;
+        public IReadOnlyList<IClipboardData> Contents => 
+            dataCollection;
 
         public IClipboardControl Control { get; set; }
 
