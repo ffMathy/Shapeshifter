@@ -53,7 +53,7 @@
         async Task<bool> CanPerformAsync(IClipboardData data)
         {
             var textData = data as IClipboardTextData;
-            return textData != null && await linkParser.HasLinkAsync(textData.Text)
+            return (textData != null) && await linkParser.HasLinkAsync(textData.Text)
                                                        .ConfigureAwait(false);
         }
 

@@ -60,7 +60,7 @@
             object sender,
             DataCopiedEventArgument e)
         {
-            var package = clipboardDataControlPackageFactory.Create();
+            var package = clipboardDataControlPackageFactory.CreateFromCurrentClipboardData();
             if (package == null)
             {
                 return;

@@ -3,8 +3,6 @@
     using System;
     using System.Diagnostics.CodeAnalysis;
 
-    using Clipboard.Interfaces;
-
     using Data.Interfaces;
 
     using Infrastructure.Environment.Interfaces;

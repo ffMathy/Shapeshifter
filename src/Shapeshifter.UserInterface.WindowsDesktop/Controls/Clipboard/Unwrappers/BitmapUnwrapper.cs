@@ -33,10 +33,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
 
         public bool CanUnwrap(uint format)
         {
-            return format == ClipboardApi.CF_DIBV5 ||
-                   format == ClipboardApi.CF_DIB ||
-                   format == ClipboardApi.CF_BITMAP ||
-                   format == ClipboardApi.CF_DIF;
+            return (format == ClipboardApi.CF_DIBV5) ||
+                   (format == ClipboardApi.CF_DIB) ||
+                   (format == ClipboardApi.CF_BITMAP) ||
+                   (format == ClipboardApi.CF_DIF);
         }
 
         public byte[] UnwrapStructure(uint format)

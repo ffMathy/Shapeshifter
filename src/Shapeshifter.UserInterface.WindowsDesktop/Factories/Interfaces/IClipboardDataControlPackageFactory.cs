@@ -4,6 +4,6 @@
 
     public interface IClipboardDataControlPackageFactory
     {
-        IClipboardDataControlPackage Create();
+        IClipboardDataControlPackage CreateFromCurrentClipboardData();
     }
 }

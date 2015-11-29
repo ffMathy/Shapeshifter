@@ -5,9 +5,6 @@
 
     using Api;
 
-    using Controls.Clipboard.Factories.Interfaces;
-    using Controls.Clipboard.Interfaces;
-
     using Data;
     using Data.Interfaces;
 
@@ -15,25 +12,14 @@
 
     using Services.Interfaces;
 
-    class TextClipboardDataControlFactory: ITextClipboardDataControlFactory
+    class TextClipboardDataFactory: IClipboardDataFactory
     {
         readonly IDataSourceService dataSourceService;
 
-        readonly IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl>
-            textControlFactory;
-
-        public TextClipboardDataControlFactory(
-            IDataSourceService dataSourceService,
-            IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl>
-                textControlFactory)
+        public TextClipboardDataFactory(
+            IDataSourceService dataSourceService)
         {
             this.dataSourceService = dataSourceService;
-            this.textControlFactory = textControlFactory;
-        }
-
-        public IClipboardControl BuildControl(IClipboardData clipboardData)
-        {
-            return textControlFactory.CreateControl((IClipboardTextData) clipboardData);
         }
 
         public IClipboardData BuildData(uint format, byte[] data)
@@ -84,18 +70,12 @@
             }
         }
 
-        public bool CanBuildControl(IClipboardData data)
-        {
-            return
-                data is IClipboardTextData;
-        }
-
         public bool CanBuildData(uint format)
         {
             return
-                format == ClipboardApi.CF_TEXT ||
-                format == ClipboardApi.CF_OEMTEXT ||
-                format == ClipboardApi.CF_UNICODETEXT;
+                (format == ClipboardApi.CF_TEXT) ||
+                (format == ClipboardApi.CF_OEMTEXT) ||
+                (format == ClipboardApi.CF_UNICODETEXT);
         }
     }
 }

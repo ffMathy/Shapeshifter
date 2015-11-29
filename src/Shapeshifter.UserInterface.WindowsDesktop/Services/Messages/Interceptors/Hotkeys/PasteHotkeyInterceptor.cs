@@ -66,8 +66,8 @@
 
         public void ReceiveMessageEvent(WindowMessageReceivedArgument e)
         {
-            if (e.Message == Message.WM_HOTKEY &&
-                (int) e.WordParameter == hotkeyInterception.InterceptionId)
+            if ((e.Message == Message.WM_HOTKEY) &&
+                ((int) e.WordParameter == hotkeyInterception.InterceptionId))
             {
                 HandleHotkeyMessage();
             }

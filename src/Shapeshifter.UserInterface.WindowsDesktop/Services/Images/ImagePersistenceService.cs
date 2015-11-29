@@ -66,7 +66,7 @@
 
         public BitmapSource ConvertByteArrayToBitmapSource(byte[] bytes)
         {
-            if (bytes == null || bytes.Length == 0)
+            if ((bytes == null) || (bytes.Length == 0))
             {
                 return null;
             }
@@ -83,7 +83,7 @@
         static bool DoesSourceHaveMetaInformation(byte[] source)
         {
             var metaInformation = GetMetaInformationFromSource(source);
-            return metaInformation.Width > 0 && metaInformation.Height > 0;
+            return (metaInformation.Width > 0) && (metaInformation.Height > 0);
         }
 
         static ImageMetaInformation GetMetaInformationFromSource(byte[] bytes)

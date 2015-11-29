@@ -10,9 +10,7 @@
 
     using UserInterface.WindowsDesktop.Api;
     using UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
-    using UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
     using UserInterface.WindowsDesktop.Data.Interfaces;
-    using UserInterface.WindowsDesktop.Factories.Interfaces;
 
     [TestClass]
     public class FileClipboardDataControlFactoryTest: TestBase

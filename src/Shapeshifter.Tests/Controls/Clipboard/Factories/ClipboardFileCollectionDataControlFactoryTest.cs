@@ -7,7 +7,6 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
-    using UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
     using UserInterface.WindowsDesktop.Data.Interfaces;
 
     [TestClass]

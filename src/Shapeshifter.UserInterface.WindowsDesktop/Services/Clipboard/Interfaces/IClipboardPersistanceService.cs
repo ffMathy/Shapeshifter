@@ -9,8 +9,7 @@
     {
         Task PersistClipboardPackageAsync(IClipboardDataPackage package);
 
-        Task<IEnumerable<IClipboardDataPackage>> GetPersistedPackagesAsync(
-            IClipboardDataPackage package);
+        Task<IEnumerable<IClipboardDataPackage>> GetPersistedPackagesAsync();
 
         Task DeletePackageAsync(IClipboardDataPackage package);
     }

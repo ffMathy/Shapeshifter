@@ -9,9 +9,6 @@
 
     using Api;
 
-    using Controls.Clipboard.Factories.Interfaces;
-    using Controls.Clipboard.Interfaces;
-
     using Data;
     using Data.Interfaces;
 
@@ -23,7 +20,7 @@
     using Services.Files.Interfaces;
     using Services.Interfaces;
 
-    class FileClipboardDataControlFactory: IFileClipboardDataControlFactory
+    class FileClipboardDataFactory: IClipboardDataFactory
     {
         readonly IDataSourceService dataSourceService;
 
@@ -31,50 +28,14 @@
 
         readonly IMemoryHandleFactory memoryHandleFactory;
 
-        readonly IClipboardControlFactory<IClipboardFileData, IClipboardFileDataControl>
-            clipboardFileControlFactory;
-
-        readonly
-            IClipboardControlFactory
-                <IClipboardFileCollectionData, IClipboardFileCollectionDataControl>
-            clipboardFileCollectionControlFactory;
-
-        public FileClipboardDataControlFactory(
+        public FileClipboardDataFactory(
             IDataSourceService dataSourceService,
             IFileIconService fileIconService,
-            IMemoryHandleFactory memoryHandleFactory,
-            IClipboardControlFactory<IClipboardFileData, IClipboardFileDataControl>
-                clipboardFileControlFactory,
-            IClipboardControlFactory
-                <IClipboardFileCollectionData, IClipboardFileCollectionDataControl>
-                clipboardFileCollectionControlFactory)
+            IMemoryHandleFactory memoryHandleFactory)
         {
             this.dataSourceService = dataSourceService;
             this.fileIconService = fileIconService;
             this.memoryHandleFactory = memoryHandleFactory;
-            this.clipboardFileControlFactory = clipboardFileControlFactory;
-            this.clipboardFileCollectionControlFactory = clipboardFileCollectionControlFactory;
-        }
-
-        public IClipboardControl BuildControl(IClipboardData clipboardData)
-        {
-            var clipboardFileCollectionData = clipboardData as IClipboardFileCollectionData;
-            if (clipboardFileCollectionData != null)
-            {
-                return clipboardFileCollectionControlFactory.CreateControl(
-                    clipboardFileCollectionData);
-            }
-
-            var clipboardFileData = clipboardData as IClipboardFileData;
-            if (clipboardFileData != null)
-            {
-                return clipboardFileControlFactory.CreateControl(
-                    clipboardFileData);
-            }
-
-            throw new ArgumentException(
-                "Unknown clipboard data type.",
-                nameof(clipboardData));
         }
 
         [ExcludeFromCodeCoverage]
@@ -189,13 +150,6 @@
             string file)
         {
             return ConstructClipboardFileData(file, 0, null);
-        }
-
-        public bool CanBuildControl(IClipboardData data)
-        {
-            return
-                data is IClipboardFileData ||
-                data is IClipboardFileCollectionData;
         }
 
         public bool CanBuildData(uint format)

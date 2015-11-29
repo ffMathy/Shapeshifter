@@ -131,7 +131,7 @@
         [ExcludeFromCodeCoverage]
         void RaiseDurationPassedEventIfNeeded(int decisecondsPassed)
         {
-            if (decisecondsPassed != DurationInDeciseconds || PasteCombinationDurationPassed == null)
+            if ((decisecondsPassed != DurationInDeciseconds) || (PasteCombinationDurationPassed == null))
             {
                 return;
             }

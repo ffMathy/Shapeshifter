@@ -108,7 +108,7 @@
                     c.RegisterFake<IClipboardDataControlPackageFactory>(
                         
                         )
-                     .Create()
+                     .CreateFromCurrentClipboardData()
                      .Returns(fakePackage);
                 });
 
@@ -148,7 +148,7 @@
                     c.RegisterFake<IClipboardDataControlPackageFactory>(
                         
                         )
-                     .Create()
+                     .CreateFromCurrentClipboardData()
                      .Returns(fakePackage);
                 });
 

@@ -119,7 +119,7 @@
         public bool IsLinkOfType(string link, LinkType type)
         {
             var linkType = GetLinkType(link);
-            return linkType == type || linkType.HasFlag(type);
+            return (linkType == type) || linkType.HasFlag(type);
         }
 
         public async Task<bool> HasLinkAsync(string text)

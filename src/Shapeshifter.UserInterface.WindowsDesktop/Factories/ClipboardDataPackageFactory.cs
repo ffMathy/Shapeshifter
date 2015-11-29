@@ -1,9 +1,8 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
-{
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
+namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
+{
     using Api;
 
     using Controls.Clipboard.Unwrappers.Interfaces;
@@ -13,12 +12,9 @@
 
     using Handles.Factories.Interfaces;
 
-    using Infrastructure.Threading.Interfaces;
-
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
-    class ClipboardDataControlPackageFactory: IClipboardDataControlPackageFactory
+    class ClipboardDataPackageFactory : IClipboardDataPackageFactory
     {
         readonly IClipboardHandleFactory clipboardSessionFactory;
 
@@ -26,18 +22,14 @@
 
         readonly IEnumerable<IClipboardDataControlFactory> dataFactories;
 
-        readonly IUserInterfaceThread userInterfaceThread;
-
-        public ClipboardDataControlPackageFactory(
+        public ClipboardDataPackageFactory(
             IEnumerable<IClipboardDataControlFactory> dataFactories,
             IEnumerable<IMemoryUnwrapper> memoryUnwrappers,
-            IClipboardHandleFactory clipboardSessionFactory,
-            IUserInterfaceThread userInterfaceThread)
+            IClipboardHandleFactory clipboardSessionFactory)
         {
             this.dataFactories = dataFactories;
             this.memoryUnwrappers = memoryUnwrappers;
             this.clipboardSessionFactory = clipboardSessionFactory;
-            this.userInterfaceThread = userInterfaceThread;
         }
 
         bool IsAnyFormatSupported(
@@ -47,23 +39,22 @@
                 x => formats.Any(x.CanBuildData));
         }
 
-        public IClipboardDataControlPackage Create()
+        public IClipboardDataPackage CreateFromCurrentClipboardData()
         {
             using (clipboardSessionFactory.StartNewSession())
             {
                 var formats = ClipboardApi.GetClipboardFormats();
                 return IsAnyFormatSupported(formats)
-                           ? ConstructPackage(formats)
+                           ? ConstructPackageFromFormats(formats)
                            : null;
             }
         }
 
-        IClipboardDataControlPackage ConstructPackage(
+        IClipboardDataControlPackage ConstructPackageFromFormats(
             IEnumerable<uint> formats)
         {
             var package = new ClipboardDataControlPackage();
             DecoratePackageWithClipboardData(formats, package);
-            userInterfaceThread.Invoke(() => DecoratePackageWithControl(package));
 
             return package;
         }
@@ -74,17 +65,17 @@
         {
             foreach (var format in formats)
             {
-                var dataFactory = dataFactories.FirstOrDefault(x => x.CanBuildData(format));
-                if (dataFactory != null)
-                {
-                    DecoratePackageWithFormatDataUsingFactory(package, dataFactory, format);
-                }
+                DecoratePackageWithClipboardDataForFormat(package, format);
             }
         }
 
-        void DecoratePackageWithFormatDataUsingFactory(
+        IClipboardDataControlFactory FindCapableFactoryFromFormat(uint format)
+        {
+            return dataFactories.FirstOrDefault(x => x.CanBuildData(format));
+        }
+
+        void DecoratePackageWithClipboardDataForFormat(
             IClipboardDataPackage package,
-            IClipboardDataControlFactory factory,
             uint format)
         {
             var unwrapper = memoryUnwrappers.FirstOrDefault(x => x.CanUnwrap(format));
@@ -95,26 +86,19 @@
                 return;
             }
 
+            DecoratePackageWithRawDataUsingFactory(package, format, rawData);
+        }
+
+        void DecoratePackageWithRawDataUsingFactory(
+            IClipboardDataPackage package,
+            uint format,
+            byte[] rawData)
+        {
+            var factory = FindCapableFactoryFromFormat(format);
             var clipboardData = factory.BuildData(format, rawData);
             if (clipboardData != null)
             {
                 package.AddData(clipboardData);
-            }
-        }
-
-        void DecoratePackageWithControl(
-            ClipboardDataControlPackage package)
-        {
-            foreach (var data in package.Contents)
-            {
-                var dataFactory = dataFactories.FirstOrDefault(x => x.CanBuildControl(data));
-                if (dataFactory == null)
-                {
-                    continue;
-                }
-
-                package.Control = dataFactory.BuildControl(data);
-                break;
             }
         }
     }

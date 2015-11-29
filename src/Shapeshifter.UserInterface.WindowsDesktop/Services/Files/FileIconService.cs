@@ -89,7 +89,7 @@
             {
                 return GetFactoryImage(dimensions, filePath, allowThumbnails);
             }
-            catch (COMException ex) when (ex.ErrorCode == -2147175936 && allowThumbnails)
+            catch (COMException ex) when ((ex.ErrorCode == -2147175936) && allowThumbnails)
             {
                 return GetFactoryImage(dimensions, filePath, false);
             }

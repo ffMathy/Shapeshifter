@@ -56,8 +56,8 @@
             IClipboardData clipboardData)
         {
             var fileData = clipboardData as IClipboardFileData;
-            return fileData != null &&
-                   fileTypeInterpreter.GetFileTypeFromFileName(fileData.FileName) == FileType.Image;
+            return (fileData != null) &&
+                   (fileTypeInterpreter.GetFileTypeFromFileName(fileData.FileName) == FileType.Image);
         }
 
         public Task PerformAsync(

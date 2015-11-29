@@ -125,7 +125,7 @@
 
         void Actions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (SelectedAction == null && Actions.Count > 0)
+            if ((SelectedAction == null) && (Actions.Count > 0))
             {
                 SelectedAction = Actions.First();
             }
