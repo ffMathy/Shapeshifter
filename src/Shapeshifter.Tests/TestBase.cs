@@ -1,15 +1,20 @@
-﻿using System;
-using System.Linq;
-using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using Ploeh.AutoFixture;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-namespace Shapeshifter.Tests
+﻿namespace Shapeshifter.Tests
 {
+    using System;
+    using System.Linq;
+
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using NSubstitute;
+
+    using Ploeh.AutoFixture;
+
+    using UserInterface.WindowsDesktop.Infrastructure.Dependencies;
+    using UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
+    using UserInterface.WindowsDesktop.Services.Interfaces;
+
     public abstract class TestBase
     {
         protected Fixture fixture;
@@ -25,7 +30,7 @@ namespace Shapeshifter.Tests
             fixture = CreateFixture();
         }
 
-        private static Fixture CreateFixture()
+        static Fixture CreateFixture()
         {
             var fixture = new Fixture
             {
@@ -50,8 +55,8 @@ namespace Shapeshifter.Tests
             builder.RegisterModule(new DefaultWiringModule());
 
             builder.RegisterFake<IEnvironmentInformation>()
-                .IsInDesignTime
-                .Returns(false);
+                   .IsInDesignTime
+                   .Returns(false);
             builder.RegisterFake<IUpdateService>();
 
             setupCallback?.Invoke(builder);

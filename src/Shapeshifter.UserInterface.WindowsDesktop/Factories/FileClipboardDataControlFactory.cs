@@ -1,40 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Text;
-using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
-    internal class FileClipboardDataControlFactory : IFileClipboardDataControlFactory
-    {
-        private readonly IDataSourceService dataSourceService;
-        private readonly IFileIconService fileIconService;
-        private readonly IMemoryHandleFactory memoryHandleFactory;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
 
-        private readonly IClipboardControlFactory<IClipboardFileData, IClipboardFileDataControl>
+    using Api;
+
+    using Controls.Clipboard.Factories.Interfaces;
+    using Controls.Clipboard.Interfaces;
+
+    using Data;
+    using Data.Interfaces;
+
+    using Handles.Factories.Interfaces;
+    using Handles.Interfaces;
+
+    using Interfaces;
+
+    using Services.Files.Interfaces;
+    using Services.Interfaces;
+
+    class FileClipboardDataControlFactory: IFileClipboardDataControlFactory
+    {
+        readonly IDataSourceService dataSourceService;
+
+        readonly IFileIconService fileIconService;
+
+        readonly IMemoryHandleFactory memoryHandleFactory;
+
+        readonly IClipboardControlFactory<IClipboardFileData, IClipboardFileDataControl>
             clipboardFileControlFactory;
 
-        private readonly IClipboardControlFactory<IClipboardFileCollectionData, IClipboardFileCollectionDataControl>
+        readonly
+            IClipboardControlFactory
+                <IClipboardFileCollectionData, IClipboardFileCollectionDataControl>
             clipboardFileCollectionControlFactory;
 
         public FileClipboardDataControlFactory(
             IDataSourceService dataSourceService,
             IFileIconService fileIconService,
             IMemoryHandleFactory memoryHandleFactory,
-            IClipboardControlFactory<IClipboardFileData, IClipboardFileDataControl> clipboardFileControlFactory,
-            IClipboardControlFactory<IClipboardFileCollectionData, IClipboardFileCollectionDataControl>
+            IClipboardControlFactory<IClipboardFileData, IClipboardFileDataControl>
+                clipboardFileControlFactory,
+            IClipboardControlFactory
+                <IClipboardFileCollectionData, IClipboardFileCollectionDataControl>
                 clipboardFileCollectionControlFactory)
         {
             this.dataSourceService = dataSourceService;
@@ -50,28 +62,31 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             if (clipboardFileCollectionData != null)
             {
                 return clipboardFileCollectionControlFactory.CreateControl(
-                    clipboardFileCollectionData);
+                                                                           clipboardFileCollectionData);
             }
 
             var clipboardFileData = clipboardData as IClipboardFileData;
             if (clipboardFileData != null)
             {
                 return clipboardFileControlFactory.CreateControl(
-                    clipboardFileData);
+                                                                 clipboardFileData);
             }
 
             throw new ArgumentException(
-                "Unknown clipboard data type.", nameof(clipboardData));
+                "Unknown clipboard data type.",
+                nameof(clipboardData));
         }
 
         [ExcludeFromCodeCoverage]
         public IClipboardData BuildData(
-            uint format, byte[] rawData)
+            uint format,
+            byte[] rawData)
         {
             if (!CanBuildData(format))
             {
                 throw new ArgumentException(
-                    "Can't construct data from this format.", nameof(format));
+                    "Can't construct data from this format.",
+                    nameof(format));
             }
 
             var files = GetFilesCopiedFromRawData(rawData);
@@ -84,7 +99,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         }
 
         [ExcludeFromCodeCoverage]
-        private IReadOnlyCollection<string> GetFilesCopiedFromRawData(byte[] data)
+        IReadOnlyCollection<string> GetFilesCopiedFromRawData(byte[] data)
         {
             var files = new List<string>();
             using (var memoryHandle = memoryHandleFactory.AllocateInMemory(data))
@@ -97,14 +112,21 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         }
 
         [ExcludeFromCodeCoverage]
-        private static void FetchFilesFromMemory(ICollection<string> files, IMemoryHandle memoryHandle, int count)
+        static void FetchFilesFromMemory(
+            ICollection<string> files,
+            IMemoryHandle memoryHandle,
+            int count)
         {
             for (var i = 0u; i < count; i++)
             {
                 var length = ClipboardApi.DragQueryFile(memoryHandle.Pointer, i, null, 0);
                 var filenameBuilder = new StringBuilder(length);
 
-                length = ClipboardApi.DragQueryFile(memoryHandle.Pointer, i, filenameBuilder, length + 1);
+                length = ClipboardApi.DragQueryFile(
+                                                    memoryHandle.Pointer,
+                                                    i,
+                                                    filenameBuilder,
+                                                    length + 1);
 
                 var fileName = filenameBuilder.ToString(0, length);
                 files.Add(fileName);
@@ -112,37 +134,44 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         }
 
         [ExcludeFromCodeCoverage]
-        private IClipboardData ConstructDataFromFiles(
-            IReadOnlyCollection<string> files, uint format, byte[] rawData)
+        IClipboardData ConstructDataFromFiles(
+            IReadOnlyCollection<string> files,
+            uint format,
+            byte[] rawData)
         {
             if (files.Count == 1)
             {
                 return ConstructClipboardFileData(
-                    files.Single(), format, rawData);
+                                                  files.Single(),
+                                                  format,
+                                                  rawData);
             }
 
             return ConstructClipboardFileCollectionData(
-                files, format, rawData);
+                                                        files,
+                                                        format,
+                                                        rawData);
         }
 
         [ExcludeFromCodeCoverage]
-        private IClipboardData ConstructClipboardFileCollectionData(
-            IEnumerable<string> files, 
-            uint format, 
+        IClipboardData ConstructClipboardFileCollectionData(
+            IEnumerable<string> files,
+            uint format,
             byte[] rawData)
         {
             return new ClipboardFileCollectionData(dataSourceService)
             {
-                Files = files.Select(ConstructClipboardFileData).ToArray(),
+                Files = files.Select(ConstructClipboardFileData)
+                             .ToArray(),
                 RawFormat = format,
                 RawData = rawData
             };
         }
 
         [ExcludeFromCodeCoverage]
-        private IClipboardFileData ConstructClipboardFileData(
-            string file, 
-            uint format, 
+        IClipboardFileData ConstructClipboardFileData(
+            string file,
+            uint format,
             byte[] rawData)
         {
             return new ClipboardFileData(dataSourceService)
@@ -156,7 +185,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         }
 
         [ExcludeFromCodeCoverage]
-        private IClipboardFileData ConstructClipboardFileData(
+        IClipboardFileData ConstructClipboardFileData(
             string file)
         {
             return ConstructClipboardFileData(file, 0, null);
@@ -164,8 +193,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
         public bool CanBuildControl(IClipboardData data)
         {
-            return 
-                data is IClipboardFileData || 
+            return
+                data is IClipboardFileData ||
                 data is IClipboardFileCollectionData;
         }
 

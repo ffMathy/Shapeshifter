@@ -1,15 +1,20 @@
-﻿using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-namespace Shapeshifter.Tests.Actions
+﻿namespace Shapeshifter.Tests.Actions
 {
-    public abstract class ActionTestBase : TestBase
+    using NSubstitute;
+
+    using UserInterface.WindowsDesktop.Data.Interfaces;
+
+    public abstract class ActionTestBase: TestBase
     {
-        protected IClipboardDataPackage GetPackageContaining<TData>() where TData : class, IClipboardData
+        protected IClipboardDataPackage GetPackageContaining<TData>()
+            where TData : class, IClipboardData
         {
             var fakePackage = Substitute.For<IClipboardDataPackage>();
             fakePackage.Contents.Returns(
-                new IClipboardData[] {Substitute.For<TData>()});
+                                         new IClipboardData[]
+                                         {
+                                             Substitute.For<TData>()
+                                         });
 
             return fakePackage;
         }

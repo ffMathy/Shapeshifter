@@ -1,40 +1,65 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using System.Text;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Api
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.InteropServices;
+    using System.Text;
+
     [ExcludeFromCodeCoverage]
     public static class ClipboardApi
     {
         public const int CF_BITMAP = 2;
+
         public const int CF_DIB = 8;
+
         public const int CF_DIBV5 = 17;
+
         public const int CF_DIF = 5;
+
         public const int CF_DSPBITMAP = 0x0082;
+
         public const int CF_DSPENHMETAFILE = 0x008E;
+
         public const int CF_DSPMETAFILEPICT = 0x0083;
+
         public const int CF_DSPTEXT = 0x0081;
+
         public const int CF_ENHMETAFILE = 14;
+
         public const int CF_GDIOBJFIRST = 0x0300;
+
         public const int CF_GDIOBJLAST = 0x03FF;
+
         public const int CF_HDROP = 15;
+
         public const int CF_LOCALE = 16;
+
         public const int CF_METAFILEPICT = 3;
+
         public const int CF_OEMTEXT = 7;
+
         public const int CF_OWNERDISPLAY = 0x0080;
+
         public const int CF_PALETTE = 9;
+
         public const int CF_PENDATA = 10;
+
         public const int CF_PRIVATEFIRST = 0x0200;
+
         public const int CF_PRIVATELAST = 0x02FF;
+
         public const int CF_RIFF = 11;
+
         public const int CF_SYLK = 4;
+
         public const int CF_TEXT = 1;
+
         public const int CF_TIFF = 6;
+
         public const int CF_UNICODETEXT = 13;
+
         public const int CF_WAVE = 12;
 
         [DllImport("user32.dll")]
@@ -53,10 +78,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
         public static extern bool EmptyClipboard();
 
         [DllImport("user32.dll")]
-        public static extern int GetClipboardFormatName(uint format, [Out] StringBuilder lpszFormatName, int cchMaxCount);
+        public static extern int GetClipboardFormatName(
+            uint format,
+            [Out] StringBuilder lpszFormatName,
+            int cchMaxCount);
 
         [DllImport("shell32.dll", CharSet = CharSet.Auto)]
-        public static extern int DragQueryFile(IntPtr hDrop, uint iFile, StringBuilder lpszFile, int cch);
+        public static extern int DragQueryFile(
+            IntPtr hDrop,
+            uint iFile,
+            StringBuilder lpszFile,
+            int cch);
 
         [DllImport("shell32.dll")]
         public static extern void DragFinish(IntPtr hDrop);
@@ -99,17 +131,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
             return buffer;
         }
 
-        private static IntPtr GetClipboardDataPointer(uint format)
+        static IntPtr GetClipboardDataPointer(uint format)
         {
             return GetClipboardData(format);
         }
 
-        private static UIntPtr GetPointerDataLength(IntPtr dataPointer)
+        static UIntPtr GetPointerDataLength(IntPtr dataPointer)
         {
             return GeneralApi.GlobalSize(dataPointer);
         }
 
-        private static IntPtr GetLockedMemoryBlockPointer(IntPtr dataPointer)
+        static IntPtr GetLockedMemoryBlockPointer(IntPtr dataPointer)
         {
             return GeneralApi.GlobalLock(dataPointer);
         }

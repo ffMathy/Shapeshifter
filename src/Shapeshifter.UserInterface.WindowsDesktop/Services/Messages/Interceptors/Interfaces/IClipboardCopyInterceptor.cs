@@ -1,10 +1,12 @@
-﻿using System;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces
 {
-    public interface IClipboardCopyInterceptor : IWindowMessageInterceptor
+    using System;
+
+    using Infrastructure.Events;
+
+    using Messages.Interfaces;
+
+    public interface IClipboardCopyInterceptor: IWindowMessageInterceptor
     {
         event EventHandler<DataCopiedEventArgument> DataCopied;
 

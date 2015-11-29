@@ -1,14 +1,19 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    using WindowsDesktop.Services.Images.Interfaces;
+
+    using Interfaces;
+
     [ExcludeFromCodeCoverage]
-    internal class DesignerImageConverterService : IDesignerImageConverterService, IDesignerService
+    class DesignerImageConverterService
+        : IDesignerImageConverterService,
+          IDesignerService
     {
-        private readonly IImageFileInterpreter imageFileInterpreter;
-        private readonly IImagePersistenceService imagePersistenceService;
+        readonly IImageFileInterpreter imageFileInterpreter;
+
+        readonly IImagePersistenceService imagePersistenceService;
 
         public DesignerImageConverterService(
             IImagePersistenceService imagePersistenceService,

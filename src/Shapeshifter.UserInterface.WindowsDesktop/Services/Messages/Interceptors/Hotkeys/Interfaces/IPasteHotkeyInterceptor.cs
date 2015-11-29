@@ -1,6 +1,5 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.
+    Interfaces
 {
-    public interface IPasteHotkeyInterceptor : IHotkeyInterceptor
-    {
-    }
+    public interface IPasteHotkeyInterceptor: IHotkeyInterceptor { }
 }

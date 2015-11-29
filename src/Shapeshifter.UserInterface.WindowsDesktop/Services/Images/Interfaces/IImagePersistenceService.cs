@@ -1,9 +1,10 @@
-﻿using System.Windows.Media.Imaging;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces
 {
-    public interface IImagePersistenceService : ISingleInstance
+    using System.Windows.Media.Imaging;
+
+    using Infrastructure.Dependencies.Interfaces;
+
+    public interface IImagePersistenceService: ISingleInstance
     {
         byte[] ConvertBitmapSourceToByteArray(BitmapSource input);
 

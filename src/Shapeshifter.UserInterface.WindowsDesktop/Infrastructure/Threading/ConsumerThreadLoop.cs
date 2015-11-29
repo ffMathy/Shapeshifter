@@ -1,19 +1,21 @@
-﻿using System;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Threading;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
-    internal class ConsumerThreadLoop : IConsumerThreadLoop
-    {
-        private readonly IThreadLoop internalLoop;
-        private readonly ILogger logger;
+    using System;
+    using System.Diagnostics;
+    using System.Threading;
+    using System.Threading.Tasks;
 
-        private int countAvailable;
+    using Interfaces;
+
+    using Logging.Interfaces;
+
+    class ConsumerThreadLoop: IConsumerThreadLoop
+    {
+        readonly IThreadLoop internalLoop;
+
+        readonly ILogger logger;
+
+        int countAvailable;
 
         public ConsumerThreadLoop(
             IThreadLoop internalLoop,
@@ -47,14 +49,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
                 }
             }
         }
-        
-        private void SpawnThread(Func<Task> action, CancellationToken token)
+
+        void SpawnThread(Func<Task> action, CancellationToken token)
         {
             logger.Information("Spawning consumption thread.");
             internalLoop.Start(async () => await Tick(action, token), token);
         }
-        
-        private async Task Tick(Func<Task> action, CancellationToken token)
+
+        async Task Tick(Func<Task> action, CancellationToken token)
         {
             lock (this)
             {
@@ -72,13 +74,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
             await action();
         }
 
-        private bool ShouldAbort(CancellationToken token)
+        bool ShouldAbort(CancellationToken token)
         {
             Debug.Assert(countAvailable >= 0, "countAvailable >= 0");
             return token.IsCancellationRequested || countAvailable == 0;
         }
 
-        private void DecrementAvailableWorkCount()
+        void DecrementAvailableWorkCount()
         {
             Interlocked.Decrement(ref countAvailable);
             logger.Information($"Consumer count decremented to {countAvailable}.");

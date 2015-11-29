@@ -1,17 +1,21 @@
-﻿using System;
-using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
-
-namespace Shapeshifter.Tests.Factories
+﻿namespace Shapeshifter.Tests.Factories
 {
+    using System;
+
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using NSubstitute;
+
+    using UserInterface.WindowsDesktop.Api;
+    using UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
+    using UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
+    using UserInterface.WindowsDesktop.Data.Interfaces;
+    using UserInterface.WindowsDesktop.Factories.Interfaces;
+
     [TestClass]
-    public class FileClipboardDataControlFactoryTest : TestBase
+    public class FileClipboardDataControlFactoryTest: TestBase
     {
         [TestMethod]
         public void CanBuildDataReturnsTrueForSingleFileFormats()
@@ -37,12 +41,18 @@ namespace Shapeshifter.Tests.Factories
             var fakeSingleFileData = Substitute.For<IClipboardFileData>();
             var fakeControl = Substitute.For<IClipboardFileDataControl>();
 
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IClipboardControlFactory<IClipboardFileData, IClipboardFileDataControl>>()
-                    .CreateControl(fakeSingleFileData)
-                    .Returns(fakeControl);
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c
+                                                    .RegisterFake
+                                                    <
+                                                        IClipboardControlFactory
+                                                            <IClipboardFileData,
+                                                                IClipboardFileDataControl>>()
+                                                    .CreateControl(fakeSingleFileData)
+                                                    .Returns(fakeControl);
+                                            });
 
             var factory = container.Resolve<IFileClipboardDataControlFactory>();
             var control = factory.BuildControl(fakeSingleFileData);
@@ -56,14 +66,19 @@ namespace Shapeshifter.Tests.Factories
             var fakeSingleFileData = Substitute.For<IClipboardFileCollectionData>();
             var fakeControl = Substitute.For<IClipboardFileCollectionDataControl>();
 
-            var container = CreateContainer(c =>
-            {
-                c
-                    .RegisterFake
-                    <IClipboardControlFactory<IClipboardFileCollectionData, IClipboardFileCollectionDataControl>>()
-                    .CreateControl(fakeSingleFileData)
-                    .Returns(fakeControl);
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c
+                                                    .RegisterFake
+                                                    <
+                                                        IClipboardControlFactory
+                                                            <IClipboardFileCollectionData,
+                                                                IClipboardFileCollectionDataControl>
+                                                        >()
+                                                    .CreateControl(fakeSingleFileData)
+                                                    .Returns(fakeControl);
+                                            });
 
             var factory = container.Resolve<IFileClipboardDataControlFactory>();
             var control = factory.BuildControl(fakeSingleFileData);

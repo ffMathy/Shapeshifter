@@ -1,17 +1,24 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
-using static Shapeshifter.UserInterface.WindowsDesktop.Api.KeyboardApi;
+﻿using static Shapeshifter.UserInterface.WindowsDesktop.Api.KeyboardApi;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {
-    internal class ClipboardPasteService : IClipboardPasteService
+    using System.Diagnostics.CodeAnalysis;
+
+    using Windows.Interfaces;
+
+    using Infrastructure.Logging.Interfaces;
+
+    using Interfaces;
+
+    using Messages.Interceptors.Hotkeys.Interfaces;
+
+    class ClipboardPasteService: IClipboardPasteService
     {
-        private readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
-        private readonly ILogger logger;
-        private readonly IMainWindowHandleContainer handleContainer;
+        readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
+
+        readonly ILogger logger;
+
+        readonly IMainWindowHandleContainer handleContainer;
 
         public ClipboardPasteService(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
@@ -34,19 +41,19 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
         }
 
         [ExcludeFromCodeCoverage]
-        private void EnablePasteHotkeyInterceptor()
+        void EnablePasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.Install(handleContainer.Handle);
         }
 
         [ExcludeFromCodeCoverage]
-        private void DisablePasteHotkeyInterceptor()
+        void DisablePasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.Uninstall();
         }
 
         [ExcludeFromCodeCoverage]
-        private static void SendPasteCombination()
+        static void SendPasteCombination()
         {
             var inputs = new[]
             {
@@ -59,7 +66,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
         }
 
         [ExcludeFromCodeCoverage]
-        private static INPUT GenerateKeystoke(VirtualKeyShort key, KEYEVENTF flags = 0)
+        static INPUT GenerateKeystoke(VirtualKeyShort key, KEYEVENTF flags = 0)
         {
             return new INPUT
             {

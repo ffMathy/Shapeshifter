@@ -1,24 +1,29 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using Autofac;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection
 {
-    internal class ClipboardFileCollectionDataViewModel : ClipboardDataViewModel<IClipboardFileCollectionData>,
-        IClipboardFileCollectionDataViewModel
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Linq;
+
+    using Autofac;
+
+    using Data.Interfaces;
+
+    using Designer.Facades;
+    using Designer.Helpers;
+
+    using Infrastructure.Environment;
+    using Infrastructure.Environment.Interfaces;
+
+    using Interfaces;
+
+    class ClipboardFileCollectionDataViewModel
+        : ClipboardDataViewModel<IClipboardFileCollectionData>,
+          IClipboardFileCollectionDataViewModel
     {
         [ExcludeFromCodeCoverage]
-        public ClipboardFileCollectionDataViewModel() : this(new EnvironmentInformation())
-        {
-        }
+        public ClipboardFileCollectionDataViewModel()
+            : this(new EnvironmentInformation()) { }
 
         public ClipboardFileCollectionDataViewModel(
             IEnvironmentInformation environmentInformation)
@@ -30,7 +35,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
         }
 
         [ExcludeFromCodeCoverage]
-        private void PrepareDesignerMode()
+        void PrepareDesignerMode()
         {
             var container = DesignTimeContainerHelper.CreateDesignTimeContainer();
             Data = container.Resolve<DesignerClipboardFileCollectionDataFacade>();

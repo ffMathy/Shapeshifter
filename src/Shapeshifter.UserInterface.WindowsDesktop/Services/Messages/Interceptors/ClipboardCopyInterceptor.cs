@@ -1,25 +1,29 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using System.Threading;
-using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.InteropServices;
+    using System.Threading;
+
+    using Api;
+
+    using Infrastructure.Events;
+    using Infrastructure.Logging.Interfaces;
+
+    using Interfaces;
+
     [ExcludeFromCodeCoverage]
-    internal class ClipboardCopyInterceptor : IClipboardCopyInterceptor
+    class ClipboardCopyInterceptor: IClipboardCopyInterceptor
     {
         public event EventHandler<DataCopiedEventArgument> DataCopied;
 
-        private uint lastClipboardItemIdentifier;
-        private bool shouldSkipNext;
+        uint lastClipboardItemIdentifier;
 
-        private IntPtr mainWindowHandle;
+        bool shouldSkipNext;
 
-        private readonly ILogger logger;
+        IntPtr mainWindowHandle;
+
+        readonly ILogger logger;
 
         public ClipboardCopyInterceptor(
             ILogger logger)
@@ -27,22 +31,30 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
             this.logger = logger;
         }
 
-        private void HandleClipboardUpdateWindowMessage()
+        void HandleClipboardUpdateWindowMessage()
         {
             var clipboardItemIdentifier = ClipboardApi.GetClipboardSequenceNumber();
 
-            logger.Information($"Clipboard update message received with sequence #{clipboardItemIdentifier}.", 1);
+            logger.Information(
+                               $"Clipboard update message received with sequence #{clipboardItemIdentifier}.",
+                               1);
 
-            if (clipboardItemIdentifier == lastClipboardItemIdentifier) return;
+            if (clipboardItemIdentifier == lastClipboardItemIdentifier)
+            {
+                return;
+            }
 
             lastClipboardItemIdentifier = clipboardItemIdentifier;
 
             TriggerDataCopiedEvent();
         }
 
-        private void TriggerDataCopiedEvent()
+        void TriggerDataCopiedEvent()
         {
-            if (DataCopied == null) return;
+            if (DataCopied == null)
+            {
+                return;
+            }
 
             var thread = new Thread(() => DataCopied(this, new DataCopiedEventArgument()))
             {
@@ -60,7 +72,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
             }
         }
 
-        private static Exception GenerateInstallFailureException()
+        static Exception GenerateInstallFailureException()
         {
             var errorCode = Marshal.GetLastWin32Error();
 
@@ -76,13 +88,17 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
         {
             if (!ClipboardApi.RemoveClipboardFormatListener(mainWindowHandle))
             {
-                throw new InvalidOperationException("Could not uninstall a clipboard hook for the main window.");
+                throw new InvalidOperationException(
+                    "Could not uninstall a clipboard hook for the main window.");
             }
         }
 
         public void ReceiveMessageEvent(WindowMessageReceivedArgument eventArgument)
         {
-            if (eventArgument.Message != Message.WM_CLIPBOARDUPDATE) return;
+            if (eventArgument.Message != Message.WM_CLIPBOARDUPDATE)
+            {
+                return;
+            }
 
             if (shouldSkipNext)
             {

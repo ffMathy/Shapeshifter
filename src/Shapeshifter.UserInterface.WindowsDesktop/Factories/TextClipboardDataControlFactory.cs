@@ -1,24 +1,31 @@
-﻿using System;
-using System.Text;
-using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
-    internal class TextClipboardDataControlFactory : ITextClipboardDataControlFactory
-    {
-        private readonly IDataSourceService dataSourceService;
+    using System;
+    using System.Text;
 
-        private readonly IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl> textControlFactory;
+    using Api;
+
+    using Controls.Clipboard.Factories.Interfaces;
+    using Controls.Clipboard.Interfaces;
+
+    using Data;
+    using Data.Interfaces;
+
+    using Interfaces;
+
+    using Services.Interfaces;
+
+    class TextClipboardDataControlFactory: ITextClipboardDataControlFactory
+    {
+        readonly IDataSourceService dataSourceService;
+
+        readonly IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl>
+            textControlFactory;
 
         public TextClipboardDataControlFactory(
             IDataSourceService dataSourceService,
-            IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl> textControlFactory)
+            IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl>
+                textControlFactory)
         {
             this.dataSourceService = dataSourceService;
             this.textControlFactory = textControlFactory;
@@ -33,7 +40,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
         {
             if (!CanBuildData(format))
             {
-                throw new ArgumentException("Can't construct data from this format.", nameof(format));
+                throw new ArgumentException(
+                    "Can't construct data from this format.",
+                    nameof(format));
             }
 
             var text = GetProcessedTextFromRawData(format, data);
@@ -45,7 +54,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             };
         }
 
-        private static string GetProcessedTextFromRawData(uint format, byte[] data)
+        static string GetProcessedTextFromRawData(uint format, byte[] data)
         {
             var text = GetTextFromRawData(format, data);
 
@@ -57,7 +66,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             return text;
         }
 
-        private static string GetTextFromRawData(uint format, byte[] data)
+        static string GetTextFromRawData(uint format, byte[] data)
         {
             switch (format)
             {

@@ -1,17 +1,22 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
 {
-    internal class ClipboardTextDataControlFactory :
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+
+    using Clipboard.Interfaces;
+
+    using Data.Interfaces;
+
+    using Infrastructure.Environment.Interfaces;
+
+    using Interfaces;
+
+    using ViewModels;
+
+    class ClipboardTextDataControlFactory:
         IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl>
     {
-        private readonly IEnvironmentInformation environmentInformation;
+        readonly IEnvironmentInformation environmentInformation;
 
         public ClipboardTextDataControlFactory(
             IEnvironmentInformation environmentInformation)
@@ -23,14 +28,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
         {
             if (data == null)
             {
-                throw new ArgumentException("Data must be set when constructing a clipboard control.", nameof(data));
+                throw new ArgumentException(
+                    "Data must be set when constructing a clipboard control.",
+                    nameof(data));
             }
 
             return CreateClipboardTextDataControl(data);
         }
 
         [ExcludeFromCodeCoverage]
-        private IClipboardTextDataControl CreateClipboardTextDataControl(IClipboardTextData data)
+        IClipboardTextDataControl CreateClipboardTextDataControl(IClipboardTextData data)
         {
             return new ClipboardTextDataControl
             {

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows.Interop;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces
 {
+    using System;
+    using System.Windows.Interop;
+
     public interface IWindow
     {
         event EventHandler SourceInitialized;

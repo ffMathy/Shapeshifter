@@ -1,8 +1,8 @@
-﻿using System;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events
 {
-    public class HotkeyFiredArgument : EventArgs
+    using System;
+
+    public class HotkeyFiredArgument: EventArgs
     {
         public HotkeyFiredArgument(int keyCode, bool isControlDown)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments.Interfaces
 {
-    internal interface IArgumentProcessor
+    interface IArgumentProcessor
     {
         bool CanProcess(string[] arguments);
 

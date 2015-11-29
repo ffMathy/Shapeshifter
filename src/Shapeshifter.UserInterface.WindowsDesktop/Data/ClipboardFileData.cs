@@ -1,9 +1,10 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Data
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Data
 {
-    public class ClipboardFileData : IClipboardFileData
+    using Interfaces;
+
+    using Services.Interfaces;
+
+    public class ClipboardFileData: IClipboardFileData
     {
         public ClipboardFileData(IDataSourceService sourceFactory)
         {
@@ -11,7 +12,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Data
         }
 
         public string FileName { get; set; }
+
         public string FullPath { get; set; }
+
         public byte[] FileIcon { get; set; }
 
         public IDataSource Source { get; }

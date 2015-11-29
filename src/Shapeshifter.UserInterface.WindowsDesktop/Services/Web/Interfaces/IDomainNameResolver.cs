@@ -1,10 +1,11 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces
 {
-    public interface IDomainNameResolver : ISingleInstance
+    using System.Net;
+    using System.Threading.Tasks;
+
+    using Infrastructure.Dependencies.Interfaces;
+
+    public interface IDomainNameResolver: ISingleInstance
     {
         Task<bool> IsValidDomainAsync(string domain);
 

@@ -1,12 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
-    class PinClipboardDataAction : IAction
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Data.Interfaces;
+
+    using Interfaces;
+
+    class PinClipboardDataAction: IAction
     {
         public string Title => "Pin to clipboard";
 
@@ -22,10 +23,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
         public async Task PerformAsync(IClipboardDataPackage package)
         {
             foreach (var item in package.Contents
-                .Where(x => x.RawData != null))
-            {
-                
-            }
+                                        .Where(x => x.RawData != null)) { }
         }
     }
 }

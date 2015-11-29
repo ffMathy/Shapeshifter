@@ -1,24 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
 {
-    internal class LinkParser : ILinkParser
-    {
-        private static readonly Regex linkValidationExpression;
-        private static readonly Regex whitespaceExpression;
+    using System;
+    using System.Collections.Generic;
+    using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
 
-        private readonly IAsyncFilter asyncFilter;
-        private readonly IDomainNameResolver domainNameResolver;
-        private readonly IFileTypeInterpreter fileTypeInterpreter;
-        private readonly IPerformanceHandleFactory performanceHandleFactory;
+    using Files;
+    using Files.Interfaces;
+
+    using Handles.Factories.Interfaces;
+
+    using Infrastructure.Threading.Interfaces;
+
+    using Interfaces;
+
+    class LinkParser: ILinkParser
+    {
+        static readonly Regex linkValidationExpression;
+
+        static readonly Regex whitespaceExpression;
+
+        readonly IAsyncFilter asyncFilter;
+
+        readonly IDomainNameResolver domainNameResolver;
+
+        readonly IFileTypeInterpreter fileTypeInterpreter;
+
+        readonly IPerformanceHandleFactory performanceHandleFactory;
 
         static LinkParser()
         {
@@ -26,7 +34,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
                 new Regex(
                     @"^(?:(?:https?|ftp):\/\/)?((?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00A1-\uFFFF0-9]+-?)*[a-z\u00A1-\uFFFF0-9]+)(?:\.(?:[a-z\u00A1-\uFFFF0-9]+-?)*[a-z\u00A1-\uFFFF0-9]+)*(?:\.(?:[a-z\u00A1-\uFFFF]{2,})))(?::\d{2,5})?)(?:\/?[^\s]*)?$",
                     RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline |
-                    RegexOptions.CultureInvariant, TimeSpan.FromMilliseconds(25));
+                    RegexOptions.CultureInvariant,
+                    TimeSpan.FromMilliseconds(25));
             whitespaceExpression = new Regex(@"\s", RegexOptions.Compiled);
         }
 
@@ -44,19 +53,20 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
 
         public async Task<IReadOnlyCollection<string>> ExtractLinksFromTextAsync(string text)
         {
-            return await Task.Run(async () =>
-            {
-                var words = GetWords(text);
-                return await asyncFilter.FilterAsync(words, IsValidLinkAsync);
-            });
+            return await Task.Run(
+                                  async () =>
+                                  {
+                                      var words = GetWords(text);
+                                      return await asyncFilter.FilterAsync(words, IsValidLinkAsync);
+                                  });
         }
 
-        private static string[] GetWords(string text)
+        static string[] GetWords(string text)
         {
             return whitespaceExpression.Split(text);
         }
 
-        private static IEnumerable<string> ExtractSuspiciousWords(string[] words)
+        static IEnumerable<string> ExtractSuspiciousWords(string[] words)
         {
             foreach (var word in words)
             {
@@ -67,7 +77,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
             }
         }
 
-        private static IEnumerable<string> ExtractNonSuspiciousWords(string[] words)
+        static IEnumerable<string> ExtractNonSuspiciousWords(string[] words)
         {
             foreach (var word in words)
             {
@@ -78,7 +88,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
             }
         }
 
-        private static bool IsSuspiciousWord(string word)
+        static bool IsSuspiciousWord(string word)
         {
             return
                 word.StartsWith("www.", StringComparison.OrdinalIgnoreCase) ||
@@ -115,21 +125,28 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
         public async Task<bool> HasLinkAsync(string text)
         {
             using (performanceHandleFactory.StartMeasuringPerformance())
-            {
-                return await Task.Run(async () =>
-                {
-                    var words = GetWords(text);
+                return await Task.Run(
+                                      async () =>
+                                      {
+                                          var words = GetWords(text);
 
-                    var suspiciousWords = ExtractSuspiciousWords(words);
-                    if (await asyncFilter.HasMatchAsync(suspiciousWords, IsValidLinkAsync))
-                    {
-                        return true;
-                    }
+                                          var suspiciousWords = ExtractSuspiciousWords(words);
+                                          if (
+                                              await
+                                              asyncFilter.HasMatchAsync(
+                                                                        suspiciousWords,
+                                                                        IsValidLinkAsync))
+                                          {
+                                              return true;
+                                          }
 
-                    var nonSuspiciousWords = ExtractNonSuspiciousWords(words);
-                    return await asyncFilter.HasMatchAsync(nonSuspiciousWords, IsValidLinkAsync);
-                });
-            }
+                                          var nonSuspiciousWords = ExtractNonSuspiciousWords(words);
+                                          return
+                                              await
+                                              asyncFilter.HasMatchAsync(
+                                                                        nonSuspiciousWords,
+                                                                        IsValidLinkAsync);
+                                      });
         }
 
         public async Task<bool> HasLinkOfTypeAsync(string text, LinkType linkType)
@@ -138,19 +155,28 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
             {
                 Func<string, Task<bool>> validationFunction =
                     async word => IsLinkOfType(word, linkType) && await IsValidLinkAsync(word);
-                return await Task.Run(async () =>
-                {
-                    var words = GetWords(text);
+                return await Task.Run(
+                                      async () =>
+                                      {
+                                          var words = GetWords(text);
 
-                    var suspiciousWords = ExtractSuspiciousWords(words);
-                    if (await asyncFilter.HasMatchAsync(suspiciousWords, validationFunction))
-                    {
-                        return true;
-                    }
+                                          var suspiciousWords = ExtractSuspiciousWords(words);
+                                          if (
+                                              await
+                                              asyncFilter.HasMatchAsync(
+                                                                        suspiciousWords,
+                                                                        validationFunction))
+                                          {
+                                              return true;
+                                          }
 
-                    var nonSuspiciousWords = ExtractNonSuspiciousWords(words);
-                    return await asyncFilter.HasMatchAsync(nonSuspiciousWords, validationFunction);
-                });
+                                          var nonSuspiciousWords = ExtractNonSuspiciousWords(words);
+                                          return
+                                              await
+                                              asyncFilter.HasMatchAsync(
+                                                                        nonSuspiciousWords,
+                                                                        validationFunction);
+                                      });
             }
         }
 
@@ -165,7 +191,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
                 }
 
                 var domain = match.Groups[1].Value;
-                return linkValidationExpression.IsMatch(link) && await domainNameResolver.IsValidDomainAsync(domain);
+                return linkValidationExpression.IsMatch(link) &&
+                       await domainNameResolver.IsValidDomainAsync(domain);
             }
             catch (RegexMatchTimeoutException)
             {

@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+
+    using Interfaces;
+
     [ExcludeFromCodeCoverage]
-    internal class ProcessManager : IProcessManager, IDisposable
+    class ProcessManager
+        : IProcessManager,
+          IDisposable
     {
-        private readonly ICollection<Process> processes;
+        readonly ICollection<Process> processes;
 
         public ProcessManager()
         {
@@ -46,11 +49,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             var workingDirectory = Path.GetDirectoryName(fileName);
             Debug.Assert(workingDirectory != null, "workingDirectory != null");
 
-            var process = Process.Start(new ProcessStartInfo
-            {
-                FileName = fileName,
-                WorkingDirectory = workingDirectory
-            });
+            var process = Process.Start(
+                                        new ProcessStartInfo
+                                        {
+                                            FileName = fileName,
+                                            WorkingDirectory = workingDirectory
+                                        });
             processes.Add(process);
         }
     }

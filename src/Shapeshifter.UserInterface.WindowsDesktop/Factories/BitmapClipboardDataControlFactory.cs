@@ -1,20 +1,27 @@
-﻿using System;
-using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
-using Shapeshifter.UserInterface.WindowsDesktop.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 {
-    internal class BitmapClipboardDataControlFactory : IClipboardDataControlFactory
+    using System;
+
+    using Api;
+
+    using Controls.Clipboard;
+    using Controls.Clipboard.Interfaces;
+    using Controls.Clipboard.ViewModels;
+
+    using Data;
+    using Data.Interfaces;
+
+    using Infrastructure.Environment.Interfaces;
+
+    using Interfaces;
+
+    using Services.Interfaces;
+
+    class BitmapClipboardDataControlFactory: IClipboardDataControlFactory
     {
-        private readonly IDataSourceService dataSourceService;
-        private readonly IEnvironmentInformation environmentInformation;
+        readonly IDataSourceService dataSourceService;
+
+        readonly IEnvironmentInformation environmentInformation;
 
         public BitmapClipboardDataControlFactory(
             IDataSourceService dataSourceService,

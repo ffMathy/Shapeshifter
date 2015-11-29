@@ -1,13 +1,17 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Net;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
+    using System.Diagnostics.CodeAnalysis;
+    using System.Net;
+    using System.Threading.Tasks;
+
+    using WindowsDesktop.Services.Web.Interfaces;
+
+    using Interfaces;
+
     [ExcludeFromCodeCoverage]
-    internal class DesignerDomainNameResolver : IDomainNameResolver, IDesignerService
+    class DesignerDomainNameResolver
+        : IDomainNameResolver,
+          IDesignerService
     {
         public async Task<IPAddress[]> GetDomainIpAddressesAsync(string domain)
         {

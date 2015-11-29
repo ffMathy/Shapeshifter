@@ -1,12 +1,14 @@
-﻿using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
-
-namespace Shapeshifter.Tests.Controls.Clipboard.Unwrappers
+﻿namespace Shapeshifter.Tests.Controls.Clipboard.Unwrappers
 {
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using UserInterface.WindowsDesktop.Api;
+    using UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
+
     [TestClass]
-    public class GeneralUnwrapperTest : TestBase
+    public class GeneralUnwrapperTest: TestBase
     {
         [TestMethod]
         public void CantUnwrapDspBitmaps()

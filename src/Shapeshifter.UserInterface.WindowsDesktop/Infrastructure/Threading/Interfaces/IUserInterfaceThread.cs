@@ -1,8 +1,8 @@
-﻿using System;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces
 {
-    internal interface IUserInterfaceThread
+    using System;
+
+    interface IUserInterfaceThread
     {
         void Invoke(Action action);
     }

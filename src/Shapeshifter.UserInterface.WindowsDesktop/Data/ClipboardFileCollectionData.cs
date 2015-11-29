@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Data
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Data
 {
-    public class ClipboardFileCollectionData : IClipboardFileCollectionData
+    using System.Collections.Generic;
+
+    using Interfaces;
+
+    using Services.Interfaces;
+
+    public class ClipboardFileCollectionData: IClipboardFileCollectionData
     {
         public ClipboardFileCollectionData(IDataSourceService sourceFactory)
         {

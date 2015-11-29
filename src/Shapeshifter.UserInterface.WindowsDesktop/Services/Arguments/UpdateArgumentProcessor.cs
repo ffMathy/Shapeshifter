@@ -1,17 +1,20 @@
-﻿using System;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using WindowsProcess = System.Diagnostics.Process;
+﻿using WindowsProcess = System.Diagnostics.Process;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
 {
-    internal class UpdateArgumentProcessor : IArgumentProcessor
+    using System;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Linq;
+
+    using Interfaces;
+
+    using Services.Interfaces;
+
+    class UpdateArgumentProcessor: IArgumentProcessor
     {
-        private readonly IProcessManager processManager;
+        readonly IProcessManager processManager;
 
         public UpdateArgumentProcessor(
             IProcessManager processManager)
@@ -38,7 +41,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
         }
 
         [ExcludeFromCodeCoverage]
-        private void InstallNewVersion(string targetDirectory, string currentDirectory)
+        void InstallNewVersion(string targetDirectory, string currentDirectory)
         {
             foreach (var currentFile in Directory.GetFiles(currentDirectory))
             {
@@ -49,17 +52,19 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
         }
 
         [ExcludeFromCodeCoverage]
-        private void LaunchNewExecutable(string targetDirectory)
+        void LaunchNewExecutable(string targetDirectory)
         {
             using (var currentProcess = WindowsProcess.GetCurrentProcess())
             {
-                var executableFile = Path.Combine(targetDirectory, $"{currentProcess.ProcessName}.exe");
+                var executableFile = Path.Combine(
+                                                  targetDirectory,
+                                                  $"{currentProcess.ProcessName}.exe");
                 processManager.LaunchFile(executableFile, $"cleanup {Environment.CurrentDirectory}");
             }
         }
 
         [ExcludeFromCodeCoverage]
-        private static void HandleNewFile(string targetDirectory, string currentFile)
+        static void HandleNewFile(string targetDirectory, string currentFile)
         {
             var currentFileName = Path.GetFileName(currentFile);
             Debug.Assert(currentFileName != null, "currentFileName != null");
@@ -71,7 +76,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
         }
 
         [ExcludeFromCodeCoverage]
-        private static void DeleteFileIfExists(string targetFile)
+        static void DeleteFileIfExists(string targetFile)
         {
             if (File.Exists(targetFile))
             {

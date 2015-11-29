@@ -1,18 +1,20 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Threading.Tasks;
+
+    using Infrastructure.Caching.Interfaces;
+
+    using Interfaces;
+
     [ExcludeFromCodeCoverage]
-    internal class DomainNameResolver : IDomainNameResolver
+    class DomainNameResolver: IDomainNameResolver
     {
-        private readonly IKeyValueCache<string, IPAddress[]> domainResolveCache;
+        readonly IKeyValueCache<string, IPAddress[]> domainResolveCache;
 
         public DomainNameResolver(
             IKeyValueCache<string, IPAddress[]> domainResolveCache)
@@ -29,7 +31,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
 
             try
             {
-                return await domainResolveCache.ThunkifyAsync(NormalizeDomain(domain), Dns.GetHostAddressesAsync);
+                return
+                    await
+                    domainResolveCache.ThunkifyAsync(
+                                                     NormalizeDomain(domain),
+                                                     Dns.GetHostAddressesAsync);
             }
             catch (SocketException)
             {
@@ -37,7 +43,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
             }
         }
 
-        private static string NormalizeDomain(string domain)
+        static string NormalizeDomain(string domain)
         {
             return domain
                 .Trim()

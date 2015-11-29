@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces
 {
-    public interface IHandle : IDisposable
-    {
-    }
+    using System;
+
+    public interface IHandle: IDisposable { }
 }

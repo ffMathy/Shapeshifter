@@ -1,9 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace Shapeshifter.Tests
+﻿namespace Shapeshifter.Tests
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     [TestClass]
-    public class MainTest
-    {
-    }
+    public class MainTest { }
 }

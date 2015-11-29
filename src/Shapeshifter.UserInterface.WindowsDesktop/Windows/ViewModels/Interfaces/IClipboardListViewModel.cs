@@ -1,21 +1,27 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces
 {
-    public interface IClipboardListViewModel : INotifyPropertyChanged
+    using System;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+
+    using Actions.Interfaces;
+
+    using Data.Interfaces;
+
+    using Infrastructure.Events;
+
+    public interface IClipboardListViewModel: INotifyPropertyChanged
     {
         event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
+
         event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
 
         IClipboardDataControlPackage SelectedElement { get; set; }
+
         IAction SelectedAction { get; set; }
 
         ObservableCollection<IClipboardDataControlPackage> Elements { get; }
+
         ObservableCollection<IAction> Actions { get; }
     }
 }

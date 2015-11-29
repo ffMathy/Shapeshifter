@@ -1,23 +1,33 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Diagnostics.CodeAnalysis;
-using System.Windows.Media.Imaging;
-using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces;
-using WindowsClipboard = System.Windows.Clipboard;
+﻿using WindowsClipboard = System.Windows.Clipboard;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {
-    internal class ClipboardInjectionService : IClipboardInjectionService
+    using System;
+    using System.Collections.Specialized;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Windows.Media.Imaging;
+
+    using Api;
+
+    using Data.Interfaces;
+
+    using Handles.Factories.Interfaces;
+
+    using Infrastructure.Logging.Interfaces;
+
+    using Interfaces;
+
+    using Messages.Interceptors.Interfaces;
+
+    class ClipboardInjectionService: IClipboardInjectionService
     {
-        private readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
-        private readonly IClipboardHandleFactory clipboardHandleFactory;
-        private readonly IMemoryHandleFactory memoryHandleFactory;
-        private readonly ILogger logger;
+        readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
+
+        readonly IClipboardHandleFactory clipboardHandleFactory;
+
+        readonly IMemoryHandleFactory memoryHandleFactory;
+
+        readonly ILogger logger;
 
         public ClipboardInjectionService(
             IClipboardCopyInterceptor clipboardCopyInterceptor,
@@ -45,7 +55,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
         }
 
         [ExcludeFromCodeCoverage]
-        private void InjectPackageContents(IClipboardDataPackage package)
+        void InjectPackageContents(IClipboardDataPackage package)
         {
             foreach (var clipboardData in package.Contents)
             {
@@ -54,7 +64,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
         }
 
         [ExcludeFromCodeCoverage]
-        private void InjectClipboardData(IClipboardData clipboardData)
+        void InjectClipboardData(IClipboardData clipboardData)
         {
             using (var memoryHandle = memoryHandleFactory.AllocateInMemory(clipboardData.RawData))
             {
@@ -66,11 +76,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
                     throw new InvalidOperationException("Could not allocate memory.");
                 }
 
-                GeneralApi.CopyMemory(target, memoryHandle.Pointer, (uint) clipboardData.RawData.Length);
+                GeneralApi.CopyMemory(
+                                      target,
+                                      memoryHandle.Pointer,
+                                      (uint) clipboardData.RawData.Length);
 
                 GeneralApi.GlobalUnlock(target);
 
-                if (ClipboardApi.SetClipboardData(clipboardData.RawFormat, globalPointer) != IntPtr.Zero) return;
+                if (ClipboardApi.SetClipboardData(clipboardData.RawFormat, globalPointer) !=
+                    IntPtr.Zero)
+                {
+                    return;
+                }
 
                 GeneralApi.GlobalFree(globalPointer);
                 throw new Exception("Could not set clipboard data.");
@@ -78,13 +95,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
         }
 
         [ExcludeFromCodeCoverage]
-        private static IntPtr AllocateInMemory(IClipboardData clipboardData)
+        static IntPtr AllocateInMemory(IClipboardData clipboardData)
         {
             return GeneralApi.GlobalAlloc(
-                GeneralApi.GMEM_ZEROINIT | GeneralApi.GMEM_MOVABLE,
-                (UIntPtr) clipboardData.RawData.Length);
+                                          GeneralApi.GMEM_ZEROINIT | GeneralApi.GMEM_MOVABLE,
+                                          (UIntPtr) clipboardData.RawData.Length);
         }
-        
+
         [ExcludeFromCodeCoverage]
         public void InjectImage(BitmapSource image)
         {

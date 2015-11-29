@@ -1,12 +1,16 @@
-﻿using System;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces
 {
-    public interface IPasteCombinationDurationMediator : IHookService
+    using System;
+
+    using Infrastructure.Events;
+
+    using Services.Interfaces;
+
+    public interface IPasteCombinationDurationMediator: IHookService
     {
-        event EventHandler<PasteCombinationDurationPassedEventArgument> PasteCombinationDurationPassed;
+        event EventHandler<PasteCombinationDurationPassedEventArgument>
+            PasteCombinationDurationPassed;
+
         event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleased;
 
         int DurationInDeciseconds { get; }

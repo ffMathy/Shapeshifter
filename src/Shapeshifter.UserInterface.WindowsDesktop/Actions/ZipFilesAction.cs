@@ -1,22 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
-    internal class ZipFilesAction : IZipFilesAction
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.IO.Compression;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Data.Interfaces;
+
+    using Infrastructure.Threading.Interfaces;
+
+    using Interfaces;
+
+    using Services.Clipboard.Interfaces;
+    using Services.Files.Interfaces;
+
+    class ZipFilesAction: IZipFilesAction
     {
-        private readonly IAsyncFilter asyncFilter;
-        private readonly IFileManager fileManager;
-        private readonly IClipboardInjectionService clipboardInjectionService;
+        readonly IAsyncFilter asyncFilter;
+
+        readonly IFileManager fileManager;
+
+        readonly IClipboardInjectionService clipboardInjectionService;
 
         public ZipFilesAction(
             IAsyncFilter asyncFilter,
@@ -41,13 +47,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return supportedData.Any();
         }
 
-        private async Task<IReadOnlyCollection<IClipboardData>> GetSupportedData(IClipboardDataPackage package)
+        async Task<IReadOnlyCollection<IClipboardData>> GetSupportedData(
+            IClipboardDataPackage package)
         {
             var supportedData = await asyncFilter.FilterAsync(package.Contents, CanPerformAsync);
             return supportedData;
         }
 
-        private static async Task<bool> CanPerformAsync(
+        static async Task<bool> CanPerformAsync(
             IClipboardData data)
         {
             return
@@ -65,7 +72,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             clipboardInjectionService.InjectFiles(zipFilePath);
         }
 
-        private string ZipFileCollectionData(params IClipboardFileData[] fileDataItems)
+        string ZipFileCollectionData(params IClipboardFileData[] fileDataItems)
         {
             if (fileDataItems == null)
             {
@@ -74,7 +81,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
             if (fileDataItems.Length == 0)
             {
-                throw new ArgumentException("There must be at least one item to compress.", nameof(fileDataItems));
+                throw new ArgumentException(
+                    "There must be at least one item to compress.",
+                    nameof(fileDataItems));
             }
 
             var filePaths = fileDataItems
@@ -89,21 +98,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return zipFile;
         }
 
-        private static string FindCommonFolder(IReadOnlyCollection<string> paths)
+        static string FindCommonFolder(IReadOnlyCollection<string> paths)
         {
             var pathSimilarityIndex = GetPathSegmentsInCommonCount(paths);
 
             var firstPath = paths.First();
             var segments = GetPathSegments(firstPath);
 
-            var commonPath = Path.Combine(segments
-                    .Take(pathSimilarityIndex)
-                    .ToArray());
+            var commonPath = Path.Combine(
+                                          segments
+                                              .Take(pathSimilarityIndex)
+                                              .ToArray());
 
             return commonPath;
         }
 
-        private static int GetPathSegmentsInCommonCount(IReadOnlyCollection<string> paths)
+        static int GetPathSegmentsInCommonCount(IReadOnlyCollection<string> paths)
         {
             var commonIndex = 0;
             foreach (var originPath in paths)
@@ -133,12 +143,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return commonIndex;
         }
 
-        private static string[] GetPathSegments(string originPath)
+        static string[] GetPathSegments(string originPath)
         {
             return originPath.Split('\\', '/');
         }
 
-        private static void CopyFilesToTemporaryFolder(IEnumerable<IClipboardFileData> fileDataItems, string directory)
+        static void CopyFilesToTemporaryFolder(
+            IEnumerable<IClipboardFileData> fileDataItems,
+            string directory)
         {
             foreach (var fileData in fileDataItems)
             {
@@ -146,14 +158,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
-        private static void CopyFileToTemporaryFolder(string directory, IClipboardFileData fileData)
+        static void CopyFileToTemporaryFolder(string directory, IClipboardFileData fileData)
         {
             var destinationFilePath = Path.Combine(directory, fileData.FileName);
             DeleteFileIfExists(destinationFilePath);
             File.Copy(fileData.FullPath, destinationFilePath);
         }
 
-        private static void DeleteFileIfExists(string destinationFilePath)
+        static void DeleteFileIfExists(string destinationFilePath)
         {
             if (File.Exists(destinationFilePath))
             {
@@ -161,7 +173,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             }
         }
 
-        private string ZipDirectory(string directory)
+        string ZipDirectory(string directory)
         {
             var directoryName = Path.GetFileName(directory);
             var compressedFolderDirectory = fileManager.PrepareFolder($"Compressed folders");
@@ -173,7 +185,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return zipFile;
         }
 
-        private string ZipData(IClipboardData data)
+        string ZipData(IClipboardData data)
         {
             var clipboardFileData = data as IClipboardFileData;
             if (clipboardFileData != null)
@@ -184,9 +196,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             var clipboardFileCollectionData = data as IClipboardFileCollectionData;
             if (clipboardFileCollectionData != null)
             {
-                return ZipFileCollectionData(clipboardFileCollectionData
-                    .Files
-                    .ToArray());
+                return ZipFileCollectionData(
+                                             clipboardFileCollectionData
+                                                 .Files
+                                                 .ToArray());
             }
 
             throw new InvalidOperationException("Unknown data format.");

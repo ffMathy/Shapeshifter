@@ -1,16 +1,16 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-
-namespace Shapeshifter.Tests.Infrastructure.Caching
+﻿namespace Shapeshifter.Tests.Infrastructure.Caching
 {
+    using System;
+    using System.Threading.Tasks;
+
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces;
+
     [TestClass]
-    public class KeyValueCacheTest : TestBase
+    public class KeyValueCacheTest: TestBase
     {
         [TestMethod]
         public void GetForUnknownKeyInStringCacheReturnsNull()
@@ -55,11 +55,11 @@ namespace Shapeshifter.Tests.Infrastructure.Caching
         public void ThunkifyCachesFunctionArguments()
         {
             var container = CreateContainer();
-            
+
             var systemUnderTest = container.Resolve<IKeyValueCache<string, int>>();
 
             var value = 0;
-            var action = new Func<string, int>((input) => value += input.Length);
+            var action = new Func<string, int>(input => value += input.Length);
 
             var result1 = systemUnderTest.Thunkify("hello world", action);
             var result2 = systemUnderTest.Thunkify("hello world", action);
@@ -78,7 +78,8 @@ namespace Shapeshifter.Tests.Infrastructure.Caching
             var systemUnderTest = container.Resolve<IKeyValueCache<string, int>>();
 
             var value = 0;
-            var action = new Func<string, Task<int>>((input) => Task.FromResult(value += input.Length));
+            var action = new Func<string, Task<int>>(
+                input => Task.FromResult(value += input.Length));
 
             var result1 = await systemUnderTest.ThunkifyAsync("hello world", action);
             var result2 = await systemUnderTest.ThunkifyAsync("hello world", action);

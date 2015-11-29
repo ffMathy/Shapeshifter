@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Data
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Data
 {
-    public class ClipboardDataControlPackage : IClipboardDataControlPackage
+    using System.Collections.Generic;
+
+    using Controls.Clipboard.Interfaces;
+
+    using Interfaces;
+
+    public class ClipboardDataControlPackage: IClipboardDataControlPackage
     {
-        private readonly IList<IClipboardData> dataCollection;
+        readonly IList<IClipboardData> dataCollection;
 
         public ClipboardDataControlPackage()
         {

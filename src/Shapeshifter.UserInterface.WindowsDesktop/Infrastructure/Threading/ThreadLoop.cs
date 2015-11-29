@@ -1,16 +1,18 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Threading;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    using Interfaces;
+
+    using Logging.Interfaces;
+
     [ExcludeFromCodeCoverage]
-    internal class ThreadLoop : IThreadLoop
+    class ThreadLoop: IThreadLoop
     {
-        private readonly ILogger logger;
+        readonly ILogger logger;
 
         public ThreadLoop(ILogger logger)
         {
@@ -31,10 +33,11 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
                 IsRunning = true;
             }
 
-            RunAsync(action, token).ConfigureAwait(false);
+            RunAsync(action, token)
+                .ConfigureAwait(false);
         }
 
-        private async Task RunAsync(Func<Task> action, CancellationToken token)
+        async Task RunAsync(Func<Task> action, CancellationToken token)
         {
             while (!token.IsCancellationRequested && IsRunning)
             {

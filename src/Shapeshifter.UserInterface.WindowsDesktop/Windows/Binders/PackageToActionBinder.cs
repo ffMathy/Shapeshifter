@@ -1,22 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders
 {
-    internal class PackageToActionBinder : IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using System.Threading.Tasks;
+
+    using Actions.Interfaces;
+
+    using Data.Interfaces;
+
+    using Interfaces;
+
+    class PackageToActionBinder: IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>
     {
-        private readonly IDictionary<IClipboardDataControlPackage, ICollection<IAction>> dictionaryStates;
+        readonly IDictionary<IClipboardDataControlPackage, ICollection<IAction>> dictionaryStates;
 
-        private IClipboardDataControlPackage currentKey;
+        IClipboardDataControlPackage currentKey;
 
-        private ObservableCollection<IAction> boundDestinationCollection;
-        private Func<IClipboardDataControlPackage, Task<IEnumerable<IAction>>> currentMappingFunction;
+        ObservableCollection<IAction> boundDestinationCollection;
+
+        Func<IClipboardDataControlPackage, Task<IEnumerable<IAction>>> currentMappingFunction;
 
         public IAction Default { get; set; }
 
@@ -24,7 +28,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders
         {
             dictionaryStates = new Dictionary<IClipboardDataControlPackage, ICollection<IAction>>();
         }
-        
+
         public void Bind(
             ObservableCollection<IClipboardDataControlPackage> sourceCollection,
             ObservableCollection<IAction> destinationCollection,
@@ -48,9 +52,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders
             }
         }
 
-        private async void SourceCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        async void SourceCollection_CollectionChanged(
+            object sender,
+            NotifyCollectionChangedEventArgs e)
         {
-            if(e?.NewItems == null || e.NewItems.Count <= 0) return;
+            if (e?.NewItems == null || e.NewItems.Count <= 0)
+            {
+                return;
+            }
 
             foreach (IClipboardDataControlPackage item in e.NewItems)
             {
@@ -59,7 +68,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders
             }
         }
 
-        private async Task AddResultsToDictionary(IClipboardDataControlPackage item)
+        async Task AddResultsToDictionary(IClipboardDataControlPackage item)
         {
             var collection = dictionaryStates[item];
             var results = await currentMappingFunction(item);
@@ -73,7 +82,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders
             }
         }
 
-        private void PrepareDictionaryStateKey(IClipboardDataControlPackage item)
+        void PrepareDictionaryStateKey(IClipboardDataControlPackage item)
         {
             if (!dictionaryStates.ContainsKey(item))
             {

@@ -1,12 +1,13 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
 {
-    internal class CleanupArgumentProcessor : IArgumentProcessor
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Linq;
+
+    using Interfaces;
+
+    class CleanupArgumentProcessor: IArgumentProcessor
     {
         public bool Terminates
             => true;

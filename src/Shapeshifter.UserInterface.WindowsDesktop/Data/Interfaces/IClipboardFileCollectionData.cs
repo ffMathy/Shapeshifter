@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces
 {
-    public interface IClipboardFileCollectionData : IClipboardData
+    using System.Collections.Generic;
+
+    public interface IClipboardFileCollectionData: IClipboardData
     {
         IReadOnlyCollection<IClipboardFileData> Files { get; set; }
     }

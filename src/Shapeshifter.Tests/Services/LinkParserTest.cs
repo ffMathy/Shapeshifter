@@ -1,25 +1,30 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Web;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-
-namespace Shapeshifter.Tests.Services
+﻿namespace Shapeshifter.Tests.Services
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using NSubstitute;
+
+    using UserInterface.WindowsDesktop.Services.Web;
+    using UserInterface.WindowsDesktop.Services.Web.Interfaces;
+
     [TestClass]
-    public class LinkParserTest : TestBase
+    public class LinkParserTest: TestBase
     {
         [TestMethod]
         public async Task ExtractsAllLinksFromText()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IDomainNameResolver>()
-                    .IsValidDomainAsync(Arg.Any<string>())
-                    .Returns(Task.FromResult(true));
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IDomainNameResolver>()
+                                                 .IsValidDomainAsync(Arg.Any<string>())
+                                                 .Returns(Task.FromResult(true));
+                                            });
 
             var text =
                 "hello http://google.com world https://foo.com foobar blah.dk/hey/lol%20kitten.jpg lolz foobar.com www.baz.com test.net/news+list.txt?cat=pic&id=foo28";
@@ -49,12 +54,13 @@ namespace Shapeshifter.Tests.Services
         [TestMethod]
         public async Task HasLinkReturnsTrueWithoutProtocol()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IDomainNameResolver>()
-                    .IsValidDomainAsync("google.com")
-                    .Returns(Task.FromResult(true));
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IDomainNameResolver>()
+                                                 .IsValidDomainAsync("google.com")
+                                                 .Returns(Task.FromResult(true));
+                                            });
 
             var text = "hello google.com world";
 
@@ -65,12 +71,13 @@ namespace Shapeshifter.Tests.Services
         [TestMethod]
         public async Task LinkWithSubdomainIsValid()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IDomainNameResolver>()
-                    .IsValidDomainAsync("foo.subdomain.google.com")
-                    .Returns(Task.FromResult(true));
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IDomainNameResolver>()
+                                                 .IsValidDomainAsync("foo.subdomain.google.com")
+                                                 .Returns(Task.FromResult(true));
+                                            });
 
             var text = "http://foo.subdomain.google.com";
 
@@ -81,12 +88,13 @@ namespace Shapeshifter.Tests.Services
         [TestMethod]
         public async Task LinkWithHttpProtocolIsValid()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IDomainNameResolver>()
-                    .IsValidDomainAsync("google.com")
-                    .Returns(Task.FromResult(true));
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IDomainNameResolver>()
+                                                 .IsValidDomainAsync("google.com")
+                                                 .Returns(Task.FromResult(true));
+                                            });
 
             var text = "http://google.com";
 
@@ -97,12 +105,13 @@ namespace Shapeshifter.Tests.Services
         [TestMethod]
         public async Task LinkWithHttpsProtocolIsValid()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IDomainNameResolver>()
-                    .IsValidDomainAsync("google.com")
-                    .Returns(Task.FromResult(true));
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IDomainNameResolver>()
+                                                 .IsValidDomainAsync("google.com")
+                                                 .Returns(Task.FromResult(true));
+                                            });
 
             var text = "https://google.com";
 
@@ -113,12 +122,13 @@ namespace Shapeshifter.Tests.Services
         [TestMethod]
         public async Task LinkWithParametersIsValid()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IDomainNameResolver>()
-                    .IsValidDomainAsync("google.com")
-                    .Returns(Task.FromResult(true));
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IDomainNameResolver>()
+                                                 .IsValidDomainAsync("google.com")
+                                                 .Returns(Task.FromResult(true));
+                                            });
 
             var text = "http://google.com?hello=flyp&version=1";
 
@@ -129,12 +139,13 @@ namespace Shapeshifter.Tests.Services
         [TestMethod]
         public async Task LinkWithDirectoriesIsValid()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IDomainNameResolver>()
-                    .IsValidDomainAsync("google.com")
-                    .Returns(Task.FromResult(true));
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IDomainNameResolver>()
+                                                 .IsValidDomainAsync("google.com")
+                                                 .Returns(Task.FromResult(true));
+                                            });
 
             var text = "http://google.com/foo/bar";
 
@@ -169,12 +180,13 @@ namespace Shapeshifter.Tests.Services
         [TestMethod]
         public async Task SeveralLinksCanFindProperType()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IDomainNameResolver>()
-                    .IsValidDomainAsync(Arg.Any<string>())
-                    .Returns(Task.FromResult(true));
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IDomainNameResolver>()
+                                                 .IsValidDomainAsync(Arg.Any<string>())
+                                                 .Returns(Task.FromResult(true));
+                                            });
 
             var text = "http://google.com foo.com/img.jpg";
 
@@ -202,7 +214,9 @@ namespace Shapeshifter.Tests.Services
             var text = "https://google.com";
 
             var linkParser = container.Resolve<ILinkParser>();
-            Assert.IsTrue(linkParser.GetLinkType(text).HasFlag(LinkType.Https));
+            Assert.IsTrue(
+                          linkParser.GetLinkType(text)
+                                    .HasFlag(LinkType.Https));
         }
     }
 }

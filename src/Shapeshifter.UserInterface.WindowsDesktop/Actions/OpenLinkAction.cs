@@ -1,18 +1,24 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
-    internal class OpenLinkAction : IOpenLinkAction
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Data.Interfaces;
+
+    using Infrastructure.Threading.Interfaces;
+
+    using Interfaces;
+
+    using Services.Interfaces;
+    using Services.Web.Interfaces;
+
+    class OpenLinkAction: IOpenLinkAction
     {
-        private readonly ILinkParser linkParser;
-        private readonly IProcessManager processManager;
-        private readonly IAsyncFilter asyncFilter;
+        readonly ILinkParser linkParser;
+
+        readonly IProcessManager processManager;
+
+        readonly IAsyncFilter asyncFilter;
 
         public OpenLinkAction(
             ILinkParser linkParser,
@@ -33,26 +39,31 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
         {
-            return await GetFirstSupportedItem(package).ConfigureAwait(false) != null;
+            return await GetFirstSupportedItem(package)
+                             .ConfigureAwait(false) != null;
         }
 
-        private async Task<IClipboardData> GetFirstSupportedItem(IClipboardDataPackage package)
+        async Task<IClipboardData> GetFirstSupportedItem(IClipboardDataPackage package)
         {
-            var supportedItems = await asyncFilter.FilterAsync(package.Contents, CanPerformAsync).ConfigureAwait(false);
+            var supportedItems = await asyncFilter.FilterAsync(package.Contents, CanPerformAsync)
+                                                  .ConfigureAwait(false);
             return supportedItems.FirstOrDefault();
         }
 
-        private async Task<bool> CanPerformAsync(IClipboardData data)
+        async Task<bool> CanPerformAsync(IClipboardData data)
         {
             var textData = data as IClipboardTextData;
-            return textData != null && await linkParser.HasLinkAsync(textData.Text).ConfigureAwait(false);
+            return textData != null && await linkParser.HasLinkAsync(textData.Text)
+                                                       .ConfigureAwait(false);
         }
 
         public async Task PerformAsync(
             IClipboardDataPackage package)
         {
-            var textData = (IClipboardTextData) await GetFirstSupportedItem(package).ConfigureAwait(false);
-            var links = await linkParser.ExtractLinksFromTextAsync(textData.Text).ConfigureAwait(false);
+            var textData = (IClipboardTextData) await GetFirstSupportedItem(package)
+                                                          .ConfigureAwait(false);
+            var links = await linkParser.ExtractLinksFromTextAsync(textData.Text)
+                                        .ConfigureAwait(false);
             foreach (var link in links)
             {
                 processManager.LaunchCommand(link);

@@ -1,30 +1,39 @@
-﻿using System;
-using System.Linq;
-using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
-using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
-
-namespace Shapeshifter.Tests.Windows.ViewModels
+﻿namespace Shapeshifter.Tests.Windows.ViewModels
 {
+    using System;
+    using System.Linq;
+
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using NSubstitute;
+
+    using UserInterface.WindowsDesktop.Actions.Interfaces;
+    using UserInterface.WindowsDesktop.Api;
+    using UserInterface.WindowsDesktop.Data.Interfaces;
+    using UserInterface.WindowsDesktop.Infrastructure.Events;
+    using UserInterface.WindowsDesktop.Mediators.Interfaces;
+    using UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
+    using UserInterface.WindowsDesktop.Windows.Binders.Interfaces;
+    using UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
+
     [TestClass]
-    public class ClipboardListViewModelTest : TestBase
+    public class ClipboardListViewModelTest: TestBase
     {
         [TestMethod]
         public void SelectedElementChangedTriggersChangedEvent()
         {
             var container =
-                CreateContainer(c =>
-                    {
-                        c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-                    });
+                CreateContainer(
+                                c =>
+                                {
+                                    c
+                                        .RegisterFake
+                                        <
+                                            IAsyncListDictionaryBinder
+                                                <IClipboardDataControlPackage, IAction>>();
+                                });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
 
@@ -45,11 +54,17 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         [TestMethod]
         public void SelectedElementChangesToTheSecondWhenFirstIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IKeyInterceptor>();
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IKeyInterceptor>();
+                                                c
+                                                    .RegisterFake
+                                                    <
+                                                        IAsyncListDictionaryBinder
+                                                            <IClipboardDataControlPackage, IAction>>
+                                                    ();
+                                            });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -65,8 +80,13 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_DOWN, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_DOWN,
+                                                                                                 false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage2);
         }
@@ -74,11 +94,17 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         [TestMethod]
         public void SelectedElementChangesToTheThirdWhenSecondIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IKeyInterceptor>();
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IKeyInterceptor>();
+                                                c
+                                                    .RegisterFake
+                                                    <
+                                                        IAsyncListDictionaryBinder
+                                                            <IClipboardDataControlPackage, IAction>>
+                                                    ();
+                                            });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -94,8 +120,13 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_DOWN, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_DOWN,
+                                                                                                 false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage3);
         }
@@ -103,11 +134,17 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         [TestMethod]
         public void SelectedElementChangesToTheFirstWhenThirdIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IKeyInterceptor>();
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IKeyInterceptor>();
+                                                c
+                                                    .RegisterFake
+                                                    <
+                                                        IAsyncListDictionaryBinder
+                                                            <IClipboardDataControlPackage, IAction>>
+                                                    ();
+                                            });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -123,8 +160,13 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_DOWN, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_DOWN,
+                                                                                                 false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage1);
         }
@@ -132,11 +174,17 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         [TestMethod]
         public void SelectedElementChangesToTheThirdWhenFirstIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IKeyInterceptor>();
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IKeyInterceptor>();
+                                                c
+                                                    .RegisterFake
+                                                    <
+                                                        IAsyncListDictionaryBinder
+                                                            <IClipboardDataControlPackage, IAction>>
+                                                    ();
+                                            });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -152,8 +200,13 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_UP, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_UP,
+                                                                                                 false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage3);
         }
@@ -161,11 +214,17 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         [TestMethod]
         public void SelectedElementChangesToTheSecondWhenThirdIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IKeyInterceptor>();
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IKeyInterceptor>();
+                                                c
+                                                    .RegisterFake
+                                                    <
+                                                        IAsyncListDictionaryBinder
+                                                            <IClipboardDataControlPackage, IAction>>
+                                                    ();
+                                            });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -181,8 +240,13 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_UP, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_UP,
+                                                                                                 false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage2);
         }
@@ -190,11 +254,17 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         [TestMethod]
         public void SelectedElementChangesToTheFirstWhenSecondIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IKeyInterceptor>();
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IKeyInterceptor>();
+                                                c
+                                                    .RegisterFake
+                                                    <
+                                                        IAsyncListDictionaryBinder
+                                                            <IClipboardDataControlPackage, IAction>>
+                                                    ();
+                                            });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -210,8 +280,13 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_UP, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_UP,
+                                                                                                 false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage1);
         }
@@ -219,11 +294,17 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         [TestMethod]
         public void SelectedActionChangesToTheSecondWhenFirstIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IKeyInterceptor>();
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IKeyInterceptor>();
+                                                c
+                                                    .RegisterFake
+                                                    <
+                                                        IAsyncListDictionaryBinder
+                                                            <IClipboardDataControlPackage, IAction>>
+                                                    ();
+                                            });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -239,12 +320,22 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_LEFT, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_LEFT,
+                                                                                                 false));
 
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_DOWN, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_DOWN,
+                                                                                                 false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction2);
         }
@@ -252,11 +343,17 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         [TestMethod]
         public void SelectedActionChangesToTheThirdWhenSecondIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IKeyInterceptor>();
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IKeyInterceptor>();
+                                                c
+                                                    .RegisterFake
+                                                    <
+                                                        IAsyncListDictionaryBinder
+                                                            <IClipboardDataControlPackage, IAction>>
+                                                    ();
+                                            });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -272,12 +369,22 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_RIGHT, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_RIGHT,
+                                                                                                 false));
 
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_DOWN, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_DOWN,
+                                                                                                 false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction3);
         }
@@ -285,11 +392,17 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         [TestMethod]
         public void SelectedActionChangesToTheFirstWhenThirdIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IKeyInterceptor>();
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IKeyInterceptor>();
+                                                c
+                                                    .RegisterFake
+                                                    <
+                                                        IAsyncListDictionaryBinder
+                                                            <IClipboardDataControlPackage, IAction>>
+                                                    ();
+                                            });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -305,12 +418,22 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_LEFT, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_LEFT,
+                                                                                                 false));
 
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_DOWN, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_DOWN,
+                                                                                                 false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction1);
         }
@@ -318,11 +441,17 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         [TestMethod]
         public void SelectedActionChangesToTheThirdWhenFirstIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IKeyInterceptor>();
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IKeyInterceptor>();
+                                                c
+                                                    .RegisterFake
+                                                    <
+                                                        IAsyncListDictionaryBinder
+                                                            <IClipboardDataControlPackage, IAction>>
+                                                    ();
+                                            });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -338,12 +467,22 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_RIGHT, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_RIGHT,
+                                                                                                 false));
 
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_UP, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_UP,
+                                                                                                 false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction3);
         }
@@ -351,11 +490,17 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         [TestMethod]
         public void SelectedActionChangesToTheSecondWhenThirdIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IKeyInterceptor>();
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IKeyInterceptor>();
+                                                c
+                                                    .RegisterFake
+                                                    <
+                                                        IAsyncListDictionaryBinder
+                                                            <IClipboardDataControlPackage, IAction>>
+                                                    ();
+                                            });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -371,12 +516,22 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_LEFT, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_LEFT,
+                                                                                                 false));
 
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_UP, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_UP,
+                                                                                                 false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction2);
         }
@@ -384,11 +539,17 @@ namespace Shapeshifter.Tests.Windows.ViewModels
         [TestMethod]
         public void SelectedActionChangesToTheFirstWhenSecondIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IKeyInterceptor>();
-                c.RegisterFake<IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>>();
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IKeyInterceptor>();
+                                                c
+                                                    .RegisterFake
+                                                    <
+                                                        IAsyncListDictionaryBinder
+                                                            <IClipboardDataControlPackage, IAction>>
+                                                    ();
+                                            });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -404,12 +565,22 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_RIGHT, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_RIGHT,
+                                                                                                 false));
 
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object(), new HotkeyFiredArgument(
-                    KeyboardApi.VK_KEY_UP, false));
+                                                                                             new object
+                                                                                                 (),
+                                                                                             new HotkeyFiredArgument
+                                                                                                 (
+                                                                                                 KeyboardApi
+                                                                                                     .VK_KEY_UP,
+                                                                                                 false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction1);
         }
@@ -421,11 +592,18 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
-            var container = CreateContainer(c => { c.RegisterInstance(fakeUserInterfaceMediator); });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterInstance(fakeUserInterfaceMediator);
+                                            });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
-            fakeUserInterfaceMediator.ControlAdded += Raise.Event<EventHandler<ControlEventArgument>>(viewModel,
-                new ControlEventArgument(fakePackage));
+            fakeUserInterfaceMediator.ControlAdded +=
+                Raise.Event<EventHandler<ControlEventArgument>>(
+                                                                viewModel,
+                                                                new ControlEventArgument(
+                                                                    fakePackage));
 
             Assert.AreSame(fakePackage, viewModel.SelectedElement);
         }
@@ -437,11 +615,18 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
-            var container = CreateContainer(c => { c.RegisterInstance(fakeUserInterfaceMediator); });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterInstance(fakeUserInterfaceMediator);
+                                            });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
-            fakeUserInterfaceMediator.ControlAdded += Raise.Event<EventHandler<ControlEventArgument>>(viewModel,
-                new ControlEventArgument(fakePackage));
+            fakeUserInterfaceMediator.ControlAdded +=
+                Raise.Event<EventHandler<ControlEventArgument>>(
+                                                                viewModel,
+                                                                new ControlEventArgument(
+                                                                    fakePackage));
 
             Assert.AreSame(fakePackage, viewModel.Elements.Single());
         }
@@ -453,13 +638,20 @@ namespace Shapeshifter.Tests.Windows.ViewModels
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
-            var container = CreateContainer(c => { c.RegisterInstance(fakeUserInterfaceMediator); });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterInstance(fakeUserInterfaceMediator);
+                                            });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
             viewModel.Elements.Add(fakePackage);
 
-            fakeUserInterfaceMediator.ControlHighlighted += Raise.Event<EventHandler<ControlEventArgument>>(viewModel,
-                new ControlEventArgument(fakePackage));
+            fakeUserInterfaceMediator.ControlHighlighted +=
+                Raise.Event<EventHandler<ControlEventArgument>>(
+                                                                viewModel,
+                                                                new ControlEventArgument(
+                                                                    fakePackage));
 
             Assert.AreSame(fakePackage, viewModel.Elements.Single());
         }

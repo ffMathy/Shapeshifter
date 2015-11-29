@@ -1,13 +1,16 @@
-﻿using System.Threading.Tasks;
-using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-namespace Shapeshifter.Tests.Actions
+﻿namespace Shapeshifter.Tests.Actions
 {
+    using System.Threading.Tasks;
+
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using UserInterface.WindowsDesktop.Actions.Interfaces;
+    using UserInterface.WindowsDesktop.Data.Interfaces;
+
     [TestClass]
-    public class ZipFilesActionTest : ActionTestBase
+    public class ZipFilesActionTest: ActionTestBase
     {
         [TestMethod]
         public async Task CanPerformForFiles()

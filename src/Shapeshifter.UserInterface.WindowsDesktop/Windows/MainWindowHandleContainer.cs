@@ -1,9 +1,10 @@
-﻿using System;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
 {
-    internal class MainWindowHandleContainer : IMainWindowHandleContainer
+    using System;
+
+    using Interfaces;
+
+    class MainWindowHandleContainer: IMainWindowHandleContainer
     {
         public IntPtr Handle { get; set; }
     }

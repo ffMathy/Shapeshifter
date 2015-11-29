@@ -1,25 +1,30 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-
-namespace Shapeshifter.Tests.Infrastructure.Threading
+﻿namespace Shapeshifter.Tests.Infrastructure.Threading
 {
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using NSubstitute;
+
+    using UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+
     [TestClass]
-    public class ConsumerThreadLoopTest : TestBase
+    public class ConsumerThreadLoopTest: TestBase
     {
         [TestMethod]
         public void IsRunningWhenInnerLoopIsRunning()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IThreadLoop>()
-                    .IsRunning
-                    .Returns(true);
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IThreadLoop>()
+                                                 .IsRunning
+                                                 .Returns(true);
+                                            });
 
             var systemUnderTest = container.Resolve<IConsumerThreadLoop>();
             Assert.IsTrue(systemUnderTest.IsRunning);
@@ -28,12 +33,13 @@ namespace Shapeshifter.Tests.Infrastructure.Threading
         [TestMethod]
         public void IsNotRunningWhenInnerLoopIsNotRunning()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IThreadLoop>()
-                    .IsRunning
-                    .Returns(false);
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IThreadLoop>()
+                                                 .IsRunning
+                                                 .Returns(false);
+                                            });
 
             var systemUnderTest = container.Resolve<IConsumerThreadLoop>();
             Assert.IsFalse(systemUnderTest.IsRunning);
@@ -42,31 +48,35 @@ namespace Shapeshifter.Tests.Infrastructure.Threading
         [TestMethod]
         public void StopStopsInnerLoop()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IThreadLoop>();
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IThreadLoop>();
+                                            });
 
             var systemUnderTest = container.Resolve<IConsumerThreadLoop>();
             systemUnderTest.Stop();
 
             var fakeInnerLoop = container.Resolve<IThreadLoop>();
-            fakeInnerLoop.Received().Stop();
+            fakeInnerLoop.Received()
+                         .Stop();
         }
 
         [TestMethod]
         public void NotifyForTheFirstTimeSpawnsThread()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IThreadLoop>();
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c.RegisterFake<IThreadLoop>();
+                                            });
 
             var systemUnderTest = container.Resolve<IConsumerThreadLoop>();
             systemUnderTest.Notify(() => Task.CompletedTask, CancellationToken.None);
 
             var fakeInnerLoop = container.Resolve<IThreadLoop>();
-            fakeInnerLoop.Received().Start(Arg.Any<Func<Task>>(), CancellationToken.None);
+            fakeInnerLoop.Received()
+                         .Start(Arg.Any<Func<Task>>(), CancellationToken.None);
         }
 
         [TestMethod]
@@ -74,17 +84,22 @@ namespace Shapeshifter.Tests.Infrastructure.Threading
         {
             IThreadLoop fakeInnerLoop = null;
             Func<Task> innerLoopTick = null;
-            var container = CreateContainer(c =>
-            {
-                fakeInnerLoop = c.RegisterFake<IThreadLoop>();
-                fakeInnerLoop.Start(Arg.Do<Func<Task>>(x =>
-                {
-                    innerLoopTick = x;
-                }), CancellationToken.None);
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                fakeInnerLoop = c.RegisterFake<IThreadLoop>();
+                                                fakeInnerLoop.Start(
+                                                                    Arg.Do<Func<Task>>(
+                                                                                       x =>
+                                                                                       {
+                                                                                           innerLoopTick
+                                                                                               = x;
+                                                                                       }),
+                                                                    CancellationToken.None);
+                                            });
 
             var systemUnderTest = container.Resolve<IConsumerThreadLoop>();
-            
+
             systemUnderTest.Notify(() => Task.CompletedTask, CancellationToken.None);
             systemUnderTest.Notify(() => Task.CompletedTask, CancellationToken.None);
             systemUnderTest.Notify(() => Task.CompletedTask, CancellationToken.None);
@@ -93,11 +108,13 @@ namespace Shapeshifter.Tests.Infrastructure.Threading
             await innerLoopTick();
             await innerLoopTick();
 
-            fakeInnerLoop.DidNotReceive().Stop();
+            fakeInnerLoop.DidNotReceive()
+                         .Stop();
 
             await innerLoopTick();
 
-            fakeInnerLoop.Received(1).Stop();
+            fakeInnerLoop.Received(1)
+                         .Stop();
         }
     }
 }

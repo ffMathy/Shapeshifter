@@ -1,10 +1,8 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+
     [ExcludeFromCodeCoverage]
-    public class DataCopiedEventArgument : EventArgs
-    {
-    }
+    public class DataCopiedEventArgument: EventArgs { }
 }

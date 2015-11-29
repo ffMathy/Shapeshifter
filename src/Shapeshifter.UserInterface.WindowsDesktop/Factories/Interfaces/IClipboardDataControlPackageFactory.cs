@@ -1,7 +1,7 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces
 {
+    using Data.Interfaces;
+
     public interface IClipboardDataControlPackageFactory
     {
         IClipboardDataControlPackage Create();

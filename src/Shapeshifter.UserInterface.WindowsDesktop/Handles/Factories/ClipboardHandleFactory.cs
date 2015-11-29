@@ -1,12 +1,14 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories
 {
-    internal class ClipboardHandleFactory : IClipboardHandleFactory
+    using Windows.Interfaces;
+
+    using Handles.Interfaces;
+
+    using Interfaces;
+
+    class ClipboardHandleFactory: IClipboardHandleFactory
     {
-        private readonly IMainWindowHandleContainer mainWindow;
+        readonly IMainWindowHandleContainer mainWindow;
 
         public ClipboardHandleFactory(
             IMainWindowHandleContainer mainWindow)

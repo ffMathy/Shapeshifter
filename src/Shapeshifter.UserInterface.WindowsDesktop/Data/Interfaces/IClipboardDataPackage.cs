@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces
 {
+    using System.Collections.Generic;
+
     public interface IClipboardDataPackage
     {
         void AddData(IClipboardData data);
 
-        IEnumerable<IClipboardData> Contents { get; }
+        IReadOnlyList<IClipboardData> Contents { get; }
     }
 }

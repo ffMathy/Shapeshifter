@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces
 {
+    using System;
+    using System.Threading.Tasks;
+
     public interface IKeyValueCache<TKey, TValue>
     {
         TValue Get(TKey key);

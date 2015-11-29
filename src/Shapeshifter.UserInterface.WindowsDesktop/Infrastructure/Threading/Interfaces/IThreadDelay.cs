@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces
 {
+    using System.Threading.Tasks;
+
     public interface IThreadDelay
     {
         Task ExecuteAsync(int millisecondsDelay);

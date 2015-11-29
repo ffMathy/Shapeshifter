@@ -1,14 +1,17 @@
-﻿using System;
-using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-namespace Shapeshifter.Tests.Controls.Clipboard.Factories
+﻿namespace Shapeshifter.Tests.Controls.Clipboard.Factories
 {
+    using System;
+
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
+    using UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
+    using UserInterface.WindowsDesktop.Data.Interfaces;
+
     [TestClass]
-    public class ClipboardTextDataControlFactoryTest : TestBase
+    public class ClipboardTextDataControlFactoryTest: TestBase
     {
         [TestMethod]
         [ExpectedException(typeof (ArgumentException))]
@@ -16,7 +19,10 @@ namespace Shapeshifter.Tests.Controls.Clipboard.Factories
         {
             var container = CreateContainer();
 
-            var factory = container.Resolve<IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl>>();
+            var factory =
+                container
+                    .Resolve
+                    <IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl>>();
             factory.CreateControl(null);
         }
     }

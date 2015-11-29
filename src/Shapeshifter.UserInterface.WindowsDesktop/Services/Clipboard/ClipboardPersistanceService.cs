@@ -1,27 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {
-    class ClipboardPersistanceService : IClipboardPersistanceService
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Threading.Tasks;
+
+    using Data.Interfaces;
+
+    using Files.Interfaces;
+
+    using Interfaces;
+
+    class ClipboardPersistanceService: IClipboardPersistanceService
     {
-        public ClipboardPersistanceService(IFileManager fileManager)
+        readonly IFileManager fileManager;
+
+        public ClipboardPersistanceService(
+            IFileManager fileManager)
         {
-            
+            this.fileManager = fileManager;
         }
 
-        public Task PersistClipboardPackageAsync(IClipboardDataPackage package)
+        public async Task PersistClipboardPackageAsync(IClipboardDataPackage package)
         {
-            throw new NotImplementedException();
+            var unixTimestamp = DateTime.UtcNow.ToFileTime();
+            var packageFolder = fileManager.PrepareFolder(
+                                                          Path.Combine(
+                                                                       "Pinned",
+                                                                       unixTimestamp.ToString()));
+            for (var i = 1; i <= package.Contents.Count; i++)
+            {
+                var content = package.Contents[i];
+                var filePath = Path.Combine(packageFolder, i.ToString());
+                fileManager.WriteBytesToTemporaryFile(filePath, content.RawData);
+            }
         }
 
-        public Task<IEnumerable<IClipboardDataPackage>> GetPersistedPackagesAsync(IClipboardDataPackage package)
+        public Task<IEnumerable<IClipboardDataPackage>> GetPersistedPackagesAsync(
+            IClipboardDataPackage package)
         {
             throw new NotImplementedException();
         }

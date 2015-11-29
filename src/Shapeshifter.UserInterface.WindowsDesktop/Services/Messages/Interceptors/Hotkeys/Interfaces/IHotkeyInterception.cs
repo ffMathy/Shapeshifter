@@ -1,7 +1,8 @@
-﻿using System;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.
+    Interfaces
 {
+    using System;
+
     public interface IHotkeyInterception
     {
         void Start(IntPtr windowHandle);

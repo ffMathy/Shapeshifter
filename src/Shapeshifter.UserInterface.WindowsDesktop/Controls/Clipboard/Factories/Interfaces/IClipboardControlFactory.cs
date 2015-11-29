@@ -1,8 +1,9 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces
 {
+    using Clipboard.Interfaces;
+
+    using Data.Interfaces;
+
     public interface IClipboardControlFactory<in TData, out TControl>
         where TData : IClipboardData
         where TControl : IClipboardControl

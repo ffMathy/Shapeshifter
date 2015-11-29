@@ -1,9 +1,10 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Handles.Factories
 {
-    internal class MemoryHandleFactory : IMemoryHandleFactory
+    using Handles.Interfaces;
+
+    using Interfaces;
+
+    class MemoryHandleFactory: IMemoryHandleFactory
     {
         public IMemoryHandle AllocateInMemory(byte[] data)
         {

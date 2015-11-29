@@ -1,29 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
-using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 {
-    internal class ClipboardUserInterfaceMediator :
+    using System;
+    using System.Collections.Generic;
+
+    using Windows.Interfaces;
+
+    using Data.Interfaces;
+
+    using Factories.Interfaces;
+
+    using Infrastructure.Events;
+
+    using Interfaces;
+
+    using Services.Messages.Interceptors.Interfaces;
+
+    class ClipboardUserInterfaceMediator:
         IClipboardUserInterfaceMediator
     {
-        private readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
-        private readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
-        private readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
+        readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
 
-        private readonly IList<IClipboardDataControlPackage> clipboardPackages;
+        readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
+
+        readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
+
+        readonly IList<IClipboardDataControlPackage> clipboardPackages;
 
         public event EventHandler<ControlEventArgument> ControlAdded;
+
         public event EventHandler<ControlEventArgument> ControlRemoved;
+
         public event EventHandler<ControlEventArgument> ControlPinned;
+
         public event EventHandler<ControlEventArgument> ControlHighlighted;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
+
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
 
         public bool IsConnected
@@ -44,19 +56,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
             clipboardPackages = new List<IClipboardDataControlPackage>();
         }
 
-        private void ClipboardHook_DataCopied(
+        void ClipboardHook_DataCopied(
             object sender,
             DataCopiedEventArgument e)
         {
             var package = clipboardDataControlPackageFactory.Create();
-            if (package == null) return;
+            if (package == null)
+            {
+                return;
+            }
 
             clipboardPackages.Add(package);
 
             FireControlAddedEvent(package);
         }
 
-        private void FireControlAddedEvent(IClipboardDataControlPackage package)
+        void FireControlAddedEvent(IClipboardDataControlPackage package)
         {
             ControlAdded?.Invoke(this, new ControlEventArgument(package));
         }
@@ -65,14 +80,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         {
             if (!IsConnected)
             {
-                throw new InvalidOperationException("The user interface mediator is already disconnected.");
+                throw new InvalidOperationException(
+                    "The user interface mediator is already disconnected.");
             }
 
             UninstallClipboardHook();
             UninstallPasteHotkeyInterceptor();
         }
 
-        private void UninstallPasteHotkeyInterceptor()
+        void UninstallPasteHotkeyInterceptor()
         {
             pasteCombinationDurationMediator.Disconnect();
 
@@ -82,7 +98,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
                 PasteCombinationDurationMediator_PasteCombinationReleased;
         }
 
-        private void UninstallClipboardHook()
+        void UninstallClipboardHook()
         {
             clipboardCopyInterceptor.DataCopied -= ClipboardHook_DataCopied;
         }
@@ -91,14 +107,15 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         {
             if (IsConnected)
             {
-                throw new InvalidOperationException("The user interface mediator is already connected.");
+                throw new InvalidOperationException(
+                    "The user interface mediator is already connected.");
             }
 
             InstallClipboardHook();
             InstallPastecombinationDurationMediator(targetWindow);
         }
 
-        private void InstallPastecombinationDurationMediator(IWindow targetWindow)
+        void InstallPastecombinationDurationMediator(IWindow targetWindow)
         {
             pasteCombinationDurationMediator.PasteCombinationDurationPassed +=
                 PasteCombinationDurationMediator_PasteCombinationDurationPassed;
@@ -108,31 +125,31 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
             pasteCombinationDurationMediator.Connect(targetWindow);
         }
 
-        private void InstallClipboardHook()
+        void InstallClipboardHook()
         {
             clipboardCopyInterceptor.DataCopied += ClipboardHook_DataCopied;
         }
 
-        private void PasteCombinationDurationMediator_PasteCombinationDurationPassed(
+        void PasteCombinationDurationMediator_PasteCombinationDurationPassed(
             object sender,
             PasteCombinationDurationPassedEventArgument e)
         {
             RaiseUserInterfaceShownEvent();
         }
 
-        private void RaiseUserInterfaceShownEvent()
+        void RaiseUserInterfaceShownEvent()
         {
             UserInterfaceShown?.Invoke(this, new UserInterfaceShownEventArgument());
         }
 
-        private void PasteCombinationDurationMediator_PasteCombinationReleased(
+        void PasteCombinationDurationMediator_PasteCombinationReleased(
             object sender,
             PasteCombinationReleasedEventArgument e)
         {
             RaiseUserInterfaceHiddenEvent();
         }
 
-        private void RaiseUserInterfaceHiddenEvent()
+        void RaiseUserInterfaceHiddenEvent()
         {
             UserInterfaceHidden?.Invoke(this, new UserInterfaceHiddenEventArgument());
         }

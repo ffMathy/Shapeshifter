@@ -1,17 +1,20 @@
-﻿using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces;
-
-namespace Shapeshifter.Tests.Factories
+﻿namespace Shapeshifter.Tests.Factories
 {
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using NSubstitute;
+
+    using UserInterface.WindowsDesktop.Api;
+    using UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
+    using UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
+    using UserInterface.WindowsDesktop.Data;
+    using UserInterface.WindowsDesktop.Data.Interfaces;
+    using UserInterface.WindowsDesktop.Factories.Interfaces;
+
     [TestClass]
-    public class TextClipboardDataControlFactoryTest : TestBase
+    public class TextClipboardDataControlFactoryTest: TestBase
     {
         [TestMethod]
         public void CanBuildDataReturnsTrueForTextFormats()
@@ -66,12 +69,18 @@ namespace Shapeshifter.Tests.Factories
             var fakeTextDataControl = Substitute.For<IClipboardTextDataControl>();
             var fakeTextData = Substitute.For<IClipboardTextData>();
 
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl>>()
-                    .CreateControl(fakeTextData)
-                    .Returns(fakeTextDataControl);
-            });
+            var container = CreateContainer(
+                                            c =>
+                                            {
+                                                c
+                                                    .RegisterFake
+                                                    <
+                                                        IClipboardControlFactory
+                                                            <IClipboardTextData,
+                                                                IClipboardTextDataControl>>()
+                                                    .CreateControl(fakeTextData)
+                                                    .Returns(fakeTextDataControl);
+                                            });
 
             var factory = container.Resolve<ITextClipboardDataControlFactory>();
             var control = factory.BuildControl(fakeTextData);

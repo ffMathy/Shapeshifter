@@ -1,9 +1,10 @@
-﻿using System;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events
 {
-    public class ControlEventArgument : EventArgs
+    using System;
+
+    using Data.Interfaces;
+
+    public class ControlEventArgument: EventArgs
     {
         public ControlEventArgument(IClipboardDataControlPackage package)
         {

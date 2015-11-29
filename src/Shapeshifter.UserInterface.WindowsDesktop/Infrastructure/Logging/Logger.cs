@@ -1,15 +1,16 @@
-﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging
 {
-    [ExcludeFromCodeCoverage]
-    internal class Logger : ILogger
-    {
-        private const int MinimumImportanceFactor = 0;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
 
-        private static void Log(string text)
+    using Interfaces;
+
+    [ExcludeFromCodeCoverage]
+    class Logger: ILogger
+    {
+        const int MinimumImportanceFactor = 0;
+
+        static void Log(string text)
         {
             Debug.WriteLine($"{text}");
         }
@@ -25,7 +26,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging
         }
 
         public void Information(
-            string text, int importanceFactor = 0)
+            string text,
+            int importanceFactor = 0)
         {
             if (importanceFactor >= MinimumImportanceFactor)
             {

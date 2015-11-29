@@ -1,16 +1,19 @@
-﻿using System;
-using System.Windows.Markup;
-using Autofac;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Converters
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Converters
 {
-    public class InjectedConverterMarkupExtension : MarkupExtension
+    using System;
+    using System.Windows.Markup;
+
+    using Autofac;
+
+    using Controls.Clipboard.Designer.Helpers;
+
+    using Infrastructure.Dependencies;
+    using Infrastructure.Environment;
+    using Infrastructure.Environment.Interfaces;
+
+    public class InjectedConverterMarkupExtension: MarkupExtension
     {
-        private static ILifetimeScope container;
+        static ILifetimeScope container;
 
         public InjectedConverterMarkupExtension()
         {
@@ -22,7 +25,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Converters
             return container.Resolve(GetType());
         }
 
-        private static void CreateContainerIfNotExists()
+        static void CreateContainerIfNotExists()
         {
             if (container != null)
             {
@@ -38,7 +41,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Converters
             {
                 var builder = new ContainerBuilder();
                 builder.RegisterModule(new DefaultWiringModule());
-                builder.RegisterInstance(environmentInformation).As<IEnvironmentInformation>();
+                builder.RegisterInstance(environmentInformation)
+                       .As<IEnvironmentInformation>();
 
                 container = builder.Build();
             }

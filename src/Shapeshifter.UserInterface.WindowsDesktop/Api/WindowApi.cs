@@ -1,10 +1,10 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using System.Text;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Api
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.InteropServices;
+    using System.Text;
+
     [ExcludeFromCodeCoverage]
     public class WindowApi
     {
@@ -29,7 +29,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Api
         public static IntPtr GetClassLongPtr(IntPtr hWnd, int nIndex)
         {
             if (IntPtr.Size == 4)
+            {
                 return new IntPtr(GetClassLong32(hWnd, nIndex));
+            }
             return GetClassLong64(hWnd, nIndex);
         }
 
