@@ -50,12 +50,12 @@
         public async Task CanPerformIsFalseForTextTypesWithNoLink()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<ILinkParser>()
-                                                 .HasLinkAsync(Arg.Any<string>())
-                                                 .Returns(Task.FromResult(false));
-                                            });
+                c =>
+                {
+                    c.RegisterFake<ILinkParser>()
+                     .HasLinkAsync(Arg.Any<string>())
+                     .Returns(Task.FromResult(false));
+                });
 
             var textDataWithLinkButNoImageLink = Substitute.For<IClipboardDataPackage>();
 
@@ -67,26 +67,26 @@
         public async Task PerformLaunchesDefaultBrowsersForEachLink()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IProcessManager>();
+                c =>
+                {
+                    c.RegisterFake<IProcessManager>();
 
-                                                c.RegisterFake<ILinkParser>()
-                                                 .HasLinkAsync(Arg.Any<string>())
-                                                 .Returns(Task.FromResult(true));
+                    c.RegisterFake<ILinkParser>()
+                     .HasLinkAsync(Arg.Any<string>())
+                     .Returns(Task.FromResult(true));
 
-                                                c.RegisterFake<ILinkParser>()
-                                                 .ExtractLinksFromTextAsync(Arg.Any<string>())
-                                                 .Returns(
-                                                          Task
-                                                              .FromResult
-                                                              <IReadOnlyCollection<string>>(
-                                                                                            new[]
-                                                                                            {
-                                                                                                "foo.com",
-                                                                                                "bar.com"
-                                                                                            }));
-                                            });
+                    c.RegisterFake<ILinkParser>()
+                     .ExtractLinksFromTextAsync(Arg.Any<string>())
+                     .Returns(
+                         Task
+                             .FromResult
+                             <IReadOnlyCollection<string>>(
+                                 new[]
+                                 {
+                                     "foo.com",
+                                     "bar.com"
+                                 }));
+                });
 
             var action = container.Resolve<IOpenLinkAction>();
             await action.PerformAsync(GetPackageContaining<IClipboardTextData>());

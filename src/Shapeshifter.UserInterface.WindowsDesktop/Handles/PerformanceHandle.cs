@@ -28,9 +28,9 @@
         {
             var now = DateTime.UtcNow;
             logger.Performance(
-                               "Finished executing " + methodName + " in " +
-                               (now - startTime).TotalMilliseconds +
-                               " milliseconds.");
+                "Finished executing " + methodName + " in " +
+                (now - startTime).TotalMilliseconds +
+                " milliseconds.");
         }
     }
 }

@@ -28,12 +28,12 @@
             var notes = GenerateFakeFileData("notes.docx");
 
             fakeData.Files.Returns(
-                                   new[]
-                                   {
-                                       kitten,
-                                       house,
-                                       notes
-                                   });
+                new[]
+                {
+                    kitten,
+                    house,
+                    notes
+                });
 
             viewModel.Data = fakeData;
 
@@ -54,12 +54,12 @@
             var house = GenerateFakeFileData("house.jpg");
 
             fakeData.Files.Returns(
-                                   new[]
-                                   {
-                                       notes,
-                                       kitten,
-                                       house
-                                   });
+                new[]
+                {
+                    notes,
+                    kitten,
+                    house
+                });
 
             viewModel.Data = fakeData;
 

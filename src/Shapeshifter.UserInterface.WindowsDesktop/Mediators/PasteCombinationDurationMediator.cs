@@ -105,11 +105,11 @@
             if (PasteCombinationReleased != null)
             {
                 mainThreadInvoker.Invoke(
-                                         () =>
-                                         PasteCombinationReleased(
-                                                                  this,
-                                                                  new PasteCombinationReleasedEventArgument
-                                                                      ()));
+                    () =>
+                    PasteCombinationReleased(
+                        this,
+                        new PasteCombinationReleasedEventArgument
+                            ()));
             }
         }
 
@@ -137,11 +137,11 @@
             }
 
             mainThreadInvoker.Invoke(
-                                     () =>
-                                     PasteCombinationDurationPassed(
-                                                                    this,
-                                                                    new PasteCombinationDurationPassedEventArgument
-                                                                        ()));
+                () =>
+                PasteCombinationDurationPassed(
+                    this,
+                    new PasteCombinationDurationPassedEventArgument
+                        ()));
             logger.Information("Paste duration passed event raised.");
         }
 
@@ -163,8 +163,8 @@
             if (!isCombinationDown)
             {
                 logger.Information(
-                                   "Paste combination duration mediator reacted to paste hotkey.",
-                                   1);
+                    "Paste combination duration mediator reacted to paste hotkey.",
+                    1);
 
                 isCombinationDown = true;
                 threadLoop.Notify(MonitorClipboardCombinationStateAsync, Token);
@@ -172,8 +172,8 @@
             else
             {
                 logger.Information(
-                                   "Paste combination duration mediator ignored paste hotkey because the paste combination was already held down.",
-                                   1);
+                    "Paste combination duration mediator ignored paste hotkey because the paste combination was already held down.",
+                    1);
             }
         }
 

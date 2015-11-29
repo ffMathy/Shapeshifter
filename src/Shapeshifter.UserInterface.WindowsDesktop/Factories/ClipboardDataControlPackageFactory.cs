@@ -44,7 +44,7 @@
             IEnumerable<uint> formats)
         {
             return dataFactories.Any(
-                                     x => formats.Any(x.CanBuildData));
+                x => formats.Any(x.CanBuildData));
         }
 
         public IClipboardDataControlPackage Create()

@@ -59,10 +59,10 @@
         public async Task PerformCausesTextOfDataToBeCopied()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IClipboardInjectionService>();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IClipboardInjectionService>();
+                });
 
             var fakeTextData = Substitute.For<IClipboardTextData>();
             fakeTextData.Text.Returns("foobar hello");

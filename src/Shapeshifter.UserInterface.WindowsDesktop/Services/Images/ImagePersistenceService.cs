@@ -121,14 +121,14 @@
             var stride = bytesPerPixel*metaInformation.Width;
 
             return BitmapSource.Create(
-                                       metaInformation.Width,
-                                       metaInformation.Height,
-                                       metaInformation.DpiX,
-                                       metaInformation.DpiY,
-                                       metaInformation.PixelFormat,
-                                       null,
-                                       imageData,
-                                       stride);
+                metaInformation.Width,
+                metaInformation.Height,
+                metaInformation.DpiX,
+                metaInformation.DpiY,
+                metaInformation.PixelFormat,
+                null,
+                imageData,
+                stride);
         }
 
         static byte[] ExtractImageDataFromSource(byte[] bytes)

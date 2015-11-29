@@ -25,9 +25,9 @@
         {
             var unixTimestamp = DateTime.UtcNow.ToFileTime();
             var packageFolder = fileManager.PrepareFolder(
-                                                          Path.Combine(
-                                                                       "Pinned",
-                                                                       unixTimestamp.ToString()));
+                Path.Combine(
+                    "Pinned",
+                    unixTimestamp.ToString()));
             for (var i = 1; i <= package.Contents.Count; i++)
             {
                 var content = package.Contents[i];

@@ -19,12 +19,12 @@
         public async Task ExtractsAllLinksFromText()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IDomainNameResolver>()
-                                                 .IsValidDomainAsync(Arg.Any<string>())
-                                                 .Returns(Task.FromResult(true));
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IDomainNameResolver>()
+                     .IsValidDomainAsync(Arg.Any<string>())
+                     .Returns(Task.FromResult(true));
+                });
 
             var text =
                 "hello http://google.com world https://foo.com foobar blah.dk/hey/lol%20kitten.jpg lolz foobar.com www.baz.com test.net/news+list.txt?cat=pic&id=foo28";
@@ -55,12 +55,12 @@
         public async Task HasLinkReturnsTrueWithoutProtocol()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IDomainNameResolver>()
-                                                 .IsValidDomainAsync("google.com")
-                                                 .Returns(Task.FromResult(true));
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IDomainNameResolver>()
+                     .IsValidDomainAsync("google.com")
+                     .Returns(Task.FromResult(true));
+                });
 
             var text = "hello google.com world";
 
@@ -72,12 +72,12 @@
         public async Task LinkWithSubdomainIsValid()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IDomainNameResolver>()
-                                                 .IsValidDomainAsync("foo.subdomain.google.com")
-                                                 .Returns(Task.FromResult(true));
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IDomainNameResolver>()
+                     .IsValidDomainAsync("foo.subdomain.google.com")
+                     .Returns(Task.FromResult(true));
+                });
 
             var text = "http://foo.subdomain.google.com";
 
@@ -89,12 +89,12 @@
         public async Task LinkWithHttpProtocolIsValid()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IDomainNameResolver>()
-                                                 .IsValidDomainAsync("google.com")
-                                                 .Returns(Task.FromResult(true));
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IDomainNameResolver>()
+                     .IsValidDomainAsync("google.com")
+                     .Returns(Task.FromResult(true));
+                });
 
             var text = "http://google.com";
 
@@ -106,12 +106,12 @@
         public async Task LinkWithHttpsProtocolIsValid()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IDomainNameResolver>()
-                                                 .IsValidDomainAsync("google.com")
-                                                 .Returns(Task.FromResult(true));
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IDomainNameResolver>()
+                     .IsValidDomainAsync("google.com")
+                     .Returns(Task.FromResult(true));
+                });
 
             var text = "https://google.com";
 
@@ -123,12 +123,12 @@
         public async Task LinkWithParametersIsValid()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IDomainNameResolver>()
-                                                 .IsValidDomainAsync("google.com")
-                                                 .Returns(Task.FromResult(true));
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IDomainNameResolver>()
+                     .IsValidDomainAsync("google.com")
+                     .Returns(Task.FromResult(true));
+                });
 
             var text = "http://google.com?hello=flyp&version=1";
 
@@ -140,12 +140,12 @@
         public async Task LinkWithDirectoriesIsValid()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IDomainNameResolver>()
-                                                 .IsValidDomainAsync("google.com")
-                                                 .Returns(Task.FromResult(true));
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IDomainNameResolver>()
+                     .IsValidDomainAsync("google.com")
+                     .Returns(Task.FromResult(true));
+                });
 
             var text = "http://google.com/foo/bar";
 
@@ -181,12 +181,12 @@
         public async Task SeveralLinksCanFindProperType()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IDomainNameResolver>()
-                                                 .IsValidDomainAsync(Arg.Any<string>())
-                                                 .Returns(Task.FromResult(true));
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IDomainNameResolver>()
+                     .IsValidDomainAsync(Arg.Any<string>())
+                     .Returns(Task.FromResult(true));
+                });
 
             var text = "http://google.com foo.com/img.jpg";
 
@@ -215,8 +215,8 @@
 
             var linkParser = container.Resolve<ILinkParser>();
             Assert.IsTrue(
-                          linkParser.GetLinkType(text)
-                                    .HasFlag(LinkType.Https));
+                linkParser.GetLinkType(text)
+                          .HasFlag(LinkType.Https));
         }
     }
 }

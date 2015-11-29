@@ -49,12 +49,12 @@
         public async Task CanNotPerformWithFileWithNoImage()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IFileTypeInterpreter>()
-                                                 .GetFileTypeFromFileName(Arg.Any<string>())
-                                                 .Returns(FileType.Other);
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IFileTypeInterpreter>()
+                     .GetFileTypeFromFileName(Arg.Any<string>())
+                     .Returns(FileType.Other);
+                });
 
             var fakeData = Substitute.For<IClipboardDataPackage>();
 
@@ -66,12 +66,12 @@
         public async Task CanPerformWithImageFile()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IFileTypeInterpreter>()
-                                                 .GetFileTypeFromFileName(Arg.Any<string>())
-                                                 .Returns(FileType.Image);
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IFileTypeInterpreter>()
+                     .GetFileTypeFromFileName(Arg.Any<string>())
+                     .Returns(FileType.Image);
+                });
 
             var fakeData = GetPackageContaining<IClipboardFileData>();
 

@@ -19,12 +19,12 @@
         public void IsConnectedIsFalseIfConsumerThreadIsNotRunning()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IConsumerThreadLoop>()
-                                                 .IsRunning
-                                                 .Returns(false);
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IConsumerThreadLoop>()
+                     .IsRunning
+                     .Returns(false);
+                });
 
             var mediator = container.Resolve<IPasteCombinationDurationMediator>();
             Assert.IsFalse(mediator.IsConnected);
@@ -34,12 +34,12 @@
         public void IsConnectedIsTrueIfConsumerThreadIsRunning()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IConsumerThreadLoop>()
-                                                 .IsRunning
-                                                 .Returns(true);
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IConsumerThreadLoop>()
+                     .IsRunning
+                     .Returns(true);
+                });
 
             var mediator = container.Resolve<IPasteCombinationDurationMediator>();
             Assert.IsTrue(mediator.IsConnected);
@@ -50,12 +50,12 @@
         public void DisconnectingWhileNotConnectedThrowsError()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IConsumerThreadLoop>()
-                                                 .IsRunning
-                                                 .Returns(false);
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IConsumerThreadLoop>()
+                     .IsRunning
+                     .Returns(false);
+                });
 
             var mediator = container.Resolve<IPasteCombinationDurationMediator>();
             mediator.Disconnect();
@@ -66,12 +66,12 @@
         public void ConnectingWhileAlreadyConnectedThrowsError()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IConsumerThreadLoop>()
-                                                 .IsRunning
-                                                 .Returns(true);
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IConsumerThreadLoop>()
+                     .IsRunning
+                     .Returns(true);
+                });
 
             var mediator = container.Resolve<IPasteCombinationDurationMediator>();
             mediator.Connect(Substitute.For<IWindow>());

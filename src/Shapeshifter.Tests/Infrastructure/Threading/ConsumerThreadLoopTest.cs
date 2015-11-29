@@ -19,12 +19,12 @@
         public void IsRunningWhenInnerLoopIsRunning()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IThreadLoop>()
-                                                 .IsRunning
-                                                 .Returns(true);
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IThreadLoop>()
+                     .IsRunning
+                     .Returns(true);
+                });
 
             var systemUnderTest = container.Resolve<IConsumerThreadLoop>();
             Assert.IsTrue(systemUnderTest.IsRunning);
@@ -34,12 +34,12 @@
         public void IsNotRunningWhenInnerLoopIsNotRunning()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IThreadLoop>()
-                                                 .IsRunning
-                                                 .Returns(false);
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IThreadLoop>()
+                     .IsRunning
+                     .Returns(false);
+                });
 
             var systemUnderTest = container.Resolve<IConsumerThreadLoop>();
             Assert.IsFalse(systemUnderTest.IsRunning);
@@ -49,10 +49,10 @@
         public void StopStopsInnerLoop()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IThreadLoop>();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IThreadLoop>();
+                });
 
             var systemUnderTest = container.Resolve<IConsumerThreadLoop>();
             systemUnderTest.Stop();
@@ -66,10 +66,10 @@
         public void NotifyForTheFirstTimeSpawnsThread()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IThreadLoop>();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IThreadLoop>();
+                });
 
             var systemUnderTest = container.Resolve<IConsumerThreadLoop>();
             systemUnderTest.Notify(() => Task.CompletedTask, CancellationToken.None);
@@ -85,18 +85,18 @@
             IThreadLoop fakeInnerLoop = null;
             Func<Task> innerLoopTick = null;
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                fakeInnerLoop = c.RegisterFake<IThreadLoop>();
-                                                fakeInnerLoop.Start(
-                                                                    Arg.Do<Func<Task>>(
-                                                                                       x =>
-                                                                                       {
-                                                                                           innerLoopTick
-                                                                                               = x;
-                                                                                       }),
-                                                                    CancellationToken.None);
-                                            });
+                c =>
+                {
+                    fakeInnerLoop = c.RegisterFake<IThreadLoop>();
+                    fakeInnerLoop.Start(
+                        Arg.Do<Func<Task>>(
+                            x =>
+                            {
+                                innerLoopTick
+                                    = x;
+                            }),
+                        CancellationToken.None);
+                });
 
             var systemUnderTest = container.Resolve<IConsumerThreadLoop>();
 

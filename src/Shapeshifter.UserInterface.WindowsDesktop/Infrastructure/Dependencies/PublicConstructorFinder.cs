@@ -13,8 +13,8 @@
             return targetType.GetConstructors()
                              .Where(x => x.IsPublic)
                              .OrderByDescending(
-                                                x => x.GetParameters()
-                                                      .Length)
+                                 x => x.GetParameters()
+                                       .Length)
                              .ToArray();
         }
     }

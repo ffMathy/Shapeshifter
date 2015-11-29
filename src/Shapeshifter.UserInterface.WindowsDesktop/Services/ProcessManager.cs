@@ -50,11 +50,11 @@
             Debug.Assert(workingDirectory != null, "workingDirectory != null");
 
             var process = Process.Start(
-                                        new ProcessStartInfo
-                                        {
-                                            FileName = fileName,
-                                            WorkingDirectory = workingDirectory
-                                        });
+                new ProcessStartInfo
+                {
+                    FileName = fileName,
+                    WorkingDirectory = workingDirectory
+                });
             processes.Add(process);
         }
     }

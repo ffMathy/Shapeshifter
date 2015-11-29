@@ -23,12 +23,12 @@
         public void IsConnectedIsFalseIfPasteCombinationDurationMonitorIsNotConnected()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IPasteCombinationDurationMediator>()
-                                                 .IsConnected
-                                                 .Returns(false);
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IPasteCombinationDurationMediator>()
+                     .IsConnected
+                     .Returns(false);
+                });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             Assert.IsFalse(mediator.IsConnected);
@@ -38,12 +38,12 @@
         public void IsConnectedIsTrueIfAllHooksAreConnected()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IPasteCombinationDurationMediator>()
-                                                 .IsConnected
-                                                 .Returns(true);
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IPasteCombinationDurationMediator>()
+                     .IsConnected
+                     .Returns(true);
+                });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             Assert.IsTrue(mediator.IsConnected);
@@ -53,11 +53,11 @@
         public void ConnectConnectsHotkeyHook()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IClipboardCopyInterceptor>();
-                                                c.RegisterFake<IPasteCombinationDurationMediator>();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IClipboardCopyInterceptor>();
+                    c.RegisterFake<IPasteCombinationDurationMediator>();
+                });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Connect(null);
@@ -71,12 +71,12 @@
         public void DisconnectDisconnectsKeyboardHook()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IPasteCombinationDurationMediator>()
-                                                 .IsConnected
-                                                 .Returns(true);
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IPasteCombinationDurationMediator>()
+                     .IsConnected
+                     .Returns(true);
+                });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Disconnect();
@@ -90,26 +90,27 @@
         public void DataCopiedCausesMediatorToCreatePackage()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IClipboardCopyInterceptor>();
-                                                c.RegisterFake<IPasteCombinationDurationMediator>();
+                c =>
+                {
+                    c.RegisterFake<IClipboardCopyInterceptor>();
+                    c.RegisterFake<IPasteCombinationDurationMediator>();
 
-                                                var fakePackage =
-                                                    Substitute.For<IClipboardDataControlPackage>();
-                                                fakePackage.Contents.Returns(
-                                                                             new[]
-                                                                             {
-                                                                                 Substitute
-                                                                                 .For
-                                                                                 <IClipboardData>()
-                                                                             });
+                    var fakePackage =
+                        Substitute.For<IClipboardDataControlPackage>();
+                    fakePackage.Contents.Returns(
+                        new[]
+                        {
+                            Substitute
+                            .For
+                            <IClipboardData>()
+                        });
 
-                                                c.RegisterFake<IClipboardDataControlPackageFactory>(
-                                                                                                    )
-                                                 .Create()
-                                                 .Returns(fakePackage);
-                                            });
+                    c.RegisterFake<IClipboardDataControlPackageFactory>(
+                        
+                        )
+                     .Create()
+                     .Returns(fakePackage);
+                });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Connect(null);
@@ -117,8 +118,8 @@
             var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
             fakeClipboardHookService.DataCopied +=
                 Raise.Event<EventHandler<DataCopiedEventArgument>>(
-                                                                   fakeClipboardHookService,
-                                                                   new DataCopiedEventArgument());
+                    fakeClipboardHookService,
+                    new DataCopiedEventArgument());
 
             Assert.AreEqual(1, mediator.ClipboardElements.Count());
         }
@@ -130,25 +131,26 @@
             var fakeControl = Substitute.For<IClipboardControl>();
 
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IClipboardCopyInterceptor>();
-                                                c.RegisterFake<IPasteCombinationDurationMediator>();
+                c =>
+                {
+                    c.RegisterFake<IClipboardCopyInterceptor>();
+                    c.RegisterFake<IPasteCombinationDurationMediator>();
 
-                                                var fakePackage =
-                                                    Substitute.For<IClipboardDataControlPackage>();
-                                                fakePackage.Contents.Returns(
-                                                                             new[]
-                                                                             {
-                                                                                 fakeData
-                                                                             });
-                                                fakePackage.Control.Returns(fakeControl);
+                    var fakePackage =
+                        Substitute.For<IClipboardDataControlPackage>();
+                    fakePackage.Contents.Returns(
+                        new[]
+                        {
+                            fakeData
+                        });
+                    fakePackage.Control.Returns(fakeControl);
 
-                                                c.RegisterFake<IClipboardDataControlPackageFactory>(
-                                                                                                    )
-                                                 .Create()
-                                                 .Returns(fakePackage);
-                                            });
+                    c.RegisterFake<IClipboardDataControlPackageFactory>(
+                        
+                        )
+                     .Create()
+                     .Returns(fakePackage);
+                });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Connect(null);
@@ -156,8 +158,8 @@
             var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
             fakeClipboardHookService.DataCopied +=
                 Raise.Event<EventHandler<DataCopiedEventArgument>>(
-                                                                   fakeClipboardHookService,
-                                                                   new DataCopiedEventArgument());
+                    fakeClipboardHookService,
+                    new DataCopiedEventArgument());
 
             var addedPackage = mediator.ClipboardElements.Single();
             var content = addedPackage.Contents.Single();
@@ -169,13 +171,14 @@
         public void DataCopiedTriggersEvent()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IClipboardCopyInterceptor>();
-                                                c.RegisterFake<IPasteCombinationDurationMediator>();
-                                                c.RegisterFake<IClipboardDataControlPackageFactory>(
-                                                                                                    );
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IClipboardCopyInterceptor>();
+                    c.RegisterFake<IPasteCombinationDurationMediator>();
+                    c.RegisterFake<IClipboardDataControlPackageFactory>(
+                        
+                        );
+                });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Connect(null);
@@ -191,8 +194,8 @@
             var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
             fakeClipboardHookService.DataCopied +=
                 Raise.Event<EventHandler<DataCopiedEventArgument>>(
-                                                                   fakeClipboardHookService,
-                                                                   new DataCopiedEventArgument());
+                    fakeClipboardHookService,
+                    new DataCopiedEventArgument());
 
             var addedPackage = mediator.ClipboardElements.Single();
             Assert.IsNotNull(addedPackage);

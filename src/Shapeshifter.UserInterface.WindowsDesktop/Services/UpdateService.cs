@@ -124,7 +124,7 @@
             catch (RateLimitExceededException)
             {
                 logger.Warning(
-                               "Did not search for updates due to the GitHub rate limit being exceed.");
+                    "Did not search for updates due to the GitHub rate limit being exceed.");
             }
         }
 
@@ -133,9 +133,9 @@
             var assets =
                 await
                 client.Release.GetAllAssets(
-                                            RepositoryOwner,
-                                            RepositoryName,
-                                            pendingUpdateRelease.Id);
+                    RepositoryOwner,
+                    RepositoryName,
+                    pendingUpdateRelease.Id);
             await UpdateFromAssetsAsync(assets);
         }
 

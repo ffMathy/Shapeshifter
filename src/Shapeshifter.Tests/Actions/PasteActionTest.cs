@@ -49,11 +49,11 @@
         public async Task PerformTriggersPaste()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IClipboardInjectionService>();
-                                                c.RegisterFake<IClipboardPasteService>();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IClipboardInjectionService>();
+                    c.RegisterFake<IClipboardPasteService>();
+                });
 
             var fakeData = GetPackageContaining<IClipboardData>();
 

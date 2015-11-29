@@ -42,17 +42,17 @@
             var fakeControl = Substitute.For<IClipboardFileDataControl>();
 
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c
-                                                    .RegisterFake
-                                                    <
-                                                        IClipboardControlFactory
-                                                            <IClipboardFileData,
-                                                                IClipboardFileDataControl>>()
-                                                    .CreateControl(fakeSingleFileData)
-                                                    .Returns(fakeControl);
-                                            });
+                c =>
+                {
+                    c
+                        .RegisterFake
+                        <
+                            IClipboardControlFactory
+                                <IClipboardFileData,
+                                    IClipboardFileDataControl>>()
+                        .CreateControl(fakeSingleFileData)
+                        .Returns(fakeControl);
+                });
 
             var factory = container.Resolve<IFileClipboardDataControlFactory>();
             var control = factory.BuildControl(fakeSingleFileData);
@@ -67,18 +67,18 @@
             var fakeControl = Substitute.For<IClipboardFileCollectionDataControl>();
 
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c
-                                                    .RegisterFake
-                                                    <
-                                                        IClipboardControlFactory
-                                                            <IClipboardFileCollectionData,
-                                                                IClipboardFileCollectionDataControl>
-                                                        >()
-                                                    .CreateControl(fakeSingleFileData)
-                                                    .Returns(fakeControl);
-                                            });
+                c =>
+                {
+                    c
+                        .RegisterFake
+                        <
+                            IClipboardControlFactory
+                                <IClipboardFileCollectionData,
+                                    IClipboardFileCollectionDataControl>
+                            >()
+                        .CreateControl(fakeSingleFileData)
+                        .Returns(fakeControl);
+                });
 
             var factory = container.Resolve<IFileClipboardDataControlFactory>();
             var control = factory.BuildControl(fakeSingleFileData);

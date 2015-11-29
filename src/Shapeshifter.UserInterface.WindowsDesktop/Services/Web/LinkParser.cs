@@ -54,11 +54,11 @@
         public async Task<IReadOnlyCollection<string>> ExtractLinksFromTextAsync(string text)
         {
             return await Task.Run(
-                                  async () =>
-                                  {
-                                      var words = GetWords(text);
-                                      return await asyncFilter.FilterAsync(words, IsValidLinkAsync);
-                                  });
+                async () =>
+                {
+                    var words = GetWords(text);
+                    return await asyncFilter.FilterAsync(words, IsValidLinkAsync);
+                });
         }
 
         static string[] GetWords(string text)
@@ -126,27 +126,27 @@
         {
             using (performanceHandleFactory.StartMeasuringPerformance())
                 return await Task.Run(
-                                      async () =>
-                                      {
-                                          var words = GetWords(text);
+                    async () =>
+                    {
+                        var words = GetWords(text);
 
-                                          var suspiciousWords = ExtractSuspiciousWords(words);
-                                          if (
-                                              await
-                                              asyncFilter.HasMatchAsync(
-                                                                        suspiciousWords,
-                                                                        IsValidLinkAsync))
-                                          {
-                                              return true;
-                                          }
+                        var suspiciousWords = ExtractSuspiciousWords(words);
+                        if (
+                            await
+                            asyncFilter.HasMatchAsync(
+                                suspiciousWords,
+                                IsValidLinkAsync))
+                        {
+                            return true;
+                        }
 
-                                          var nonSuspiciousWords = ExtractNonSuspiciousWords(words);
-                                          return
-                                              await
-                                              asyncFilter.HasMatchAsync(
-                                                                        nonSuspiciousWords,
-                                                                        IsValidLinkAsync);
-                                      });
+                        var nonSuspiciousWords = ExtractNonSuspiciousWords(words);
+                        return
+                            await
+                            asyncFilter.HasMatchAsync(
+                                nonSuspiciousWords,
+                                IsValidLinkAsync);
+                    });
         }
 
         public async Task<bool> HasLinkOfTypeAsync(string text, LinkType linkType)
@@ -156,27 +156,27 @@
                 Func<string, Task<bool>> validationFunction =
                     async word => IsLinkOfType(word, linkType) && await IsValidLinkAsync(word);
                 return await Task.Run(
-                                      async () =>
-                                      {
-                                          var words = GetWords(text);
+                    async () =>
+                    {
+                        var words = GetWords(text);
 
-                                          var suspiciousWords = ExtractSuspiciousWords(words);
-                                          if (
-                                              await
-                                              asyncFilter.HasMatchAsync(
-                                                                        suspiciousWords,
-                                                                        validationFunction))
-                                          {
-                                              return true;
-                                          }
+                        var suspiciousWords = ExtractSuspiciousWords(words);
+                        if (
+                            await
+                            asyncFilter.HasMatchAsync(
+                                suspiciousWords,
+                                validationFunction))
+                        {
+                            return true;
+                        }
 
-                                          var nonSuspiciousWords = ExtractNonSuspiciousWords(words);
-                                          return
-                                              await
-                                              asyncFilter.HasMatchAsync(
-                                                                        nonSuspiciousWords,
-                                                                        validationFunction);
-                                      });
+                        var nonSuspiciousWords = ExtractNonSuspiciousWords(words);
+                        return
+                            await
+                            asyncFilter.HasMatchAsync(
+                                nonSuspiciousWords,
+                                validationFunction);
+                    });
             }
         }
 

@@ -57,8 +57,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
             using (var currentProcess = WindowsProcess.GetCurrentProcess())
             {
                 var executableFile = Path.Combine(
-                                                  targetDirectory,
-                                                  $"{currentProcess.ProcessName}.exe");
+                    targetDirectory,
+                    $"{currentProcess.ProcessName}.exe");
                 processManager.LaunchFile(executableFile, $"cleanup {Environment.CurrentDirectory}");
             }
         }

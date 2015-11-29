@@ -60,19 +60,19 @@
         static BitmapSource CreateBitmapSourceFromHandle(IntPtr bitmapHandle, IconApi.BITMAP bitmap)
         {
             var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(
-                                                                     bitmapHandle,
-                                                                     IntPtr.Zero,
-                                                                     new Int32Rect(
-                                                                         0,
-                                                                         0,
-                                                                         bitmap.Width,
-                                                                         bitmap.Height),
-                                                                     BitmapSizeOptions
-                                                                         .FromWidthAndHeight(
-                                                                                             bitmap
-                                                                                                 .Width,
-                                                                                             bitmap
-                                                                                                 .Height));
+                bitmapHandle,
+                IntPtr.Zero,
+                new Int32Rect(
+                    0,
+                    0,
+                    bitmap.Width,
+                    bitmap.Height),
+                BitmapSizeOptions
+                    .FromWidthAndHeight(
+                        bitmap
+                            .Width,
+                        bitmap
+                            .Height));
             bitmapSource.Freeze();
             return bitmapSource;
         }

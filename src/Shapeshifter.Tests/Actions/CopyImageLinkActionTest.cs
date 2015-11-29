@@ -53,14 +53,14 @@
         public async Task CanPerformIsFalseForTextTypesWithNoImageLink()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<ILinkParser>()
-                                                 .HasLinkOfTypeAsync(
-                                                                     Arg.Any<string>(),
-                                                                     LinkType.ImageFile)
-                                                 .Returns(Task.FromResult(false));
-                                            });
+                c =>
+                {
+                    c.RegisterFake<ILinkParser>()
+                     .HasLinkOfTypeAsync(
+                         Arg.Any<string>(),
+                         LinkType.ImageFile)
+                     .Returns(Task.FromResult(false));
+                });
 
             var action = container.Resolve<ICopyImageLinkAction>();
             var canPerform = await action.CanPerformAsync(Substitute.For<IClipboardDataPackage>());
@@ -71,14 +71,14 @@
         public async Task CanPerformIsTrueForTextTypesWithImageLink()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<ILinkParser>()
-                                                 .HasLinkOfTypeAsync(
-                                                                     Arg.Any<string>(),
-                                                                     LinkType.ImageFile)
-                                                 .Returns(Task.FromResult(true));
-                                            });
+                c =>
+                {
+                    c.RegisterFake<ILinkParser>()
+                     .HasLinkOfTypeAsync(
+                         Arg.Any<string>(),
+                         LinkType.ImageFile)
+                     .Returns(Task.FromResult(true));
+                });
 
             var action = container.Resolve<ICopyImageLinkAction>();
             Assert.IsTrue(await action.CanPerformAsync(GetPackageContaining<IClipboardTextData>()));
@@ -97,38 +97,38 @@
             };
 
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IClipboardInjectionService>();
+                c =>
+                {
+                    c.RegisterFake<IClipboardInjectionService>();
 
-                                                c.RegisterFake<IImageFileInterpreter>();
+                    c.RegisterFake<IImageFileInterpreter>();
 
-                                                c.RegisterFake<IDownloader>()
-                                                 .DownloadBytesAsync(Arg.Any<string>())
-                                                 .Returns(
-                                                          Task.FromResult(
-                                                                          firstFakeDownloadedImageBytes),
-                                                          Task.FromResult(
-                                                                          secondFakeDownloadedImageBytes));
+                    c.RegisterFake<IDownloader>()
+                     .DownloadBytesAsync(Arg.Any<string>())
+                     .Returns(
+                         Task.FromResult(
+                             firstFakeDownloadedImageBytes),
+                         Task.FromResult(
+                             secondFakeDownloadedImageBytes));
 
-                                                c.RegisterFake<ILinkParser>()
-                                                 .HasLinkOfTypeAsync(
-                                                                     Arg.Any<string>(),
-                                                                     LinkType.ImageFile)
-                                                 .Returns(Task.FromResult(true));
+                    c.RegisterFake<ILinkParser>()
+                     .HasLinkOfTypeAsync(
+                         Arg.Any<string>(),
+                         LinkType.ImageFile)
+                     .Returns(Task.FromResult(true));
 
-                                                c.RegisterFake<ILinkParser>()
-                                                 .ExtractLinksFromTextAsync(Arg.Any<string>())
-                                                 .Returns(
-                                                          Task
-                                                              .FromResult
-                                                              <IReadOnlyCollection<string>>(
-                                                                                            new[]
-                                                                                            {
-                                                                                                "foobar.com",
-                                                                                                "example.com"
-                                                                                            }));
-                                            });
+                    c.RegisterFake<ILinkParser>()
+                     .ExtractLinksFromTextAsync(Arg.Any<string>())
+                     .Returns(
+                         Task
+                             .FromResult
+                             <IReadOnlyCollection<string>>(
+                                 new[]
+                                 {
+                                     "foobar.com",
+                                     "example.com"
+                                 }));
+                });
 
             var action = container.Resolve<ICopyImageLinkAction>();
             await action.PerformAsync(GetPackageContaining<IClipboardTextData>());

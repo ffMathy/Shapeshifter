@@ -77,9 +77,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
                 }
 
                 GeneralApi.CopyMemory(
-                                      target,
-                                      memoryHandle.Pointer,
-                                      (uint) clipboardData.RawData.Length);
+                    target,
+                    memoryHandle.Pointer,
+                    (uint) clipboardData.RawData.Length);
 
                 GeneralApi.GlobalUnlock(target);
 
@@ -98,8 +98,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
         static IntPtr AllocateInMemory(IClipboardData clipboardData)
         {
             return GeneralApi.GlobalAlloc(
-                                          GeneralApi.GMEM_ZEROINIT | GeneralApi.GMEM_MOVABLE,
-                                          (UIntPtr) clipboardData.RawData.Length);
+                GeneralApi.GMEM_ZEROINIT | GeneralApi.GMEM_MOVABLE,
+                (UIntPtr) clipboardData.RawData.Length);
         }
 
         [ExcludeFromCodeCoverage]

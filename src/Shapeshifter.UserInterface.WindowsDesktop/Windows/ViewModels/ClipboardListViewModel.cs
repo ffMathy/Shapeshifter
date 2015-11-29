@@ -196,8 +196,8 @@
             else
             {
                 SelectedElement = GetNewSelectedElementAfterHandlingDownKey(
-                                                                            Elements,
-                                                                            SelectedElement);
+                    Elements,
+                    SelectedElement);
             }
         }
 

@@ -106,9 +106,9 @@
             var segments = GetPathSegments(firstPath);
 
             var commonPath = Path.Combine(
-                                          segments
-                                              .Take(pathSimilarityIndex)
-                                              .ToArray());
+                segments
+                    .Take(pathSimilarityIndex)
+                    .ToArray());
 
             return commonPath;
         }
@@ -197,9 +197,9 @@
             if (clipboardFileCollectionData != null)
             {
                 return ZipFileCollectionData(
-                                             clipboardFileCollectionData
-                                                 .Files
-                                                 .ToArray());
+                    clipboardFileCollectionData
+                        .Files
+                        .ToArray());
             }
 
             throw new InvalidOperationException("Unknown data format.");

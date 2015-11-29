@@ -49,9 +49,9 @@
             AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) =>
             {
                 MessageBox.Show(
-                                exceptionEventArguments.ExceptionObject.ToString(),
-                                "Shapeshifter error",
-                                MessageBoxButton.OK);
+                    exceptionEventArguments.ExceptionObject.ToString(),
+                    "Shapeshifter error",
+                    MessageBoxButton.OK);
                 Current.Shutdown();
             };
 

@@ -17,10 +17,10 @@
         public void InjectingDataSkipsNextCopyInterception()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IClipboardCopyInterceptor>();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IClipboardCopyInterceptor>();
+                });
 
             var injectionService = container.Resolve<IClipboardInjectionService>();
             injectionService.InjectData(Substitute.For<IClipboardDataPackage>());

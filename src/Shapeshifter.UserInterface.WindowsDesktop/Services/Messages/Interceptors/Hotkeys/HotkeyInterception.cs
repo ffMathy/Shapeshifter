@@ -39,10 +39,10 @@
             }
 
             var registrationResult = KeyboardApi.RegisterHotKey(
-                                                                windowHandle,
-                                                                InterceptionId,
-                                                                modifier,
-                                                                KeyCode);
+                windowHandle,
+                InterceptionId,
+                modifier,
+                KeyCode);
             if (!registrationResult)
             {
                 throw new InvalidOperationException(
@@ -63,8 +63,8 @@
         bool UnregisterHotkey(IntPtr windowHandle)
         {
             return KeyboardApi.UnregisterHotKey(
-                                                windowHandle,
-                                                InterceptionId);
+                windowHandle,
+                InterceptionId);
         }
     }
 }

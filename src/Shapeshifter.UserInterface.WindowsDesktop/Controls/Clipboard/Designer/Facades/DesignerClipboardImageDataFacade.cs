@@ -19,8 +19,8 @@
         {
             RawData =
                 designerImageConverterService.GenerateDesignerImageBytesFromFileBytes(
-                                                                                      Resources
-                                                                                          .FileImageSample);
+                    Resources
+                        .FileImageSample);
         }
     }
 }

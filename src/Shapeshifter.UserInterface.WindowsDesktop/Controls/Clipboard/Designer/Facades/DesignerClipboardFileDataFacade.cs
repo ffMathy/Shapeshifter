@@ -20,8 +20,8 @@
             FileName = "Kitten.jpg";
             FileIcon =
                 designerImageConverterService.GenerateDesignerImageBytesFromFileBytes(
-                                                                                      Resources
-                                                                                          .FileDataFileIcon);
+                    Resources
+                        .FileDataFileIcon);
         }
     }
 }

@@ -70,17 +70,17 @@
             var fakeTextData = Substitute.For<IClipboardTextData>();
 
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c
-                                                    .RegisterFake
-                                                    <
-                                                        IClipboardControlFactory
-                                                            <IClipboardTextData,
-                                                                IClipboardTextDataControl>>()
-                                                    .CreateControl(fakeTextData)
-                                                    .Returns(fakeTextDataControl);
-                                            });
+                c =>
+                {
+                    c
+                        .RegisterFake
+                        <
+                            IClipboardControlFactory
+                                <IClipboardTextData,
+                                    IClipboardTextDataControl>>()
+                        .CreateControl(fakeTextData)
+                        .Returns(fakeTextDataControl);
+                });
 
             var factory = container.Resolve<ITextClipboardDataControlFactory>();
             var control = factory.BuildControl(fakeTextData);

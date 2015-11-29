@@ -53,8 +53,8 @@
 
             var fileTypeInterpreter = container.Resolve<IFileTypeInterpreter>();
             Assert.AreEqual(
-                            FileType.Other,
-                            fileTypeInterpreter.GetFileTypeFromFileName("foo.other"));
+                FileType.Other,
+                fileTypeInterpreter.GetFileTypeFromFileName("foo.other"));
         }
     }
 }

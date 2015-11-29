@@ -32,9 +32,9 @@
             this.logger = logger;
 
             hotkeyInterception = hotkeyInterceptionFactory.CreateInterception(
-                                                                              KeyboardApi.VK_KEY_V,
-                                                                              true,
-                                                                              true);
+                KeyboardApi.VK_KEY_V,
+                true,
+                true);
         }
 
         public void Install(IntPtr windowHandle)
@@ -78,10 +78,10 @@
             logger.Information("Paste hotkey message received.", 1);
 
             HotkeyFired?.Invoke(
-                                this,
-                                new HotkeyFiredArgument(
-                                    hotkeyInterception.KeyCode,
-                                    hotkeyInterception.ControlNeeded));
+                this,
+                new HotkeyFiredArgument(
+                    hotkeyInterception.KeyCode,
+                    hotkeyInterception.ControlNeeded));
         }
     }
 }

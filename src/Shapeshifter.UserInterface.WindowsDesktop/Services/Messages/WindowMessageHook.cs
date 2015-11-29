@@ -51,7 +51,7 @@
             cancellationTokenSource = new CancellationTokenSource();
 
             logger.Information(
-                               $"Window message hook was constructed using {windowMessageInterceptors.Count} interceptors.");
+                $"Window message hook was constructed using {windowMessageInterceptors.Count} interceptors.");
         }
 
         public void Disconnect()
@@ -113,12 +113,12 @@
                                                  .Name;
 
                 logger.Information(
-                                   $"Passing message {messageName} to interceptor {interceptorName}.");
+                    $"Passing message {messageName} to interceptor {interceptorName}.");
 
                 interceptor.ReceiveMessageEvent(nextMessage);
 
                 logger.Information(
-                                   $"Message of type {messageName} passed to interceptor {interceptorName}.");
+                    $"Message of type {messageName} passed to interceptor {interceptorName}.");
             }
         }
 
@@ -155,7 +155,7 @@
             }
 
             logger.Information(
-                               $"Message received: [{hwnd}, {FormatMessage((Message) msg)}, {wParam}, {lParam}]");
+                $"Message received: [{hwnd}, {FormatMessage((Message) msg)}, {wParam}, {lParam}]");
 
             var argument = new WindowMessageReceivedArgument(hwnd, (Message) msg, wParam, lParam);
             pendingMessages.Enqueue(argument);

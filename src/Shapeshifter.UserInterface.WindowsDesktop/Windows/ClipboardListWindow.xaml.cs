@@ -61,23 +61,23 @@
         void SetupKeyInterception()
         {
             keyInterceptor.AddInterceptingKey(
-                                              handleContainer.Handle,
-                                              KeyboardApi.VK_KEY_UP);
+                handleContainer.Handle,
+                KeyboardApi.VK_KEY_UP);
             keyInterceptor.AddInterceptingKey(
-                                              handleContainer.Handle,
-                                              KeyboardApi.VK_KEY_DOWN);
+                handleContainer.Handle,
+                KeyboardApi.VK_KEY_DOWN);
             keyInterceptor.AddInterceptingKey(
-                                              handleContainer.Handle,
-                                              KeyboardApi.VK_KEY_LEFT);
+                handleContainer.Handle,
+                KeyboardApi.VK_KEY_LEFT);
             keyInterceptor.AddInterceptingKey(
-                                              handleContainer.Handle,
-                                              KeyboardApi.VK_KEY_RIGHT);
+                handleContainer.Handle,
+                KeyboardApi.VK_KEY_RIGHT);
             keyInterceptor.AddInterceptingKey(
-                                              handleContainer.Handle,
-                                              KeyboardApi.VK_HOME);
+                handleContainer.Handle,
+                KeyboardApi.VK_HOME);
             keyInterceptor.AddInterceptingKey(
-                                              handleContainer.Handle,
-                                              KeyboardApi.VK_DELETE);
+                handleContainer.Handle,
+                KeyboardApi.VK_DELETE);
         }
 
         public HwndSource HandleSource => PresentationSource.FromVisual(this) as HwndSource;

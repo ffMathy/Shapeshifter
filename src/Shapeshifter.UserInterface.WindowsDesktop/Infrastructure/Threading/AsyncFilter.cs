@@ -15,8 +15,8 @@
         {
             return await
                    FilterAsync(
-                               candidatesTask.Select<TResult, Task<TResult>>(Task.FromResult),
-                               filter)
+                       candidatesTask.Select<TResult, Task<TResult>>(Task.FromResult),
+                       filter)
                        .ConfigureAwait(false);
         }
 
@@ -70,8 +70,8 @@
             return
                 await
                 HasMatchAsync(
-                              candidatesTask.Select<TResult, Task<TResult>>(Task.FromResult),
-                              filter);
+                    candidatesTask.Select<TResult, Task<TResult>>(Task.FromResult),
+                    filter);
         }
 
         public async Task<bool> HasMatchAsync<TResult>(

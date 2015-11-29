@@ -11,10 +11,10 @@
         {
             var fakePackage = Substitute.For<IClipboardDataPackage>();
             fakePackage.Contents.Returns(
-                                         new IClipboardData[]
-                                         {
-                                             Substitute.For<TData>()
-                                         });
+                new IClipboardData[]
+                {
+                    Substitute.For<TData>()
+                });
 
             return fakePackage;
         }

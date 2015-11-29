@@ -32,10 +32,10 @@
         static BitmapSource GetWindowIcon(IntPtr windowHandle)
         {
             var hIcon = WindowApi.SendMessage(
-                                              windowHandle,
-                                              (int) Message.WM_GETICON,
-                                              WindowApi.ICON_BIG,
-                                              IntPtr.Zero);
+                windowHandle,
+                (int) Message.WM_GETICON,
+                WindowApi.ICON_BIG,
+                IntPtr.Zero);
             if (hIcon == IntPtr.Zero)
             {
                 hIcon = WindowApi.GetClassLongPtr(windowHandle, WindowApi.GCL_HICON);
@@ -50,9 +50,9 @@
             if (hIcon != IntPtr.Zero)
             {
                 return Imaging.CreateBitmapSourceFromHIcon(
-                                                           hIcon,
-                                                           Int32Rect.Empty,
-                                                           BitmapSizeOptions.FromEmptyOptions());
+                    hIcon,
+                    Int32Rect.Empty,
+                    BitmapSizeOptions.FromEmptyOptions());
             }
             throw new InvalidOperationException("Could not load window icon.");
         }

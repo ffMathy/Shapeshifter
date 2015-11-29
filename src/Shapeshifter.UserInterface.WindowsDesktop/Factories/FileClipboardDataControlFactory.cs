@@ -62,14 +62,14 @@
             if (clipboardFileCollectionData != null)
             {
                 return clipboardFileCollectionControlFactory.CreateControl(
-                                                                           clipboardFileCollectionData);
+                    clipboardFileCollectionData);
             }
 
             var clipboardFileData = clipboardData as IClipboardFileData;
             if (clipboardFileData != null)
             {
                 return clipboardFileControlFactory.CreateControl(
-                                                                 clipboardFileData);
+                    clipboardFileData);
             }
 
             throw new ArgumentException(
@@ -123,10 +123,10 @@
                 var filenameBuilder = new StringBuilder(length);
 
                 length = ClipboardApi.DragQueryFile(
-                                                    memoryHandle.Pointer,
-                                                    i,
-                                                    filenameBuilder,
-                                                    length + 1);
+                    memoryHandle.Pointer,
+                    i,
+                    filenameBuilder,
+                    length + 1);
 
                 var fileName = filenameBuilder.ToString(0, length);
                 files.Add(fileName);
@@ -142,15 +142,15 @@
             if (files.Count == 1)
             {
                 return ConstructClipboardFileData(
-                                                  files.Single(),
-                                                  format,
-                                                  rawData);
+                    files.Single(),
+                    format,
+                    rawData);
             }
 
             return ConstructClipboardFileCollectionData(
-                                                        files,
-                                                        format,
-                                                        rawData);
+                files,
+                format,
+                rawData);
         }
 
         [ExcludeFromCodeCoverage]

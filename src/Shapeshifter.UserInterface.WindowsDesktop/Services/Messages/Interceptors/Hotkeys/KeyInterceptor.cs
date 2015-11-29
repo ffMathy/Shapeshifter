@@ -85,10 +85,10 @@
             if (interception != null)
             {
                 HotkeyFired?.Invoke(
-                                    this,
-                                    new HotkeyFiredArgument(
-                                        interception.KeyCode,
-                                        interception.ControlNeeded));
+                    this,
+                    new HotkeyFiredArgument(
+                        interception.KeyCode,
+                        interception.ControlNeeded));
             }
         }
 
@@ -146,9 +146,9 @@
         IHotkeyInterception CreateNewInterception(int keyCode)
         {
             var interception = hotkeyInterceptionFactory.CreateInterception(
-                                                                            keyCode,
-                                                                            true,
-                                                                            false);
+                keyCode,
+                true,
+                false);
             return interception;
         }
 

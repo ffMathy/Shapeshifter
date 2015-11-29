@@ -112,12 +112,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
                 var drawingContext = visual.RenderOpen();
 
                 drawingContext.DrawImage(
-                                         CreateBitmapSourceFromBitmap(drawingBitmap),
-                                         new Rect(
-                                             0,
-                                             0,
-                                             infoHeader.bV5Width,
-                                             infoHeader.bV5Height));
+                    CreateBitmapSourceFromBitmap(drawingBitmap),
+                    new Rect(
+                        0,
+                        0,
+                        infoHeader.bV5Width,
+                        infoHeader.bV5Height));
 
                 renderTargetBitmapSource.Render(visual);
 
@@ -139,8 +139,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
                 DrawingPixelFormat.Format32bppPArgb);
             using (var graphics = Graphics.FromImage(targetBitmap))
                 graphics.DrawImage(
-                                   sourceBitmap,
-                                   new Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height));
+                    sourceBitmap,
+                    new Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height));
             sourceBitmap.Dispose();
             return targetBitmap;
         }
@@ -173,10 +173,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
             try
             {
                 return Imaging.CreateBitmapSourceFromHBitmap(
-                                                             bitmapHandle,
-                                                             IntPtr.Zero,
-                                                             Int32Rect.Empty,
-                                                             BitmapSizeOptions.FromEmptyOptions());
+                    bitmapHandle,
+                    IntPtr.Zero,
+                    Int32Rect.Empty,
+                    BitmapSizeOptions.FromEmptyOptions());
             }
             finally
             {

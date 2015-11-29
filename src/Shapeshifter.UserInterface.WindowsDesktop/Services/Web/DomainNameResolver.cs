@@ -34,8 +34,8 @@
                 return
                     await
                     domainResolveCache.ThunkifyAsync(
-                                                     NormalizeDomain(domain),
-                                                     Dns.GetHostAddressesAsync);
+                        NormalizeDomain(domain),
+                        Dns.GetHostAddressesAsync);
             }
             catch (SocketException)
             {

@@ -26,14 +26,14 @@
         {
             var container =
                 CreateContainer(
-                                c =>
-                                {
-                                    c
-                                        .RegisterFake
-                                        <
-                                            IAsyncListDictionaryBinder
-                                                <IClipboardDataControlPackage, IAction>>();
-                                });
+                    c =>
+                    {
+                        c
+                            .RegisterFake
+                            <
+                                IAsyncListDictionaryBinder
+                                    <IClipboardDataControlPackage, IAction>>();
+                    });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
 
@@ -55,16 +55,16 @@
         public void SelectedElementChangesToTheSecondWhenFirstIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IKeyInterceptor>();
-                                                c
-                                                    .RegisterFake
-                                                    <
-                                                        IAsyncListDictionaryBinder
-                                                            <IClipboardDataControlPackage, IAction>>
-                                                    ();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IKeyInterceptor>();
+                    c
+                        .RegisterFake
+                        <
+                            IAsyncListDictionaryBinder
+                                <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -80,13 +80,13 @@
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_DOWN,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_DOWN,
+                    false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage2);
         }
@@ -95,16 +95,16 @@
         public void SelectedElementChangesToTheThirdWhenSecondIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IKeyInterceptor>();
-                                                c
-                                                    .RegisterFake
-                                                    <
-                                                        IAsyncListDictionaryBinder
-                                                            <IClipboardDataControlPackage, IAction>>
-                                                    ();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IKeyInterceptor>();
+                    c
+                        .RegisterFake
+                        <
+                            IAsyncListDictionaryBinder
+                                <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -120,13 +120,13 @@
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_DOWN,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_DOWN,
+                    false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage3);
         }
@@ -135,16 +135,16 @@
         public void SelectedElementChangesToTheFirstWhenThirdIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IKeyInterceptor>();
-                                                c
-                                                    .RegisterFake
-                                                    <
-                                                        IAsyncListDictionaryBinder
-                                                            <IClipboardDataControlPackage, IAction>>
-                                                    ();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IKeyInterceptor>();
+                    c
+                        .RegisterFake
+                        <
+                            IAsyncListDictionaryBinder
+                                <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -160,13 +160,13 @@
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_DOWN,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_DOWN,
+                    false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage1);
         }
@@ -175,16 +175,16 @@
         public void SelectedElementChangesToTheThirdWhenFirstIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IKeyInterceptor>();
-                                                c
-                                                    .RegisterFake
-                                                    <
-                                                        IAsyncListDictionaryBinder
-                                                            <IClipboardDataControlPackage, IAction>>
-                                                    ();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IKeyInterceptor>();
+                    c
+                        .RegisterFake
+                        <
+                            IAsyncListDictionaryBinder
+                                <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -200,13 +200,13 @@
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_UP,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_UP,
+                    false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage3);
         }
@@ -215,16 +215,16 @@
         public void SelectedElementChangesToTheSecondWhenThirdIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IKeyInterceptor>();
-                                                c
-                                                    .RegisterFake
-                                                    <
-                                                        IAsyncListDictionaryBinder
-                                                            <IClipboardDataControlPackage, IAction>>
-                                                    ();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IKeyInterceptor>();
+                    c
+                        .RegisterFake
+                        <
+                            IAsyncListDictionaryBinder
+                                <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -240,13 +240,13 @@
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_UP,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_UP,
+                    false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage2);
         }
@@ -255,16 +255,16 @@
         public void SelectedElementChangesToTheFirstWhenSecondIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IKeyInterceptor>();
-                                                c
-                                                    .RegisterFake
-                                                    <
-                                                        IAsyncListDictionaryBinder
-                                                            <IClipboardDataControlPackage, IAction>>
-                                                    ();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IKeyInterceptor>();
+                    c
+                        .RegisterFake
+                        <
+                            IAsyncListDictionaryBinder
+                                <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -280,13 +280,13 @@
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_UP,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_UP,
+                    false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage1);
         }
@@ -295,16 +295,16 @@
         public void SelectedActionChangesToTheSecondWhenFirstIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IKeyInterceptor>();
-                                                c
-                                                    .RegisterFake
-                                                    <
-                                                        IAsyncListDictionaryBinder
-                                                            <IClipboardDataControlPackage, IAction>>
-                                                    ();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IKeyInterceptor>();
+                    c
+                        .RegisterFake
+                        <
+                            IAsyncListDictionaryBinder
+                                <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -320,22 +320,22 @@
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_LEFT,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_LEFT,
+                    false));
 
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_DOWN,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_DOWN,
+                    false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction2);
         }
@@ -344,16 +344,16 @@
         public void SelectedActionChangesToTheThirdWhenSecondIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IKeyInterceptor>();
-                                                c
-                                                    .RegisterFake
-                                                    <
-                                                        IAsyncListDictionaryBinder
-                                                            <IClipboardDataControlPackage, IAction>>
-                                                    ();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IKeyInterceptor>();
+                    c
+                        .RegisterFake
+                        <
+                            IAsyncListDictionaryBinder
+                                <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -369,22 +369,22 @@
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_RIGHT,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_RIGHT,
+                    false));
 
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_DOWN,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_DOWN,
+                    false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction3);
         }
@@ -393,16 +393,16 @@
         public void SelectedActionChangesToTheFirstWhenThirdIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IKeyInterceptor>();
-                                                c
-                                                    .RegisterFake
-                                                    <
-                                                        IAsyncListDictionaryBinder
-                                                            <IClipboardDataControlPackage, IAction>>
-                                                    ();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IKeyInterceptor>();
+                    c
+                        .RegisterFake
+                        <
+                            IAsyncListDictionaryBinder
+                                <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -418,22 +418,22 @@
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_LEFT,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_LEFT,
+                    false));
 
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_DOWN,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_DOWN,
+                    false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction1);
         }
@@ -442,16 +442,16 @@
         public void SelectedActionChangesToTheThirdWhenFirstIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IKeyInterceptor>();
-                                                c
-                                                    .RegisterFake
-                                                    <
-                                                        IAsyncListDictionaryBinder
-                                                            <IClipboardDataControlPackage, IAction>>
-                                                    ();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IKeyInterceptor>();
+                    c
+                        .RegisterFake
+                        <
+                            IAsyncListDictionaryBinder
+                                <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -467,22 +467,22 @@
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_RIGHT,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_RIGHT,
+                    false));
 
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_UP,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_UP,
+                    false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction3);
         }
@@ -491,16 +491,16 @@
         public void SelectedActionChangesToTheSecondWhenThirdIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IKeyInterceptor>();
-                                                c
-                                                    .RegisterFake
-                                                    <
-                                                        IAsyncListDictionaryBinder
-                                                            <IClipboardDataControlPackage, IAction>>
-                                                    ();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IKeyInterceptor>();
+                    c
+                        .RegisterFake
+                        <
+                            IAsyncListDictionaryBinder
+                                <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -516,22 +516,22 @@
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_LEFT,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_LEFT,
+                    false));
 
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_UP,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_UP,
+                    false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction2);
         }
@@ -540,16 +540,16 @@
         public void SelectedActionChangesToTheFirstWhenSecondIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterFake<IKeyInterceptor>();
-                                                c
-                                                    .RegisterFake
-                                                    <
-                                                        IAsyncListDictionaryBinder
-                                                            <IClipboardDataControlPackage, IAction>>
-                                                    ();
-                                            });
+                c =>
+                {
+                    c.RegisterFake<IKeyInterceptor>();
+                    c
+                        .RegisterFake
+                        <
+                            IAsyncListDictionaryBinder
+                                <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
 
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
 
@@ -565,22 +565,22 @@
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_RIGHT,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_RIGHT,
+                    false));
 
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                                                                                             new object
-                                                                                                 (),
-                                                                                             new HotkeyFiredArgument
-                                                                                                 (
-                                                                                                 KeyboardApi
-                                                                                                     .VK_KEY_UP,
-                                                                                                 false));
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardApi
+                        .VK_KEY_UP,
+                    false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction1);
         }
@@ -593,17 +593,17 @@
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterInstance(fakeUserInterfaceMediator);
-                                            });
+                c =>
+                {
+                    c.RegisterInstance(fakeUserInterfaceMediator);
+                });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
             fakeUserInterfaceMediator.ControlAdded +=
                 Raise.Event<EventHandler<ControlEventArgument>>(
-                                                                viewModel,
-                                                                new ControlEventArgument(
-                                                                    fakePackage));
+                    viewModel,
+                    new ControlEventArgument(
+                        fakePackage));
 
             Assert.AreSame(fakePackage, viewModel.SelectedElement);
         }
@@ -616,17 +616,17 @@
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterInstance(fakeUserInterfaceMediator);
-                                            });
+                c =>
+                {
+                    c.RegisterInstance(fakeUserInterfaceMediator);
+                });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
             fakeUserInterfaceMediator.ControlAdded +=
                 Raise.Event<EventHandler<ControlEventArgument>>(
-                                                                viewModel,
-                                                                new ControlEventArgument(
-                                                                    fakePackage));
+                    viewModel,
+                    new ControlEventArgument(
+                        fakePackage));
 
             Assert.AreSame(fakePackage, viewModel.Elements.Single());
         }
@@ -639,19 +639,19 @@
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
             var container = CreateContainer(
-                                            c =>
-                                            {
-                                                c.RegisterInstance(fakeUserInterfaceMediator);
-                                            });
+                c =>
+                {
+                    c.RegisterInstance(fakeUserInterfaceMediator);
+                });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
             viewModel.Elements.Add(fakePackage);
 
             fakeUserInterfaceMediator.ControlHighlighted +=
                 Raise.Event<EventHandler<ControlEventArgument>>(
-                                                                viewModel,
-                                                                new ControlEventArgument(
-                                                                    fakePackage));
+                    viewModel,
+                    new ControlEventArgument(
+                        fakePackage));
 
             Assert.AreSame(fakePackage, viewModel.Elements.Single());
         }
