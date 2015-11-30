@@ -5,9 +5,10 @@
 
     using Windows.Interfaces;
 
-    using Data.Interfaces;
+    using Controls.Clipboard.Factories.Interfaces;
 
-    using Factories.Interfaces;
+    using Data.Factories.Interfaces;
+    using Data.Interfaces;
 
     using Infrastructure.Events;
 

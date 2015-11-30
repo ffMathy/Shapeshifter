@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.Tests.Services.Messages.Interceptors.Hotkeys
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
     using System;
 

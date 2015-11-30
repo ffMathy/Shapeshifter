@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.Tests.Infrastructure.Caching
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching
 {
     using System;
     using System.Threading.Tasks;

@@ -236,18 +236,18 @@
 
             if (SelectedAction != null)
             {
-                await SelectedAction.PerformAsync(SelectedElement);
+                await SelectedAction.PerformAsync(SelectedElement.Data);
             }
         }
 
         async Task<IEnumerable<IAction>> GetSupportedActionsFromDataAsync(
-            IClipboardDataPackage data)
+            IClipboardDataControlPackage data)
         {
             using (performanceHandleFactory.StartMeasuringPerformance())
             {
                 var allowedActions =
                     await
-                    asyncFilter.FilterAsync(allActions, action => action.CanPerformAsync(data))
+                    asyncFilter.FilterAsync(allActions, action => action.CanPerformAsync(data.Data))
                                .ConfigureAwait(false);
                 return allowedActions.OrderBy(x => x.Order);
             }

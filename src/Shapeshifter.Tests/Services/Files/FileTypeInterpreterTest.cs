@@ -1,10 +1,9 @@
-﻿namespace Shapeshifter.Tests.Services.Files
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
 {
     using Autofac;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using UserInterface.WindowsDesktop.Services.Files;
     using UserInterface.WindowsDesktop.Services.Files.Interfaces;
 
     [TestClass]

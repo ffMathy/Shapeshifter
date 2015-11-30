@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Factories
 {
     using System;
     using System.Collections.Generic;
@@ -20,7 +20,7 @@
     using Services.Files.Interfaces;
     using Services.Interfaces;
 
-    class FileClipboardDataFactory: IClipboardDataFactory
+    class FileClipboardDataFactory: IFileClipboardDataFactory
     {
         readonly IDataSourceService dataSourceService;
 

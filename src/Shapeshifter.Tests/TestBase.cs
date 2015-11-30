@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.Tests
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop
 {
     using System;
     using System.Linq;

@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.Tests.Windows.ViewModels
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
 {
     using System;
     using System.Linq;

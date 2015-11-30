@@ -1,20 +1,24 @@
-﻿namespace Shapeshifter.Tests.Mediators
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 {
     using System;
     using System.Linq;
 
     using Autofac;
 
+    using Controls.Clipboard.Factories.Interfaces;
+    using Controls.Clipboard.Interfaces;
+
+    using Data.Interfaces;
+
+    using Infrastructure.Events;
+
+    using Interfaces;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
 
-    using UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-    using UserInterface.WindowsDesktop.Data.Interfaces;
-    using UserInterface.WindowsDesktop.Factories.Interfaces;
-    using UserInterface.WindowsDesktop.Infrastructure.Events;
-    using UserInterface.WindowsDesktop.Mediators.Interfaces;
-    using UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces;
+    using Services.Messages.Interceptors.Interfaces;
 
     [TestClass]
     public class ClipboardUserInterfaceMediatorTest: TestBase
@@ -97,7 +101,7 @@
 
                     var fakePackage =
                         Substitute.For<IClipboardDataControlPackage>();
-                    fakePackage.Contents.Returns(
+                    fakePackage.Data.Contents.Returns(
                         new[]
                         {
                             Substitute
@@ -105,9 +109,7 @@
                             <IClipboardData>()
                         });
 
-                    c.RegisterFake<IClipboardDataControlPackageFactory>(
-                        
-                        )
+                    c.RegisterFake<IClipboardDataControlPackageFactory>()
                      .CreateFromCurrentClipboardData()
                      .Returns(fakePackage);
                 });
@@ -138,7 +140,7 @@
 
                     var fakePackage =
                         Substitute.For<IClipboardDataControlPackage>();
-                    fakePackage.Contents.Returns(
+                    fakePackage.Data.Contents.Returns(
                         new[]
                         {
                             fakeData
@@ -162,7 +164,7 @@
                     new DataCopiedEventArgument());
 
             var addedPackage = mediator.ClipboardElements.Single();
-            var content = addedPackage.Contents.Single();
+            var content = addedPackage.Data.Contents.Single();
             Assert.AreSame(fakeData, content);
             Assert.AreSame(fakeControl, addedPackage.Control);
         }

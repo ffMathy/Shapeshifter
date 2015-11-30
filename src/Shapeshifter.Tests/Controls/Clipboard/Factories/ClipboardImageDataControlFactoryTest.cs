@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.Tests.Controls.Clipboard.Factories
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
 {
     using System;
 
@@ -6,8 +6,8 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
-    using UserInterface.WindowsDesktop.Data.Interfaces;
+    using Interfaces;
+    using Data.Interfaces;
 
     [TestClass]
     public class ClipboardImageDataControlFactoryTest: TestBase
@@ -18,11 +18,9 @@
         {
             var container = CreateContainer();
 
-            var factory =
-                container
-                    .Resolve
-                    <IClipboardControlFactory<IClipboardImageData, IClipboardImageDataControl>>();
-            factory.CreateControl(null);
+            var factory = container
+                .Resolve<IClipboardDataControlFactory>();
+            factory.BuildControl(null);
         }
     }
 }

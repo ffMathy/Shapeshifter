@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Factories
 {
+    using System;
+
     using Api;
 
     using Data;
@@ -11,7 +11,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
     using Services.Interfaces;
 
-    class BitmapClipboardDataFactory : IClipboardDataFactory
+    class BitmapClipboardDataFactory : IBitmapClipboardDataFactory
     {
         readonly IDataSourceService dataSourceService;
 

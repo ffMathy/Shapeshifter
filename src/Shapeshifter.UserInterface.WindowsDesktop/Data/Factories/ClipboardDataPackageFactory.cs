@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Factories
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     using Api;
 
     using Controls.Clipboard.Unwrappers.Interfaces;
@@ -14,16 +14,18 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
 
     using Interfaces;
 
+    using Structures;
+
     class ClipboardDataPackageFactory : IClipboardDataPackageFactory
     {
         readonly IClipboardHandleFactory clipboardSessionFactory;
 
         readonly IEnumerable<IMemoryUnwrapper> memoryUnwrappers;
 
-        readonly IEnumerable<IClipboardDataControlFactory> dataFactories;
+        readonly IEnumerable<IClipboardDataFactory> dataFactories;
 
         public ClipboardDataPackageFactory(
-            IEnumerable<IClipboardDataControlFactory> dataFactories,
+            IEnumerable<IClipboardDataFactory> dataFactories,
             IEnumerable<IMemoryUnwrapper> memoryUnwrappers,
             IClipboardHandleFactory clipboardSessionFactory)
         {
@@ -50,10 +52,26 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             }
         }
 
-        IClipboardDataControlPackage ConstructPackageFromFormats(
+        public IClipboardDataPackage CreateFromFormatsAndData(params FormatDataPair[] formatsAndData)
+        {
+            if (!IsAnyFormatSupported(formatsAndData.Select(x => x.Format)))
+            {
+                return null;
+            }
+
+            var package = new ClipboardDataPackage();
+            foreach (var pair in formatsAndData)
+            {
+                DecoratePackageWithClipboardDataFromRawDataAndFormat(package, pair.Format, pair.Data);
+            }
+
+            return package;
+        }
+
+        IClipboardDataPackage ConstructPackageFromFormats(
             IEnumerable<uint> formats)
         {
-            var package = new ClipboardDataControlPackage();
+            var package = new ClipboardDataPackage();
             DecoratePackageWithClipboardData(formats, package);
 
             return package;
@@ -69,7 +87,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
             }
         }
 
-        IClipboardDataControlFactory FindCapableFactoryFromFormat(uint format)
+        IClipboardDataFactory FindCapableFactoryFromFormat(uint format)
         {
             return dataFactories.FirstOrDefault(x => x.CanBuildData(format));
         }
@@ -86,10 +104,10 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
                 return;
             }
 
-            DecoratePackageWithRawDataUsingFactory(package, format, rawData);
+            DecoratePackageWithClipboardDataFromRawDataAndFormat(package, format, rawData);
         }
 
-        void DecoratePackageWithRawDataUsingFactory(
+        void DecoratePackageWithClipboardDataFromRawDataAndFormat(
             IClipboardDataPackage package,
             uint format,
             byte[] rawData)

@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.Tests.Services
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
     using System.Linq;
     using System.Threading.Tasks;

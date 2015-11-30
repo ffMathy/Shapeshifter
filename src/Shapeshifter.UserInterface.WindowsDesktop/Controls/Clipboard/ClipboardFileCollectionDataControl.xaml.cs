@@ -3,13 +3,15 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Windows.Controls;
 
+    using Interfaces;
+
     /// <summary>
     ///     Interaction logic for ClipboardFileCollectionDataControl.xaml
     /// </summary>
     [ExcludeFromCodeCoverage]
     public partial class ClipboardFileCollectionDataControl
         : UserControl,
-          IClipboardFileCollectionDataControl
+          IClipboardControl
     {
         public ClipboardFileCollectionDataControl()
         {

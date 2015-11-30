@@ -3,6 +3,8 @@
     using System;
     using System.Diagnostics.CodeAnalysis;
 
+    using Clipboard.Interfaces;
+
     using Data.Interfaces;
 
     using Infrastructure.Environment.Interfaces;
@@ -12,8 +14,7 @@
     using ViewModels.FileCollection;
 
     class ClipboardFileCollectionDataControlFactory
-        : IClipboardControlFactory
-              <IClipboardFileCollectionData, IClipboardFileCollectionDataControl>
+        : IClipboardFileCollectionDataControlFactory
     {
         readonly IEnvironmentInformation environmentInformation;
 
@@ -23,7 +24,13 @@
             this.environmentInformation = environmentInformation;
         }
 
-        public IClipboardFileCollectionDataControl CreateControl(IClipboardFileCollectionData data)
+        public bool CanBuildControl(IClipboardData data)
+        {
+            return data is IClipboardFileCollectionData;
+        }
+
+        public IClipboardControl BuildControl(
+            IClipboardData data)
         {
             if (data == null)
             {
@@ -32,11 +39,11 @@
                     nameof(data));
             }
 
-            return CreateClipboardFileCollectionDataControl(data);
+            return CreateClipboardFileCollectionDataControl((IClipboardFileCollectionData)data);
         }
 
         [ExcludeFromCodeCoverage]
-        IClipboardFileCollectionDataControl CreateClipboardFileCollectionDataControl(
+        IClipboardControl CreateClipboardFileCollectionDataControl(
             IClipboardFileCollectionData data)
         {
             return new ClipboardFileCollectionDataControl

@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.Tests.Mediators
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 {
     using System;
 

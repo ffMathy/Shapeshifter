@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.Tests.Controls.Clipboard.ViewModels
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
     using System.Linq;
 

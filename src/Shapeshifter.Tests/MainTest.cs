@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.Tests
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 

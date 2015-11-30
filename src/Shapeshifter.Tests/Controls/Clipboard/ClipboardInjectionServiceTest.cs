@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.Tests.Controls.Clipboard
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard
 {
     using Autofac;
 

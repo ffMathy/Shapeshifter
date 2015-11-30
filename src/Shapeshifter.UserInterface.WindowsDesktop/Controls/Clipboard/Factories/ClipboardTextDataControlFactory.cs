@@ -3,6 +3,8 @@
     using System;
     using System.Diagnostics.CodeAnalysis;
 
+    using Clipboard.Interfaces;
+
     using Data.Interfaces;
 
     using Infrastructure.Environment.Interfaces;
@@ -11,8 +13,8 @@
 
     using ViewModels;
 
-    class ClipboardTextDataControlFactory:
-        IClipboardControlFactory<IClipboardTextData, IClipboardTextDataControl>
+    class ClipboardTextDataControlFactory :
+        IClipboardDataControlFactory
     {
         readonly IEnvironmentInformation environmentInformation;
 
@@ -22,7 +24,12 @@
             this.environmentInformation = environmentInformation;
         }
 
-        public IClipboardTextDataControl CreateControl(IClipboardTextData data)
+        public bool CanBuildControl(IClipboardData data)
+        {
+            return data is IClipboardTextData;
+        }
+
+        public IClipboardControl BuildControl(IClipboardData data)
         {
             if (data == null)
             {
@@ -31,11 +38,11 @@
                     nameof(data));
             }
 
-            return CreateClipboardTextDataControl(data);
+            return CreateClipboardTextDataControl((IClipboardTextData)data);
         }
 
         [ExcludeFromCodeCoverage]
-        IClipboardTextDataControl CreateClipboardTextDataControl(IClipboardTextData data)
+        IClipboardControl CreateClipboardTextDataControl(IClipboardTextData data)
         {
             return new ClipboardTextDataControl
             {

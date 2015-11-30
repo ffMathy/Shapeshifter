@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Factories.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Factories.Interfaces
 {
     using Data.Interfaces;
 

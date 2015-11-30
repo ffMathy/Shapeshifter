@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.Tests.Actions
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
     using System.Threading.Tasks;
 
@@ -8,9 +8,10 @@
 
     using NSubstitute;
 
+    using Services.Files;
+
     using UserInterface.WindowsDesktop.Actions.Interfaces;
     using UserInterface.WindowsDesktop.Data.Interfaces;
-    using UserInterface.WindowsDesktop.Services.Files;
     using UserInterface.WindowsDesktop.Services.Files.Interfaces;
 
     [TestClass]

@@ -2,27 +2,29 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Data.Factories.Interfaces;
     using Data.Interfaces;
-
-    using Factories.Interfaces;
 
     using Files.Interfaces;
 
     using Interfaces;
 
+    using Structures;
+
     class ClipboardPersistanceService: IClipboardPersistanceService
     {
         readonly IFileManager fileManager;
 
-        readonly IClipboardDataControlPackageFactory factory;
+        readonly IClipboardDataPackageFactory factory;
 
         public ClipboardPersistanceService(
             IFileManager fileManager,
-            IClipboardDataControlPackageFactory factory)
+            IClipboardDataPackageFactory factory)
         {
             this.fileManager = fileManager;
             this.factory = factory;
@@ -59,13 +61,25 @@
             return packageList;
         }
 
-        Task<IClipboardDataPackage> GetPersistedPackageAsync(string directory)
+        async Task<IClipboardDataPackage> GetPersistedPackageAsync(string directory)
         {
-            var packageFiles = Directory.GetFiles(directory)
-                .OrderBy(x => x);
-            
-            factory.CreateFromFormatAndRawData()
-            package.AddData();
+            var packageFiles = Directory.GetFiles(directory).OrderBy(x => x);
+
+            var dataPairs = new List<FormatDataPair>();
+            foreach (var file in packageFiles)
+            {
+                var fileExtension = Path.GetExtension(file);
+                Debug.Assert(fileExtension != null, "fileExtension != null");
+
+                var fileExtensionWithoutDot = fileExtension.Substring(1);
+
+                var format = uint.Parse(fileExtensionWithoutDot);
+                var data = File.ReadAllBytes(file);
+
+                dataPairs.Add(new FormatDataPair(format, data));
+            }
+
+            return factory.CreateFromFormatsAndData(dataPairs.ToArray());
         }
 
         public Task DeletePackageAsync(IClipboardDataPackage package)

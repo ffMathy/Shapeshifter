@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.Tests.Actions
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;

@@ -6,7 +6,7 @@
     <ProjectGuid>{66E94495-F590-41F6-B488-52B0FDCAB03C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Shapeshifter.Tests</RootNamespace>
+    <RootNamespace>Shapeshifter.UserInterface.WindowsDesktop</RootNamespace>
     <AssemblyName>Shapeshifter.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -105,7 +105,8 @@
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardFileDataViewModelTest.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardTextDataViewModelTest.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Factories\FileClipboardDataControlFactoryTest.cs" />
+    <Compile Include="Data\Factories\FileClipboardDataFactoryTest.cs" />
+    <Compile Include="Data\Factories\TextClipboardDataFactoryTest.cs" />
     <Compile Include="Infrastructure\Caching\KeyValueCacheTest.cs" />
     <Compile Include="Infrastructure\Threading\ConsumerThreadLoopTest.cs" />
     <Compile Include="MainTest.cs" />
@@ -116,7 +117,6 @@
     <Compile Include="Services\ProcessManagerTest.cs" />
     <Compile Include="Services\LinkParserTest.cs" />
     <Compile Include="TestBase.cs" />
-    <Compile Include="Factories\TextClipboardDataControlFactoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Windows\ViewModels\ClipboardListViewModelTest.cs" />
   </ItemGroup>
@@ -129,9 +129,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

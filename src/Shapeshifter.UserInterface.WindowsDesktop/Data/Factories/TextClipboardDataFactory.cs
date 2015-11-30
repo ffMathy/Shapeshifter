@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Factories
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Factories
 {
     using System;
     using System.Text;
@@ -12,7 +12,7 @@
 
     using Services.Interfaces;
 
-    class TextClipboardDataFactory: IClipboardDataFactory
+    class TextClipboardDataFactory: ITextClipboardDataFactory
     {
         readonly IDataSourceService dataSourceService;
 
