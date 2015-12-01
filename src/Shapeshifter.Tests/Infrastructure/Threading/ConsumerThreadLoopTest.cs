@@ -10,7 +10,7 @@
 
     using NSubstitute;
 
-    using UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
+    using Interfaces;
 
     [TestClass]
     public class ConsumerThreadLoopTest: TestBase

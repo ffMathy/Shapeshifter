@@ -8,15 +8,15 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
-
-    using UserInterface.WindowsDesktop.Actions.Interfaces;
-    using UserInterface.WindowsDesktop.Api;
-    using UserInterface.WindowsDesktop.Data.Interfaces;
-    using UserInterface.WindowsDesktop.Infrastructure.Events;
-    using UserInterface.WindowsDesktop.Mediators.Interfaces;
-    using UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
-    using UserInterface.WindowsDesktop.Windows.Binders.Interfaces;
-    using UserInterface.WindowsDesktop.Windows.ViewModels.Interfaces;
+    
+    using Actions.Interfaces;
+    using Api;
+    using Data.Interfaces;
+    using Infrastructure.Events;
+    using Mediators.Interfaces;
+    using Services.Messages.Interceptors.Hotkeys.Interfaces;
+    using Binders.Interfaces;
+    using Interfaces;
 
     [TestClass]
     public class ClipboardListViewModelTest: TestBase
@@ -28,10 +28,7 @@
                 CreateContainer(
                     c =>
                     {
-                        c
-                            .RegisterFake
-                            <
-                                IAsyncListDictionaryBinder
+                        c.RegisterFake<IAsyncListDictionaryBinder
                                     <IClipboardDataControlPackage, IAction>>();
                     });
 

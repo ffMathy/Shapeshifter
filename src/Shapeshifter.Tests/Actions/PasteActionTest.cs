@@ -9,9 +9,9 @@
 
     using NSubstitute;
 
-    using UserInterface.WindowsDesktop.Actions.Interfaces;
-    using UserInterface.WindowsDesktop.Data.Interfaces;
-    using UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
+    using Interfaces;
+    using Data.Interfaces;
+    using Services.Clipboard.Interfaces;
 
     [TestClass]
     public class PasteActionTest: ActionTestBase

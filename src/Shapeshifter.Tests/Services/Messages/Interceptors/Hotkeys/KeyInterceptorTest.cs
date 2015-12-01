@@ -8,10 +8,10 @@
 
     using NSubstitute;
 
-    using UserInterface.WindowsDesktop.Api;
-    using UserInterface.WindowsDesktop.Infrastructure.Events;
-    using UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Factories.Interfaces;
-    using UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
+    using Api;
+    using Infrastructure.Events;
+    using Factories.Interfaces;
+    using Interfaces;
 
     [TestClass]
     public class KeyInterceptorTest: TestBase

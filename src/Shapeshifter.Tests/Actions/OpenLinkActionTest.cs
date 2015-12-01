@@ -9,10 +9,10 @@
 
     using NSubstitute;
 
-    using UserInterface.WindowsDesktop.Actions.Interfaces;
-    using UserInterface.WindowsDesktop.Data.Interfaces;
-    using UserInterface.WindowsDesktop.Services.Interfaces;
-    using UserInterface.WindowsDesktop.Services.Web.Interfaces;
+    using Interfaces;
+    using Data.Interfaces;
+    using Services.Interfaces;
+    using Services.Web.Interfaces;
 
     [TestClass]
     public class OpenLinkActionTest: ActionTestBase

@@ -11,9 +11,9 @@
 
     using Ploeh.AutoFixture;
 
-    using UserInterface.WindowsDesktop.Infrastructure.Dependencies;
-    using UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-    using UserInterface.WindowsDesktop.Services.Interfaces;
+    using Infrastructure.Dependencies;
+    using Infrastructure.Environment.Interfaces;
+    using Services.Interfaces;
 
     public abstract class TestBase
     {

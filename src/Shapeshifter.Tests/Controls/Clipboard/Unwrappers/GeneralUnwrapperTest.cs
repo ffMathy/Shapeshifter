@@ -4,8 +4,8 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using UserInterface.WindowsDesktop.Api;
-    using UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers.Interfaces;
+    using Api;
+    using Interfaces;
 
     [TestClass]
     public class GeneralUnwrapperTest: TestBase

@@ -10,9 +10,9 @@
 
     using Services.Files;
 
-    using UserInterface.WindowsDesktop.Actions.Interfaces;
-    using UserInterface.WindowsDesktop.Data.Interfaces;
-    using UserInterface.WindowsDesktop.Services.Files.Interfaces;
+    using Interfaces;
+    using Data.Interfaces;
+    using Services.Files.Interfaces;
 
     [TestClass]
     public class UploadImageActionTest: ActionTestBase

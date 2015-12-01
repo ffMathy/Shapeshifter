@@ -1,6 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces
 {
-    using Controls.Clipboard.Interfaces;
+    using Clipboard.Interfaces;
 
     using Data.Interfaces;
 

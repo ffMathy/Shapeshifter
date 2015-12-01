@@ -6,8 +6,8 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using UserInterface.WindowsDesktop.Actions.Interfaces;
-    using UserInterface.WindowsDesktop.Data.Interfaces;
+    using Interfaces;
+    using Data.Interfaces;
 
     [TestClass]
     public class ZipFilesActionTest: ActionTestBase

@@ -8,8 +8,8 @@
 
     using NSubstitute;
 
-    using UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection.Interfaces;
-    using UserInterface.WindowsDesktop.Data.Interfaces;
+    using FileCollection.Interfaces;
+    using Data.Interfaces;
 
     [TestClass]
     public class ClipboardFileCollectionDataViewModelTest: TestBase

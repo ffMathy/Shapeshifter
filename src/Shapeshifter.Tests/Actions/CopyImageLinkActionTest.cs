@@ -10,12 +10,12 @@
 
     using NSubstitute;
 
-    using UserInterface.WindowsDesktop.Actions.Interfaces;
-    using UserInterface.WindowsDesktop.Data.Interfaces;
-    using UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-    using UserInterface.WindowsDesktop.Services.Images.Interfaces;
-    using UserInterface.WindowsDesktop.Services.Web;
-    using UserInterface.WindowsDesktop.Services.Web.Interfaces;
+    using Interfaces;
+    using Data.Interfaces;
+    using Services.Clipboard.Interfaces;
+    using Services.Images.Interfaces;
+    using Services.Web;
+    using Services.Web.Interfaces;
 
     [TestClass]
     public class CopyImageLinkActionTest: ActionTestBase

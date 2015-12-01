@@ -4,7 +4,7 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using UserInterface.WindowsDesktop.Services.Files.Interfaces;
+    using Interfaces;
 
     [TestClass]
     public class FileTypeInterpreterTest: TestBase

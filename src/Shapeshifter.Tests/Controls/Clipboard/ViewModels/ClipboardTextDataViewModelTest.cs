@@ -6,8 +6,8 @@
 
     using NSubstitute;
 
-    using UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Interfaces;
-    using UserInterface.WindowsDesktop.Data.Interfaces;
+    using Interfaces;
+    using Data.Interfaces;
 
     [TestClass]
     public class ClipboardTextDataViewModelTest: TestBase

@@ -6,9 +6,9 @@
 
     using NSubstitute;
 
-    using UserInterface.WindowsDesktop.Data.Interfaces;
-    using UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-    using UserInterface.WindowsDesktop.Services.Messages.Interceptors.Interfaces;
+    using Data.Interfaces;
+    using Services.Clipboard.Interfaces;
+    using Services.Messages.Interceptors.Interfaces;
 
     [TestClass]
     public class ClipboardInjectionServiceTest: TestBase

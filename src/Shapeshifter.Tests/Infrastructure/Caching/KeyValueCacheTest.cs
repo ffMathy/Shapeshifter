@@ -7,7 +7,7 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces;
+    using Interfaces;
 
     [TestClass]
     public class KeyValueCacheTest: TestBase

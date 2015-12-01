@@ -8,9 +8,9 @@
 
     using NSubstitute;
 
-    using UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-    using UserInterface.WindowsDesktop.Mediators.Interfaces;
-    using UserInterface.WindowsDesktop.Windows.Interfaces;
+    using Infrastructure.Threading.Interfaces;
+    using Interfaces;
+    using Windows.Interfaces;
 
     [TestClass]
     public class PasteCombinationDurationMediatorTest: TestBase

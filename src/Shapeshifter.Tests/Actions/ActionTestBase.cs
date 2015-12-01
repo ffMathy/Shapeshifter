@@ -2,7 +2,7 @@
 {
     using NSubstitute;
 
-    using UserInterface.WindowsDesktop.Data.Interfaces;
+    using Data.Interfaces;
 
     public abstract class ActionTestBase: TestBase
     {

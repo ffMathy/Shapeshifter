@@ -9,8 +9,8 @@
 
     using NSubstitute;
 
-    using UserInterface.WindowsDesktop.Services.Web;
-    using UserInterface.WindowsDesktop.Services.Web.Interfaces;
+    using Web;
+    using Web.Interfaces;
 
     [TestClass]
     public class LinkParserTest: TestBase
