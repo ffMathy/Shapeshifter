@@ -18,7 +18,8 @@
                 ClipboardApi.CF_DSPBITMAP,
                 ClipboardApi.CF_DSPENHMETAFILE,
                 ClipboardApi.CF_ENHMETAFILE,
-                ClipboardApi.CF_METAFILEPICT
+                ClipboardApi.CF_METAFILEPICT,
+                ClipboardApi.CF_BITMAP
             };
         }
 
