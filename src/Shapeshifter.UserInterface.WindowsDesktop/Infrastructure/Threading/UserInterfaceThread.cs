@@ -1,12 +1,13 @@
-﻿using System;
-using System.Windows.Threading;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
-    internal class UserInterfaceThread : IUserInterfaceThread
+    using System;
+    using System.Windows.Threading;
+
+    using Interfaces;
+
+    class UserInterfaceThread: IUserInterfaceThread
     {
-        private readonly Dispatcher targetThread;
+        readonly Dispatcher targetThread;
 
         public UserInterfaceThread(Dispatcher targetThread)
         {

@@ -1,14 +1,18 @@
-﻿using System.Linq;
-using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-namespace Shapeshifter.Tests.Controls.Clipboard.ViewModels
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
+    using System.Linq;
+
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using NSubstitute;
+
+    using FileCollection.Interfaces;
+    using Data.Interfaces;
+
     [TestClass]
-    public class ClipboardFileCollectionDataViewModelTest : TestBase
+    public class ClipboardFileCollectionDataViewModelTest: TestBase
     {
         [TestMethod]
         public void FileCountReturnsAmountOfFiles()
@@ -23,12 +27,13 @@ namespace Shapeshifter.Tests.Controls.Clipboard.ViewModels
             var house = GenerateFakeFileData("house.jpg");
             var notes = GenerateFakeFileData("notes.docx");
 
-            fakeData.Files.Returns(new[]
-            {
-                kitten,
-                house,
-                notes
-            });
+            fakeData.Files.Returns(
+                new[]
+                {
+                    kitten,
+                    house,
+                    notes
+                });
 
             viewModel.Data = fakeData;
 
@@ -48,12 +53,13 @@ namespace Shapeshifter.Tests.Controls.Clipboard.ViewModels
             var kitten = GenerateFakeFileData("kitten.jpg");
             var house = GenerateFakeFileData("house.jpg");
 
-            fakeData.Files.Returns(new[]
-            {
-                notes,
-                kitten,
-                house
-            });
+            fakeData.Files.Returns(
+                new[]
+                {
+                    notes,
+                    kitten,
+                    house
+                });
 
             viewModel.Data = fakeData;
 
@@ -67,7 +73,7 @@ namespace Shapeshifter.Tests.Controls.Clipboard.ViewModels
             Assert.AreEqual(1, groups[1].Count);
         }
 
-        private static IClipboardFileData GenerateFakeFileData(string fileName)
+        static IClipboardFileData GenerateFakeFileData(string fileName)
         {
             var fakeFileData = Substitute.For<IClipboardFileData>();
             fakeFileData.FileName.Returns(fileName);

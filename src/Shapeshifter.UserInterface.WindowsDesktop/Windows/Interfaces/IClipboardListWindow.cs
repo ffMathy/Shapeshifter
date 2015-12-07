@@ -1,8 +1,8 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces
 {
-    internal interface IClipboardListWindow : IWindow, ISingleInstance
-    {
-    }
+    using Infrastructure.Dependencies.Interfaces;
+
+    interface IClipboardListWindow
+        : IWindow,
+          ISingleInstance { }
 }

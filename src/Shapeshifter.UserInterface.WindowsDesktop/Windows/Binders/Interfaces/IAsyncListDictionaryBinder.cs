@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces
 {
-    public interface IAsyncListDictionaryBinder<TKey, TData> where TKey : class
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Threading.Tasks;
+
+    public interface IAsyncListDictionaryBinder<TKey, TData>
+        where TKey : class
     {
         TData Default { get; set; }
 

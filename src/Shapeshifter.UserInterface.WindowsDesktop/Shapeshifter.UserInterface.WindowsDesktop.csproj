@@ -72,6 +72,10 @@
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="JetBrains.Annotations, Version=10.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Octokit, Version=0.14.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Octokit.0.14.0\lib\net45\Octokit.dll</HintPath>
       <Private>True</Private>
@@ -110,6 +114,7 @@
     <Compile Include="Actions\OpenLinkAction.cs" />
     <Compile Include="Actions\PasteAction.cs" />
     <Compile Include="Actions\PasteAsPlainTextAction.cs" />
+    <Compile Include="Actions\PinClipboardDataAction.cs" />
     <Compile Include="Actions\UploadImageAction.cs" />
     <Compile Include="Actions\ZipFilesAction.cs" />
     <Compile Include="Api\GeneralApi.cs" />
@@ -124,16 +129,13 @@
     <Compile Include="Controls\Clipboard\Designer\Services\DesignerFileManager.cs" />
     <Compile Include="Controls\Clipboard\Designer\Services\DesignerProcessManager.cs" />
     <Compile Include="Controls\Clipboard\Designer\Services\DesignerUpdateService.cs" />
+    <Compile Include="Controls\Clipboard\Factories\ClipboardDataControlPackageFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardFileCollectionDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardImageDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardFileDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardTextDataControlFactory.cs" />
-    <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardControlFactory.cs" />
+    <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardFileCollectionDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Interfaces\IClipboardControl.cs" />
-    <Compile Include="Controls\Clipboard\Interfaces\IClipboardImageDataControl.cs" />
-    <Compile Include="Controls\Clipboard\Interfaces\IClipboardTextDataControl.cs" />
-    <Compile Include="Controls\Clipboard\Interfaces\IClipboardFileDataControl.cs" />
-    <Compile Include="Controls\Clipboard\Interfaces\IClipboardFileCollectionDataControl.cs" />
     <Compile Include="Controls\Clipboard\Unwrappers\BitmapUnwrapper.cs" />
     <Compile Include="Controls\Clipboard\Unwrappers\GeneralUnwrapper.cs" />
     <Compile Include="Controls\Clipboard\Unwrappers\Interfaces\IMemoryUnwrapper.cs" />
@@ -152,12 +154,16 @@
     <Compile Include="Controls\Clipboard\ViewModels\Interfaces\IClipboardDataViewModel.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\Interfaces\IClipboardTextDataViewModel.cs" />
     <Compile Include="Converters\InjectedConverterMarkupExtension.cs" />
+    <Compile Include="Data\ClipboardDataPackage.cs" />
     <Compile Include="Data\ClipboardDataControlPackage.cs" />
     <Compile Include="Data\ClipboardFileCollectionData.cs" />
     <Compile Include="Data\ClipboardFileData.cs" />
     <Compile Include="Data\ClipboardImageData.cs" />
     <Compile Include="Data\ClipboardTextData.cs" />
     <Compile Include="Data\DataSource.cs" />
+    <Compile Include="Data\Factories\Interfaces\IBitmapClipboardDataFactory.cs" />
+    <Compile Include="Data\Factories\Interfaces\IFileClipboardDataFactory.cs" />
+    <Compile Include="Data\Factories\Interfaces\ITextClipboardDataFactory.cs" />
     <Compile Include="Data\Interfaces\IClipboardData.cs" />
     <Compile Include="Data\Interfaces\IClipboardDataControlPackage.cs" />
     <Compile Include="Data\Interfaces\IClipboardDataPackage.cs" />
@@ -166,17 +172,16 @@
     <Compile Include="Data\Interfaces\IClipboardImageData.cs" />
     <Compile Include="Data\Interfaces\IClipboardTextData.cs" />
     <Compile Include="Data\Interfaces\IDataSource.cs" />
-    <Compile Include="Factories\ClipboardDataControlPackageFactory.cs" />
+    <Compile Include="Data\Factories\BitmapClipboardDataFactory.cs" />
+    <Compile Include="Data\Factories\ClipboardDataPackageFactory.cs" />
+    <Compile Include="Data\Factories\Interfaces\IClipboardDataFactory.cs" />
+    <Compile Include="Data\Factories\Interfaces\IClipboardDataPackageFactory.cs" />
     <Compile Include="Handles\Factories\ClipboardHandleFactory.cs" />
-    <Compile Include="Factories\BitmapClipboardDataControlFactory.cs" />
-    <Compile Include="Factories\FileClipboardDataControlFactory.cs" />
-    <Compile Include="Factories\Interfaces\IClipboardDataControlFactory.cs" />
-    <Compile Include="Factories\EnhancedMetafileClipboardDataControlFactory.cs" />
-    <Compile Include="Factories\Interfaces\IClipboardDataControlPackageFactory.cs" />
+    <Compile Include="Data\Factories\FileClipboardDataFactory.cs" />
+    <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardDataControlFactory.cs" />
+    <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardDataControlPackageFactory.cs" />
     <Compile Include="Handles\Factories\Interfaces\IClipboardHandleFactory.cs" />
-    <Compile Include="Factories\Interfaces\IFileClipboardDataControlFactory.cs" />
-    <Compile Include="Factories\Interfaces\ITextClipboardDataControlFactory.cs" />
-    <Compile Include="Factories\TextClipboardDataControlFactory.cs" />
+    <Compile Include="Data\Factories\TextClipboardDataFactory.cs" />
     <Compile Include="Api\IconApi.cs" />
     <Compile Include="Api\KeyboardApi.cs" />
     <Compile Include="Api\ClipboardApi.cs" />
@@ -222,8 +227,10 @@
     <Compile Include="Services\Arguments\UpdateArgumentProcessor.cs" />
     <Compile Include="Services\Clipboard\ClipboardPasteService.cs" />
     <Compile Include="Handles\ClipboardHandle.cs" />
+    <Compile Include="Services\Clipboard\ClipboardPersistanceService.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IClipboardPasteService.cs" />
     <Compile Include="Handles\Interfaces\IHandle.cs" />
+    <Compile Include="Services\Clipboard\Interfaces\IClipboardPersistanceService.cs" />
     <Compile Include="Services\Interfaces\IDataSourceService.cs" />
     <Compile Include="Services\Messages\Interceptors\ClipboardCopyInterceptor.cs" />
     <Compile Include="Mediators\ClipboardUserInterfaceMediator.cs" />
@@ -274,6 +281,7 @@
     <Compile Include="Services\ProcessManager.cs" />
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Services\Messages\WindowMessageHook.cs" />
+    <Compile Include="Structures\FormatDataPair.cs" />
     <Compile Include="Windows\Binders\PackageToActionBinder.cs" />
     <Compile Include="Windows\ClipboardListWindow.xaml.cs">
       <DependentUpon>ClipboardListWindow.xaml</DependentUpon>

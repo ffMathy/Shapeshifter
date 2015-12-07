@@ -1,20 +1,22 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Windows;
-using Autofac;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Windows;
+
+    using Autofac;
+
+    using Infrastructure.Dependencies;
+
     /// <summary>
     ///     Interaction logic for App.xaml
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public partial class App : Application
+    public partial class App: Application
     {
-        private static ILifetimeScope container;
+        static ILifetimeScope container;
 
-        private static ILifetimeScope Container
+        static ILifetimeScope Container
         {
             get
             {
@@ -46,7 +48,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) =>
             {
-                MessageBox.Show(exceptionEventArguments.ExceptionObject.ToString(), "Shapeshifter error",
+                MessageBox.Show(
+                    exceptionEventArguments.ExceptionObject.ToString(),
+                    "Shapeshifter error",
                     MessageBoxButton.OK);
                 Current.Shutdown();
             };

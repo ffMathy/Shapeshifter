@@ -1,20 +1,27 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data;
-using Shapeshifter.UserInterface.WindowsDesktop.Properties;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    using Data;
+
+    using Properties;
+
+    using Services;
+    using Services.Interfaces;
+
     [ExcludeFromCodeCoverage]
-    internal class DesignerClipboardFileDataFacade : ClipboardFileData
+    class DesignerClipboardFileDataFacade: ClipboardFileData
     {
         public DesignerClipboardFileDataFacade(
-            IDesignerImageConverterService designerImageConverterService) :
+            IDesignerImageConverterService designerImageConverterService)
+            :
                 base(new DesignerFileDataSourceService(designerImageConverterService))
         {
             FileName = "Kitten.jpg";
-            FileIcon = designerImageConverterService.GenerateDesignerImageBytesFromFileBytes(Resources.FileDataFileIcon);
+            FileIcon =
+                designerImageConverterService.GenerateDesignerImageBytesFromFileBytes(
+                    Resources
+                        .FileDataFileIcon);
         }
     }
 }

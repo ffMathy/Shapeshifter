@@ -1,9 +1,10 @@
-﻿using System.Linq;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
 {
-    internal class FileTypeInterpreter : IFileTypeInterpreter
+    using System.Linq;
+
+    using Interfaces;
+
+    class FileTypeInterpreter: IFileTypeInterpreter
     {
         public FileType GetFileTypeFromFileName(string name)
         {
@@ -19,15 +20,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             return FileType.Other;
         }
 
-        private static bool IsTextFileType(string name)
+        static bool IsTextFileType(string name)
         {
-            var imageFileTypes = new[] {".txt"};
+            var imageFileTypes = new[]
+            {
+                ".txt"
+            };
             return imageFileTypes.Any(name.EndsWith);
         }
 
-        private static bool IsImageFileType(string name)
+        static bool IsImageFileType(string name)
         {
-            var imageFileTypes = new[] {".png", ".jpg"};
+            var imageFileTypes = new[]
+            {
+                ".png",
+                ".jpg"
+            };
             return imageFileTypes.Any(name.EndsWith);
         }
     }

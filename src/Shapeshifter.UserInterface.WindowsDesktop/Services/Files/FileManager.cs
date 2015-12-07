@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+
+    using Interfaces;
+
     [ExcludeFromCodeCoverage]
-    internal class FileManager : IFileManager, IDisposable
+    class FileManager
+        : IFileManager,
+          IDisposable
     {
-        private readonly ICollection<string> temporaryPaths;
+        readonly ICollection<string> temporaryPaths;
 
         public FileManager()
         {
@@ -31,7 +34,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             }
         }
 
-        private static string PrepareIsolatedTemporaryFolder()
+        static string PrepareIsolatedTemporaryFolder()
         {
             const string folderName = "Shapeshifter";
 
@@ -43,7 +46,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             return path;
         }
 
-        private static void PrepareDirectory(string path)
+        static void PrepareDirectory(string path)
         {
             if (!Directory.Exists(path))
             {
@@ -61,7 +64,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
             return finalPath;
         }
 
-        private static string GetFullPathFromRelativeTemporaryPath(string path)
+        static string GetFullPathFromRelativeTemporaryPath(string path)
         {
             var isolatedFolderPath = PrepareIsolatedTemporaryFolder();
 

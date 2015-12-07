@@ -1,17 +1,23 @@
-﻿using System;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
-    internal class PasteAction : IPasteAction
+    using System;
+    using System.Threading.Tasks;
+
+    using Data.Interfaces;
+
+    using Infrastructure.Logging.Interfaces;
+
+    using Interfaces;
+
+    using Services.Clipboard.Interfaces;
+
+    class PasteAction: IPasteAction
     {
-        private readonly IClipboardInjectionService clipboardInjectionService;
-        private readonly IClipboardPasteService clipboardPasteService;
-        private readonly ILogger logger;
+        readonly IClipboardInjectionService clipboardInjectionService;
+
+        readonly IClipboardPasteService clipboardPasteService;
+
+        readonly ILogger logger;
 
         public PasteAction(
             IClipboardInjectionService clipboardInjectionService,

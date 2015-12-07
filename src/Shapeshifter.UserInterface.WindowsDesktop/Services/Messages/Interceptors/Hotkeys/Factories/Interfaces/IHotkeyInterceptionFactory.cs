@@ -1,10 +1,14 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Factories.Interfaces
+﻿namespace
+    Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Factories.
+    Interfaces
 {
+    using Hotkeys.Interfaces;
+
     public interface IHotkeyInterceptionFactory
     {
         IHotkeyInterception CreateInterception(
-            int hotkey, bool controlNeeded, bool noRepeat);
+            int hotkey,
+            bool controlNeeded,
+            bool noRepeat);
     }
 }

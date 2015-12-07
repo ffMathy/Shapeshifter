@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces
 {
+    using System.Threading.Tasks;
+
+    using Data.Interfaces;
+
     public interface IAction
     {
         string Title { get; }

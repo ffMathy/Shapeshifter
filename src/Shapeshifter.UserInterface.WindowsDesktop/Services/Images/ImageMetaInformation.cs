@@ -1,7 +1,7 @@
-﻿using System.Windows.Media;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
 {
+    using System.Windows.Media;
+
     public struct ImageMetaInformation
     {
         public int Width { get; set; }

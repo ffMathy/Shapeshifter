@@ -1,30 +1,40 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Mediators.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
 {
-    internal class PasteCombinationDurationMediator : IPasteCombinationDurationMediator
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Windows.Input;
+
+    using Windows.Interfaces;
+
+    using Infrastructure.Events;
+    using Infrastructure.Logging.Interfaces;
+    using Infrastructure.Threading.Interfaces;
+
+    using Interfaces;
+
+    using Services.Messages.Interceptors.Hotkeys.Interfaces;
+
+    class PasteCombinationDurationMediator: IPasteCombinationDurationMediator
     {
-        private readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
-        private readonly IConsumerThreadLoop threadLoop;
-        private readonly IThreadDelay threadDelay;
-        private readonly ILogger logger;
-        private readonly IMainThreadInvoker mainThreadInvoker;
+        readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
 
-        private readonly CancellationTokenSource threadCancellationTokenSource;
+        readonly IConsumerThreadLoop threadLoop;
 
-        private bool isCombinationDown;
+        readonly IThreadDelay threadDelay;
 
-        public event EventHandler<PasteCombinationDurationPassedEventArgument> PasteCombinationDurationPassed;
+        readonly ILogger logger;
+
+        readonly IMainThreadInvoker mainThreadInvoker;
+
+        readonly CancellationTokenSource threadCancellationTokenSource;
+
+        bool isCombinationDown;
+
+        public event EventHandler<PasteCombinationDurationPassedEventArgument>
+            PasteCombinationDurationPassed;
+
         public event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleased;
 
         public PasteCombinationDurationMediator(
@@ -46,7 +56,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         public bool IsConnected
             => threadLoop.IsRunning;
 
-        private bool IsCancellationRequested
+        bool IsCancellationRequested
             => threadCancellationTokenSource.Token.IsCancellationRequested;
 
         [ExcludeFromCodeCoverage]
@@ -58,7 +68,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
             => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.V);
 
         [ExcludeFromCodeCoverage]
-        private CancellationToken Token
+        CancellationToken Token
             => threadCancellationTokenSource.Token;
 
         [ExcludeFromCodeCoverage]
@@ -69,34 +79,42 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         {
             if (IsConnected)
             {
-                throw new InvalidOperationException("The clipboard combination mediator is already connected.");
+                throw new InvalidOperationException(
+                    "The clipboard combination mediator is already connected.");
             }
 
             InstallPasteHotkeyInterceptor();
         }
 
         [ExcludeFromCodeCoverage]
-        private async Task MonitorClipboardCombinationStateAsync()
+        async Task MonitorClipboardCombinationStateAsync()
         {
             await WaitForCombinationRelease();
-            if (IsCancellationRequested) return;
+            if (IsCancellationRequested)
+            {
+                return;
+            }
 
             RegisterCombinationReleased();
         }
 
         [ExcludeFromCodeCoverage]
-        private void RegisterCombinationReleased()
+        void RegisterCombinationReleased()
         {
             isCombinationDown = false;
             if (PasteCombinationReleased != null)
             {
                 mainThreadInvoker.Invoke(
-                    () => PasteCombinationReleased(this, new PasteCombinationReleasedEventArgument()));
+                    () =>
+                    PasteCombinationReleased(
+                        this,
+                        new PasteCombinationReleasedEventArgument
+                            ()));
             }
         }
 
         [ExcludeFromCodeCoverage]
-        private async Task WaitForCombinationRelease()
+        async Task WaitForCombinationRelease()
         {
             var decisecondsPassed = 0;
             while (!IsCancellationRequested && IsOneCombinationKeyDown)
@@ -111,33 +129,42 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         }
 
         [ExcludeFromCodeCoverage]
-        private void RaiseDurationPassedEventIfNeeded(int decisecondsPassed)
+        void RaiseDurationPassedEventIfNeeded(int decisecondsPassed)
         {
-            if (decisecondsPassed != DurationInDeciseconds || PasteCombinationDurationPassed == null) return;
+            if ((decisecondsPassed != DurationInDeciseconds) || (PasteCombinationDurationPassed == null))
+            {
+                return;
+            }
 
             mainThreadInvoker.Invoke(
-                () => PasteCombinationDurationPassed(this, new PasteCombinationDurationPassedEventArgument()));
+                () =>
+                PasteCombinationDurationPassed(
+                    this,
+                    new PasteCombinationDurationPassedEventArgument
+                        ()));
             logger.Information("Paste duration passed event raised.");
         }
 
         [ExcludeFromCodeCoverage]
-        private void InstallPasteHotkeyInterceptor()
+        void InstallPasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.HotkeyFired += PasteHotkeyInterceptor_PasteHotkeyFired;
         }
 
         [ExcludeFromCodeCoverage]
-        private void UninstallPasteHotkeyInterceptor()
+        void UninstallPasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.HotkeyFired -= PasteHotkeyInterceptor_PasteHotkeyFired;
         }
-        
+
         [ExcludeFromCodeCoverage]
-        private void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, HotkeyFiredArgument e)
+        void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, HotkeyFiredArgument e)
         {
             if (!isCombinationDown)
             {
-                logger.Information("Paste combination duration mediator reacted to paste hotkey.", 1);
+                logger.Information(
+                    "Paste combination duration mediator reacted to paste hotkey.",
+                    1);
 
                 isCombinationDown = true;
                 threadLoop.Notify(MonitorClipboardCombinationStateAsync, Token);
@@ -154,7 +181,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Mediators
         {
             if (!IsConnected)
             {
-                throw new InvalidOperationException("The clipboard combination mediator is already disconnected.");
+                throw new InvalidOperationException(
+                    "The clipboard combination mediator is already disconnected.");
             }
 
             threadCancellationTokenSource.Cancel();

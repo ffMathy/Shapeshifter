@@ -1,12 +1,13 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Windows.Media.Imaging;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
 {
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Windows.Media.Imaging;
+
+    using Interfaces;
+
     [ExcludeFromCodeCoverage]
-    internal class ImageFileInterpreter : IImageFileInterpreter
+    class ImageFileInterpreter: IImageFileInterpreter
     {
         public BitmapSource Interpret(byte[] bytes)
         {

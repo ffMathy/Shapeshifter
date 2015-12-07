@@ -1,6 +1,4 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces
 {
-    public interface ICopyImageLinkAction : IAction
-    {
-    }
+    public interface ICopyImageLinkAction: IAction { }
 }

@@ -1,10 +1,11 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Handles
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Handles
 {
-    internal class MemoryHandle : IMemoryHandle
+    using System;
+    using System.Runtime.InteropServices;
+
+    using Interfaces;
+
+    class MemoryHandle: IMemoryHandle
     {
         public MemoryHandle(byte[] bytes)
         {

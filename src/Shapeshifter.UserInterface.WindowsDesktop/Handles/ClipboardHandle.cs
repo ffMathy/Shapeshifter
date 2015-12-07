@@ -1,10 +1,12 @@
-﻿using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Handles
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Handles
 {
-    internal class ClipboardHandle : IClipboardHandle
+    using Windows.Interfaces;
+
+    using Api;
+
+    using Interfaces;
+
+    class ClipboardHandle: IClipboardHandle
     {
         public ClipboardHandle(
             IMainWindowHandleContainer mainWindow)

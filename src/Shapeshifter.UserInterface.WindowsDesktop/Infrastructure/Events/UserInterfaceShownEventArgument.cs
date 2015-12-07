@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events
 {
-    public class UserInterfaceShownEventArgument : EventArgs
-    {
-    }
+    using System;
+
+    public class UserInterfaceShownEventArgument: EventArgs { }
 }

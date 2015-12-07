@@ -1,17 +1,21 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-
-namespace Shapeshifter.Tests.Actions
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using NSubstitute;
+
+    using Interfaces;
+    using Data.Interfaces;
+    using Services.Interfaces;
+    using Services.Web.Interfaces;
+
     [TestClass]
-    public class OpenLinkActionTest : ActionTestBase
+    public class OpenLinkActionTest: ActionTestBase
     {
         [TestMethod]
         public void CanReadDescription()
@@ -45,12 +49,13 @@ namespace Shapeshifter.Tests.Actions
         [TestMethod]
         public async Task CanPerformIsFalseForTextTypesWithNoLink()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<ILinkParser>()
-                    .HasLinkAsync(Arg.Any<string>())
-                    .Returns(Task.FromResult(false));
-            });
+            var container = CreateContainer(
+                c =>
+                {
+                    c.RegisterFake<ILinkParser>()
+                     .HasLinkAsync(Arg.Any<string>())
+                     .Returns(Task.FromResult(false));
+                });
 
             var textDataWithLinkButNoImageLink = Substitute.For<IClipboardDataPackage>();
 
@@ -61,25 +66,36 @@ namespace Shapeshifter.Tests.Actions
         [TestMethod]
         public async Task PerformLaunchesDefaultBrowsersForEachLink()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IProcessManager>();
+            var container = CreateContainer(
+                c =>
+                {
+                    c.RegisterFake<IProcessManager>();
 
-                c.RegisterFake<ILinkParser>()
-                    .HasLinkAsync(Arg.Any<string>())
-                    .Returns(Task.FromResult(true));
+                    c.RegisterFake<ILinkParser>()
+                     .HasLinkAsync(Arg.Any<string>())
+                     .Returns(Task.FromResult(true));
 
-                c.RegisterFake<ILinkParser>()
-                    .ExtractLinksFromTextAsync(Arg.Any<string>())
-                    .Returns(Task.FromResult<IReadOnlyCollection<string>>(new[] {"foo.com", "bar.com"}));
-            });
-            
+                    c.RegisterFake<ILinkParser>()
+                     .ExtractLinksFromTextAsync(Arg.Any<string>())
+                     .Returns(
+                         Task
+                             .FromResult
+                             <IReadOnlyCollection<string>>(
+                                 new[]
+                                 {
+                                     "foo.com",
+                                     "bar.com"
+                                 }));
+                });
+
             var action = container.Resolve<IOpenLinkAction>();
             await action.PerformAsync(GetPackageContaining<IClipboardTextData>());
 
             var fakeProcessManager = container.Resolve<IProcessManager>();
-            fakeProcessManager.Received(1).LaunchCommand("foo.com");
-            fakeProcessManager.Received(1).LaunchCommand("bar.com");
+            fakeProcessManager.Received(1)
+                              .LaunchCommand("foo.com");
+            fakeProcessManager.Received(1)
+                              .LaunchCommand("bar.com");
         }
     }
 }

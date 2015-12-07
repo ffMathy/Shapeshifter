@@ -1,16 +1,21 @@
-﻿using System.Threading.Tasks;
-using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-
-namespace Shapeshifter.Tests.Actions
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
+    using System.Threading.Tasks;
+
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using NSubstitute;
+
+    using Services.Files;
+
+    using Interfaces;
+    using Data.Interfaces;
+    using Services.Files.Interfaces;
+
     [TestClass]
-    public class UploadImageActionTest : ActionTestBase
+    public class UploadImageActionTest: ActionTestBase
     {
         [TestMethod]
         public async Task CanNotPerformWithUnknownDataType()
@@ -44,12 +49,13 @@ namespace Shapeshifter.Tests.Actions
         [TestMethod]
         public async Task CanNotPerformWithFileWithNoImage()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IFileTypeInterpreter>()
-                    .GetFileTypeFromFileName(Arg.Any<string>())
-                    .Returns(FileType.Other);
-            });
+            var container = CreateContainer(
+                c =>
+                {
+                    c.RegisterFake<IFileTypeInterpreter>()
+                     .GetFileTypeFromFileName(Arg.Any<string>())
+                     .Returns(FileType.Other);
+                });
 
             var fakeData = Substitute.For<IClipboardDataPackage>();
 
@@ -60,12 +66,13 @@ namespace Shapeshifter.Tests.Actions
         [TestMethod]
         public async Task CanPerformWithImageFile()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IFileTypeInterpreter>()
-                    .GetFileTypeFromFileName(Arg.Any<string>())
-                    .Returns(FileType.Image);
-            });
+            var container = CreateContainer(
+                c =>
+                {
+                    c.RegisterFake<IFileTypeInterpreter>()
+                     .GetFileTypeFromFileName(Arg.Any<string>())
+                     .Returns(FileType.Image);
+                });
 
             var fakeData = GetPackageContaining<IClipboardFileData>();
 

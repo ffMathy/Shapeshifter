@@ -1,22 +1,27 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+
+    using Api;
+
+    using Factories.Interfaces;
+
+    using Infrastructure.Events;
+    using Infrastructure.Logging.Interfaces;
+
+    using Interfaces;
+
     [ExcludeFromCodeCoverage]
-    internal class PasteHotkeyInterceptor : IPasteHotkeyInterceptor
+    class PasteHotkeyInterceptor: IPasteHotkeyInterceptor
     {
-        private readonly ILogger logger;
-        private readonly IHotkeyInterception hotkeyInterception;
+        readonly ILogger logger;
 
-        private IntPtr mainWindowHandle;
+        readonly IHotkeyInterception hotkeyInterception;
 
-        private bool isInstalled;
+        IntPtr mainWindowHandle;
+
+        bool isInstalled;
 
         public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
@@ -27,7 +32,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
             this.logger = logger;
 
             hotkeyInterception = hotkeyInterceptionFactory.CreateInterception(
-                KeyboardApi.VK_KEY_V, true, true);
+                KeyboardApi.VK_KEY_V,
+                true,
+                true);
         }
 
         public void Install(IntPtr windowHandle)
@@ -47,7 +54,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
         {
             if (!isInstalled)
             {
-                throw new InvalidOperationException("This interceptor has already been uninstalled.");
+                throw new InvalidOperationException(
+                    "This interceptor has already been uninstalled.");
             }
 
             //TODO: proper exceptions for uninstall for ALL uninstalls (don't uninstall when already uninstalled etc).
@@ -58,18 +66,22 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
 
         public void ReceiveMessageEvent(WindowMessageReceivedArgument e)
         {
-            if (e.Message == Message.WM_HOTKEY && (int) e.WordParameter == hotkeyInterception.InterceptionId)
+            if ((e.Message == Message.WM_HOTKEY) &&
+                ((int) e.WordParameter == hotkeyInterception.InterceptionId))
             {
                 HandleHotkeyMessage();
             }
         }
 
-        private void HandleHotkeyMessage()
+        void HandleHotkeyMessage()
         {
             logger.Information("Paste hotkey message received.", 1);
 
-            HotkeyFired?.Invoke(this, new HotkeyFiredArgument(
-                hotkeyInterception.KeyCode, hotkeyInterception.ControlNeeded));
+            HotkeyFired?.Invoke(
+                this,
+                new HotkeyFiredArgument(
+                    hotkeyInterception.KeyCode,
+                    hotkeyInterception.ControlNeeded));
         }
     }
 }

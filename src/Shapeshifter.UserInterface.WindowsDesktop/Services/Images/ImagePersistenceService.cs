@@ -1,30 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Windows.Media.Imaging;
-using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Images.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Windows.Media.Imaging;
+
+    using Api;
+
+    using Interfaces;
+
     [ExcludeFromCodeCoverage]
-    internal class ImagePersistenceService : IImagePersistenceService
+    class ImagePersistenceService: IImagePersistenceService
     {
-        private static ImageMetaInformation ConvertByteArrayToMetaInformation(byte[] data)
+        static ImageMetaInformation ConvertByteArrayToMetaInformation(byte[] data)
         {
             return GeneralApi.ByteArrayToStructure<ImageMetaInformation>(data);
         }
 
-        private static IEnumerable<byte> ConvertMetaInformationToByteArray(ImageMetaInformation metaInformation)
+        static IEnumerable<byte> ConvertMetaInformationToByteArray(
+            ImageMetaInformation metaInformation)
         {
             return GeneralApi.StructureToByteArray(metaInformation);
         }
 
         public byte[] ConvertBitmapSourceToByteArray(BitmapSource bitmap)
         {
-            if (bitmap == null) return null;
+            if (bitmap == null)
+            {
+                return null;
+            }
 
             var metaInformation = new ImageMetaInformation
             {
@@ -39,7 +45,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
             return DecorateSourceWithMetaInformation(imageData, metaInformation);
         }
 
-        public byte[] DecorateSourceWithMetaInformation(byte[] source, ImageMetaInformation information)
+        public byte[] DecorateSourceWithMetaInformation(
+            byte[] source,
+            ImageMetaInformation information)
         {
             var metaData = ConvertMetaInformationToByteArray(information);
             return metaData
@@ -47,7 +55,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
                 .ToArray();
         }
 
-        private static byte[] ConvertImageDataToByteArray(BitmapSource bitmap)
+        static byte[] ConvertImageDataToByteArray(BitmapSource bitmap)
         {
             var stride = bitmap.PixelWidth*((bitmap.Format.BitsPerPixel + 7)/8);
 
@@ -58,61 +66,76 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
 
         public BitmapSource ConvertByteArrayToBitmapSource(byte[] bytes)
         {
-            if (bytes == null || bytes.Length == 0) return null;
+            if ((bytes == null) || (bytes.Length == 0))
+            {
+                return null;
+            }
 
             if (!DoesSourceHaveMetaInformation(bytes))
             {
-                throw new InvalidOperationException("Tried to load an image without metadata in it.");
+                throw new InvalidOperationException(
+                    "Tried to load an image without metadata in it.");
             }
 
             return GenerateBitmapSourceFromSource(bytes);
         }
 
-        private static bool DoesSourceHaveMetaInformation(byte[] source)
+        static bool DoesSourceHaveMetaInformation(byte[] source)
         {
             var metaInformation = GetMetaInformationFromSource(source);
-            return metaInformation.Width > 0 && metaInformation.Height > 0;
+            return (metaInformation.Width > 0) && (metaInformation.Height > 0);
         }
 
-        private static ImageMetaInformation GetMetaInformationFromSource(byte[] bytes)
+        static ImageMetaInformation GetMetaInformationFromSource(byte[] bytes)
         {
             var metaInformationData = ExtractMetaInformationFromSource(bytes);
             var metaInformation = ConvertByteArrayToMetaInformation(metaInformationData);
             return metaInformation;
         }
 
-        private static byte[] ExtractMetaInformationFromSource(byte[] bytes)
+        static byte[] ExtractMetaInformationFromSource(byte[] bytes)
         {
             var metaInformationSize = GetImageMetaInformationStructureSize();
-            var metaInformationData = bytes.Take(metaInformationSize).ToArray();
+            var metaInformationData = bytes.Take(metaInformationSize)
+                                           .ToArray();
             return metaInformationData;
         }
 
-        private static int GetImageMetaInformationStructureSize()
+        static int GetImageMetaInformationStructureSize()
         {
             return Marshal.SizeOf<ImageMetaInformation>();
         }
 
-        private static BitmapSource GenerateBitmapSourceFromSource(byte[] bytes)
+        static BitmapSource GenerateBitmapSourceFromSource(byte[] bytes)
         {
             var metaInformation = GetMetaInformationFromSource(bytes);
             var imageData = ExtractImageDataFromSource(bytes);
             return GenerateBitmapSource(metaInformation, imageData);
         }
 
-        private static BitmapSource GenerateBitmapSource(ImageMetaInformation metaInformation, byte[] imageData)
+        static BitmapSource GenerateBitmapSource(
+            ImageMetaInformation metaInformation,
+            byte[] imageData)
         {
             var bytesPerPixel = (metaInformation.PixelFormat.BitsPerPixel + 7)/8;
             var stride = bytesPerPixel*metaInformation.Width;
 
-            return BitmapSource.Create(metaInformation.Width, metaInformation.Height, metaInformation.DpiX,
-                metaInformation.DpiY, metaInformation.PixelFormat, null, imageData, stride);
+            return BitmapSource.Create(
+                metaInformation.Width,
+                metaInformation.Height,
+                metaInformation.DpiX,
+                metaInformation.DpiY,
+                metaInformation.PixelFormat,
+                null,
+                imageData,
+                stride);
         }
 
-        private static byte[] ExtractImageDataFromSource(byte[] bytes)
+        static byte[] ExtractImageDataFromSource(byte[] bytes)
         {
             var metaInformationSize = GetImageMetaInformationStructureSize();
-            return bytes.Skip(metaInformationSize).ToArray();
+            return bytes.Skip(metaInformationSize)
+                        .ToArray();
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using System;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces
 {
-    public interface IMemoryHandle : IHandle
+    using System;
+
+    public interface IMemoryHandle: IHandle
     {
         IntPtr Pointer { get; }
     }

@@ -1,16 +1,23 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Properties;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    using WindowsDesktop.Services.Interfaces;
+
+    using Data.Interfaces;
+
+    using Facades;
+
+    using Interfaces;
+
+    using Properties;
+
     [ExcludeFromCodeCoverage]
-    internal class DesignerFileDataSourceService : IDataSourceService, IDesignerService
+    class DesignerFileDataSourceService
+        : IDataSourceService,
+          IDesignerService
     {
-        private readonly IDesignerImageConverterService designerImageConverterService;
+        readonly IDesignerImageConverterService designerImageConverterService;
 
         public DesignerFileDataSourceService(
             IDesignerImageConverterService designerImageConverterService)

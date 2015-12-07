@@ -1,16 +1,20 @@
-﻿using System;
-using System.Threading.Tasks;
-using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-
-namespace Shapeshifter.Tests.Actions
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
+    using System;
+    using System.Threading.Tasks;
+
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using NSubstitute;
+
+    using Interfaces;
+    using Data.Interfaces;
+    using Services.Clipboard.Interfaces;
+
     [TestClass]
-    public class PasteActionTest : ActionTestBase
+    public class PasteActionTest: ActionTestBase
     {
         [TestMethod]
         public async Task CanAlwaysPerformIfDataIsGiven()
@@ -44,11 +48,12 @@ namespace Shapeshifter.Tests.Actions
         [TestMethod]
         public async Task PerformTriggersPaste()
         {
-            var container = CreateContainer(c =>
-            {
-                c.RegisterFake<IClipboardInjectionService>();
-                c.RegisterFake<IClipboardPasteService>();
-            });
+            var container = CreateContainer(
+                c =>
+                {
+                    c.RegisterFake<IClipboardInjectionService>();
+                    c.RegisterFake<IClipboardPasteService>();
+                });
 
             var fakeData = GetPackageContaining<IClipboardData>();
 

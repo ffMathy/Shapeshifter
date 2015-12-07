@@ -1,35 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Autofac;
-using Octokit;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.IO.Compression;
+    using System.Linq;
+    using System.Reflection;
+    using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
+
+    using Autofac;
+
+    using Files.Interfaces;
+
+    using Infrastructure.Environment.Interfaces;
+    using Infrastructure.Logging.Interfaces;
+
+    using Interfaces;
+
+    using Octokit;
+
+    using Web.Interfaces;
+
     [ExcludeFromCodeCoverage]
-    internal class UpdateService : IUpdateService, IStartable
+    class UpdateService
+        : IUpdateService,
+          IStartable
     {
-        private const string RepositoryOwner = "ffMathy";
-        private const string RepositoryName = "Shapeshifter";
+        const string RepositoryOwner = "ffMathy";
 
-        private readonly GitHubClient client;
+        const string RepositoryName = "Shapeshifter";
 
-        private readonly IDownloader fileDownloader;
-        private readonly IFileManager fileManager;
-        private readonly IEnvironmentInformation environmentInformation;
-        private readonly IProcessManager processManager;
-        private readonly ILogger logger;
+        readonly GitHubClient client;
+
+        readonly IDownloader fileDownloader;
+
+        readonly IFileManager fileManager;
+
+        readonly IEnvironmentInformation environmentInformation;
+
+        readonly IProcessManager processManager;
+
+        readonly ILogger logger;
 
         public UpdateService(
             IDownloader fileDownloader,
@@ -47,7 +60,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             this.logger = logger;
         }
 
-        private async void StartUpdateLoop()
+        async void StartUpdateLoop()
         {
             while (true)
             {
@@ -58,7 +71,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             // ReSharper disable once FunctionNeverReturns
         }
 
-        private static async Task WaitForNextCycle()
+        static async Task WaitForNextCycle()
         {
             //TODO: introduce a circuit breaker for this.
             const int updateIntervalInHours = 6;
@@ -72,22 +85,25 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             await Task.Delay(updateIntervalInMilliseconds);
         }
 
-        private static Version GetCurrentVersion()
+        static Version GetCurrentVersion()
         {
-            return GetAssemblyInformation().Version;
+            return GetAssemblyInformation()
+                .Version;
         }
 
-        private static string GetAssemblyName()
+        static string GetAssemblyName()
         {
-            return GetAssemblyInformation().Name;
+            return GetAssemblyInformation()
+                .Name;
         }
 
-        private static AssemblyName GetAssemblyInformation()
+        static AssemblyName GetAssemblyInformation()
         {
-            return Assembly.GetExecutingAssembly().GetName();
+            return Assembly.GetExecutingAssembly()
+                           .GetName();
         }
 
-        private static GitHubClient CreateClient()
+        static GitHubClient CreateClient()
         {
             var client = new GitHubClient(new ProductHeaderValue(GetAssemblyName()));
             return client;
@@ -98,23 +114,32 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             try
             {
                 var pendingUpdateRelease = await GetAvailableUpdateAsync();
-                if (pendingUpdateRelease == null) return;
+                if (pendingUpdateRelease == null)
+                {
+                    return;
+                }
 
                 await UpdateFromReleaseAsync(pendingUpdateRelease);
             }
             catch (RateLimitExceededException)
             {
-                logger.Warning("Did not search for updates due to the GitHub rate limit being exceed.");
+                logger.Warning(
+                    "Did not search for updates due to the GitHub rate limit being exceed.");
             }
         }
 
-        private async Task UpdateFromReleaseAsync(Release pendingUpdateRelease)
+        async Task UpdateFromReleaseAsync(Release pendingUpdateRelease)
         {
-            var assets = await client.Release.GetAllAssets(RepositoryOwner, RepositoryName, pendingUpdateRelease.Id);
+            var assets =
+                await
+                client.Release.GetAllAssets(
+                    RepositoryOwner,
+                    RepositoryName,
+                    pendingUpdateRelease.Id);
             await UpdateFromAssetsAsync(assets);
         }
 
-        private async Task UpdateFromAssetsAsync(IReadOnlyList<ReleaseAsset> assets)
+        async Task UpdateFromAssetsAsync(IReadOnlyList<ReleaseAsset> assets)
         {
             const string targetAssetName = "Binaries.zip";
             foreach (var asset in assets.Where(asset => asset.Name == targetAssetName))
@@ -123,7 +148,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             }
         }
 
-        private async Task UpdateFromAssetAsync(ReleaseAsset asset)
+        async Task UpdateFromAssetAsync(ReleaseAsset asset)
         {
             var localFilePath = await DownloadUpdateAsync(asset);
             var temporaryDirectory = ExtractUpdate(localFilePath);
@@ -131,13 +156,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             StartUpdate(temporaryDirectory);
         }
 
-        private void StartUpdate(string temporaryDirectory)
+        void StartUpdate(string temporaryDirectory)
         {
             var concretePath = Path.Combine(temporaryDirectory, GetAssemblyName() + ".exe");
             processManager.LaunchFile(concretePath, $"update \"{Environment.CurrentDirectory}\"");
         }
 
-        private async Task<string> DownloadUpdateAsync(ReleaseAsset asset)
+        async Task<string> DownloadUpdateAsync(ReleaseAsset asset)
         {
             var url = asset.BrowserDownloadUrl;
 
@@ -147,14 +172,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             return localFilePath;
         }
 
-        private string ExtractUpdate(string localFilePath)
+        string ExtractUpdate(string localFilePath)
         {
             var temporaryDirectory = fileManager.PrepareFolder("Update");
             ZipFile.ExtractToDirectory(localFilePath, temporaryDirectory);
             return temporaryDirectory;
         }
 
-        private static bool IsUpdateToReleaseNeeded(Release release)
+        static bool IsUpdateToReleaseNeeded(Release release)
         {
             if (release.Prerelease)
             {
@@ -165,12 +190,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             return IsUpdateToVersionNeeded(releaseVersion);
         }
 
-        private static bool IsUpdateToVersionNeeded(Version releaseVersion)
+        static bool IsUpdateToVersionNeeded(Version releaseVersion)
         {
             return releaseVersion > GetCurrentVersion();
         }
 
-        private static Version GetReleaseVersion(Release release)
+        static Version GetReleaseVersion(Release release)
         {
             var versionMatch = Regex.Match(release.Name, "shapeshifter-v(.+)");
             var versionGroup = versionMatch.Groups[1];
@@ -179,7 +204,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
             return version;
         }
 
-        private async Task<Release> GetAvailableUpdateAsync()
+        async Task<Release> GetAvailableUpdateAsync()
         {
             var updates = await GetReleasesWithUpdatesAsync();
             return updates
@@ -187,7 +212,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services
                 .FirstOrDefault();
         }
 
-        private async Task<IEnumerable<Release>> GetReleasesWithUpdatesAsync()
+        async Task<IEnumerable<Release>> GetReleasesWithUpdatesAsync()
         {
             var allReleases = await client.Release.GetAll(RepositoryOwner, RepositoryName);
             return allReleases.Where(IsUpdateToReleaseNeeded);

@@ -1,10 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
-    internal class ThreadDelay : IThreadDelay
+    using System.Diagnostics.CodeAnalysis;
+    using System.Threading.Tasks;
+
+    using Interfaces;
+
+    class ThreadDelay: IThreadDelay
     {
         [ExcludeFromCodeCoverage]
         public async Task ExecuteAsync(int millisecondsDelay)

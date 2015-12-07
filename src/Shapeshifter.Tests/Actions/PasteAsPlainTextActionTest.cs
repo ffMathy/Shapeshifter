@@ -1,15 +1,19 @@
-﻿using System.Threading.Tasks;
-using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-
-namespace Shapeshifter.Tests.Actions
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
+    using System.Threading.Tasks;
+
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using NSubstitute;
+
+    using Interfaces;
+    using Data.Interfaces;
+    using Services.Clipboard.Interfaces;
+
     [TestClass]
-    public class PasteAsPlainTextActionTest : ActionTestBase
+    public class PasteAsPlainTextActionTest: ActionTestBase
     {
         [TestMethod]
         public async Task CanNotPerformWithNonTextData()
@@ -54,7 +58,11 @@ namespace Shapeshifter.Tests.Actions
         [TestMethod]
         public async Task PerformCausesTextOfDataToBeCopied()
         {
-            var container = CreateContainer(c => { c.RegisterFake<IClipboardInjectionService>(); });
+            var container = CreateContainer(
+                c =>
+                {
+                    c.RegisterFake<IClipboardInjectionService>();
+                });
 
             var fakeTextData = Substitute.For<IClipboardTextData>();
             fakeTextData.Text.Returns("foobar hello");
@@ -66,7 +74,7 @@ namespace Shapeshifter.Tests.Actions
 
             var fakeClipboardInjectionService = container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService.Received(1)
-                .InjectText("foobar hello");
+                                         .InjectText("foobar hello");
         }
     }
 }

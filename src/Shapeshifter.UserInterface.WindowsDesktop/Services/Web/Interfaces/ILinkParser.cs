@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web.Interfaces
 {
-    public interface ILinkParser : ISingleInstance
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    using Infrastructure.Dependencies.Interfaces;
+
+    public interface ILinkParser: ISingleInstance
     {
         Task<IReadOnlyCollection<string>> ExtractLinksFromTextAsync(string text);
 

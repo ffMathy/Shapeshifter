@@ -1,13 +1,15 @@
-﻿using System;
-using System.Threading;
-using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
-    internal class HotkeyInterception : IHotkeyInterception
+    using System;
+    using System.Threading;
+
+    using Api;
+
+    using Interfaces;
+
+    class HotkeyInterception: IHotkeyInterception
     {
-        private static int interceptionId;
+        static int interceptionId;
 
         public int InterceptionId { get; }
 
@@ -27,14 +29,24 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
             UnregisterHotkey(windowHandle);
 
             var modifier = 0;
-            if (ControlNeeded) modifier |= KeyboardApi.MOD_CONTROL;
-            if (NoRepeat) modifier |= KeyboardApi.MOD_NOREPEAT;
+            if (ControlNeeded)
+            {
+                modifier |= KeyboardApi.MOD_CONTROL;
+            }
+            if (NoRepeat)
+            {
+                modifier |= KeyboardApi.MOD_NOREPEAT;
+            }
 
             var registrationResult = KeyboardApi.RegisterHotKey(
-                windowHandle, InterceptionId, modifier, KeyCode);
+                windowHandle,
+                InterceptionId,
+                modifier,
+                KeyCode);
             if (!registrationResult)
             {
-                throw new InvalidOperationException($"Couldn't install the hotkey interceptor for key {KeyCode}.");
+                throw new InvalidOperationException(
+                    $"Couldn't install the hotkey interceptor for key {KeyCode}.");
             }
         }
 
@@ -43,14 +55,16 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
             var registrationResult = UnregisterHotkey(windowHandle);
             if (!registrationResult)
             {
-                throw new InvalidOperationException($"Couldn't uninstall the hotkey interceptor for key {KeyCode}.");
+                throw new InvalidOperationException(
+                    $"Couldn't uninstall the hotkey interceptor for key {KeyCode}.");
             }
         }
 
-        private bool UnregisterHotkey(IntPtr windowHandle)
+        bool UnregisterHotkey(IntPtr windowHandle)
         {
             return KeyboardApi.UnregisterHotKey(
-                windowHandle, InterceptionId);
+                windowHandle,
+                InterceptionId);
         }
     }
 }

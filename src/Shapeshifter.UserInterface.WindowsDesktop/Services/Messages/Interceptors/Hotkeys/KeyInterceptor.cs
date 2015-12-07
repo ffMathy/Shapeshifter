@@ -1,24 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Shapeshifter.UserInterface.WindowsDesktop.Api;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Events;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
-    internal class KeyInterceptor : IKeyInterceptor
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Api;
+
+    using Factories.Interfaces;
+
+    using Infrastructure.Events;
+    using Infrastructure.Threading.Interfaces;
+
+    using Interfaces;
+
+    class KeyInterceptor: IKeyInterceptor
     {
-        private readonly IHotkeyInterceptionFactory hotkeyInterceptionFactory;
-        private readonly IUserInterfaceThread userInterfaceThread;
+        readonly IHotkeyInterceptionFactory hotkeyInterceptionFactory;
 
-        private readonly IDictionary<int, IHotkeyInterception> keyInterceptions;
+        readonly IUserInterfaceThread userInterfaceThread;
 
-        private bool isInstalled;
+        readonly IDictionary<int, IHotkeyInterception> keyInterceptions;
 
-        private IntPtr installedWindowHandle;
+        bool isInstalled;
+
+        IntPtr installedWindowHandle;
 
         public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
@@ -63,25 +68,31 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
             }
         }
 
-        private IHotkeyInterception GetInterceptionForInterceptionId(int interceptionId)
+        IHotkeyInterception GetInterceptionForInterceptionId(int interceptionId)
         {
             return keyInterceptions.Values
-                .SingleOrDefault(x => x.InterceptionId == interceptionId);
+                                   .SingleOrDefault(x => x.InterceptionId == interceptionId);
         }
 
-        private void HandleHotkeyMessage(WindowMessageReceivedArgument e)
+        void HandleHotkeyMessage(WindowMessageReceivedArgument e)
         {
-            if (!isInstalled) return;
+            if (!isInstalled)
+            {
+                return;
+            }
 
             var interception = GetInterceptionForInterceptionId((int) e.WordParameter);
             if (interception != null)
             {
-                HotkeyFired?.Invoke(this, new HotkeyFiredArgument(
-                    interception.KeyCode, interception.ControlNeeded));
+                HotkeyFired?.Invoke(
+                    this,
+                    new HotkeyFiredArgument(
+                        interception.KeyCode,
+                        interception.ControlNeeded));
             }
         }
 
-        private void HandleWindowVisibilityChangedMessage(WindowMessageReceivedArgument e)
+        void HandleWindowVisibilityChangedMessage(WindowMessageReceivedArgument e)
         {
             const int Shown = 1;
             const int Hidden = 0;
@@ -102,7 +113,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
         {
             if (!isInstalled)
             {
-                throw new InvalidOperationException("This interceptor has already been uninstalled.");
+                throw new InvalidOperationException(
+                    "This interceptor has already been uninstalled.");
             }
 
             foreach (var interception in keyInterceptions.Values)
@@ -131,10 +143,12 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Intercepto
             keyInterceptions.Add(keyCode, interception);
         }
 
-        private IHotkeyInterception CreateNewInterception(int keyCode)
+        IHotkeyInterception CreateNewInterception(int keyCode)
         {
             var interception = hotkeyInterceptionFactory.CreateInterception(
-                keyCode, true, false);
+                keyCode,
+                true,
+                false);
             return interception;
         }
 

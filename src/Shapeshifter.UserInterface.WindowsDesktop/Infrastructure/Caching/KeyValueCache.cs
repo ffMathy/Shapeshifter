@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Caching
 {
-    internal class KeyValueCache<TKey, TValue> : IKeyValueCache<TKey, TValue>
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    using Interfaces;
+
+    class KeyValueCache<TKey, TValue>: IKeyValueCache<TKey, TValue>
     {
-        private readonly IDictionary<TKey, TValue> data;
+        readonly IDictionary<TKey, TValue> data;
 
         public KeyValueCache()
         {

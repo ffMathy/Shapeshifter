@@ -3,7 +3,9 @@
     public enum FileType
     {
         Other,
+
         Image,
+
         Text
     }
 }

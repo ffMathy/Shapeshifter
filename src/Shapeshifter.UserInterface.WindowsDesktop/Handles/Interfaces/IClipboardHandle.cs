@@ -1,6 +1,4 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Handles.Interfaces
 {
-    public interface IClipboardHandle : IHandle
-    {
-    }
+    public interface IClipboardHandle: IHandle { }
 }

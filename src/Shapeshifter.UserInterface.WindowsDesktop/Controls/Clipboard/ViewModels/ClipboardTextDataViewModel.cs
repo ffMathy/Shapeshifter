@@ -1,19 +1,26 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Text.RegularExpressions;
-using Autofac;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
-    internal class ClipboardTextDataViewModel : ClipboardDataViewModel<IClipboardTextData>, IClipboardTextDataViewModel
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Text.RegularExpressions;
+
+    using Autofac;
+
+    using Data.Interfaces;
+
+    using Designer.Facades;
+    using Designer.Helpers;
+
+    using Infrastructure.Environment;
+    using Infrastructure.Environment.Interfaces;
+
+    using Interfaces;
+
+    class ClipboardTextDataViewModel
+        : ClipboardDataViewModel<IClipboardTextData>,
+          IClipboardTextDataViewModel
     {
-        private static readonly Regex whitespaceSubstitutionExpression;
+        static readonly Regex whitespaceSubstitutionExpression;
 
         static ClipboardTextDataViewModel()
         {
@@ -21,9 +28,8 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
         }
 
         [ExcludeFromCodeCoverage]
-        public ClipboardTextDataViewModel() : this(new EnvironmentInformation())
-        {
-        }
+        public ClipboardTextDataViewModel()
+            : this(new EnvironmentInformation()) { }
 
         public ClipboardTextDataViewModel(
             IEnvironmentInformation environmentInformation)
@@ -35,7 +41,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModel
         }
 
         [ExcludeFromCodeCoverage]
-        private void PrepareDesignMode()
+        void PrepareDesignMode()
         {
             var container = DesignTimeContainerHelper.CreateDesignTimeContainer();
             Data = container.Resolve<DesignerClipboardTextDataFacade>();

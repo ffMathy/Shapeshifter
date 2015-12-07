@@ -1,9 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace Shapeshifter.Tests.Services
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     [TestClass]
-    public class ProcessManagerTest : TestBase
-    {
-    }
+    public class ProcessManagerTest: TestBase { }
 }

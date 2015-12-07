@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Autofac;
-using NSubstitute;
-
-namespace Shapeshifter.Tests
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop
 {
-    internal static class Extensions
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    using Autofac;
+
+    using NSubstitute;
+
+    static class Extensions
     {
-        private static readonly IDictionary<Type, object> fakeCache;
+        static readonly IDictionary<Type, object> fakeCache;
 
         static Extensions()
         {
@@ -20,10 +22,13 @@ namespace Shapeshifter.Tests
             fakeCache.Clear();
         }
 
-        public static TInterface RegisterFake<TInterface>(this ContainerBuilder builder) where TInterface : class
+        public static TInterface RegisterFake<TInterface>(this ContainerBuilder builder)
+            where TInterface : class
         {
             if (fakeCache.ContainsKey(typeof (TInterface)))
+            {
                 return (TInterface) fakeCache[typeof (TInterface)];
+            }
 
             var fake = Substitute.For<TInterface>();
             fakeCache.Add(typeof (TInterface), fake);
@@ -31,8 +36,6 @@ namespace Shapeshifter.Tests
             return fake;
         }
 
-        public static void IgnoreAwait(this Task task)
-        {
-        }
+        public static void IgnoreAwait(this Task task) { }
     }
 }

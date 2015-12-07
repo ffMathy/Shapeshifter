@@ -1,15 +1,17 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades
 {
-    [ExcludeFromCodeCoverage]
-    internal class DesignerDataSourceFacade : IDataSource
-    {
-        private byte[] icon;
+    using System.Diagnostics.CodeAnalysis;
 
-        private readonly IDesignerImageConverterService designerImageConverterService;
+    using Data.Interfaces;
+
+    using Services.Interfaces;
+
+    [ExcludeFromCodeCoverage]
+    class DesignerDataSourceFacade: IDataSource
+    {
+        byte[] icon;
+
+        readonly IDesignerImageConverterService designerImageConverterService;
 
         public DesignerDataSourceFacade(
             IDesignerImageConverterService designerImageConverterService)
@@ -17,15 +19,21 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.
             this.designerImageConverterService = designerImageConverterService;
         }
 
-        private byte[] DecorateIcon(byte[] iconBytes)
+        byte[] DecorateIcon(byte[] iconBytes)
         {
             return designerImageConverterService.GenerateDesignerImageBytesFromFileBytes(iconBytes);
         }
 
         public byte[] Icon
         {
-            get { return icon; }
-            set { icon = DecorateIcon(value); }
+            get
+            {
+                return icon;
+            }
+            set
+            {
+                icon = DecorateIcon(value);
+            }
         }
 
         public string Text { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging.Interfaces
 {
-    internal interface ILogger
+    interface ILogger
     {
         void Information(string text, int importanceFactor = 0);
 

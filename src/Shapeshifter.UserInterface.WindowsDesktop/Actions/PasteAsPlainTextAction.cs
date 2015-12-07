@@ -1,16 +1,21 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
-    internal class PasteAsPlainTextAction : IPasteAsPlainTextAction
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Data.Interfaces;
+
+    using Infrastructure.Threading.Interfaces;
+
+    using Interfaces;
+
+    using Services.Clipboard.Interfaces;
+
+    class PasteAsPlainTextAction: IPasteAsPlainTextAction
     {
-        private readonly IClipboardInjectionService clipboardInjectionService;
-        private readonly IAsyncFilter asyncFilter;
+        readonly IClipboardInjectionService clipboardInjectionService;
+
+        readonly IAsyncFilter asyncFilter;
 
         public PasteAsPlainTextAction(
             IClipboardInjectionService clipboardInjectionService,
@@ -32,13 +37,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return await GetFirstSupportedItem(data) != null;
         }
 
-        private async Task<IClipboardData> GetFirstSupportedItem(IClipboardDataPackage data)
+        async Task<IClipboardData> GetFirstSupportedItem(IClipboardDataPackage data)
         {
             var supportedData = await asyncFilter.FilterAsync(data.Contents, CanPerformAsync);
             return supportedData.FirstOrDefault();
         }
 
-        private static async Task<bool> CanPerformAsync(
+        static async Task<bool> CanPerformAsync(
             IClipboardData data)
         {
             return data is IClipboardTextData;

@@ -1,18 +1,23 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
 {
-    internal class UploadImageAction : IUploadImageAction
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Data.Interfaces;
+
+    using Infrastructure.Threading.Interfaces;
+
+    using Interfaces;
+
+    using Services.Files;
+    using Services.Files.Interfaces;
+
+    class UploadImageAction: IUploadImageAction
     {
-        private readonly IFileTypeInterpreter fileTypeInterpreter;
-        private readonly IAsyncFilter asyncFilter;
+        readonly IFileTypeInterpreter fileTypeInterpreter;
+
+        readonly IAsyncFilter asyncFilter;
 
         public UploadImageAction(
             IFileTypeInterpreter fileTypeInterpreter,
@@ -35,23 +40,24 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Actions
             return supportedData.Any();
         }
 
-        private async Task<bool> CanPerformAsync(
+        async Task<bool> CanPerformAsync(
             IClipboardData clipboardData)
         {
             return IsSuitableImageData(clipboardData) || IsSuitableFileData(clipboardData);
         }
 
-        private static bool IsSuitableImageData(
+        static bool IsSuitableImageData(
             IClipboardData clipboardData)
         {
             return clipboardData is IClipboardImageData;
         }
 
-        private bool IsSuitableFileData(
+        bool IsSuitableFileData(
             IClipboardData clipboardData)
         {
             var fileData = clipboardData as IClipboardFileData;
-            return fileData != null && fileTypeInterpreter.GetFileTypeFromFileName(fileData.FileName) == FileType.Image;
+            return (fileData != null) &&
+                   (fileTypeInterpreter.GetFileTypeFromFileName(fileData.FileName) == FileType.Image);
         }
 
         public Task PerformAsync(

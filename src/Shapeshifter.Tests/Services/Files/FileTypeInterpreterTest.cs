@@ -1,12 +1,13 @@
-﻿using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-
-namespace Shapeshifter.Tests.Services.Files
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
 {
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using Interfaces;
+
     [TestClass]
-    public class FileTypeInterpreterTest : TestBase
+    public class FileTypeInterpreterTest: TestBase
     {
         [TestMethod]
         public void CanGetPngFileType()
@@ -50,7 +51,9 @@ namespace Shapeshifter.Tests.Services.Files
             var container = CreateContainer();
 
             var fileTypeInterpreter = container.Resolve<IFileTypeInterpreter>();
-            Assert.AreEqual(FileType.Other, fileTypeInterpreter.GetFileTypeFromFileName("foo.other"));
+            Assert.AreEqual(
+                FileType.Other,
+                fileTypeInterpreter.GetFileTypeFromFileName("foo.other"));
         }
     }
 }

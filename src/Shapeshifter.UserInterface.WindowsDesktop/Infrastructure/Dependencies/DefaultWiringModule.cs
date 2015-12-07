@@ -1,22 +1,28 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Threading;
-using Autofac;
-using Autofac.Builder;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading;
-using AutofacModule = Autofac.Module;
+﻿using AutofacModule = Autofac.Module;
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
 {
-    public class DefaultWiringModule : AutofacModule
+    using System;
+    using System.Linq;
+    using System.Reflection;
+    using System.Windows.Threading;
+
+    using Autofac;
+    using Autofac.Builder;
+
+    using Controls.Clipboard.Designer.Helpers;
+    using Controls.Clipboard.Designer.Services.Interfaces;
+
+    using Environment;
+    using Environment.Interfaces;
+
+    using Interfaces;
+
+    using Threading;
+
+    public class DefaultWiringModule: AutofacModule
     {
-        private readonly Action<ContainerBuilder> callback;
+        readonly Action<ContainerBuilder> callback;
 
         public DefaultWiringModule(Action<ContainerBuilder> callback = null)
         {
@@ -40,12 +46,13 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
             base.Load(builder);
         }
 
-        private static void RegisterMainThread(ContainerBuilder builder)
+        static void RegisterMainThread(ContainerBuilder builder)
         {
-            builder.RegisterInstance(new UserInterfaceThread(Dispatcher.CurrentDispatcher)).AsImplementedInterfaces();
+            builder.RegisterInstance(new UserInterfaceThread(Dispatcher.CurrentDispatcher))
+                   .AsImplementedInterfaces();
         }
 
-        private static EnvironmentInformation RegisterEnvironmentInformation(ContainerBuilder builder)
+        static EnvironmentInformation RegisterEnvironmentInformation(ContainerBuilder builder)
         {
             var environmentInformation = new EnvironmentInformation();
             builder
@@ -55,7 +62,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
             return environmentInformation;
         }
 
-        private static void RegisterAssemblyTypes(ContainerBuilder builder, Assembly assembly)
+        static void RegisterAssemblyTypes(ContainerBuilder builder, Assembly assembly)
         {
             var types = assembly.GetTypes();
             foreach (var type in types)
@@ -66,7 +73,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
                 }
 
                 var interfaces = type.GetInterfaces();
-                if(interfaces.Contains(typeof(IDesignerService)))
+                if (interfaces.Contains(typeof (IDesignerService)))
                 {
                     continue;
                 }
@@ -93,7 +100,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
                 }
 
                 registration.FindConstructorsWith(new PublicConstructorFinder());
-                
+
                 if (interfaces.Contains(typeof (ISingleInstance)))
                 {
                     registration.SingleInstance();

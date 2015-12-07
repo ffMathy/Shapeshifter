@@ -1,13 +1,16 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Windows.Controls;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard
 {
+    using System.Diagnostics.CodeAnalysis;
+    using System.Windows.Controls;
+
+    using Interfaces;
+
     /// <summary>
     ///     Interaction logic for ClipboardImageDataControl.xaml
     /// </summary>
-    public partial class ClipboardImageDataControl : UserControl, IClipboardImageDataControl
+    public partial class ClipboardImageDataControl
+        : UserControl,
+          IClipboardControl
     {
         [ExcludeFromCodeCoverage]
         public ClipboardImageDataControl()

@@ -1,14 +1,15 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Windows.Threading;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Windows.Threading;
+
+    using Interfaces;
+
     [ExcludeFromCodeCoverage]
-    internal class MainThreadInvoker : IMainThreadInvoker
+    class MainThreadInvoker: IMainThreadInvoker
     {
-        private readonly Dispatcher dispatcher;
+        readonly Dispatcher dispatcher;
 
         public MainThreadInvoker()
         {

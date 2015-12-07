@@ -1,12 +1,15 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    using WindowsDesktop.Services.Files.Interfaces;
+
+    using Interfaces;
+
     [ExcludeFromCodeCoverage]
-    internal class DesignerFileManager : IFileManager, IDesignerService
+    class DesignerFileManager
+        : IFileManager,
+          IDesignerService
     {
         public string PrepareFolder(string path)
         {

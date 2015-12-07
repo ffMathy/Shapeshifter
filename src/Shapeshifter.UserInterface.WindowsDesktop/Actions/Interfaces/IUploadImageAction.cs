@@ -1,6 +1,4 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Actions.Interfaces
 {
-    public interface IUploadImageAction : IAction
-    {
-    }
+    public interface IUploadImageAction: IAction { }
 }

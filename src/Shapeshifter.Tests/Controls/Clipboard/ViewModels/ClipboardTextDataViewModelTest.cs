@@ -1,13 +1,16 @@
-﻿using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-
-namespace Shapeshifter.Tests.Controls.Clipboard.ViewModels
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
+    using Autofac;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using NSubstitute;
+
+    using Interfaces;
+    using Data.Interfaces;
+
     [TestClass]
-    public class ClipboardTextDataViewModelTest : TestBase
+    public class ClipboardTextDataViewModelTest: TestBase
     {
         [TestMethod]
         public void FriendlyTextRemovesDuplicateWhitespaces()

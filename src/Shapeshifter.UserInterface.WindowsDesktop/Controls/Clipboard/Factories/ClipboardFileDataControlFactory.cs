@@ -1,17 +1,22 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels;
-using Shapeshifter.UserInterface.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Environment.Interfaces;
-
-namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
 {
-    internal class ClipboardFileDataControlFactory
-        : IClipboardControlFactory<IClipboardFileData, IClipboardFileDataControl>
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+
+    using Clipboard.Interfaces;
+
+    using Data.Interfaces;
+
+    using Infrastructure.Environment.Interfaces;
+
+    using Interfaces;
+
+    using ViewModels;
+
+    class ClipboardFileDataControlFactory
+        : IClipboardDataControlFactory
     {
-        private readonly IEnvironmentInformation environmentInformation;
+        readonly IEnvironmentInformation environmentInformation;
 
         public ClipboardFileDataControlFactory(
             IEnvironmentInformation environmentInformation)
@@ -19,18 +24,25 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
             this.environmentInformation = environmentInformation;
         }
 
-        public IClipboardFileDataControl CreateControl(IClipboardFileData data)
+        public bool CanBuildControl(IClipboardData data)
+        {
+            return data is IClipboardFileData;
+        }
+
+        public IClipboardControl BuildControl(IClipboardData data)
         {
             if (data == null)
             {
-                throw new ArgumentException("Data must be set when constructing a clipboard control.", nameof(data));
+                throw new ArgumentException(
+                    "Data must be set when constructing a clipboard control.",
+                    nameof(data));
             }
 
-            return CreateFileDataControl(data);
+            return CreateFileDataControl((IClipboardFileData)data);
         }
 
         [ExcludeFromCodeCoverage]
-        private IClipboardFileDataControl CreateFileDataControl(IClipboardFileData data)
+        IClipboardControl CreateFileDataControl(IClipboardFileData data)
         {
             return new ClipboardFileDataControl
             {
