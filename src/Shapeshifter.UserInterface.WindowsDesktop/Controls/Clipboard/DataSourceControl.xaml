@@ -4,7 +4,7 @@
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
             xmlns:facades="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades"
-            xmlns:converters="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Converters"
+            xmlns:converters="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Converters"
             mc:Ignorable="d"
             d:DataContext="{d:DesignInstance Type=facades:DesignerDataSourceFacade, IsDesignTimeCreatable=True}"
             Orientation="Horizontal" VerticalAlignment="Center">

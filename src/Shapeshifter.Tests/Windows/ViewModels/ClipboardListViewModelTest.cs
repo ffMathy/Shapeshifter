@@ -8,14 +8,16 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
-    
-    using Actions.Interfaces;
+
     using Api;
     using Data.Interfaces;
     using Infrastructure.Events;
     using Mediators.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Binders.Interfaces;
+
+    using Data.Actions.Interfaces;
+
     using Interfaces;
 
     [TestClass]

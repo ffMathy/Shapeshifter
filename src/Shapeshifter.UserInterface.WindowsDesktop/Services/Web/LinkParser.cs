@@ -8,8 +8,7 @@
     using Files;
     using Files.Interfaces;
 
-    using Handles.Factories.Interfaces;
-
+    using Infrastructure.Handles.Factories.Interfaces;
     using Infrastructure.Threading.Interfaces;
 
     using Interfaces;

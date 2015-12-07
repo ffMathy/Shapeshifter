@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard"
-             xmlns:converters="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Converters"
              xmlns:fileCollection="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection"
+             xmlns:converters="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Converters"
              d:DataContext="{d:DesignInstance Type=fileCollection:ClipboardFileCollectionDataViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d">
     <Border Style="{StaticResource ClipboardDataControlContentStyle}">

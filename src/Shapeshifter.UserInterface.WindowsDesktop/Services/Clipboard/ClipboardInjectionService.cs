@@ -11,8 +11,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 
     using Data.Interfaces;
 
-    using Handles.Factories.Interfaces;
-
+    using Infrastructure.Handles.Factories.Interfaces;
     using Infrastructure.Logging.Interfaces;
 
     using Interfaces;

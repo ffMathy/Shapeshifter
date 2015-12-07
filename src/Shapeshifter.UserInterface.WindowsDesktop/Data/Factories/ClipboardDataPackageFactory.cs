@@ -11,7 +11,7 @@
     using Data;
     using Data.Interfaces;
 
-    using Handles.Factories.Interfaces;
+    using Infrastructure.Handles.Factories.Interfaces;
 
     using Interfaces;
 

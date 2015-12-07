@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard"
              xmlns:viewModels="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels"
-             xmlns:converters="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Converters"
+             xmlns:converters="clr-namespace:Shapeshifter.UserInterface.WindowsDesktop.Controls.Converters"
              d:DataContext="{d:DesignInstance Type=viewModels:ClipboardFileDataViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d">
     <Border Style="{StaticResource ClipboardDataControlContentStyle}">
