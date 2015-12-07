@@ -4,8 +4,7 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
 
-    using Actions.Interfaces;
-
+    using Data.Actions.Interfaces;
     using Data.Interfaces;
 
     using Infrastructure.Events;

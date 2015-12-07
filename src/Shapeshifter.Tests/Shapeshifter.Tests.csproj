@@ -87,13 +87,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Actions\ActionTestBase.cs" />
-    <Compile Include="Actions\OpenLinkActionTest.cs" />
-    <Compile Include="Actions\CopyImageLinkActionTest.cs" />
-    <Compile Include="Actions\ZipFilesActionTest.cs" />
-    <Compile Include="Actions\UploadImageActionTest.cs" />
-    <Compile Include="Actions\PasteAsPlainTextActionTest.cs" />
-    <Compile Include="Actions\PasteActionTest.cs" />
+    <Compile Include="Data\Actions\ActionTestBase.cs" />
+    <Compile Include="Data\Actions\OpenLinkActionTest.cs" />
+    <Compile Include="Data\Actions\CopyImageLinkActionTest.cs" />
+    <Compile Include="Data\Actions\ZipFilesActionTest.cs" />
+    <Compile Include="Data\Actions\UploadImageActionTest.cs" />
+    <Compile Include="Data\Actions\PasteAsPlainTextActionTest.cs" />
+    <Compile Include="Data\Actions\PasteActionTest.cs" />
     <Compile Include="Controls\Clipboard\ClipboardPasteServiceTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardImageDataControlFactoryTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardTextDataControlFactoryTest.cs" />
