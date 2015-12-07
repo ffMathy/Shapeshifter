@@ -9,6 +9,8 @@
     using Data.Factories.Interfaces;
     using Data.Interfaces;
 
+    using Infrastructure.Threading.Interfaces;
+
     using Interfaces;
 
     class ClipboardDataControlPackageFactory: IClipboardDataControlPackageFactory
@@ -17,12 +19,16 @@
 
         readonly IEnumerable<IClipboardDataControlFactory> controlFactories;
 
+        readonly IMainThreadInvoker mainThreadInvoker;
+
         public ClipboardDataControlPackageFactory(
             IClipboardDataPackageFactory dataPackageFactory,
-            IEnumerable<IClipboardDataControlFactory> controlFactories)
+            IEnumerable<IClipboardDataControlFactory> controlFactories,
+            IMainThreadInvoker mainThreadInvoker)
         {
             this.dataPackageFactory = dataPackageFactory;
             this.controlFactories = controlFactories;
+            this.mainThreadInvoker = mainThreadInvoker;
         }
 
         public IClipboardDataControlPackage CreateFromCurrentClipboardData()
@@ -33,13 +39,19 @@
                 return null;
             }
 
-            var control = CreateControlFromDataPackage(dataPackage);
-            if (control == null)
-            {
-                return null;
-            }
+            ClipboardDataControlPackage package = null;
+            mainThreadInvoker.Invoke(
+                () => {
+                    var control = CreateControlFromDataPackage(dataPackage);
+                    if (control == null)
+                    {
+                        return;
+                    }
 
-            return new ClipboardDataControlPackage(dataPackage, control);
+                    package = new ClipboardDataControlPackage(dataPackage, control);
+                });
+
+            return package;
         }
 
         IClipboardControl CreateControlFromDataPackage(IClipboardDataPackage dataPackage)

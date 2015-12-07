@@ -26,33 +26,6 @@
                 .Resolve<IClipboardFileCollectionDataControlFactory>();
             factory.BuildControl(null);
         }
-        [TestMethod]
-        public void BuildsFileControlForSingleFileData()
-        {
-            var fakeSingleFileData = Substitute.For<IClipboardFileData>();
-            var fakeControl = Substitute.For<IClipboardControl>();
-
-            var container = CreateContainer();
-
-            var factory = container.Resolve<IClipboardFileCollectionDataControlFactory>();
-            var control = factory.BuildControl(fakeSingleFileData);
-
-            Assert.AreSame(fakeControl, control);
-        }
-
-        [TestMethod]
-        public void BuildsFileControlForMultipleFileData()
-        {
-            var fakeSingleFileData = Substitute.For<IClipboardFileCollectionData>();
-            var fakeControl = Substitute.For<IClipboardControl>();
-
-            var container = CreateContainer();
-
-            var factory = container.Resolve<IClipboardFileCollectionDataControlFactory>();
-            var control = factory.BuildControl(fakeSingleFileData);
-
-            Assert.AreSame(fakeControl, control);
-        }
 
         [TestMethod]
         public void CanBuildControlReturnsFalseForNonFileData()
@@ -69,7 +42,7 @@
             var container = CreateContainer();
 
             var factory = container.Resolve<IClipboardFileCollectionDataControlFactory>();
-            Assert.IsTrue(factory.CanBuildControl(Substitute.For<IClipboardFileData>()));
+            Assert.IsTrue(factory.CanBuildControl(Substitute.For<IClipboardFileCollectionData>()));
         }
 
         [TestMethod]
