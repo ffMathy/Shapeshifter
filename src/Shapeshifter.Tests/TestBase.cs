@@ -7,6 +7,7 @@
 
     using Infrastructure.Dependencies;
     using Infrastructure.Environment.Interfaces;
+    using Infrastructure.Threading.Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -63,6 +64,7 @@
                 new DefaultWiringModule(fakeEnvironment));
 
             builder.RegisterFake<IUpdateService>();
+            builder.RegisterFake<IThreadDelay>();
 
             setupCallback?.Invoke(builder);
 
