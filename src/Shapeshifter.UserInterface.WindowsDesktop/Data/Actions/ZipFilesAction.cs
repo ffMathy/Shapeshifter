@@ -89,63 +89,13 @@
             var filePaths = fileDataItems
                 .Select(x => x.FullPath)
                 .ToArray();
-            var commonPath = FindCommonFolder(filePaths);
+            var commonPath = fileManager.FindCommonFolderFromPaths(filePaths);
             var directoryName = Path.GetFileName(commonPath);
-            var directoryPath = fileManager.PrepareFolder(directoryName);
+            var directoryPath = fileManager.PrepareTemporaryFolder(directoryName);
             CopyFilesToTemporaryFolder(fileDataItems, directoryPath);
 
             var zipFile = ZipDirectory(directoryPath);
             return zipFile;
-        }
-
-        static string FindCommonFolder(IReadOnlyCollection<string> paths)
-        {
-            var pathSimilarityIndex = GetPathSegmentsInCommonCount(paths);
-
-            var firstPath = paths.First();
-            var segments = GetPathSegments(firstPath);
-
-            var commonPath = Path.Combine(
-                segments
-                    .Take(pathSimilarityIndex)
-                    .ToArray());
-
-            return commonPath;
-        }
-
-        static int GetPathSegmentsInCommonCount(IReadOnlyCollection<string> paths)
-        {
-            var commonIndex = 0;
-            foreach (var originPath in paths)
-            {
-                var originSegments = GetPathSegments(originPath);
-                for (var index = 0; index < originSegments.Length; index++)
-                {
-                    var originSegment = originSegments[index];
-                    foreach (var referencePath in paths)
-                    {
-                        var referenceSegments = GetPathSegments(referencePath);
-                        if (referenceSegments.Length < originSegments.Length)
-                        {
-                            return commonIndex;
-                        }
-
-                        var referenceSegment = referenceSegments[index];
-                        if (originSegment != referenceSegment)
-                        {
-                            return commonIndex;
-                        }
-                    }
-                    commonIndex++;
-                }
-            }
-
-            return commonIndex;
-        }
-
-        static string[] GetPathSegments(string originPath)
-        {
-            return originPath.Split('\\', '/');
         }
 
         static void CopyFilesToTemporaryFolder(
@@ -160,7 +110,8 @@
 
         static void CopyFileToTemporaryFolder(string directory, IClipboardFileData fileData)
         {
-            var destinationFilePath = Path.Combine(directory, fileData.FileName);
+            var destinationFilePath = Path.Combine(
+                directory, fileData.FileName);
             DeleteFileIfExists(destinationFilePath);
             File.Copy(fileData.FullPath, destinationFilePath);
         }
@@ -176,7 +127,7 @@
         string ZipDirectory(string directory)
         {
             var directoryName = Path.GetFileName(directory);
-            var compressedFolderDirectory = fileManager.PrepareFolder($"Compressed folders");
+            var compressedFolderDirectory = fileManager.PrepareTemporaryFolder($"Compressed folders");
             var zipFile = Path.Combine(compressedFolderDirectory, $"{directoryName}.zip");
 
             DeleteFileIfExists(zipFile);

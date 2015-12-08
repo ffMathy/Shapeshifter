@@ -22,7 +22,14 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
 
     public class DefaultWiringModule: AutofacModule
     {
+        readonly IEnvironmentInformation environmentInformation;
+
         readonly Action<ContainerBuilder> callback;
+
+        public DefaultWiringModule(IEnvironmentInformation environmentInformation)
+        {
+            this.environmentInformation = environmentInformation;
+        }
 
         public DefaultWiringModule(Action<ContainerBuilder> callback = null)
         {
@@ -52,9 +59,9 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Dependencies
                    .AsImplementedInterfaces();
         }
 
-        static EnvironmentInformation RegisterEnvironmentInformation(ContainerBuilder builder)
+        IEnvironmentInformation RegisterEnvironmentInformation(ContainerBuilder builder)
         {
-            var environmentInformation = new EnvironmentInformation();
+            var environmentInformation = this.environmentInformation ?? new EnvironmentInformation();
             builder
                 .RegisterInstance(environmentInformation)
                 .As<IEnvironmentInformation>()
