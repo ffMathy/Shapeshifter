@@ -1,5 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Web
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -37,6 +38,16 @@
             var resolver = container.Resolve<IDomainNameResolver>();
             var isValid = await resolver.IsValidDomainAsync("google.com");
             Assert.IsTrue(isValid);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public async Task NoDomainSpecifiedThrowsException()
+        {
+            var container = CreateContainer();
+
+            var resolver = container.Resolve<IDomainNameResolver>();
+            await resolver.GetDomainIpAddressesAsync(null);
         }
 
         [TestMethod]
