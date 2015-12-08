@@ -111,6 +111,7 @@
     <Compile Include="Data\Factories\TextClipboardDataFactoryTest.cs" />
     <Compile Include="Infrastructure\Caching\KeyValueCacheTest.cs" />
     <Compile Include="Infrastructure\Threading\ConsumerThreadLoopTest.cs" />
+    <Compile Include="Infrastructure\Threading\MainThreadInvokerTest.cs" />
     <Compile Include="Infrastructure\Threading\ThreadLoopTest.cs" />
     <Compile Include="MainTest.cs" />
     <Compile Include="Mediators\PasteCombinationDurationMediatorTest.cs" />

@@ -59,7 +59,8 @@
                 .IsInDesignTime
                 .Returns(false);
 
-            builder.RegisterModule(new DefaultWiringModule(fakeEnvironment));
+            builder.RegisterModule(
+                new DefaultWiringModule(fakeEnvironment));
 
             builder.RegisterFake<IUpdateService>();
 
