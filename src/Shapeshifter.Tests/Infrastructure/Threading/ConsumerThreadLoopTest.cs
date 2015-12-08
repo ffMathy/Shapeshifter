@@ -76,7 +76,7 @@
 
             var fakeInnerLoop = container.Resolve<IThreadLoop>();
             fakeInnerLoop.Received()
-                         .Start(Arg.Any<Func<Task>>(), CancellationToken.None);
+                         .StartAsync(Arg.Any<Func<Task>>(), CancellationToken.None);
         }
 
         [TestMethod]
@@ -88,7 +88,7 @@
                 c =>
                 {
                     fakeInnerLoop = c.RegisterFake<IThreadLoop>();
-                    fakeInnerLoop.Start(
+                    fakeInnerLoop.StartAsync(
                         Arg.Do<Func<Task>>(
                             x =>
                             {

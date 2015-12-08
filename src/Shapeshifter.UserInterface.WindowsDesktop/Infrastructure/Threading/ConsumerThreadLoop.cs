@@ -53,7 +53,7 @@
         void SpawnThread(Func<Task> action, CancellationToken token)
         {
             logger.Information("Spawning consumption thread.");
-            internalLoop.Start(async () => await Tick(action, token), token);
+            internalLoop.StartAsync(async () => await Tick(action, token), token);
         }
 
         async Task Tick(Func<Task> action, CancellationToken token)
