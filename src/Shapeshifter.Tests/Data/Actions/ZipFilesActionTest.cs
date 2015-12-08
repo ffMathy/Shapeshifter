@@ -10,8 +10,6 @@
 
     using Data.Interfaces;
 
-    using Factories.Interfaces;
-
     using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;

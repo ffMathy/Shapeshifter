@@ -5,11 +5,7 @@
 
     using Autofac;
 
-    using Mediators.Interfaces;
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    using NSubstitute;
 
     using Services.Web.Interfaces;
 
