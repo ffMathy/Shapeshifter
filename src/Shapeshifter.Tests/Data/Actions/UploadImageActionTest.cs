@@ -47,6 +47,15 @@
         }
 
         [TestMethod]
+        public void OrderIsCorrect()
+        {
+            var container = CreateContainer();
+
+            var action = container.Resolve<IUploadImageAction>();
+            Assert.AreEqual(50, action.Order);
+        }
+
+        [TestMethod]
         public async Task CanNotPerformWithFileWithNoImage()
         {
             var container = CreateContainer(

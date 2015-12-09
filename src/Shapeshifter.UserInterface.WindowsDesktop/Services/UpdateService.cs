@@ -131,8 +131,7 @@
         async Task UpdateFromReleaseAsync(Release pendingUpdateRelease)
         {
             var assets =
-                await
-                client.Release.GetAllAssets(
+                await client.Release.GetAllAssets(
                     RepositoryOwner,
                     RepositoryName,
                     pendingUpdateRelease.Id);
@@ -158,8 +157,12 @@
 
         void StartUpdate(string temporaryDirectory)
         {
-            var concretePath = Path.Combine(temporaryDirectory, GetAssemblyName() + ".exe");
-            processManager.LaunchFile(concretePath, $"update \"{Environment.CurrentDirectory}\"");
+            var concretePath = Path.Combine(
+                temporaryDirectory,
+                GetAssemblyName() + ".exe");
+            processManager.LaunchFile(
+                concretePath,
+                $"update \"{Environment.CurrentDirectory}\"");
         }
 
         async Task<string> DownloadUpdateAsync(ReleaseAsset asset)
@@ -174,7 +177,7 @@
 
         string ExtractUpdate(string localFilePath)
         {
-            var temporaryDirectory = fileManager.PrepareFolder("Update");
+            var temporaryDirectory = fileManager.PrepareTemporaryFolder("Update");
             ZipFile.ExtractToDirectory(localFilePath, temporaryDirectory);
             return temporaryDirectory;
         }

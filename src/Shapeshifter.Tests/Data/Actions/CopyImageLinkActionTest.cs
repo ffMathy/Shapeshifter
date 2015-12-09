@@ -42,6 +42,15 @@
         }
 
         [TestMethod]
+        public void OrderIsCorrect()
+        {
+            var container = CreateContainer();
+
+            var action = container.Resolve<ICopyImageLinkAction>();
+            Assert.AreEqual(100, action.Order);
+        }
+
+        [TestMethod]
         public void CanReadDescription()
         {
             var container = CreateContainer();

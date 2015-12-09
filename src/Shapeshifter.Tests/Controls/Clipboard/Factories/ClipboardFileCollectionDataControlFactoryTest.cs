@@ -4,8 +4,6 @@
 
     using Autofac;
 
-    using Clipboard.Interfaces;
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;

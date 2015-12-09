@@ -7,7 +7,6 @@
 
     using Controls.Clipboard.Factories.Interfaces;
 
-    using Data.Factories.Interfaces;
     using Data.Interfaces;
 
     using Infrastructure.Events;

@@ -7,7 +7,6 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Interfaces;
-    using Data.Interfaces;
 
     [TestClass]
     public class ClipboardImageDataControlFactoryTest: TestBase
