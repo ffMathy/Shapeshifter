@@ -1,5 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
     using WindowsDesktop.Services.Files.Interfaces;
@@ -11,7 +12,20 @@
         : IFileManager,
           IDesignerService
     {
-        public string PrepareFolder(string path)
+        public string PrepareTemporaryFolder(string path)
+        {
+            return null;
+        }
+
+        public void DeleteDirectoryIfExists(string path)
+        {
+        }
+
+        public void DeleteFileIfExists(string path)
+        {
+        }
+
+        public string FindCommonFolderFromPaths(IReadOnlyCollection<string> paths)
         {
             return null;
         }

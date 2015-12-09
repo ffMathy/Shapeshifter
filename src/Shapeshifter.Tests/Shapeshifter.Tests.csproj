@@ -70,6 +70,8 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <Choose>
@@ -109,6 +111,8 @@
     <Compile Include="Data\Factories\TextClipboardDataFactoryTest.cs" />
     <Compile Include="Infrastructure\Caching\KeyValueCacheTest.cs" />
     <Compile Include="Infrastructure\Threading\ConsumerThreadLoopTest.cs" />
+    <Compile Include="Infrastructure\Threading\MainThreadInvokerTest.cs" />
+    <Compile Include="Infrastructure\Threading\ThreadLoopTest.cs" />
     <Compile Include="MainTest.cs" />
     <Compile Include="Mediators\PasteCombinationDurationMediatorTest.cs" />
     <Compile Include="Mediators\ClipboardUserInterfaceMediatorTest.cs" />
@@ -118,6 +122,9 @@
     <Compile Include="Services\LinkParserTest.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestException.cs" />
+    <Compile Include="Web\DownloaderTest.cs" />
+    <Compile Include="Web\DomainNameResolverTest.cs" />
     <Compile Include="Windows\ViewModels\ClipboardListViewModelTest.cs" />
   </ItemGroup>
   <ItemGroup>

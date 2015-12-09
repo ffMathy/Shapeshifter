@@ -29,6 +29,15 @@
         }
 
         [TestMethod]
+        public void OrderIsCorrect()
+        {
+            var container = CreateContainer();
+
+            var action = container.Resolve<IPasteAction>();
+            Assert.AreEqual(0, action.Order);
+        }
+
+        [TestMethod]
         public void CanGetTitle()
         {
             var container = CreateContainer();

@@ -4,14 +4,9 @@
 
     using Autofac;
 
-    using Clipboard.Interfaces;
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Interfaces;
-    using Data.Interfaces;
-
-    using NSubstitute;
 
     [TestClass]
     public class ClipboardFileDataControlFactoryTest: TestBase

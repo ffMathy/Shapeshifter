@@ -32,8 +32,7 @@
             try
             {
                 return
-                    await
-                    domainResolveCache.ThunkifyAsync(
+                    await domainResolveCache.ThunkifyAsync(
                         NormalizeDomain(domain),
                         Dns.GetHostAddressesAsync);
             }

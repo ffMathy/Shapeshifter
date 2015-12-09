@@ -5,14 +5,16 @@
 
     using Autofac;
 
+    using Infrastructure.Dependencies;
+    using Infrastructure.Environment.Interfaces;
+    using Infrastructure.Threading.Interfaces;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
 
     using Ploeh.AutoFixture;
 
-    using Infrastructure.Dependencies;
-    using Infrastructure.Environment.Interfaces;
     using Services.Interfaces;
 
     public abstract class TestBase
@@ -52,12 +54,17 @@
         protected ILifetimeScope CreateContainer(Action<ContainerBuilder> setupCallback = null)
         {
             var builder = new ContainerBuilder();
-            builder.RegisterModule(new DefaultWiringModule());
 
-            builder.RegisterFake<IEnvironmentInformation>()
-                   .IsInDesignTime
-                   .Returns(false);
+            var fakeEnvironment = builder.RegisterFake<IEnvironmentInformation>();
+            fakeEnvironment
+                .IsInDesignTime
+                .Returns(false);
+
+            builder.RegisterModule(
+                new DefaultWiringModule(fakeEnvironment));
+
             builder.RegisterFake<IUpdateService>();
+            builder.RegisterFake<IThreadDelay>();
 
             setupCallback?.Invoke(builder);
 
