@@ -17,6 +17,14 @@
             return null;
         }
 
+        public void DeleteDirectoryIfExists(string path)
+        {
+        }
+
+        public void DeleteFileIfExists(string path)
+        {
+        }
+
         public string FindCommonFolderFromPaths(IReadOnlyCollection<string> paths)
         {
             return null;

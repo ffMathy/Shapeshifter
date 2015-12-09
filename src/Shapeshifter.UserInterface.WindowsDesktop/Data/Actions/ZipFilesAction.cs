@@ -66,7 +66,7 @@
             IClipboardDataPackage processedData)
         {
             var supportedDataCollection = await GetSupportedData(processedData);
-            var firstSupportedData = supportedDataCollection.First();
+            var firstSupportedData = supportedDataCollection.FirstOrDefault();
 
             var zipFilePath = ZipData(firstSupportedData);
             clipboardInjectionService.InjectFiles(zipFilePath);
@@ -74,11 +74,6 @@
 
         string ZipFileCollectionData(params IClipboardFileData[] fileDataItems)
         {
-            if (fileDataItems == null)
-            {
-                throw new ArgumentNullException(nameof(fileDataItems));
-            }
-
             if (fileDataItems.Length == 0)
             {
                 throw new ArgumentException(
@@ -98,7 +93,7 @@
             return zipFile;
         }
 
-        static void CopyFilesToTemporaryFolder(
+        void CopyFilesToTemporaryFolder(
             IEnumerable<IClipboardFileData> fileDataItems,
             string directory)
         {
@@ -108,20 +103,12 @@
             }
         }
 
-        static void CopyFileToTemporaryFolder(string directory, IClipboardFileData fileData)
+        void CopyFileToTemporaryFolder(string directory, IClipboardFileData fileData)
         {
             var destinationFilePath = Path.Combine(
                 directory, fileData.FileName);
-            DeleteFileIfExists(destinationFilePath);
+            fileManager.DeleteFileIfExists(destinationFilePath);
             File.Copy(fileData.FullPath, destinationFilePath);
-        }
-
-        static void DeleteFileIfExists(string destinationFilePath)
-        {
-            if (File.Exists(destinationFilePath))
-            {
-                File.Delete(destinationFilePath);
-            }
         }
 
         string ZipDirectory(string directory)
@@ -130,7 +117,7 @@
             var compressedFolderDirectory = fileManager.PrepareTemporaryFolder($"Compressed folders");
             var zipFile = Path.Combine(compressedFolderDirectory, $"{directoryName}.zip");
 
-            DeleteFileIfExists(zipFile);
+            fileManager.DeleteFileIfExists(zipFile);
             ZipFile.CreateFromDirectory(directory, zipFile);
 
             return zipFile;

@@ -10,6 +10,10 @@
 
         string PrepareTemporaryFolder(string path);
 
+        void DeleteDirectoryIfExists(string path);
+
+        void DeleteFileIfExists(string path);
+
         string FindCommonFolderFromPaths(IReadOnlyCollection<string> paths);
     }
 }

@@ -35,15 +35,25 @@
             }
         }
 
-        static void PurgePath(string temporaryPath)
+        void PurgePath(string temporaryPath)
         {
-            if (File.Exists(temporaryPath))
+            DeleteFileIfExists(temporaryPath);
+            DeleteDirectoryIfExists(temporaryPath);
+        }
+
+        public void DeleteFileIfExists(string path)
+        {
+            if (File.Exists(path))
             {
-                File.Delete(temporaryPath);
+                File.Delete(path);
             }
-            else if (Directory.Exists(temporaryPath))
+        }
+
+        public void DeleteDirectoryIfExists(string path)
+        {
+            if (Directory.Exists(path))
             {
-                Directory.Delete(temporaryPath);
+                Directory.Delete(path);
             }
         }
 

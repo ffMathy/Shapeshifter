@@ -24,9 +24,7 @@
             var ipAddresses = await resolver.GetDomainIpAddressesAsync("google.com");
             var firstIpAddress = ipAddresses.First();
 
-            Assert.IsTrue(firstIpAddress
-                .ToString()
-                .StartsWith("195.249."));
+            Assert.IsNotNull(firstIpAddress);
         }
 
         [TestMethod]

@@ -65,6 +65,15 @@
         }
 
         [TestMethod]
+        public void OrderIsCorrect()
+        {
+            var container = CreateContainer();
+
+            var action = container.Resolve<IOpenLinkAction>();
+            Assert.AreEqual(200, action.Order);
+        }
+
+        [TestMethod]
         public async Task PerformLaunchesDefaultBrowsersForEachLink()
         {
             var container = CreateContainer(

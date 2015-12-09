@@ -1,5 +1,8 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Actions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
 
     using System.IO;
@@ -61,8 +64,56 @@
         }
 
         [TestMethod]
+        public void OrderIsCorrect()
+        {
+            var container = CreateContainer();
+
+            var action = container.Resolve<IZipFilesAction>();
+            Assert.AreEqual(75, action.Order);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         [TestCategory("Integration")]
-        public async Task ProducesProperZipFile()
+        public async Task ThrowsExceptionForInvalidData()
+        {
+            var container = CreateContainer();
+
+            var action = container.Resolve<IZipFilesAction>();
+
+            var fakeData = Substitute.For<IClipboardData>();
+
+            var package = new ClipboardDataPackage();
+            package.AddData(fakeData);
+
+            await action.PerformAsync(package);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        [TestCategory("Integration")]
+        public async Task NoFilesAddedThrowsException()
+        {
+            var container = CreateContainer();
+
+            var action = container.Resolve<IZipFilesAction>();
+
+            var fakeDataSourceService = Substitute.For<IDataSourceService>();
+
+            var fileCollectionData = new ClipboardFileCollectionData(fakeDataSourceService)
+            {
+                Files = new Collection<IClipboardFileData>()
+            };
+
+            var package = new ClipboardDataPackage();
+            package.AddData(fileCollectionData);
+
+            await action.PerformAsync(package);
+        }
+
+        [TestMethod]
+        [TestCategory("Integration")]
+        public async Task ProducesProperZipFileForCollection()
         {
             var container = CreateContainer(
                 c =>
@@ -123,6 +174,57 @@
                     .Count(x => x.FullName == Path.GetFileName(file1)));
                 Assert.AreEqual(1, entries
                     .Count(x => x.FullName == Path.GetFileName(file2)));
+            }
+        }
+        
+        [TestMethod]
+        [TestCategory("Integration")]
+        public async Task ProducesProperZipFileForSingleFile()
+        {
+            var container = CreateContainer(
+                c =>
+                {
+                    c.RegisterFake<IClipboardInjectionService>();
+                });
+
+            var fakeClipboardInjectionService = container.Resolve<IClipboardInjectionService>();
+            var action = container.Resolve<IZipFilesAction>();
+
+            var file = Path.GetTempFileName();
+
+            File.WriteAllText(file, "file");
+
+            var fakeDataSourceService = Substitute.For<IDataSourceService>();
+
+            var fileData = new ClipboardFileData(fakeDataSourceService)
+            {
+                FullPath = file,
+                FileName = Path.GetFileName(file)
+            };
+
+            var package = new ClipboardDataPackage();
+            package.AddData(fileData);
+
+            string zipPath = null;
+            fakeClipboardInjectionService
+                .When(x => x.InjectFiles(Arg.Any<string[]>()))
+                .Do(parameters =>
+                {
+                    var files = (string[])parameters[0];
+                    zipPath = files[0];
+                });
+
+            await action.PerformAsync(package);
+
+            Assert.IsNotNull(zipPath);
+
+            using (var archive = ZipFile.Open(zipPath, ZipArchiveMode.Read))
+            {
+                var entries = archive.Entries;
+
+                Assert.AreEqual(1, entries.Count);
+                Assert.AreEqual(1, entries
+                    .Count(x => x.FullName == Path.GetFileName(file)));
             }
         }
     }
