@@ -1,4 +1,7 @@
-<img src="https://ci.appveyor.com/api/projects/status/hnhqpn0rwcsvccng/branch/master?svg=true" />
+[![AppVeyor](https://img.shields.io/appveyor/ci/ffMathy/Shapeshifter.svg)]()
+[![GitHub release](https://img.shields.io/github/release/ffMathy/Shapeshifter.svg)]()
+[![Github All Releases](https://img.shields.io/github/downloads/ffMathy/Shapeshifter/total.svg)]()
+
 # Shapeshifter
 Shapeshifter is a revolutionary clipboard manager that you might know of already. It can be downloaded [here](http://flamefusion.net/software/shapeshifter),
 although that link is for Version 5. 
