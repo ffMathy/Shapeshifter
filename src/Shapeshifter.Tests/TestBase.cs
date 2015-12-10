@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop
 {
     using System;
-    using System.Linq;
 
     using Autofac;
 
@@ -13,42 +12,14 @@
 
     using NSubstitute;
 
-    using Ploeh.AutoFixture;
-
     using Services.Interfaces;
 
     public abstract class TestBase
     {
-        protected Fixture fixture;
-
         [TestCleanup]
         public void ClearCacheOnEnd()
         {
             Extensions.ClearCache();
-        }
-
-        protected TestBase()
-        {
-            fixture = CreateFixture();
-        }
-
-        static Fixture CreateFixture()
-        {
-            var fixture = new Fixture
-            {
-                OmitAutoProperties = true,
-                RepeatCount = 5
-            };
-
-            var behavior = fixture
-                .Behaviors
-                .OfType<ThrowingRecursionBehavior>()
-                .Single();
-            fixture.Behaviors.Remove(behavior);
-
-            fixture.Behaviors.Add(new OmitOnRecursionBehavior(1));
-
-            return fixture;
         }
 
         protected ILifetimeScope CreateContainer(Action<ContainerBuilder> setupCallback = null)
