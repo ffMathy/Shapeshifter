@@ -17,12 +17,12 @@ build:
   project: src\Shapeshifter.sln
   verbosity: normal
 after_build:
-- cmd: 
-	- cd src\Shapeshifter.UserInterface.WindowsDesktop\bin\Release\
+- cmd: >-
+	cd src\Shapeshifter.UserInterface.WindowsDesktop\bin\Release\
     
-	  7z a Binaries.zip *.dll
+	7z a Binaries.zip *.dll
       
-	  7z a Binaries.zip *.exe
+	7z a Binaries.zip *.exe
 
 artifacts:
 - path: src\Shapeshifter.UserInterface.WindowsDesktop\bin\Release\Binaries.zip
