@@ -43,4 +43,6 @@ test_script:
     
     python.exe -m pip install codecov
     
+    cd Scripts
+    
     codecov -f "coverage.xml"
