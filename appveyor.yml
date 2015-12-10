@@ -19,13 +19,17 @@ build:
 after_build:
 - cmd: >-
     cd src\Shapeshifter.UserInterface.WindowsDesktop\bin\Release\
-
+    
     7z a Binaries.zip *.dll
-
+    
     7z a Binaries.zip *.exe
+    
 artifacts:
 - path: src\Shapeshifter.UserInterface.WindowsDesktop\bin\Release\Binaries.zip
   name: Deployment
+environment:
+  repo_token:
+    secure: aanmTK5qJueN5VtmB0IYFqeGUPSe3+OrY6hWyGygF9NvHB99o0cMS4bls30h2PtF
 deploy:
 - provider: GitHub
   release: shapeshifter-v$(appveyor_build_version)
