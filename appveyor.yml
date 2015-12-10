@@ -20,10 +20,10 @@ after_build:
 - cmd: >-
     cd src\Shapeshifter.UserInterface.WindowsDesktop\bin\Release\
     
-	7z a Binaries.zip *.dll
-
-	7z a Binaries.zip *.exe
-
+    7z a Binaries.zip *.dll
+    
+    7z a Binaries.zip *.exe
+    
 artifacts:
 - path: src\Shapeshifter.UserInterface.WindowsDesktop\bin\Release\Binaries.zip
   name: Deployment
@@ -38,9 +38,9 @@ test_script:
   - nuget install opencover -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
     
     %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\src\Shapeshifter.Tests\bin\Release\Shapeshifter.Tests.dll\"" -register:user -excludebyattribute:*.ExcludeFromCodeCoverage* -output:coverage.xml -skipautoprops -returntargetcode -filter:"+[Shapeshifter.*]*"
-
+    
     "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
-
+    
     pip install codecov
-
+    
     codecov -f "coverage.xml"
