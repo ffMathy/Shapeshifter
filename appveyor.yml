@@ -1,0 +1,39 @@
+version: 6.0.0.{build}
+pull_requests:
+  do_not_increment_build_number: true
+skip_tags: true
+os: Visual Studio 2015
+configuration: Release
+platform: Any CPU
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+before_build:
+- cmd: nuget restore src\Shapeshifter.sln
+build:
+  project: src\Shapeshifter.sln
+  verbosity: normal
+after_build:
+- cmd: >-
+    cd src\Shapeshifter.UserInterface.WindowsDesktop\bin\Release\
+    
+    7z a Binaries.zip *.dll
+    
+    7z a Binaries.zip *.exe
+    
+artifacts:
+- path: src\Shapeshifter.UserInterface.WindowsDesktop\bin\Release\Binaries.zip
+  name: Deployment
+environment:
+  repo_token:
+    secure: aanmTK5qJueN5VtmB0IYFqeGUPSe3+OrY6hWyGygF9NvHB99o0cMS4bls30h2PtF
+deploy:
+- provider: GitHub
+  release: shapeshifter-v$(appveyor_build_version)
+  auth_token:
+    secure: bEEQPxNCa8Kb1CYtJddx0wPImmY2T/ZCrXVFf+RVtEC0Lvb0pVDE2D6sjfy9NxdV
+  on:
+    branch: master
