@@ -37,3 +37,6 @@ deploy:
     secure: bEEQPxNCa8Kb1CYtJddx0wPImmY2T/ZCrXVFf+RVtEC0Lvb0pVDE2D6sjfy9NxdV
   on:
     branch: master
+test_script: 
+  - nuget install opencover -ExcludeVersion
+    nuget install coveralls.io -ExcludeVersion
