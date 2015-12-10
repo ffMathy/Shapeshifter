@@ -42,4 +42,4 @@ test_script:
   
     nuget install coveralls.io -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
     
-    %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\OpenCover.Console.exe -register:user -output:coverage.xml -skipautoprops -returntargetcode -filter:"+[Shapeshifter*]*"
+    %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -register:user -output:coverage.xml -skipautoprops -returntargetcode -filter:"+[Shapeshifter*]*"
