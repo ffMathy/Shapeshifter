@@ -37,7 +37,7 @@ deploy:
 test_script: 
   - nuget install opencover -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
     
-    %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\src\Shapeshifter.Tests\bin\Release\Shapeshifter.Tests.dll\"" -register:user -output:coverage.xml -skipautoprops -returntargetcode -filter:"+[Shapeshifter.*]*";"-[Shapeshifter.Tests.*]*"
+    %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\src\Shapeshifter.Tests\bin\Release\Shapeshifter.Tests.dll\" \"%APPVEYOR_BUILD_FOLDER%\src\Shapeshifter.UserInterface.WindowsDesktop\bin\Release\Shapeshifter.exe\"" -register:user -output:coverage.xml -skipautoprops -returntargetcode -filter:"+[Shapeshifter.*]*"
     
     C:\Python35-x64\python.exe -m pip install codecov
     
