@@ -38,7 +38,7 @@ deploy:
   on:
     branch: master
 test_script: 
-  - nuget install opencover -ExcludeVersion
+  - nuget install opencover -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
   
-    nuget install coveralls.io -ExcludeVersion
+    nuget install coveralls.io -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
     
