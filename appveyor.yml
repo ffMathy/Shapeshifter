@@ -39,4 +39,6 @@ deploy:
     branch: master
 test_script: 
   - nuget install opencover -ExcludeVersion
+  
     nuget install coveralls.io -ExcludeVersion
+    
