@@ -39,6 +39,8 @@ test_script:
     
     %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\src\Shapeshifter.Tests\bin\Release\Shapeshifter.Tests.dll\"" -register:user -excludebyattribute:*.ExcludeFromCodeCoverage* -output:coverage.xml -skipautoprops -returntargetcode -filter:"+[Shapeshifter.*]*"
     
-    C:\Python35-x64\\python.exe -m pip install codecov
+    cd C:\Python35-x64
+    
+    python.exe -m pip install codecov
     
     codecov -f "coverage.xml"
