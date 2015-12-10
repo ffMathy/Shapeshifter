@@ -21,7 +21,7 @@ after_build:
     cd src\Shapeshifter.UserInterface.WindowsDesktop\bin\Release\
     
 	7z a Binaries.zip *.dll
-      
+
 	7z a Binaries.zip *.exe
 
 artifacts:
