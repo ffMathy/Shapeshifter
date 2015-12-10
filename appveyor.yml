@@ -28,7 +28,7 @@ artifacts:
 - path: src\Shapeshifter.UserInterface.WindowsDesktop\bin\Release\Binaries.zip
   name: Deployment
 environment:
-  repo_token:
+  COVERALLS_REPO_TOKEN:
     secure: aanmTK5qJueN5VtmB0IYFqeGUPSe3+OrY6hWyGygF9NvHB99o0cMS4bls30h2PtF
 deploy:
 - provider: GitHub
@@ -44,4 +44,4 @@ test_script:
     
     %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\src\Shapeshifter.Tests\bin\Release\Shapeshifter.Tests.dll\"" -register:user -output:coverage.xml -skipautoprops -returntargetcode -filter:"+[Shapeshifter*]*"
     
-    
+    %APPVEYOR_BUILD_FOLDER%\tools\coveralls.io\tools\coveralls.net.exe --opencover coverage.xml --full-sources
