@@ -24,6 +24,8 @@ after_build:
     
     7z a Binaries.zip *.exe
     
+    cd ..\..\..
+    
 artifacts:
 - path: src\Shapeshifter.UserInterface.WindowsDesktop\bin\Release\Binaries.zip
   name: Deployment
