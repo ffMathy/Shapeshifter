@@ -41,4 +41,4 @@ test_script:
     
     C:\Python35-x64\python.exe -m pip install codecov
     
-    C:\Python35-x64\Scripts\codecov "coverage.xml"
+    C:\Python35-x64\Scripts\codecov
