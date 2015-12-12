@@ -17,16 +17,19 @@
         {
             var container = CreateContainer();
 
+            var initialRunningProcesses = Process.GetProcessesByName("timeout")
+                                                 .Length;
+
             using (var processManager = container.Resolve<IProcessManager>())
             {
                 processManager.LaunchCommand("timeout", "/t -1 /nobreak");
 
-                var runningProcessesBeforeDisposal = Process.GetProcessesByName("timeout");
-                Assert.AreEqual(1, runningProcessesBeforeDisposal.Length);
+                var runningProcessesBeforeDisposal = Process.GetProcessesByName("timeout").Length;
+                Assert.AreEqual(initialRunningProcesses + 1, runningProcessesBeforeDisposal);
             }
 
-            var runningProcessesAfterDisposal = Process.GetProcessesByName("timeout");
-            Assert.AreEqual(0, runningProcessesAfterDisposal.Length);
+            var runningProcessesAfterDisposal = Process.GetProcessesByName("timeout").Length;
+            Assert.AreEqual(initialRunningProcesses, runningProcessesAfterDisposal);
         }
 
         [TestMethod]
