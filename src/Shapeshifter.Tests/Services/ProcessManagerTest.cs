@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
     using System;
+    using System.Collections.Generic;
 
     using Autofac;
 
@@ -18,21 +19,24 @@
         {
             var container = CreateContainer();
 
-            var initialRunningProcesses = Process.GetProcessesByName("timeout")
-                                                 .Length;
-
+            var initialRunningProcesses = GetTimeoutProcesses().Length;
             using (var processManager = container.Resolve<IProcessManager>())
             {
                 processManager.LaunchCommand("timeout", "/t -1 /nobreak");
 
-                var runningProcessesBeforeDisposal = Process.GetProcessesByName("timeout").Length;
+                var runningProcessesBeforeDisposal = GetTimeoutProcesses().Length;
                 Extensions.AssertWait(() =>
                     Assert.AreEqual(initialRunningProcesses + 1, runningProcessesBeforeDisposal));
             }
 
-            var runningProcessesAfterDisposal = Process.GetProcessesByName("timeout").Length;
+            var runningProcessesAfterDisposal = GetTimeoutProcesses().Length;
             Extensions.AssertWait(() =>
                 Assert.AreEqual(initialRunningProcesses, runningProcessesAfterDisposal));
+        }
+
+        static Process[] GetTimeoutProcesses()
+        {
+            return Process.GetProcessesByName("timeout");
         }
 
         [TestMethod]
