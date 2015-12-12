@@ -7,7 +7,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class Downloader
         : IDownloader,
           IDisposable

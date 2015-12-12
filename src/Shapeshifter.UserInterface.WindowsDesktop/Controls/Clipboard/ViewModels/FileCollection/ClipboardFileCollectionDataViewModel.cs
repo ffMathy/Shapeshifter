@@ -21,7 +21,7 @@
         : ClipboardDataViewModel<IClipboardFileCollectionData>,
           IClipboardFileCollectionDataViewModel
     {
-        [ExcludeFromCodeCoverage]
+        
         public ClipboardFileCollectionDataViewModel()
             : this(new EnvironmentInformation()) { }
 
@@ -34,7 +34,7 @@
             }
         }
 
-        [ExcludeFromCodeCoverage]
+        
         void PrepareDesignerMode()
         {
             var container = DesignTimeContainerHelper.CreateDesignTimeContainer();

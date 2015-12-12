@@ -27,7 +27,7 @@
             whitespaceSubstitutionExpression = new Regex(@"\s+", RegexOptions.Compiled);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         public ClipboardTextDataViewModel()
             : this(new EnvironmentInformation()) { }
 
@@ -40,7 +40,7 @@
             }
         }
 
-        [ExcludeFromCodeCoverage]
+        
         void PrepareDesignMode()
         {
             var container = DesignTimeContainerHelper.CreateDesignTimeContainer();

@@ -8,7 +8,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class ProcessManager
         : IProcessManager,
           IDisposable
@@ -20,7 +20,7 @@
             processes = new HashSet<Process>();
         }
 
-        [ExcludeFromCodeCoverage]
+        
         public void Dispose()
         {
             foreach (var process in processes)
@@ -29,14 +29,14 @@
             }
         }
 
-        [ExcludeFromCodeCoverage]
+        
         public void LaunchCommand(string command)
         {
             var process = Process.Start(command);
             processes.Add(process);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         public void LaunchFile(string fileName, string arguments = null)
         {
             if (!File.Exists(fileName))

@@ -17,7 +17,7 @@
 
     using Structures;
 
-    [ExcludeFromCodeCoverage]
+    
     class ClipboardDataPackageFactory : IClipboardDataPackageFactory
     {
         readonly IClipboardHandleFactory clipboardSessionFactory;

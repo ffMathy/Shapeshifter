@@ -20,7 +20,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrapper
 
     using Services.Images.Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class BitmapUnwrapper: IMemoryUnwrapper
     {
         readonly IImagePersistenceService imagePersistenceService;

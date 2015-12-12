@@ -11,7 +11,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class ImagePersistenceService: IImagePersistenceService
     {
         static ImageMetaInformation ConvertByteArrayToMetaInformation(byte[] data)

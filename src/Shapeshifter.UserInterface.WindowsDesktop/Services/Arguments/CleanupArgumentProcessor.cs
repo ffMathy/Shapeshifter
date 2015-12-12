@@ -17,7 +17,7 @@
             return arguments.Contains("cleanup");
         }
 
-        [ExcludeFromCodeCoverage]
+        
         public void Process(string[] arguments)
         {
             var updateIndex = Array.IndexOf(arguments, "cleanup");

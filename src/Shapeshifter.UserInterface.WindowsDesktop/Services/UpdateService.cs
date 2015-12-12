@@ -23,7 +23,7 @@
 
     using Web.Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class UpdateService
         : IUpdateService,
           IStartable

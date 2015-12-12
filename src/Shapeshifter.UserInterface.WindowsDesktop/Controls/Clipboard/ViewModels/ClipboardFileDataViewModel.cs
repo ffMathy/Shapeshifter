@@ -12,7 +12,7 @@
     using Infrastructure.Environment;
     using Infrastructure.Environment.Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class ClipboardFileDataViewModel: ClipboardDataViewModel<IClipboardFileData>
     {
         public ClipboardFileDataViewModel()

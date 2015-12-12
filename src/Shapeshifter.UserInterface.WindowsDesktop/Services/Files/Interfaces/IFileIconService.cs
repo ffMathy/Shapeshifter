@@ -6,7 +6,7 @@
 
     public interface IFileIconService: ISingleInstance
     {
-        [ExcludeFromCodeCoverage]
+        
         byte[] GetIcon(string path, bool allowThumbnails, int dimensions = 256);
     }
 }

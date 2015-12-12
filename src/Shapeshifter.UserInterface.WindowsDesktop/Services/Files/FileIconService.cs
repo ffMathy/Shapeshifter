@@ -13,7 +13,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class FileIconService: IFileIconService
     {
         readonly IImagePersistenceService imagePersistenceService;

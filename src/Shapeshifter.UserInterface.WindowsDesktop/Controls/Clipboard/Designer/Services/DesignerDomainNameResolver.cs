@@ -8,7 +8,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class DesignerDomainNameResolver
         : IDomainNameResolver,
           IDesignerService

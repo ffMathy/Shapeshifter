@@ -53,7 +53,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
             logger.Information("Clipboard package has been injected to the clipboard.", 1);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         void InjectPackageContents(IClipboardDataPackage package)
         {
             foreach (var clipboardData in package.Contents)
@@ -62,7 +62,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
             }
         }
 
-        [ExcludeFromCodeCoverage]
+        
         void InjectClipboardData(IClipboardData clipboardData)
         {
             using (var memoryHandle = memoryHandleFactory.AllocateInMemory(clipboardData.RawData))
@@ -93,7 +93,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
             }
         }
 
-        [ExcludeFromCodeCoverage]
+        
         static IntPtr AllocateInMemory(IClipboardData clipboardData)
         {
             return GeneralApi.GlobalAlloc(
@@ -101,21 +101,21 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
                 (UIntPtr) clipboardData.RawData.Length);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         public void InjectImage(BitmapSource image)
         {
             clipboardCopyInterceptor.SkipNext();
             WindowsClipboard.SetImage(image);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         public void InjectText(string text)
         {
             clipboardCopyInterceptor.SkipNext();
             WindowsClipboard.SetText(text);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         public void InjectFiles(params string[] files)
         {
             clipboardCopyInterceptor.SkipNext();

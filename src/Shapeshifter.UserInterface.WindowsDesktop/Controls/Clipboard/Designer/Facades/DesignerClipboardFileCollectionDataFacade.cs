@@ -7,7 +7,7 @@
     using Services;
     using Services.Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class DesignerClipboardFileCollectionDataFacade: ClipboardFileCollectionData
     {
         public DesignerClipboardFileCollectionDataFacade(

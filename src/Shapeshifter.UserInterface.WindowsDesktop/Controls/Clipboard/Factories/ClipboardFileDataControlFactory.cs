@@ -41,7 +41,7 @@
             return CreateFileDataControl((IClipboardFileData)data);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         IClipboardControl CreateFileDataControl(IClipboardFileData data)
         {
             return new ClipboardFileDataControl

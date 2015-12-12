@@ -41,7 +41,7 @@
             return CreateImageDataControl((IClipboardImageData)data);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         IClipboardControl CreateImageDataControl(IClipboardImageData data)
         {
             return new ClipboardImageDataControl

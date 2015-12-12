@@ -4,7 +4,7 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
-    [ExcludeFromCodeCoverage]
+    
     public static class IconApi
     {
         public const uint SHGFI_ICON = 0x100;
@@ -133,7 +133,7 @@
             SIIGBF_INCACHEONLY = 16
         }
 
-        [ExcludeFromCodeCoverage]
+        
         [StructLayout(LayoutKind.Sequential)]
         public struct SIZE
         {

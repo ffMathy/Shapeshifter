@@ -9,7 +9,7 @@
     using Services;
     using Services.Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class DesignerClipboardFileDataFacade: ClipboardFileData
     {
         public DesignerClipboardFileDataFacade(

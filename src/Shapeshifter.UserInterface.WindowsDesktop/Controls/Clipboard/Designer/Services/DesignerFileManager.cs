@@ -7,7 +7,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class DesignerFileManager
         : IFileManager,
           IDesignerService

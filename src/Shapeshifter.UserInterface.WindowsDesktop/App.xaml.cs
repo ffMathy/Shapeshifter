@@ -11,7 +11,7 @@
     /// <summary>
     ///     Interaction logic for App.xaml
     /// </summary>
-    [ExcludeFromCodeCoverage]
+    
     public partial class App: Application
     {
         static ILifetimeScope container;

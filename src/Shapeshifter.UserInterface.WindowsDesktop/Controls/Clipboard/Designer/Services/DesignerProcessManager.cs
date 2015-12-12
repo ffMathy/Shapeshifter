@@ -6,7 +6,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class DesignerProcessManager
         : IProcessManager,
           IDesignerService

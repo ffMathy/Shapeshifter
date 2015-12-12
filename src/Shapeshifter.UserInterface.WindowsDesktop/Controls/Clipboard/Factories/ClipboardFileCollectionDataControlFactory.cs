@@ -42,7 +42,7 @@
             return CreateClipboardFileCollectionDataControl((IClipboardFileCollectionData)data);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         IClipboardControl CreateClipboardFileCollectionDataControl(
             IClipboardFileCollectionData data)
         {

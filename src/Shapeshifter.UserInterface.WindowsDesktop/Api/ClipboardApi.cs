@@ -7,7 +7,7 @@
     using System.Runtime.InteropServices;
     using System.Text;
 
-    [ExcludeFromCodeCoverage]
+    
     public static class ClipboardApi
     {
         public const int CF_BITMAP = 2;

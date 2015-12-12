@@ -5,7 +5,7 @@
     using System.Runtime.InteropServices;
     using System.Text;
 
-    [ExcludeFromCodeCoverage]
+    
     public class WindowApi
     {
         [DllImport("user32.dll")]

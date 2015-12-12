@@ -12,7 +12,7 @@
     using Infrastructure.Environment;
     using Infrastructure.Environment.Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class ClipboardImageDataViewModel: ClipboardDataViewModel<IClipboardImageData>
     {
         public ClipboardImageDataViewModel()
@@ -27,7 +27,7 @@
             }
         }
 
-        [ExcludeFromCodeCoverage]
+        
         void PrepareDesignerMode()
         {
             var container = DesignTimeContainerHelper.CreateDesignTimeContainer();

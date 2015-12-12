@@ -7,7 +7,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class DesignerUpdateService
         : IUpdateService,
           IDesignerService

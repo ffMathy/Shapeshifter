@@ -6,7 +6,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class DesignerImageConverterService
         : IDesignerImageConverterService,
           IDesignerService

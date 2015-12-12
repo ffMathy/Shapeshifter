@@ -12,7 +12,7 @@
         : UserControl,
           IClipboardControl
     {
-        [ExcludeFromCodeCoverage]
+        
         public ClipboardImageDataControl()
         {
             InitializeComponent();

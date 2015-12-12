@@ -6,7 +6,7 @@
 
     using Services.Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class DesignerDataSourceFacade: IDataSource
     {
         byte[] icon;

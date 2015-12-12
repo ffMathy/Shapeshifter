@@ -5,7 +5,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class Logger: ILogger
     {
         const int MinimumImportanceFactor = 0;

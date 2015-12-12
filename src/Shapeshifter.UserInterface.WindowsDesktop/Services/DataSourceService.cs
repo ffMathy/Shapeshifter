@@ -17,7 +17,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class DataSourceService
         : IDataSourceService,
           ISingleInstance

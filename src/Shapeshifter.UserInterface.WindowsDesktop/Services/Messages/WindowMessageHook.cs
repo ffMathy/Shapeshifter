@@ -17,7 +17,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class WindowMessageHook
         : IWindowMessageHook,
           IDisposable

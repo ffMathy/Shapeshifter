@@ -8,12 +8,12 @@
     using Services;
     using Services.Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class DesignerClipboardTextDataFacade
         : ClipboardTextData,
           IClipboardTextData
     {
-        [ExcludeFromCodeCoverage]
+        
         public DesignerClipboardTextDataFacade(
             IDesignerImageConverterService designerImageConverterService)
             :

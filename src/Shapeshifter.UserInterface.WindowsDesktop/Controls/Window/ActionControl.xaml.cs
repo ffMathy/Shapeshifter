@@ -6,7 +6,7 @@
     /// <summary>
     ///     Interaction logic for ActionControl.xaml
     /// </summary>
-    [ExcludeFromCodeCoverage]
+    
     public partial class ActionControl: UserControl
     {
         public ActionControl()

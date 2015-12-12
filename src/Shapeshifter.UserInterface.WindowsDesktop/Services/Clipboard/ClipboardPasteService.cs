@@ -30,7 +30,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
             this.handleContainer = handleContainer;
         }
 
-        [ExcludeFromCodeCoverage]
+        
         public void PasteClipboardContents()
         {
             DisablePasteHotkeyInterceptor();
@@ -40,19 +40,19 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
             logger.Information("Paste simulated.", 1);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         void EnablePasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.Install(handleContainer.Handle);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         void DisablePasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.Uninstall();
         }
 
-        [ExcludeFromCodeCoverage]
+        
         static void SendPasteCombination()
         {
             var inputs = new[]
@@ -65,7 +65,7 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
             SendInput((uint) inputs.Length, inputs, INPUT.Size);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         static INPUT GenerateKeystoke(VirtualKeyShort key, KEYEVENTF flags = 0)
         {
             return new INPUT

@@ -12,7 +12,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class ClipboardCopyInterceptor: IClipboardCopyInterceptor
     {
         public event EventHandler<DataCopiedEventArgument> DataCopied;

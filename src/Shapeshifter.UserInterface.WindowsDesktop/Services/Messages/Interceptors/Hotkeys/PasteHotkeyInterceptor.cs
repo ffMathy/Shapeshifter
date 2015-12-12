@@ -12,7 +12,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class PasteHotkeyInterceptor: IPasteHotkeyInterceptor
     {
         readonly ILogger logger;

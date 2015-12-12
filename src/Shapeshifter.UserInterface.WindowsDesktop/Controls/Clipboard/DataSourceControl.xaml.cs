@@ -6,7 +6,7 @@
     /// <summary>
     ///     Interaction logic for DataSourceControl.xaml
     /// </summary>
-    [ExcludeFromCodeCoverage]
+    
     public partial class DataSourceControl: StackPanel
     {
         public DataSourceControl()

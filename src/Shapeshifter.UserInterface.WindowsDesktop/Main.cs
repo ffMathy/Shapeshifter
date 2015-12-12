@@ -13,7 +13,7 @@
 
     using Services.Arguments.Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class Main: ISingleInstance
     {
         readonly IEnumerable<IArgumentProcessor> argumentProcessors;

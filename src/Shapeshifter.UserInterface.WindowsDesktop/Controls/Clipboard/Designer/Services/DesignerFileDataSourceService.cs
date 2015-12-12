@@ -12,7 +12,7 @@
 
     using Properties;
 
-    [ExcludeFromCodeCoverage]
+    
     class DesignerFileDataSourceService
         : IDataSourceService,
           IDesignerService

@@ -6,7 +6,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class ImageFileInterpreter: IImageFileInterpreter
     {
         public BitmapSource Interpret(byte[] bytes)

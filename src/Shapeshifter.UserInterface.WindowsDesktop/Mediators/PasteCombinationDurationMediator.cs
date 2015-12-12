@@ -59,19 +59,19 @@
         bool IsCancellationRequested
             => threadCancellationTokenSource.Token.IsCancellationRequested;
 
-        [ExcludeFromCodeCoverage]
+        
         public bool IsCombinationHeldDown
             => Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.V);
 
-        [ExcludeFromCodeCoverage]
+        
         public bool IsOneCombinationKeyDown
             => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.V);
 
-        [ExcludeFromCodeCoverage]
+        
         CancellationToken Token
             => threadCancellationTokenSource.Token;
 
-        [ExcludeFromCodeCoverage]
+        
         public int DurationInDeciseconds
             => 2;
 
@@ -86,7 +86,7 @@
             InstallPasteHotkeyInterceptor();
         }
 
-        [ExcludeFromCodeCoverage]
+        
         async Task MonitorClipboardCombinationStateAsync()
         {
             await WaitForCombinationRelease();
@@ -98,7 +98,7 @@
             RegisterCombinationReleased();
         }
 
-        [ExcludeFromCodeCoverage]
+        
         void RegisterCombinationReleased()
         {
             isCombinationDown = false;
@@ -113,7 +113,7 @@
             }
         }
 
-        [ExcludeFromCodeCoverage]
+        
         async Task WaitForCombinationRelease()
         {
             var decisecondsPassed = 0;
@@ -128,7 +128,7 @@
             }
         }
 
-        [ExcludeFromCodeCoverage]
+        
         void RaiseDurationPassedEventIfNeeded(int decisecondsPassed)
         {
             if ((decisecondsPassed != DurationInDeciseconds) || (PasteCombinationDurationPassed == null))
@@ -145,19 +145,19 @@
             logger.Information("Paste duration passed event raised.");
         }
 
-        [ExcludeFromCodeCoverage]
+        
         void InstallPasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.HotkeyFired += PasteHotkeyInterceptor_PasteHotkeyFired;
         }
 
-        [ExcludeFromCodeCoverage]
+        
         void UninstallPasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.HotkeyFired -= PasteHotkeyInterceptor_PasteHotkeyFired;
         }
 
-        [ExcludeFromCodeCoverage]
+        
         void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, HotkeyFiredArgument e)
         {
             if (!isCombinationDown)

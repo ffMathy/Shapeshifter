@@ -11,7 +11,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class DomainNameResolver: IDomainNameResolver
     {
         readonly IKeyValueCache<string, IPAddress[]> domainResolveCache;

@@ -12,7 +12,7 @@
 
     using Services;
 
-    [ExcludeFromCodeCoverage]
+    
     static class DesignTimeContainerHelper
     {
         public static IContainer CreateDesignTimeContainer()

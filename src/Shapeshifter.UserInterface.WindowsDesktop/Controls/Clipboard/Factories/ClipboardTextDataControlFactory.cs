@@ -41,7 +41,7 @@
             return CreateClipboardTextDataControl((IClipboardTextData)data);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         IClipboardControl CreateClipboardTextDataControl(IClipboardTextData data)
         {
             return new ClipboardTextDataControl
