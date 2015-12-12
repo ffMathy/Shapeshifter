@@ -1,10 +1,11 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files.Interfaces
 {
+    using System;
     using System.Collections.Generic;
 
     using Infrastructure.Dependencies.Interfaces;
 
-    public interface IFileManager: ISingleInstance
+    public interface IFileManager: ISingleInstance, IDisposable
     {
         string WriteBytesToTemporaryFile(string path, byte[] bytes);
 

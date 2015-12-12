@@ -10,8 +10,7 @@
 
     [ExcludeFromCodeCoverage]
     class FileManager
-        : IFileManager,
-          IDisposable
+        : IFileManager
     {
         readonly ICollection<string> temporaryPaths;
 

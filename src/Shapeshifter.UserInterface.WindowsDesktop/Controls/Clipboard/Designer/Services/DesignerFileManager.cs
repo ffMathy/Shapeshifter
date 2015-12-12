@@ -39,5 +39,10 @@
         {
             return null;
         }
+
+        public void Dispose()
+        {
+            
+        }
     }
 }
