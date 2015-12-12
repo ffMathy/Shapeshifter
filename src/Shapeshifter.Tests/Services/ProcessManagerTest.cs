@@ -13,6 +13,7 @@
     public class ProcessManagerTest: TestBase
     {
         [TestMethod]
+        [TestCategory("Integration")]
         public void CanLaunchProcessesAndKillThemAfterDisposing()
         {
             var container = CreateContainer();
