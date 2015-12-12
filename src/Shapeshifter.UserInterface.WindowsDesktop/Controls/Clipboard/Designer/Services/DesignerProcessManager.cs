@@ -9,7 +9,7 @@
         : IProcessManager,
           IDesignerService
     {
-        public void LaunchCommand(string command) { }
+        public void LaunchCommand(string command, string arguments = null) { }
 
         public void CloseAllProcessesExceptCurrent()
         {
@@ -17,5 +17,10 @@
         }
 
         public void LaunchFile(string fileName, string arguments = null) { }
+
+        public void Dispose()
+        {
+            
+        }
     }
 }

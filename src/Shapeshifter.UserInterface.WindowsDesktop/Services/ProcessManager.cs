@@ -9,8 +9,7 @@
 
     
     class ProcessManager
-        : IProcessManager,
-          IDisposable
+        : IProcessManager
     {
         readonly ICollection<Process> processes;
 
@@ -23,14 +22,13 @@
         {
             foreach (var process in processes)
             {
-                process.Dispose();
+                CloseProcess(process);
             }
         }
         
-        public void LaunchCommand(string command)
+        public void LaunchCommand(string command, string arguments = null)
         {
-            var process = Process.Start(command);
-            processes.Add(process);
+            SpawnProcess(command, Environment.CurrentDirectory);
         }
 
         public void CloseAllProcessesExceptCurrent()
@@ -53,26 +51,33 @@
                     continue;
                 }
 
-                process.CloseMainWindow();
-                if (!process.WaitForExit(3000))
-                {
-                    process.Kill();
-                }
+                CloseProcess(process);
             }
+        }
+
+        static void CloseProcess(Process process)
+        {
+            process.CloseMainWindow();
+            if (!process.WaitForExit(3000))
+            {
+                process.Kill();
+            }
+            process.Dispose();
         }
 
         public void LaunchFile(string fileName, string arguments = null)
         {
             if (!File.Exists(fileName))
             {
-                throw new ArgumentException("The given file did not exist.", nameof(fileName));
+                throw new ArgumentException("The given file doesn't exist.", nameof(fileName));
             }
 
-            Debug.Assert(fileName != null, "fileName != null");
-
             var workingDirectory = Path.GetDirectoryName(fileName);
-            Debug.Assert(workingDirectory != null, "workingDirectory != null");
+            SpawnProcess(fileName, workingDirectory);
+        }
 
+        void SpawnProcess(string fileName, string workingDirectory)
+        {
             var process = Process.Start(
                 new ProcessStartInfo
                 {
