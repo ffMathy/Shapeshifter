@@ -8,7 +8,9 @@
     {
         string WriteBytesToTemporaryFile(string path, byte[] bytes);
 
-        string PrepareTemporaryFolder(string path);
+        string PrepareTemporaryFolder(string relativePath);
+
+        string PrepareFolder(string relativePath);
 
         void DeleteDirectoryIfExists(string path);
 
