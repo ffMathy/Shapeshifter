@@ -7,8 +7,7 @@
     using System.Linq;
 
     using Interfaces;
-
-    [ExcludeFromCodeCoverage]
+    
     class FileManager
         : IFileManager
     {
