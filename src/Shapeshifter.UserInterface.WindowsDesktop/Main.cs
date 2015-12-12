@@ -1,8 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop
 {
     using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     using Windows.Interfaces;
@@ -12,11 +10,13 @@
     using Mediators.Interfaces;
 
     using Services.Arguments.Interfaces;
+    using Services.Interfaces;
 
-    
-    class Main: ISingleInstance
+    public class Main: ISingleInstance
     {
         readonly IEnumerable<IArgumentProcessor> argumentProcessors;
+
+        readonly IProcessManager processManager;
 
         readonly IClipboardListWindow mainWindow;
 
@@ -24,17 +24,19 @@
 
         public Main(
             IEnumerable<IArgumentProcessor> argumentProcessors,
+            IProcessManager processManager,
             IClipboardListWindow mainWindow,
             IClipboardUserInterfaceMediator clipboardUserInterfaceMediator)
         {
             this.argumentProcessors = argumentProcessors;
+            this.processManager = processManager;
             this.mainWindow = mainWindow;
             this.clipboardUserInterfaceMediator = clipboardUserInterfaceMediator;
         }
 
-        public void Start(string[] arguments)
+        public void Start(params string[] arguments)
         {
-            CloseAllProcessesExceptCurrent();
+            processManager.CloseAllProcessesExceptCurrent();
 
             var processorsUsed = ProcessArguments(arguments);
             if (processorsUsed.Any(x => x.Terminates))
@@ -43,35 +45,6 @@
             }
 
             LaunchMainWindow();
-        }
-
-        static void CloseAllProcessesExceptCurrent()
-        {
-            //TODO: if this method gets isolated, the whole class can be unit tested.
-            using (var currentProcess = Process.GetCurrentProcess())
-            {
-                var processes = Process.GetProcessesByName(currentProcess.ProcessName);
-                CloseProcessesExceptProcessWithId(currentProcess.Id, processes);
-            }
-        }
-
-        static void CloseProcessesExceptProcessWithId(
-            int processId,
-            params Process[] processes)
-        {
-            foreach (var process in processes)
-            {
-                if (process.Id == processId)
-                {
-                    continue;
-                }
-
-                process.CloseMainWindow();
-                if (!process.WaitForExit(3000))
-                {
-                    process.Kill();
-                }
-            }
         }
 
         void LaunchMainWindow()

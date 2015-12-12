@@ -4,7 +4,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Arguments
 {
     using System;
     using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
 

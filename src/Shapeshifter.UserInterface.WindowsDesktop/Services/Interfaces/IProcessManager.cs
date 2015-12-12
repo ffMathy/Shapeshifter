@@ -5,5 +5,7 @@
         void LaunchFile(string fileName, string arguments = null);
 
         void LaunchCommand(string command);
+
+        void CloseAllProcessesExceptCurrent();
     }
 }

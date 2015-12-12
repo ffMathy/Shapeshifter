@@ -1,7 +1,5 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
-    using System.Diagnostics.CodeAnalysis;
-
     using Autofac;
 
     using Data.Interfaces;

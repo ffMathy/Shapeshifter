@@ -1,6 +1,5 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
 {
-    using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
 
     using Interfaces;

@@ -1,7 +1,5 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades
 {
-    using System.Diagnostics.CodeAnalysis;
-
     using Data;
     using Data.Interfaces;
 

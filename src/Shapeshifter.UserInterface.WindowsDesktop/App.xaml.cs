@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Windows;
 
     using Autofac;

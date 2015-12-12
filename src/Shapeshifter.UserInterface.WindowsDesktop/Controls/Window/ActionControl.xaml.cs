@@ -1,6 +1,5 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Window
 {
-    using System.Diagnostics.CodeAnalysis;
     using System.Windows.Controls;
 
     /// <summary>

@@ -5,7 +5,6 @@ using DrawingPixelFormat = System.Drawing.Imaging.PixelFormat;
 namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
     using System.IO;
     using System.Runtime.InteropServices;

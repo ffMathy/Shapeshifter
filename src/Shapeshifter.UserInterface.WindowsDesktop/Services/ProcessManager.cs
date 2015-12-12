@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
 
     using Interfaces;
@@ -19,7 +18,6 @@
         {
             processes = new HashSet<Process>();
         }
-
         
         public void Dispose()
         {
@@ -28,7 +26,6 @@
                 process.Dispose();
             }
         }
-
         
         public void LaunchCommand(string command)
         {
@@ -36,7 +33,34 @@
             processes.Add(process);
         }
 
-        
+        public void CloseAllProcessesExceptCurrent()
+        {
+            using (var currentProcess = Process.GetCurrentProcess())
+            {
+                var processes = Process.GetProcessesByName(currentProcess.ProcessName);
+                CloseProcessesExceptProcessWithId(currentProcess.Id, processes);
+            }
+        }
+
+        static void CloseProcessesExceptProcessWithId(
+            int processId,
+            params Process[] processes)
+        {
+            foreach (var process in processes)
+            {
+                if (process.Id == processId)
+                {
+                    continue;
+                }
+
+                process.CloseMainWindow();
+                if (!process.WaitForExit(3000))
+                {
+                    process.Kill();
+                }
+            }
+        }
+
         public void LaunchFile(string fileName, string arguments = null)
         {
             if (!File.Exists(fileName))

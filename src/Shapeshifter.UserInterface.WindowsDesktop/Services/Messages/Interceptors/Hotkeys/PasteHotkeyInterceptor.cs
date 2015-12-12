@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
 
     using Api;
 

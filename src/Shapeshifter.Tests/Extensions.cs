@@ -22,6 +22,12 @@
             fakeCache.Clear();
         }
 
+        public static TInterface WithFakeSettings<TInterface>(this TInterface item, Action<TInterface> method)
+        {
+            method(item);
+            return item;
+        }
+
         public static TInterface RegisterFake<TInterface>(this ContainerBuilder builder)
             where TInterface : class
         {
@@ -31,8 +37,14 @@
             }
 
             var fake = Substitute.For<TInterface>();
+            return Register(builder, fake);
+        }
+
+        static TInterface Register<TInterface>(ContainerBuilder builder, TInterface fake) where TInterface : class
+        {
             fakeCache.Add(typeof (TInterface), fake);
-            builder.RegisterInstance(fake);
+            builder.Register(c => fake)
+                   .As<TInterface>();
             return fake;
         }
 

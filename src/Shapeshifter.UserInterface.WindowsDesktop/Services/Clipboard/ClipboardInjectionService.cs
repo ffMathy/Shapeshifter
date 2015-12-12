@@ -4,7 +4,6 @@ namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {
     using System;
     using System.Collections.Specialized;
-    using System.Diagnostics.CodeAnalysis;
     using System.Windows.Media.Imaging;
 
     using Api;
