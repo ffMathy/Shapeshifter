@@ -10,7 +10,7 @@
     using System.Diagnostics;
 
     [TestClass]
-    public class ProcessManagerTest: TestBase
+    public class ProcessManagerTest : TestBase
     {
         [TestMethod]
         [TestCategory("Integration")]
@@ -26,11 +26,13 @@
                 processManager.LaunchCommand("timeout", "/t -1 /nobreak");
 
                 var runningProcessesBeforeDisposal = Process.GetProcessesByName("timeout").Length;
-                Assert.AreEqual(initialRunningProcesses + 1, runningProcessesBeforeDisposal);
+                Extensions.AssertWait(() =>
+                    Assert.AreEqual(initialRunningProcesses + 1, runningProcessesBeforeDisposal));
             }
 
             var runningProcessesAfterDisposal = Process.GetProcessesByName("timeout").Length;
-            Assert.AreEqual(initialRunningProcesses, runningProcessesAfterDisposal);
+            Extensions.AssertWait(() =>
+                Assert.AreEqual(initialRunningProcesses, runningProcessesAfterDisposal));
         }
 
         [TestMethod]
