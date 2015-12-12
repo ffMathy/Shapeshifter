@@ -1,7 +1,5 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Helpers
 {
-    using System.Diagnostics.CodeAnalysis;
-
     using WindowsDesktop.Services.Files.Interfaces;
     using WindowsDesktop.Services.Interfaces;
     using WindowsDesktop.Services.Web.Interfaces;
@@ -12,7 +10,7 @@
 
     using Services;
 
-    [ExcludeFromCodeCoverage]
+    
     static class DesignTimeContainerHelper
     {
         public static IContainer CreateDesignTimeContainer()

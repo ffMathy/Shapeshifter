@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Factories
 {
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     using Api;
@@ -17,7 +16,7 @@
 
     using Structures;
 
-    [ExcludeFromCodeCoverage]
+    
     class ClipboardDataPackageFactory : IClipboardDataPackageFactory
     {
         readonly IClipboardHandleFactory clipboardSessionFactory;

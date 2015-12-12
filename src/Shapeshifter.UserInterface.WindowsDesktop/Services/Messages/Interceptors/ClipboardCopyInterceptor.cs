@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Messages.Interceptors
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
     using System.Threading;
 
@@ -12,7 +11,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class ClipboardCopyInterceptor: IClipboardCopyInterceptor
     {
         public event EventHandler<DataCopiedEventArgument> DataCopied;

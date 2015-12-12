@@ -2,16 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
 
     using Interfaces;
-
-    [ExcludeFromCodeCoverage]
+    
     class FileManager
-        : IFileManager,
-          IDisposable
+        : IFileManager
     {
         readonly ICollection<string> temporaryPaths;
 
@@ -98,38 +95,29 @@
             var commonIndex = 0;
             foreach (var originPath in paths)
             {
-                if (FindPathCommonIndexAmongPaths(paths, originPath, ref commonIndex))
+                var originSegments = GetPathSegments(originPath);
+                for (var index = 0; index < originSegments.Length; index++)
                 {
-                    return commonIndex;
+                    var originSegment = originSegments[index];
+                    foreach (var referencePath in paths)
+                    {
+                        var referenceSegments = GetPathSegments(referencePath);
+                        if (index >= referenceSegments.Length)
+                        {
+                            return commonIndex;
+                        }
+
+                        var referenceSegment = referenceSegments[index];
+                        if (originSegment != referenceSegment)
+                        {
+                            return commonIndex;
+                        }
+                    }
+                    commonIndex++;
                 }
             }
 
             return commonIndex;
-        }
-
-        static bool FindPathCommonIndexAmongPaths(IReadOnlyCollection<string> paths, string path, ref int commonIndex)
-        {
-            var originSegments = GetPathSegments(path);
-            for (var index = 0; index < originSegments.Length; index++)
-            {
-                var originSegment = originSegments[index];
-                foreach (var referencePath in paths)
-                {
-                    var referenceSegments = GetPathSegments(referencePath);
-                    if (referenceSegments.Length < originSegments.Length)
-                    {
-                        return true;
-                    }
-
-                    var referenceSegment = referenceSegments[index];
-                    if (originSegment != referenceSegment)
-                    {
-                        return true;
-                    }
-                }
-                commonIndex++;
-            }
-            return false;
         }
 
         static string[] GetPathSegments(string originPath)
@@ -187,7 +175,7 @@
             var finalPath = GetFullPathFromRelativeTemporaryPath(fileName);
             temporaryPaths.Add(finalPath);
 
-            File.WriteAllBytes(fileName, bytes);
+            File.WriteAllBytes(finalPath, bytes);
 
             return finalPath;
         }

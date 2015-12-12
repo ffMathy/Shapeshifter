@@ -1,7 +1,5 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels
 {
-    using System.Diagnostics.CodeAnalysis;
-
     using Autofac;
 
     using Data.Interfaces;
@@ -12,7 +10,7 @@
     using Infrastructure.Environment;
     using Infrastructure.Environment.Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class ClipboardImageDataViewModel: ClipboardDataViewModel<IClipboardImageData>
     {
         public ClipboardImageDataViewModel()
@@ -27,7 +25,7 @@
             }
         }
 
-        [ExcludeFromCodeCoverage]
+        
         void PrepareDesignerMode()
         {
             var container = DesignTimeContainerHelper.CreateDesignTimeContainer();

@@ -1,13 +1,12 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
 
     using WindowsDesktop.Services.Files.Interfaces;
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class DesignerFileManager
         : IFileManager,
           IDesignerService
@@ -38,6 +37,11 @@
         public string WriteBytesToTemporaryFile(string path, byte[] bytes)
         {
             return null;
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 }

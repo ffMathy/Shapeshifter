@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
 
     using Clipboard.Interfaces;
 
@@ -41,7 +40,7 @@
             return CreateFileDataControl((IClipboardFileData)data);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         IClipboardControl CreateFileDataControl(IClipboardFileData data)
         {
             return new ClipboardFileDataControl

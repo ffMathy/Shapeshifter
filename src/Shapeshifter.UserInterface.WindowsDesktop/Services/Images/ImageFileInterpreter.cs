@@ -1,12 +1,11 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Images
 {
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Windows.Media.Imaging;
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class ImageFileInterpreter: IImageFileInterpreter
     {
         public BitmapSource Interpret(byte[] bytes)

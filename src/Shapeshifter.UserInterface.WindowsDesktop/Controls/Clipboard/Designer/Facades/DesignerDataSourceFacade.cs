@@ -1,12 +1,10 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades
 {
-    using System.Diagnostics.CodeAnalysis;
-
     using Data.Interfaces;
 
     using Services.Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class DesignerDataSourceFacade: IDataSource
     {
         byte[] icon;

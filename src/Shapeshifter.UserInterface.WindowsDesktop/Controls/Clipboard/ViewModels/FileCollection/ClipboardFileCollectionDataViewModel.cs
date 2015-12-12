@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.ViewModels.FileCollection
 {
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
 
@@ -21,7 +20,7 @@
         : ClipboardDataViewModel<IClipboardFileCollectionData>,
           IClipboardFileCollectionDataViewModel
     {
-        [ExcludeFromCodeCoverage]
+        
         public ClipboardFileCollectionDataViewModel()
             : this(new EnvironmentInformation()) { }
 
@@ -34,7 +33,7 @@
             }
         }
 
-        [ExcludeFromCodeCoverage]
+        
         void PrepareDesignerMode()
         {
             var container = DesignTimeContainerHelper.CreateDesignTimeContainer();

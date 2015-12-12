@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -38,7 +37,7 @@
             this.memoryHandleFactory = memoryHandleFactory;
         }
 
-        [ExcludeFromCodeCoverage]
+        
         public IClipboardData BuildData(
             uint format,
             byte[] rawData)
@@ -59,7 +58,7 @@
             return ConstructDataFromFiles(files, format, rawData);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         IReadOnlyCollection<string> GetFilesCopiedFromRawData(byte[] data)
         {
             var files = new List<string>();
@@ -72,7 +71,7 @@
             return files;
         }
 
-        [ExcludeFromCodeCoverage]
+        
         static void FetchFilesFromMemory(
             ICollection<string> files,
             IMemoryHandle memoryHandle,
@@ -94,7 +93,7 @@
             }
         }
 
-        [ExcludeFromCodeCoverage]
+        
         IClipboardData ConstructDataFromFiles(
             IReadOnlyCollection<string> files,
             uint format,
@@ -114,7 +113,7 @@
                 rawData);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         IClipboardData ConstructClipboardFileCollectionData(
             IEnumerable<string> files,
             uint format,
@@ -129,7 +128,7 @@
             };
         }
 
-        [ExcludeFromCodeCoverage]
+        
         IClipboardFileData ConstructClipboardFileData(
             string file,
             uint format,
@@ -145,7 +144,7 @@
             };
         }
 
-        [ExcludeFromCodeCoverage]
+        
         IClipboardFileData ConstructClipboardFileData(
             string file)
         {

@@ -2,7 +2,7 @@
 {
     using Infrastructure.Dependencies.Interfaces;
 
-    interface IClipboardListWindow
+    public interface IClipboardListWindow
         : IWindow,
           ISingleInstance { }
 }

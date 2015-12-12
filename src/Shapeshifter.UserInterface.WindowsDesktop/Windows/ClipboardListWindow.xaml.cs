@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Windows;
     using System.Windows.Interop;
 
@@ -19,7 +18,7 @@
     /// <summary>
     ///     Interaction logic for ClipboardListWindow.xaml
     /// </summary>
-    [ExcludeFromCodeCoverage]
+    
     public partial class ClipboardListWindow
         : Window,
           IClipboardListWindow

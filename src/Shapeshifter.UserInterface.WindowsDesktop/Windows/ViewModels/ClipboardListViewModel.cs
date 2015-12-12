@@ -5,7 +5,6 @@
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -221,13 +220,13 @@
             return list[indexToUse];
         }
 
-        [ExcludeFromCodeCoverage]
+        
         async void Service_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
         {
             UserInterfaceShown?.Invoke(this, e);
         }
 
-        [ExcludeFromCodeCoverage]
+        
         async void Service_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
         {
             UserInterfaceHidden?.Invoke(this, e);

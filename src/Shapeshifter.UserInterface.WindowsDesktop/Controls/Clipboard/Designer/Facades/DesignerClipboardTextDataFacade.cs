@@ -1,19 +1,17 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Facades
 {
-    using System.Diagnostics.CodeAnalysis;
-
     using Data;
     using Data.Interfaces;
 
     using Services;
     using Services.Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class DesignerClipboardTextDataFacade
         : ClipboardTextData,
           IClipboardTextData
     {
-        [ExcludeFromCodeCoverage]
+        
         public DesignerClipboardTextDataFacade(
             IDesignerImageConverterService designerImageConverterService)
             :

@@ -1,11 +1,10 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Logging
 {
     using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class Logger: ILogger
     {
         const int MinimumImportanceFactor = 0;

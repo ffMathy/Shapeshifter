@@ -1,7 +1,5 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
-    using System.Diagnostics.CodeAnalysis;
-
     using WindowsDesktop.Services.Interfaces;
 
     using Data.Interfaces;
@@ -12,7 +10,7 @@
 
     using Properties;
 
-    [ExcludeFromCodeCoverage]
+    
     class DesignerFileDataSourceService
         : IDataSourceService,
           IDesignerService

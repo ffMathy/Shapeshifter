@@ -3,15 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class ProcessManager
-        : IProcessManager,
-          IDisposable
+        : IProcessManager
     {
         readonly ICollection<Process> processes;
 
@@ -19,36 +17,67 @@
         {
             processes = new HashSet<Process>();
         }
-
-        [ExcludeFromCodeCoverage]
+        
         public void Dispose()
         {
             foreach (var process in processes)
             {
-                process.Dispose();
+                CloseProcess(process);
+            }
+        }
+        
+        public void LaunchCommand(string command, string arguments = null)
+        {
+            SpawnProcess(command, Environment.CurrentDirectory);
+        }
+
+        public void CloseAllProcessesExceptCurrent()
+        {
+            using (var currentProcess = Process.GetCurrentProcess())
+            {
+                var processes = Process.GetProcessesByName(currentProcess.ProcessName);
+                CloseProcessesExceptProcessWithId(currentProcess.Id, processes);
             }
         }
 
-        [ExcludeFromCodeCoverage]
-        public void LaunchCommand(string command)
+        static void CloseProcessesExceptProcessWithId(
+            int processId,
+            params Process[] processes)
         {
-            var process = Process.Start(command);
-            processes.Add(process);
+            foreach (var process in processes)
+            {
+                if (process.Id == processId)
+                {
+                    continue;
+                }
+
+                CloseProcess(process);
+            }
         }
 
-        [ExcludeFromCodeCoverage]
+        static void CloseProcess(Process process)
+        {
+            process.CloseMainWindow();
+            if (!process.WaitForExit(3000))
+            {
+                process.Kill();
+            }
+            process.Dispose();
+        }
+
         public void LaunchFile(string fileName, string arguments = null)
         {
             if (!File.Exists(fileName))
             {
-                throw new ArgumentException("The given file did not exist.", nameof(fileName));
+                throw new ArgumentException("The given file doesn't exist.", nameof(fileName));
             }
 
-            Debug.Assert(fileName != null, "fileName != null");
-
             var workingDirectory = Path.GetDirectoryName(fileName);
-            Debug.Assert(workingDirectory != null, "workingDirectory != null");
+            SpawnProcess(fileName, workingDirectory);
+        }
 
+        void SpawnProcess(string fileName, string workingDirectory)
+        {
             var process = Process.Start(
                 new ProcessStartInfo
                 {

@@ -1,6 +1,5 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard
 {
-    using System.Diagnostics.CodeAnalysis;
     using System.Windows.Controls;
 
     using Interfaces;
@@ -12,7 +11,7 @@
         : UserControl,
           IClipboardControl
     {
-        [ExcludeFromCodeCoverage]
+        
         public ClipboardImageDataControl()
         {
             InitializeComponent();

@@ -1,10 +1,9 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Api
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
-    [ExcludeFromCodeCoverage]
+    
     public static class KeyboardApi
     {
         public const int MOD_ALT = 0x1;

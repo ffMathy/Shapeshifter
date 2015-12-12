@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Windows;
     using System.Windows.Interop;
     using System.Windows.Media.Imaging;
@@ -17,7 +16,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class DataSourceService
         : IDataSourceService,
           ISingleInstance

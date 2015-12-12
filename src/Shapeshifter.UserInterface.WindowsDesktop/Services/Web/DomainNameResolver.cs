@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Web
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Net;
     using System.Net.Sockets;
@@ -11,7 +10,7 @@
 
     using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+    
     class DomainNameResolver: IDomainNameResolver
     {
         readonly IKeyValueCache<string, IPAddress[]> domainResolveCache;
