@@ -39,5 +39,56 @@
 
             Assert.IsFalse(Directory.Exists(permanentPath));
         }
+
+        [TestMethod]
+        public void CanGetCommonPathWithBiggestPathFirst()
+        {
+            var container = CreateContainer();
+            var fileManager = container.Resolve<IFileManager>();
+
+            var commonPath = fileManager.FindCommonFolderFromPaths(
+                new[]
+                {
+                    "foo\\bar\\baz\\lol",
+                    "foo\\bar\\baz",
+                    "foo\\bar"
+                });
+
+            Assert.AreEqual("foo\\bar", commonPath);
+        }
+
+        [TestMethod]
+        public void CanGetCommonPathWithSmallestPathFirst()
+        {
+            var container = CreateContainer();
+            var fileManager = container.Resolve<IFileManager>();
+
+            var commonPath = fileManager.FindCommonFolderFromPaths(
+                new[]
+                {
+                    "foo\\bar",
+                    "foo\\bar\\baz",
+                    "foo\\bar\\baz\\lol"
+                });
+
+            Assert.AreEqual("foo\\bar", commonPath);
+        }
+
+        [TestMethod]
+        public void CanGetCommonPathWithBiggestPathInMiddle()
+        {
+            var container = CreateContainer();
+            var fileManager = container.Resolve<IFileManager>();
+
+            var commonPath = fileManager.FindCommonFolderFromPaths(
+                new[]
+                {
+                    "foo\\bar",
+                    "foo\\bar\\baz\\lol",
+                    "foo\\bar\\baz"
+                });
+
+            Assert.AreEqual("foo\\bar", commonPath);
+        }
     }
 }
