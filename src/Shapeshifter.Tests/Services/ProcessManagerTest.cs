@@ -13,6 +13,7 @@
     [TestClass]
     public class ProcessManagerTest : TestBase
     {
+        [Ignore]
         [TestMethod]
         [TestCategory("Integration")]
         public void CanLaunchProcessesAndKillThemAfterDisposing()
