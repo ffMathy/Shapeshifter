@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
 {
     using System.IO;
+    using System.Text;
 
     using Autofac;
 
@@ -17,7 +18,7 @@
     {
         [TestMethod]
         [TestCategory("Integration")]
-        public void CanCreateFilesAndDisposeThemAgain()
+        public void CanCreateFoldersAndDisposeThemAgain()
         {
             var container = CreateContainer();
 
@@ -38,6 +39,22 @@
             Directory.Delete(permanentPath);
 
             Assert.IsFalse(Directory.Exists(permanentPath));
+        }
+
+        [TestMethod]
+        [TestCategory("Integration")]
+        public void CanCreateFilesAndDisposeThemAgain()
+        {
+            var container = CreateContainer();
+            
+            string temporaryPath;
+            using (var fileManager = container.Resolve<IFileManager>())
+            {
+                temporaryPath = fileManager.WriteBytesToTemporaryFile("Temporary.txt", Encoding.Default.GetBytes("hello world"));
+                Assert.IsTrue(File.Exists(temporaryPath));
+            }
+            
+            Assert.IsFalse(File.Exists(temporaryPath));
         }
 
         [TestMethod]

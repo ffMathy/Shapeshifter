@@ -177,7 +177,7 @@
             var finalPath = GetFullPathFromRelativeTemporaryPath(fileName);
             temporaryPaths.Add(finalPath);
 
-            File.WriteAllBytes(fileName, bytes);
+            File.WriteAllBytes(finalPath, bytes);
 
             return finalPath;
         }
