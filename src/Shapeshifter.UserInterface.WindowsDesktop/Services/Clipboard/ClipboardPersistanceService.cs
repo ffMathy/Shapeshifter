@@ -44,7 +44,7 @@
         string PrepareUniquePackageFolder()
         {
             var unixTimestamp = DateTime.UtcNow.ToFileTime();
-            var packageFolder = fileManager.PrepareTemporaryFolder(
+            var packageFolder = fileManager.PrepareFolder(
                 Path.Combine("Pinned", unixTimestamp.ToString()));
             return packageFolder;
         }
@@ -52,7 +52,7 @@
         public async Task<IEnumerable<IClipboardDataPackage>> GetPersistedPackagesAsync()
         {
             var packageList = new List<IClipboardDataPackage>();
-            var packageFolder = fileManager.PrepareTemporaryFolder("Pinned");
+            var packageFolder = fileManager.PrepareFolder("Pinned");
             foreach (var directory in Directory.GetDirectories(packageFolder))
             {
                 packageList.Add(await GetPersistedPackageAsync(directory));

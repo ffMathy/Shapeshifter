@@ -17,6 +17,11 @@
             return null;
         }
 
+        public string PrepareFolder(string relativePath)
+        {
+            return null;
+        }
+
         public void DeleteDirectoryIfExists(string path)
         {
         }

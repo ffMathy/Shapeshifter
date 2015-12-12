@@ -57,16 +57,25 @@
             }
         }
 
-        static string PrepareIsolatedTemporaryFolder()
+        static string PrepareIsolatedFolder()
+        {
+            return PrepareIsolatedFolder(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+        }
+
+        static string PrepareIsolatedFolder(string basePath)
         {
             const string folderName = "Shapeshifter";
-
-            var temporaryDirectory = Path.GetTempPath();
-            var path = Path.Combine(temporaryDirectory, folderName);
-
-            PrepareDirectory(path);
+            
+            var path = Path.Combine(basePath, folderName);
+            CreateDirectoryIfNotExists(path);
 
             return path;
+        }
+
+        static string PrepareIsolatedTemporaryFolder()
+        {
+            return PrepareIsolatedFolder(Path.GetTempPath());
         }
 
         public string FindCommonFolderFromPaths(IReadOnlyCollection<string> paths)
@@ -128,21 +137,40 @@
             return originPath.Split('\\', '/');
         }
 
-        static void PrepareDirectory(string path)
+        public string PrepareFolder(string relativePath)
         {
-            if (!Directory.Exists(path))
+            var finalPath = GetFullPathFromRelativePath(relativePath);
+            CreateDirectoryIfNotExists(finalPath);
+            return finalPath;
+        }
+
+        public string PrepareTemporaryFolder(string relativePath)
+        {
+            var finalPath = GetFullPathFromRelativeTemporaryPath(relativePath);
+            WatchDirectory(finalPath);
+
+            return finalPath;
+        }
+
+        void WatchDirectory(string finalPath)
+        {
+            temporaryPaths.Add(finalPath);
+            CreateDirectoryIfNotExists(finalPath);
+        }
+
+        static void CreateDirectoryIfNotExists(string relativePath)
+        {
+            if (!Directory.Exists(relativePath))
             {
-                Directory.CreateDirectory(path);
+                Directory.CreateDirectory(relativePath);
             }
         }
 
-        public string PrepareTemporaryFolder(string path)
+        static string GetFullPathFromRelativePath(string path)
         {
-            var finalPath = GetFullPathFromRelativeTemporaryPath(path);
-            temporaryPaths.Add(finalPath);
+            var isolatedFolderPath = PrepareIsolatedFolder();
 
-            PrepareDirectory(finalPath);
-
+            var finalPath = Path.Combine(isolatedFolderPath, path);
             return finalPath;
         }
 

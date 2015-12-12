@@ -6,6 +6,8 @@
     {
         void AddData(IClipboardData data);
 
+        long Id { get; }
+
         IReadOnlyList<IClipboardData> Contents { get; }
     }
 }
