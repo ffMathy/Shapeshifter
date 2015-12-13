@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop
+﻿namespace Shapeshifter.WindowsDesktop
 {
     using System;
     using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
+﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
 {
     using System;
     using System.Threading;

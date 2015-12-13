@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Factories
+﻿namespace Shapeshifter.WindowsDesktop.Data.Factories
 {
     using Api;
 

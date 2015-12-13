@@ -2,7 +2,7 @@
 
 using System.Threading;
 
-namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Threading
+namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
 {
     using System.Security.Permissions;
     using System.Windows.Threading;

@@ -6,7 +6,7 @@
     <ProjectGuid>{66E94495-F590-41F6-B488-52B0FDCAB03C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Shapeshifter.UserInterface.WindowsDesktop</RootNamespace>
+    <RootNamespace>Shapeshifter.WindowsDesktop</RootNamespace>
     <AssemblyName>Shapeshifter.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -124,9 +124,9 @@
     <Compile Include="Windows\ViewModels\ClipboardListViewModelTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Shapeshifter.UserInterface.WindowsDesktop\Shapeshifter.UserInterface.WindowsDesktop.csproj">
+    <ProjectReference Include="..\Shapeshifter.WindowsDesktop\Shapeshifter.WindowsDesktop.csproj">
       <Project>{c8afeb5b-5197-4f7d-90f1-dc1dcd795be1}</Project>
-      <Name>Shapeshifter.UserInterface.WindowsDesktop</Name>
+      <Name>Shapeshifter.WindowsDesktop</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

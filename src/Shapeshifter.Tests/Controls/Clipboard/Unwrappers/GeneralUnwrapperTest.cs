@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Unwrappers
+﻿namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Unwrappers
 {
     using Autofac;
 

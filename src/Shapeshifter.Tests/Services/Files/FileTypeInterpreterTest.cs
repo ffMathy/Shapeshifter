@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Files
+﻿namespace Shapeshifter.WindowsDesktop.Services.Files
 {
     using Autofac;
 

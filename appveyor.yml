@@ -18,7 +18,7 @@ build:
   verbosity: normal
 after_build:
 - cmd: >-
-    cd src\Shapeshifter.UserInterface.WindowsDesktop\bin\Release\
+    cd src\Shapeshifter.WindowsDesktop\bin\Release\
     
     7z a Binaries.zip *.dll
     
@@ -27,7 +27,7 @@ after_build:
     cd ..\..\..
     
 artifacts:
-- path: src\Shapeshifter.UserInterface.WindowsDesktop\bin\Release\Binaries.zip
+- path: src\Shapeshifter.WindowsDesktop\bin\Release\Binaries.zip
   name: Deployment
 deploy:
 - provider: GitHub
