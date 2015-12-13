@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard.Factories
+﻿namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Factories
 {
     using System;
 

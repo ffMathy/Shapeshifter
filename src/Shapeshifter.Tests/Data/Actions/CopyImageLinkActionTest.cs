@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Data.Actions
+﻿namespace Shapeshifter.WindowsDesktop.Data.Actions
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;

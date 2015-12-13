@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.UserInterface.WindowsDesktop", "Shapeshifter.UserInterface.WindowsDesktop\Shapeshifter.UserInterface.WindowsDesktop.csproj", "{C8AFEB5B-5197-4F7D-90F1-DC1DCD795BE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.WindowsDesktop", "Shapeshifter.WindowsDesktop\Shapeshifter.WindowsDesktop.csproj", "{C8AFEB5B-5197-4F7D-90F1-DC1DCD795BE1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.Tests", "Shapeshifter.Tests\Shapeshifter.Tests.csproj", "{66E94495-F590-41F6-B488-52B0FDCAB03C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.UserInterface.WindowsDesktop.Installer", "Shapeshifter.UserInterface.WindowsDesktop.Installer\Shapeshifter.UserInterface.WindowsDesktop.Installer.csproj", "{E34F39BC-9DA4-4AC9-96E8-51E578A22277}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.WindowsDesktop.Installer", "Shapeshifter.WindowsDesktop.Installer\Shapeshifter.WindowsDesktop.Installer.csproj", "{E34F39BC-9DA4-4AC9-96E8-51E578A22277}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
