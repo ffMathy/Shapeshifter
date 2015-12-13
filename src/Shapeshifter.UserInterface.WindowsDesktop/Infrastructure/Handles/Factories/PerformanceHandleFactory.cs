@@ -4,7 +4,7 @@
 
     using Handles.Interfaces;
 
-    using Infrastructure.Logging.Interfaces;
+    using Logging.Interfaces;
 
     using Interfaces;
 

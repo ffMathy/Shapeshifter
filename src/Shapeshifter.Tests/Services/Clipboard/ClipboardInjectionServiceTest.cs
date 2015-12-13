@@ -8,8 +8,8 @@
 
     using NSubstitute;
 
-    using Services.Clipboard.Interfaces;
-    using Services.Messages.Interceptors.Interfaces;
+    using Interfaces;
+    using Messages.Interceptors.Interfaces;
 
     [TestClass]
     public class ClipboardInjectionServiceTest: TestBase

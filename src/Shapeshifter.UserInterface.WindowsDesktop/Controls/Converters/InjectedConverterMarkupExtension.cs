@@ -5,7 +5,7 @@
 
     using Autofac;
 
-    using Controls.Clipboard.Designer.Helpers;
+    using Clipboard.Designer.Helpers;
 
     using Infrastructure.Dependencies;
     using Infrastructure.Environment;
