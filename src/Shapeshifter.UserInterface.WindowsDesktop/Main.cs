@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Windows.Interfaces;
+    using Controls.Window.Interfaces;
 
     using Infrastructure.Dependencies.Interfaces;
 

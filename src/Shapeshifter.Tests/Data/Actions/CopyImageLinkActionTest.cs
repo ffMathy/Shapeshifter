@@ -6,7 +6,7 @@
 
     using Autofac;
 
-    using Data.Actions.Interfaces;
+    using Interfaces;
     using Data.Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;

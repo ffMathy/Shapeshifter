@@ -91,12 +91,12 @@
     <Compile Include="Data\Actions\UploadImageActionTest.cs" />
     <Compile Include="Data\Actions\PasteAsPlainTextActionTest.cs" />
     <Compile Include="Data\Actions\PasteActionTest.cs" />
-    <Compile Include="Controls\Clipboard\ClipboardPasteServiceTest.cs" />
+    <Compile Include="Services\Clipboard\ClipboardPasteServiceTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardImageDataControlFactoryTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardTextDataControlFactoryTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardFileDataControlFactoryTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardFileCollectionDataControlFactoryTest.cs" />
-    <Compile Include="Controls\Clipboard\ClipboardInjectionServiceTest.cs" />
+    <Compile Include="Services\Clipboard\ClipboardInjectionServiceTest.cs" />
     <Compile Include="Controls\Clipboard\Unwrappers\GeneralUnwrapperTest.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardFileCollectionDataViewModelTest.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardFileDataViewModelTest.cs" />

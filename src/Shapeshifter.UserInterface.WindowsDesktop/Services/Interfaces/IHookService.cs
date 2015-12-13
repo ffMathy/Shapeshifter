@@ -1,6 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Interfaces
 {
-    using Windows.Interfaces;
+    using Controls.Window.Interfaces;
 
     using Infrastructure.Dependencies.Interfaces;
 

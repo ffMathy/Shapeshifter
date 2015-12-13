@@ -16,7 +16,7 @@
                     <SolidColorBrush p:Freeze="True" x:Key="AccentDarkerBrush"
                                      Color="{StaticResource AccentDarkerColor}" />
                 </ResourceDictionary>
-                <ResourceDictionary Source="Styles/Light.xaml" />
+                <ResourceDictionary Source="Controls/Styles/Light.xaml" />
                 <ResourceDictionary Source="Controls/Styles/Clipboard.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

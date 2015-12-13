@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
 
-    using Windows.Interfaces;
-
     using Autofac;
+
+    using Controls.Window.Interfaces;
 
     using Mediators.Interfaces;
 

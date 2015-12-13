@@ -1,8 +1,8 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Handles
 {
-    using Windows.Interfaces;
-
     using Api;
+
+    using Controls.Window.Interfaces;
 
     using Interfaces;
 

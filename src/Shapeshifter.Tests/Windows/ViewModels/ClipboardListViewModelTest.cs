@@ -10,15 +10,16 @@
     using NSubstitute;
 
     using Api;
+
+    using Controls.Window.Binders.Interfaces;
+    using Controls.Window.ViewModels.Interfaces;
+
     using Data.Interfaces;
     using Infrastructure.Events;
     using Mediators.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
-    using Binders.Interfaces;
 
     using Data.Actions.Interfaces;
-
-    using Interfaces;
 
     [TestClass]
     public class ClipboardListViewModelTest: TestBase

@@ -1,6 +1,6 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Infrastructure.Handles.Factories
 {
-    using Windows.Interfaces;
+    using Controls.Window.Interfaces;
 
     using Handles.Interfaces;
 
