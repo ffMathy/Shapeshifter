@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -33,10 +34,10 @@
         {
             var time = DateTime.Now;
 
-            Exception lastException = null;
+            var exceptions = new List<AssertFailedException>();
             while (
                 ((DateTime.Now - time).TotalMilliseconds < timeout) || 
-                (lastException == null))
+                (exceptions.Count == 0))
             {
                 try
                 {
@@ -45,13 +46,21 @@
                 }
                 catch (AssertFailedException ex)
                 {
-                    lastException = ex;
+                    if (exceptions.All(x => x.Message != ex.Message))
+                    {
+                        exceptions.Add(ex);
+                    }
                 }
 
                 Thread.Sleep(1);
             }
 
-            throw lastException;
+            if (exceptions.Count > 1)
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            throw exceptions.First();
         }
 
         public static TInterface WithFakeSettings<TInterface>(this TInterface item, Action<TInterface> method)
