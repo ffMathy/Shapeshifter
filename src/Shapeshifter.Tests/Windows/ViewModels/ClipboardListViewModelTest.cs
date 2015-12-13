@@ -5,21 +5,23 @@
 
     using Autofac;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    using NSubstitute;
-
     using Controls.Window.Binders.Interfaces;
     using Controls.Window.ViewModels.Interfaces;
 
-    using Data.Interfaces;
-    using Infrastructure.Events;
-    using Mediators.Interfaces;
-    using Services.Messages.Interceptors.Hotkeys.Interfaces;
-
     using Data.Actions.Interfaces;
+    using Data.Interfaces;
+
+    using Infrastructure.Events;
+
+    using Mediators.Interfaces;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Native;
+
+    using NSubstitute;
+
+    using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
     [TestClass]
     public class ClipboardListViewModelTest: TestBase
@@ -29,18 +31,16 @@
         {
             var container =
                 CreateContainer(
-                    c =>
-                    {
+                    c => {
                         c.RegisterFake<IAsyncListDictionaryBinder
-                                    <IClipboardDataControlPackage, IAction>>();
+                            <IClipboardDataControlPackage, IAction>>();
                     });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
 
             object eventSender = null;
 
-            viewModel.PropertyChanged += (sender, e) =>
-            {
+            viewModel.PropertyChanged += (sender, e) => {
                 if (e.PropertyName == nameof(viewModel.SelectedElement))
                 {
                     eventSender = sender;
@@ -55,8 +55,7 @@
         public void SelectedElementChangesToTheSecondWhenFirstIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -95,8 +94,7 @@
         public void SelectedElementChangesToTheThirdWhenSecondIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -135,8 +133,7 @@
         public void SelectedElementChangesToTheFirstWhenThirdIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -175,8 +172,7 @@
         public void SelectedElementChangesToTheThirdWhenFirstIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -215,8 +211,7 @@
         public void SelectedElementChangesToTheSecondWhenThirdIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -255,8 +250,7 @@
         public void SelectedElementChangesToTheFirstWhenSecondIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -295,8 +289,7 @@
         public void SelectedActionChangesToTheSecondWhenFirstIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -344,8 +337,7 @@
         public void SelectedActionChangesToTheThirdWhenSecondIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -393,8 +385,7 @@
         public void SelectedActionChangesToTheFirstWhenThirdIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -442,8 +433,7 @@
         public void SelectedActionChangesToTheThirdWhenFirstIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -491,8 +481,7 @@
         public void SelectedActionChangesToTheSecondWhenThirdIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -540,8 +529,7 @@
         public void SelectedActionChangesToTheFirstWhenSecondIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -593,8 +581,7 @@
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterInstance(fakeUserInterfaceMediator);
                 });
 
@@ -616,8 +603,7 @@
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterInstance(fakeUserInterfaceMediator);
                 });
 
@@ -639,8 +625,7 @@
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterInstance(fakeUserInterfaceMediator);
                 });
 

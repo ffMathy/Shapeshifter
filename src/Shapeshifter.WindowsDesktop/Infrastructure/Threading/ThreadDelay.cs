@@ -6,7 +6,6 @@
 
     class ThreadDelay: IThreadDelay
     {
-        
         public async Task ExecuteAsync(int millisecondsDelay)
         {
             await Task.Delay(millisecondsDelay);

@@ -220,13 +220,11 @@
             return list[indexToUse];
         }
 
-        
         async void Service_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
         {
             UserInterfaceShown?.Invoke(this, e);
         }
 
-        
         async void Service_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
         {
             UserInterfaceHidden?.Invoke(this, e);

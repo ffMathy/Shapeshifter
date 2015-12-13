@@ -6,7 +6,7 @@
     using System.Linq;
 
     using Interfaces;
-    
+
     class FileManager
         : IFileManager
     {
@@ -63,7 +63,7 @@
         static string PrepareIsolatedFolder(string basePath)
         {
             const string folderName = "Shapeshifter";
-            
+
             var path = Path.Combine(basePath, folderName);
             CreateDirectoryIfNotExists(path);
 

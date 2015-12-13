@@ -6,7 +6,6 @@
 
     using Interfaces;
 
-    
     class Downloader
         : IDownloader,
           IDisposable

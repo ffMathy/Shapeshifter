@@ -33,7 +33,6 @@
             this.keyboardNativeApi = keyboardNativeApi;
         }
 
-        
         public void PasteClipboardContents()
         {
             DisablePasteHotkeyInterceptor();
@@ -43,19 +42,16 @@
             logger.Information("Paste simulated.", 1);
         }
 
-        
         void EnablePasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.Install(handleContainer.Handle);
         }
 
-        
         void DisablePasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.Uninstall();
         }
 
-        
         void SendPasteCombination()
         {
             var inputs = new[]
@@ -68,7 +64,6 @@
             keyboardNativeApi.SendInput((uint) inputs.Length, inputs, KeyboardNativeApi.INPUT.Size);
         }
 
-        
         static KeyboardNativeApi.INPUT GenerateKeystoke(KeyboardNativeApi.VirtualKeyShort key, KeyboardNativeApi.KEYEVENTF flags = 0)
         {
             return new KeyboardNativeApi.INPUT

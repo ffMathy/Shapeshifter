@@ -8,8 +8,9 @@
 
     using Autofac;
 
-    using NSubstitute;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using NSubstitute;
 
     static class Extensions
     {
@@ -36,7 +37,7 @@
 
             var exceptions = new List<AssertFailedException>();
             while (
-                ((DateTime.Now - time).TotalMilliseconds < timeout) || 
+                ((DateTime.Now - time).TotalMilliseconds < timeout) ||
                 (exceptions.Count == 0))
             {
                 try

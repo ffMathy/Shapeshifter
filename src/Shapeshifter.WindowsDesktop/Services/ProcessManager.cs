@@ -7,7 +7,6 @@
 
     using Interfaces;
 
-    
     class ProcessManager
         : IProcessManager
     {
@@ -17,7 +16,7 @@
         {
             processes = new HashSet<Process>();
         }
-        
+
         public void Dispose()
         {
             foreach (var process in processes)
@@ -25,7 +24,7 @@
                 CloseProcess(process);
             }
         }
-        
+
         public void LaunchCommand(string command, string arguments = null)
         {
             SpawnProcess(command, Environment.CurrentDirectory);

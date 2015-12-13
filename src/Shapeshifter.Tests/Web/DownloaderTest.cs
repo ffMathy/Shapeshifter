@@ -9,7 +9,7 @@
     using Services.Web.Interfaces;
 
     [TestClass]
-    public class DownloaderTest : TestBase
+    public class DownloaderTest: TestBase
     {
         [TestMethod]
         [TestCategory("Integration")]
@@ -22,7 +22,6 @@
                 var bytes = await downloader.DownloadBytesAsync("http://google.com");
                 Assert.AreNotEqual(0, bytes.Length);
             }
-
         }
     }
 }

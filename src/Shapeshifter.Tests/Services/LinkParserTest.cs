@@ -19,8 +19,7 @@
         public async Task ExtractsAllLinksFromText()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IDomainNameResolver>()
                      .IsValidDomainAsync(Arg.Any<string>())
                      .Returns(Task.FromResult(true));
@@ -55,8 +54,7 @@
         public async Task HasLinkReturnsTrueWithoutProtocol()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IDomainNameResolver>()
                      .IsValidDomainAsync("google.com")
                      .Returns(Task.FromResult(true));
@@ -72,8 +70,7 @@
         public async Task LinkWithSubdomainIsValid()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IDomainNameResolver>()
                      .IsValidDomainAsync("foo.subdomain.google.com")
                      .Returns(Task.FromResult(true));
@@ -89,8 +86,7 @@
         public async Task LinkWithHttpProtocolIsValid()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IDomainNameResolver>()
                      .IsValidDomainAsync("google.com")
                      .Returns(Task.FromResult(true));
@@ -106,8 +102,7 @@
         public async Task LinkWithHttpsProtocolIsValid()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IDomainNameResolver>()
                      .IsValidDomainAsync("google.com")
                      .Returns(Task.FromResult(true));
@@ -123,8 +118,7 @@
         public async Task LinkWithParametersIsValid()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IDomainNameResolver>()
                      .IsValidDomainAsync("google.com")
                      .Returns(Task.FromResult(true));
@@ -140,8 +134,7 @@
         public async Task LinkWithDirectoriesIsValid()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IDomainNameResolver>()
                      .IsValidDomainAsync("google.com")
                      .Returns(Task.FromResult(true));
@@ -181,8 +174,7 @@
         public async Task SeveralLinksCanFindProperType()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IDomainNameResolver>()
                      .IsValidDomainAsync(Arg.Any<string>())
                      .Returns(Task.FromResult(true));

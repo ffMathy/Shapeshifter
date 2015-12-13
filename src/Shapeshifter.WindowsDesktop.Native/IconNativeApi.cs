@@ -5,7 +5,7 @@
 
     using Interfaces;
 
-    public class IconNativeApi : IIconNativeApi
+    public class IconNativeApi: IIconNativeApi
     {
         public const uint SHGFI_ICON = 0x100;
 
@@ -154,7 +154,6 @@
             SIIGBF_INCACHEONLY = 16
         }
 
-        
         [StructLayout(LayoutKind.Sequential)]
         public struct SIZE
         {

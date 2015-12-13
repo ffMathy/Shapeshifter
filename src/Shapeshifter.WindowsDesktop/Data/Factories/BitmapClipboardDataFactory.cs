@@ -2,7 +2,6 @@
 {
     using System;
 
-    using Data;
     using Data.Interfaces;
 
     using Interfaces;
@@ -11,7 +10,7 @@
 
     using Services.Interfaces;
 
-    class BitmapClipboardDataFactory : IBitmapClipboardDataFactory
+    class BitmapClipboardDataFactory: IBitmapClipboardDataFactory
     {
         readonly IDataSourceService dataSourceService;
 

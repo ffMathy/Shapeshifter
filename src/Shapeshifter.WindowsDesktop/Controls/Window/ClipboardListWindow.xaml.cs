@@ -18,7 +18,6 @@
     /// <summary>
     ///     Interaction logic for ClipboardListWindow.xaml
     /// </summary>
-    
     public partial class ClipboardListWindow
         : Window,
           IClipboardListWindow

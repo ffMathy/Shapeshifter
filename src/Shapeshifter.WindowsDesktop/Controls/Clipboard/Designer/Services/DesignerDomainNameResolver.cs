@@ -7,7 +7,6 @@
 
     using Interfaces;
 
-    
     class DesignerDomainNameResolver
         : IDomainNameResolver,
           IDesignerService

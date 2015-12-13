@@ -10,7 +10,6 @@
     /// <summary>
     ///     Interaction logic for App.xaml
     /// </summary>
-    
     public partial class App: Application
     {
         static ILifetimeScope container;
@@ -45,8 +44,7 @@
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) =>
-            {
+            AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) => {
                 MessageBox.Show(
                     exceptionEventArguments.ExceptionObject.ToString(),
                     "Shapeshifter error",

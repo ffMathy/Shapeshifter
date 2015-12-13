@@ -11,7 +11,7 @@
     using Native;
 
     [TestClass]
-    public class FileClipboardDataFactoryTest : TestBase
+    public class FileClipboardDataFactoryTest: TestBase
     {
         [TestMethod]
         public void CanBuildDataReturnsTrueForSingleFileFormats()
@@ -32,7 +32,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof (ArgumentException))]
         public void BuildDataForIncompatibleFormatThrowsException()
         {
             var container = CreateContainer();

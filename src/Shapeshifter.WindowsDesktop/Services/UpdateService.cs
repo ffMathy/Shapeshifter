@@ -22,7 +22,6 @@
 
     using Web.Interfaces;
 
-    
     class UpdateService
         : IUpdateService,
           IStartable

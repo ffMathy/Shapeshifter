@@ -14,7 +14,6 @@
 
     using Interfaces;
 
-    
     class WindowMessageHook
         : IWindowMessageHook,
           IDisposable

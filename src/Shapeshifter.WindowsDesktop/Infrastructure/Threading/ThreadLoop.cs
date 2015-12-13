@@ -7,7 +7,7 @@
     using Interfaces;
 
     using Logging.Interfaces;
-    
+
     class ThreadLoop: IThreadLoop
     {
         readonly ILogger logger;

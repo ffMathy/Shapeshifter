@@ -29,7 +29,6 @@ namespace Shapeshifter.WindowsDesktop.Services.Arguments
             return arguments.Contains("update");
         }
 
-        
         public void Process(string[] arguments)
         {
             var updateIndex = Array.IndexOf(arguments, "update");
@@ -39,7 +38,6 @@ namespace Shapeshifter.WindowsDesktop.Services.Arguments
             InstallNewVersion(targetDirectory, currentDirectory);
         }
 
-        
         void InstallNewVersion(string targetDirectory, string currentDirectory)
         {
             foreach (var currentFile in Directory.GetFiles(currentDirectory))
@@ -50,7 +48,6 @@ namespace Shapeshifter.WindowsDesktop.Services.Arguments
             LaunchNewExecutable(targetDirectory);
         }
 
-        
         void LaunchNewExecutable(string targetDirectory)
         {
             using (var currentProcess = WindowsProcess.GetCurrentProcess())
@@ -62,7 +59,6 @@ namespace Shapeshifter.WindowsDesktop.Services.Arguments
             }
         }
 
-        
         static void HandleNewFile(string targetDirectory, string currentFile)
         {
             var currentFileName = Path.GetFileName(currentFile);
@@ -74,7 +70,6 @@ namespace Shapeshifter.WindowsDesktop.Services.Arguments
             File.Copy(currentFile, targetFile);
         }
 
-        
         static void DeleteFileIfExists(string targetFile)
         {
             if (File.Exists(targetFile))

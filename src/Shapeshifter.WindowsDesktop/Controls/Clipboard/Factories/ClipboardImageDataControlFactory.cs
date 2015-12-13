@@ -37,10 +37,9 @@
                     nameof(data));
             }
 
-            return CreateImageDataControl((IClipboardImageData)data);
+            return CreateImageDataControl((IClipboardImageData) data);
         }
 
-        
         IClipboardControl CreateImageDataControl(IClipboardImageData data)
         {
             return new ClipboardImageDataControl

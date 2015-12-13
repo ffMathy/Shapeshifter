@@ -6,12 +6,13 @@
 
     using Controls.Window.Interfaces;
 
+    using Infrastructure.Threading.Interfaces;
+
+    using Interfaces;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
-
-    using Infrastructure.Threading.Interfaces;
-    using Interfaces;
 
     [TestClass]
     public class PasteCombinationDurationMediatorTest: TestBase
@@ -20,8 +21,7 @@
         public void IsConnectedIsFalseIfConsumerThreadIsNotRunning()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IConsumerThreadLoop>()
                      .IsRunning
                      .Returns(false);
@@ -35,8 +35,7 @@
         public void IsConnectedIsTrueIfConsumerThreadIsRunning()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IConsumerThreadLoop>()
                      .IsRunning
                      .Returns(true);
@@ -51,8 +50,7 @@
         public void DisconnectingWhileNotConnectedThrowsError()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IConsumerThreadLoop>()
                      .IsRunning
                      .Returns(false);
@@ -67,8 +65,7 @@
         public void ConnectingWhileAlreadyConnectedThrowsError()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IConsumerThreadLoop>()
                      .IsRunning
                      .Returns(true);

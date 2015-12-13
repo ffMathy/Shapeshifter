@@ -4,8 +4,9 @@
 
     using Autofac;
 
-    using Interfaces;
     using Data.Interfaces;
+
+    using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -59,8 +60,7 @@
         public async Task CanNotPerformWithFileWithNoImage()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IFileTypeInterpreter>()
                      .GetFileTypeFromFileName(Arg.Any<string>())
                      .Returns(FileType.Other);
@@ -76,8 +76,7 @@
         public async Task CanPerformWithImageFile()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IFileTypeInterpreter>()
                      .GetFileTypeFromFileName(Arg.Any<string>())
                      .Returns(FileType.Image);

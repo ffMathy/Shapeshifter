@@ -2,9 +2,9 @@
 {
     using System;
 
-    using Logging.Interfaces;
-
     using Interfaces;
+
+    using Logging.Interfaces;
 
     class PerformanceHandle: IPerformanceHandle
     {

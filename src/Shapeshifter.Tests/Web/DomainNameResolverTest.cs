@@ -39,7 +39,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof (ArgumentNullException))]
         public async Task NoDomainSpecifiedThrowsException()
         {
             var container = CreateContainer();

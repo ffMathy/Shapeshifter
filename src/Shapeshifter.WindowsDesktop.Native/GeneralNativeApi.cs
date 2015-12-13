@@ -5,7 +5,7 @@
 
     using Interfaces;
 
-    public class GeneralNativeApi : IGeneralNativeApi
+    public class GeneralNativeApi: IGeneralNativeApi
     {
         public const int GMEM_MOVABLE = 0x0002;
 

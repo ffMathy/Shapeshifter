@@ -5,11 +5,9 @@
 
     using Autofac;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-
     using Interfaces;
 
-    using WindowsDesktop;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
     public class FileManagerTest: TestBase
@@ -44,14 +42,14 @@
         public void CanCreateFilesAndDisposeThemAgain()
         {
             var container = CreateContainer();
-            
+
             string temporaryPath;
             using (var fileManager = container.Resolve<IFileManager>())
             {
                 temporaryPath = fileManager.WriteBytesToTemporaryFile("Temporary.txt", Encoding.Default.GetBytes("hello world"));
                 Assert.IsTrue(File.Exists(temporaryPath));
             }
-            
+
             Assert.IsFalse(File.Exists(temporaryPath));
         }
 

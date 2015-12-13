@@ -8,7 +8,6 @@
 
     using Interfaces;
 
-    using Native;
     using Native.Interfaces;
 
     class ImagePersistenceService: IImagePersistenceService

@@ -4,9 +4,9 @@
 
     using Handles.Interfaces;
 
-    using Logging.Interfaces;
-
     using Interfaces;
+
+    using Logging.Interfaces;
 
     class PerformanceHandleFactory: IPerformanceHandleFactory
     {

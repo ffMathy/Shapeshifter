@@ -4,13 +4,15 @@
 
     using Autofac;
 
+    using Factories.Interfaces;
+
+    using Infrastructure.Events;
+
+    using Interfaces;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
-
-    using Infrastructure.Events;
-    using Factories.Interfaces;
-    using Interfaces;
 
     [TestClass]
     public class KeyInterceptorTest: TestBase
@@ -43,8 +45,7 @@
             var fakeInterception2 = Substitute.For<IHotkeyInterception>();
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IHotkeyInterceptionFactory>()
                      .CreateInterception(Arg.Any<int>(), true, false)
                      .Returns(fakeInterception1, fakeInterception2);
@@ -68,8 +69,7 @@
             var fakeInterception = Substitute.For<IHotkeyInterception>();
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IHotkeyInterceptionFactory>()
                      .CreateInterception(Arg.Any<int>(), true, false)
                      .Returns(fakeInterception);
@@ -95,8 +95,7 @@
             var fakeInterception = Substitute.For<IHotkeyInterception>();
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IHotkeyInterceptionFactory>()
                      .CreateInterception(Arg.Any<int>(), true, false)
                      .Returns(fakeInterception);
@@ -125,8 +124,7 @@
             fakeInterception.KeyCode.Returns(1338);
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IHotkeyInterceptionFactory>()
                      .CreateInterception(Arg.Any<int>(), true, false)
                      .Returns(fakeInterception);
@@ -137,8 +135,7 @@
             systemUnderTest.Install(IntPtr.Zero);
 
             var eventFired = false;
-            systemUnderTest.HotkeyFired += (sender, e) =>
-            {
+            systemUnderTest.HotkeyFired += (sender, e) => {
                 eventFired = e.KeyCode == 1338;
             };
 
@@ -159,8 +156,7 @@
             var fakeInterception2 = Substitute.For<IHotkeyInterception>();
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IHotkeyInterceptionFactory>()
                      .CreateInterception(Arg.Any<int>(), true, false)
                      .Returns(fakeInterception1, fakeInterception2);
@@ -183,8 +179,7 @@
         public void AddInterceptingKeyCreatesInterception()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IHotkeyInterceptionFactory>();
                 });
 
@@ -201,8 +196,7 @@
         {
             var fakeInterception = Substitute.For<IHotkeyInterception>();
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IHotkeyInterceptionFactory>()
                      .CreateInterception(1337, true, false)
                      .Returns(fakeInterception);
@@ -229,8 +223,7 @@
         public void AddInterceptingKeyWithKeyAlreadyThereDoesNotDoAnything()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IHotkeyInterceptionFactory>();
                 });
 
@@ -248,8 +241,7 @@
         {
             var fakeInterception = Substitute.For<IHotkeyInterception>();
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IHotkeyInterceptionFactory>()
                      .CreateInterception(1337, true, false)
                      .Returns(fakeInterception);

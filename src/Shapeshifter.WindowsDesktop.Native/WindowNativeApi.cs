@@ -6,7 +6,7 @@
 
     using Interfaces;
 
-    public class WindowNativeApi : IWindowNativeApi
+    public class WindowNativeApi: IWindowNativeApi
     {
         IntPtr IWindowNativeApi.GetClassLongPtr(IntPtr hWnd, int nIndex)
         {
@@ -84,7 +84,7 @@
         public static IntPtr IDI_APPLICATION => new IntPtr(0x7F00);
 
         public const int GCL_HICON = -14;
-        
+
         internal static string GetWindowTitle(IntPtr windowHandle)
         {
             const int numberOfCharacters = 512;

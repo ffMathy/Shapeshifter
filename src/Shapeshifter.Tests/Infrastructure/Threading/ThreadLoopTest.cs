@@ -1,4 +1,5 @@
 ﻿// ReSharper disable AccessToModifiedClosure
+
 namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
 {
     using System;
@@ -60,12 +61,12 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
         }
 
         [TestMethod]
-        [ExpectedException(typeof(TestException))]
+        [ExpectedException(typeof (TestException))]
         public async Task ForwardsExceptionsThrown()
         {
             var container = CreateContainer();
             var loop = container.Resolve<IThreadLoop>();
-            
+
             var action = CreateTestAction(
                 loop,
                 () => {
@@ -100,7 +101,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException(typeof (InvalidOperationException))]
         public async Task StartTwiceThrowsException()
         {
             var container = CreateContainer();
@@ -114,7 +115,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
                 loop,
                 () => shouldEndFirstAction = true);
 
-            loop.StartAsync(firstAction).IgnoreAwait();
+            loop.StartAsync(firstAction)
+                .IgnoreAwait();
 
             try
             {

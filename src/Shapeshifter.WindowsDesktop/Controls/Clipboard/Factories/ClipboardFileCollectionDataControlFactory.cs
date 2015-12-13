@@ -38,10 +38,9 @@
                     nameof(data));
             }
 
-            return CreateClipboardFileCollectionDataControl((IClipboardFileCollectionData)data);
+            return CreateClipboardFileCollectionDataControl((IClipboardFileCollectionData) data);
         }
 
-        
         IClipboardControl CreateClipboardFileCollectionDataControl(
             IClipboardFileCollectionData data)
         {

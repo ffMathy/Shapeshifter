@@ -54,7 +54,7 @@
         {
             var textData = data as IClipboardTextData;
             return (textData != null) && await linkParser.HasLinkAsync(textData.Text)
-                                                       .ConfigureAwait(false);
+                                                         .ConfigureAwait(false);
         }
 
         public async Task PerformAsync(

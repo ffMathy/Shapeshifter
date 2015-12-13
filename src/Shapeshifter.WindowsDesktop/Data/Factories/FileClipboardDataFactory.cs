@@ -6,7 +6,6 @@
     using System.Linq;
     using System.Text;
 
-    using Data;
     using Data.Interfaces;
 
     using Infrastructure.Handles.Factories.Interfaces;
@@ -42,7 +41,6 @@
             this.clipboardNativeApi = clipboardNativeApi;
         }
 
-        
         public IClipboardData BuildData(
             uint format,
             byte[] rawData)
@@ -63,7 +61,6 @@
             return ConstructDataFromFiles(files, format, rawData);
         }
 
-        
         IReadOnlyCollection<string> GetFilesCopiedFromRawData(byte[] data)
         {
             var files = new List<string>();
@@ -76,7 +73,6 @@
             return files;
         }
 
-        
         void FetchFilesFromMemory(
             ICollection<string> files,
             IMemoryHandle memoryHandle,
@@ -98,7 +94,6 @@
             }
         }
 
-        
         IClipboardData ConstructDataFromFiles(
             IReadOnlyCollection<string> files,
             uint format,
@@ -118,7 +113,6 @@
                 rawData);
         }
 
-        
         IClipboardData ConstructClipboardFileCollectionData(
             IEnumerable<string> files,
             uint format,
@@ -133,7 +127,6 @@
             };
         }
 
-        
         IClipboardFileData ConstructClipboardFileData(
             string file,
             uint format,
@@ -149,7 +142,6 @@
             };
         }
 
-        
         IClipboardFileData ConstructClipboardFileData(
             string file)
         {

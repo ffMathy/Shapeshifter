@@ -4,7 +4,6 @@
 
     using Services.Interfaces;
 
-    
     class DesignerDataSourceFacade: IDataSource
     {
         byte[] icon;

@@ -3,7 +3,7 @@
     using System;
     using System.Runtime.InteropServices;
 
-    public class ImageNativeApi : IImageNativeApi
+    public class ImageNativeApi: IImageNativeApi
     {
         public const uint BI_RGB = 0x00;
 

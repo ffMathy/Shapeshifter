@@ -1,16 +1,16 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services
 {
     using System;
+    using System.Diagnostics;
 
     using Autofac;
 
     using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System.Diagnostics;
 
     [TestClass]
-    public class ProcessManagerTest : TestBase
+    public class ProcessManagerTest: TestBase
     {
         [Ignore]
         [TestMethod]
@@ -19,18 +19,23 @@
         {
             var container = CreateContainer();
 
-            var initialRunningProcesses = GetTimeoutProcesses().Length;
+            var initialRunningProcesses = GetTimeoutProcesses()
+                .Length;
             using (var processManager = container.Resolve<IProcessManager>())
             {
                 processManager.LaunchCommand("timeout", "/t -1 /nobreak");
 
-                var runningProcessesBeforeDisposal = GetTimeoutProcesses().Length;
-                Extensions.AssertWait(() =>
+                var runningProcessesBeforeDisposal = GetTimeoutProcesses()
+                    .Length;
+                Extensions.AssertWait(
+                    () =>
                     Assert.AreEqual(initialRunningProcesses + 1, runningProcessesBeforeDisposal));
             }
 
-            var runningProcessesAfterDisposal = GetTimeoutProcesses().Length;
-            Extensions.AssertWait(() =>
+            var runningProcessesAfterDisposal = GetTimeoutProcesses()
+                .Length;
+            Extensions.AssertWait(
+                () =>
                 Assert.AreEqual(initialRunningProcesses, runningProcessesAfterDisposal));
         }
 
@@ -40,7 +45,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof (ArgumentException))]
         public void ThrowsExceptionWhenLaunchingFileThatDoesNotExist()
         {
             var container = CreateContainer();

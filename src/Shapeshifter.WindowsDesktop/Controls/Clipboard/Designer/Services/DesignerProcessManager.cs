@@ -4,23 +4,16 @@
 
     using Interfaces;
 
-    
     class DesignerProcessManager
         : IProcessManager,
           IDesignerService
     {
         public void LaunchCommand(string command, string arguments = null) { }
 
-        public void CloseAllProcessesExceptCurrent()
-        {
-            
-        }
+        public void CloseAllProcessesExceptCurrent() { }
 
         public void LaunchFile(string fileName, string arguments = null) { }
 
-        public void Dispose()
-        {
-            
-        }
+        public void Dispose() { }
     }
 }

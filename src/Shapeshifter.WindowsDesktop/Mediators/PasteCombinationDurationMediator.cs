@@ -58,19 +58,15 @@
         bool IsCancellationRequested
             => threadCancellationTokenSource.Token.IsCancellationRequested;
 
-        
         public bool IsCombinationHeldDown
             => Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.V);
 
-        
         public bool IsOneCombinationKeyDown
             => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.V);
 
-        
         CancellationToken Token
             => threadCancellationTokenSource.Token;
 
-        
         public int DurationInDeciseconds
             => 2;
 
@@ -85,7 +81,6 @@
             InstallPasteHotkeyInterceptor();
         }
 
-        
         async Task MonitorClipboardCombinationStateAsync()
         {
             await WaitForCombinationRelease();
@@ -97,7 +92,6 @@
             RegisterCombinationReleased();
         }
 
-        
         void RegisterCombinationReleased()
         {
             isCombinationDown = false;
@@ -112,7 +106,6 @@
             }
         }
 
-        
         async Task WaitForCombinationRelease()
         {
             var decisecondsPassed = 0;
@@ -127,7 +120,6 @@
             }
         }
 
-        
         void RaiseDurationPassedEventIfNeeded(int decisecondsPassed)
         {
             if ((decisecondsPassed != DurationInDeciseconds) || (PasteCombinationDurationPassed == null))
@@ -144,19 +136,16 @@
             logger.Information("Paste duration passed event raised.");
         }
 
-        
         void InstallPasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.HotkeyFired += PasteHotkeyInterceptor_PasteHotkeyFired;
         }
 
-        
         void UninstallPasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.HotkeyFired -= PasteHotkeyInterceptor_PasteHotkeyFired;
         }
 
-        
         void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, HotkeyFiredArgument e)
         {
             if (!isCombinationDown)

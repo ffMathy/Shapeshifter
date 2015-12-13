@@ -10,7 +10,6 @@
 
     using Properties;
 
-    
     class DesignerTextDataSourceService
         : IDataSourceService,
           IDesignerService

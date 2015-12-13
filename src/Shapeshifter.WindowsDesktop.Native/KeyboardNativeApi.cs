@@ -5,7 +5,7 @@
 
     using Interfaces;
 
-    public class KeyboardNativeApi : IKeyboardNativeApi
+    public class KeyboardNativeApi: IKeyboardNativeApi
     {
         public const int MOD_ALT = 0x1;
 
@@ -1373,7 +1373,7 @@
         [DllImport("user32.dll")]
         internal static extern uint SendInput(
             uint nInputs,
-            [MarshalAs(UnmanagedType.LPArray)][In] INPUT[] pInputs,
+            [MarshalAs(UnmanagedType.LPArray)] [In] INPUT[] pInputs,
             int cbSize);
 
         [DllImport("user32.dll")]
