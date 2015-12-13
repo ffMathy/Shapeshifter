@@ -116,9 +116,7 @@
     <Compile Include="Data\Actions\PinClipboardDataAction.cs" />
     <Compile Include="Data\Actions\UploadImageAction.cs" />
     <Compile Include="Data\Actions\ZipFilesAction.cs" />
-    <Compile Include="Api\GeneralApi.cs" />
-    <Compile Include="Api\ImageApi.cs" />
-    <Compile Include="Api\Message.cs" />
+    <Compile Include="Message.cs" />
     <Compile Include="Controls\Clipboard\ClipboardImageDataControl.xaml.cs">
       <DependentUpon>ClipboardImageDataControl.xaml</DependentUpon>
     </Compile>
@@ -181,10 +179,6 @@
     <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardDataControlPackageFactory.cs" />
     <Compile Include="Infrastructure\Handles\Factories\Interfaces\IClipboardHandleFactory.cs" />
     <Compile Include="Data\Factories\TextClipboardDataFactory.cs" />
-    <Compile Include="Api\IconApi.cs" />
-    <Compile Include="Api\KeyboardApi.cs" />
-    <Compile Include="Api\ClipboardApi.cs" />
-    <Compile Include="Api\WindowApi.cs" />
     <Compile Include="Infrastructure\Handles\Factories\Interfaces\IMemoryHandleFactory.cs" />
     <Compile Include="Infrastructure\Handles\Factories\Interfaces\IPerformanceHandleFactory.cs" />
     <Compile Include="Infrastructure\Handles\Factories\MemoryHandleFactory.cs" />
@@ -398,6 +392,12 @@
     <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileImageSample.dat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shapeshifter.WindowsDesktop.Native\Shapeshifter.WindowsDesktop.Native.csproj">
+      <Project>{25acb6f2-f5e2-4c38-ab51-697eaa995cc4}</Project>
+      <Name>Shapeshifter.WindowsDesktop.Native</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

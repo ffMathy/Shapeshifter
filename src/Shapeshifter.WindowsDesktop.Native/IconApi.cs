@@ -1,10 +1,9 @@
-﻿namespace Shapeshifter.WindowsDesktop.Api
+﻿namespace Shapeshifter.WindowsDesktop.Native
 {
     using System;
     using System.Runtime.InteropServices;
 
-    
-    public static class IconApi
+    static class IconApi
     {
         public const uint SHGFI_ICON = 0x100;
 
@@ -45,14 +44,14 @@
         }
 
         [DllImport("gdi32", CharSet = CharSet.Auto)]
-        public static extern int GetObject(
+        internal static extern int GetObject(
             IntPtr hgdiobj,
             int cbBuffer,
             out BITMAP lpvObject
             );
 
         [DllImport("shell32.dll", SetLastError = true)]
-        public static extern IntPtr SHGetFileInfo(
+        internal static extern IntPtr SHGetFileInfo(
             string pszPath,
             uint dwFileAttributes,
             ref SHFILEINFO psfi,
@@ -60,11 +59,11 @@
             uint uFlags);
 
         [DllImport("gdi32.dll", SetLastError = true)]
-        public static extern bool DeleteObject(IntPtr hObject);
+        internal static extern bool DeleteObject(IntPtr hObject);
 
         [DllImport("shell32.dll", CharSet = CharSet.Unicode, PreserveSig = false,
             SetLastError = true)]
-        public static extern void SHCreateItemFromParsingName(
+        internal static extern void SHCreateItemFromParsingName(
             [In] [MarshalAs(UnmanagedType.LPWStr)] string pszPath,
             [In] IntPtr pbc,
             [In] [MarshalAs(UnmanagedType.LPStruct)] Guid riid,
@@ -90,8 +89,9 @@
             void Compare(IShellItem psi, uint hint, out int piOrder);
         }
 
-        [ComImport, Guid("bcc18b79-ba16-442f-80c4-8a59c30c463b"),
-         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [ComImport]
+        [Guid("bcc18b79-ba16-442f-80c4-8a59c30c463b")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IShellItemImageFactory
         {
             void GetImage(SIZE size, SIIGBF flags, ref IntPtr phbm);

@@ -5,8 +5,6 @@
     using System.Windows.Interop;
     using System.Windows.Media.Imaging;
 
-    using Api;
-
     using Data;
     using Data.Interfaces;
 
@@ -16,7 +14,8 @@
 
     using Interfaces;
 
-    
+    using Native;
+
     class DataSourceService
         : IDataSourceService,
           ISingleInstance

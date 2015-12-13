@@ -1,10 +1,9 @@
-﻿namespace Shapeshifter.WindowsDesktop.Api
+﻿namespace Shapeshifter.WindowsDesktop.Native
 {
     using System;
     using System.Runtime.InteropServices;
 
-    
-    public static class KeyboardApi
+    static class KeyboardApi
     {
         public const int MOD_ALT = 0x1;
 
@@ -38,7 +37,7 @@
 
             public InputUnion U;
 
-            public static int Size => Marshal.SizeOf(typeof (INPUT));
+            internal static int Size => Marshal.SizeOf(typeof (INPUT));
         }
 
         [Flags]
@@ -1352,15 +1351,15 @@
         }
 
         [DllImport("user32.dll")]
-        public static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
+        internal static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
 
         [DllImport("user32.dll")]
-        public static extern uint SendInput(
+        internal static extern uint SendInput(
             uint nInputs,
-            [MarshalAs(UnmanagedType.LPArray), In] INPUT[] pInputs,
+            [MarshalAs(UnmanagedType.LPArray)][In] INPUT[] pInputs,
             int cbSize);
 
         [DllImport("user32.dll")]
-        public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+        internal static extern bool UnregisterHotKey(IntPtr hWnd, int id);
     }
 }

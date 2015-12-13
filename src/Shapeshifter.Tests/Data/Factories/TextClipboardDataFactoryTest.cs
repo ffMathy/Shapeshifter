@@ -1,7 +1,5 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Factories
 {
-    using Api;
-
     using Autofac;
 
     using Data;

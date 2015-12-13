@@ -1,10 +1,10 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Handles
 {
-    using Api;
-
     using Controls.Window.Interfaces;
 
     using Interfaces;
+
+    using Native;
 
     class ClipboardHandle: IClipboardHandle
     {

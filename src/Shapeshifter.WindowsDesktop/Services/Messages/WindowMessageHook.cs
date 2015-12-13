@@ -6,8 +6,6 @@
     using System.Threading.Tasks;
     using System.Windows.Interop;
 
-    using Api;
-
     using Controls.Window.Interfaces;
 
     using Infrastructure.Events;

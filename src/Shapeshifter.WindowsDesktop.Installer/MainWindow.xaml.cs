@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Installer
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Installer
 {
     using System.Windows;
 

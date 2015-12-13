@@ -2,8 +2,6 @@
 {
     using System;
 
-    using Api;
-
     using Autofac;
 
     using Interfaces;

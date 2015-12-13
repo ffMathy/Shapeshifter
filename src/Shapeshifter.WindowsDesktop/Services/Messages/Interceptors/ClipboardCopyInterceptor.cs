@@ -4,14 +4,13 @@
     using System.Runtime.InteropServices;
     using System.Threading;
 
-    using Api;
-
     using Infrastructure.Events;
     using Infrastructure.Logging.Interfaces;
 
     using Interfaces;
 
-    
+    using Native;
+
     class ClipboardCopyInterceptor: IClipboardCopyInterceptor
     {
         public event EventHandler<DataCopiedEventArgument> DataCopied;

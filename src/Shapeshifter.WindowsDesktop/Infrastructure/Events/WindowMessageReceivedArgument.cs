@@ -2,8 +2,6 @@
 {
     using System;
 
-    using Api;
-
     public class WindowMessageReceivedArgument: EventArgs
     {
         public WindowMessageReceivedArgument(

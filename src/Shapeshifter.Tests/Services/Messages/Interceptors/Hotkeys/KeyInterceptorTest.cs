@@ -8,7 +8,6 @@
 
     using NSubstitute;
 
-    using Api;
     using Infrastructure.Events;
     using Factories.Interfaces;
     using Interfaces;

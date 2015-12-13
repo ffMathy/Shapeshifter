@@ -6,11 +6,10 @@
     using System.Runtime.InteropServices;
     using System.Windows.Media.Imaging;
 
-    using Api;
-
     using Interfaces;
 
-    
+    using Native;
+
     class ImagePersistenceService: IImagePersistenceService
     {
         static ImageMetaInformation ConvertByteArrayToMetaInformation(byte[] data)

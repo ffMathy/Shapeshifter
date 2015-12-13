@@ -4,11 +4,11 @@
     using System.Windows;
     using System.Windows.Interop;
 
-    using Api;
-
     using Infrastructure.Events;
 
     using Interfaces;
+
+    using Native;
 
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interfaces;

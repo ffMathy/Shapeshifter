@@ -6,13 +6,12 @@
     using System.Windows.Interop;
     using System.Windows.Media.Imaging;
 
-    using Api;
-
     using Images.Interfaces;
 
     using Interfaces;
 
-    
+    using Native;
+
     class FileIconService: IFileIconService
     {
         readonly IImagePersistenceService imagePersistenceService;

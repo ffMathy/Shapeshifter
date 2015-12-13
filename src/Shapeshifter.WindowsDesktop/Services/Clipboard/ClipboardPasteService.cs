@@ -1,4 +1,4 @@
-﻿using static Shapeshifter.WindowsDesktop.Api.KeyboardApi;
+﻿using static Shapeshifter.WindowsDesktop.Native.KeyboardApi;
 
 namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {

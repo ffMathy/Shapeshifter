@@ -9,8 +9,6 @@
 
     using NSubstitute;
 
-    using Api;
-
     using Controls.Window.Binders.Interfaces;
     using Controls.Window.ViewModels.Interfaces;
 

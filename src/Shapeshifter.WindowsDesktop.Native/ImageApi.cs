@@ -1,20 +1,19 @@
-﻿namespace Shapeshifter.WindowsDesktop.Api
+﻿namespace Shapeshifter.WindowsDesktop.Native
 {
     using System;
     using System.Runtime.InteropServices;
 
-    
-    public static class ImageApi
+    static class ImageApi
     {
         public const uint BI_RGB = 0x00;
 
         [DllImport("gdi32.dll")]
-        public static extern bool DeleteObject(IntPtr hObject);
+        internal static extern bool DeleteObject(IntPtr hObject);
 
         [StructLayout(LayoutKind.Sequential, Pack = 2)]
         public struct BITMAPFILEHEADER
         {
-            public static readonly short BM = 0x4d42;
+            internal static readonly short BM = 0x4d42;
 
             public short bfType;
 

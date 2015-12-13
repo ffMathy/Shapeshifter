@@ -3,9 +3,9 @@
     using System;
     using System.Threading;
 
-    using Api;
-
     using Interfaces;
+
+    using Native;
 
     class HotkeyInterception: IHotkeyInterception
     {

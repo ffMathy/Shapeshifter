@@ -2,8 +2,6 @@
 {
     using System;
 
-    using Api;
-
     using Factories.Interfaces;
 
     using Infrastructure.Events;
@@ -11,7 +9,8 @@
 
     using Interfaces;
 
-    
+    using Native;
+
     class PasteHotkeyInterceptor: IPasteHotkeyInterceptor
     {
         readonly ILogger logger;

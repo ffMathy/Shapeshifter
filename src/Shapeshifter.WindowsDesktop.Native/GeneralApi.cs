@@ -1,35 +1,34 @@
-﻿namespace Shapeshifter.WindowsDesktop.Api
+﻿namespace Shapeshifter.WindowsDesktop.Native
 {
     using System;
     using System.Runtime.InteropServices;
 
-    
-    public static class GeneralApi
+    static class GeneralApi
     {
         public const int GMEM_MOVABLE = 0x0002;
 
         public const int GMEM_ZEROINIT = 0x0040;
 
         [DllImport("kernel32.dll", EntryPoint = "CopyMemory", SetLastError = true)]
-        public static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
+        internal static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
 
         [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern UIntPtr GlobalSize(IntPtr hMem);
+        internal static extern UIntPtr GlobalSize(IntPtr hMem);
 
         [DllImport("kernel32.dll")]
-        public static extern IntPtr GlobalLock(IntPtr hMem);
+        internal static extern IntPtr GlobalLock(IntPtr hMem);
 
         [DllImport("kernel32.dll")]
-        public static extern IntPtr GlobalAlloc(uint uFlags, UIntPtr dwBytes);
+        internal static extern IntPtr GlobalAlloc(uint uFlags, UIntPtr dwBytes);
 
         [DllImport("kernel32.dll")]
-        public static extern IntPtr GlobalFree(IntPtr hMem);
+        internal static extern IntPtr GlobalFree(IntPtr hMem);
 
         [DllImport("kernel32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GlobalUnlock(IntPtr hMem);
+        internal static extern bool GlobalUnlock(IntPtr hMem);
 
-        public static T ByteArrayToStructure<T>(byte[] data)
+        internal static T ByteArrayToStructure<T>(byte[] data)
         {
             var size = Marshal.SizeOf(typeof (T));
 
@@ -46,7 +45,7 @@
             }
         }
 
-        public static byte[] StructureToByteArray<T>(T structure)
+        internal static byte[] StructureToByteArray<T>(T structure)
         {
             var size = Marshal.SizeOf(structure);
             var buffer = new byte[size];

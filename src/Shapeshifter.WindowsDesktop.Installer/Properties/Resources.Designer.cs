@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Shapeshifter.WindowsDesktop.Installer.Properties
+namespace Shapeshifter.UserInterface.WindowsDesktop.Installer.Properties
 {
 
 

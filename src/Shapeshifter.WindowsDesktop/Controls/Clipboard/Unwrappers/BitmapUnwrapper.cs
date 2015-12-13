@@ -1,4 +1,4 @@
-﻿using static Shapeshifter.WindowsDesktop.Api.ImageApi;
+﻿using static Shapeshifter.WindowsDesktop.Native.ImageApi;
 
 using DrawingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
@@ -13,9 +13,9 @@ namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Unwrappers
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
 
-    using Api;
-
     using Interfaces;
+
+    using Native;
 
     using Services.Images.Interfaces;
 
