@@ -2,7 +2,7 @@
 
 namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {
-    using Windows.Interfaces;
+    using Controls.Window.Interfaces;
 
     using Infrastructure.Logging.Interfaces;
 

@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.ViewModels
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Window.ViewModels
 {
     using System;
     using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Windows
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Window
 {
     using System;
 

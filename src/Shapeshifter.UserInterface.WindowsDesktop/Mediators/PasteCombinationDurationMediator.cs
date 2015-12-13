@@ -5,7 +5,7 @@
     using System.Threading.Tasks;
     using System.Windows.Input;
 
-    using Windows.Interfaces;
+    using Controls.Window.Interfaces;
 
     using Infrastructure.Events;
     using Infrastructure.Logging.Interfaces;

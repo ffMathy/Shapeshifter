@@ -3,9 +3,8 @@
     using System;
     using System.Collections.Generic;
 
-    using Windows.Interfaces;
-
     using Controls.Clipboard.Factories.Interfaces;
+    using Controls.Window.Interfaces;
 
     using Data.Interfaces;
 

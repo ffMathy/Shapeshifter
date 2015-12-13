@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 

@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Window.Interfaces
 {
     using Infrastructure.Dependencies.Interfaces;
 

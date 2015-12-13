@@ -1,12 +1,13 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Clipboard
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Services.Clipboard
 {
     using Autofac;
+
+    using Data.Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
 
-    using Data.Interfaces;
     using Services.Clipboard.Interfaces;
     using Services.Messages.Interceptors.Interfaces;
 

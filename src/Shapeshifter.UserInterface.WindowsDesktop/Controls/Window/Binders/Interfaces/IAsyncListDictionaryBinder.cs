@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Windows.Binders.Interfaces
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Controls.Window.Binders.Interfaces
 {
     using System;
     using System.Collections.Generic;

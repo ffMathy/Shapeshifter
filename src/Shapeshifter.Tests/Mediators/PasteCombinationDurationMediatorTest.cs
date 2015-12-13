@@ -4,13 +4,14 @@
 
     using Autofac;
 
+    using Controls.Window.Interfaces;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
 
     using Infrastructure.Threading.Interfaces;
     using Interfaces;
-    using Windows.Interfaces;
 
     [TestClass]
     public class PasteCombinationDurationMediatorTest: TestBase
