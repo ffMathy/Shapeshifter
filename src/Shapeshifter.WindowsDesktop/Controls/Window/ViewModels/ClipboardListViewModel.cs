@@ -149,19 +149,19 @@
         {
             switch (e.KeyCode)
             {
-                case KeyboardApi.VK_KEY_DOWN:
+                case KeyboardNativeApi.VK_KEY_DOWN:
                     HandleDownPressed();
                     break;
 
-                case KeyboardApi.VK_KEY_UP:
+                case KeyboardNativeApi.VK_KEY_UP:
                     HandleUpPressed();
                     break;
 
-                case KeyboardApi.VK_KEY_LEFT:
+                case KeyboardNativeApi.VK_KEY_LEFT:
                     HandleRightOrLeftPressed();
                     break;
 
-                case KeyboardApi.VK_KEY_RIGHT:
+                case KeyboardNativeApi.VK_KEY_RIGHT:
                     HandleRightOrLeftPressed();
                     break;
             }

@@ -4,8 +4,40 @@
     using System.Runtime.InteropServices;
     using System.Text;
 
-    static class WindowApi
+    using Interfaces;
+
+    public class WindowNativeApi : IWindowNativeApi
     {
+        IntPtr IWindowNativeApi.GetClassLongPtr(IntPtr hWnd, int nIndex)
+        {
+            return GetClassLongPtr(hWnd, nIndex);
+        }
+
+        IntPtr IWindowNativeApi.GetForegroundWindow()
+        {
+            return GetForegroundWindow();
+        }
+
+        int IWindowNativeApi.GetWindowText(IntPtr hWnd, StringBuilder text, int count)
+        {
+            return GetWindowText(hWnd, text, count);
+        }
+
+        string IWindowNativeApi.GetWindowTitle(IntPtr windowHandle)
+        {
+            return GetWindowTitle(windowHandle);
+        }
+
+        IntPtr IWindowNativeApi.LoadIcon(IntPtr hInstance, IntPtr lpIconName)
+        {
+            return LoadIcon(hInstance, lpIconName);
+        }
+
+        IntPtr IWindowNativeApi.SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam)
+        {
+            return SendMessage(hWnd, Msg, wParam, lParam);
+        }
+
         [DllImport("user32.dll")]
         internal static extern IntPtr GetForegroundWindow();
 
@@ -18,8 +50,20 @@
         [DllImport("user32.dll")]
         internal static extern IntPtr LoadIcon(IntPtr hInstance, IntPtr lpIconName);
 
+        IntPtr IWindowNativeApi.IDI_APPLICATION => IDI_APPLICATION;
+
         [DllImport("user32.dll", EntryPoint = "GetClassLong")]
         internal static extern uint GetClassLong32(IntPtr hWnd, int nIndex);
+
+        IntPtr IWindowNativeApi.GetClassLong64(IntPtr hWnd, int nIndex)
+        {
+            return GetClassLong64(hWnd, nIndex);
+        }
+
+        uint IWindowNativeApi.GetClassLong32(IntPtr hWnd, int nIndex)
+        {
+            return GetClassLong32(hWnd, nIndex);
+        }
 
         [DllImport("user32.dll", EntryPoint = "GetClassLongPtr")]
         internal static extern IntPtr GetClassLong64(IntPtr hWnd, int nIndex);
@@ -33,13 +77,14 @@
             return GetClassLong64(hWnd, nIndex);
         }
 
-        internal static IntPtr ICON_BIG => new IntPtr(1);
+        public static IntPtr ICON_BIG => new IntPtr(1);
 
-        internal static IntPtr IDI_APPLICATION => new IntPtr(0x7F00);
+        IntPtr IWindowNativeApi.ICON_BIG => ICON_BIG;
+
+        public static IntPtr IDI_APPLICATION => new IntPtr(0x7F00);
 
         public const int GCL_HICON = -14;
-
-        //TODO: refactor this into custom service.
+        
         internal static string GetWindowTitle(IntPtr windowHandle)
         {
             const int numberOfCharacters = 512;

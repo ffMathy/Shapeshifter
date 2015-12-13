@@ -3,11 +3,48 @@
     using System;
     using System.Runtime.InteropServices;
 
-    static class GeneralApi
+    using Interfaces;
+
+    public class GeneralNativeApi : IGeneralNativeApi
     {
         public const int GMEM_MOVABLE = 0x0002;
 
         public const int GMEM_ZEROINIT = 0x0040;
+
+        void IGeneralNativeApi.CopyMemory(IntPtr dest, IntPtr src, uint count)
+        {
+            CopyMemory(dest, src, count);
+        }
+
+        IntPtr IGeneralNativeApi.GlobalAlloc(uint uFlags, UIntPtr dwBytes)
+        {
+            return GlobalAlloc(uFlags, dwBytes);
+        }
+
+        IntPtr IGeneralNativeApi.GlobalFree(IntPtr hMem)
+        {
+            return GlobalFree(hMem);
+        }
+
+        IntPtr IGeneralNativeApi.GlobalLock(IntPtr hMem)
+        {
+            return GlobalLock(hMem);
+        }
+
+        UIntPtr IGeneralNativeApi.GlobalSize(IntPtr hMem)
+        {
+            return GlobalSize(hMem);
+        }
+
+        bool IGeneralNativeApi.GlobalUnlock(IntPtr hMem)
+        {
+            return GlobalUnlock(hMem);
+        }
+
+        byte[] IGeneralNativeApi.StructureToByteArray<T>(T structure)
+        {
+            return StructureToByteArray(structure);
+        }
 
         [DllImport("kernel32.dll", EntryPoint = "CopyMemory", SetLastError = true)]
         internal static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
@@ -28,7 +65,7 @@
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool GlobalUnlock(IntPtr hMem);
 
-        internal static T ByteArrayToStructure<T>(byte[] data)
+        public T ByteArrayToStructure<T>(byte[] data)
         {
             var size = Marshal.SizeOf(typeof (T));
 

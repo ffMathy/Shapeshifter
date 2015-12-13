@@ -4,19 +4,23 @@
 
     using Interfaces;
 
-    using Native;
+    using Native.Interfaces;
 
     class ClipboardHandle: IClipboardHandle
     {
+        readonly IClipboardNativeApi clipboardNativeApi;
+
         public ClipboardHandle(
+            IClipboardNativeApi clipboardNativeApi,
             IMainWindowHandleContainer mainWindow)
         {
-            ClipboardApi.OpenClipboard(mainWindow.Handle);
+            this.clipboardNativeApi = clipboardNativeApi;
+            clipboardNativeApi.OpenClipboard(mainWindow.Handle);
         }
 
         public void Dispose()
         {
-            ClipboardApi.CloseClipboard();
+            clipboardNativeApi.CloseClipboard();
         }
     }
 }

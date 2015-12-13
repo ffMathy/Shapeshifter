@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services
 {
     using System;
-    using System.Collections.Generic;
 
     using Autofac;
 

@@ -1,9 +1,9 @@
-﻿namespace Shapeshifter.WindowsDesktop.Native
+﻿namespace Shapeshifter.WindowsDesktop.Native.Interfaces
 {
     using System;
     using System.Runtime.InteropServices;
 
-    static class ImageApi
+    public class ImageNativeApi : IImageNativeApi
     {
         public const uint BI_RGB = 0x00;
 
@@ -13,7 +13,7 @@
         [StructLayout(LayoutKind.Sequential, Pack = 2)]
         public struct BITMAPFILEHEADER
         {
-            internal static readonly short BM = 0x4d42;
+            public static readonly short BM = 0x4d42;
 
             public short bfType;
 
@@ -146,6 +146,11 @@
             public CIEXYZ ciexyzGreen;
 
             public CIEXYZ ciexyzBlue;
+        }
+
+        bool IImageNativeApi.DeleteObject(IntPtr hObject)
+        {
+            return DeleteObject(hObject);
         }
     }
 }

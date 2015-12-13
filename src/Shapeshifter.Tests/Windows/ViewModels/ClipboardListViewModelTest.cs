@@ -19,6 +19,8 @@
 
     using Data.Actions.Interfaces;
 
+    using Native;
+
     [TestClass]
     public class ClipboardListViewModelTest: TestBase
     {
@@ -82,7 +84,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_DOWN,
                     false));
 
@@ -122,7 +124,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_DOWN,
                     false));
 
@@ -162,7 +164,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_DOWN,
                     false));
 
@@ -202,7 +204,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_UP,
                     false));
 
@@ -242,7 +244,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_UP,
                     false));
 
@@ -282,7 +284,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_UP,
                     false));
 
@@ -322,7 +324,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_LEFT,
                     false));
 
@@ -331,7 +333,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_DOWN,
                     false));
 
@@ -371,7 +373,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_RIGHT,
                     false));
 
@@ -380,7 +382,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_DOWN,
                     false));
 
@@ -420,7 +422,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_LEFT,
                     false));
 
@@ -429,7 +431,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_DOWN,
                     false));
 
@@ -469,7 +471,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_RIGHT,
                     false));
 
@@ -478,7 +480,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_UP,
                     false));
 
@@ -518,7 +520,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_LEFT,
                     false));
 
@@ -527,7 +529,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_UP,
                     false));
 
@@ -567,7 +569,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_RIGHT,
                     false));
 
@@ -576,7 +578,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_UP,
                     false));
 

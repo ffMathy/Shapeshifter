@@ -3,7 +3,9 @@
     using System;
     using System.Runtime.InteropServices;
 
-    static class IconApi
+    using Interfaces;
+
+    public class IconNativeApi : IIconNativeApi
     {
         public const uint SHGFI_ICON = 0x100;
 
@@ -41,6 +43,26 @@
             public ushort BitsPixel;
 
             public IntPtr Bits;
+        }
+
+        bool IIconNativeApi.DeleteObject(IntPtr hObject)
+        {
+            return DeleteObject(hObject);
+        }
+
+        int IIconNativeApi.GetObject(IntPtr hgdiobj, int cbBuffer, out BITMAP lpvObject)
+        {
+            return GetObject(hgdiobj, cbBuffer, out lpvObject);
+        }
+
+        void IIconNativeApi.SHCreateItemFromParsingName(string pszPath, IntPtr pbc, Guid riid, out IShellItem ppv)
+        {
+            SHCreateItemFromParsingName(pszPath, pbc, riid, out ppv);
+        }
+
+        IntPtr IIconNativeApi.SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags)
+        {
+            return SHGetFileInfo(pszPath, dwFileAttributes, ref psfi, cbSizeFileInfo, uFlags);
         }
 
         [DllImport("gdi32", CharSet = CharSet.Auto)]

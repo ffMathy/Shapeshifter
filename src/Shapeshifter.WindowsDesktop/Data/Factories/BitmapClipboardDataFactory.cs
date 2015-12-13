@@ -38,7 +38,7 @@
         public bool CanBuildData(uint format)
         {
             return
-                format == ClipboardApi.CF_BITMAP;
+                format == ClipboardNativeApi.CF_BITMAP;
         }
     }
 }

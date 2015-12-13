@@ -30,7 +30,7 @@
             this.logger = logger;
 
             hotkeyInterception = hotkeyInterceptionFactory.CreateInterception(
-                KeyboardApi.VK_KEY_V,
+                KeyboardNativeApi.VK_KEY_V,
                 true,
                 true);
         }

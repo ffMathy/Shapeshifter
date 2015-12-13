@@ -56,13 +56,13 @@
         {
             switch (format)
             {
-                case ClipboardApi.CF_TEXT:
+                case ClipboardNativeApi.CF_TEXT:
                     return Encoding.UTF8.GetString(data);
 
-                case ClipboardApi.CF_OEMTEXT:
+                case ClipboardNativeApi.CF_OEMTEXT:
                     return Encoding.Default.GetString(data);
 
-                case ClipboardApi.CF_UNICODETEXT:
+                case ClipboardNativeApi.CF_UNICODETEXT:
                     return Encoding.Unicode.GetString(data);
 
                 default:
@@ -73,9 +73,9 @@
         public bool CanBuildData(uint format)
         {
             return
-                (format == ClipboardApi.CF_TEXT) ||
-                (format == ClipboardApi.CF_OEMTEXT) ||
-                (format == ClipboardApi.CF_UNICODETEXT);
+                (format == ClipboardNativeApi.CF_TEXT) ||
+                (format == ClipboardNativeApi.CF_OEMTEXT) ||
+                (format == ClipboardNativeApi.CF_UNICODETEXT);
         }
     }
 }

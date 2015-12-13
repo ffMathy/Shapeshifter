@@ -7,6 +7,8 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using Native;
+
     [TestClass]
     public class TextClipboardDataFactoryTest : TestBase
     {
@@ -16,7 +18,7 @@
             var container = CreateContainer();
 
             var factory = container.Resolve<IClipboardDataFactory>();
-            Assert.IsTrue(factory.CanBuildData(ClipboardApi.CF_TEXT));
+            Assert.IsTrue(factory.CanBuildData(ClipboardNativeApi.CF_TEXT));
         }
 
         [TestMethod]
@@ -34,7 +36,7 @@
             var container = CreateContainer();
 
             var factory = container.Resolve<IClipboardDataFactory>();
-            var data = factory.BuildData(ClipboardApi.CF_TEXT, new byte[0]);
+            var data = factory.BuildData(ClipboardNativeApi.CF_TEXT, new byte[0]);
 
             Assert.IsInstanceOfType(data, typeof(ClipboardTextData));
         }

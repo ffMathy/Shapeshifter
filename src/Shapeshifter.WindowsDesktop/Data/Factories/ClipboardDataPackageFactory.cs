@@ -12,7 +12,7 @@
 
     using Interfaces;
 
-    using Native;
+    using Native.Interfaces;
 
     using Structures;
 
@@ -21,6 +21,8 @@
     {
         readonly IClipboardHandleFactory clipboardSessionFactory;
 
+        readonly IClipboardNativeApi clipboardNativeApi;
+
         readonly IEnumerable<IMemoryUnwrapper> memoryUnwrappers;
 
         readonly IEnumerable<IClipboardDataFactory> dataFactories;
@@ -28,11 +30,13 @@
         public ClipboardDataPackageFactory(
             IEnumerable<IClipboardDataFactory> dataFactories,
             IEnumerable<IMemoryUnwrapper> memoryUnwrappers,
-            IClipboardHandleFactory clipboardSessionFactory)
+            IClipboardHandleFactory clipboardSessionFactory,
+            IClipboardNativeApi clipboardNativeApi)
         {
             this.dataFactories = dataFactories;
             this.memoryUnwrappers = memoryUnwrappers;
             this.clipboardSessionFactory = clipboardSessionFactory;
+            this.clipboardNativeApi = clipboardNativeApi;
         }
 
         bool IsAnyFormatSupported(
@@ -46,7 +50,7 @@
         {
             using (clipboardSessionFactory.StartNewSession())
             {
-                var formats = ClipboardApi.GetClipboardFormats();
+                var formats = clipboardNativeApi.GetClipboardFormats();
                 return IsAnyFormatSupported(formats)
                            ? ConstructPackageFromFormats(formats)
                            : null;

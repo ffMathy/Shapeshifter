@@ -15,6 +15,7 @@
     using Interfaces;
 
     using Native;
+    using Native.Interfaces;
 
     class DataSourceService
         : IDataSourceService,
@@ -22,27 +23,31 @@
     {
         readonly IImagePersistenceService imagePersistenceService;
 
-        public DataSourceService(IImagePersistenceService imagePersistenceService)
+        readonly IWindowNativeApi windowNativeApi;
+
+        public DataSourceService(
+            IImagePersistenceService imagePersistenceService,
+            IWindowNativeApi windowNativeApi)
         {
             this.imagePersistenceService = imagePersistenceService;
+            this.windowNativeApi = windowNativeApi;
         }
 
-        static BitmapSource GetWindowIcon(IntPtr windowHandle)
+        BitmapSource GetWindowIcon(IntPtr windowHandle)
         {
-            var hIcon = WindowApi.SendMessage(
+            var hIcon = windowNativeApi.SendMessage(
                 windowHandle,
                 (int) Message.WM_GETICON,
-                WindowApi.ICON_BIG,
+                WindowNativeApi.ICON_BIG,
                 IntPtr.Zero);
             if (hIcon == IntPtr.Zero)
             {
-                hIcon = WindowApi.GetClassLongPtr(windowHandle, WindowApi.GCL_HICON);
+                hIcon = windowNativeApi.GetClassLongPtr(windowHandle, WindowNativeApi.GCL_HICON);
             }
 
             if (hIcon == IntPtr.Zero)
             {
-                //TODO: define this constant in the api. it's messy in here.
-                hIcon = WindowApi.LoadIcon(IntPtr.Zero, (IntPtr) 0x7F00 /*IDI_APPLICATION*/);
+                hIcon = windowNativeApi.LoadIcon(IntPtr.Zero, WindowNativeApi.IDI_APPLICATION);
             }
 
             if (hIcon != IntPtr.Zero)
@@ -57,9 +62,9 @@
 
         public IDataSource GetDataSource()
         {
-            var activeWindowHandle = WindowApi.GetForegroundWindow();
+            var activeWindowHandle = windowNativeApi.GetForegroundWindow();
 
-            var windowTitle = WindowApi.GetWindowTitle(activeWindowHandle);
+            var windowTitle = windowNativeApi.GetWindowTitle(activeWindowHandle);
             var windowIcon = GetWindowIcon(activeWindowHandle);
 
             var iconBytes = imagePersistenceService.ConvertBitmapSourceToByteArray(windowIcon);

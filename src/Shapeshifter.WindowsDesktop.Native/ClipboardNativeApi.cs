@@ -6,7 +6,9 @@
     using System.Runtime.InteropServices;
     using System.Text;
 
-    static class ClipboardApi
+    using Interfaces;
+
+    public class ClipboardNativeApi: IClipboardNativeApi
     {
         public const int CF_BITMAP = 2;
 
@@ -62,6 +64,101 @@
 
         [DllImport("user32.dll")]
         internal static extern uint EnumClipboardFormats(uint format);
+
+        bool IClipboardNativeApi.OpenClipboard(IntPtr hWndNewOwner)
+        {
+            return OpenClipboard(hWndNewOwner);
+        }
+
+        IntPtr IClipboardNativeApi.GetClipboardData(uint uFormat)
+        {
+            return GetClipboardData(uFormat);
+        }
+
+        bool IClipboardNativeApi.CloseClipboard()
+        {
+            return CloseClipboard();
+        }
+
+        bool IClipboardNativeApi.EmptyClipboard()
+        {
+            return EmptyClipboard();
+        }
+
+        int IClipboardNativeApi.GetClipboardFormatName(uint format, StringBuilder lpszFormatName, int cchMaxCount)
+        {
+            return GetClipboardFormatName(format, lpszFormatName, cchMaxCount);
+        }
+
+        int IClipboardNativeApi.DragQueryFile(IntPtr hDrop, uint iFile, StringBuilder lpszFile, int cch)
+        {
+            return DragQueryFile(hDrop, iFile, lpszFile, cch);
+        }
+
+        void IClipboardNativeApi.DragFinish(IntPtr hDrop)
+        {
+            DragFinish(hDrop);
+        }
+
+        IntPtr IClipboardNativeApi.SetClipboardData(uint uFormat, IntPtr hMem)
+        {
+            return SetClipboardData(uFormat, hMem);
+        }
+
+        IReadOnlyCollection<uint> IClipboardNativeApi.GetClipboardFormats()
+        {
+            return GetClipboardFormats();
+        }
+
+        byte[] IClipboardNativeApi.GetClipboardDataBytes(uint format)
+        {
+            return GetClipboardDataBytes(format);
+        }
+
+        string IClipboardNativeApi.GetClipboardFormatName(uint ClipboardFormat)
+        {
+            return GetClipboardFormatName(ClipboardFormat);
+        }
+
+        bool IClipboardNativeApi.AddClipboardFormatListener(IntPtr hwnd)
+        {
+            return AddClipboardFormatListener(hwnd);
+        }
+
+        IntPtr IClipboardNativeApi.SetClipboardViewer(IntPtr hWndNewViewer)
+        {
+            return SetClipboardViewer(hWndNewViewer);
+        }
+
+        bool IClipboardNativeApi.ChangeClipboardChain(IntPtr hWndRemove, IntPtr hWndNewNext)
+        {
+            return ChangeClipboardChain(hWndRemove, hWndNewNext);
+        }
+
+        int IClipboardNativeApi.SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam)
+        {
+            return SendMessage(hWnd, Msg, wParam, lParam);
+        }
+
+        IntPtr IClipboardNativeApi.GetClipboardOwner()
+        {
+            return GetClipboardOwner();
+        }
+
+        bool IClipboardNativeApi.RemoveClipboardFormatListener(IntPtr hwnd)
+        {
+            return RemoveClipboardFormatListener(hwnd);
+        }
+
+        uint IClipboardNativeApi.GetClipboardSequenceNumber()
+        {
+            return GetClipboardSequenceNumber();
+        }
+
+        uint IClipboardNativeApi.EnumClipboardFormats(uint format)
+        {
+            return EnumClipboardFormats(format);
+        }
 
         [DllImport("user32.dll")]
         internal static extern bool OpenClipboard(IntPtr hWndNewOwner);
@@ -124,7 +221,7 @@
 
             var buffer = new byte[(int) length];
             Marshal.Copy(lockedMemory, buffer, 0, (int) length);
-            GeneralApi.GlobalUnlock(dataPointer);
+            GeneralNativeApi.GlobalUnlock(dataPointer);
 
             return buffer;
         }
@@ -136,12 +233,12 @@
 
         static UIntPtr GetPointerDataLength(IntPtr dataPointer)
         {
-            return GeneralApi.GlobalSize(dataPointer);
+            return GeneralNativeApi.GlobalSize(dataPointer);
         }
 
         static IntPtr GetLockedMemoryBlockPointer(IntPtr dataPointer)
         {
-            return GeneralApi.GlobalLock(dataPointer);
+            return GeneralNativeApi.GlobalLock(dataPointer);
         }
 
         internal static string GetClipboardFormatName(uint ClipboardFormat)

@@ -15,6 +15,7 @@
     using Interfaces;
 
     using Native;
+    using Native.Interfaces;
 
     using Services.Files.Interfaces;
     using Services.Interfaces;
@@ -27,14 +28,18 @@
 
         readonly IMemoryHandleFactory memoryHandleFactory;
 
+        readonly IClipboardNativeApi clipboardNativeApi;
+
         public FileClipboardDataFactory(
             IDataSourceService dataSourceService,
             IFileIconService fileIconService,
-            IMemoryHandleFactory memoryHandleFactory)
+            IMemoryHandleFactory memoryHandleFactory,
+            IClipboardNativeApi clipboardNativeApi)
         {
             this.dataSourceService = dataSourceService;
             this.fileIconService = fileIconService;
             this.memoryHandleFactory = memoryHandleFactory;
+            this.clipboardNativeApi = clipboardNativeApi;
         }
 
         
@@ -64,7 +69,7 @@
             var files = new List<string>();
             using (var memoryHandle = memoryHandleFactory.AllocateInMemory(data))
             {
-                var count = ClipboardApi.DragQueryFile(memoryHandle.Pointer, 0xFFFFFFFF, null, 0);
+                var count = clipboardNativeApi.DragQueryFile(memoryHandle.Pointer, 0xFFFFFFFF, null, 0);
                 FetchFilesFromMemory(files, memoryHandle, count);
             }
 
@@ -72,17 +77,17 @@
         }
 
         
-        static void FetchFilesFromMemory(
+        void FetchFilesFromMemory(
             ICollection<string> files,
             IMemoryHandle memoryHandle,
             int count)
         {
             for (var i = 0u; i < count; i++)
             {
-                var length = ClipboardApi.DragQueryFile(memoryHandle.Pointer, i, null, 0);
+                var length = clipboardNativeApi.DragQueryFile(memoryHandle.Pointer, i, null, 0);
                 var filenameBuilder = new StringBuilder(length);
 
-                length = ClipboardApi.DragQueryFile(
+                length = clipboardNativeApi.DragQueryFile(
                     memoryHandle.Pointer,
                     i,
                     filenameBuilder,
@@ -154,7 +159,7 @@
         public bool CanBuildData(uint format)
         {
             return
-                format == ClipboardApi.CF_HDROP;
+                format == ClipboardNativeApi.CF_HDROP;
         }
     }
 }

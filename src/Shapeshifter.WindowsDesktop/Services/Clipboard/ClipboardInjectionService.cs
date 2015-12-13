@@ -16,6 +16,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
     using Messages.Interceptors.Interfaces;
 
     using Native;
+    using Native.Interfaces;
 
     class ClipboardInjectionService: IClipboardInjectionService
     {
@@ -27,16 +28,24 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 
         readonly ILogger logger;
 
+        readonly IClipboardNativeApi clipboardNativeApi;
+
+        readonly IGeneralNativeApi generalNativeApi;
+
         public ClipboardInjectionService(
             IClipboardCopyInterceptor clipboardCopyInterceptor,
             IClipboardHandleFactory clipboardHandleFactory,
             IMemoryHandleFactory memoryHandleFactory,
-            ILogger logger)
+            ILogger logger,
+            IClipboardNativeApi clipboardNativeApi,
+            IGeneralNativeApi generalNativeApi)
         {
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;
             this.clipboardHandleFactory = clipboardHandleFactory;
             this.memoryHandleFactory = memoryHandleFactory;
             this.logger = logger;
+            this.clipboardNativeApi = clipboardNativeApi;
+            this.generalNativeApi = generalNativeApi;
         }
 
         public void InjectData(IClipboardDataPackage package)
@@ -45,7 +54,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 
             using (clipboardHandleFactory.StartNewSession())
             {
-                ClipboardApi.EmptyClipboard();
+                clipboardNativeApi.EmptyClipboard();
                 InjectPackageContents(package);
             }
 
@@ -68,35 +77,35 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
             {
                 var globalPointer = AllocateInMemory(clipboardData);
 
-                var target = GeneralApi.GlobalLock(globalPointer);
+                var target = generalNativeApi.GlobalLock(globalPointer);
                 if (target == IntPtr.Zero)
                 {
                     throw new InvalidOperationException("Could not allocate memory.");
                 }
 
-                GeneralApi.CopyMemory(
+                generalNativeApi.CopyMemory(
                     target,
                     memoryHandle.Pointer,
                     (uint) clipboardData.RawData.Length);
 
-                GeneralApi.GlobalUnlock(target);
+                generalNativeApi.GlobalUnlock(target);
 
-                if (ClipboardApi.SetClipboardData(clipboardData.RawFormat, globalPointer) !=
+                if (clipboardNativeApi.SetClipboardData(clipboardData.RawFormat, globalPointer) !=
                     IntPtr.Zero)
                 {
                     return;
                 }
 
-                GeneralApi.GlobalFree(globalPointer);
+                generalNativeApi.GlobalFree(globalPointer);
                 throw new Exception("Could not set clipboard data.");
             }
         }
 
         
-        static IntPtr AllocateInMemory(IClipboardData clipboardData)
+        IntPtr AllocateInMemory(IClipboardData clipboardData)
         {
-            return GeneralApi.GlobalAlloc(
-                GeneralApi.GMEM_ZEROINIT | GeneralApi.GMEM_MOVABLE,
+            return generalNativeApi.GlobalAlloc(
+                GeneralNativeApi.GMEM_ZEROINIT | GeneralNativeApi.GMEM_MOVABLE,
                 (UIntPtr) clipboardData.RawData.Length);
         }
 

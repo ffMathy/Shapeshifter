@@ -3,7 +3,9 @@
     using System;
     using System.Runtime.InteropServices;
 
-    static class KeyboardApi
+    using Interfaces;
+
+    public class KeyboardNativeApi : IKeyboardNativeApi
     {
         public const int MOD_ALT = 0x1;
 
@@ -37,7 +39,7 @@
 
             public InputUnion U;
 
-            internal static int Size => Marshal.SizeOf(typeof (INPUT));
+            public static int Size => Marshal.SizeOf(typeof (INPUT));
         }
 
         [Flags]
@@ -1352,6 +1354,21 @@
 
         [DllImport("user32.dll")]
         internal static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
+
+        uint IKeyboardNativeApi.SendInput(uint nInputs, INPUT[] pInputs, int cbSize)
+        {
+            return SendInput(nInputs, pInputs, cbSize);
+        }
+
+        bool IKeyboardNativeApi.UnregisterHotKey(IntPtr hWnd, int id)
+        {
+            return UnregisterHotKey(hWnd, id);
+        }
+
+        bool IKeyboardNativeApi.RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc)
+        {
+            return RegisterHotKey(hWnd, id, fsModifiers, vlc);
+        }
 
         [DllImport("user32.dll")]
         internal static extern uint SendInput(

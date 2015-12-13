@@ -8,6 +8,8 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using Native;
+
     [TestClass]
     public class FileClipboardDataFactoryTest : TestBase
     {
@@ -17,7 +19,7 @@
             var container = CreateContainer();
 
             var factory = container.Resolve<IFileClipboardDataFactory>();
-            Assert.IsTrue(factory.CanBuildData(ClipboardApi.CF_HDROP));
+            Assert.IsTrue(factory.CanBuildData(ClipboardNativeApi.CF_HDROP));
         }
 
         [TestMethod]
@@ -45,7 +47,7 @@
             var container = CreateContainer();
 
             var factory = container.Resolve<IFileClipboardDataFactory>();
-            Assert.IsTrue(factory.CanBuildData(ClipboardApi.CF_HDROP));
+            Assert.IsTrue(factory.CanBuildData(ClipboardNativeApi.CF_HDROP));
         }
 
         [TestMethod]

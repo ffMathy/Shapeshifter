@@ -1,6 +1,4 @@
-﻿using static Shapeshifter.WindowsDesktop.Native.KeyboardApi;
-
-namespace Shapeshifter.WindowsDesktop.Services.Clipboard
+﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
     using Controls.Window.Interfaces;
 
@@ -10,6 +8,9 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 
     using Messages.Interceptors.Hotkeys.Interfaces;
 
+    using Native;
+    using Native.Interfaces;
+
     class ClipboardPasteService: IClipboardPasteService
     {
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
@@ -18,14 +19,18 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 
         readonly IMainWindowHandleContainer handleContainer;
 
+        readonly IKeyboardNativeApi keyboardNativeApi;
+
         public ClipboardPasteService(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
             ILogger logger,
-            IMainWindowHandleContainer handleContainer)
+            IMainWindowHandleContainer handleContainer,
+            IKeyboardNativeApi keyboardNativeApi)
         {
             this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
             this.logger = logger;
             this.handleContainer = handleContainer;
+            this.keyboardNativeApi = keyboardNativeApi;
         }
 
         
@@ -51,27 +56,27 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
         }
 
         
-        static void SendPasteCombination()
+        void SendPasteCombination()
         {
             var inputs = new[]
             {
-                GenerateKeystoke(VirtualKeyShort.LCONTROL),
-                GenerateKeystoke(VirtualKeyShort.KEY_V),
-                GenerateKeystoke(VirtualKeyShort.KEY_V, KEYEVENTF.KEYUP),
-                GenerateKeystoke(VirtualKeyShort.LCONTROL, KEYEVENTF.KEYUP)
+                GenerateKeystoke(KeyboardNativeApi.VirtualKeyShort.LCONTROL),
+                GenerateKeystoke(KeyboardNativeApi.VirtualKeyShort.KEY_V),
+                GenerateKeystoke(KeyboardNativeApi.VirtualKeyShort.KEY_V, KeyboardNativeApi.KEYEVENTF.KEYUP),
+                GenerateKeystoke(KeyboardNativeApi.VirtualKeyShort.LCONTROL, KeyboardNativeApi.KEYEVENTF.KEYUP)
             };
-            SendInput((uint) inputs.Length, inputs, INPUT.Size);
+            keyboardNativeApi.SendInput((uint) inputs.Length, inputs, KeyboardNativeApi.INPUT.Size);
         }
 
         
-        static INPUT GenerateKeystoke(VirtualKeyShort key, KEYEVENTF flags = 0)
+        static KeyboardNativeApi.INPUT GenerateKeystoke(KeyboardNativeApi.VirtualKeyShort key, KeyboardNativeApi.KEYEVENTF flags = 0)
         {
-            return new INPUT
+            return new KeyboardNativeApi.INPUT
             {
                 type = 1,
-                U = new InputUnion
+                U = new KeyboardNativeApi.InputUnion
                 {
-                    ki = new KEYBDINPUT
+                    ki = new KeyboardNativeApi.KEYBDINPUT
                     {
                         wVk = key,
                         dwFlags = flags,

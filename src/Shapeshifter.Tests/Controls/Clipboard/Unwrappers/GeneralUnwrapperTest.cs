@@ -6,6 +6,8 @@
 
     using Interfaces;
 
+    using Native;
+
     [TestClass]
     public class GeneralUnwrapperTest: TestBase
     {
@@ -15,7 +17,7 @@
             var container = CreateContainer();
 
             var unwrapper = container.Resolve<IMemoryUnwrapper>();
-            Assert.IsFalse(unwrapper.CanUnwrap(ClipboardApi.CF_DSPBITMAP));
+            Assert.IsFalse(unwrapper.CanUnwrap(ClipboardNativeApi.CF_DSPBITMAP));
         }
 
         [TestMethod]
@@ -24,7 +26,7 @@
             var container = CreateContainer();
 
             var unwrapper = container.Resolve<IMemoryUnwrapper>();
-            Assert.IsFalse(unwrapper.CanUnwrap(ClipboardApi.CF_DSPENHMETAFILE));
+            Assert.IsFalse(unwrapper.CanUnwrap(ClipboardNativeApi.CF_DSPENHMETAFILE));
         }
 
         [TestMethod]
@@ -33,7 +35,7 @@
             var container = CreateContainer();
 
             var unwrapper = container.Resolve<IMemoryUnwrapper>();
-            Assert.IsFalse(unwrapper.CanUnwrap(ClipboardApi.CF_ENHMETAFILE));
+            Assert.IsFalse(unwrapper.CanUnwrap(ClipboardNativeApi.CF_ENHMETAFILE));
         }
 
         [TestMethod]
@@ -42,7 +44,7 @@
             var container = CreateContainer();
 
             var unwrapper = container.Resolve<IMemoryUnwrapper>();
-            Assert.IsFalse(unwrapper.CanUnwrap(ClipboardApi.CF_METAFILEPICT));
+            Assert.IsFalse(unwrapper.CanUnwrap(ClipboardNativeApi.CF_METAFILEPICT));
         }
     }
 }

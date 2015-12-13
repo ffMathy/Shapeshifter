@@ -56,13 +56,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClipboardApi.cs" />
-    <Compile Include="GeneralApi.cs" />
-    <Compile Include="IconApi.cs" />
-    <Compile Include="ImageApi.cs" />
-    <Compile Include="KeyboardApi.cs" />
+    <Compile Include="ClipboardNativeApi.cs" />
+    <Compile Include="GeneralNativeApi.cs" />
+    <Compile Include="Interfaces\IClipboardNativeApi.cs" />
+    <Compile Include="IconNativeApi.cs" />
+    <Compile Include="Interfaces\IGeneralNativeApi.cs" />
+    <Compile Include="Interfaces\IIconNativeApi.cs" />
+    <Compile Include="Interfaces\IImageNativeApi.cs" />
+    <Compile Include="Interfaces\IKeyboardNativeApi.cs" />
+    <Compile Include="Interfaces\ImageNativeApi.cs" />
+    <Compile Include="Interfaces\IWindowNativeApi.cs" />
+    <Compile Include="KeyboardNativeApi.cs" />
+    <Compile Include="NativeAssemblyHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WindowApi.cs" />
+    <Compile Include="WindowNativeApi.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

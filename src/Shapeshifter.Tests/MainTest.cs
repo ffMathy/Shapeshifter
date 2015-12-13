@@ -1,7 +1,5 @@
 ﻿namespace Shapeshifter.WindowsDesktop
 {
-    using System.Collections.Generic;
-
     using Autofac;
 
     using Controls.Window.Interfaces;
