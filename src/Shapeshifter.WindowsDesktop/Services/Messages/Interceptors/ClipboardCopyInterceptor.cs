@@ -57,16 +57,7 @@
 
         void TriggerDataCopiedEvent()
         {
-            if (DataCopied == null)
-            {
-                return;
-            }
-
-            var thread = new Thread(() => DataCopied(this, new DataCopiedEventArgument()))
-            {
-                IsBackground = true
-            };
-            thread.Start();
+            DataCopied?.Invoke(this, new DataCopiedEventArgument());
         }
 
         public void Install(IntPtr windowHandle)

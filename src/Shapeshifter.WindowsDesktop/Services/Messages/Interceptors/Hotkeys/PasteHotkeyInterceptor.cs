@@ -55,8 +55,7 @@
                 throw new InvalidOperationException(
                     "This interceptor has already been uninstalled.");
             }
-
-            //TODO: proper exceptions for uninstall for ALL uninstalls (don't uninstall when already uninstalled etc).
+            
             hotkeyInterception.Stop(mainWindowHandle);
 
             isInstalled = false;

@@ -4,6 +4,8 @@
 
     public interface IThreadDelay
     {
+        void Execute(int millisecondsDelay);
+
         Task ExecuteAsync(int millisecondsDelay);
     }
 }
