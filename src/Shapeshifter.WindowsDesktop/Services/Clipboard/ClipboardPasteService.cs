@@ -16,6 +16,8 @@
 
     class ClipboardPasteService: IClipboardPasteService
     {
+        const int KeyboardGracePeriodMilliseconds = 100;
+
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
 
         readonly ILogger logger;
@@ -44,11 +46,11 @@
         {
             DisablePasteHotkeyInterceptor();
 
-            delay.Execute(100);
+            delay.Execute(KeyboardGracePeriodMilliseconds);
 
             SendPasteCombination();
 
-            delay.Execute(100);
+            delay.Execute(KeyboardGracePeriodMilliseconds);
 
             EnablePasteHotkeyInterceptor();
 
