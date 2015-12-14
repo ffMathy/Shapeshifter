@@ -318,7 +318,7 @@
                 new HotkeyFiredArgument
                     (
                     KeyboardNativeApi
-                        .VK_KEY_LEFT,
+                        .VK_KEY_RIGHT,
                     false));
 
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
@@ -382,6 +382,190 @@
         }
 
         [TestMethod]
+        public void WindowIsHiddenWhenInDataListAndLeftIsPressed()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IKeyInterceptor>();
+                    c
+                        .RegisterFake
+                        <
+                            IAsyncListDictionaryBinder
+                                <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
+
+            var hideEventCount = 0;
+
+            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
+            systemUnderTest.UserInterfaceHidden += (sender, e) => hideEventCount++;
+
+            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
+
+            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardNativeApi
+                        .VK_KEY_LEFT,
+                    false));
+
+            Assert.AreEqual(1, hideEventCount);
+        }
+
+        [TestMethod]
+        public void WindowIsHiddenWhenInActionListAndRightIsPressed()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IKeyInterceptor>();
+                    c
+                        .RegisterFake
+                        <
+                            IAsyncListDictionaryBinder
+                                <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
+
+            var hideEventCount = 0;
+
+            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
+            systemUnderTest.UserInterfaceHidden += (sender, e) => hideEventCount++;
+
+            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
+
+            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardNativeApi
+                        .VK_KEY_RIGHT,
+                    false));
+
+            Assert.AreEqual(0, hideEventCount);
+
+            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardNativeApi
+                        .VK_KEY_RIGHT,
+                    false));
+
+            Assert.AreEqual(1, hideEventCount);
+        }
+
+        [TestMethod]
+        public void WhenUserInterfaceIsHiddenSelectedActionIsInvoked()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IClipboardUserInterfaceMediator>();
+                    c
+                        .RegisterFake<IAsyncListDictionaryBinder
+                            <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
+
+            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
+
+            var fakeAction = Substitute.For<IAction>();
+            systemUnderTest.SelectedAction = fakeAction;
+
+            var fakeElement = Substitute.For<IClipboardDataControlPackage>();
+            systemUnderTest.SelectedElement = fakeElement;
+
+            var fakeMediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            fakeMediator.UserInterfaceHidden +=
+                Raise.Event<EventHandler
+                    <UserInterfaceHiddenEventArgument>>(new object());
+
+            fakeAction.Received()
+                      .PerformAsync(Arg.Any<IClipboardDataPackage>());
+        }
+
+        [TestMethod]
+        public void UserInterfaceShownIsBubbledUpFromDurationMediator()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IClipboardUserInterfaceMediator>();
+                    c
+                        .RegisterFake<IAsyncListDictionaryBinder
+                            <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
+
+            var showEventCount = 0;
+
+            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
+            systemUnderTest.UserInterfaceShown += (sender, e) => showEventCount++;
+
+            var fakeMediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            fakeMediator.UserInterfaceShown += Raise.Event<EventHandler<UserInterfaceShownEventArgument>>(new object());
+
+            Assert.AreEqual(1, showEventCount);
+        }
+
+        [TestMethod]
+        public void UserInterfaceHiddenIsBubbledUpFromDurationMediator()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IClipboardUserInterfaceMediator>();
+                    c
+                        .RegisterFake<IAsyncListDictionaryBinder
+                            <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
+
+            var hideEventCount = 0;
+
+            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
+            systemUnderTest.UserInterfaceHidden += (sender, e) => hideEventCount++;
+
+            var fakeMediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            fakeMediator.UserInterfaceHidden += Raise.Event<EventHandler<UserInterfaceHiddenEventArgument>>(new object());
+
+            Assert.AreEqual(1, hideEventCount);
+        }
+
+        [TestMethod]
+        public void WindowIsHiddenWhenInItemListAndLeftIsPressed()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IKeyInterceptor>();
+                    c
+                        .RegisterFake
+                        <
+                            IAsyncListDictionaryBinder
+                                <IClipboardDataControlPackage, IAction>>
+                        ();
+                });
+
+            var hideEventCount = 0;
+
+            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
+            systemUnderTest.UserInterfaceHidden += (sender, e) => hideEventCount++;
+
+            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
+            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardNativeApi
+                        .VK_KEY_LEFT,
+                    false));
+
+            Assert.AreEqual(1, hideEventCount);
+        }
+
+        [TestMethod]
         public void SelectedActionChangesToTheFirstWhenThirdIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
@@ -414,7 +598,7 @@
                 new HotkeyFiredArgument
                     (
                     KeyboardNativeApi
-                        .VK_KEY_LEFT,
+                        .VK_KEY_RIGHT,
                     false));
 
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
@@ -510,7 +694,7 @@
                 new HotkeyFiredArgument
                     (
                     KeyboardNativeApi
-                        .VK_KEY_LEFT,
+                        .VK_KEY_RIGHT,
                     false));
 
             fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(

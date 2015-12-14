@@ -158,18 +158,37 @@
                     break;
 
                 case KeyboardNativeApi.VK_KEY_LEFT:
-                    HandleRightOrLeftPressed();
+                    HandleLeftPressed();
                     break;
 
                 case KeyboardNativeApi.VK_KEY_RIGHT:
-                    HandleRightOrLeftPressed();
+                    HandleRightPressed();
                     break;
             }
         }
 
-        void HandleRightOrLeftPressed()
+        void HandleLeftPressed()
         {
-            isFocusInActionsList = !isFocusInActionsList;
+            if (!isFocusInActionsList)
+            {
+                HideInterface();
+            }
+            else
+            {
+                isFocusInActionsList = !isFocusInActionsList;
+            }
+        }
+
+        void HandleRightPressed()
+        {
+            if (isFocusInActionsList)
+            {
+                HideInterface();
+            }
+            else
+            {
+                isFocusInActionsList = !isFocusInActionsList;
+            }
         }
 
         void HandleUpPressed()
@@ -227,12 +246,18 @@
 
         async void Service_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
         {
-            UserInterfaceHidden?.Invoke(this, e);
+            HideInterface();
 
             if (SelectedAction != null)
             {
                 await SelectedAction.PerformAsync(SelectedElement.Data);
             }
+        }
+
+        void HideInterface()
+        {
+            isFocusInActionsList = false;
+            UserInterfaceHidden?.Invoke(this, new UserInterfaceHiddenEventArgument());
         }
 
         async Task<IEnumerable<IAction>> GetSupportedActionsFromDataAsync(
