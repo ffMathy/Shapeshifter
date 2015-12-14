@@ -12,6 +12,8 @@
 
     using WindowsDesktop;
 
+    using Controls.Window.Interfaces;
+
     [TestClass]
     public class WindowMessageHookTest: TestBase
     {
@@ -23,6 +25,19 @@
 
             var hook = container.Resolve<IWindowMessageHook>();
             hook.Disconnect();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof (InvalidOperationException))]
+        public void ConnectWhenAlreadyConnectedThrowsException()
+        {
+            var container = CreateContainer();
+
+            var fakeWindow = Substitute.For<IWindow>();
+
+            var hook = container.Resolve<IWindowMessageHook>();
+            hook.Connect(fakeWindow);
+            hook.Connect(fakeWindow);
         }
     }
 }
