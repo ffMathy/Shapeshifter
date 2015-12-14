@@ -18,9 +18,7 @@
     class ClipboardDataPackageFactory: IClipboardDataPackageFactory
     {
         readonly IClipboardHandleFactory clipboardSessionFactory;
-
-        readonly IClipboardNativeApi clipboardNativeApi;
-
+        
         readonly IEnumerable<IMemoryUnwrapper> memoryUnwrappers;
 
         readonly IEnumerable<IClipboardDataFactory> dataFactories;
@@ -34,7 +32,6 @@
             this.dataFactories = dataFactories;
             this.memoryUnwrappers = memoryUnwrappers;
             this.clipboardSessionFactory = clipboardSessionFactory;
-            this.clipboardNativeApi = clipboardNativeApi;
         }
 
         bool IsAnyFormatSupported(
@@ -46,9 +43,9 @@
 
         public IClipboardDataPackage CreateFromCurrentClipboardData()
         {
-            using (clipboardSessionFactory.StartNewSession())
+            using (var session = clipboardSessionFactory.StartNewSession())
             {
-                var formats = clipboardNativeApi.GetClipboardFormats();
+                var formats = session.GetClipboardFormats();
                 return IsAnyFormatSupported(formats)
                            ? ConstructPackageFromFormats(formats)
                            : null;
