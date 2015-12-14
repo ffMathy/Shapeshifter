@@ -1,7 +1,5 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
-    using System.Threading;
-
     using Controls.Window.Interfaces;
 
     using Infrastructure.Logging.Interfaces;
