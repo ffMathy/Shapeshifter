@@ -95,7 +95,6 @@
             builder.Register(c => fake)
                    .As<TInterface>()
                    .SingleInstance();
-            return fake;
         }
 
         public static void IgnoreAwait(this Task task) { }
