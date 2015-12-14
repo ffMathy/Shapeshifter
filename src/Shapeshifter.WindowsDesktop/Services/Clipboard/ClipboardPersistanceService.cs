@@ -63,7 +63,8 @@
 
         async Task<IClipboardDataPackage> GetPersistedPackageAsync(string directory)
         {
-            var packageFiles = Directory.GetFiles(directory).OrderBy(x => x);
+            var packageFiles = Directory.GetFiles(directory)
+                                        .OrderBy(x => x);
 
             var dataPairs = new List<FormatDataPair>();
             foreach (var file in packageFiles)

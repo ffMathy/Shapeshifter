@@ -4,7 +4,6 @@
 
     using Interfaces;
 
-    
     class DesignerImageConverterService
         : IDesignerImageConverterService,
           IDesignerService

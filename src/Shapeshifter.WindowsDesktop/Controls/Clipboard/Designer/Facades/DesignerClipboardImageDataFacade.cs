@@ -7,7 +7,6 @@
     using Services;
     using Services.Interfaces;
 
-    
     class DesignerClipboardImageDataFacade: ClipboardImageData
     {
         public DesignerClipboardImageDataFacade(

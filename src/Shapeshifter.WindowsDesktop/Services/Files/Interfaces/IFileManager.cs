@@ -5,7 +5,9 @@
 
     using Infrastructure.Dependencies.Interfaces;
 
-    public interface IFileManager: ISingleInstance, IDisposable
+    public interface IFileManager
+        : ISingleInstance,
+          IDisposable
     {
         string WriteBytesToTemporaryFile(string path, byte[] bytes);
 

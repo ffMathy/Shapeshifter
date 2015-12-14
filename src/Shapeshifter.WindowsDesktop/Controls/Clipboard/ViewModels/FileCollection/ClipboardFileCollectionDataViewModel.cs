@@ -20,7 +20,6 @@
         : ClipboardDataViewModel<IClipboardFileCollectionData>,
           IClipboardFileCollectionDataViewModel
     {
-        
         public ClipboardFileCollectionDataViewModel()
             : this(new EnvironmentInformation()) { }
 
@@ -33,7 +32,6 @@
             }
         }
 
-        
         void PrepareDesignerMode()
         {
             var container = DesignTimeContainerHelper.CreateDesignTimeContainer();

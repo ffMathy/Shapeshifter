@@ -4,14 +4,13 @@
     using System.Runtime.InteropServices;
     using System.Threading;
 
-    using Api;
-
     using Infrastructure.Events;
     using Infrastructure.Logging.Interfaces;
 
     using Interfaces;
 
-    
+    using Native.Interfaces;
+
     class ClipboardCopyInterceptor: IClipboardCopyInterceptor
     {
         public event EventHandler<DataCopiedEventArgument> DataCopied;
@@ -24,15 +23,23 @@
 
         readonly ILogger logger;
 
+        readonly IClipboardNativeApi clipboardNativeApi;
+
+        readonly IWindowNativeApi windowNativeApi;
+
         public ClipboardCopyInterceptor(
-            ILogger logger)
+            ILogger logger,
+            IClipboardNativeApi clipboardNativeApi,
+            IWindowNativeApi windowNativeApi)
         {
             this.logger = logger;
+            this.clipboardNativeApi = clipboardNativeApi;
+            this.windowNativeApi = windowNativeApi;
         }
 
         void HandleClipboardUpdateWindowMessage()
         {
-            var clipboardItemIdentifier = ClipboardApi.GetClipboardSequenceNumber();
+            var clipboardItemIdentifier = clipboardNativeApi.GetClipboardSequenceNumber();
 
             logger.Information(
                 $"Clipboard update message received with sequence #{clipboardItemIdentifier}.",
@@ -65,18 +72,18 @@
         public void Install(IntPtr windowHandle)
         {
             this.mainWindowHandle = windowHandle;
-            if (!ClipboardApi.AddClipboardFormatListener(windowHandle))
+            if (!clipboardNativeApi.AddClipboardFormatListener(windowHandle))
             {
                 throw GenerateInstallFailureException();
             }
         }
 
-        static Exception GenerateInstallFailureException()
+        Exception GenerateInstallFailureException()
         {
             var errorCode = Marshal.GetLastWin32Error();
 
-            var existingOwner = ClipboardApi.GetClipboardOwner();
-            var ownerTitle = WindowApi.GetWindowTitle(existingOwner);
+            var existingOwner = clipboardNativeApi.GetClipboardOwner();
+            var ownerTitle = windowNativeApi.GetWindowTitle(existingOwner);
 
             return
                 new InvalidOperationException(
@@ -85,7 +92,7 @@
 
         public void Uninstall()
         {
-            if (!ClipboardApi.RemoveClipboardFormatListener(mainWindowHandle))
+            if (!clipboardNativeApi.RemoveClipboardFormatListener(mainWindowHandle))
             {
                 throw new InvalidOperationException(
                     "Could not uninstall a clipboard hook for the main window.");

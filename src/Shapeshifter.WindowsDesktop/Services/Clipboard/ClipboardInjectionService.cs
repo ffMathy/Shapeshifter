@@ -6,8 +6,6 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
     using System.Collections.Specialized;
     using System.Windows.Media.Imaging;
 
-    using Api;
-
     using Data.Interfaces;
 
     using Infrastructure.Handles.Factories.Interfaces;
@@ -16,6 +14,9 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
     using Interfaces;
 
     using Messages.Interceptors.Interfaces;
+
+    using Native;
+    using Native.Interfaces;
 
     class ClipboardInjectionService: IClipboardInjectionService
     {
@@ -27,16 +28,24 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 
         readonly ILogger logger;
 
+        readonly IClipboardNativeApi clipboardNativeApi;
+
+        readonly IGeneralNativeApi generalNativeApi;
+
         public ClipboardInjectionService(
             IClipboardCopyInterceptor clipboardCopyInterceptor,
             IClipboardHandleFactory clipboardHandleFactory,
             IMemoryHandleFactory memoryHandleFactory,
-            ILogger logger)
+            ILogger logger,
+            IClipboardNativeApi clipboardNativeApi,
+            IGeneralNativeApi generalNativeApi)
         {
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;
             this.clipboardHandleFactory = clipboardHandleFactory;
             this.memoryHandleFactory = memoryHandleFactory;
             this.logger = logger;
+            this.clipboardNativeApi = clipboardNativeApi;
+            this.generalNativeApi = generalNativeApi;
         }
 
         public void InjectData(IClipboardDataPackage package)
@@ -45,14 +54,13 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 
             using (clipboardHandleFactory.StartNewSession())
             {
-                ClipboardApi.EmptyClipboard();
+                clipboardNativeApi.EmptyClipboard();
                 InjectPackageContents(package);
             }
 
             logger.Information("Clipboard package has been injected to the clipboard.", 1);
         }
 
-        
         void InjectPackageContents(IClipboardDataPackage package)
         {
             foreach (var clipboardData in package.Contents)
@@ -61,60 +69,55 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
             }
         }
 
-        
         void InjectClipboardData(IClipboardData clipboardData)
         {
             using (var memoryHandle = memoryHandleFactory.AllocateInMemory(clipboardData.RawData))
             {
                 var globalPointer = AllocateInMemory(clipboardData);
 
-                var target = GeneralApi.GlobalLock(globalPointer);
+                var target = generalNativeApi.GlobalLock(globalPointer);
                 if (target == IntPtr.Zero)
                 {
                     throw new InvalidOperationException("Could not allocate memory.");
                 }
 
-                GeneralApi.CopyMemory(
+                generalNativeApi.CopyMemory(
                     target,
                     memoryHandle.Pointer,
                     (uint) clipboardData.RawData.Length);
 
-                GeneralApi.GlobalUnlock(target);
+                generalNativeApi.GlobalUnlock(target);
 
-                if (ClipboardApi.SetClipboardData(clipboardData.RawFormat, globalPointer) !=
+                if (clipboardNativeApi.SetClipboardData(clipboardData.RawFormat, globalPointer) !=
                     IntPtr.Zero)
                 {
                     return;
                 }
 
-                GeneralApi.GlobalFree(globalPointer);
+                generalNativeApi.GlobalFree(globalPointer);
                 throw new Exception("Could not set clipboard data.");
             }
         }
 
-        
-        static IntPtr AllocateInMemory(IClipboardData clipboardData)
+        IntPtr AllocateInMemory(IClipboardData clipboardData)
         {
-            return GeneralApi.GlobalAlloc(
-                GeneralApi.GMEM_ZEROINIT | GeneralApi.GMEM_MOVABLE,
+            return generalNativeApi.GlobalAlloc(
+                GeneralNativeApi.GMEM_ZEROINIT | GeneralNativeApi.GMEM_MOVABLE,
                 (UIntPtr) clipboardData.RawData.Length);
         }
 
-        
         public void InjectImage(BitmapSource image)
         {
             clipboardCopyInterceptor.SkipNext();
             WindowsClipboard.SetImage(image);
         }
 
-        
         public void InjectText(string text)
         {
             clipboardCopyInterceptor.SkipNext();
             WindowsClipboard.SetText(text);
         }
 
-        
         public void InjectFiles(params string[] files)
         {
             clipboardCopyInterceptor.SkipNext();

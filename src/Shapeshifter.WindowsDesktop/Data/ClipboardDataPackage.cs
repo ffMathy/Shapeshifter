@@ -17,12 +17,13 @@
             Id = Interlocked.Increment(ref idOffset);
         }
 
-        public ClipboardDataPackage(long id) : this()
+        public ClipboardDataPackage(long id)
+            : this()
         {
             Id = id;
         }
 
-        public IReadOnlyList<IClipboardData> Contents => 
+        public IReadOnlyList<IClipboardData> Contents =>
             dataCollection;
 
         public void AddData(IClipboardData data)

@@ -1,10 +1,11 @@
-﻿namespace Shapeshifter.WindowsDesktop.Api
+﻿namespace Shapeshifter.WindowsDesktop.Native
 {
     using System;
     using System.Runtime.InteropServices;
 
-    
-    public static class KeyboardApi
+    using Interfaces;
+
+    public class KeyboardNativeApi: IKeyboardNativeApi
     {
         public const int MOD_ALT = 0x1;
 
@@ -1352,15 +1353,30 @@
         }
 
         [DllImport("user32.dll")]
-        public static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
+        internal static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
+
+        uint IKeyboardNativeApi.SendInput(uint nInputs, INPUT[] pInputs, int cbSize)
+        {
+            return SendInput(nInputs, pInputs, cbSize);
+        }
+
+        bool IKeyboardNativeApi.UnregisterHotKey(IntPtr hWnd, int id)
+        {
+            return UnregisterHotKey(hWnd, id);
+        }
+
+        bool IKeyboardNativeApi.RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc)
+        {
+            return RegisterHotKey(hWnd, id, fsModifiers, vlc);
+        }
 
         [DllImport("user32.dll")]
-        public static extern uint SendInput(
+        internal static extern uint SendInput(
             uint nInputs,
-            [MarshalAs(UnmanagedType.LPArray), In] INPUT[] pInputs,
+            [MarshalAs(UnmanagedType.LPArray)] [In] INPUT[] pInputs,
             int cbSize);
 
         [DllImport("user32.dll")]
-        public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+        internal static extern bool UnregisterHotKey(IntPtr hWnd, int id);
     }
 }

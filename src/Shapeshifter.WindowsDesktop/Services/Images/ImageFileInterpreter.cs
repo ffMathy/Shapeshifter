@@ -5,7 +5,6 @@
 
     using Interfaces;
 
-    
     class ImageFileInterpreter: IImageFileInterpreter
     {
         public BitmapSource Interpret(byte[] bytes)

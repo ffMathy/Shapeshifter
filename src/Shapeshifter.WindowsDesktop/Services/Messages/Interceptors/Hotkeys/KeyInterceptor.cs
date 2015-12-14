@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Api;
-
     using Factories.Interfaces;
 
     using Infrastructure.Events;

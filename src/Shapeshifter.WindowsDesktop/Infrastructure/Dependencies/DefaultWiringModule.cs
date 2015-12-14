@@ -18,6 +18,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 
     using Interfaces;
 
+    using Native;
+
     using Threading;
 
     public class DefaultWiringModule: AutofacModule
@@ -26,7 +28,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 
         readonly Action<ContainerBuilder> callback;
 
-        public DefaultWiringModule(IEnvironmentInformation environmentInformation)
+        public DefaultWiringModule(
+            IEnvironmentInformation environmentInformation)
         {
             this.environmentInformation = environmentInformation;
         }
@@ -39,6 +42,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
         protected override void Load(ContainerBuilder builder)
         {
             RegisterAssemblyTypes(builder, typeof (DefaultWiringModule).Assembly);
+            RegisterAssemblyTypes(builder, NativeAssemblyHelper.Assembly);
 
             RegisterMainThread(builder);
 

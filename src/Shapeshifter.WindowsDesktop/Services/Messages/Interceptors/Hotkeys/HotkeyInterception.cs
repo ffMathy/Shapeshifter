@@ -3,12 +3,15 @@
     using System;
     using System.Threading;
 
-    using Api;
-
     using Interfaces;
+
+    using Native;
+    using Native.Interfaces;
 
     class HotkeyInterception: IHotkeyInterception
     {
+        readonly IKeyboardNativeApi keyboardNativeApi;
+
         static int interceptionId;
 
         public int InterceptionId { get; }
@@ -19,8 +22,10 @@
 
         public int KeyCode { get; set; }
 
-        public HotkeyInterception()
+        public HotkeyInterception(
+            IKeyboardNativeApi keyboardNativeApi)
         {
+            this.keyboardNativeApi = keyboardNativeApi;
             InterceptionId = Interlocked.Increment(ref interceptionId);
         }
 
@@ -31,14 +36,14 @@
             var modifier = 0;
             if (ControlNeeded)
             {
-                modifier |= KeyboardApi.MOD_CONTROL;
+                modifier |= KeyboardNativeApi.MOD_CONTROL;
             }
             if (NoRepeat)
             {
-                modifier |= KeyboardApi.MOD_NOREPEAT;
+                modifier |= KeyboardNativeApi.MOD_NOREPEAT;
             }
 
-            var registrationResult = KeyboardApi.RegisterHotKey(
+            var registrationResult = keyboardNativeApi.RegisterHotKey(
                 windowHandle,
                 InterceptionId,
                 modifier,
@@ -62,7 +67,7 @@
 
         bool UnregisterHotkey(IntPtr windowHandle)
         {
-            return KeyboardApi.UnregisterHotKey(
+            return keyboardNativeApi.UnregisterHotKey(
                 windowHandle,
                 InterceptionId);
         }

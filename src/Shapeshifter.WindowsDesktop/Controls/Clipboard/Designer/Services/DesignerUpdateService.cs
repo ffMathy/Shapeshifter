@@ -6,7 +6,6 @@
 
     using Interfaces;
 
-    
     class DesignerUpdateService
         : IUpdateService,
           IDesignerService

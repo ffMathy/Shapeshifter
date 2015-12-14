@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Api
+﻿namespace Shapeshifter.WindowsDesktop
 {
     public enum Message
     {

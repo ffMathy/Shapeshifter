@@ -2,16 +2,16 @@
 {
     using System;
 
-    using Api;
-
     using Autofac;
 
     using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using Native;
+
     [TestClass]
-    public class FileClipboardDataFactoryTest : TestBase
+    public class FileClipboardDataFactoryTest: TestBase
     {
         [TestMethod]
         public void CanBuildDataReturnsTrueForSingleFileFormats()
@@ -19,7 +19,7 @@
             var container = CreateContainer();
 
             var factory = container.Resolve<IFileClipboardDataFactory>();
-            Assert.IsTrue(factory.CanBuildData(ClipboardApi.CF_HDROP));
+            Assert.IsTrue(factory.CanBuildData(ClipboardNativeApi.CF_HDROP));
         }
 
         [TestMethod]
@@ -32,7 +32,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof (ArgumentException))]
         public void BuildDataForIncompatibleFormatThrowsException()
         {
             var container = CreateContainer();
@@ -47,7 +47,7 @@
             var container = CreateContainer();
 
             var factory = container.Resolve<IFileClipboardDataFactory>();
-            Assert.IsTrue(factory.CanBuildData(ClipboardApi.CF_HDROP));
+            Assert.IsTrue(factory.CanBuildData(ClipboardNativeApi.CF_HDROP));
         }
 
         [TestMethod]

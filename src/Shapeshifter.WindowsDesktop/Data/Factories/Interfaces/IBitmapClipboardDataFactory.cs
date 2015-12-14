@@ -1,6 +1,4 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Factories.Interfaces
 {
-    interface IBitmapClipboardDataFactory : IClipboardDataFactory
-    {
-    }
+    interface IBitmapClipboardDataFactory: IClipboardDataFactory { }
 }

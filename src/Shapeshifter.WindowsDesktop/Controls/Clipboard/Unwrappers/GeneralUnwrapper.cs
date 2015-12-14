@@ -3,23 +3,28 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Api;
-
     using Interfaces;
+
+    using Native;
+    using Native.Interfaces;
 
     class GeneralUnwrapper: IMemoryUnwrapper
     {
+        readonly IClipboardNativeApi clipboardNativeApi;
+
         readonly IEnumerable<int> excludedFormats;
 
-        public GeneralUnwrapper()
+        public GeneralUnwrapper(
+            IClipboardNativeApi clipboardNativeApi)
         {
+            this.clipboardNativeApi = clipboardNativeApi;
             excludedFormats = new[]
             {
-                ClipboardApi.CF_DSPBITMAP,
-                ClipboardApi.CF_DSPENHMETAFILE,
-                ClipboardApi.CF_ENHMETAFILE,
-                ClipboardApi.CF_METAFILEPICT,
-                ClipboardApi.CF_BITMAP
+                ClipboardNativeApi.CF_DSPBITMAP,
+                ClipboardNativeApi.CF_DSPENHMETAFILE,
+                ClipboardNativeApi.CF_ENHMETAFILE,
+                ClipboardNativeApi.CF_METAFILEPICT,
+                ClipboardNativeApi.CF_BITMAP
             };
         }
 
@@ -30,7 +35,7 @@
 
         public byte[] UnwrapStructure(uint format)
         {
-            return ClipboardApi.GetClipboardDataBytes(format);
+            return clipboardNativeApi.GetClipboardDataBytes(format);
         }
     }
 }

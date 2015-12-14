@@ -10,7 +10,6 @@
 
     using Services;
 
-    
     static class DesignTimeContainerHelper
     {
         public static IContainer CreateDesignTimeContainer()

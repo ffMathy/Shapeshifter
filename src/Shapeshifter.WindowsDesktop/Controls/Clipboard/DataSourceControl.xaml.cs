@@ -5,7 +5,6 @@
     /// <summary>
     ///     Interaction logic for DataSourceControl.xaml
     /// </summary>
-    
     public partial class DataSourceControl: StackPanel
     {
         public DataSourceControl()

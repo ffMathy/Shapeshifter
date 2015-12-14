@@ -1,6 +1,4 @@
-﻿using static Shapeshifter.WindowsDesktop.Api.ImageApi;
-
-using DrawingPixelFormat = System.Drawing.Imaging.PixelFormat;
+﻿using DrawingPixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Unwrappers
 {
@@ -13,79 +11,91 @@ namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Unwrappers
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
 
-    using Api;
-
     using Interfaces;
+
+    using Native;
+    using Native.Interfaces;
 
     using Services.Images.Interfaces;
 
-    
     class BitmapUnwrapper: IMemoryUnwrapper
     {
         readonly IImagePersistenceService imagePersistenceService;
 
+        readonly IClipboardNativeApi clipboardNativeApi;
+
+        readonly IGeneralNativeApi generalNativeApi;
+
+        readonly IImageNativeApi imageNativeApi;
+
         public BitmapUnwrapper(
-            IImagePersistenceService imagePersistenceService)
+            IImagePersistenceService imagePersistenceService,
+            IClipboardNativeApi clipboardNativeApi,
+            IGeneralNativeApi generalNativeApi,
+            IImageNativeApi imageNativeApi)
         {
             this.imagePersistenceService = imagePersistenceService;
+            this.clipboardNativeApi = clipboardNativeApi;
+            this.generalNativeApi = generalNativeApi;
+            this.imageNativeApi = imageNativeApi;
         }
 
         public bool CanUnwrap(uint format)
         {
-            return (format == ClipboardApi.CF_DIBV5) ||
-                   (format == ClipboardApi.CF_DIB) ||
-                   (format == ClipboardApi.CF_BITMAP) ||
-                   (format == ClipboardApi.CF_DIF);
+            return (format == ClipboardNativeApi.CF_DIBV5) ||
+                   (format == ClipboardNativeApi.CF_DIB) ||
+                   (format == ClipboardNativeApi.CF_BITMAP) ||
+                   (format == ClipboardNativeApi.CF_DIF);
         }
 
         public byte[] UnwrapStructure(uint format)
         {
             //TODO: it is very sad that we invoke System.Drawing here to get the job done. probably not very optimal.
 
-            var bitmapVersionFivePointer = ClipboardApi.GetClipboardData(ClipboardApi.CF_DIBV5);
+            var bitmapVersionFivePointer = clipboardNativeApi.GetClipboardData(ClipboardNativeApi.CF_DIBV5);
             var bitmapVersionFiveHeader =
-                (BITMAPV5HEADER)
-                Marshal.PtrToStructure(bitmapVersionFivePointer, typeof (BITMAPV5HEADER));
+                (ImageNativeApi.BITMAPV5HEADER)
+                Marshal.PtrToStructure(bitmapVersionFivePointer, typeof (ImageNativeApi.BITMAPV5HEADER));
 
-            if (bitmapVersionFiveHeader.bV5Compression != BI_RGB)
+            if (bitmapVersionFiveHeader.bV5Compression != ImageNativeApi.BI_RGB)
             {
                 return HandleBitmapVersionFive(bitmapVersionFivePointer, bitmapVersionFiveHeader);
             }
 
-            var bitmapVersionOneBytes = ClipboardApi.GetClipboardDataBytes(ClipboardApi.CF_DIB);
+            var bitmapVersionOneBytes = clipboardNativeApi.GetClipboardDataBytes(ClipboardNativeApi.CF_DIB);
             var bitmapVersionOneHeader =
-                GeneralApi.ByteArrayToStructure<BITMAPINFOHEADER>(bitmapVersionOneBytes);
+                generalNativeApi.ByteArrayToStructure<ImageNativeApi.BITMAPINFOHEADER>(bitmapVersionOneBytes);
 
             return HandleBitmapVersionOne(bitmapVersionOneBytes, bitmapVersionOneHeader);
         }
 
         byte[] HandleBitmapVersionOne(
             byte[] bitmapVersionOneBytes,
-            BITMAPINFOHEADER bitmapVersionOneHeader)
+            ImageNativeApi.BITMAPINFOHEADER bitmapVersionOneHeader)
         {
             var bitmap = CreateBitmapVersionOne(bitmapVersionOneBytes, bitmapVersionOneHeader);
             return imagePersistenceService.ConvertBitmapSourceToByteArray(bitmap);
         }
 
-        static BitmapFrame CreateBitmapVersionOne(
+        BitmapFrame CreateBitmapVersionOne(
             byte[] bitmapVersionOneBytes,
-            BITMAPINFOHEADER bitmapVersionOneHeader)
+            ImageNativeApi.BITMAPINFOHEADER bitmapVersionOneHeader)
         {
-            var fileHeaderSize = Marshal.SizeOf(typeof (BITMAPFILEHEADER));
+            var fileHeaderSize = Marshal.SizeOf(typeof (ImageNativeApi.BITMAPFILEHEADER));
             var infoHeaderSize = bitmapVersionOneHeader.biSize;
             var fileSize = fileHeaderSize + bitmapVersionOneHeader.biSize +
                            bitmapVersionOneHeader.biSizeImage;
 
-            var fileHeader = new BITMAPFILEHEADER
+            var fileHeader = new ImageNativeApi.BITMAPFILEHEADER
             {
-                bfType = BITMAPFILEHEADER.BM,
+                bfType = ImageNativeApi.BITMAPFILEHEADER.BM,
                 bfSize = fileSize,
                 bfReserved1 = 0,
                 bfReserved2 = 0,
                 bfOffBits = fileHeaderSize + infoHeaderSize + bitmapVersionOneHeader.biClrUsed*4
             };
 
-            var fileHeaderBytes = GeneralApi.StructureToByteArray(fileHeader);
+            var fileHeaderBytes = generalNativeApi.StructureToByteArray(fileHeader);
 
             var bitmapStream = new MemoryStream();
             bitmapStream.Write(fileHeaderBytes, 0, fileHeaderSize);
@@ -96,7 +106,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Unwrappers
             return bitmap;
         }
 
-        byte[] HandleBitmapVersionFive(IntPtr pointer, BITMAPV5HEADER infoHeader)
+        byte[] HandleBitmapVersionFive(IntPtr pointer, ImageNativeApi.BITMAPV5HEADER infoHeader)
         {
             using (var drawingBitmap = CreateDrawingBitmapFromVersionOnePointer(pointer, infoHeader)
                 )
@@ -146,7 +156,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Unwrappers
 
         static Bitmap CreateDrawingBitmapFromVersionOnePointer(
             IntPtr pointer,
-            BITMAPV5HEADER infoHeader)
+            ImageNativeApi.BITMAPV5HEADER infoHeader)
         {
             var stride = (int) (infoHeader.bV5SizeImage/infoHeader.bV5Height);
             var bitmap = new Bitmap(
@@ -160,7 +170,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Unwrappers
             return ConvertBitmapTo32Bit(bitmap);
         }
 
-        static BitmapSource CreateBitmapSourceFromBitmap(Bitmap bitmap)
+        BitmapSource CreateBitmapSourceFromBitmap(Bitmap bitmap)
         {
             if (bitmap == null)
             {
@@ -179,7 +189,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Unwrappers
             }
             finally
             {
-                DeleteObject(bitmapHandle);
+                imageNativeApi.DeleteObject(bitmapHandle);
             }
         }
     }

@@ -3,23 +3,23 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Api;
-
     using Controls.Clipboard.Unwrappers.Interfaces;
 
-    using Data;
     using Data.Interfaces;
 
     using Infrastructure.Handles.Factories.Interfaces;
 
     using Interfaces;
 
+    using Native.Interfaces;
+
     using Structures;
 
-    
-    class ClipboardDataPackageFactory : IClipboardDataPackageFactory
+    class ClipboardDataPackageFactory: IClipboardDataPackageFactory
     {
         readonly IClipboardHandleFactory clipboardSessionFactory;
+
+        readonly IClipboardNativeApi clipboardNativeApi;
 
         readonly IEnumerable<IMemoryUnwrapper> memoryUnwrappers;
 
@@ -28,11 +28,13 @@
         public ClipboardDataPackageFactory(
             IEnumerable<IClipboardDataFactory> dataFactories,
             IEnumerable<IMemoryUnwrapper> memoryUnwrappers,
-            IClipboardHandleFactory clipboardSessionFactory)
+            IClipboardHandleFactory clipboardSessionFactory,
+            IClipboardNativeApi clipboardNativeApi)
         {
             this.dataFactories = dataFactories;
             this.memoryUnwrappers = memoryUnwrappers;
             this.clipboardSessionFactory = clipboardSessionFactory;
+            this.clipboardNativeApi = clipboardNativeApi;
         }
 
         bool IsAnyFormatSupported(
@@ -46,7 +48,7 @@
         {
             using (clipboardSessionFactory.StartNewSession())
             {
-                var formats = ClipboardApi.GetClipboardFormats();
+                var formats = clipboardNativeApi.GetClipboardFormats();
                 return IsAnyFormatSupported(formats)
                            ? ConstructPackageFromFormats(formats)
                            : null;
@@ -114,7 +116,10 @@
             byte[] rawData)
         {
             var factory = FindCapableFactoryFromFormat(format);
-            if (factory == null) return;
+            if (factory == null)
+            {
+                return;
+            }
 
             var clipboardData = factory.BuildData(format, rawData);
             if (clipboardData != null)

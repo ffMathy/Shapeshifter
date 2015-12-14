@@ -16,7 +16,6 @@
             return arguments.Contains("cleanup");
         }
 
-        
         public void Process(string[] arguments)
         {
             var updateIndex = Array.IndexOf(arguments, "cleanup");

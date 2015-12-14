@@ -5,21 +5,23 @@
 
     using Autofac;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    using NSubstitute;
-
-    using Api;
-
     using Controls.Window.Binders.Interfaces;
     using Controls.Window.ViewModels.Interfaces;
 
-    using Data.Interfaces;
-    using Infrastructure.Events;
-    using Mediators.Interfaces;
-    using Services.Messages.Interceptors.Hotkeys.Interfaces;
-
     using Data.Actions.Interfaces;
+    using Data.Interfaces;
+
+    using Infrastructure.Events;
+
+    using Mediators.Interfaces;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using Native;
+
+    using NSubstitute;
+
+    using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
     [TestClass]
     public class ClipboardListViewModelTest: TestBase
@@ -29,18 +31,16 @@
         {
             var container =
                 CreateContainer(
-                    c =>
-                    {
+                    c => {
                         c.RegisterFake<IAsyncListDictionaryBinder
-                                    <IClipboardDataControlPackage, IAction>>();
+                            <IClipboardDataControlPackage, IAction>>();
                     });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
 
             object eventSender = null;
 
-            viewModel.PropertyChanged += (sender, e) =>
-            {
+            viewModel.PropertyChanged += (sender, e) => {
                 if (e.PropertyName == nameof(viewModel.SelectedElement))
                 {
                     eventSender = sender;
@@ -55,8 +55,7 @@
         public void SelectedElementChangesToTheSecondWhenFirstIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -84,7 +83,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_DOWN,
                     false));
 
@@ -95,8 +94,7 @@
         public void SelectedElementChangesToTheThirdWhenSecondIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -124,7 +122,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_DOWN,
                     false));
 
@@ -135,8 +133,7 @@
         public void SelectedElementChangesToTheFirstWhenThirdIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -164,7 +161,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_DOWN,
                     false));
 
@@ -175,8 +172,7 @@
         public void SelectedElementChangesToTheThirdWhenFirstIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -204,7 +200,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_UP,
                     false));
 
@@ -215,8 +211,7 @@
         public void SelectedElementChangesToTheSecondWhenThirdIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -244,7 +239,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_UP,
                     false));
 
@@ -255,8 +250,7 @@
         public void SelectedElementChangesToTheFirstWhenSecondIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -284,7 +278,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_UP,
                     false));
 
@@ -295,8 +289,7 @@
         public void SelectedActionChangesToTheSecondWhenFirstIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -324,7 +317,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_LEFT,
                     false));
 
@@ -333,7 +326,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_DOWN,
                     false));
 
@@ -344,8 +337,7 @@
         public void SelectedActionChangesToTheThirdWhenSecondIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -373,7 +365,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_RIGHT,
                     false));
 
@@ -382,7 +374,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_DOWN,
                     false));
 
@@ -393,8 +385,7 @@
         public void SelectedActionChangesToTheFirstWhenThirdIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -422,7 +413,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_LEFT,
                     false));
 
@@ -431,7 +422,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_DOWN,
                     false));
 
@@ -442,8 +433,7 @@
         public void SelectedActionChangesToTheThirdWhenFirstIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -471,7 +461,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_RIGHT,
                     false));
 
@@ -480,7 +470,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_UP,
                     false));
 
@@ -491,8 +481,7 @@
         public void SelectedActionChangesToTheSecondWhenThirdIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -520,7 +509,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_LEFT,
                     false));
 
@@ -529,7 +518,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_UP,
                     false));
 
@@ -540,8 +529,7 @@
         public void SelectedActionChangesToTheFirstWhenSecondIsSelectedAndUpIsPressed()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyInterceptor>();
                     c
                         .RegisterFake
@@ -569,7 +557,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_RIGHT,
                     false));
 
@@ -578,7 +566,7 @@
                     (),
                 new HotkeyFiredArgument
                     (
-                    KeyboardApi
+                    KeyboardNativeApi
                         .VK_KEY_UP,
                     false));
 
@@ -593,8 +581,7 @@
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterInstance(fakeUserInterfaceMediator);
                 });
 
@@ -616,8 +603,7 @@
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterInstance(fakeUserInterfaceMediator);
                 });
 
@@ -639,8 +625,7 @@
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterInstance(fakeUserInterfaceMediator);
                 });
 

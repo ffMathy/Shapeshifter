@@ -7,7 +7,6 @@
     /// <summary>
     ///     Interaction logic for ClipboardFileCollectionDataControl.xaml
     /// </summary>
-    
     public partial class ClipboardFileCollectionDataControl
         : UserControl,
           IClipboardControl

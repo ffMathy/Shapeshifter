@@ -27,8 +27,7 @@
         public void IsConnectedIsFalseIfPasteCombinationDurationMonitorIsNotConnected()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IPasteCombinationDurationMediator>()
                      .IsConnected
                      .Returns(false);
@@ -42,8 +41,7 @@
         public void IsConnectedIsTrueIfAllHooksAreConnected()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IPasteCombinationDurationMediator>()
                      .IsConnected
                      .Returns(true);
@@ -57,8 +55,7 @@
         public void ConnectConnectsHotkeyHook()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IClipboardCopyInterceptor>();
                     c.RegisterFake<IPasteCombinationDurationMediator>();
                 });
@@ -75,8 +72,7 @@
         public void DisconnectDisconnectsKeyboardHook()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IPasteCombinationDurationMediator>()
                      .IsConnected
                      .Returns(true);
@@ -94,8 +90,7 @@
         public void DataCopiedCausesMediatorToCreatePackage()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IClipboardCopyInterceptor>();
                     c.RegisterFake<IPasteCombinationDurationMediator>();
 
@@ -133,8 +128,7 @@
             var fakeControl = Substitute.For<IClipboardControl>();
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IClipboardCopyInterceptor>();
                     c.RegisterFake<IPasteCombinationDurationMediator>();
 
@@ -173,8 +167,7 @@
         public void DataCopiedTriggersEvent()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IClipboardCopyInterceptor>();
                     c.RegisterFake<IPasteCombinationDurationMediator>();
                     c.RegisterFake<IClipboardDataControlPackageFactory>(
@@ -187,8 +180,7 @@
 
             object eventSender = null;
             ControlEventArgument eventArgument = null;
-            mediator.ControlAdded += (sender, e) =>
-            {
+            mediator.ControlAdded += (sender, e) => {
                 eventSender = sender;
                 eventArgument = e;
             };

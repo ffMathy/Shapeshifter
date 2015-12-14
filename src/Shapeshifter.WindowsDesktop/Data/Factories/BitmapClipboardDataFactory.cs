@@ -2,16 +2,15 @@
 {
     using System;
 
-    using Api;
-
-    using Data;
     using Data.Interfaces;
 
     using Interfaces;
 
+    using Native;
+
     using Services.Interfaces;
 
-    class BitmapClipboardDataFactory : IBitmapClipboardDataFactory
+    class BitmapClipboardDataFactory: IBitmapClipboardDataFactory
     {
         readonly IDataSourceService dataSourceService;
 
@@ -38,7 +37,7 @@
         public bool CanBuildData(uint format)
         {
             return
-                format == ClipboardApi.CF_BITMAP;
+                format == ClipboardNativeApi.CF_BITMAP;
         }
     }
 }

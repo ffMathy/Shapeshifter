@@ -1,7 +1,5 @@
 ﻿namespace Shapeshifter.WindowsDesktop
 {
-    using System.Collections.Generic;
-
     using Autofac;
 
     using Controls.Window.Interfaces;
@@ -12,8 +10,8 @@
 
     using NSubstitute;
 
-    using Services.Interfaces;
     using Services.Arguments.Interfaces;
+    using Services.Interfaces;
 
     [TestClass]
     public class MainTest: TestBase
@@ -32,7 +30,8 @@
             main.Start();
 
             var fakeWindow = container.Resolve<IClipboardListWindow>();
-            fakeWindow.Received().Show();
+            fakeWindow.Received()
+                      .Show();
         }
 
         [TestMethod]
@@ -78,7 +77,8 @@
             main.Start();
 
             var fakeWindow = container.Resolve<IClipboardListWindow>();
-            fakeWindow.DidNotReceive().Show();
+            fakeWindow.DidNotReceive()
+                      .Show();
         }
     }
 }

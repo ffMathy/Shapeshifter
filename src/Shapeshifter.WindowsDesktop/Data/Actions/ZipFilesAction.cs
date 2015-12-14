@@ -106,7 +106,8 @@
         void CopyFileToTemporaryFolder(string directory, IClipboardFileData fileData)
         {
             var destinationFilePath = Path.Combine(
-                directory, fileData.FileName);
+                directory,
+                fileData.FileName);
             fileManager.DeleteFileIfExists(destinationFilePath);
             File.Copy(fileData.FullPath, destinationFilePath);
         }

@@ -6,12 +6,10 @@
     using Services;
     using Services.Interfaces;
 
-    
     class DesignerClipboardTextDataFacade
         : ClipboardTextData,
           IClipboardTextData
     {
-        
         public DesignerClipboardTextDataFacade(
             IDesignerImageConverterService designerImageConverterService)
             :

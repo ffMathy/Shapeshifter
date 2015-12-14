@@ -4,12 +4,13 @@
 
     using Data.Interfaces;
 
+    using Interfaces;
+
+    using Messages.Interceptors.Interfaces;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
-
-    using Interfaces;
-    using Messages.Interceptors.Interfaces;
 
     [TestClass]
     public class ClipboardInjectionServiceTest: TestBase
@@ -18,8 +19,7 @@
         public void InjectingDataSkipsNextCopyInterception()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IClipboardCopyInterceptor>();
                 });
 

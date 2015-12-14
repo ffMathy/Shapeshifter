@@ -6,7 +6,6 @@
 
     using Interfaces;
 
-    
     class DesignerFileManager
         : IFileManager,
           IDesignerService
@@ -21,13 +20,9 @@
             return null;
         }
 
-        public void DeleteDirectoryIfExists(string path)
-        {
-        }
+        public void DeleteDirectoryIfExists(string path) { }
 
-        public void DeleteFileIfExists(string path)
-        {
-        }
+        public void DeleteFileIfExists(string path) { }
 
         public string FindCommonFolderFromPaths(IReadOnlyCollection<string> paths)
         {
@@ -39,9 +34,6 @@
             return null;
         }
 
-        public void Dispose()
-        {
-            
-        }
+        public void Dispose() { }
     }
 }
