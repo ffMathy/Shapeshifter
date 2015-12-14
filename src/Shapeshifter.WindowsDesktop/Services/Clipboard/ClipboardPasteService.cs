@@ -1,8 +1,11 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
+    using System.Threading;
+
     using Controls.Window.Interfaces;
 
     using Infrastructure.Logging.Interfaces;
+    using Infrastructure.Threading.Interfaces;
 
     using Interfaces;
 
@@ -21,16 +24,20 @@
 
         readonly IKeyboardNativeApi keyboardNativeApi;
 
+        readonly IThreadDelay delay;
+
         public ClipboardPasteService(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
             ILogger logger,
             IMainWindowHandleContainer handleContainer,
-            IKeyboardNativeApi keyboardNativeApi)
+            IKeyboardNativeApi keyboardNativeApi,
+            IThreadDelay delay)
         {
             this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
             this.logger = logger;
             this.handleContainer = handleContainer;
             this.keyboardNativeApi = keyboardNativeApi;
+            this.delay = delay;
         }
 
         public void PasteClipboardContents()
@@ -54,6 +61,8 @@
 
         void SendPasteCombination()
         {
+            delay.Execute(100);
+
             var inputs = new[]
             {
                 GenerateKeystoke(KeyboardNativeApi.VirtualKeyShort.LCONTROL),
