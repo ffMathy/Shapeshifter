@@ -18,8 +18,6 @@
         : IWindowMessageHook,
           IDisposable
     {
-        HwndSource hooker;
-
         IWindow connectedWindow;
 
         readonly IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors;
@@ -32,16 +30,20 @@
 
         readonly IConsumerThreadLoop consumerLoop;
 
+        readonly IMainWindowHandleContainer mainWindowHandleContainer;
+
         public bool IsConnected { get; private set; }
 
         public WindowMessageHook(
             IReadOnlyCollection<IWindowMessageInterceptor> windowMessageInterceptors,
             ILogger logger,
-            IConsumerThreadLoop consumerLoop)
+            IConsumerThreadLoop consumerLoop,
+            IMainWindowHandleContainer mainWindowHandleContainer)
         {
             this.windowMessageInterceptors = windowMessageInterceptors;
             this.logger = logger;
             this.consumerLoop = consumerLoop;
+            this.mainWindowHandleContainer = mainWindowHandleContainer;
 
             pendingMessages = new Queue<WindowMessageReceivedArgument>();
             cancellationTokenSource = new CancellationTokenSource();
@@ -54,7 +56,7 @@
         {
             if (!IsConnected)
             {
-                return;
+                throw new InvalidOperationException("Can't disconnect the hook when it is already disconnected.");
             }
 
             UninstallInterceptors();
@@ -72,7 +74,7 @@
 
         void UninstallWindowMessageHook()
         {
-            hooker.RemoveHook(WindowHookCallback);
+            connectedWindow.RemoveHwndSourceHook(WindowHookCallback);
         }
 
         void UninstallInterceptors()
@@ -120,7 +122,7 @@
 
         void InstallInterceptors()
         {
-            var mainWindowHandle = hooker.Handle;
+            var mainWindowHandle = mainWindowHandleContainer.Handle;
             foreach (var interceptor in windowMessageInterceptors)
             {
                 interceptor.Install(mainWindowHandle);
@@ -130,12 +132,13 @@
 
         void InstallWindowMessageHook()
         {
-            var hooker = connectedWindow.HandleSource;
-            hooker.AddHook(WindowHookCallback);
+            if (IsConnected)
+            {
+                throw new InvalidOperationException("Can't connect the hook when it is already connected.");
+            }
 
+            connectedWindow.AddHwndSourceHook(WindowHookCallback);
             logger.Information("Installed message hook.");
-
-            this.hooker = hooker;
         }
 
         IntPtr WindowHookCallback(
@@ -168,7 +171,7 @@
 
         public void Dispose()
         {
-            hooker?.Dispose();
+            consumerLoop.Stop();
         }
     }
 }

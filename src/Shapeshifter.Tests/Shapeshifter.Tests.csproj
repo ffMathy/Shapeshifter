@@ -115,6 +115,7 @@
     <Compile Include="Services\Files\FileManagerTest.cs" />
     <Compile Include="Services\Files\FileTypeInterpreterTest.cs" />
     <Compile Include="Services\Messages\Interceptors\Hotkeys\KeyInterceptorTest.cs" />
+    <Compile Include="Services\Messages\WindowMessageHookTest.cs" />
     <Compile Include="Services\ProcessManagerTest.cs" />
     <Compile Include="Services\LinkParserTest.cs" />
     <Compile Include="TestBase.cs" />

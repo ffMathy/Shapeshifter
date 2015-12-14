@@ -118,5 +118,15 @@
         {
             Show();
         }
+
+        public void AddHwndSourceHook(HwndSourceHook hook)
+        {
+            HandleSource.AddHook(hook);
+        }
+
+        public void RemoveHwndSourceHook(HwndSourceHook hook)
+        {
+            HandleSource.RemoveHook(hook);
+        }
     }
 }

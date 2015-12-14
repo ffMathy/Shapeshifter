@@ -7,7 +7,9 @@
     {
         event EventHandler SourceInitialized;
 
-        HwndSource HandleSource { get; }
+        void AddHwndSourceHook(HwndSourceHook hook);
+
+        void RemoveHwndSourceHook(HwndSourceHook hook);
 
         void Show();
     }
