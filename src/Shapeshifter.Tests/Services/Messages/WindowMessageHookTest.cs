@@ -28,10 +28,13 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof (InvalidOperationException))]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void ConnectWhenAlreadyConnectedThrowsException()
         {
-            var container = CreateContainer();
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IWindowMessageInterceptor>();
+                });
 
             var fakeWindow = Substitute.For<IWindow>();
 

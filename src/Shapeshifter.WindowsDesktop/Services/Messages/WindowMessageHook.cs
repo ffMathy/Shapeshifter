@@ -132,11 +132,6 @@
 
         void InstallWindowMessageHook()
         {
-            if (IsConnected)
-            {
-                throw new InvalidOperationException("Can't connect the hook when it is already connected.");
-            }
-
             connectedWindow.AddHwndSourceHook(WindowHookCallback);
             logger.Information("Installed message hook.");
         }

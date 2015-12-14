@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -79,14 +80,21 @@
             }
 
             var fake = Substitute.For<TInterface>();
-            return Register(builder, fake);
+            var collection = new ReadOnlyCollection<TInterface>(new List<TInterface>(new [] {fake}));
+
+            Register(builder, fake);
+            Register<IReadOnlyCollection<TInterface>>(builder, collection);
+            Register<IEnumerable<TInterface>>(builder, collection);
+
+            return fake;
         }
 
-        static TInterface Register<TInterface>(ContainerBuilder builder, TInterface fake) where TInterface : class
+        static void Register<TInterface>(ContainerBuilder builder, TInterface fake) where TInterface : class
         {
             fakeCache.Add(typeof (TInterface), fake);
             builder.Register(c => fake)
-                   .As<TInterface>();
+                   .As<TInterface>()
+                   .SingleInstance();
             return fake;
         }
 
