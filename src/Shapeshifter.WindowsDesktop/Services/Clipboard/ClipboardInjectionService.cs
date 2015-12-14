@@ -9,6 +9,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
     using Data.Interfaces;
 
     using Infrastructure.Handles.Factories.Interfaces;
+    using Infrastructure.Handles.Interfaces;
     using Infrastructure.Logging.Interfaces;
 
     using Interfaces;
@@ -28,8 +29,6 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 
         readonly ILogger logger;
 
-        readonly IClipboardNativeApi clipboardNativeApi;
-
         readonly IGeneralNativeApi generalNativeApi;
 
         public ClipboardInjectionService(
@@ -44,7 +43,6 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
             this.clipboardHandleFactory = clipboardHandleFactory;
             this.memoryHandleFactory = memoryHandleFactory;
             this.logger = logger;
-            this.clipboardNativeApi = clipboardNativeApi;
             this.generalNativeApi = generalNativeApi;
         }
 
@@ -52,24 +50,26 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
         {
             clipboardCopyInterceptor.SkipNext();
 
-            using (clipboardHandleFactory.StartNewSession())
+            using (var session = clipboardHandleFactory.StartNewSession())
             {
-                clipboardNativeApi.EmptyClipboard();
-                InjectPackageContents(package);
+                session.EmptyClipboard();
+                InjectPackageContents(session, package);
             }
 
             logger.Information("Clipboard package has been injected to the clipboard.", 1);
         }
 
-        void InjectPackageContents(IClipboardDataPackage package)
+        void InjectPackageContents(
+            IClipboardHandle session, IClipboardDataPackage package)
         {
             foreach (var clipboardData in package.Contents)
             {
-                InjectClipboardData(clipboardData);
+                InjectClipboardData(session, clipboardData);
             }
         }
 
-        void InjectClipboardData(IClipboardData clipboardData)
+        void InjectClipboardData(
+            IClipboardHandle session, IClipboardData clipboardData)
         {
             using (var memoryHandle = memoryHandleFactory.AllocateInMemory(clipboardData.RawData))
             {
@@ -88,7 +88,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 
                 generalNativeApi.GlobalUnlock(target);
 
-                if (clipboardNativeApi.SetClipboardData(clipboardData.RawFormat, globalPointer) !=
+                if (session.SetClipboardData(clipboardData.RawFormat, globalPointer) !=
                     IntPtr.Zero)
                 {
                     return;
