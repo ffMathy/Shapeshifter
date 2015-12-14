@@ -68,7 +68,7 @@
             => threadCancellationTokenSource.Token;
 
         public int DurationInDeciseconds
-            => 2;
+            => 5;
 
         public void Connect(IWindow targetWindow)
         {

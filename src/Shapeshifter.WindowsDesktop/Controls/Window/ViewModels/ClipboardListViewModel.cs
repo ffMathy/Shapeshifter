@@ -25,12 +25,14 @@
 
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
-    class ClipboardListViewModel:
+    class ClipboardListViewModel :
         IClipboardListViewModel
     {
         IClipboardDataControlPackage selectedElement;
 
         IAction selectedAction;
+
+        bool cancellationRequested;
 
         readonly IAction[] allActions;
 
@@ -86,6 +88,7 @@
         public ClipboardListViewModel(
             IAction[] allActions,
             IClipboardUserInterfaceMediator clipboardUserInterfaceMediator,
+            // ReSharper disable once SuggestBaseTypeForParameter
             IKeyInterceptor hotkeyInterceptor,
             IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder,
             IAsyncFilter asyncFilter,
@@ -171,7 +174,7 @@
         {
             if (!isFocusInActionsList)
             {
-                HideInterface();
+                Cancel();
             }
             else
             {
@@ -183,12 +186,18 @@
         {
             if (isFocusInActionsList)
             {
-                HideInterface();
+                Cancel();
             }
             else
             {
                 isFocusInActionsList = !isFocusInActionsList;
             }
+        }
+
+        void Cancel()
+        {
+            cancellationRequested = true;
+            HideInterface();
         }
 
         void HandleUpPressed()
@@ -241,11 +250,17 @@
 
         async void Service_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
         {
+            cancellationRequested = false;
             UserInterfaceShown?.Invoke(this, e);
         }
 
         async void Service_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
         {
+            if (cancellationRequested)
+            {
+                return;
+            }
+
             HideInterface();
 
             if (SelectedAction != null)
