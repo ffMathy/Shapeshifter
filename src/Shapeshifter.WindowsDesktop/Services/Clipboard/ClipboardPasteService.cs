@@ -43,7 +43,13 @@
         public void PasteClipboardContents()
         {
             DisablePasteHotkeyInterceptor();
+
+            delay.Execute(100);
+
             SendPasteCombination();
+
+            delay.Execute(100);
+
             EnablePasteHotkeyInterceptor();
 
             logger.Information("Paste simulated.", 1);
@@ -61,8 +67,6 @@
 
         void SendPasteCombination()
         {
-            delay.Execute(100);
-
             var inputs = new[]
             {
                 GenerateKeystoke(KeyboardNativeApi.VirtualKeyShort.LCONTROL),
