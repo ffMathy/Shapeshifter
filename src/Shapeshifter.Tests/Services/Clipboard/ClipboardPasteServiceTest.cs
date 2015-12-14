@@ -36,5 +36,22 @@
             fakeInterceptor.Received().Uninstall();
             fakeInterceptor.Received().Install(Arg.Any<IntPtr>());
         }
+
+        [TestMethod]
+        public void PasteWaitsGracefullyWithHooksBeforeSimulatingKeystrokes()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IThreadDelay>();
+                    c.RegisterFake<IKeyboardNativeApi>();
+                    c.RegisterFake<IPasteHotkeyInterceptor>();
+                });
+
+            var pasteService = container.Resolve<IClipboardPasteService>();
+            pasteService.PasteClipboardContents();
+
+            var fakeDelay = container.Resolve<IThreadDelay>();
+            fakeDelay.Received(2).Execute(100);
+        }
     }
 }
