@@ -107,6 +107,7 @@
     <Compile Include="Data\Actions\Interfaces\IPasteAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IOpenLinkAction.cs" />
     <Compile Include="Data\Actions\Interfaces\ICopyImageLinkAction.cs" />
+    <Compile Include="Data\Actions\Interfaces\IPinClipboardDataAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IZipFilesAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IUploadImageAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IPasteAsPlainTextAction.cs" />

@@ -87,6 +87,7 @@
     <Compile Include="Data\Actions\ActionTestBase.cs" />
     <Compile Include="Data\Actions\OpenLinkActionTest.cs" />
     <Compile Include="Data\Actions\CopyImageLinkActionTest.cs" />
+    <Compile Include="Data\Actions\PinClipboardDataActionTest.cs" />
     <Compile Include="Data\Actions\ZipFilesActionTest.cs" />
     <Compile Include="Data\Actions\UploadImageActionTest.cs" />
     <Compile Include="Data\Actions\PasteAsPlainTextActionTest.cs" />
