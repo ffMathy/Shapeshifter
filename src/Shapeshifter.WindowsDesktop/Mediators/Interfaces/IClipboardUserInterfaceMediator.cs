@@ -23,6 +23,10 @@
 
         event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
 
+        event EventHandler<PastePerformedEventArgument> PastePerformed;
+
         IEnumerable<IClipboardDataControlPackage> ClipboardElements { get; }
+
+        void Cancel();
     }
 }

@@ -18,23 +18,20 @@
     class PasteCombinationDurationMediator: IPasteCombinationDurationMediator
     {
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
-
         readonly IConsumerThreadLoop threadLoop;
-
         readonly IThreadDelay threadDelay;
-
         readonly ILogger logger;
-
         readonly IMainThreadInvoker mainThreadInvoker;
 
         readonly CancellationTokenSource threadCancellationTokenSource;
 
+        bool combinationCancellationRequested;
         bool isCombinationDown;
 
         public event EventHandler<PasteCombinationDurationPassedEventArgument>
             PasteCombinationDurationPassed;
-
-        public event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleased;
+        public event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleasedPartially;
+        public event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleasedEntirely;
 
         public PasteCombinationDurationMediator(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
@@ -61,6 +58,11 @@
         public bool IsCombinationHeldDown
             => Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.V);
 
+        public void CancelCombinationRegistration()
+        {
+            combinationCancellationRequested = true;
+        }
+
         public bool IsOneCombinationKeyDown
             => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.V);
 
@@ -83,33 +85,68 @@
 
         async Task MonitorClipboardCombinationStateAsync()
         {
-            await WaitForCombinationRelease();
+            combinationCancellationRequested = false;
+
+            await WaitForCombinationReleasePartially();
             if (IsCancellationRequested)
             {
                 return;
             }
 
-            RegisterCombinationReleased();
+            RegisterCombinationReleasedPartially();
+            if (combinationCancellationRequested)
+            {
+                return;
+            }
+
+            await WaitForCombinationReleaseEntirely();
+            if (IsCancellationRequested)
+            {
+                return;
+            }
+
+            RegisterCombinationReleasedEntirely();
         }
 
-        void RegisterCombinationReleased()
+        void RegisterCombinationReleasedPartially()
         {
             isCombinationDown = false;
-            if (PasteCombinationReleased != null)
+            if (PasteCombinationReleasedPartially != null)
             {
                 mainThreadInvoker.Invoke(
                     () =>
-                    PasteCombinationReleased(
+                    PasteCombinationReleasedPartially(
                         this,
                         new PasteCombinationReleasedEventArgument
                             ()));
             }
         }
 
-        async Task WaitForCombinationRelease()
+        void RegisterCombinationReleasedEntirely()
+        {
+            if (PasteCombinationReleasedEntirely != null)
+            {
+                mainThreadInvoker.Invoke(
+                    () =>
+                    PasteCombinationReleasedEntirely(
+                        this,
+                        new PasteCombinationReleasedEventArgument
+                            ()));
+            }
+        }
+
+        async Task WaitForCombinationReleaseEntirely()
+        {
+            while (!IsCancellationRequested && IsOneCombinationKeyDown)
+            {
+                await threadDelay.ExecuteAsync(100);
+            }
+        }
+
+        async Task WaitForCombinationReleasePartially()
         {
             var decisecondsPassed = 0;
-            while (!IsCancellationRequested && IsOneCombinationKeyDown)
+            while (!IsCancellationRequested && IsCombinationHeldDown && !combinationCancellationRequested)
             {
                 await threadDelay.ExecuteAsync(100);
                 decisecondsPassed++;

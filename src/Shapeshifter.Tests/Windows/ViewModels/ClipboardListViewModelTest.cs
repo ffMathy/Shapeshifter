@@ -459,7 +459,7 @@
         }
 
         [TestMethod]
-        public void WhenUserInterfaceIsHiddenSelectedActionIsInvoked()
+        public void WhenPasteIsRequestedSelectedActionIsInvoked()
         {
             var container = CreateContainer(
                 c => {
@@ -479,9 +479,9 @@
             systemUnderTest.SelectedElement = fakeElement;
 
             var fakeMediator = container.Resolve<IClipboardUserInterfaceMediator>();
-            fakeMediator.UserInterfaceHidden +=
+            fakeMediator.PastePerformed +=
                 Raise.Event<EventHandler
-                    <UserInterfaceHiddenEventArgument>>(new object());
+                    <PastePerformedEventArgument>>(new object());
 
             fakeAction.Received()
                       .PerformAsync(Arg.Any<IClipboardDataPackage>());
