@@ -1,5 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
+    using System.Threading.Tasks;
     using System.Windows.Input;
 
     using Controls.Window.Interfaces;
@@ -13,9 +14,6 @@
     using Keyboard.Interfaces;
 
     using Messages.Interceptors.Hotkeys.Interfaces;
-
-    using Native;
-    using Native.Interfaces;
 
     class ClipboardPasteService: IClipboardPasteService
     {
@@ -41,15 +39,15 @@
             this.delay = delay;
         }
 
-        public void PasteClipboardContents()
+        public async Task PasteClipboardContentsAsync()
         {
             DisablePasteHotkeyInterceptor();
 
-            delay.Execute(KeyboardGracePeriodMilliseconds);
+            await delay.ExecuteAsync(KeyboardGracePeriodMilliseconds);
 
             SendPasteCombination();
 
-            delay.Execute(KeyboardGracePeriodMilliseconds);
+            await delay.ExecuteAsync(KeyboardGracePeriodMilliseconds);
 
             EnablePasteHotkeyInterceptor();
 

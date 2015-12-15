@@ -16,11 +16,13 @@
 
     using NSubstitute;
 
+    using System.Threading.Tasks;
+
     [TestClass]
     public class ClipboardPasteServiceTest: TestBase
     {
         [TestMethod]
-        public void PasteDisablesAndEnablesPasteInterceptor()
+        public async Task PasteDisablesAndEnablesPasteInterceptor()
         {
             var container = CreateContainer(
                 c => {
@@ -30,7 +32,7 @@
                 });
 
             var pasteService = container.Resolve<IClipboardPasteService>();
-            pasteService.PasteClipboardContents();
+            await pasteService.PasteClipboardContentsAsync();
 
             var fakeInterceptor = container.Resolve<IPasteHotkeyInterceptor>();
             fakeInterceptor.Received().Uninstall();
@@ -38,7 +40,7 @@
         }
 
         [TestMethod]
-        public void PasteWaitsGracefullyWithHooksBeforeSimulatingKeystrokes()
+        public async Task PasteWaitsGracefullyWithHooksBeforeSimulatingKeystrokes()
         {
             var container = CreateContainer(
                 c => {
@@ -48,10 +50,10 @@
                 });
 
             var pasteService = container.Resolve<IClipboardPasteService>();
-            pasteService.PasteClipboardContents();
+            await pasteService.PasteClipboardContentsAsync();
 
             var fakeDelay = container.Resolve<IThreadDelay>();
-            fakeDelay.Received(2).Execute(100);
+            fakeDelay.Received(2).ExecuteAsync(100).IgnoreAwait();
         }
     }
 }
