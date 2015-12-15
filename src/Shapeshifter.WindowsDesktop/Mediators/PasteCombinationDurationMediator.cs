@@ -13,59 +13,61 @@
 
     using Interfaces;
 
+    using Services.Keyboard.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
-    class PasteCombinationDurationMediator: IPasteCombinationDurationMediator
+    class PasteCombinationDurationMediator : IPasteCombinationDurationMediator
     {
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
-
-        readonly IConsumerThreadLoop threadLoop;
-
+        readonly IConsumerThreadLoop consumerLoop;
         readonly IThreadDelay threadDelay;
-
         readonly ILogger logger;
-
+        readonly IKeyboardManager keyboardManager;
         readonly IMainThreadInvoker mainThreadInvoker;
 
         readonly CancellationTokenSource threadCancellationTokenSource;
 
-        bool isCombinationDown;
+        bool combinationCancellationRequested;
 
         public event EventHandler<PasteCombinationDurationPassedEventArgument>
             PasteCombinationDurationPassed;
-
-        public event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleased;
+        public event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleasedPartially;
+        public event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleasedEntirely;
 
         public PasteCombinationDurationMediator(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
-            IConsumerThreadLoop threadLoop,
+            IConsumerThreadLoop consumerLoop,
             IThreadDelay threadDelay,
             IMainThreadInvoker mainThreadInvoker,
-            ILogger logger)
+            ILogger logger,
+            IKeyboardManager keyboardManager)
         {
             this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
-            this.threadLoop = threadLoop;
+            this.consumerLoop = consumerLoop;
             this.threadDelay = threadDelay;
             this.mainThreadInvoker = mainThreadInvoker;
             this.logger = logger;
+            this.keyboardManager = keyboardManager;
 
             threadCancellationTokenSource = new CancellationTokenSource();
         }
 
         public bool IsConnected
-            => threadLoop.IsRunning;
+            => consumerLoop.IsRunning;
 
         bool IsCancellationRequested
             => threadCancellationTokenSource.Token.IsCancellationRequested;
 
-        public bool IsCombinationHeldDown
-            => Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.V);
+        public bool IsCombinationFullyHeldDown
+            => keyboardManager.IsKeyDown(Key.LeftCtrl) && keyboardManager.IsKeyDown(Key.V);
 
-        public bool IsOneCombinationKeyDown
-            => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.V);
+        public void CancelCombinationRegistration()
+        {
+            combinationCancellationRequested = true;
+        }
 
-        CancellationToken Token
-            => threadCancellationTokenSource.Token;
+        public bool IsCombinationPartiallyHeldDown
+            => keyboardManager.IsKeyDown(Key.LeftCtrl) || keyboardManager.IsKeyDown(Key.V);
 
         public int DurationInDeciseconds
             => 5;
@@ -83,33 +85,67 @@
 
         async Task MonitorClipboardCombinationStateAsync()
         {
-            await WaitForCombinationRelease();
+            combinationCancellationRequested = false;
+
+            await WaitForCombinationReleasePartially();
             if (IsCancellationRequested)
             {
                 return;
             }
 
-            RegisterCombinationReleased();
+            RegisterCombinationReleasedPartially();
+            if (combinationCancellationRequested)
+            {
+                return;
+            }
+
+            await WaitForCombinationReleaseEntirely();
+            if (IsCancellationRequested)
+            {
+                return;
+            }
+
+            RegisterCombinationReleasedEntirely();
         }
 
-        void RegisterCombinationReleased()
+        void RegisterCombinationReleasedPartially()
         {
-            isCombinationDown = false;
-            if (PasteCombinationReleased != null)
+            if (PasteCombinationReleasedPartially != null)
             {
                 mainThreadInvoker.Invoke(
                     () =>
-                    PasteCombinationReleased(
+                    PasteCombinationReleasedPartially(
                         this,
                         new PasteCombinationReleasedEventArgument
                             ()));
             }
         }
 
-        async Task WaitForCombinationRelease()
+        void RegisterCombinationReleasedEntirely()
+        {
+            if (PasteCombinationReleasedEntirely != null)
+            {
+                mainThreadInvoker.Invoke(
+                    () =>
+                    PasteCombinationReleasedEntirely(
+                        this,
+                        new PasteCombinationReleasedEventArgument
+                            ()));
+            }
+        }
+
+        async Task WaitForCombinationReleaseEntirely()
+        {
+            while (!IsCancellationRequested && IsCombinationPartiallyHeldDown)
+            {
+                await threadDelay.ExecuteAsync(100);
+            }
+        }
+
+        async Task WaitForCombinationReleasePartially()
         {
             var decisecondsPassed = 0;
-            while (!IsCancellationRequested && IsOneCombinationKeyDown)
+            while (!IsCancellationRequested && IsCombinationFullyHeldDown && !combinationCancellationRequested)
             {
                 await threadDelay.ExecuteAsync(100);
                 decisecondsPassed++;
@@ -148,21 +184,13 @@
 
         void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, HotkeyFiredArgument e)
         {
-            if (!isCombinationDown)
-            {
-                logger.Information(
-                    "Paste combination duration mediator reacted to paste hotkey.",
-                    1);
+            logger.Information(
+                "Paste combination duration mediator reacted to paste hotkey.",
+                1);
 
-                isCombinationDown = true;
-                threadLoop.Notify(MonitorClipboardCombinationStateAsync, Token);
-            }
-            else
-            {
-                logger.Information(
-                    "Paste combination duration mediator ignored paste hotkey because the paste combination was already held down.",
-                    1);
-            }
+            consumerLoop.Notify(
+                MonitorClipboardCombinationStateAsync,
+                threadCancellationTokenSource.Token);
         }
 
         public void Disconnect()

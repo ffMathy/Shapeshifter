@@ -18,30 +18,31 @@
         IClipboardUserInterfaceMediator
     {
         readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
-
         readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
-
         readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
 
         readonly IList<IClipboardDataControlPackage> clipboardPackages;
 
         public event EventHandler<ControlEventArgument> ControlAdded;
-
         public event EventHandler<ControlEventArgument> ControlRemoved;
-
         public event EventHandler<ControlEventArgument> ControlPinned;
-
         public event EventHandler<ControlEventArgument> ControlHighlighted;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
-
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
+
+        public event EventHandler<PastePerformedEventArgument> PastePerformed;
 
         public bool IsConnected
             => pasteCombinationDurationMediator.IsConnected;
 
         public IEnumerable<IClipboardDataControlPackage> ClipboardElements
             => clipboardPackages;
+
+        public void Cancel()
+        {
+            pasteCombinationDurationMediator.CancelCombinationRegistration();
+        }
 
         public ClipboardUserInterfaceMediator(
             IClipboardCopyInterceptor clipboardCopyInterceptor,
@@ -93,8 +94,19 @@
 
             pasteCombinationDurationMediator.PasteCombinationDurationPassed -=
                 PasteCombinationDurationMediator_PasteCombinationDurationPassed;
-            pasteCombinationDurationMediator.PasteCombinationReleased -=
-                PasteCombinationDurationMediator_PasteCombinationReleased;
+            pasteCombinationDurationMediator.PasteCombinationReleasedPartially -=
+                PasteCombinationDurationMediatorPasteCombinationReleasedPartially;
+            pasteCombinationDurationMediator.PasteCombinationReleasedEntirely -= PasteCombinationDurationMediator_PasteCombinationReleasedEntirely;
+        }
+
+        void PasteCombinationDurationMediator_PasteCombinationReleasedEntirely(object sender, PasteCombinationReleasedEventArgument e)
+        {
+            RaisePastePerformedEvent();
+        }
+
+        void RaisePastePerformedEvent()
+        {
+            PastePerformed?.Invoke(this, new PastePerformedEventArgument());
         }
 
         void UninstallClipboardHook()
@@ -118,8 +130,9 @@
         {
             pasteCombinationDurationMediator.PasteCombinationDurationPassed +=
                 PasteCombinationDurationMediator_PasteCombinationDurationPassed;
-            pasteCombinationDurationMediator.PasteCombinationReleased +=
-                PasteCombinationDurationMediator_PasteCombinationReleased;
+            pasteCombinationDurationMediator.PasteCombinationReleasedPartially +=
+                PasteCombinationDurationMediatorPasteCombinationReleasedPartially;
+            pasteCombinationDurationMediator.PasteCombinationReleasedEntirely += PasteCombinationDurationMediator_PasteCombinationReleasedEntirely;
 
             pasteCombinationDurationMediator.Connect(targetWindow);
         }
@@ -141,7 +154,7 @@
             UserInterfaceShown?.Invoke(this, new UserInterfaceShownEventArgument());
         }
 
-        void PasteCombinationDurationMediator_PasteCombinationReleased(
+        void PasteCombinationDurationMediatorPasteCombinationReleasedPartially(
             object sender,
             PasteCombinationReleasedEventArgument e)
         {
