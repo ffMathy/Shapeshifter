@@ -7,6 +7,7 @@
 
     using Controls.Clipboard.Factories.Interfaces;
     using Controls.Clipboard.Interfaces;
+    using Controls.Window.Interfaces;
 
     using Data.Interfaces;
 
@@ -41,13 +42,30 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof (InvalidOperationException))]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void DisconnectWhileAlreadyDisconnectedThrowsException()
         {
             var container = CreateContainer();
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Disconnect();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ConnectWhileAlreadyConnectedThrowsException()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IPasteCombinationDurationMediator>()
+                     .IsConnected
+                     .Returns(true);
+                });
+
+            var fakeWindow = Substitute.For<IWindow>();
+
+            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            mediator.Connect(fakeWindow);
         }
 
         [TestMethod]
