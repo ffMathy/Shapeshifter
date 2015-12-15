@@ -18,9 +18,7 @@
         IClipboardUserInterfaceMediator
     {
         readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
-
         readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
-
         readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
 
         readonly IList<IClipboardDataControlPackage> clipboardPackages;

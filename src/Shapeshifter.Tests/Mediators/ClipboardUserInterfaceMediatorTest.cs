@@ -41,6 +41,16 @@
         }
 
         [TestMethod]
+        [ExpectedException(typeof (InvalidOperationException))]
+        public void DisconnectWhileAlreadyDisconnectedThrowsException()
+        {
+            var container = CreateContainer();
+
+            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            mediator.Disconnect();
+        }
+
+        [TestMethod]
         public void IsConnectedIsFalseIfPasteCombinationDurationMonitorIsNotConnected()
         {
             var container = CreateContainer(
