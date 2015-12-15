@@ -50,7 +50,7 @@
             IClipboardDataPackage package)
         {
             clipboardInjectionService.InjectData(package);
-            clipboardPasteService.PasteClipboardContents();
+            await clipboardPasteService.PasteClipboardContentsAsync();
 
             logger.Information("Paste action performed.", 1);
         }
