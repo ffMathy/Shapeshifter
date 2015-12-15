@@ -552,6 +552,43 @@
         }
 
         [TestMethod]
+        public void CanAlternateBetweenListsWithoutCancellingMediator()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IKeyInterceptor>();
+                    c.RegisterFake<IClipboardUserInterfaceMediator>();
+                    c.RegisterFake<IAsyncListDictionaryBinder
+                        <IClipboardDataControlPackage, IAction>>();
+                });
+
+            container.Resolve<IClipboardListViewModel>();
+
+            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
+            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardNativeApi
+                        .VK_KEY_RIGHT,
+                    false));
+            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                new object
+                    (),
+                new HotkeyFiredArgument
+                    (
+                    KeyboardNativeApi
+                        .VK_KEY_LEFT,
+                    false));
+
+            var fakeMediator = container
+                .Resolve<IClipboardUserInterfaceMediator>();
+            fakeMediator.DidNotReceive()
+                        .Cancel();
+        }
+
+        [TestMethod]
         public void SelectedActionChangesToTheFirstWhenThirdIsSelectedAndDownIsPressed()
         {
             var container = CreateContainer(
