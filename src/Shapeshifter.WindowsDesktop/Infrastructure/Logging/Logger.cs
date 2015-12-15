@@ -18,12 +18,17 @@
 
         int lastThreadId;
 
+        readonly ILogStream stream;
+
         readonly IDictionary<int, int> threadIndentationCache;
 
         static int ManagedThreadId => Thread.CurrentThread.ManagedThreadId;
 
-        public Logger()
+        public Logger(
+            ILogStream stream)
         {
+            this.stream = stream;
+
             threadIndentationCache = new Dictionary<int, int>();
         }
 
@@ -32,7 +37,7 @@
             NotifyOfThreadChanges();
 
             var indentationString = GenerateIndentationString();
-            Debug.WriteLine($" {indentationString}{text}");
+            stream.WriteLine($" {indentationString}{text}");
         }
 
         string GenerateIndentationString()

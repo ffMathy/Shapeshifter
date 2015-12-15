@@ -21,7 +21,7 @@
     public class ClipboardPersistanceServiceTest: TestBase
     {
         [TestMethod]
-        public async Task FirstTest()
+        public async Task CanPersistClipboardData()
         {
             var container = CreateContainer(
                 c => {
