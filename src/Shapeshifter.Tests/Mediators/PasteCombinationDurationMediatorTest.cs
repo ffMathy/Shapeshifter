@@ -291,31 +291,6 @@
         }
 
         [TestMethod]
-        public void WhenCtrlVIsDownAndMonitoringLoopIsActiveItIsIgnored()
-        {
-            var container = CreateContainer(
-                c =>
-                {
-                    c.RegisterFake<IPasteHotkeyInterceptor>();
-                    c.RegisterFake<IConsumerThreadLoop>();
-                });
-
-            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            mediator.Connect(Substitute.For<IWindow>());
-
-            var fakePasteHotkeyInterceptor = container.Resolve<IPasteHotkeyInterceptor>();
-            RaiseHotkeyFired(fakePasteHotkeyInterceptor);
-            RaiseHotkeyFired(fakePasteHotkeyInterceptor);
-
-            var fakeConsumerThreadLoop = container.Resolve<IConsumerThreadLoop>();
-            fakeConsumerThreadLoop
-                .Received(1)
-                .Notify(
-                    Arg.Any<Func<Task>>(),
-                    Arg.Any<CancellationToken>());
-        }
-
-        [TestMethod]
         [SuppressMessage("ReSharper", "ImplicitlyCapturedClosure")]
         public void WhenCombinationIsDownForLongEnoughThenEventFires()
         {

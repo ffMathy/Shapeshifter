@@ -6,6 +6,8 @@
 
     using Infrastructure.Dependencies;
     using Infrastructure.Environment.Interfaces;
+    using Infrastructure.Handles.Interfaces;
+    using Infrastructure.Logging.Interfaces;
     using Infrastructure.Threading.Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -36,6 +38,9 @@
 
             builder.RegisterFake<IUpdateService>();
             builder.RegisterFake<IThreadDelay>();
+            builder.RegisterFake<ILogger>()
+                .Indent()
+                .Returns(Substitute.For<IIndentationHandle>());
 
             setupCallback?.Invoke(builder);
 

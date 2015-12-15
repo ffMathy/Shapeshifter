@@ -4,7 +4,7 @@
 
     using Handles.Interfaces;
 
-    interface ILogger: ISingleInstance
+    public interface ILogger: ISingleInstance
     {
         void Information(string text, int importanceFactor = 0);
 
