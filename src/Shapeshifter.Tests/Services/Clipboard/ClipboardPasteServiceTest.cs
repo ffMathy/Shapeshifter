@@ -51,7 +51,7 @@
             await pasteService.PasteClipboardContentsAsync();
 
             var fakeDelay = container.Resolve<IThreadDelay>();
-            fakeDelay.Received(2).Execute(100);
+            fakeDelay.Received(2).ExecuteAsync(100).IgnoreAwait();
         }
     }
 }
