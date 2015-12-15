@@ -118,6 +118,8 @@
     <Compile Include="Data\Actions\UploadImageAction.cs" />
     <Compile Include="Data\Actions\ZipFilesAction.cs" />
     <Compile Include="Infrastructure\Events\PastePerformedEventArgument.cs" />
+    <Compile Include="Infrastructure\Handles\IndentationHandle.cs" />
+    <Compile Include="Infrastructure\Handles\Interfaces\IIndentationHandle.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Controls\Clipboard\ClipboardImageDataControl.xaml.cs">
       <DependentUpon>ClipboardImageDataControl.xaml</DependentUpon>

@@ -62,7 +62,7 @@
             {
                 if (ShouldAbort(token))
                 {
-                    logger.Information("Stopping consumer loop before consuming last item.");
+                    logger.Information("Stopping consumer loop.");
                     internalLoop.Stop();
                     return;
                 }

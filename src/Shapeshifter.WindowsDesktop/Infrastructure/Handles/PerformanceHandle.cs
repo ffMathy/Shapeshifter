@@ -9,7 +9,7 @@
     class PerformanceHandle: IPerformanceHandle
     {
         readonly ILogger logger;
-
+        
         readonly string methodName;
 
         readonly DateTime startTime;

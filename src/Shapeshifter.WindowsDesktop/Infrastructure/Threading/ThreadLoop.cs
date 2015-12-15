@@ -31,7 +31,10 @@
                 IsRunning = true;
             }
 
-            await RunAsync(action, token);
+            using (logger.Indent())
+            {
+                await RunAsync(action, token);
+            }
         }
 
         async Task RunAsync(Func<Task> action, CancellationToken token = default(CancellationToken))

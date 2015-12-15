@@ -1,6 +1,10 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging.Interfaces
 {
-    interface ILogger
+    using Dependencies.Interfaces;
+
+    using Handles.Interfaces;
+
+    interface ILogger: ISingleInstance
     {
         void Information(string text, int importanceFactor = 0);
 
@@ -9,5 +13,7 @@
         void Error(string text);
 
         void Performance(string text);
+
+        IIndentationHandle Indent();
     }
 }

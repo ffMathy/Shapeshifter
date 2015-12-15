@@ -6,6 +6,8 @@
 
     using Controls.Window.Interfaces;
 
+    using Infrastructure.Handles.Factories.Interfaces;
+    using Infrastructure.Handles.Interfaces;
     using Infrastructure.Logging.Interfaces;
     using Infrastructure.Threading.Interfaces;
 
@@ -22,17 +24,20 @@
         readonly ILogger logger;
         readonly IMainWindowHandleContainer handleContainer;
         readonly IKeyboardManager keyboardManager;
+        readonly IPerformanceHandleFactory performanceHandleFactory;
 
         public ClipboardPasteService(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
             ILogger logger,
             IMainWindowHandleContainer handleContainer,
-            IKeyboardManager keyboardManager)
+            IKeyboardManager keyboardManager,
+            IPerformanceHandleFactory performanceHandleFactory)
         {
             this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
             this.logger = logger;
             this.handleContainer = handleContainer;
             this.keyboardManager = keyboardManager;
+            this.performanceHandleFactory = performanceHandleFactory;
         }
 
         public async Task PasteClipboardContentsAsync()
@@ -50,16 +55,21 @@
             logger.Information(
                 $"Simulating paste with CTRL {(isCtrlDown ? "down" : "released")} and V {(isVDown ? "down" : "released")}.");
 
-            DisablePasteHotkeyInterceptor();
-            UninstallPasteHotkeyInterceptor();
+            using (performanceHandleFactory.StartMeasuringPerformance())
+            {
 
-            RunFirstKeyboardPhase(isCtrlDown, isVDown);
+                DisablePasteHotkeyInterceptor();
+                UninstallPasteHotkeyInterceptor();
 
-            InstallPasteHotkeyInterceptor();
+                RunFirstKeyboardPhase(isCtrlDown, isVDown);
 
-            RunSecondKeyboardPhase(isCtrlDown, isVDown);
+                InstallPasteHotkeyInterceptor();
 
-            EnablePasteHotkeyInterceptor();
+                RunSecondKeyboardPhase(isCtrlDown, isVDown);
+
+                EnablePasteHotkeyInterceptor();
+
+            }
         }
 
         void EnablePasteHotkeyInterceptor()

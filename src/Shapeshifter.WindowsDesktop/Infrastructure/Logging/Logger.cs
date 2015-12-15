@@ -1,16 +1,60 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 {
+    using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Threading;
+
+    using Handles;
+    using Handles.Interfaces;
 
     using Interfaces;
 
     class Logger: ILogger
     {
         const int MinimumImportanceFactor = 0;
+        const int IndentationSize = 2;
 
-        static void Log(string text)
+        int lastThreadId;
+
+        readonly IDictionary<int, int> threadIndentationCache;
+
+        static int ManagedThreadId => Thread.CurrentThread.ManagedThreadId;
+
+        public Logger()
         {
-            Debug.WriteLine($"{text}");
+            threadIndentationCache = new Dictionary<int, int>();
+        }
+
+        void Log(string text)
+        {
+            NotifyOfThreadChanges();
+
+            var indentationString = GenerateIndentationString();
+            Debug.WriteLine($" {indentationString}{text}");
+        }
+
+        string GenerateIndentationString()
+        {
+            var indentationString = string.Empty;
+            if (threadIndentationCache.ContainsKey(ManagedThreadId))
+            {
+                indentationString = new string(' ', threadIndentationCache[ManagedThreadId] * IndentationSize);
+            }
+            return indentationString;
+        }
+
+        void NotifyOfThreadChanges()
+        {
+            if (ManagedThreadId == lastThreadId)
+            {
+                return;
+            }
+
+            lastThreadId = ManagedThreadId;
+
+            Debug.WriteLine(string.Empty);
+            Debug.WriteLine($"[Thread #{lastThreadId}]");
         }
 
         public void Error(string text)
@@ -21,6 +65,37 @@
         public void Performance(string text)
         {
             Log("Performance information: " + text);
+        }
+
+        public IIndentationHandle Indent()
+        {
+            return new IndentationHandle(this);
+        }
+
+        internal void IncreaseIndentation()
+        {
+            if (threadIndentationCache.ContainsKey(ManagedThreadId))
+            {
+                threadIndentationCache[ManagedThreadId]++;
+            }
+            else
+            {
+                threadIndentationCache.Add(ManagedThreadId, 1);
+            }
+        }
+
+        internal void DecreaseIndentation()
+        {
+            if (!threadIndentationCache.ContainsKey(ManagedThreadId))
+            {
+                throw new InvalidOperationException("The indentation has not been increased on this thread.");
+            }
+
+            var newIndentation = threadIndentationCache[ManagedThreadId]--;
+            if (newIndentation == 0)
+            {
+                threadIndentationCache.Remove(ManagedThreadId);
+            }
         }
 
         public void Information(
