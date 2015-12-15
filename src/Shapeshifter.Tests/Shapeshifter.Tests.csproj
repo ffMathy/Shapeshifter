@@ -113,6 +113,7 @@
     <Compile Include="MainTest.cs" />
     <Compile Include="Mediators\PasteCombinationDurationMediatorTest.cs" />
     <Compile Include="Mediators\ClipboardUserInterfaceMediatorTest.cs" />
+    <Compile Include="Services\Clipboard\ClipboardPersistanceServiceTest.cs" />
     <Compile Include="Services\Files\FileManagerTest.cs" />
     <Compile Include="Services\Files\FileTypeInterpreterTest.cs" />
     <Compile Include="Services\Messages\Interceptors\ClipboardCopyInterceptorTest.cs" />

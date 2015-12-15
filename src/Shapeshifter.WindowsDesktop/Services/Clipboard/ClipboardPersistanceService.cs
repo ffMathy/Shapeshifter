@@ -33,11 +33,14 @@
         public async Task PersistClipboardPackageAsync(IClipboardDataPackage package)
         {
             var packageFolder = PrepareUniquePackageFolder();
-            for (var i = 1; i <= package.Contents.Count; i++)
+            for (var i = 0; i < package.Contents.Count; i++)
             {
                 var content = package.Contents[i];
-                var filePath = Path.Combine(packageFolder, i.ToString());
-                fileManager.WriteBytesToTemporaryFile(filePath, content.RawData);
+                var filePath = Path.Combine(
+                    packageFolder, 
+                    i+1 + "." + content.RawFormat);
+                fileManager.WriteBytesToTemporaryFile(
+                    filePath, content.RawData);
             }
         }
 
