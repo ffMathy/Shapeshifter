@@ -24,6 +24,23 @@
     public class ClipboardUserInterfaceMediatorTest: TestBase
     {
         [TestMethod]
+        public void CancelCancelsCombinationRegistrationOnDurationMediator()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IPasteCombinationDurationMediator>()
+                     .IsConnected
+                     .Returns(false);
+                });
+
+            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            mediator.Cancel();
+
+            var fakeDurationMediator = container.Resolve<IPasteCombinationDurationMediator>();
+            fakeDurationMediator.Received(1).CancelCombinationRegistration();
+        }
+
+        [TestMethod]
         public void IsConnectedIsFalseIfPasteCombinationDurationMonitorIsNotConnected()
         {
             var container = CreateContainer(

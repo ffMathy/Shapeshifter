@@ -17,6 +17,7 @@
     [TestClass]
     public class PasteCombinationDurationMediatorTest: TestBase
     {
+
         [TestMethod]
         public void IsConnectedIsFalseIfConsumerThreadIsNotRunning()
         {
