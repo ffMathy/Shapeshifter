@@ -1,4 +1,4 @@
-[![AppVeyor](https://img.shields.io/appveyor/ci/ffMathy/Shapeshifter.svg)](https://ci.appveyor.com/project/ffMathy/shapeshifter)
+[![Build status](https://ci.appveyor.com/api/projects/status/hnhqpn0rwcsvccng/branch/master?svg=true)](https://ci.appveyor.com/project/ffMathy/shapeshifter/branch/master)
 [![GitHub release](https://img.shields.io/github/release/ffMathy/Shapeshifter.svg)](https://github.com/ffMathy/Shapeshifter/releases/latest)
 [![Github All Releases](https://img.shields.io/github/downloads/ffMathy/Shapeshifter/total.svg)](https://github.com/ffMathy/Shapeshifter/releases)
 [![codecov.io](https://codecov.io/github/ffMathy/Shapeshifter/coverage.svg?branch=master)](https://codecov.io/github/ffMathy/Shapeshifter?branch=master)
