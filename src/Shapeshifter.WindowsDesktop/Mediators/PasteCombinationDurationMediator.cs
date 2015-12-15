@@ -19,7 +19,7 @@
     class PasteCombinationDurationMediator : IPasteCombinationDurationMediator
     {
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
-        readonly IConsumerThreadLoop threadLoop;
+        readonly IConsumerThreadLoop consumerLoop;
         readonly IThreadDelay threadDelay;
         readonly ILogger logger;
         readonly IKeyboardManager keyboardManager;
@@ -36,14 +36,14 @@
 
         public PasteCombinationDurationMediator(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
-            IConsumerThreadLoop threadLoop,
+            IConsumerThreadLoop consumerLoop,
             IThreadDelay threadDelay,
             IMainThreadInvoker mainThreadInvoker,
             ILogger logger,
             IKeyboardManager keyboardManager)
         {
             this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
-            this.threadLoop = threadLoop;
+            this.consumerLoop = consumerLoop;
             this.threadDelay = threadDelay;
             this.mainThreadInvoker = mainThreadInvoker;
             this.logger = logger;
@@ -53,7 +53,7 @@
         }
 
         public bool IsConnected
-            => threadLoop.IsRunning;
+            => consumerLoop.IsRunning;
 
         bool IsCancellationRequested
             => threadCancellationTokenSource.Token.IsCancellationRequested;
@@ -63,6 +63,7 @@
 
         public void CancelCombinationRegistration()
         {
+            logger.Information("Cancelling duration mediator combination registration.");
             combinationCancellationRequested = true;
         }
 
@@ -89,7 +90,7 @@
 
             combinationCancellationRequested = false;
 
-            await WaitForCombinationReleasePartially();
+            await WaitForCombinationReleaseOrDurationPass();
             if (IsCancellationRequested)
             {
                 return;
@@ -136,7 +137,7 @@
                         ()));
         }
 
-        async Task WaitForCombinationReleasePartially()
+        async Task WaitForCombinationReleaseOrDurationPass()
         {
             var decisecondsPassed = 0;
             while (!IsCancellationRequested && IsCombinationFullyHeldDown && !combinationCancellationRequested)
@@ -156,13 +157,14 @@
             {
                 return;
             }
-
+            
             mainThreadInvoker.Invoke(
-                () =>
-                PasteCombinationDurationPassed(
-                    this,
-                    new PasteCombinationDurationPassedEventArgument
-                        ()));
+                () => {
+                    PasteCombinationDurationPassed(
+                        this,
+                        new PasteCombinationDurationPassedEventArgument
+                            ());
+                });
             logger.Information("Paste duration passed event raised.");
         }
 
@@ -182,7 +184,7 @@
                 "Paste combination duration mediator reacted to paste hotkey.",
                 1);
 
-            threadLoop.Notify(
+            consumerLoop.Notify(
                 MonitorClipboardCombinationStateAsync,
                 threadCancellationTokenSource.Token);
         }

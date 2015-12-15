@@ -12,6 +12,7 @@
 
     using Interfaces;
 
+    using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interceptors.Interfaces;
 
     class ClipboardUserInterfaceMediator:
@@ -19,6 +20,7 @@
     {
         readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
         readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
+        readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
         readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
 
         readonly IList<IClipboardDataControlPackage> clipboardPackages;
@@ -47,10 +49,12 @@
         public ClipboardUserInterfaceMediator(
             IClipboardCopyInterceptor clipboardCopyInterceptor,
             IPasteCombinationDurationMediator pasteCombinationDurationMediator,
+            IPasteHotkeyInterceptor pasteHotkeyInterceptor,
             IClipboardDataControlPackageFactory clipboardDataControlPackageFactory)
         {
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;
             this.pasteCombinationDurationMediator = pasteCombinationDurationMediator;
+            this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
             this.clipboardDataControlPackageFactory = clipboardDataControlPackageFactory;
 
             clipboardPackages = new List<IClipboardDataControlPackage>();
@@ -152,6 +156,7 @@
 
         void RaiseUserInterfaceShownEvent()
         {
+            pasteHotkeyInterceptor.SkipNext();
             UserInterfaceShown?.Invoke(this, new UserInterfaceShownEventArgument());
         }
 

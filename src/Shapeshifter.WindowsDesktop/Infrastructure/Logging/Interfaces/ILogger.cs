@@ -14,6 +14,8 @@
 
         void Performance(string text);
 
+        void PrintStackTrace();
+
         IIndentationHandle Indent();
     }
 }

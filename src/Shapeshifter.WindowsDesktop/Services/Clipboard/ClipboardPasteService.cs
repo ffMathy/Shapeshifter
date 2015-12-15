@@ -16,28 +16,27 @@
     using Keyboard;
     using Keyboard.Interfaces;
 
+    using Mediators.Interfaces;
+
     using Messages.Interceptors.Hotkeys.Interfaces;
 
-    class ClipboardPasteService: IClipboardPasteService
+    class ClipboardPasteService : IClipboardPasteService
     {
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
         readonly ILogger logger;
         readonly IMainWindowHandleContainer handleContainer;
         readonly IKeyboardManager keyboardManager;
-        readonly IPerformanceHandleFactory performanceHandleFactory;
 
         public ClipboardPasteService(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
             ILogger logger,
             IMainWindowHandleContainer handleContainer,
-            IKeyboardManager keyboardManager,
-            IPerformanceHandleFactory performanceHandleFactory)
+            IKeyboardManager keyboardManager)
         {
             this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
             this.logger = logger;
             this.handleContainer = handleContainer;
             this.keyboardManager = keyboardManager;
-            this.performanceHandleFactory = performanceHandleFactory;
         }
 
         public async Task PasteClipboardContentsAsync()
@@ -55,21 +54,16 @@
             logger.Information(
                 $"Simulating paste with CTRL {(isCtrlDown ? "down" : "released")} and V {(isVDown ? "down" : "released")}.");
 
-            using (performanceHandleFactory.StartMeasuringPerformance())
-            {
+            DisablePasteHotkeyInterceptor();
+            UninstallPasteHotkeyInterceptor();
 
-                DisablePasteHotkeyInterceptor();
-                UninstallPasteHotkeyInterceptor();
+            RunFirstKeyboardPhase(isCtrlDown, isVDown);
 
-                RunFirstKeyboardPhase(isCtrlDown, isVDown);
+            InstallPasteHotkeyInterceptor();
 
-                InstallPasteHotkeyInterceptor();
+            RunSecondKeyboardPhase(isCtrlDown, isVDown);
 
-                RunSecondKeyboardPhase(isCtrlDown, isVDown);
-
-                EnablePasteHotkeyInterceptor();
-
-            }
+            EnablePasteHotkeyInterceptor();
         }
 
         void EnablePasteHotkeyInterceptor()

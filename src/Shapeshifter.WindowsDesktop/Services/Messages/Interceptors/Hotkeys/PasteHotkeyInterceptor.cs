@@ -20,6 +20,7 @@
         IntPtr mainWindowHandle;
 
         bool isInstalled;
+        bool shouldSkipNext;
 
         public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
@@ -44,7 +45,7 @@
                 throw new InvalidOperationException("This interceptor has already been installed.");
             }
 
-            this.mainWindowHandle = windowHandle;
+            mainWindowHandle = windowHandle;
             hotkeyInterception.Start(windowHandle);
 
             isInstalled = true;
@@ -76,7 +77,13 @@
         {
             if (!IsEnabled)
             {
-                logger.Information("Skipped paste hotkey message because the intereceptor is disabled.");
+                logger.Information("Skipped paste hotkey message because the interceptor is disabled.");
+                return;
+            }
+
+            if (shouldSkipNext)
+            {
+                shouldSkipNext = false;
                 return;
             }
 
@@ -87,6 +94,11 @@
                 new HotkeyFiredArgument(
                     hotkeyInterception.KeyCode,
                     hotkeyInterception.ControlNeeded));
+        }
+        
+        public void SkipNext()
+        {
+            shouldSkipNext = true;
         }
 
         public bool IsEnabled { get; set; }

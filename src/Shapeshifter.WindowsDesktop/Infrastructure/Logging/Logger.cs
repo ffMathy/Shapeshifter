@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using System.Threading;
 
     using Handles;
@@ -65,6 +66,18 @@
         public void Performance(string text)
         {
             Log("Performance information: " + text);
+        }
+
+        public void PrintStackTrace()
+        {
+            var stackTrace = new StackTrace();
+            Log("Stack trace: " + stackTrace
+                    .GetFrames()
+                    .Reverse()
+                    .Select(x => x.GetMethod())
+                    .Select(x => x.Name)
+                    .TakeWhile(x => x != nameof(PrintStackTrace))
+                    .Aggregate((a, b) => $"{a} -> {b}"));
         }
 
         public IIndentationHandle Indent()

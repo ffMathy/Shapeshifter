@@ -154,7 +154,8 @@
             var argument = new WindowMessageReceivedArgument(hwnd, (Message) msg, wParam, lParam);
             pendingMessages.Enqueue(argument);
 
-            consumerLoop.Notify(HandleNextMessageAsync, cancellationTokenSource.Token);
+            HandleNextMessageAsync().Wait();
+            //consumerLoop.Notify(HandleNextMessageAsync, cancellationTokenSource.Token);
 
             return IntPtr.Zero;
         }
