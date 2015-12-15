@@ -104,16 +104,19 @@
         async Task HandleNextMessageAsync()
         {
             var nextMessage = pendingMessages.Dequeue();
-            foreach (var interceptor in windowMessageInterceptors)
+            using (logger.Indent())
             {
-                var messageName = FormatMessage(nextMessage.Message);
-                var interceptorName = interceptor.GetType()
-                                                 .Name;
+                foreach (var interceptor in windowMessageInterceptors)
+                {
+                    var messageName = FormatMessage(nextMessage.Message);
+                    var interceptorName = interceptor.GetType()
+                                                     .Name;
 
-                logger.Information(
-                    $"Passing message {messageName} to interceptor {interceptorName}.");
+                    logger.Information(
+                        $"Passing message {messageName} to interceptor {interceptorName}.");
 
-                interceptor.ReceiveMessageEvent(nextMessage);
+                    interceptor.ReceiveMessageEvent(nextMessage);
+                }
             }
         }
 
