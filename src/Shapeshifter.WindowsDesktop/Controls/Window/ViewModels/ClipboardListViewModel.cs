@@ -25,30 +25,24 @@
 
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
-    class ClipboardListViewModel :
+    class ClipboardListViewModel:
         IClipboardListViewModel
     {
         IClipboardDataControlPackage selectedElement;
 
         IAction selectedAction;
 
-        bool cancellationRequested;
+        bool isFocusInActionsList;
 
         readonly IAction[] allActions;
 
-        readonly IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>
-            packageActionBinder;
-
+        readonly IClipboardUserInterfaceMediator clipboardUserInterfaceMediator;
+        readonly IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder;
         readonly IAsyncFilter asyncFilter;
-
         readonly IPerformanceHandleFactory performanceHandleFactory;
-
         readonly IUserInterfaceThread userInterfaceThread;
 
-        bool isFocusInActionsList;
-
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
-
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -88,6 +82,7 @@
         public ClipboardListViewModel(
             IAction[] allActions,
             IClipboardUserInterfaceMediator clipboardUserInterfaceMediator,
+
             // ReSharper disable once SuggestBaseTypeForParameter
             IKeyInterceptor hotkeyInterceptor,
             IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder,
@@ -105,6 +100,7 @@
 
             this.allActions = allActions.Where(x => x != pasteAction)
                                         .ToArray();
+            this.clipboardUserInterfaceMediator = clipboardUserInterfaceMediator;
             this.packageActionBinder = packageActionBinder;
             this.asyncFilter = asyncFilter;
             this.performanceHandleFactory = performanceHandleFactory;
@@ -140,16 +136,29 @@
         void RegisterMediatorEvents(
             IClipboardUserInterfaceMediator mediator)
         {
-            mediator.ControlAdded += Service_ControlAdded;
-            mediator.ControlHighlighted += Service_ControlHighlighted;
-            mediator.ControlRemoved += Service_ControlRemoved;
+            mediator.ControlAdded += Mediator_ControlAdded;
+            mediator.ControlHighlighted += Mediator_ControlHighlighted;
+            mediator.ControlRemoved += Mediator_ControlRemoved;
 
-            mediator.UserInterfaceHidden += Service_UserInterfaceHidden;
-            mediator.UserInterfaceShown += Service_UserInterfaceShown;
+            mediator.UserInterfaceHidden += Mediator_UserInterfaceHidden;
+            mediator.UserInterfaceShown += Mediator_UserInterfaceShown;
+
+            mediator.PastePerformed += Mediator_PastePerformed;
+        }
+
+        async void Mediator_PastePerformed(
+            object sender,
+            PastePerformedEventArgument e)
+        {
+            if (SelectedAction != null)
+            {
+                await SelectedAction.PerformAsync(SelectedElement.Data);
+            }
         }
 
         void HotkeyInterceptor_HotkeyFired(object sender, HotkeyFiredArgument e)
         {
+            // ReSharper disable once SwitchStatementMissingSomeCases
             switch (e.KeyCode)
             {
                 case KeyboardNativeApi.VK_KEY_DOWN:
@@ -196,8 +205,7 @@
 
         void Cancel()
         {
-            cancellationRequested = true;
-            HideInterface();
+            clipboardUserInterfaceMediator.Cancel();
         }
 
         void HandleUpPressed()
@@ -248,25 +256,14 @@
             return list[indexToUse];
         }
 
-        async void Service_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
+        async void Mediator_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
         {
-            cancellationRequested = false;
             UserInterfaceShown?.Invoke(this, e);
         }
 
-        async void Service_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
+        async void Mediator_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
         {
-            if (cancellationRequested)
-            {
-                return;
-            }
-
             HideInterface();
-
-            if (SelectedAction != null)
-            {
-                await SelectedAction.PerformAsync(SelectedElement.Data);
-            }
         }
 
         void HideInterface()
@@ -288,7 +285,7 @@
             }
         }
 
-        void Service_ControlRemoved(object sender, ControlEventArgument e)
+        void Mediator_ControlRemoved(object sender, ControlEventArgument e)
         {
             lock (Elements)
             {
@@ -296,7 +293,7 @@
             }
         }
 
-        void Service_ControlHighlighted(object sender, ControlEventArgument e)
+        void Mediator_ControlHighlighted(object sender, ControlEventArgument e)
         {
             lock (Elements)
             {
@@ -305,7 +302,7 @@
             }
         }
 
-        void Service_ControlAdded(object sender, ControlEventArgument e)
+        void Mediator_ControlAdded(object sender, ControlEventArgument e)
         {
             lock (Elements)
             {

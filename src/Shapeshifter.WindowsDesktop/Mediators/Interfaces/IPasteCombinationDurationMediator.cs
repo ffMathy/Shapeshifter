@@ -11,10 +11,16 @@
         event EventHandler<PasteCombinationDurationPassedEventArgument>
             PasteCombinationDurationPassed;
 
-        event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleased;
+        event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleasedPartially;
+
+        event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleasedEntirely;
 
         int DurationInDeciseconds { get; }
 
-        bool IsCombinationHeldDown { get; }
+        bool IsCombinationFullyHeldDown { get; }
+
+        bool IsCombinationPartiallyHeldDown { get; }
+
+        void CancelCombinationRegistration();
     }
 }

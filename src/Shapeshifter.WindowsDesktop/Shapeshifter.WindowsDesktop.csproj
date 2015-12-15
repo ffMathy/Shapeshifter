@@ -117,6 +117,7 @@
     <Compile Include="Data\Actions\PinClipboardDataAction.cs" />
     <Compile Include="Data\Actions\UploadImageAction.cs" />
     <Compile Include="Data\Actions\ZipFilesAction.cs" />
+    <Compile Include="Infrastructure\Events\PastePerformedEventArgument.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Controls\Clipboard\ClipboardImageDataControl.xaml.cs">
       <DependentUpon>ClipboardImageDataControl.xaml</DependentUpon>
@@ -226,6 +227,10 @@
     <Compile Include="Infrastructure\Handles\Interfaces\IHandle.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IClipboardPersistanceService.cs" />
     <Compile Include="Services\Interfaces\IDataSourceService.cs" />
+    <Compile Include="Services\Keyboard\Interfaces\IKeyboardManager.cs" />
+    <Compile Include="Services\Keyboard\KeyboardManager.cs" />
+    <Compile Include="Services\Keyboard\KeyDirection.cs" />
+    <Compile Include="Services\Keyboard\KeyOperation.cs" />
     <Compile Include="Services\Messages\Interceptors\ClipboardCopyInterceptor.cs" />
     <Compile Include="Mediators\ClipboardUserInterfaceMediator.cs" />
     <Compile Include="Services\Clipboard\ClipboardInjectionService.cs" />
