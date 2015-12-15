@@ -59,7 +59,7 @@
         bool IsCancellationRequested
             => threadCancellationTokenSource.Token.IsCancellationRequested;
 
-        public bool IsCombinationHeldDown
+        public bool IsCombinationFullyHeldDown
             => keyboardManager.IsKeyDown(Key.LeftCtrl) && keyboardManager.IsKeyDown(Key.V);
 
         public void  CancelCombinationRegistration()
@@ -67,7 +67,7 @@
             combinationCancellationRequested = true;
         }
 
-        public bool IsOneCombinationKeyDown
+        public bool IsCombinationPartiallyHeldDown
             => keyboardManager.IsKeyDown(Key.LeftCtrl) || keyboardManager.IsKeyDown(Key.V);
 
         CancellationToken Token
@@ -141,7 +141,7 @@
 
         async Task WaitForCombinationReleaseEntirely()
         {
-            while (!IsCancellationRequested && IsOneCombinationKeyDown)
+            while (!IsCancellationRequested && IsCombinationPartiallyHeldDown)
             {
                 await threadDelay.ExecuteAsync(100);
             }
@@ -150,7 +150,7 @@
         async Task WaitForCombinationReleasePartially()
         {
             var decisecondsPassed = 0;
-            while (!IsCancellationRequested && IsCombinationHeldDown && !combinationCancellationRequested)
+            while (!IsCancellationRequested && IsCombinationFullyHeldDown && !combinationCancellationRequested)
             {
                 await threadDelay.ExecuteAsync(100);
                 decisecondsPassed++;

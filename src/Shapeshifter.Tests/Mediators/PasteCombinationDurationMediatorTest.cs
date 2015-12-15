@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Mediators
 {
     using System;
+    using System.Windows.Input;
 
     using Autofac;
 
@@ -13,6 +14,8 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
+
+    using Services.Keyboard.Interfaces;
 
     [TestClass]
     public class PasteCombinationDurationMediatorTest: TestBase
@@ -44,6 +47,158 @@
 
             var mediator = container.Resolve<IPasteCombinationDurationMediator>();
             Assert.IsTrue(mediator.IsConnected);
+        }
+
+        [TestMethod]
+        public void CombinationIsHeldDownWhenCtrlVIsDown()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IKeyboardManager>()
+                     .WithFakeSettings(
+                         x => {
+                             x.IsKeyDown(Key.LeftCtrl)
+                              .Returns(true);
+                             x.IsKeyDown(Key.V)
+                              .Returns(true);
+                         });
+                });
+
+            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
+            Assert.IsTrue(mediator.IsCombinationFullyHeldDown);
+        }
+
+        [TestMethod]
+        public void CombinationIsReleasedWhenOnlyCtrlIsDown()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IKeyboardManager>()
+                     .WithFakeSettings(
+                         x => {
+                             x.IsKeyDown(Key.LeftCtrl)
+                              .Returns(true);
+                             x.IsKeyDown(Key.V)
+                              .Returns(false);
+                         });
+                });
+
+            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
+            Assert.IsFalse(mediator.IsCombinationFullyHeldDown);
+        }
+
+        [TestMethod]
+        public void CombinationIsReleasedWhenOnlyVIsDown()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IKeyboardManager>()
+                     .WithFakeSettings(
+                         x => {
+                             x.IsKeyDown(Key.LeftCtrl)
+                              .Returns(false);
+                             x.IsKeyDown(Key.V)
+                              .Returns(true);
+                         });
+                });
+
+            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
+            Assert.IsFalse(mediator.IsCombinationFullyHeldDown);
+        }
+
+        [TestMethod]
+        public void CombinationIsReleasedWhenBothVAndCtrlIsReleased()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IKeyboardManager>()
+                     .WithFakeSettings(
+                         x => {
+                             x.IsKeyDown(Key.LeftCtrl)
+                              .Returns(false);
+                             x.IsKeyDown(Key.V)
+                              .Returns(false);
+                         });
+                });
+
+            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
+            Assert.IsFalse(mediator.IsCombinationFullyHeldDown);
+        }
+
+        [TestMethod]
+        public void PartialCombinationIsHeldDownWhenOnlyVIsDown()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IKeyboardManager>()
+                     .WithFakeSettings(
+                         x => {
+                             x.IsKeyDown(Key.LeftCtrl)
+                              .Returns(false);
+                             x.IsKeyDown(Key.V)
+                              .Returns(true);
+                         });
+                });
+
+            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
+            Assert.IsTrue(mediator.IsCombinationPartiallyHeldDown);
+        }
+
+        [TestMethod]
+        public void PartialCombinationIsHeldDownWhenOnlyCtrlIsDown()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IKeyboardManager>()
+                     .WithFakeSettings(
+                         x => {
+                             x.IsKeyDown(Key.LeftCtrl)
+                              .Returns(true);
+                             x.IsKeyDown(Key.V)
+                              .Returns(false);
+                         });
+                });
+
+            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
+            Assert.IsTrue(mediator.IsCombinationPartiallyHeldDown);
+        }
+
+        [TestMethod]
+        public void PartialCombinationIsHeldDownWhenBothVAndCtrlAreDown()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IKeyboardManager>()
+                     .WithFakeSettings(
+                         x => {
+                             x.IsKeyDown(Key.LeftCtrl)
+                              .Returns(true);
+                             x.IsKeyDown(Key.V)
+                              .Returns(true);
+                         });
+                });
+
+            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
+            Assert.IsTrue(mediator.IsCombinationPartiallyHeldDown);
+        }
+
+        [TestMethod]
+        public void PartialCombinationReleasedWhenBothVAndCtrlAreReleased()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IKeyboardManager>()
+                     .WithFakeSettings(
+                         x => {
+                             x.IsKeyDown(Key.LeftCtrl)
+                              .Returns(false);
+                             x.IsKeyDown(Key.V)
+                              .Returns(false);
+                         });
+                });
+
+            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
+            Assert.IsFalse(mediator.IsCombinationPartiallyHeldDown);
         }
 
         [TestMethod]
