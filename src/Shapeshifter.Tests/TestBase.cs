@@ -38,9 +38,6 @@
 
             builder.RegisterFake<IUpdateService>();
             builder.RegisterFake<IThreadDelay>();
-            builder.RegisterFake<ILogger>()
-                .Indent()
-                .Returns(Substitute.For<IIndentationHandle>());
 
             setupCallback?.Invoke(builder);
 

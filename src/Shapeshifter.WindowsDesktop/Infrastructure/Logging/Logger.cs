@@ -34,10 +34,8 @@
 
         void Log(string text)
         {
-            NotifyOfThreadChanges();
-
             var indentationString = GenerateIndentationString();
-            stream.WriteLine($" {indentationString}{text}");
+            stream.WriteLine($"{indentationString}{text}");
         }
 
         string GenerateIndentationString()
@@ -48,19 +46,6 @@
                 indentationString = new string(' ', threadIndentationCache[ManagedThreadId] * IndentationSize);
             }
             return indentationString;
-        }
-
-        void NotifyOfThreadChanges()
-        {
-            if (ManagedThreadId == lastThreadId)
-            {
-                return;
-            }
-
-            lastThreadId = ManagedThreadId;
-
-            Debug.WriteLine(string.Empty);
-            Debug.WriteLine($"[Thread #{lastThreadId}]");
         }
 
         public void Error(string text)
