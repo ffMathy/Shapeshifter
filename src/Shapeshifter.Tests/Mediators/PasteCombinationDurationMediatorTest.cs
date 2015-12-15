@@ -27,6 +27,15 @@
     [TestClass]
     public class PasteCombinationDurationMediatorTest : TestBase
     {
+        static void RaiseHotkeyFired(IPasteHotkeyInterceptor fakePasteHotkeyInterceptor)
+        {
+            fakePasteHotkeyInterceptor.HotkeyFired += Raise.EventWith(
+                            fakePasteHotkeyInterceptor,
+                            new HotkeyFiredArgument(
+                                KeyboardNativeApi.VK_KEY_V,
+                                true));
+        }
+
         [TestMethod]
         public void IsConnectedIsFalseIfConsumerThreadIsNotRunning()
         {
@@ -281,13 +290,29 @@
                     Arg.Any<CancellationToken>());
         }
 
-        static void RaiseHotkeyFired(IPasteHotkeyInterceptor fakePasteHotkeyInterceptor)
+        [TestMethod]
+        public void WhenCtrlVIsDownAndMonitoringLoopIsActiveItIsIgnored()
         {
-            fakePasteHotkeyInterceptor.HotkeyFired += Raise.EventWith(
-                            fakePasteHotkeyInterceptor,
-                            new HotkeyFiredArgument(
-                                KeyboardNativeApi.VK_KEY_V,
-                                true));
+            var container = CreateContainer(
+                c =>
+                {
+                    c.RegisterFake<IPasteHotkeyInterceptor>();
+                    c.RegisterFake<IConsumerThreadLoop>();
+                });
+
+            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
+            mediator.Connect(Substitute.For<IWindow>());
+
+            var fakePasteHotkeyInterceptor = container.Resolve<IPasteHotkeyInterceptor>();
+            RaiseHotkeyFired(fakePasteHotkeyInterceptor);
+            RaiseHotkeyFired(fakePasteHotkeyInterceptor);
+
+            var fakeConsumerThreadLoop = container.Resolve<IConsumerThreadLoop>();
+            fakeConsumerThreadLoop
+                .Received(1)
+                .Notify(
+                    Arg.Any<Func<Task>>(),
+                    Arg.Any<CancellationToken>());
         }
 
         [TestMethod]
