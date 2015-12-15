@@ -15,7 +15,9 @@
     using Native.Interfaces;
 
     using NSubstitute;
+
     using System.Threading.Tasks;
+
     [TestClass]
     public class ClipboardPasteServiceTest: TestBase
     {
