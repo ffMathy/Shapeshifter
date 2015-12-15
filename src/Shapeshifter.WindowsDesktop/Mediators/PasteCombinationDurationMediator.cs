@@ -13,6 +13,7 @@
 
     using Interfaces;
 
+    using Services.Keyboard.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
     class PasteCombinationDurationMediator: IPasteCombinationDurationMediator
@@ -21,6 +22,7 @@
         readonly IConsumerThreadLoop threadLoop;
         readonly IThreadDelay threadDelay;
         readonly ILogger logger;
+        readonly IKeyboardManager keyboardManager;
         readonly IMainThreadInvoker mainThreadInvoker;
 
         readonly CancellationTokenSource threadCancellationTokenSource;
@@ -38,13 +40,15 @@
             IConsumerThreadLoop threadLoop,
             IThreadDelay threadDelay,
             IMainThreadInvoker mainThreadInvoker,
-            ILogger logger)
+            ILogger logger,
+            IKeyboardManager keyboardManager)
         {
             this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
             this.threadLoop = threadLoop;
             this.threadDelay = threadDelay;
             this.mainThreadInvoker = mainThreadInvoker;
             this.logger = logger;
+            this.keyboardManager = keyboardManager;
 
             threadCancellationTokenSource = new CancellationTokenSource();
         }
@@ -56,15 +60,15 @@
             => threadCancellationTokenSource.Token.IsCancellationRequested;
 
         public bool IsCombinationHeldDown
-            => Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.V);
+            => keyboardManager.IsKeyDown(Key.LeftCtrl) && keyboardManager.IsKeyDown(Key.V);
 
-        public void CancelCombinationRegistration()
+        public void  CancelCombinationRegistration()
         {
             combinationCancellationRequested = true;
         }
 
         public bool IsOneCombinationKeyDown
-            => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.V);
+            => keyboardManager.IsKeyDown(Key.LeftCtrl) || keyboardManager.IsKeyDown(Key.V);
 
         CancellationToken Token
             => threadCancellationTokenSource.Token;
