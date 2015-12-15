@@ -6,10 +6,6 @@
     {
         bool IsKeyDown(Key key);
 
-        void SendKeyDown(Key key);
-
-        void SendKeyUp(Key key);
-
         void SendKeys(params Key[] keys);
 
         void SendKeys(params KeyOperation[] keyOperations);

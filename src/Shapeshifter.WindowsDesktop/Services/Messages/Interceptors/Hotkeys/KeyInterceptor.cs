@@ -98,12 +98,16 @@
             switch ((int) e.WordParameter)
             {
                 case Shown:
-                    Install(e.WindowHandle);
+                    if(!isInstalled) Install(e.WindowHandle);
                     break;
 
                 case Hidden:
-                    Uninstall();
+                    if (isInstalled) Uninstall();
                     break;
+
+                default:
+                    throw new InvalidOperationException(
+                        $"Invalid {nameof(e.WordParameter)} received for {nameof(Message.WM_SHOWWINDOW)} message.");
             }
         }
 

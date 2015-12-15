@@ -104,19 +104,19 @@
         async Task HandleNextMessageAsync()
         {
             var nextMessage = pendingMessages.Dequeue();
-            foreach (var interceptor in windowMessageInterceptors)
+            using (logger.Indent())
             {
-                var messageName = FormatMessage(nextMessage.Message);
-                var interceptorName = interceptor.GetType()
-                                                 .Name;
+                foreach (var interceptor in windowMessageInterceptors)
+                {
+                    var messageName = FormatMessage(nextMessage.Message);
+                    var interceptorName = interceptor.GetType()
+                                                     .Name;
 
-                logger.Information(
-                    $"Passing message {messageName} to interceptor {interceptorName}.");
+                    logger.Information(
+                        $"Passing message {messageName} to interceptor {interceptorName}.");
 
-                interceptor.ReceiveMessageEvent(nextMessage);
-
-                logger.Information(
-                    $"Message of type {messageName} passed to interceptor {interceptorName}.");
+                    interceptor.ReceiveMessageEvent(nextMessage);
+                }
             }
         }
 
@@ -154,7 +154,8 @@
             var argument = new WindowMessageReceivedArgument(hwnd, (Message) msg, wParam, lParam);
             pendingMessages.Enqueue(argument);
 
-            consumerLoop.Notify(HandleNextMessageAsync, cancellationTokenSource.Token);
+            HandleNextMessageAsync().Wait();
+            //consumerLoop.Notify(HandleNextMessageAsync, cancellationTokenSource.Token);
 
             return IntPtr.Zero;
         }

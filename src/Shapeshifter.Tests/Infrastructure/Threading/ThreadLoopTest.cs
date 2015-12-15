@@ -10,6 +10,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
 
     using Interfaces;
 
+    using Logging.Interfaces;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
@@ -29,7 +31,11 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
         [TestMethod]
         public async Task StartRunsMethod()
         {
-            var container = CreateContainer();
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<ILogger>();
+                });
+
             var loop = container.Resolve<IThreadLoop>();
 
             var invoked = false;
@@ -46,7 +52,11 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
         [TestMethod]
         public async Task KeepsRunningMethod()
         {
-            var container = CreateContainer();
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<ILogger>();
+                });
+
             var loop = container.Resolve<IThreadLoop>();
 
             var runCount = 0;

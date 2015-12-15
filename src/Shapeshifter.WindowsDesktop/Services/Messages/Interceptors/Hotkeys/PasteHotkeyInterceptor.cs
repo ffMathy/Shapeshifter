@@ -20,6 +20,7 @@
         IntPtr mainWindowHandle;
 
         bool isInstalled;
+        bool shouldSkipNext;
 
         public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
@@ -28,6 +29,8 @@
             IHotkeyInterceptionFactory hotkeyInterceptionFactory)
         {
             this.logger = logger;
+
+            IsEnabled = true;
 
             hotkeyInterception = hotkeyInterceptionFactory.CreateInterception(
                 KeyboardNativeApi.VK_KEY_V,
@@ -42,7 +45,7 @@
                 throw new InvalidOperationException("This interceptor has already been installed.");
             }
 
-            this.mainWindowHandle = windowHandle;
+            mainWindowHandle = windowHandle;
             hotkeyInterception.Start(windowHandle);
 
             isInstalled = true;
@@ -72,6 +75,18 @@
 
         void HandleHotkeyMessage()
         {
+            if (!IsEnabled)
+            {
+                logger.Information("Skipped paste hotkey message because the interceptor is disabled.");
+                return;
+            }
+
+            if (shouldSkipNext)
+            {
+                shouldSkipNext = false;
+                return;
+            }
+
             logger.Information("Paste hotkey message received.", 1);
 
             HotkeyFired?.Invoke(
@@ -80,5 +95,12 @@
                     hotkeyInterception.KeyCode,
                     hotkeyInterception.ControlNeeded));
         }
+        
+        public void SkipNext()
+        {
+            shouldSkipNext = true;
+        }
+
+        public bool IsEnabled { get; set; }
     }
 }

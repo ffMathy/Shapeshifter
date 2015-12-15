@@ -150,6 +150,11 @@
             object sender,
             PastePerformedEventArgument e)
         {
+            await PerformPaste();
+        }
+
+        async Task PerformPaste()
+        {
             if (SelectedAction != null)
             {
                 await SelectedAction.PerformAsync(SelectedElement.Data);

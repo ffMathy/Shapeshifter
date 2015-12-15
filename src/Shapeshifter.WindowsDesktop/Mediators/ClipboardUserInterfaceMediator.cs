@@ -12,6 +12,7 @@
 
     using Interfaces;
 
+    using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interceptors.Interfaces;
 
     class ClipboardUserInterfaceMediator:
@@ -19,6 +20,7 @@
     {
         readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
         readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
+        readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
         readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
 
         readonly IList<IClipboardDataControlPackage> clipboardPackages;
@@ -47,10 +49,12 @@
         public ClipboardUserInterfaceMediator(
             IClipboardCopyInterceptor clipboardCopyInterceptor,
             IPasteCombinationDurationMediator pasteCombinationDurationMediator,
+            IPasteHotkeyInterceptor pasteHotkeyInterceptor,
             IClipboardDataControlPackageFactory clipboardDataControlPackageFactory)
         {
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;
             this.pasteCombinationDurationMediator = pasteCombinationDurationMediator;
+            this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
             this.clipboardDataControlPackageFactory = clipboardDataControlPackageFactory;
 
             clipboardPackages = new List<IClipboardDataControlPackage>();
@@ -94,12 +98,13 @@
 
             pasteCombinationDurationMediator.PasteCombinationDurationPassed -=
                 PasteCombinationDurationMediator_PasteCombinationDurationPassed;
-            pasteCombinationDurationMediator.PasteCombinationReleasedPartially -=
-                PasteCombinationDurationMediatorPasteCombinationReleasedPartially;
-            pasteCombinationDurationMediator.PasteCombinationReleasedEntirely -= PasteCombinationDurationMediator_PasteCombinationReleasedEntirely;
+            pasteCombinationDurationMediator.PasteCombinationReleased -=
+                PasteCombinationDurationMediatorPasteCombinationReleased;
+            pasteCombinationDurationMediator.AfterPasteCombinationReleased -= AfterPasteCombinationDurationMediatorAfterPasteCombinationReleased;
         }
 
-        void PasteCombinationDurationMediator_PasteCombinationReleasedEntirely(object sender, PasteCombinationReleasedEventArgument e)
+        void AfterPasteCombinationDurationMediatorAfterPasteCombinationReleased(
+            object sender, PasteCombinationReleasedEventArgument e)
         {
             RaisePastePerformedEvent();
         }
@@ -130,9 +135,9 @@
         {
             pasteCombinationDurationMediator.PasteCombinationDurationPassed +=
                 PasteCombinationDurationMediator_PasteCombinationDurationPassed;
-            pasteCombinationDurationMediator.PasteCombinationReleasedPartially +=
-                PasteCombinationDurationMediatorPasteCombinationReleasedPartially;
-            pasteCombinationDurationMediator.PasteCombinationReleasedEntirely += PasteCombinationDurationMediator_PasteCombinationReleasedEntirely;
+            pasteCombinationDurationMediator.PasteCombinationReleased +=
+                PasteCombinationDurationMediatorPasteCombinationReleased;
+            pasteCombinationDurationMediator.AfterPasteCombinationReleased += AfterPasteCombinationDurationMediatorAfterPasteCombinationReleased;
 
             pasteCombinationDurationMediator.Connect(targetWindow);
         }
@@ -151,10 +156,11 @@
 
         void RaiseUserInterfaceShownEvent()
         {
+            pasteHotkeyInterceptor.SkipNext();
             UserInterfaceShown?.Invoke(this, new UserInterfaceShownEventArgument());
         }
 
-        void PasteCombinationDurationMediatorPasteCombinationReleasedPartially(
+        void PasteCombinationDurationMediatorPasteCombinationReleased(
             object sender,
             PasteCombinationReleasedEventArgument e)
         {

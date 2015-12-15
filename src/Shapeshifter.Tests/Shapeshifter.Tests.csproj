@@ -93,6 +93,7 @@
     <Compile Include="Data\Actions\PasteAsPlainTextActionTest.cs" />
     <Compile Include="Data\Actions\PasteActionTest.cs" />
     <Compile Include="Infrastructure\Handles\ClipboardHandleTest.cs" />
+    <Compile Include="Infrastructure\Logging\LoggerTest.cs" />
     <Compile Include="Services\Clipboard\ClipboardPasteServiceTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardImageDataControlFactoryTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardTextDataControlFactoryTest.cs" />
@@ -113,10 +114,12 @@
     <Compile Include="MainTest.cs" />
     <Compile Include="Mediators\PasteCombinationDurationMediatorTest.cs" />
     <Compile Include="Mediators\ClipboardUserInterfaceMediatorTest.cs" />
+    <Compile Include="Services\Clipboard\ClipboardPersistanceServiceTest.cs" />
     <Compile Include="Services\Files\FileManagerTest.cs" />
     <Compile Include="Services\Files\FileTypeInterpreterTest.cs" />
     <Compile Include="Services\Messages\Interceptors\ClipboardCopyInterceptorTest.cs" />
     <Compile Include="Services\Messages\Interceptors\Hotkeys\KeyInterceptorTest.cs" />
+    <Compile Include="Services\Messages\Interceptors\Hotkeys\PasteHotkeyInterceptorTest.cs" />
     <Compile Include="Services\Messages\WindowMessageHookTest.cs" />
     <Compile Include="Services\ProcessManagerTest.cs" />
     <Compile Include="Services\LinkParserTest.cs" />
