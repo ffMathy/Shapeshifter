@@ -16,10 +16,10 @@
     using Services.Keyboard.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
-    class PasteCombinationDurationMediator: IPasteCombinationDurationMediator
+    class PasteCombinationDurationMediator : IPasteCombinationDurationMediator
     {
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
-        readonly IConsumerThreadLoop threadLoop;
+        readonly IConsumerThreadLoop consumerLoop;
         readonly IThreadDelay threadDelay;
         readonly ILogger logger;
         readonly IKeyboardManager keyboardManager;
@@ -28,7 +28,6 @@
         readonly CancellationTokenSource threadCancellationTokenSource;
 
         bool combinationCancellationRequested;
-        bool isCombinationDown;
 
         public event EventHandler<PasteCombinationDurationPassedEventArgument>
             PasteCombinationDurationPassed;
@@ -37,14 +36,14 @@
 
         public PasteCombinationDurationMediator(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
-            IConsumerThreadLoop threadLoop,
+            IConsumerThreadLoop consumerLoop,
             IThreadDelay threadDelay,
             IMainThreadInvoker mainThreadInvoker,
             ILogger logger,
             IKeyboardManager keyboardManager)
         {
             this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
-            this.threadLoop = threadLoop;
+            this.consumerLoop = consumerLoop;
             this.threadDelay = threadDelay;
             this.mainThreadInvoker = mainThreadInvoker;
             this.logger = logger;
@@ -54,7 +53,7 @@
         }
 
         public bool IsConnected
-            => threadLoop.IsRunning;
+            => consumerLoop.IsRunning;
 
         bool IsCancellationRequested
             => threadCancellationTokenSource.Token.IsCancellationRequested;
@@ -62,16 +61,13 @@
         public bool IsCombinationFullyHeldDown
             => keyboardManager.IsKeyDown(Key.LeftCtrl) && keyboardManager.IsKeyDown(Key.V);
 
-        public void  CancelCombinationRegistration()
+        public void CancelCombinationRegistration()
         {
             combinationCancellationRequested = true;
         }
 
         public bool IsCombinationPartiallyHeldDown
             => keyboardManager.IsKeyDown(Key.LeftCtrl) || keyboardManager.IsKeyDown(Key.V);
-
-        CancellationToken Token
-            => threadCancellationTokenSource.Token;
 
         public int DurationInDeciseconds
             => 5;
@@ -114,7 +110,6 @@
 
         void RegisterCombinationReleasedPartially()
         {
-            isCombinationDown = false;
             if (PasteCombinationReleasedPartially != null)
             {
                 mainThreadInvoker.Invoke(
@@ -189,21 +184,13 @@
 
         void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, HotkeyFiredArgument e)
         {
-            if (!isCombinationDown)
-            {
-                logger.Information(
-                    "Paste combination duration mediator reacted to paste hotkey.",
-                    1);
+            logger.Information(
+                "Paste combination duration mediator reacted to paste hotkey.",
+                1);
 
-                isCombinationDown = true;
-                threadLoop.Notify(MonitorClipboardCombinationStateAsync, Token);
-            }
-            else
-            {
-                logger.Information(
-                    "Paste combination duration mediator ignored paste hotkey because the paste combination was already held down.",
-                    1);
-            }
+            consumerLoop.Notify(
+                MonitorClipboardCombinationStateAsync,
+                threadCancellationTokenSource.Token);
         }
 
         public void Disconnect()

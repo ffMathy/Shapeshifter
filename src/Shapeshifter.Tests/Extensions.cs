@@ -59,7 +59,7 @@
 
             if (exceptions.Count > 1)
             {
-                throw new AggregateException(exceptions);
+                throw new AggregateException("The assertion timeout of " + timeout + " milliseconds was exceeded, and multiple exceptions were caught.", exceptions);
             }
 
             throw exceptions.First();
