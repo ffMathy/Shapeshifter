@@ -16,7 +16,7 @@
     using Services.Keyboard.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
-    class PasteCombinationDurationMediator: IPasteCombinationDurationMediator
+    class PasteCombinationDurationMediator : IPasteCombinationDurationMediator
     {
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
         readonly IConsumerThreadLoop threadLoop;
@@ -28,12 +28,11 @@
         readonly CancellationTokenSource threadCancellationTokenSource;
 
         bool combinationCancellationRequested;
-        bool isCombinationDown;
 
-        public event EventHandler<PasteCombinationDurationPassedEventArgument>
-            PasteCombinationDurationPassed;
-        public event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleasedPartially;
-        public event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleasedEntirely;
+        public event EventHandler<PasteCombinationDurationPassedEventArgument> PasteCombinationDurationPassed;
+
+        public event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleased;
+        public event EventHandler<PasteCombinationReleasedEventArgument> AfterPasteCombinationReleased;
 
         public PasteCombinationDurationMediator(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
@@ -62,7 +61,7 @@
         public bool IsCombinationFullyHeldDown
             => keyboardManager.IsKeyDown(Key.LeftCtrl) && keyboardManager.IsKeyDown(Key.V);
 
-        public void  CancelCombinationRegistration()
+        public void CancelCombinationRegistration()
         {
             combinationCancellationRequested = true;
         }
@@ -86,6 +85,8 @@
 
         async Task MonitorClipboardCombinationStateAsync()
         {
+            logger.Information("Paste combination duration loop has ticked.");
+
             combinationCancellationRequested = false;
 
             await WaitForCombinationReleasePartially();
@@ -94,54 +95,45 @@
                 return;
             }
 
-            RegisterCombinationReleasedPartially();
+            RegisterCombinationReleased();
             if (combinationCancellationRequested)
             {
                 return;
             }
 
-            await WaitForCombinationReleaseEntirely();
-            if (IsCancellationRequested)
+            RegisterAfterCombinationReleased();
+        }
+
+        void RegisterCombinationReleased()
+        {
+            if (PasteCombinationReleased == null)
             {
                 return;
             }
 
-            RegisterCombinationReleasedEntirely();
+            logger.Information("Firing " + nameof(PasteCombinationReleased) + " event.");
+            mainThreadInvoker.Invoke(
+                () =>
+                PasteCombinationReleased(
+                    this,
+                    new PasteCombinationReleasedEventArgument
+                        ()));
         }
 
-        void RegisterCombinationReleasedPartially()
+        void RegisterAfterCombinationReleased()
         {
-            isCombinationDown = false;
-            if (PasteCombinationReleasedPartially != null)
+            if (AfterPasteCombinationReleased == null)
             {
-                mainThreadInvoker.Invoke(
-                    () =>
-                    PasteCombinationReleasedPartially(
-                        this,
-                        new PasteCombinationReleasedEventArgument
-                            ()));
+                return;
             }
-        }
 
-        void RegisterCombinationReleasedEntirely()
-        {
-            if (PasteCombinationReleasedEntirely != null)
-            {
-                mainThreadInvoker.Invoke(
-                    () =>
-                    PasteCombinationReleasedEntirely(
-                        this,
-                        new PasteCombinationReleasedEventArgument
-                            ()));
-            }
-        }
-
-        async Task WaitForCombinationReleaseEntirely()
-        {
-            while (!IsCancellationRequested && IsCombinationPartiallyHeldDown)
-            {
-                await threadDelay.ExecuteAsync(100);
-            }
+            logger.Information("Firing " + nameof(AfterPasteCombinationReleased) + " event.");
+            mainThreadInvoker.Invoke(
+                () =>
+                AfterPasteCombinationReleased(
+                    this,
+                    new PasteCombinationReleasedEventArgument
+                        ()));
         }
 
         async Task WaitForCombinationReleasePartially()
@@ -186,23 +178,13 @@
 
         void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, HotkeyFiredArgument e)
         {
-            if (!isCombinationDown)
-            {
-                logger.Information(
-                    "Paste combination duration mediator reacted to paste hotkey.",
-                    1);
+            logger.Information(
+                "Paste combination duration mediator reacted to paste hotkey.",
+                1);
 
-                isCombinationDown = true;
-                threadLoop.Notify(
-                    MonitorClipboardCombinationStateAsync, 
-                    threadCancellationTokenSource.Token);
-            }
-            else
-            {
-                logger.Information(
-                    "Paste combination duration mediator ignored paste hotkey because the paste combination was already held down.",
-                    1);
-            }
+            threadLoop.Notify(
+                MonitorClipboardCombinationStateAsync,
+                threadCancellationTokenSource.Token);
         }
 
         public void Disconnect()

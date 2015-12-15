@@ -94,12 +94,13 @@
 
             pasteCombinationDurationMediator.PasteCombinationDurationPassed -=
                 PasteCombinationDurationMediator_PasteCombinationDurationPassed;
-            pasteCombinationDurationMediator.PasteCombinationReleasedPartially -=
-                PasteCombinationDurationMediatorPasteCombinationReleasedPartially;
-            pasteCombinationDurationMediator.PasteCombinationReleasedEntirely -= PasteCombinationDurationMediator_PasteCombinationReleasedEntirely;
+            pasteCombinationDurationMediator.PasteCombinationReleased -=
+                PasteCombinationDurationMediatorPasteCombinationReleased;
+            pasteCombinationDurationMediator.AfterPasteCombinationReleased -= AfterPasteCombinationDurationMediatorAfterPasteCombinationReleased;
         }
 
-        void PasteCombinationDurationMediator_PasteCombinationReleasedEntirely(object sender, PasteCombinationReleasedEventArgument e)
+        void AfterPasteCombinationDurationMediatorAfterPasteCombinationReleased(
+            object sender, PasteCombinationReleasedEventArgument e)
         {
             RaisePastePerformedEvent();
         }
@@ -130,9 +131,9 @@
         {
             pasteCombinationDurationMediator.PasteCombinationDurationPassed +=
                 PasteCombinationDurationMediator_PasteCombinationDurationPassed;
-            pasteCombinationDurationMediator.PasteCombinationReleasedPartially +=
-                PasteCombinationDurationMediatorPasteCombinationReleasedPartially;
-            pasteCombinationDurationMediator.PasteCombinationReleasedEntirely += PasteCombinationDurationMediator_PasteCombinationReleasedEntirely;
+            pasteCombinationDurationMediator.PasteCombinationReleased +=
+                PasteCombinationDurationMediatorPasteCombinationReleased;
+            pasteCombinationDurationMediator.AfterPasteCombinationReleased += AfterPasteCombinationDurationMediatorAfterPasteCombinationReleased;
 
             pasteCombinationDurationMediator.Connect(targetWindow);
         }
@@ -154,7 +155,7 @@
             UserInterfaceShown?.Invoke(this, new UserInterfaceShownEventArgument());
         }
 
-        void PasteCombinationDurationMediatorPasteCombinationReleasedPartially(
+        void PasteCombinationDurationMediatorPasteCombinationReleased(
             object sender,
             PasteCombinationReleasedEventArgument e)
         {

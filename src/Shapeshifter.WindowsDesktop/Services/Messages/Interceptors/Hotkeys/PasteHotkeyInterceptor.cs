@@ -29,6 +29,8 @@
         {
             this.logger = logger;
 
+            IsEnabled = true;
+
             hotkeyInterception = hotkeyInterceptionFactory.CreateInterception(
                 KeyboardNativeApi.VK_KEY_V,
                 true,
@@ -72,6 +74,12 @@
 
         void HandleHotkeyMessage()
         {
+            if (!IsEnabled)
+            {
+                logger.Information("Skipped paste hotkey message because the intereceptor is disabled.");
+                return;
+            }
+
             logger.Information("Paste hotkey message received.", 1);
 
             HotkeyFired?.Invoke(
@@ -80,5 +88,7 @@
                     hotkeyInterception.KeyCode,
                     hotkeyInterception.ControlNeeded));
         }
+
+        public bool IsEnabled { get; set; }
     }
 }

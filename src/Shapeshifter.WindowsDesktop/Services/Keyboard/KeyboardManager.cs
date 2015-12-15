@@ -4,6 +4,8 @@
     using System.Linq;
     using System.Windows.Input;
 
+    using Infrastructure.Logging.Interfaces;
+
     using Interfaces;
 
     using Native.Interfaces;
@@ -13,26 +15,19 @@
     class KeyboardManager : IKeyboardManager
     {
         readonly IKeyboardNativeApi nativeApi;
+        readonly ILogger logger;
 
         public KeyboardManager(
-            IKeyboardNativeApi nativeApi)
+            IKeyboardNativeApi nativeApi,
+            ILogger logger)
         {
             this.nativeApi = nativeApi;
+            this.logger = logger;
         }
 
         public bool IsKeyDown(Key key)
         {
             return Keyboard.IsKeyDown(key);
-        }
-
-        public void SendKeyDown(Key key)
-        {
-            SendKeys(new KeyOperation(key, KeyDirection.Down));
-        }
-
-        public void SendKeyUp(Key key)
-        {
-            SendKeys(new KeyOperation(key, KeyDirection.Up));
         }
 
         public void SendKeys(params Key[] keys)
@@ -49,6 +44,11 @@
 
         public void SendKeys(params KeyOperation[] keyOperations)
         {
+            var logString = keyOperations
+                .Select(x => $"[{x.Key}: {x.Direction}]")
+                .Aggregate((a, b) => $"{a}, {b}");
+            logger.Information($"Sending key combinations {logString}.");
+
             var inputs = keyOperations
                 .Select(
                     x => GenerateKeystoke(

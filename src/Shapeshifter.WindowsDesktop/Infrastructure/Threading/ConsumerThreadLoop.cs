@@ -62,7 +62,7 @@
             {
                 if (ShouldAbort(token))
                 {
-                    logger.Information("Stopping consumer loop.");
+                    logger.Information("Stopping consumer loop before consuming last item.");
                     internalLoop.Stop();
                     return;
                 }
@@ -70,7 +70,7 @@
                 DecrementAvailableWorkCount();
             }
 
-            logger.Information("Consuming.");
+            logger.Information("Consuming item.");
             await action();
         }
 

@@ -114,9 +114,6 @@
                     $"Passing message {messageName} to interceptor {interceptorName}.");
 
                 interceptor.ReceiveMessageEvent(nextMessage);
-
-                logger.Information(
-                    $"Message of type {messageName} passed to interceptor {interceptorName}.");
             }
         }
 

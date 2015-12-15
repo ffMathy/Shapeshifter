@@ -117,6 +117,7 @@
     <Compile Include="Services\Files\FileTypeInterpreterTest.cs" />
     <Compile Include="Services\Messages\Interceptors\ClipboardCopyInterceptorTest.cs" />
     <Compile Include="Services\Messages\Interceptors\Hotkeys\KeyInterceptorTest.cs" />
+    <Compile Include="Services\Messages\Interceptors\Hotkeys\PasteHotkeyInterceptorTest.cs" />
     <Compile Include="Services\Messages\WindowMessageHookTest.cs" />
     <Compile Include="Services\ProcessManagerTest.cs" />
     <Compile Include="Services\LinkParserTest.cs" />

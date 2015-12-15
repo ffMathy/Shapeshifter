@@ -8,12 +8,10 @@
 
     public interface IPasteCombinationDurationMediator: IHookService
     {
-        event EventHandler<PasteCombinationDurationPassedEventArgument>
-            PasteCombinationDurationPassed;
+        event EventHandler<PasteCombinationDurationPassedEventArgument> PasteCombinationDurationPassed;
 
-        event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleasedPartially;
-
-        event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleasedEntirely;
+        event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleased;
+        event EventHandler<PasteCombinationReleasedEventArgument> AfterPasteCombinationReleased;
 
         int DurationInDeciseconds { get; }
 
