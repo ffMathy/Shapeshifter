@@ -7,6 +7,7 @@
     using Autofac;
 
     using Infrastructure.Dependencies;
+    using Infrastructure.Environment;
 
     using Services;
 
@@ -15,7 +16,8 @@
         public static IContainer CreateDesignTimeContainer()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterModule(new DefaultWiringModule());
+            builder.RegisterModule(new DefaultWiringModule(
+                new EnvironmentInformation(true)));
 
             return builder.Build();
         }

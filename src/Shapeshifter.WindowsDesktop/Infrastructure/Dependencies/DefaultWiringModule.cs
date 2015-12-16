@@ -73,7 +73,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
             return environmentInformation;
         }
 
-        static void RegisterAssemblyTypes(ContainerBuilder builder, Assembly assembly)
+        void RegisterAssemblyTypes(ContainerBuilder builder, Assembly assembly)
         {
             var types = assembly.GetTypes();
             foreach (var type in types)
@@ -84,7 +84,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
                 }
 
                 var interfaces = type.GetInterfaces();
-                if (interfaces.Contains(typeof (IDesignerService)))
+                if (interfaces.Contains(typeof (IDesignerService)) && !environmentInformation.IsInDesignTime)
                 {
                     continue;
                 }

@@ -13,7 +13,7 @@
     class ClipboardImageDataViewModel: ClipboardDataViewModel<IClipboardImageData>
     {
         public ClipboardImageDataViewModel()
-            : this(new EnvironmentInformation()) { }
+            : this(new EnvironmentInformation(true)) { }
 
         public ClipboardImageDataViewModel(
             IEnvironmentInformation environmentInformation)
@@ -26,8 +26,10 @@
 
         void PrepareDesignerMode()
         {
-            var container = DesignTimeContainerHelper.CreateDesignTimeContainer();
-            Data = container.Resolve<DesignerClipboardImageDataFacade>();
+            var container = DesignTimeContainerHelper
+                .CreateDesignTimeContainer();
+            Data = container
+                .Resolve<DesignerClipboardImageDataFacade>();
         }
     }
 }

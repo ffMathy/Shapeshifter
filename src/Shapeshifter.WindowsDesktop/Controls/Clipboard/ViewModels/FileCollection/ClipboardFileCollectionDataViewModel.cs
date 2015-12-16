@@ -21,7 +21,7 @@
           IClipboardFileCollectionDataViewModel
     {
         public ClipboardFileCollectionDataViewModel()
-            : this(new EnvironmentInformation()) { }
+            : this(new EnvironmentInformation(true)) { }
 
         public ClipboardFileCollectionDataViewModel(
             IEnvironmentInformation environmentInformation)

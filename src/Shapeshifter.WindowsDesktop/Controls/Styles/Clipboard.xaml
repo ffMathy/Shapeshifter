@@ -88,7 +88,7 @@
            BasedOn="{StaticResource ClipboardDataControlContentAreaStyle}">
         <Setter Property="Background">
             <Setter.Value>
-                <SolidColorBrush Opacity="0.9" Color="{StaticResource WindowBackgroundColor}" />
+                <SolidColorBrush Opacity="0.1" Color="{StaticResource WindowBackgroundColor}" />
             </Setter.Value>
         </Setter>
     </Style>

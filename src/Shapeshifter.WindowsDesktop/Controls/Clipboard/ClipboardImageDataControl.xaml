@@ -29,7 +29,7 @@
 
             <Grid Grid.Column="2" Style="{StaticResource ClipboardDataControlContentAreaStyleFaded}">
                 <Grid Style="{StaticResource ClipboardDataControlContentAreaInnerStyle}">
-                    <local:DataSourceControl VerticalAlignment="Bottom" DataContext="{Binding Data.Source}" />
+                    <local:DataSourceControl VerticalAlignment="Bottom" TextVisibility="Collapsed" DataContext="{Binding Data.Source}" />
                 </Grid>
             </Grid>
         </Grid>
