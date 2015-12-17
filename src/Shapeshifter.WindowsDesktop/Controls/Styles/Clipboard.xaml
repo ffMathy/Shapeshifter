@@ -136,6 +136,27 @@
         </Style.Triggers>
     </Style>
 
+    <Style TargetType="Image" x:Key="ClipboardImageDataControlImageStyle">
+        <Setter Property="Stretch" Value="UniformToFill" />
+        <Setter Property="Opacity" Value="0.75" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="True">
+                <Setter Property="Opacity" Value="1" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Path" x:Key="ClipboardDataControlPathStyle">
+        <Setter Property="Fill" Value="{StaticResource AccentBrush}"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="True">
+                <Setter Property="Fill" Value="White"/>
+            </DataTrigger>
+            </Style.Triggers>
+    </Style>
+
     <Style TargetType="Border" x:Key="ClipboardDataControlImageAreaStyleFaded"
            BasedOn="{StaticResource ClipboardDataControlImageAreaStyle}">
         <Setter Property="Opacity" Value="0.9" />
@@ -243,6 +264,13 @@
                 <Setter Property="Foreground" Value="White" />
             </DataTrigger>
         </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Canvas" x:Key="ClipboardDataCanvasStyle">
+        <Setter Property="Width" Value="64" />
+        <Setter Property="Height" Value="64" />
+
+        <Setter Property="Margin" Value="12,10,11,10" />
     </Style>
 
     <Style TargetType="Image" x:Key="ClipboardDataImageStyle">
