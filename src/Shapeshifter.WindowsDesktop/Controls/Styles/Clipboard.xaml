@@ -143,21 +143,6 @@
                          Value="True">
                 <Setter Property="Fill" Value="White"/>
             </DataTrigger>
-            </Style.Triggers>
-    </Style>
-
-    <Style TargetType="Border" x:Key="ClipboardDataControlImageAreaStyleFaded"
-           BasedOn="{StaticResource ClipboardDataControlImageAreaStyle}">
-        <Setter Property="Opacity" Value="0.9" />
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
-                         Value="False">
-                <Setter Property="Opacity" Value="0.5" />
-            </DataTrigger>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
-                         Value="True">
-                <Setter Property="Margin" Value="0" />
-            </DataTrigger>
         </Style.Triggers>
     </Style>
 
