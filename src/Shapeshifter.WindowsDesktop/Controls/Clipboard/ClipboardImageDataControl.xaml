@@ -16,11 +16,49 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            
+
             <Image Stretch="UniformToFill"
                    Source="{Binding Data.Image, Converter={converters:ByteArrayToImageSourceConverter}}"
-                   Grid.ColumnSpan="3" />
-            <Rectangle Style="{StaticResource ClipboardImageDataControlOverlayStyle}" Grid.ColumnSpan="3" Grid.Column="0" />
+                   Grid.ColumnSpan="3">
+                <Image.OpacityMask>
+                    <DrawingBrush Stretch="None" AlignmentX="Right" AlignmentY="Top">
+                        <DrawingBrush.RelativeTransform>
+                            <TranslateTransform Y="-0.05" X="0.09" />
+                        </DrawingBrush.RelativeTransform>
+                        <DrawingBrush.Drawing>
+                            <GeometryDrawing>
+                                <GeometryDrawing.Geometry>
+                                    <GeometryGroup>
+                                        <LineGeometry StartPoint="-40,110" EndPoint="-90,0" />
+                                        <LineGeometry StartPoint="-20,110" EndPoint="-70,0" />
+                                        <LineGeometry StartPoint=" 0, 110" EndPoint="-50,0" />
+                                        <LineGeometry StartPoint=" 20,110" EndPoint="-30,0" />
+                                        <LineGeometry StartPoint=" 40,110" EndPoint="-10,0" />
+                                        <LineGeometry StartPoint=" 60,110" EndPoint="010,0" />
+                                        <LineGeometry StartPoint=" 80,110" EndPoint="030,0" />
+                                        <LineGeometry StartPoint="100,110" EndPoint="050,0" />
+                                        <LineGeometry StartPoint="120,110" EndPoint="070,0" />
+                                        <LineGeometry StartPoint="140,110" EndPoint="090,0" />
+                                        <LineGeometry StartPoint="160,110" EndPoint="110,0" />
+                                        <LineGeometry StartPoint="180,110" EndPoint="130,0" />
+                                        <LineGeometry StartPoint="200,110" EndPoint="150,0" />
+                                        <LineGeometry StartPoint="220,110" EndPoint="170,0" />
+                                        <LineGeometry StartPoint="240,110" EndPoint="190,0" />
+                                        <LineGeometry StartPoint="260,110" EndPoint="210,0" />
+                                        <LineGeometry StartPoint="280,110" EndPoint="230,0" />
+                                        <LineGeometry StartPoint="300,110" EndPoint="250,0" />
+                                    </GeometryGroup>
+                                </GeometryDrawing.Geometry>
+                                <GeometryDrawing.Pen>
+                                    <Pen Thickness="15" Brush="Black" />
+                                </GeometryDrawing.Pen>
+                            </GeometryDrawing>
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </Image.OpacityMask>
+
+            </Image>
+            <!--<Rectangle Style="{StaticResource ClipboardImageDataControlOverlayStyle}" Grid.ColumnSpan="3" Grid.Column="0" />-->
 
             <Border Grid.Column="0" Style="{StaticResource ClipboardDataControlImageAreaStyleFaded}">
                 <Image ClipToBounds="True" Style="{StaticResource ClipboardDataImageStyle}" />
@@ -29,7 +67,7 @@
             <Rectangle Opacity="0.2" Grid.Column="1" Style="{StaticResource ClipboardDataControlIconContentSplitterStyle}" />
 
             <Grid Grid.Column="2">
-                <Canvas ClipToBounds="True">
+                <!--<Canvas ClipToBounds="True">
                     <Line Opacity="1.00" Style="{StaticResource ClipboardImageDataControlLineStyle}" Canvas.Right="-90" Canvas.Top="-10" X1="100" X2="-5" Y1="-10" Y2="110" />
                     <Line Opacity="1.00" Style="{StaticResource ClipboardImageDataControlLineStyle}" Canvas.Right="-70" Canvas.Top="-10" X1="100" X2="-5" Y1="-10" Y2="110" />
                     <Line Opacity="1.00" Style="{StaticResource ClipboardImageDataControlLineStyle}" Canvas.Right="-50" Canvas.Top="-10" X1="100" X2="-5" Y1="-10" Y2="110" />
@@ -48,7 +86,7 @@
                     <Line Opacity="0.20" Style="{StaticResource ClipboardImageDataControlLineStyle}" Canvas.Right="210" Canvas.Top="-10" X1="100" X2="-5" Y1="-10" Y2="110" />
                     <Line Opacity="0.10" Style="{StaticResource ClipboardImageDataControlLineStyle}" Canvas.Right="230" Canvas.Top="-10" X1="100" X2="-5" Y1="-10" Y2="110" />
                     <Line Opacity="0.00" Style="{StaticResource ClipboardImageDataControlLineStyle}" Canvas.Right="250" Canvas.Top="-10" X1="100" X2="-5" Y1="-10" Y2="110" />
-                </Canvas>
+                </Canvas>-->
                 <Grid Style="{StaticResource ClipboardDataControlContentAreaInnerStyle}">
                     <local:DataSourceControl VerticalAlignment="Bottom" TextVisibility="Collapsed" DataContext="{Binding Data.Source}" />
                 </Grid>
