@@ -12,7 +12,6 @@
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
                          Value="True">
-                <Setter Property="BorderThickness" Value="6,1,0,1" />
                 <Setter Property="Background" Value="{StaticResource AccentBrush}" />
                 <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
             </DataTrigger>
@@ -113,16 +112,6 @@
 
     <Style TargetType="Border" x:Key="ClipboardDataControlImageAreaStyle">
         <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
-                         Value="False">
-                <Setter Property="Opacity" Value="0.5" />
-            </DataTrigger>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
-                         Value="True">
-                <Setter Property="Margin" Value="-5,0,0,0" />
-            </DataTrigger>
-        </Style.Triggers>
     </Style>
 
     <Style TargetType="Rectangle" x:Key="ClipboardImageDataControlOverlayStyle">
@@ -138,7 +127,7 @@
 
     <Style TargetType="Image" x:Key="ClipboardImageDataControlImageStyle">
         <Setter Property="Stretch" Value="UniformToFill" />
-        <Setter Property="Opacity" Value="0.75" />
+        <Setter Property="Opacity" Value="0.5" />
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
                          Value="True">
@@ -206,7 +195,6 @@
                          Value="False">
                 <Setter Property="BorderBrush" Value="#10000000" />
                 <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
-                <Setter Property="Padding" Value="10,5,10,8" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
