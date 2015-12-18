@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:window="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Window"
+        xmlns:viewModels="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Window.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewModels:ClipboardListViewModel}"
         Top="0"
         Left="0"
