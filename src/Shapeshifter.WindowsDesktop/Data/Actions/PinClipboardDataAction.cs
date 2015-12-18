@@ -16,9 +16,9 @@
 
         public string Title => "Pin to clipboard";
 
-        public string Description => "Pastes clipboard contents as plain text.";
+        public string Description => "Pins this item so that it always stays in the top, and gets saved to your harddrive.";
 
-        public byte Order => 200;
+        public byte Order => byte.MaxValue;
 
         public PinClipboardDataAction(
             IClipboardPersistanceService clipboardPersistanceService)
