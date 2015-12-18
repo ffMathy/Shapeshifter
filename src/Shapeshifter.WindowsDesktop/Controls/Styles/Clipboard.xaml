@@ -7,13 +7,14 @@
 
         <Setter Property="Background" Value="{StaticResource WindowDarkBackgroundBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource ControlBorderBrush}" />
-        <Setter Property="BorderThickness" Value="0,1,0,1" />
+        <Setter Property="BorderThickness" Value="0,0.5,0,0.5" />
+        <Setter Property="Margin" Value="0,0,0,0" />
 
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
                          Value="True">
                 <Setter Property="Background" Value="{StaticResource AccentBrush}" />
-                <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource AccentDarkBrush}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -27,7 +28,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                    <Border x:Name="Bd" Background="{TemplateBinding Background}" Margin="0,-1,0,0" Padding="0">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" Margin="0,0,0,0" Padding="0">
                         <ContentPresenter Name="Cp" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           Margin="0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                     </Border>
@@ -46,7 +47,7 @@
                     <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
                         <ScrollViewer Focusable="False">
-                            <ItemsPresenter Margin="0,1,0,0" />
+                            <ItemsPresenter Margin="0,-0.5,0,0" />
                         </ScrollViewer>
                     </Border>
                 </ControlTemplate>
@@ -175,8 +176,8 @@
 
     <Style TargetType="UserControl" x:Key="ActionControlContentAreaStyle">
         <Setter Property="Background" Value="{StaticResource AccentBrush}" />
-        <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{StaticResource AccentDarkBrush}" />
+        <Setter Property="BorderThickness" Value="0,0.5,1,0.5" />
         <Setter Property="FontWeight" Value="ExtraLight" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="Padding" Value="5,5,10,8" />
@@ -185,7 +186,7 @@
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
                          Value="False">
-                <Setter Property="BorderBrush" Value="#10000000" />
+                <Setter Property="BorderBrush" Value="{StaticResource AccentDarkerBrush}" />
                 <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
             </DataTrigger>
         </Style.Triggers>
