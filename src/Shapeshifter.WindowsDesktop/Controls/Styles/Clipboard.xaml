@@ -112,6 +112,13 @@
 
     <Style TargetType="Border" x:Key="ClipboardDataControlImageAreaStyle">
         <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
+        <Setter Property="Opacity" Value="0.75" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="True">
+                <Setter Property="Opacity" Value="1" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="Rectangle" x:Key="ClipboardImageDataControlOverlayStyle">

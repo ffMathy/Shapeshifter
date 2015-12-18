@@ -37,7 +37,7 @@
                 <Image.OpacityMask>
                     <DrawingBrush Stretch="None" AlignmentX="Right" AlignmentY="Top">
                         <DrawingBrush.RelativeTransform>
-                            <TranslateTransform Y="-0.05" X="0.102" />
+                            <TranslateTransform Y="-0.05" X="0.115" />
                         </DrawingBrush.RelativeTransform>
                         <DrawingBrush.Drawing>
                             <GeometryDrawing>
@@ -64,7 +64,7 @@
                                     </GeometryGroup>
                                 </GeometryDrawing.Geometry>
                                 <GeometryDrawing.Pen>
-                                    <Pen Thickness="9" Brush="Black"/>
+                                    <Pen Thickness="15" Brush="Black"/>
                                 </GeometryDrawing.Pen>
                             </GeometryDrawing>
                         </DrawingBrush.Drawing>
