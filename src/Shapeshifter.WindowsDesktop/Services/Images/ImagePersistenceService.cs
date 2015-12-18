@@ -22,13 +22,15 @@
 
         ImageMetaInformation ConvertByteArrayToMetaInformation(byte[] data)
         {
-            return generalNativeApi.ByteArrayToStructure<ImageMetaInformation>(data);
+            return generalNativeApi
+                .ByteArrayToStructure<ImageMetaInformation>(data);
         }
 
         IEnumerable<byte> ConvertMetaInformationToByteArray(
             ImageMetaInformation metaInformation)
         {
-            return generalNativeApi.StructureToByteArray(metaInformation);
+            return generalNativeApi
+                .StructureToByteArray(metaInformation);
         }
 
         public byte[] ConvertBitmapSourceToByteArray(BitmapSource bitmap)
@@ -48,7 +50,8 @@
             };
 
             var imageData = ConvertImageDataToByteArray(bitmap);
-            return DecorateSourceWithMetaInformation(imageData, metaInformation);
+            return DecorateSourceWithMetaInformation(
+                imageData, metaInformation);
         }
 
         public byte[] DecorateSourceWithMetaInformation(
@@ -116,7 +119,8 @@
         {
             var metaInformation = GetMetaInformationFromSource(bytes);
             var imageData = ExtractImageDataFromSource(bytes);
-            return GenerateBitmapSource(metaInformation, imageData);
+            return GenerateBitmapSource(
+                metaInformation, imageData);
         }
 
         static BitmapSource GenerateBitmapSource(

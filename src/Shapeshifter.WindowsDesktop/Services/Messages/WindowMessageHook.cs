@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Windows.Interop;
 
     using Controls.Window.Interfaces;
 
@@ -153,9 +152,8 @@
 
             var argument = new WindowMessageReceivedArgument(hwnd, (Message) msg, wParam, lParam);
             pendingMessages.Enqueue(argument);
-
-            HandleNextMessageAsync().Wait();
-            //consumerLoop.Notify(HandleNextMessageAsync, cancellationTokenSource.Token);
+            
+            consumerLoop.Notify(HandleNextMessageAsync, cancellationTokenSource.Token);
 
             return IntPtr.Zero;
         }

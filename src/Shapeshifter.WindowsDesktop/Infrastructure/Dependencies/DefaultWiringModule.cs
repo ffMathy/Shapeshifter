@@ -22,7 +22,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 
     using Threading;
 
-    public class DefaultWiringModule: AutofacModule
+    public class DefaultWiringModule : AutofacModule
     {
         readonly IEnvironmentInformation environmentInformation;
 
@@ -35,13 +35,14 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
         }
 
         public DefaultWiringModule(Action<ContainerBuilder> callback = null)
+            : this(new EnvironmentInformation())
         {
             this.callback = callback;
         }
 
         protected override void Load(ContainerBuilder builder)
         {
-            RegisterAssemblyTypes(builder, typeof (DefaultWiringModule).Assembly);
+            RegisterAssemblyTypes(builder, typeof(DefaultWiringModule).Assembly);
             RegisterAssemblyTypes(builder, NativeAssemblyHelper.Assembly);
 
             RegisterMainThread(builder);
@@ -73,7 +74,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
             return environmentInformation;
         }
 
-        static void RegisterAssemblyTypes(ContainerBuilder builder, Assembly assembly)
+        void RegisterAssemblyTypes(ContainerBuilder builder, Assembly assembly)
         {
             var types = assembly.GetTypes();
             foreach (var type in types)
@@ -84,7 +85,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
                 }
 
                 var interfaces = type.GetInterfaces();
-                if (interfaces.Contains(typeof (IDesignerService)))
+                if (interfaces.Contains(typeof(IDesignerService)) && !environmentInformation.IsInDesignTime)
                 {
                     continue;
                 }
@@ -112,7 +113,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 
                 registration.FindConstructorsWith(new PublicConstructorFinder());
 
-                if (interfaces.Contains(typeof (ISingleInstance)))
+                if (interfaces.Contains(typeof(ISingleInstance)))
                 {
                     registration.SingleInstance();
                 }

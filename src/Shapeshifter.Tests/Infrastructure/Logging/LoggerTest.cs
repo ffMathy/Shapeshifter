@@ -42,11 +42,18 @@
             using (logger.Indent())
             {
                 logger.Information("inside indentation");
+                using(logger.Indent())
+                {
+                    logger.Information("deep inside indentation");
+                }
             }
 
             logger.Information("outside indentation");
 
             var fakeStream = container.Resolve<ILogStream>();
+            fakeStream
+                .Received()
+                .WriteLine("    Information: deep inside indentation");
             fakeStream
                 .Received()
                 .WriteLine("  Information: inside indentation");

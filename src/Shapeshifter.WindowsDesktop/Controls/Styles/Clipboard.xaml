@@ -12,7 +12,6 @@
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
                          Value="True">
-                <Setter Property="BorderThickness" Value="6,1,0,1" />
                 <Setter Property="Background" Value="{StaticResource AccentBrush}" />
                 <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
             </DataTrigger>
@@ -88,28 +87,70 @@
            BasedOn="{StaticResource ClipboardDataControlContentAreaStyle}">
         <Setter Property="Background">
             <Setter.Value>
-                <SolidColorBrush Opacity="0.9" Color="{StaticResource WindowBackgroundColor}" />
+                <SolidColorBrush Opacity="0.25" Color="{StaticResource WindowBackgroundColor}" />
             </Setter.Value>
         </Setter>
-    </Style>
-
-    <Style TargetType="Border" x:Key="ClipboardDataControlImageAreaStyle">
-        <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
-                         Value="False">
-                <Setter Property="Opacity" Value="0.5" />
-            </DataTrigger>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
                          Value="True">
-                <Setter Property="Margin" Value="-5,0,0,0" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Opacity" Value="0.1" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="Border" x:Key="ClipboardDataControlImageAreaStyleFaded"
-           BasedOn="{StaticResource ClipboardDataControlImageAreaStyle}">
-        <Setter Property="Opacity" Value="0.9" />
+    <Style TargetType="Line" x:Key="ClipboardImageDataControlLineStyle">
+        <Setter Property="Stroke" Value="{StaticResource WindowBackgroundBrush}" />
+        <Setter Property="StrokeThickness" Value="8" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="True">
+                <Setter Property="Stroke" Value="{StaticResource AccentBrush}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Border" x:Key="ClipboardDataControlImageAreaStyle">
+        <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
+        <Setter Property="Opacity" Value="0.75" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="True">
+                <Setter Property="Opacity" Value="1" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Rectangle" x:Key="ClipboardImageDataControlOverlayStyle">
+        <Setter Property="Fill" Value="{StaticResource WindowBackgroundBrush}" />
+        <Setter Property="Opacity" Value="0.75"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="True">
+                <Setter Property="Opacity" Value="0" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Image" x:Key="ClipboardImageDataControlImageStyle">
+        <Setter Property="Stretch" Value="UniformToFill" />
+        <Setter Property="Opacity" Value="0.5" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="True">
+                <Setter Property="Opacity" Value="1" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Path" x:Key="ClipboardDataControlPathStyle">
+        <Setter Property="Fill" Value="{StaticResource AccentBrush}"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                         Value="True">
+                <Setter Property="Fill" Value="White"/>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="TextBlock" x:Key="ClipboardFileCollectionControlCountForeground">
@@ -146,7 +187,6 @@
                          Value="False">
                 <Setter Property="BorderBrush" Value="#10000000" />
                 <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
-                <Setter Property="Padding" Value="10,5,10,8" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -204,6 +244,13 @@
                 <Setter Property="Foreground" Value="White" />
             </DataTrigger>
         </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Canvas" x:Key="ClipboardDataCanvasStyle">
+        <Setter Property="Width" Value="64" />
+        <Setter Property="Height" Value="64" />
+
+        <Setter Property="Margin" Value="12,10,11,10" />
     </Style>
 
     <Style TargetType="Image" x:Key="ClipboardDataImageStyle">

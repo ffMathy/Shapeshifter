@@ -1,5 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.ViewModels
 {
+    using System.Windows.Forms;
+
     using Autofac;
 
     using Data.Interfaces;
@@ -13,7 +15,7 @@
     class ClipboardFileDataViewModel: ClipboardDataViewModel<IClipboardFileData>
     {
         public ClipboardFileDataViewModel()
-            : this(new EnvironmentInformation()) { }
+            : this(new EnvironmentInformation(true)) { }
 
         public ClipboardFileDataViewModel(
             IEnvironmentInformation environmentInformation)

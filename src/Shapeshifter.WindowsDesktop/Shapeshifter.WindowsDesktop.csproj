@@ -333,7 +333,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Resource Include="Controls\Clipboard\Resources\ClipboardTextDataIcon.png" />
     <Page Include="Controls\Styles\Clipboard.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

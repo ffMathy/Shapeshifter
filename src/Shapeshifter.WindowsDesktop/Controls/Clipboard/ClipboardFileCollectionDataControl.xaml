@@ -17,7 +17,7 @@
             </Grid.ColumnDefinitions>
 
             <Border Style="{StaticResource ClipboardDataControlImageAreaStyle}">
-                <ContentControl Width="64" Height="64" Margin="10,10,13,10">
+                <ContentControl Width="64" Height="64" Margin="12,7,11,10">
                     <TextBlock FontSize="60" FontWeight="ExtraLight" VerticalAlignment="Center"
                                HorizontalAlignment="Center"
                                Style="{StaticResource ClipboardFileCollectionControlCountForeground}"
