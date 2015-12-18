@@ -53,7 +53,7 @@
             var container = CreateContainer();
 
             var action = container.Resolve<IPinClipboardDataAction>();
-            Assert.AreEqual(200, action.Order);
+            Assert.AreEqual(byte.MaxValue, action.Order);
         }
     }
 }
