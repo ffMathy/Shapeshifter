@@ -64,6 +64,11 @@
             object sender,
             DataCopiedEventArgument e)
         {
+            AppendPackagesWithDataFromClipboard();
+        }
+
+        void AppendPackagesWithDataFromClipboard()
+        {
             var package = clipboardDataControlPackageFactory.CreateFromCurrentClipboardData();
             if (package == null)
             {
