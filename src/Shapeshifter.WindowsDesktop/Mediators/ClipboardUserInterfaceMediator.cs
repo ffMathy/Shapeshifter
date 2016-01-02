@@ -132,8 +132,14 @@
                     "The user interface mediator is already connected.");
             }
 
+            LoadInitialClipboardData();
             InstallClipboardHook();
             InstallPastecombinationDurationMediator(targetWindow);
+        }
+
+        void LoadInitialClipboardData()
+        {
+            AppendPackagesWithDataFromClipboard();
         }
 
         void InstallPastecombinationDurationMediator(IWindow targetWindow)
