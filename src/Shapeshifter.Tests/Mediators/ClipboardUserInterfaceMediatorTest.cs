@@ -155,6 +155,7 @@
                 c => {
                     c.RegisterFake<IClipboardCopyInterceptor>();
                     c.RegisterFake<IPasteCombinationDurationMediator>();
+                    c.RegisterFake<IClipboardDataControlPackageFactory>();
                 });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
@@ -209,13 +210,14 @@
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Connect(null);
 
+            var numberOfPackagesBeforeDataCopied = mediator.ClipboardElements.Count();
             var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
             fakeClipboardHookService.DataCopied +=
                 Raise.Event<EventHandler<DataCopiedEventArgument>>(
                     fakeClipboardHookService,
                     new DataCopiedEventArgument());
 
-            Assert.AreEqual(1, mediator.ClipboardElements.Count());
+            Assert.AreEqual(1, mediator.ClipboardElements.Count() - numberOfPackagesBeforeDataCopied);
         }
 
         [TestMethod]
@@ -254,8 +256,8 @@
                     fakeClipboardHookService,
                     new DataCopiedEventArgument());
 
-            var addedPackage = mediator.ClipboardElements.Single();
-            var content = addedPackage.Data.Contents.Single();
+            var addedPackage = mediator.ClipboardElements.Last();
+            var content = addedPackage.Data.Contents.Last();
             Assert.AreSame(fakeData, content);
             Assert.AreSame(fakeControl, addedPackage.Control);
         }
@@ -288,7 +290,7 @@
                     fakeClipboardHookService,
                     new DataCopiedEventArgument());
 
-            var addedPackage = mediator.ClipboardElements.Single();
+            var addedPackage = mediator.ClipboardElements.Last();
             Assert.IsNotNull(addedPackage);
 
             Assert.AreSame(mediator, eventSender);
