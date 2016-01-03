@@ -64,6 +64,11 @@
             object sender,
             DataCopiedEventArgument e)
         {
+            AppendPackagesWithDataFromClipboard();
+        }
+
+        void AppendPackagesWithDataFromClipboard()
+        {
             var package = clipboardDataControlPackageFactory.CreateFromCurrentClipboardData();
             if (package == null)
             {
@@ -127,8 +132,14 @@
                     "The user interface mediator is already connected.");
             }
 
+            LoadInitialClipboardData();
             InstallClipboardHook();
             InstallPastecombinationDurationMediator(targetWindow);
+        }
+
+        void LoadInitialClipboardData()
+        {
+            AppendPackagesWithDataFromClipboard();
         }
 
         void InstallPastecombinationDurationMediator(IWindow targetWindow)
