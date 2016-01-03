@@ -240,9 +240,7 @@
                         });
                     fakePackage.Control.Returns(fakeControl);
 
-                    c.RegisterFake<IClipboardDataControlPackageFactory>(
-                        
-                        )
+                    c.RegisterFake<IClipboardDataControlPackageFactory>()
                      .CreateFromCurrentClipboardData()
                      .Returns(fakePackage);
                 });
