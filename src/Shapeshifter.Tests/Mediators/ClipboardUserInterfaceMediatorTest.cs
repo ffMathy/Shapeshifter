@@ -97,12 +97,65 @@
         }
 
         [TestMethod]
+        public void ConnectAddsInitialPackage()
+        {
+            var fakeData = Substitute.For<IClipboardData>();
+            var fakeControl = Substitute.For<IClipboardControl>();
+            var fakePackage = Substitute.For<IClipboardDataControlPackage>();
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IClipboardCopyInterceptor>();
+                    c.RegisterFake<IPasteCombinationDurationMediator>();
+                    c.RegisterFake<IClipboardDataControlPackageFactory>()
+                     .CreateFromCurrentClipboardData()
+                     .Returns(fakePackage);
+                    fakePackage.Data.Contents.Returns(new[] { fakeData });
+                    fakePackage.Control.Returns(fakeControl);
+                });
+
+            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            mediator.Connect(null);
+
+            var addedPackage = mediator.ClipboardElements.Single();
+            var content = addedPackage.Data.Contents.Single();
+            Assert.AreSame(fakeData, content);
+            Assert.AreSame(fakeControl, addedPackage.Control);
+        }
+
+        [TestMethod]
+        public void ConnectTriggersControlAddedEvent()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IClipboardCopyInterceptor>();
+                    c.RegisterFake<IPasteCombinationDurationMediator>();
+                    c.RegisterFake<IClipboardDataControlPackageFactory>();
+                });
+            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            object eventSender = null;
+            ControlEventArgument eventArgument = null;
+            mediator.ControlAdded += (sender, e) => {
+                eventSender = sender;
+                eventArgument = e;
+            };
+
+            mediator.Connect(null);
+
+            var addedPackage = mediator.ClipboardElements.Single();
+            Assert.IsNotNull(addedPackage);
+            Assert.AreSame(mediator, eventSender);
+            Assert.AreSame(addedPackage, eventArgument.Package);
+        }
+
+
+        [TestMethod]
         public void ConnectConnectsHotkeyHook()
         {
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IClipboardCopyInterceptor>();
                     c.RegisterFake<IPasteCombinationDurationMediator>();
+                    c.RegisterFake<IClipboardDataControlPackageFactory>();
                 });
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
@@ -157,13 +210,14 @@
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Connect(null);
 
+            var numberOfPackagesBeforeDataCopied = mediator.ClipboardElements.Count();
             var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
             fakeClipboardHookService.DataCopied +=
                 Raise.Event<EventHandler<DataCopiedEventArgument>>(
                     fakeClipboardHookService,
                     new DataCopiedEventArgument());
 
-            Assert.AreEqual(1, mediator.ClipboardElements.Count());
+            Assert.AreEqual(1, mediator.ClipboardElements.Count() - numberOfPackagesBeforeDataCopied);
         }
 
         [TestMethod]
@@ -186,9 +240,7 @@
                         });
                     fakePackage.Control.Returns(fakeControl);
 
-                    c.RegisterFake<IClipboardDataControlPackageFactory>(
-                        
-                        )
+                    c.RegisterFake<IClipboardDataControlPackageFactory>()
                      .CreateFromCurrentClipboardData()
                      .Returns(fakePackage);
                 });
@@ -202,8 +254,8 @@
                     fakeClipboardHookService,
                     new DataCopiedEventArgument());
 
-            var addedPackage = mediator.ClipboardElements.Single();
-            var content = addedPackage.Data.Contents.Single();
+            var addedPackage = mediator.ClipboardElements.Last();
+            var content = addedPackage.Data.Contents.Last();
             Assert.AreSame(fakeData, content);
             Assert.AreSame(fakeControl, addedPackage.Control);
         }
@@ -236,7 +288,7 @@
                     fakeClipboardHookService,
                     new DataCopiedEventArgument());
 
-            var addedPackage = mediator.ClipboardElements.Single();
+            var addedPackage = mediator.ClipboardElements.Last();
             Assert.IsNotNull(addedPackage);
 
             Assert.AreSame(mediator, eventSender);
