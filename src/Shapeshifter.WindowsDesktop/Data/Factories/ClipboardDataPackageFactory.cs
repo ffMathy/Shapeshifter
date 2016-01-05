@@ -11,8 +11,6 @@
 
     using Interfaces;
 
-    using Native.Interfaces;
-
     using Structures;
 
     class ClipboardDataPackageFactory: IClipboardDataPackageFactory
@@ -26,8 +24,7 @@
         public ClipboardDataPackageFactory(
             IEnumerable<IClipboardDataFactory> dataFactories,
             IEnumerable<IMemoryUnwrapper> memoryUnwrappers,
-            IClipboardHandleFactory clipboardSessionFactory,
-            IClipboardNativeApi clipboardNativeApi)
+            IClipboardHandleFactory clipboardSessionFactory)
         {
             this.dataFactories = dataFactories;
             this.memoryUnwrappers = memoryUnwrappers;
@@ -54,7 +51,8 @@
 
         public IClipboardDataPackage CreateFromFormatsAndData(params FormatDataPair[] formatsAndData)
         {
-            if (!IsAnyFormatSupported(formatsAndData.Select(x => x.Format)))
+            if (!IsAnyFormatSupported(
+                formatsAndData.Select(x => x.Format)))
             {
                 return null;
             }
@@ -96,7 +94,9 @@
             IClipboardDataPackage package,
             uint format)
         {
-            var unwrapper = memoryUnwrappers.FirstOrDefault(x => x.CanUnwrap(format));
+            var unwrapper = memoryUnwrappers
+                .FirstOrDefault(
+                    x => x.CanUnwrap(format));
 
             var rawData = unwrapper?.UnwrapStructure(format);
             if (rawData == null)
@@ -113,12 +113,8 @@
             byte[] rawData)
         {
             var factory = FindCapableFactoryFromFormat(format);
-            if (factory == null)
-            {
-                return;
-            }
 
-            var clipboardData = factory.BuildData(format, rawData);
+            var clipboardData = factory?.BuildData(format, rawData);
             if (clipboardData != null)
             {
                 package.AddData(clipboardData);

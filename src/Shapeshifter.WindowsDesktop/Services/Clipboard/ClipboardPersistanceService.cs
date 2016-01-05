@@ -16,7 +16,7 @@
 
     using Structures;
 
-    class ClipboardPersistanceService: IClipboardPersistanceService
+    class ClipboardPersistanceService : IClipboardPersistanceService
     {
         readonly IFileManager fileManager;
 
@@ -37,8 +37,8 @@
             {
                 var content = package.Contents[i];
                 var filePath = Path.Combine(
-                    packageFolder, 
-                    i+1 + "." + content.RawFormat);
+                    packageFolder,
+                    i + 1 + "." + content.RawFormat);
                 fileManager.WriteBytesToTemporaryFile(
                     filePath, content.RawData);
             }
@@ -46,9 +46,10 @@
 
         string PrepareUniquePackageFolder()
         {
-            var unixTimestamp = DateTime.UtcNow.ToFileTime();
             var packageFolder = fileManager.PrepareFolder(
-                Path.Combine("Pinned", unixTimestamp.ToString()));
+                Path.Combine("Pinned", 
+                    Guid.NewGuid()
+                        .ToString()));
             return packageFolder;
         }
 
@@ -66,8 +67,9 @@
 
         async Task<IClipboardDataPackage> GetPersistedPackageAsync(string directory)
         {
-            var packageFiles = Directory.GetFiles(directory)
-                                        .OrderBy(x => x);
+            var packageFiles = Directory
+                .GetFiles(directory)
+                .OrderBy(x => x);
 
             var dataPairs = new List<FormatDataPair>();
             foreach (var file in packageFiles)
@@ -83,7 +85,8 @@
                 dataPairs.Add(new FormatDataPair(format, data));
             }
 
-            return factory.CreateFromFormatsAndData(dataPairs.ToArray());
+            return factory.CreateFromFormatsAndData(
+                dataPairs.ToArray());
         }
 
         public Task DeletePackageAsync(IClipboardDataPackage package)

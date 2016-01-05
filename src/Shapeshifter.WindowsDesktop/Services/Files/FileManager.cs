@@ -50,7 +50,7 @@
         {
             if (Directory.Exists(path))
             {
-                Directory.Delete(path);
+                Directory.Delete(path, true);
             }
         }
 
@@ -125,7 +125,7 @@
             return originPath.Split('\\', '/');
         }
 
-        public string PrepareFolder(string relativePath)
+        public string PrepareFolder(string relativePath = null)
         {
             var finalPath = GetFullPathFromRelativePath(relativePath);
             CreateDirectoryIfNotExists(finalPath);
@@ -154,11 +154,13 @@
             }
         }
 
-        static string GetFullPathFromRelativePath(string path)
+        static string GetFullPathFromRelativePath(string path = null)
         {
             var isolatedFolderPath = PrepareIsolatedFolder();
 
-            var finalPath = Path.Combine(isolatedFolderPath, path);
+            var finalPath = path == null 
+                ? isolatedFolderPath 
+                : Path.Combine(isolatedFolderPath, path);
             return finalPath;
         }
 

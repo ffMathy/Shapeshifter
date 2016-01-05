@@ -6,17 +6,12 @@
 
     using Controls.Window.Interfaces;
 
-    using Infrastructure.Handles.Factories.Interfaces;
-    using Infrastructure.Handles.Interfaces;
     using Infrastructure.Logging.Interfaces;
-    using Infrastructure.Threading.Interfaces;
 
     using Interfaces;
 
     using Keyboard;
     using Keyboard.Interfaces;
-
-    using Mediators.Interfaces;
 
     using Messages.Interceptors.Hotkeys.Interfaces;
 

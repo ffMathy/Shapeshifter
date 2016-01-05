@@ -12,9 +12,6 @@
 
     using NSubstitute;
 
-    using Services.Files;
-    using Services.Files.Interfaces;
-
     [TestClass]
     public class PinClipboardDataActionTest : ActionTestBase
     {
