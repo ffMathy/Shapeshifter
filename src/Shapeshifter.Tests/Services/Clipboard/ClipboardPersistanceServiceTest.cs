@@ -191,14 +191,6 @@
                     .Contents[1]
                     .RawData[1]);
 
-            Assert.AreEqual(3,
-                persistedPackage2
-                    .Contents[1]
-                    .RawData[0]);
-            Assert.AreEqual(4,
-                persistedPackage2
-                    .Contents[1]
-                    .RawData[1]);
             Assert.AreEqual(1,
                 persistedPackage2
                     .Contents[0]
@@ -206,6 +198,14 @@
             Assert.AreEqual(2,
                 persistedPackage2
                     .Contents[0]
+                    .RawData[1]);
+            Assert.AreEqual(3,
+                persistedPackage2
+                    .Contents[1]
+                    .RawData[0]);
+            Assert.AreEqual(4,
+                persistedPackage2
+                    .Contents[1]
                     .RawData[1]);
         }
     }
