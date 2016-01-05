@@ -174,21 +174,38 @@
             Assert.AreEqual(1, persistedPackage1.Id);
             Assert.AreEqual(2, persistedPackage2.Id);
 
-            Assert.AreEqual(3, 
+            Assert.AreEqual(1, 
                 persistedPackage1
                     .Contents[0]
-                    .RawData[0]);
-            Assert.AreEqual(4,
-                persistedPackage1
-                    .Contents[0]
-                    .RawData[1]);
-            Assert.AreEqual(1,
-                persistedPackage1
-                    .Contents[1]
                     .RawData[0]);
             Assert.AreEqual(2,
                 persistedPackage1
+                    .Contents[0]
+                    .RawData[1]);
+            Assert.AreEqual(3,
+                persistedPackage1
                     .Contents[1]
+                    .RawData[0]);
+            Assert.AreEqual(4,
+                persistedPackage1
+                    .Contents[1]
+                    .RawData[1]);
+
+            Assert.AreEqual(3,
+                persistedPackage2
+                    .Contents[1]
+                    .RawData[0]);
+            Assert.AreEqual(4,
+                persistedPackage2
+                    .Contents[1]
+                    .RawData[1]);
+            Assert.AreEqual(1,
+                persistedPackage2
+                    .Contents[0]
+                    .RawData[0]);
+            Assert.AreEqual(2,
+                persistedPackage2
+                    .Contents[0]
                     .RawData[1]);
         }
     }

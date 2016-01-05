@@ -46,10 +46,12 @@
 
         string PrepareUniquePackageFolder()
         {
+            var unixTimestamp = DateTime.UtcNow.ToFileTime();
+            var guid = Guid.NewGuid()
+                           .ToString();
             var packageFolder = fileManager.PrepareFolder(
                 Path.Combine("Pinned", 
-                    Guid.NewGuid()
-                        .ToString()));
+                    unixTimestamp + "-" + guid));
             return packageFolder;
         }
 
@@ -85,8 +87,7 @@
                 dataPairs.Add(new FormatDataPair(format, data));
             }
 
-            return factory.CreateFromFormatsAndData(
-                dataPairs.ToArray());
+            return factory.CreateFromFormatsAndData(dataPairs.ToArray());
         }
 
         public Task DeletePackageAsync(IClipboardDataPackage package)
