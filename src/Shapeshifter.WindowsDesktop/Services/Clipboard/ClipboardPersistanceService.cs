@@ -16,7 +16,7 @@
 
     using Structures;
 
-    class ClipboardPersistanceService: IClipboardPersistanceService
+    class ClipboardPersistanceService : IClipboardPersistanceService
     {
         readonly IFileManager fileManager;
 
@@ -37,8 +37,8 @@
             {
                 var content = package.Contents[i];
                 var filePath = Path.Combine(
-                    packageFolder, 
-                    i+1 + "." + content.RawFormat);
+                    packageFolder,
+                    i + 1 + "." + content.RawFormat);
                 fileManager.WriteBytesToTemporaryFile(
                     filePath, content.RawData);
             }
@@ -46,9 +46,8 @@
 
         string PrepareUniquePackageFolder()
         {
-            var unixTimestamp = DateTime.UtcNow.ToFileTime();
-            var packageFolder = fileManager.PrepareFolder(
-                Path.Combine("Pinned", unixTimestamp.ToString()));
+            var packageFolder = fileManager.PrepareNewFolder(
+                Path.Combine("Pinned"));
             return packageFolder;
         }
 
@@ -56,9 +55,10 @@
         {
             var packageList = new List<IClipboardDataPackage>();
             var packageFolder = fileManager.PrepareFolder("Pinned");
-            foreach (var directory in Directory.GetDirectories(packageFolder))
+            var packageDirectories = Directory.GetDirectories(packageFolder);
+            foreach (var packageDirectory in packageDirectories)
             {
-                packageList.Add(await GetPersistedPackageAsync(directory));
+                packageList.Add(await GetPersistedPackageAsync(packageDirectory));
             }
 
             return packageList;
@@ -66,8 +66,9 @@
 
         async Task<IClipboardDataPackage> GetPersistedPackageAsync(string directory)
         {
-            var packageFiles = Directory.GetFiles(directory)
-                                        .OrderBy(x => x);
+            var packageFiles = Directory
+                .GetFiles(directory)
+                .OrderBy(x => x);
 
             var dataPairs = new List<FormatDataPair>();
             foreach (var file in packageFiles)

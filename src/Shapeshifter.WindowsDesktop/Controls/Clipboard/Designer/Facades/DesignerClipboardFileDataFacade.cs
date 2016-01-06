@@ -1,7 +1,5 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Designer.Facades
 {
-    using System.Windows.Forms;
-
     using Data;
 
     using Properties;

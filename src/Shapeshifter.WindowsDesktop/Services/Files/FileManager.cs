@@ -50,7 +50,7 @@
         {
             if (Directory.Exists(path))
             {
-                Directory.Delete(path);
+                Directory.Delete(path, true);
             }
         }
 
@@ -125,9 +125,28 @@
             return originPath.Split('\\', '/');
         }
 
-        public string PrepareFolder(string relativePath)
+        public string PrepareNewFolder(string relativePath)
+        {
+            var count = 0;
+
+            string finalPath = null;
+            while ((finalPath == null) || Directory.Exists(finalPath))
+            {
+                finalPath = GetFullPathFromRelativePath(
+                    Path.Combine(relativePath, (++count).ToString()));
+            }
+
+            return PrepareFullFolderPath(finalPath);
+        }
+
+        public string PrepareFolder(string relativePath = null)
         {
             var finalPath = GetFullPathFromRelativePath(relativePath);
+            return PrepareFullFolderPath(finalPath);
+        }
+
+        static string PrepareFullFolderPath(string finalPath)
+        {
             CreateDirectoryIfNotExists(finalPath);
             return finalPath;
         }
@@ -154,11 +173,13 @@
             }
         }
 
-        static string GetFullPathFromRelativePath(string path)
+        static string GetFullPathFromRelativePath(string path = null)
         {
             var isolatedFolderPath = PrepareIsolatedFolder();
 
-            var finalPath = Path.Combine(isolatedFolderPath, path);
+            var finalPath = path == null 
+                ? isolatedFolderPath 
+                : Path.Combine(isolatedFolderPath, path);
             return finalPath;
         }
 

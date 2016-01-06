@@ -13,7 +13,9 @@
 
         string PrepareTemporaryFolder(string relativePath);
 
-        string PrepareFolder(string relativePath);
+        string PrepareFolder(string relativePath = null);
+
+        string PrepareNewFolder(string relativePath);
 
         void DeleteDirectoryIfExists(string path);
 

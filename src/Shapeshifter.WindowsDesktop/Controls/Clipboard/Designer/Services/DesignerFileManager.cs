@@ -20,6 +20,11 @@
             return null;
         }
 
+        public string PrepareNewFolder(string relativePath)
+        {
+            return null;
+        }
+
         public void DeleteDirectoryIfExists(string path) { }
 
         public void DeleteFileIfExists(string path) { }
