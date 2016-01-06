@@ -7,9 +7,8 @@ namespace Shapeshifter.WindowsDesktop.Services.Arguments
     using System.IO;
     using System.Linq;
 
-    using Interfaces;
-
-    using Services.Interfaces;
+    using Shared.Services.Arguments.Interfaces;
+    using Shared.Services.Interfaces;
 
     class UpdateArgumentProcessor: IArgumentProcessor
     {

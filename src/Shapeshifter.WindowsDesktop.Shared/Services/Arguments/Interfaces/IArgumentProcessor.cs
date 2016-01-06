@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services.Arguments.Interfaces
+﻿namespace Shapeshifter.WindowsDesktop.Shared.Services.Arguments.Interfaces
 {
     public interface IArgumentProcessor
     {

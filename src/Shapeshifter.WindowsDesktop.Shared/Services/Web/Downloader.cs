@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services.Web
+﻿namespace Shapeshifter.WindowsDesktop.Shared.Services.Web
 {
     using System;
     using System.Net.Http;

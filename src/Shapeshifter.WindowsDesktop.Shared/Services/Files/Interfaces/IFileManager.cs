@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services.Files.Interfaces
+﻿namespace Shapeshifter.WindowsDesktop.Shared.Services.Files.Interfaces
 {
     using System;
     using System.Collections.Generic;

@@ -1,8 +1,8 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
-    using WindowsDesktop.Services.Interfaces;
-
     using Interfaces;
+
+    using Shared.Services.Interfaces;
 
     class DesignerProcessManager
         : IProcessManager,
