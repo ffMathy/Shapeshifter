@@ -20,6 +20,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 
     using Native;
 
+    using Shared;
+
     using Threading;
 
     public class DefaultWiringModule : AutofacModule
@@ -43,7 +45,9 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
         protected override void Load(ContainerBuilder builder)
         {
             RegisterAssemblyTypes(builder, typeof(DefaultWiringModule).Assembly);
+
             RegisterAssemblyTypes(builder, NativeAssemblyHelper.Assembly);
+            RegisterAssemblyTypes(builder, SharedAssemblyHelper.Assembly);
 
             RegisterMainThread(builder);
 
