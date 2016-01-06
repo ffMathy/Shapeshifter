@@ -30,7 +30,7 @@
                 c =>
                 {
                     c.RegisterFake<IFileManager>()
-                        .PrepareFolder(Arg.Is<string>(
+                        .PrepareNewFolder(Arg.Is<string>(
                             x => x.StartsWith("Pinned")))
                         .Returns("preparedFolder");
                 });
@@ -191,19 +191,19 @@
                     .Contents[1]
                     .RawData[1]);
 
-            Assert.AreEqual(1,
+            Assert.AreEqual(3,
                 persistedPackage2
                     .Contents[0]
                     .RawData[0]);
-            Assert.AreEqual(2,
+            Assert.AreEqual(4,
                 persistedPackage2
                     .Contents[0]
                     .RawData[1]);
-            Assert.AreEqual(3,
+            Assert.AreEqual(1,
                 persistedPackage2
                     .Contents[1]
                     .RawData[0]);
-            Assert.AreEqual(4,
+            Assert.AreEqual(2,
                 persistedPackage2
                     .Contents[1]
                     .RawData[1]);

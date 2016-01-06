@@ -46,12 +46,8 @@
 
         string PrepareUniquePackageFolder()
         {
-            var unixTimestamp = DateTime.UtcNow.ToFileTime();
-            var guid = Guid.NewGuid()
-                           .ToString();
-            var packageFolder = fileManager.PrepareFolder(
-                Path.Combine("Pinned", 
-                    unixTimestamp + "-" + guid));
+            var packageFolder = fileManager.PrepareNewFolder(
+                Path.Combine("Pinned"));
             return packageFolder;
         }
 
@@ -59,9 +55,10 @@
         {
             var packageList = new List<IClipboardDataPackage>();
             var packageFolder = fileManager.PrepareFolder("Pinned");
-            foreach (var directory in Directory.GetDirectories(packageFolder))
+            var packageDirectories = Directory.GetDirectories(packageFolder);
+            foreach (var packageDirectory in packageDirectories)
             {
-                packageList.Add(await GetPersistedPackageAsync(directory));
+                packageList.Add(await GetPersistedPackageAsync(packageDirectory));
             }
 
             return packageList;

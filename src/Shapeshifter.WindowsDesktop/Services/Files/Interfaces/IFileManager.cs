@@ -15,6 +15,8 @@
 
         string PrepareFolder(string relativePath = null);
 
+        string PrepareNewFolder(string relativePath);
+
         void DeleteDirectoryIfExists(string path);
 
         void DeleteFileIfExists(string path);
