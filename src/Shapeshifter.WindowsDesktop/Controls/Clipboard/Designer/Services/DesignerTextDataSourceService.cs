@@ -10,6 +10,8 @@
 
     using Properties;
 
+    using Shared.Controls.Designer.Services;
+
     class DesignerTextDataSourceService
         : IDataSourceService,
           IDesignerService

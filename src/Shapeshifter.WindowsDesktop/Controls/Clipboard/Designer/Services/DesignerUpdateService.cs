@@ -2,8 +2,7 @@
 {
     using System.Threading.Tasks;
 
-    using Interfaces;
-
+    using Shared.Controls.Designer.Services;
     using Shared.Services.Interfaces;
 
     class DesignerUpdateService

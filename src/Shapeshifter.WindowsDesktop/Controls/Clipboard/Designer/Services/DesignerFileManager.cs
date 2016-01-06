@@ -2,8 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using Interfaces;
-
+    using Shared.Controls.Designer.Services;
     using Shared.Services.Files.Interfaces;
 
     class DesignerFileManager

@@ -44,7 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\Designer\Services\IDesignerService.cs" />
+    <Compile Include="Infrastructure\Dependencies\AssemblyRegistrationHelper.cs" />
     <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
+    <Compile Include="Infrastructure\Dependencies\PublicConstructorFinder.cs" />
     <Compile Include="SharedAssemblyHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Arguments\AggregateArgumentProcessor.cs" />

@@ -197,11 +197,9 @@
     <Compile Include="Infrastructure\Handles\Interfaces\IPerformanceHandle.cs" />
     <Compile Include="Infrastructure\Handles\MemoryHandle.cs" />
     <Compile Include="Infrastructure\Handles\PerformanceHandle.cs" />
-    <Compile Include="Controls\Clipboard\Designer\Services\Interfaces\IDesignerService.cs" />
     <Compile Include="Infrastructure\Caching\Interfaces\IKeyValueCache.cs" />
     <Compile Include="Infrastructure\Caching\KeyValueCache.cs" />
     <Compile Include="Infrastructure\Dependencies\DefaultWiringModule.cs" />
-    <Compile Include="Infrastructure\Dependencies\PublicConstructorFinder.cs" />
     <Compile Include="Infrastructure\Environment\EnvironmentInformation.cs" />
     <Compile Include="Infrastructure\Environment\Interfaces\IEnvironmentInformation.cs" />
     <Compile Include="Infrastructure\Events\UserInterfaceHiddenEventArgument.cs" />

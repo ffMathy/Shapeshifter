@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    using Infrastructure.Dependencies.Interfaces;
+    using WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 
     public interface IFileManager
         : ISingleInstance,
