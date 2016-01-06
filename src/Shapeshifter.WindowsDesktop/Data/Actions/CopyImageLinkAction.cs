@@ -16,7 +16,7 @@
     using Services.Web;
     using Services.Web.Interfaces;
 
-    //TODO: have custom preview generators as well. for instance, when copying ONLY an image link, generate the image itself as a preview (icon for the clipboard entry).
+    using Shared.Services.Web.Interfaces;
 
     class CopyImageLinkAction: ICopyImageLinkAction
     {

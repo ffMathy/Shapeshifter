@@ -12,8 +12,7 @@
 
     using NSubstitute;
 
-    using Services.Files.Interfaces;
-    using Services.Interfaces;
+    using Shared.Services.Interfaces;
 
     public abstract class TestBase
     {
@@ -23,19 +22,13 @@
         public void ClearCacheOnEnd()
         {
             Extensions.ClearCache();
-            DisposeIntegrationTestTypes();
+            DisposeContainer();
         }
 
-        void DisposeIntegrationTestTypes()
+        void DisposeContainer()
         {
-            if (activeContainer == null)
-            {
-                return;
-            }
-
-            var fileManager = activeContainer.Resolve<IFileManager>();
-            fileManager.DeleteDirectoryIfExists(fileManager.PrepareFolder());
-            fileManager.Dispose();
+            activeContainer?.Dispose();
+            activeContainer = null;
         }
 
         protected ILifetimeScope CreateContainer(Action<ContainerBuilder> setupCallback = null)

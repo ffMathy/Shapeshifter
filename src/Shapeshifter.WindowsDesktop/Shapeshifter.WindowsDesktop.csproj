@@ -197,12 +197,9 @@
     <Compile Include="Infrastructure\Handles\Interfaces\IPerformanceHandle.cs" />
     <Compile Include="Infrastructure\Handles\MemoryHandle.cs" />
     <Compile Include="Infrastructure\Handles\PerformanceHandle.cs" />
-    <Compile Include="Controls\Clipboard\Designer\Services\Interfaces\IDesignerService.cs" />
     <Compile Include="Infrastructure\Caching\Interfaces\IKeyValueCache.cs" />
     <Compile Include="Infrastructure\Caching\KeyValueCache.cs" />
     <Compile Include="Infrastructure\Dependencies\DefaultWiringModule.cs" />
-    <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
-    <Compile Include="Infrastructure\Dependencies\PublicConstructorFinder.cs" />
     <Compile Include="Infrastructure\Environment\EnvironmentInformation.cs" />
     <Compile Include="Infrastructure\Environment\Interfaces\IEnvironmentInformation.cs" />
     <Compile Include="Infrastructure\Events\UserInterfaceHiddenEventArgument.cs" />
@@ -224,7 +221,6 @@
     <Compile Include="Main.cs" />
     <Compile Include="Mediators\PasteCombinationDurationMediator.cs" />
     <Compile Include="Mediators\Interfaces\IPasteCombinationDurationMediator.cs" />
-    <Compile Include="Services\Arguments\Interfaces\IArgumentProcessor.cs" />
     <Compile Include="Services\Arguments\CleanupArgumentProcessor.cs" />
     <Compile Include="Services\Arguments\UpdateArgumentProcessor.cs" />
     <Compile Include="Services\Clipboard\ClipboardPasteService.cs" />
@@ -258,8 +254,6 @@
     <Compile Include="Services\Messages\Interfaces\IWindowMessageInterceptor.cs" />
     <Compile Include="Services\Messages\Interfaces\IWindowMessageHook.cs" />
     <Compile Include="Services\Web\DomainNameResolver.cs" />
-    <Compile Include="Services\Web\Downloader.cs" />
-    <Compile Include="Services\Files\FileManager.cs" />
     <Compile Include="Services\Files\FileType.cs" />
     <Compile Include="Services\Files\FileTypeInterpreter.cs" />
     <Compile Include="Services\Files\Interfaces\IFileTypeInterpreter.cs" />
@@ -270,13 +264,9 @@
     <Compile Include="Services\Messages\Interceptors\Interfaces\IClipboardCopyInterceptor.cs" />
     <Compile Include="Mediators\Interfaces\IClipboardUserInterfaceMediator.cs" />
     <Compile Include="Services\Web\Interfaces\IDomainNameResolver.cs" />
-    <Compile Include="Services\Web\Interfaces\IDownloader.cs" />
-    <Compile Include="Services\Files\Interfaces\IFileManager.cs" />
     <Compile Include="Services\Interfaces\IHookService.cs" />
     <Compile Include="Services\Images\Interfaces\IImagePersistenceService.cs" />
     <Compile Include="Services\Web\Interfaces\ILinkParser.cs" />
-    <Compile Include="Services\Interfaces\IProcessManager.cs" />
-    <Compile Include="Services\Interfaces\IUpdateService.cs" />
     <Compile Include="Services\Messages\Interceptors\Hotkeys\Interfaces\IPasteHotkeyInterceptor.cs" />
     <Compile Include="Infrastructure\Events\WindowMessageReceivedArgument.cs" />
     <Compile Include="Services\Files\FileIconService.cs" />
@@ -284,8 +274,6 @@
     <Compile Include="Services\Messages\Interceptors\Hotkeys\PasteHotkeyInterceptor.cs" />
     <Compile Include="Services\Web\LinkParser.cs" />
     <Compile Include="Services\Web\LinkType.cs" />
-    <Compile Include="Services\ProcessManager.cs" />
-    <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Services\Messages\WindowMessageHook.cs" />
     <Compile Include="Structures\FormatDataPair.cs" />
     <Compile Include="Controls\Window\Binders\PackageToActionBinder.cs" />
@@ -409,6 +397,10 @@
     <ProjectReference Include="..\Shapeshifter.WindowsDesktop.Native\Shapeshifter.WindowsDesktop.Native.csproj">
       <Project>{25acb6f2-f5e2-4c38-ab51-697eaa995cc4}</Project>
       <Name>Shapeshifter.WindowsDesktop.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shapeshifter.WindowsDesktop.Shared\Shapeshifter.WindowsDesktop.Shared.csproj">
+      <Project>{B1862496-6FC3-4DBB-ACA5-C1CA84B86688}</Project>
+      <Name>Shapeshifter.WindowsDesktop.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

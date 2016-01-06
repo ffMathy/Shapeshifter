@@ -129,12 +129,16 @@
     <Compile Include="TestException.cs" />
     <Compile Include="Web\DownloaderTest.cs" />
     <Compile Include="Web\DomainNameResolverTest.cs" />
-    <Compile Include="Windows\ViewModels\ClipboardListViewModelTest.cs" />
+    <Compile Include="Controls\Window\ViewModels\ClipboardListViewModelTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shapeshifter.WindowsDesktop.Native\Shapeshifter.WindowsDesktop.Native.csproj">
       <Project>{25acb6f2-f5e2-4c38-ab51-697eaa995cc4}</Project>
       <Name>Shapeshifter.WindowsDesktop.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shapeshifter.WindowsDesktop.Shared\Shapeshifter.WindowsDesktop.Shared.csproj">
+      <Project>{b1862496-6fc3-4dbb-aca5-c1ca84b86688}</Project>
+      <Name>Shapeshifter.WindowsDesktop.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\Shapeshifter.WindowsDesktop\Shapeshifter.WindowsDesktop.csproj">
       <Project>{c8afeb5b-5197-4f7d-90f1-dc1dcd795be1}</Project>

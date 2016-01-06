@@ -2,9 +2,8 @@
 {
     using System.Threading.Tasks;
 
-    using WindowsDesktop.Services.Interfaces;
-
-    using Interfaces;
+    using Shared.Controls.Designer.Services;
+    using Shared.Services.Interfaces;
 
     class DesignerUpdateService
         : IUpdateService,

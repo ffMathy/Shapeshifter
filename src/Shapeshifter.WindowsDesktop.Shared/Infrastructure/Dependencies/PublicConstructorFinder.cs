@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
+﻿namespace Shapeshifter.WindowsDesktop.Shared.Infrastructure.Dependencies
 {
     using System;
     using System.Linq;

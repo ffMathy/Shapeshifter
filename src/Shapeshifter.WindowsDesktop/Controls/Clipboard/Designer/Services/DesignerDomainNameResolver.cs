@@ -5,7 +5,7 @@
 
     using WindowsDesktop.Services.Web.Interfaces;
 
-    using Interfaces;
+    using Shared.Controls.Designer.Services;
 
     class DesignerDomainNameResolver
         : IDomainNameResolver,

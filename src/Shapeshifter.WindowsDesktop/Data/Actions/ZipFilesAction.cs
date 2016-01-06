@@ -14,7 +14,8 @@
     using Interfaces;
 
     using Services.Clipboard.Interfaces;
-    using Services.Files.Interfaces;
+
+    using Shared.Services.Files.Interfaces;
 
     class ZipFilesAction: IZipFilesAction
     {

@@ -5,9 +5,9 @@
 
     using Autofac;
 
-    using Interfaces;
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using Shared.Services.Interfaces;
 
     [TestClass]
     public class ProcessManagerTest: TestBase

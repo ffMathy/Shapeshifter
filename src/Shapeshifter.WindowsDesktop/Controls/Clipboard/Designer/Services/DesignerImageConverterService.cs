@@ -4,6 +4,8 @@
 
     using Interfaces;
 
+    using Shared.Controls.Designer.Services;
+
     class DesignerImageConverterService
         : IDesignerImageConverterService,
           IDesignerService

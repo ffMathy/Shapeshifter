@@ -1,9 +1,9 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services.Files.Interfaces
+﻿namespace Shapeshifter.WindowsDesktop.Shared.Services.Files.Interfaces
 {
     using System;
     using System.Collections.Generic;
 
-    using Infrastructure.Dependencies.Interfaces;
+    using WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 
     public interface IFileManager
         : ISingleInstance,

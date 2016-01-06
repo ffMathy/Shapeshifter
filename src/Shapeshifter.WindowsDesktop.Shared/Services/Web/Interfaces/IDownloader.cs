@@ -1,9 +1,9 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services.Web.Interfaces
+﻿namespace Shapeshifter.WindowsDesktop.Shared.Services.Web.Interfaces
 {
     using System;
     using System.Threading.Tasks;
 
-    using Infrastructure.Dependencies.Interfaces;
+    using WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 
     public interface IDownloader
         : ISingleInstance,

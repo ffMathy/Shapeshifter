@@ -2,9 +2,8 @@
 {
     using System.Collections.Generic;
 
-    using WindowsDesktop.Services.Files.Interfaces;
-
-    using Interfaces;
+    using Shared.Controls.Designer.Services;
+    using Shared.Services.Files.Interfaces;
 
     class DesignerFileManager
         : IFileManager,
