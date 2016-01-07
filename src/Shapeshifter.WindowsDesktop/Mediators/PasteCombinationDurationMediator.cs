@@ -16,8 +16,6 @@
     using Services.Keyboard.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
-    using Shared.Controls.Window.Interfaces;
-
     class PasteCombinationDurationMediator : IPasteCombinationDurationMediator
     {
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;

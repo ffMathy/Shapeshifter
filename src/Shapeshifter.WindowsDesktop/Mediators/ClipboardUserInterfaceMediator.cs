@@ -15,8 +15,6 @@
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interceptors.Interfaces;
 
-    using Shared.Controls.Window.Interfaces;
-
     class ClipboardUserInterfaceMediator:
         IClipboardUserInterfaceMediator
     {

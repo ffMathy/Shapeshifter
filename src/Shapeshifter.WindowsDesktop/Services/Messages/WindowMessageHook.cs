@@ -13,8 +13,6 @@
 
     using Interfaces;
 
-    using Shared.Controls.Window.Interfaces;
-
     class WindowMessageHook
         : IWindowMessageHook,
           IDisposable

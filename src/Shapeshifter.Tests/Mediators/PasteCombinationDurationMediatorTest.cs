@@ -24,8 +24,6 @@
     using Services.Keyboard.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
-    using Shared.Controls.Window.Interfaces;
-
     [TestClass]
     public class PasteCombinationDurationMediatorTest : TestBase
     {

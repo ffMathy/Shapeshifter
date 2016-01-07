@@ -16,7 +16,6 @@
 
     using NSubstitute;
 
-    using Shared.Controls.Window.Interfaces;
     using Controls.Window.Interfaces;
     [TestClass]
     public class WindowMessageHookTest: TestBase

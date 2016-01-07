@@ -21,8 +21,6 @@
 
     using Services.Messages.Interceptors.Interfaces;
 
-    using Shared.Controls.Window.Interfaces;
-
     [TestClass]
     public class ClipboardUserInterfaceMediatorTest: TestBase
     {
