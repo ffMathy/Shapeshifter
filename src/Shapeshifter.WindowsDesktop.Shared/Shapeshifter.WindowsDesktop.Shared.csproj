@@ -34,6 +34,7 @@
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\Designer\Services\IDesignerService.cs" />
+    <Compile Include="Controls\Window\Interfaces\IWindow.cs" />
     <Compile Include="Infrastructure\Dependencies\AssemblyRegistrationHelper.cs" />
     <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
     <Compile Include="Infrastructure\Dependencies\PublicConstructorFinder.cs" />

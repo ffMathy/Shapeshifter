@@ -24,6 +24,8 @@
     using Services.Keyboard.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
+    using Shared.Controls.Window.Interfaces;
+
     [TestClass]
     public class PasteCombinationDurationMediatorTest : TestBase
     {
@@ -263,7 +265,7 @@
                 });
 
             var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            mediator.Connect(Substitute.For<IWindow>());
+            mediator.Connect(Substitute.For<IHookableWindow>());
         }
 
         [TestMethod]
@@ -277,7 +279,7 @@
                 });
 
             var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            mediator.Connect(Substitute.For<IWindow>());
+            mediator.Connect(Substitute.For<IHookableWindow>());
 
             var fakePasteHotkeyInterceptor = container.Resolve<IPasteHotkeyInterceptor>();
             RaiseHotkeyFired(fakePasteHotkeyInterceptor);
@@ -321,7 +323,7 @@
 
             var mediator = container.Resolve<IPasteCombinationDurationMediator>();
             mediator.PasteCombinationDurationPassed += (sender, e) => holdCombinationDown = false;
-            mediator.Connect(Substitute.For<IWindow>());
+            mediator.Connect(Substitute.For<IHookableWindow>());
 
             var fakePasteHotkeyInterceptor = container.Resolve<IPasteHotkeyInterceptor>();
             RaiseHotkeyFired(fakePasteHotkeyInterceptor);

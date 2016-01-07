@@ -1,16 +1,13 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Window.Interfaces
 {
-    using System;
     using System.Windows.Interop;
 
-    public interface IWindow
-    {
-        event EventHandler SourceInitialized;
+    using Shared.Controls.Window.Interfaces;
 
+    public interface IHookableWindow: IWindow
+    {
         void AddHwndSourceHook(HwndSourceHook hook);
 
         void RemoveHwndSourceHook(HwndSourceHook hook);
-
-        void Show();
     }
 }

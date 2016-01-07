@@ -16,8 +16,6 @@
         const int MinimumImportanceFactor = 0;
         const int IndentationSize = 2;
 
-        int lastThreadId;
-
         readonly ILogStream stream;
 
         readonly IDictionary<int, int> threadIndentationCache;

@@ -16,6 +16,8 @@
     using Services.Keyboard.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
+    using Shared.Controls.Window.Interfaces;
+
     class PasteCombinationDurationMediator : IPasteCombinationDurationMediator
     {
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
@@ -73,7 +75,8 @@
         public int DurationInDeciseconds
             => 5;
 
-        public void Connect(IWindow targetWindow)
+        public void Connect(
+            IHookableWindow targetWindow)
         {
             if (IsConnected)
             {

@@ -105,6 +105,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\Window\Interfaces\IHookableWindow.cs" />
     <Compile Include="Data\Actions\CopyImageLinkAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IPasteAction.cs" />
@@ -283,7 +284,6 @@
     <Compile Include="Controls\Window\Binders\Interfaces\IAsyncListDictionaryBinder.cs" />
     <Compile Include="Controls\Window\Interfaces\IClipboardListWindow.cs" />
     <Compile Include="Controls\Window\Interfaces\IMainWindowHandleContainer.cs" />
-    <Compile Include="Controls\Window\Interfaces\IWindow.cs" />
     <Compile Include="Controls\Window\MainWindowHandleContainer.cs" />
     <Compile Include="Controls\Window\ViewModels\ClipboardListViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\IClipboardListViewModel.cs" />

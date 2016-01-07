@@ -1,16 +1,51 @@
-﻿using System.Collections.Generic;
-
-namespace Shapeshifter.WindowsDesktop.Services.Arguments
+﻿namespace Shapeshifter.WindowsDesktop.Shared.Services.Arguments
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
 
-    using Shared.Services.Arguments.Interfaces;
+    using Interfaces;
 
-    class AggregateArgumentProcessor: IAggregateArgumentProcessor
+    class AggregateArgumentProcessor : IAggregateArgumentProcessor
     {
         readonly IEnumerable<IArgumentProcessor> argumentProcessors;
+        readonly ICollection<IArgumentProcessor> processorsUsed;
 
-        public bool ShouldTerminate { get; set; }
+        bool isProcessed;
+        bool shouldTerminate;
+
+        public AggregateArgumentProcessor()
+        {
+            processorsUsed = new List<IArgumentProcessor>();
+        }
+
+        public IEnumerable<IArgumentProcessor> ProcessorsUsed
+        {
+            get
+            {
+                if (!isProcessed)
+                {
+                    throw new InvalidOperationException(
+                        "Can't get the processors used before all arguments have been processed.");
+                }
+
+                return processorsUsed;
+            }
+        }
+
+        public bool ShouldTerminate
+        {
+            get
+            {
+                if (!isProcessed)
+                {
+                    throw new InvalidOperationException(
+                        "Can't get termination consensus before all arguments have been processed.");
+                }
+
+                return shouldTerminate;
+            }
+        }
 
         public AggregateArgumentProcessor(
             IEnumerable<IArgumentProcessor> argumentProcessors)
@@ -20,21 +55,30 @@ namespace Shapeshifter.WindowsDesktop.Services.Arguments
 
         public void ProcessArguments(string[] arguments)
         {
-            ShouldTerminate = false;
-
-            var processorsUsed = new List<IArgumentProcessor>();
-            foreach (var processor in argumentProcessors)
+            lock (processorsUsed)
             {
-                if (!processor.CanProcess(arguments))
+                processorsUsed.Clear();
+                
+                foreach (var processor in argumentProcessors)
                 {
-                    continue;
+                    ProcessArgumentsWithProcessor(arguments, processor);
                 }
-
-                processor.Process(arguments);
-                processorsUsed.Add(processor);
             }
 
-            ShouldTerminate = processorsUsed.Any(x => x.Terminates);
+            shouldTerminate = processorsUsed.Any(
+                x => x.Terminates);
+            isProcessed = true;
+        }
+
+        void ProcessArgumentsWithProcessor(string[] arguments, IArgumentProcessor processor)
+        {
+            if (!processor.CanProcess(arguments))
+            {
+                return;
+            }
+
+            processor.Process(arguments);
+            processorsUsed.Add(processor);
         }
     }
 }

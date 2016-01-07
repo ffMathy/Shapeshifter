@@ -4,12 +4,14 @@
 
     using Infrastructure.Dependencies.Interfaces;
 
+    using Shared.Controls.Window.Interfaces;
+
     public interface IHookService: ISingleInstance
     {
         bool IsConnected { get; }
 
         void Disconnect();
 
-        void Connect(IWindow window);
+        void Connect(IHookableWindow window);
     }
 }

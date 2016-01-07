@@ -823,29 +823,5 @@
 
             Assert.AreSame(fakePackage, viewModel.Elements.Single());
         }
-
-        [TestMethod]
-        public void ControlHighlightedMovesElement()
-        {
-            var fakeUserInterfaceMediator = Substitute.For<IClipboardUserInterfaceMediator>();
-
-            var fakePackage = Substitute.For<IClipboardDataControlPackage>();
-
-            var container = CreateContainer(
-                c => {
-                    c.RegisterInstance(fakeUserInterfaceMediator);
-                });
-
-            var viewModel = container.Resolve<IClipboardListViewModel>();
-            viewModel.Elements.Add(fakePackage);
-
-            fakeUserInterfaceMediator.ControlHighlighted +=
-                Raise.Event<EventHandler<ControlEventArgument>>(
-                    viewModel,
-                    new ControlEventArgument(
-                        fakePackage));
-
-            Assert.AreSame(fakePackage, viewModel.Elements.Single());
-        }
     }
 }

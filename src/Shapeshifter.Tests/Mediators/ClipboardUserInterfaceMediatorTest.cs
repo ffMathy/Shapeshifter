@@ -21,6 +21,8 @@
 
     using Services.Messages.Interceptors.Interfaces;
 
+    using Shared.Controls.Window.Interfaces;
+
     [TestClass]
     public class ClipboardUserInterfaceMediatorTest: TestBase
     {
@@ -62,7 +64,7 @@
                      .Returns(true);
                 });
 
-            var fakeWindow = Substitute.For<IWindow>();
+            var fakeWindow = Substitute.For<IHookableWindow>();
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Connect(fakeWindow);

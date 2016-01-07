@@ -137,7 +137,6 @@
             IClipboardUserInterfaceMediator mediator)
         {
             mediator.ControlAdded += Mediator_ControlAdded;
-            mediator.ControlHighlighted += Mediator_ControlHighlighted;
             mediator.ControlRemoved += Mediator_ControlRemoved;
 
             mediator.UserInterfaceHidden += Mediator_UserInterfaceHidden;
@@ -295,15 +294,6 @@
             lock (Elements)
             {
                 Elements.Remove(e.Package);
-            }
-        }
-
-        void Mediator_ControlHighlighted(object sender, ControlEventArgument e)
-        {
-            lock (Elements)
-            {
-                Elements.Remove(e.Package);
-                Elements.Insert(0, e.Package);
             }
         }
 

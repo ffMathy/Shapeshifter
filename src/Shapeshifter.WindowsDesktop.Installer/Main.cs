@@ -1,33 +1,25 @@
-﻿namespace Shapeshifter.WindowsDesktop
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Installer
 {
-    using Controls.Window.Interfaces;
-
-    using Infrastructure.Dependencies.Interfaces;
-
-    using Mediators.Interfaces;
-
-    using Shared.Services.Arguments.Interfaces;
-    using Shared.Services.Interfaces;
+    using Shapeshifter.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
+    using Shapeshifter.WindowsDesktop.Shared.Controls.Window.Interfaces;
+    using Shapeshifter.WindowsDesktop.Shared.Services.Arguments.Interfaces;
+    using Shapeshifter.WindowsDesktop.Shared.Services.Interfaces;
 
     public class Main: ISingleInstance
     {
         readonly IProcessManager processManager;
 
-        readonly IClipboardListWindow mainWindow;
-
-        readonly IClipboardUserInterfaceMediator clipboardUserInterfaceMediator;
+        readonly IWindow mainWindow;
 
         readonly IAggregateArgumentProcessor aggregateArgumentProcessor;
 
         public Main(
             IProcessManager processManager,
-            IClipboardListWindow mainWindow,
-            IClipboardUserInterfaceMediator clipboardUserInterfaceMediator,
+            IWindow mainWindow,
             IAggregateArgumentProcessor aggregateArgumentProcessor)
         {
             this.processManager = processManager;
             this.mainWindow = mainWindow;
-            this.clipboardUserInterfaceMediator = clipboardUserInterfaceMediator;
             this.aggregateArgumentProcessor = aggregateArgumentProcessor;
         }
 
@@ -42,13 +34,6 @@
                 return;
             }
 
-            LaunchMainWindow();
-        }
-
-        void LaunchMainWindow()
-        {
-            mainWindow.SourceInitialized +=
-                (sender, e) => clipboardUserInterfaceMediator.Connect(mainWindow);
             mainWindow.Show();
         }
     }

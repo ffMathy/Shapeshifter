@@ -2,7 +2,9 @@
 {
     using Infrastructure.Dependencies.Interfaces;
 
+    using Shared.Controls.Window.Interfaces;
+
     public interface IClipboardListWindow
-        : IWindow,
+        : IHookableWindow,
           ISingleInstance { }
 }
