@@ -10,6 +10,7 @@
                    TextWrapping="Wrap" FontWeight="UltraLight" TextAlignment="Center">
             Downloading Shapeshifter ...
         </TextBlock>
-        <ProgressBar Background="Transparent" Name="Progress" IsIndeterminate="True" VerticalAlignment="Bottom" Height="5" BorderThickness="0" />
+        <ProgressBar Background="Transparent" IsIndeterminate="True" VerticalAlignment="Top" Height="3" BorderThickness="0" />
+        <ProgressBar Background="Transparent" IsIndeterminate="True" VerticalAlignment="Bottom" Height="3" BorderThickness="0" />
     </Grid>
 </Window>
