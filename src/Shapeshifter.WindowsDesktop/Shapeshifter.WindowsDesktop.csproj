@@ -46,10 +46,6 @@
       <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Octokit, Version=0.17.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Octokit.0.17.0\lib\net45\Octokit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -199,7 +195,6 @@
     <Compile Include="Infrastructure\Handles\Interfaces\IHandle.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IClipboardPersistanceService.cs" />
     <Compile Include="Services\Interfaces\IDataSourceService.cs" />
-    <Compile Include="Services\Interfaces\IUpdateService.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardManager.cs" />
     <Compile Include="Services\Keyboard\KeyboardManager.cs" />
     <Compile Include="Services\Keyboard\KeyDirection.cs" />
@@ -223,7 +218,6 @@
     <Compile Include="Services\Messages\Interceptors\Hotkeys\KeyInterceptor.cs" />
     <Compile Include="Services\Messages\Interfaces\IWindowMessageInterceptor.cs" />
     <Compile Include="Services\Messages\Interfaces\IWindowMessageHook.cs" />
-    <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Services\Web\DomainNameResolver.cs" />
     <Compile Include="Services\Files\FileType.cs" />
     <Compile Include="Services\Files\FileTypeInterpreter.cs" />

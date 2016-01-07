@@ -1,9 +1,8 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services
+﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Installer.Services
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.IO.Compression;
     using System.Linq;
     using System.Reflection;
     using System.Text.RegularExpressions;
@@ -11,20 +10,11 @@
 
     using Autofac;
 
-    using Files.Interfaces;
-
-    using Infrastructure.Environment.Interfaces;
-    using Infrastructure.Logging.Interfaces;
-
     using Interfaces;
 
-    using Octokit;
-
-    using Shared.Services.Files.Interfaces;
-    using Shared.Services.Interfaces;
-    using Shared.Services.Web.Interfaces;
-
-    using Web.Interfaces;
+    using Shapeshifter.WindowsDesktop.Shared.Services.Files.Interfaces;
+    using Shapeshifter.WindowsDesktop.Shared.Services.Interfaces;
+    using Shapeshifter.WindowsDesktop.Shared.Services.Web.Interfaces;
 
     class UpdateService
         : IUpdateService,

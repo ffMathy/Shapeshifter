@@ -31,8 +31,13 @@
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Octokit, Version=0.17.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Octokit.0.17.0\lib\net45\Octokit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -52,6 +57,8 @@
     </ApplicationDefinition>
     <Compile Include="Infrastructure\Dependencies\DefaultWiringModule.cs" />
     <Compile Include="Controls\ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Services\Interfaces\IUpdateService.cs" />
+    <Compile Include="Services\UpdateService.cs" />
     <Page Include="Controls\Window\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
