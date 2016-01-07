@@ -277,15 +277,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileDataSourceIcon.dat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileDataFileIcon.dat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\TextDataSourceIcon.dat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileDataSourceIcon.dat" />
+    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileDataFileIcon.dat" />
+    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\TextDataSourceIcon.dat" />
     <Page Include="Controls\Clipboard\DataSourceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -359,9 +353,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileImageSample.dat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileImageSample.dat" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shapeshifter.WindowsDesktop.Native\Shapeshifter.WindowsDesktop.Native.csproj">
