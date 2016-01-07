@@ -16,16 +16,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\build\shared\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -58,7 +50,6 @@
     <Compile Include="Services\Files\FileManager.cs" />
     <Compile Include="Services\Files\Interfaces\IFileManager.cs" />
     <Compile Include="Services\Interfaces\IProcessManager.cs" />
-    <Compile Include="Services\Interfaces\IUpdateService.cs" />
     <Compile Include="Services\ProcessManager.cs" />
     <Compile Include="Services\Web\Downloader.cs" />
     <Compile Include="Services\Web\Interfaces\IDownloader.cs" />

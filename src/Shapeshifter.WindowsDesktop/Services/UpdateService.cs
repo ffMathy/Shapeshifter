@@ -20,6 +20,10 @@
 
     using Octokit;
 
+    using Shared.Services.Files.Interfaces;
+    using Shared.Services.Interfaces;
+    using Shared.Services.Web.Interfaces;
+
     using Web.Interfaces;
 
     class UpdateService
