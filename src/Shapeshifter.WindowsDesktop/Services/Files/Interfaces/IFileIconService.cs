@@ -1,6 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Files.Interfaces
 {
-    using Infrastructure.Dependencies.Interfaces;
+    using Shared.Infrastructure.Dependencies.Interfaces;
 
     public interface IFileIconService: ISingleInstance
     {

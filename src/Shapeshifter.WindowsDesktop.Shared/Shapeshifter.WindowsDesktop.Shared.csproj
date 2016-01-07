@@ -42,6 +42,12 @@
     <Compile Include="Infrastructure\Dependencies\AssemblyRegistrationHelper.cs" />
     <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
     <Compile Include="Infrastructure\Dependencies\PublicConstructorFinder.cs" />
+    <Compile Include="Infrastructure\Handles\IndentationHandle.cs" />
+    <Compile Include="Infrastructure\Handles\Interfaces\IHandle.cs" />
+    <Compile Include="Infrastructure\Handles\Interfaces\IIndentationHandle.cs" />
+    <Compile Include="Infrastructure\Logging\Interfaces\ILogger.cs" />
+    <Compile Include="Infrastructure\Logging\Interfaces\ILogStream.cs" />
+    <Compile Include="Infrastructure\Logging\Logger.cs" />
     <Compile Include="SharedAssemblyHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Arguments\AggregateArgumentProcessor.cs" />

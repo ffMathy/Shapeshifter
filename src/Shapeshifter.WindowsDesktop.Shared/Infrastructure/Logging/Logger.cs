@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
+﻿namespace Shapeshifter.WindowsDesktop.Shared.Infrastructure.Logging
 {
     using System;
     using System.Collections.Generic;

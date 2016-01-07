@@ -2,7 +2,7 @@
 {
     using System;
 
-    using Infrastructure.Dependencies.Interfaces;
+    using Shared.Infrastructure.Dependencies.Interfaces;
 
     public interface IMainWindowHandleContainer: ISingleInstance
     {

@@ -2,7 +2,7 @@
 {
     using System;
 
-    using Dependencies.Interfaces;
+    using Shared.Infrastructure.Dependencies.Interfaces;
 
     public interface IMainThreadInvoker: ISingleInstance
     {

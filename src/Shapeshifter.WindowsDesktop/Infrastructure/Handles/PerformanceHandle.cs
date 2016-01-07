@@ -4,7 +4,7 @@
 
     using Interfaces;
 
-    using Logging.Interfaces;
+    using Shared.Infrastructure.Logging.Interfaces;
 
     class PerformanceHandle: IPerformanceHandle
     {

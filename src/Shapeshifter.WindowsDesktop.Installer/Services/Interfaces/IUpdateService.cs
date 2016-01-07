@@ -2,7 +2,7 @@
 {
     using System.Threading.Tasks;
 
-    using Shapeshifter.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
+    using Shapeshifter.WindowsDesktop.Shared.Infrastructure.Dependencies.Interfaces;
 
     public interface IUpdateService: ISingleInstance
     {

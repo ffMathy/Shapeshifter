@@ -86,10 +86,7 @@
     <Compile Include="Data\Actions\UploadImageAction.cs" />
     <Compile Include="Data\Actions\ZipFilesAction.cs" />
     <Compile Include="Infrastructure\Events\PastePerformedEventArgument.cs" />
-    <Compile Include="Infrastructure\Handles\IndentationHandle.cs" />
-    <Compile Include="Infrastructure\Handles\Interfaces\IIndentationHandle.cs" />
     <Compile Include="Infrastructure\Logging\LogStream.cs" />
-    <Compile Include="Infrastructure\Logging\Interfaces\ILogStream.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Controls\Clipboard\ClipboardImageDataControl.xaml.cs">
       <DependentUpon>ClipboardImageDataControl.xaml</DependentUpon>
@@ -99,7 +96,6 @@
     <Compile Include="Controls\Clipboard\Designer\Services\DesignerDomainNameResolver.cs" />
     <Compile Include="Controls\Clipboard\Designer\Services\DesignerFileManager.cs" />
     <Compile Include="Controls\Clipboard\Designer\Services\DesignerProcessManager.cs" />
-    <Compile Include="Controls\Clipboard\Designer\Services\DesignerUpdateService.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardDataControlPackageFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardFileCollectionDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardImageDataControlFactory.cs" />
@@ -169,8 +165,6 @@
     <Compile Include="Infrastructure\Environment\Interfaces\IEnvironmentInformation.cs" />
     <Compile Include="Infrastructure\Events\UserInterfaceHiddenEventArgument.cs" />
     <Compile Include="Infrastructure\Events\UserInterfaceShownEventArgument.cs" />
-    <Compile Include="Infrastructure\Logging\Interfaces\ILogger.cs" />
-    <Compile Include="Infrastructure\Logging\Logger.cs" />
     <Compile Include="Infrastructure\Threading\AsyncFilter.cs" />
     <Compile Include="Infrastructure\Threading\ConsumerThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IAsyncFilter.cs" />
@@ -192,7 +186,6 @@
     <Compile Include="Infrastructure\Handles\ClipboardHandle.cs" />
     <Compile Include="Services\Clipboard\ClipboardPersistanceService.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IClipboardPasteService.cs" />
-    <Compile Include="Infrastructure\Handles\Interfaces\IHandle.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IClipboardPersistanceService.cs" />
     <Compile Include="Services\Interfaces\IDataSourceService.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardManager.cs" />

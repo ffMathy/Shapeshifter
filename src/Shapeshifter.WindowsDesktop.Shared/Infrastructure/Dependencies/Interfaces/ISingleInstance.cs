@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies.Interfaces
+﻿namespace Shapeshifter.WindowsDesktop.Shared.Infrastructure.Dependencies.Interfaces
 {
     public interface ISingleInstance { }
 }

@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging.Interfaces
+﻿namespace Shapeshifter.WindowsDesktop.Shared.Infrastructure.Logging.Interfaces
 {
     public interface ILogStream
     {

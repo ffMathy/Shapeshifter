@@ -8,13 +8,14 @@
     using Controls.Window.Interfaces;
 
     using Infrastructure.Events;
-    using Infrastructure.Logging.Interfaces;
     using Infrastructure.Threading.Interfaces;
 
     using Interfaces;
 
     using Services.Keyboard.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
+
+    using Shared.Infrastructure.Logging.Interfaces;
 
     class PasteCombinationDurationMediator : IPasteCombinationDurationMediator
     {

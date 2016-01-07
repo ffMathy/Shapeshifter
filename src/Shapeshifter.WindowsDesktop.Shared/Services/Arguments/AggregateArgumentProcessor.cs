@@ -14,11 +14,6 @@
         bool isProcessed;
         bool shouldTerminate;
 
-        public AggregateArgumentProcessor()
-        {
-            processorsUsed = new List<IArgumentProcessor>();
-        }
-
         public IEnumerable<IArgumentProcessor> ProcessorsUsed
         {
             get
@@ -51,6 +46,8 @@
             IEnumerable<IArgumentProcessor> argumentProcessors)
         {
             this.argumentProcessors = argumentProcessors;
+
+            processorsUsed = new List<IArgumentProcessor>();
         }
 
         public void ProcessArguments(string[] arguments)

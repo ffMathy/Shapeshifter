@@ -3,7 +3,7 @@
     using System;
     using System.Threading.Tasks;
 
-    using WindowsDesktop.Infrastructure.Dependencies.Interfaces;
+    using Infrastructure.Dependencies.Interfaces;
 
     public interface IDownloader
         : ISingleInstance,

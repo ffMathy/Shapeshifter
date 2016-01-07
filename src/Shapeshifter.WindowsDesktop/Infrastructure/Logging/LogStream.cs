@@ -2,7 +2,7 @@
 {
     using System.Diagnostics;
 
-    using Interfaces;
+    using Shared.Infrastructure.Logging.Interfaces;
 
     class LogStream : ILogStream
     {

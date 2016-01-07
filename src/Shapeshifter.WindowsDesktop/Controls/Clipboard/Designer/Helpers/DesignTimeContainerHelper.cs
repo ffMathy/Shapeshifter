@@ -25,10 +25,6 @@
 
         public static void RegisterFakes(ContainerBuilder builder)
         {
-            builder.RegisterType<DesignerUpdateService>()
-                   .AsSelf()
-                   .As<IUpdateService>()
-                   .SingleInstance();
             builder.RegisterType<DesignerFileManager>()
                    .AsSelf()
                    .As<IFileManager>()

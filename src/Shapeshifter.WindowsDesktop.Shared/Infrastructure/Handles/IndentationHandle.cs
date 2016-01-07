@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Handles
+﻿namespace Shapeshifter.WindowsDesktop.Shared.Infrastructure.Handles
 {
     using Interfaces;
 

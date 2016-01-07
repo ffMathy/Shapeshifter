@@ -47,8 +47,7 @@
 
             builder.RegisterModule(
                 new DefaultWiringModule(fakeEnvironment));
-
-            builder.RegisterFake<IUpdateService>();
+            
             builder.RegisterFake<IThreadDelay>();
 
             setupCallback?.Invoke(builder);

@@ -1,7 +1,7 @@
 ﻿namespace Shapeshifter.UserInterface.WindowsDesktop.Installer
 {
-    using Shapeshifter.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
     using Shapeshifter.WindowsDesktop.Shared.Controls.Window.Interfaces;
+    using Shapeshifter.WindowsDesktop.Shared.Infrastructure.Dependencies.Interfaces;
     using Shapeshifter.WindowsDesktop.Shared.Services.Arguments.Interfaces;
     using Shapeshifter.WindowsDesktop.Shared.Services.Interfaces;
 

@@ -8,10 +8,11 @@
     using Controls.Window.Interfaces;
 
     using Infrastructure.Events;
-    using Infrastructure.Logging.Interfaces;
     using Infrastructure.Threading.Interfaces;
 
     using Interfaces;
+
+    using Shared.Infrastructure.Logging.Interfaces;
 
     class WindowMessageHook
         : IWindowMessageHook,

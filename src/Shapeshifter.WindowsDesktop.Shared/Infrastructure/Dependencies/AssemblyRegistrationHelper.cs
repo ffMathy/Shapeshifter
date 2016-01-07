@@ -4,12 +4,12 @@ namespace Shapeshifter.WindowsDesktop.Shared.Infrastructure.Dependencies
 {
     using System.Reflection;
 
-    using WindowsDesktop.Infrastructure.Dependencies.Interfaces;
-
     using Autofac;
     using Autofac.Builder;
 
     using Controls.Designer.Services;
+
+    using Interfaces;
 
     public static class AssemblyRegistrationHelper
     {

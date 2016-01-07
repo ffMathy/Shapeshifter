@@ -2,7 +2,7 @@
 {
     using Controls.Window.Interfaces;
 
-    using Infrastructure.Dependencies.Interfaces;
+    using Shared.Infrastructure.Dependencies.Interfaces;
 
     public interface IHookService: ISingleInstance
     {

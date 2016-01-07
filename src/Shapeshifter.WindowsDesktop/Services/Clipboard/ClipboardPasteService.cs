@@ -6,14 +6,14 @@
 
     using Controls.Window.Interfaces;
 
-    using Infrastructure.Logging.Interfaces;
-
     using Interfaces;
 
     using Keyboard;
     using Keyboard.Interfaces;
 
     using Messages.Interceptors.Hotkeys.Interfaces;
+
+    using Shared.Infrastructure.Logging.Interfaces;
 
     class ClipboardPasteService : IClipboardPasteService
     {

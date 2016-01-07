@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.IO.Compression;
     using System.Linq;
     using System.Reflection;
     using System.Text.RegularExpressions;
@@ -12,9 +13,12 @@
 
     using Interfaces;
 
+    using Shapeshifter.WindowsDesktop.Shared.Infrastructure.Logging.Interfaces;
     using Shapeshifter.WindowsDesktop.Shared.Services.Files.Interfaces;
     using Shapeshifter.WindowsDesktop.Shared.Services.Interfaces;
     using Shapeshifter.WindowsDesktop.Shared.Services.Web.Interfaces;
+
+    using Octokit;
 
     class UpdateService
         : IUpdateService,
@@ -30,8 +34,6 @@
 
         readonly IFileManager fileManager;
 
-        readonly IEnvironmentInformation environmentInformation;
-
         readonly IProcessManager processManager;
 
         readonly ILogger logger;
@@ -40,7 +42,6 @@
             IDownloader fileDownloader,
             IFileManager fileManager,
             IProcessManager processManager,
-            IEnvironmentInformation environmentInformation,
             ILogger logger)
         {
             client = CreateClient();
@@ -48,7 +49,6 @@
             this.fileDownloader = fileDownloader;
             this.fileManager = fileManager;
             this.processManager = processManager;
-            this.environmentInformation = environmentInformation;
             this.logger = logger;
         }
 
@@ -72,7 +72,7 @@
             const int secondsInAMinute = 60;
             const int minutesInAnHour = 60;
             const int updateIntervalInMilliseconds =
-                milliSecondsInASecond*secondsInAMinute*minutesInAnHour*updateIntervalInHours;
+                milliSecondsInASecond * secondsInAMinute * minutesInAnHour * updateIntervalInHours;
 
             await Task.Delay(updateIntervalInMilliseconds);
         }
@@ -215,10 +215,7 @@
 
         public void Start()
         {
-            if (!environmentInformation.IsDebugging && !environmentInformation.IsInDesignTime)
-            {
-                StartUpdateLoop();
-            }
+            StartUpdateLoop();
         }
     }
 }

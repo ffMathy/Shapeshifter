@@ -5,11 +5,11 @@
 
     using Data.Interfaces;
 
-    using Infrastructure.Logging.Interfaces;
-
     using Interfaces;
 
     using Services.Clipboard.Interfaces;
+
+    using Shared.Infrastructure.Logging.Interfaces;
 
     class PasteAction: IPasteAction
     {
