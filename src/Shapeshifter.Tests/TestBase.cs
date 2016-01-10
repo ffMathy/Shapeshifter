@@ -50,7 +50,9 @@
 
             setupCallback?.Invoke(builder);
 
-            return activeContainer = builder.Build();
+            return activeContainer = builder
+                .Build()
+                .BeginLifetimeScope();
         }
     }
 }

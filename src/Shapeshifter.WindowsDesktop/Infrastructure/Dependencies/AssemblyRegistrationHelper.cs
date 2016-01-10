@@ -1,5 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 {
+    using System;
     using System.Linq;
     using System.Reflection;
 
@@ -41,7 +42,7 @@
                         .Where(x => x.IsGenericType);
                     foreach (var genericInterface in genericInterfaces)
                     {
-                        registration.As(genericInterface);
+                        registration = registration.As(genericInterface);
                     }
                 }
                 else
@@ -53,7 +54,7 @@
                     registration = standardRegistration;
                 }
 
-                registration.FindConstructorsWith(new PublicConstructorFinder());
+                registration = registration.FindConstructorsWith(new PublicConstructorFinder());
 
                 if (interfaces.Contains(typeof(ISingleInstance)))
                 {
