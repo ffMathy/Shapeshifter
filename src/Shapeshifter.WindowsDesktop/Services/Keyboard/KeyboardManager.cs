@@ -4,11 +4,11 @@
     using System.Linq;
     using System.Windows.Input;
 
+    using Infrastructure.Logging.Interfaces;
+
     using Interfaces;
 
     using Native.Interfaces;
-
-    using Shared.Infrastructure.Logging.Interfaces;
 
     using static Native.KeyboardNativeApi;
 

@@ -10,6 +10,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 
     using Infrastructure.Handles.Factories.Interfaces;
     using Infrastructure.Handles.Interfaces;
+    using Infrastructure.Logging.Interfaces;
 
     using Interfaces;
 
@@ -17,8 +18,6 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 
     using Native;
     using Native.Interfaces;
-
-    using Shared.Infrastructure.Logging.Interfaces;
 
     class ClipboardInjectionService: IClipboardInjectionService
     {

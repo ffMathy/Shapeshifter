@@ -16,8 +16,6 @@
     using Services.Web;
     using Services.Web.Interfaces;
 
-    using Shared.Services.Web.Interfaces;
-
     class CopyImageLinkAction: ICopyImageLinkAction
     {
         readonly IClipboardInjectionService clipboardInjectionService;

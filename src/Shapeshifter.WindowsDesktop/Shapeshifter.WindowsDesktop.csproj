@@ -46,6 +46,10 @@
       <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Octokit, Version=0.17.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Octokit.0.17.0\lib\net45\Octokit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -69,7 +73,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\Designer\Services\IDesignerService.cs" />
+    <Compile Include="Controls\ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Controls\Window\Interfaces\IHookableWindow.cs" />
+    <Compile Include="Controls\Window\InstallerWindow.xaml.cs">
+      <DependentUpon>InstallerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Window\Interfaces\IWindow.cs" />
     <Compile Include="Data\Actions\CopyImageLinkAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IPasteAction.cs" />
@@ -85,7 +95,16 @@
     <Compile Include="Data\Actions\PinClipboardDataAction.cs" />
     <Compile Include="Data\Actions\UploadImageAction.cs" />
     <Compile Include="Data\Actions\ZipFilesAction.cs" />
+    <Compile Include="Infrastructure\Dependencies\AssemblyRegistrationHelper.cs" />
+    <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
+    <Compile Include="Infrastructure\Dependencies\PublicConstructorFinder.cs" />
     <Compile Include="Infrastructure\Events\PastePerformedEventArgument.cs" />
+    <Compile Include="Infrastructure\Handles\IndentationHandle.cs" />
+    <Compile Include="Infrastructure\Handles\Interfaces\IHandle.cs" />
+    <Compile Include="Infrastructure\Handles\Interfaces\IIndentationHandle.cs" />
+    <Compile Include="Infrastructure\Logging\Interfaces\ILogger.cs" />
+    <Compile Include="Infrastructure\Logging\Interfaces\ILogStream.cs" />
+    <Compile Include="Infrastructure\Logging\Logger.cs" />
     <Compile Include="Infrastructure\Logging\LogStream.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Controls\Clipboard\ClipboardImageDataControl.xaml.cs">
@@ -180,14 +199,22 @@
     <Compile Include="Main.cs" />
     <Compile Include="Mediators\PasteCombinationDurationMediator.cs" />
     <Compile Include="Mediators\Interfaces\IPasteCombinationDurationMediator.cs" />
+    <Compile Include="Services\Arguments\AggregateArgumentProcessor.cs" />
     <Compile Include="Services\Arguments\CleanupArgumentProcessor.cs" />
+    <Compile Include="Services\Arguments\Interfaces\IAggregateArgumentProcessor.cs" />
+    <Compile Include="Services\Arguments\Interfaces\IArgumentProcessor.cs" />
     <Compile Include="Services\Arguments\UpdateArgumentProcessor.cs" />
     <Compile Include="Services\Clipboard\ClipboardPasteService.cs" />
     <Compile Include="Infrastructure\Handles\ClipboardHandle.cs" />
     <Compile Include="Services\Clipboard\ClipboardPersistanceService.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IClipboardPasteService.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IClipboardPersistanceService.cs" />
+    <Compile Include="Services\Files\FileManager.cs" />
+    <Compile Include="Services\Files\Interfaces\IFileManager.cs" />
     <Compile Include="Services\Interfaces\IDataSourceService.cs" />
+    <Compile Include="Services\Interfaces\IProcessManager.cs" />
+    <Compile Include="Services\Interfaces\IReleaseVersionManager.cs" />
+    <Compile Include="Services\Interfaces\IUpdateService.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardManager.cs" />
     <Compile Include="Services\Keyboard\KeyboardManager.cs" />
     <Compile Include="Services\Keyboard\KeyDirection.cs" />
@@ -211,6 +238,8 @@
     <Compile Include="Services\Messages\Interceptors\Hotkeys\KeyInterceptor.cs" />
     <Compile Include="Services\Messages\Interfaces\IWindowMessageInterceptor.cs" />
     <Compile Include="Services\Messages\Interfaces\IWindowMessageHook.cs" />
+    <Compile Include="Services\ProcessManager.cs" />
+    <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Services\Web\DomainNameResolver.cs" />
     <Compile Include="Services\Files\FileType.cs" />
     <Compile Include="Services\Files\FileTypeInterpreter.cs" />
@@ -221,9 +250,11 @@
     <Compile Include="Services\Images\Interfaces\IImageFileInterpreter.cs" />
     <Compile Include="Services\Messages\Interceptors\Interfaces\IClipboardCopyInterceptor.cs" />
     <Compile Include="Mediators\Interfaces\IClipboardUserInterfaceMediator.cs" />
+    <Compile Include="Services\Web\Downloader.cs" />
     <Compile Include="Services\Web\Interfaces\IDomainNameResolver.cs" />
     <Compile Include="Services\Interfaces\IHookService.cs" />
     <Compile Include="Services\Images\Interfaces\IImagePersistenceService.cs" />
+    <Compile Include="Services\Web\Interfaces\IDownloader.cs" />
     <Compile Include="Services\Web\Interfaces\ILinkParser.cs" />
     <Compile Include="Services\Messages\Interceptors\Hotkeys\Interfaces\IPasteHotkeyInterceptor.cs" />
     <Compile Include="Infrastructure\Events\WindowMessageReceivedArgument.cs" />
@@ -307,6 +338,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\Window\InstallerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -346,10 +381,6 @@
     <ProjectReference Include="..\Shapeshifter.WindowsDesktop.Native\Shapeshifter.WindowsDesktop.Native.csproj">
       <Project>{25acb6f2-f5e2-4c38-ab51-697eaa995cc4}</Project>
       <Name>Shapeshifter.WindowsDesktop.Native</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Shapeshifter.WindowsDesktop.Shared\Shapeshifter.WindowsDesktop.Shared.csproj">
-      <Project>{B1862496-6FC3-4DBB-ACA5-C1CA84B86688}</Project>
-      <Name>Shapeshifter.WindowsDesktop.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

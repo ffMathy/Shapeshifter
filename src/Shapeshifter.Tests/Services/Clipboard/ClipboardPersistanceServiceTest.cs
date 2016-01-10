@@ -18,7 +18,7 @@
 
     using Data.Factories.Interfaces;
 
-    using Shared.Services.Files.Interfaces;
+    using Files.Interfaces;
 
     [TestClass]
     public class ClipboardPersistanceServiceTest : TestBase

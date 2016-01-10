@@ -10,8 +10,8 @@
 
     using NSubstitute;
 
-    using Shared.Services.Arguments.Interfaces;
-    using Shared.Services.Interfaces;
+    using Services.Arguments.Interfaces;
+    using Services.Interfaces;
 
     [TestClass]
     public class MainTest: TestBase

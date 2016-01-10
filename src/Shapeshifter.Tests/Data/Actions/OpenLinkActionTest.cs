@@ -13,9 +13,8 @@
 
     using NSubstitute;
 
+    using Services.Interfaces;
     using Services.Web.Interfaces;
-
-    using Shared.Services.Interfaces;
 
     [TestClass]
     public class OpenLinkActionTest: ActionTestBase

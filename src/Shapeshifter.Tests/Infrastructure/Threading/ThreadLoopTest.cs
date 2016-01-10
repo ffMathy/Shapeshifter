@@ -10,9 +10,9 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
 
     using Interfaces;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Logging.Interfaces;
 
-    using Shared.Infrastructure.Logging.Interfaces;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
     public class ThreadLoopTest: TestBase

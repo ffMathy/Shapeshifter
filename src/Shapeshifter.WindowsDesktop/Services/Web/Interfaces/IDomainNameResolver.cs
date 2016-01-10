@@ -3,7 +3,7 @@
     using System.Net;
     using System.Threading.Tasks;
 
-    using Shared.Infrastructure.Dependencies.Interfaces;
+    using Infrastructure.Dependencies.Interfaces;
 
     public interface IDomainNameResolver: ISingleInstance
     {

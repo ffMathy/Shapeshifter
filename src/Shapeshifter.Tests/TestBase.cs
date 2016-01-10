@@ -12,8 +12,6 @@
 
     using NSubstitute;
 
-    using Shared.Services.Interfaces;
-
     public abstract class TestBase
     {
         ILifetimeScope activeContainer;

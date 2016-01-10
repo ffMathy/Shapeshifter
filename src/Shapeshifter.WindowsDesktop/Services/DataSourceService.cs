@@ -10,12 +10,12 @@
 
     using Images.Interfaces;
 
+    using Infrastructure.Dependencies.Interfaces;
+
     using Interfaces;
 
     using Native;
     using Native.Interfaces;
-
-    using Shared.Infrastructure.Dependencies.Interfaces;
 
     class DataSourceService
         : IDataSourceService,

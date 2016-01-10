@@ -10,9 +10,9 @@
     using Data.Factories.Interfaces;
     using Data.Interfaces;
 
-    using Interfaces;
+    using Files.Interfaces;
 
-    using Shared.Services.Files.Interfaces;
+    using Interfaces;
 
     using Structures;
 

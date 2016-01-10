@@ -2,7 +2,7 @@
 {
     using System.Windows.Media.Imaging;
 
-    using Shared.Infrastructure.Dependencies.Interfaces;
+    using Infrastructure.Dependencies.Interfaces;
 
     public interface IImagePersistenceService: ISingleInstance
     {

@@ -7,11 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.WindowsDesktop
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.Tests", "Shapeshifter.Tests\Shapeshifter.Tests.csproj", "{66E94495-F590-41F6-B488-52B0FDCAB03C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.WindowsDesktop.Installer", "Shapeshifter.WindowsDesktop.Installer\Shapeshifter.WindowsDesktop.Installer.csproj", "{E34F39BC-9DA4-4AC9-96E8-51E578A22277}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.WindowsDesktop.Native", "Shapeshifter.WindowsDesktop.Native\Shapeshifter.WindowsDesktop.Native.csproj", "{25ACB6F2-F5E2-4C38-AB51-697EAA995CC4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.WindowsDesktop.Shared", "Shapeshifter.WindowsDesktop.Shared\Shapeshifter.WindowsDesktop.Shared.csproj", "{B1862496-6FC3-4DBB-ACA5-C1CA84B86688}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,12 +18,8 @@ Global
 		{C8AFEB5B-5197-4F7D-90F1-DC1DCD795BE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66E94495-F590-41F6-B488-52B0FDCAB03C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{66E94495-F590-41F6-B488-52B0FDCAB03C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E34F39BC-9DA4-4AC9-96E8-51E578A22277}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E34F39BC-9DA4-4AC9-96E8-51E578A22277}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25ACB6F2-F5E2-4C38-AB51-697EAA995CC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{25ACB6F2-F5E2-4C38-AB51-697EAA995CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B1862496-6FC3-4DBB-ACA5-C1CA84B86688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B1862496-6FC3-4DBB-ACA5-C1CA84B86688}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

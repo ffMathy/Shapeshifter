@@ -8,7 +8,7 @@
 
     using WindowsDesktop;
 
-    using Shared.Infrastructure.Logging.Interfaces;
+    using Interfaces;
 
     [TestClass]
     public class LoggerTest: TestBase

@@ -4,7 +4,7 @@
     using System.IO;
     using System.Linq;
 
-    using Shared.Services.Arguments.Interfaces;
+    using Interfaces;
 
     class CleanupArgumentProcessor: IArgumentProcessor
     {

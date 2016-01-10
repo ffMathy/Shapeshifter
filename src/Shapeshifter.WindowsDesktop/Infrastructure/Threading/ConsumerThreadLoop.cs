@@ -7,7 +7,7 @@
 
     using Interfaces;
 
-    using Shared.Infrastructure.Logging.Interfaces;
+    using Logging.Interfaces;
 
     class ConsumerThreadLoop: IConsumerThreadLoop
     {

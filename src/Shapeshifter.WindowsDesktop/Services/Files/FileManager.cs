@@ -1,0 +1,204 @@
+﻿namespace Shapeshifter.WindowsDesktop.Services.Files
+{
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+
+    using Interfaces;
+
+    class FileManager
+        : IFileManager
+    {
+        readonly ICollection<string> temporaryPaths;
+
+        public FileManager()
+        {
+            temporaryPaths = new HashSet<string>();
+            ClearDirectory();
+        }
+
+        static void ClearDirectory()
+        {
+            var directory = PrepareIsolatedTemporaryFolder();
+            Directory.Delete(directory, true);
+        }
+
+        public void Dispose()
+        {
+            foreach (var temporaryPath in temporaryPaths)
+            {
+                PurgePath(temporaryPath);
+            }
+        }
+
+        void PurgePath(string temporaryPath)
+        {
+            DeleteFileIfExists(temporaryPath);
+            DeleteDirectoryIfExists(temporaryPath);
+        }
+
+        public void DeleteFileIfExists(string path)
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+
+        public void DeleteDirectoryIfExists(string path)
+        {
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
+        }
+
+        static string PrepareIsolatedFolder()
+        {
+            return PrepareIsolatedFolder(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+        }
+
+        static string PrepareIsolatedFolder(string basePath)
+        {
+            const string folderName = "Shapeshifter";
+
+            var path = Path.Combine(basePath, folderName);
+            CreateDirectoryIfNotExists(path);
+
+            return path;
+        }
+
+        static string PrepareIsolatedTemporaryFolder()
+        {
+            return PrepareIsolatedFolder(Path.GetTempPath());
+        }
+
+        public string FindCommonFolderFromPaths(IReadOnlyCollection<string> paths)
+        {
+            var pathSimilarityIndex = GetPathSegmentsInCommonCount(paths);
+
+            var firstPath = paths.First();
+            var segments = GetPathSegments(firstPath);
+
+            var commonPath = Path.Combine(
+                segments
+                    .Take(pathSimilarityIndex)
+                    .ToArray());
+
+            return commonPath;
+        }
+
+        static int GetPathSegmentsInCommonCount(IReadOnlyCollection<string> paths)
+        {
+            var commonIndex = 0;
+            foreach (var originPath in paths)
+            {
+                var originSegments = GetPathSegments(originPath);
+                for (var index = 0; index < originSegments.Length; index++)
+                {
+                    var originSegment = originSegments[index];
+                    foreach (var referencePath in paths)
+                    {
+                        var referenceSegments = GetPathSegments(referencePath);
+                        if (index >= referenceSegments.Length)
+                        {
+                            return commonIndex;
+                        }
+
+                        var referenceSegment = referenceSegments[index];
+                        if (originSegment != referenceSegment)
+                        {
+                            return commonIndex;
+                        }
+                    }
+                    commonIndex++;
+                }
+            }
+
+            return commonIndex;
+        }
+
+        static string[] GetPathSegments(string originPath)
+        {
+            return originPath.Split('\\', '/');
+        }
+
+        public string PrepareNewFolder(string relativePath)
+        {
+            var count = 0;
+
+            string finalPath = null;
+            while ((finalPath == null) || Directory.Exists(finalPath))
+            {
+                finalPath = GetFullPathFromRelativePath(
+                    Path.Combine(relativePath, (++count).ToString()));
+            }
+
+            return PrepareFullFolderPath(finalPath);
+        }
+
+        public string PrepareFolder(string relativePath = null)
+        {
+            var finalPath = GetFullPathFromRelativePath(relativePath);
+            return PrepareFullFolderPath(finalPath);
+        }
+
+        static string PrepareFullFolderPath(string finalPath)
+        {
+            CreateDirectoryIfNotExists(finalPath);
+            return finalPath;
+        }
+
+        public string PrepareTemporaryFolder(string relativePath)
+        {
+            var finalPath = GetFullPathFromRelativeTemporaryPath(relativePath);
+            WatchDirectory(finalPath);
+
+            return finalPath;
+        }
+
+        void WatchDirectory(string finalPath)
+        {
+            temporaryPaths.Add(finalPath);
+            CreateDirectoryIfNotExists(finalPath);
+        }
+
+        static void CreateDirectoryIfNotExists(string relativePath)
+        {
+            if (!Directory.Exists(relativePath))
+            {
+                Directory.CreateDirectory(relativePath);
+            }
+        }
+
+        static string GetFullPathFromRelativePath(string path = null)
+        {
+            var isolatedFolderPath = PrepareIsolatedFolder();
+
+            var finalPath = path == null 
+                ? isolatedFolderPath 
+                : Path.Combine(isolatedFolderPath, path);
+            return finalPath;
+        }
+
+        static string GetFullPathFromRelativeTemporaryPath(string path)
+        {
+            var isolatedFolderPath = PrepareIsolatedTemporaryFolder();
+
+            var finalPath = Path.Combine(isolatedFolderPath, path);
+            return finalPath;
+        }
+
+        public string WriteBytesToTemporaryFile(string fileName, byte[] bytes)
+        {
+            var finalPath = GetFullPathFromRelativeTemporaryPath(fileName);
+            temporaryPaths.Add(finalPath);
+
+            File.WriteAllBytes(finalPath, bytes);
+
+            return finalPath;
+        }
+    }
+}

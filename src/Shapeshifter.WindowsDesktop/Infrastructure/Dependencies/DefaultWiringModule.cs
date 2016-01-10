@@ -14,9 +14,6 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 
     using Native;
 
-    using Shared;
-    using Shared.Infrastructure.Dependencies;
-
     using Threading;
 
     public class DefaultWiringModule : AutofacModule
@@ -44,8 +41,6 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 
             AssemblyRegistrationHelper
                 .RegisterAssemblyTypes(builder, NativeAssemblyHelper.Assembly, this.environmentInformation.IsInDesignTime);
-            AssemblyRegistrationHelper
-                .RegisterAssemblyTypes(builder, SharedAssemblyHelper.Assembly, this.environmentInformation.IsInDesignTime);
 
             RegisterMainThread(builder);
 

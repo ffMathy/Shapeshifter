@@ -9,9 +9,8 @@
 
     using Interfaces;
 
+    using Services.Interfaces;
     using Services.Web.Interfaces;
-
-    using Shared.Services.Interfaces;
 
     class OpenLinkAction: IOpenLinkAction
     {

@@ -5,9 +5,9 @@
 
     using Autofac;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Interfaces;
 
-    using Shared.Services.Files.Interfaces;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
     public class FileManagerTest: TestBase

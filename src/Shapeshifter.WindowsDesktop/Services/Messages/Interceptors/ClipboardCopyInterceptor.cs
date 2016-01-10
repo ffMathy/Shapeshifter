@@ -4,12 +4,11 @@
     using System.Runtime.InteropServices;
 
     using Infrastructure.Events;
+    using Infrastructure.Logging.Interfaces;
 
     using Interfaces;
 
     using Native.Interfaces;
-
-    using Shared.Infrastructure.Logging.Interfaces;
 
     class ClipboardCopyInterceptor: IClipboardCopyInterceptor
     {

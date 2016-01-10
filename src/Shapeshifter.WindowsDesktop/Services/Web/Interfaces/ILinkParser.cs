@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using Shared.Infrastructure.Dependencies.Interfaces;
+    using Infrastructure.Dependencies.Interfaces;
 
     public interface ILinkParser: ISingleInstance
     {

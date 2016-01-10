@@ -5,12 +5,11 @@
     using Factories.Interfaces;
 
     using Infrastructure.Events;
+    using Infrastructure.Logging.Interfaces;
 
     using Interfaces;
 
     using Native;
-
-    using Shared.Infrastructure.Logging.Interfaces;
 
     class PasteHotkeyInterceptor: IPasteHotkeyInterceptor
     {
