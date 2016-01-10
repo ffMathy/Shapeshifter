@@ -60,7 +60,7 @@
         {
             var container = CreateContainer(
                 c => {
-                    c.RegisterFake<IArgumentProcessor>()
+                    c.RegisterFake<ISingleArgumentProcessor>()
                      .WithFakeSettings(
                          x => {
                              x.Terminates.Returns(true);

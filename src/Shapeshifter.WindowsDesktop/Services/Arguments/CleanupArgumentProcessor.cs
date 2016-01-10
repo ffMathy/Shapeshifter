@@ -6,7 +6,7 @@
 
     using Interfaces;
 
-    class CleanupArgumentProcessor: IArgumentProcessor
+    class CleanupArgumentProcessor: ISingleArgumentProcessor
     {
         public bool Terminates
             => true;
@@ -21,7 +21,7 @@
             var updateIndex = Array.IndexOf(arguments, "cleanup");
             var targetDirectory = arguments[updateIndex + 1];
 
-            Directory.Delete(targetDirectory, true);
+            File.Delete(targetDirectory);
         }
     }
 }

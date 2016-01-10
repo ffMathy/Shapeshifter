@@ -38,6 +38,13 @@
   <PropertyGroup>
     <ApplicationIcon>Resources\Shapeshifter.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
@@ -202,7 +209,9 @@
     <Compile Include="Services\Arguments\CleanupArgumentProcessor.cs" />
     <Compile Include="Services\Arguments\Interfaces\IAggregateArgumentProcessor.cs" />
     <Compile Include="Services\Arguments\Interfaces\IArgumentProcessor.cs" />
-    <Compile Include="Services\Arguments\UpdateArgumentProcessor.cs" />
+    <Compile Include="Services\Arguments\Interfaces\INoArgumentProcessor.cs" />
+    <Compile Include="Services\Arguments\Interfaces\ISingleArgumentProcessor.cs" />
+    <Compile Include="Services\Arguments\InstallArgumentProcessor.cs" />
     <Compile Include="Services\Clipboard\ClipboardPasteService.cs" />
     <Compile Include="Infrastructure\Handles\ClipboardHandle.cs" />
     <Compile Include="Services\Clipboard\ClipboardPersistanceService.cs" />
@@ -356,9 +365,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.manifest">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

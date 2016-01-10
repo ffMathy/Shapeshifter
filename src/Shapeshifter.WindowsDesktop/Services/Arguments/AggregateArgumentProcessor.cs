@@ -8,7 +8,9 @@
 
     class AggregateArgumentProcessor : IAggregateArgumentProcessor
     {
-        readonly IEnumerable<IArgumentProcessor> argumentProcessors;
+        readonly IEnumerable<INoArgumentProcessor> noArgumentProcessors;
+        readonly IEnumerable<ISingleArgumentProcessor> singleArgumentProcessors;
+
         readonly ICollection<IArgumentProcessor> processorsUsed;
 
         bool isProcessed;
@@ -43,9 +45,11 @@
         }
 
         public AggregateArgumentProcessor(
-            IEnumerable<IArgumentProcessor> argumentProcessors)
+            IEnumerable<ISingleArgumentProcessor> singleArgumentProcessors,
+            IEnumerable<INoArgumentProcessor> noArgumentProcessors)
         {
-            this.argumentProcessors = argumentProcessors;
+            this.singleArgumentProcessors = singleArgumentProcessors;
+            this.noArgumentProcessors = noArgumentProcessors;
 
             processorsUsed = new List<IArgumentProcessor>();
         }
@@ -56,9 +60,10 @@
             {
                 processorsUsed.Clear();
                 
-                foreach (var processor in argumentProcessors)
+                ProcessSingleArgumentProcessors(arguments);
+                if (!processorsUsed.Any())
                 {
-                    ProcessArgumentsWithProcessor(arguments, processor);
+                    ProcessNoArgumentProcessors();
                 }
             }
 
@@ -67,7 +72,34 @@
             isProcessed = true;
         }
 
-        void ProcessArgumentsWithProcessor(string[] arguments, IArgumentProcessor processor)
+        void ProcessNoArgumentProcessors()
+        {
+            foreach (var processor in noArgumentProcessors)
+            {
+                ProcessArgumentsWithNoArgumentProcessor(processor);
+            }
+        }
+
+        void ProcessArgumentsWithNoArgumentProcessor(INoArgumentProcessor processor)
+        {
+            if (!processor.CanProcess())
+            {
+                return;
+            }
+
+            processor.Process();
+            processorsUsed.Add(processor);
+        }
+
+        void ProcessSingleArgumentProcessors(string[] arguments)
+        {
+            foreach (var processor in singleArgumentProcessors)
+            {
+                ProcessArgumentsWithSingleArgumentProcessor(arguments, processor);
+            }
+        }
+
+        void ProcessArgumentsWithSingleArgumentProcessor(string[] arguments, ISingleArgumentProcessor processor)
         {
             if (!processor.CanProcess(arguments))
             {

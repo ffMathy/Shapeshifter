@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using System.Security.Principal;
 
     using Infrastructure.Threading.Interfaces;
 
@@ -29,6 +30,11 @@
             {
                 CloseProcess(process);
             }
+        }
+
+        public string GetCurrentProcessPath()
+        {
+            throw new NotImplementedException();
         }
 
         public void LaunchCommand(string command, string arguments = null)
@@ -73,22 +79,38 @@
 
         public void LaunchFile(string fileName, string arguments = null)
         {
+            var workingDirectory = Path.GetDirectoryName(fileName);
+            SpawnProcess(fileName, workingDirectory);
+        }
+
+        public void LaunchFileWithAdministrativeRights(string fileName, string arguments = null)
+        {
+            var workingDirectory = Path.GetDirectoryName(fileName);
+            SpawnProcess(fileName, workingDirectory, "runas");
+        }
+
+        public bool IsCurrentProcessElevated()
+        {
+            using (var identity = WindowsIdentity.GetCurrent())
+            {
+                var principal = new WindowsPrincipal(identity);
+                return principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+        }
+
+        void SpawnProcess(string fileName, string workingDirectory, string verb = null)
+        {
             if (!File.Exists(fileName))
             {
                 throw new ArgumentException("The given file doesn't exist.", nameof(fileName));
             }
 
-            var workingDirectory = Path.GetDirectoryName(fileName);
-            SpawnProcess(fileName, workingDirectory);
-        }
-
-        void SpawnProcess(string fileName, string workingDirectory)
-        {
             var process = Process.Start(
                 new ProcessStartInfo
                 {
                     FileName = fileName,
-                    WorkingDirectory = workingDirectory
+                    WorkingDirectory = workingDirectory,
+                    Verb = verb
                 });
             processes.Add(process);
         }
