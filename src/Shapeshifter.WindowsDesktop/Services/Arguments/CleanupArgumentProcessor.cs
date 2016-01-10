@@ -21,7 +21,7 @@
             var updateIndex = Array.IndexOf(arguments, "cleanup");
             var targetDirectory = arguments[updateIndex + 1];
 
-            Directory.Delete(targetDirectory);
+            Directory.Delete(targetDirectory, true);
         }
     }
 }

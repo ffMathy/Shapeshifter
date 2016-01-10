@@ -1,6 +1,5 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 {
-    using System;
     using System.Linq;
     using System.Reflection;
 

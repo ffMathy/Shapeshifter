@@ -5,15 +5,21 @@
     using System.Diagnostics;
     using System.IO;
 
+    using Infrastructure.Threading.Interfaces;
+
     using Interfaces;
 
     class ProcessManager
         : IProcessManager
     {
+        readonly IThreadDelay delay;
+
         readonly ICollection<Process> processes;
 
-        public ProcessManager()
+        public ProcessManager(IThreadDelay delay)
         {
+            this.delay = delay;
+
             processes = new HashSet<Process>();
         }
 
@@ -39,11 +45,11 @@
             }
         }
 
-        static void CloseProcessesExceptProcessWithId(
+        void CloseProcessesExceptProcessWithId(
             int processId,
-            params Process[] processes)
+            params Process[] targetProcesses)
         {
-            foreach (var process in processes)
+            foreach (var process in targetProcesses)
             {
                 if (process.Id == processId)
                 {
@@ -54,12 +60,13 @@
             }
         }
 
-        static void CloseProcess(Process process)
+        void CloseProcess(Process process)
         {
             process.CloseMainWindow();
             if (!process.WaitForExit(3000))
             {
                 process.Kill();
+                delay.Execute(3000);
             }
             process.Dispose();
         }

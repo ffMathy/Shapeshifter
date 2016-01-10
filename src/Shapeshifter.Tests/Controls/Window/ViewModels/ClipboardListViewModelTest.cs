@@ -5,8 +5,8 @@
 
     using Autofac;
 
-    using Controls.Window.Binders.Interfaces;
-    using Controls.Window.ViewModels.Interfaces;
+    using Binders.Interfaces;
+    using Interfaces;
 
     using Data.Actions.Interfaces;
     using Data.Interfaces;
