@@ -77,9 +77,6 @@
     <Compile Include="Controls\Designer\Services\IDesignerService.cs" />
     <Compile Include="Controls\ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Controls\Window\Interfaces\IHookableWindow.cs" />
-    <Compile Include="Controls\Window\InstallerWindow.xaml.cs">
-      <DependentUpon>InstallerWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Window\Interfaces\IWindow.cs" />
     <Compile Include="Data\Actions\CopyImageLinkAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IAction.cs" />
@@ -337,10 +334,6 @@
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardTextDataViewModel.cs" />
     <Compile Include="Controls\Converters\ByteArrayToImageSourceConverter.cs" />
     <Page Include="Controls\Styles\Light.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\Window\InstallerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
