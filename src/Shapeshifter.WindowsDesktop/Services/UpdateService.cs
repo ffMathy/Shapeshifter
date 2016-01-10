@@ -2,8 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
-    using System.IO.Compression;
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
@@ -85,7 +83,7 @@
 
         async Task UpdateFromAssetsAsync(IReadOnlyList<ReleaseAsset> assets)
         {
-            const string targetAssetName = "Binaries.zip";
+            const string targetAssetName = "Shapeshifter.exe";
 
             var asset = assets.Single(x => x.Name == targetAssetName);
             await UpdateFromAssetAsync(asset);
@@ -94,18 +92,8 @@
         async Task UpdateFromAssetAsync(ReleaseAsset asset)
         {
             var localFilePath = await DownloadUpdateAsync(asset);
-            var temporaryDirectory = ExtractUpdate(localFilePath);
-
-            StartUpdate(temporaryDirectory);
-        }
-
-        void StartUpdate(string temporaryDirectory)
-        {
-            var filesInDirectory = Directory.GetFiles(temporaryDirectory);
-            var executablePath = filesInDirectory.Single(
-                x => Path.GetExtension(x) == ".exe");
             processManager.LaunchFile(
-                executablePath,
+                localFilePath,
                 $"update");
         }
 
@@ -117,13 +105,6 @@
             var localFilePath = fileManager.WriteBytesToTemporaryFile(asset.Name, data);
 
             return localFilePath;
-        }
-
-        string ExtractUpdate(string localFilePath)
-        {
-            var temporaryDirectory = fileManager.PrepareTemporaryFolder("Update");
-            ZipFile.ExtractToDirectory(localFilePath, temporaryDirectory);
-            return temporaryDirectory;
         }
 
         bool IsUpdateToReleaseNeeded(Release release)
