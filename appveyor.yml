@@ -16,18 +16,8 @@ before_build:
 build:
   project: src\Shapeshifter.sln
   verbosity: normal
-after_build:
-- cmd: >-
-    cd build\application
-
-    7z a Binaries.zip *.dll
-
-    7z a Binaries.zip *.exe
-
-    cd ..\..
-
 artifacts:
-- path: build\application\Binaries.zip
+- path: build\application\Shapeshifter.exe
   name: Deployment
 deploy:
 - provider: GitHub
