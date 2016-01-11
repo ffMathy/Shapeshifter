@@ -48,6 +48,11 @@
 
         void Install()
         {
+            if (!Directory.Exists(TargetDirectory))
+            {
+                Directory.CreateDirectory(TargetDirectory);
+            }
+
             var targetExecutableFile = Path.Combine(TargetDirectory, "Shapeshifter.exe");
             var currentExecutableFile = processManager.GetCurrentProcessPath();
 
