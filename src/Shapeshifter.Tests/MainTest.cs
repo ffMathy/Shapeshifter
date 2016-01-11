@@ -10,8 +10,8 @@
 
     using NSubstitute;
 
-    using Shared.Services.Arguments.Interfaces;
-    using Shared.Services.Interfaces;
+    using Services.Arguments.Interfaces;
+    using Services.Interfaces;
 
     [TestClass]
     public class MainTest: TestBase
@@ -60,7 +60,7 @@
         {
             var container = CreateContainer(
                 c => {
-                    c.RegisterFake<IArgumentProcessor>()
+                    c.RegisterFake<ISingleArgumentProcessor>()
                      .WithFakeSettings(
                          x => {
                              x.Terminates.Returns(true);

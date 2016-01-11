@@ -6,7 +6,7 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using Shared.Services.Web.Interfaces;
+    using Services.Web.Interfaces;
 
     [TestClass]
     public class DownloaderTest: TestBase

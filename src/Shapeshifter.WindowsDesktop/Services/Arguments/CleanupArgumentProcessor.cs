@@ -4,9 +4,9 @@
     using System.IO;
     using System.Linq;
 
-    using Shared.Services.Arguments.Interfaces;
+    using Interfaces;
 
-    class CleanupArgumentProcessor: IArgumentProcessor
+    class CleanupArgumentProcessor: ISingleArgumentProcessor
     {
         public bool Terminates
             => true;
@@ -21,7 +21,7 @@
             var updateIndex = Array.IndexOf(arguments, "cleanup");
             var targetDirectory = arguments[updateIndex + 1];
 
-            Directory.Delete(targetDirectory);
+            File.Delete(targetDirectory);
         }
     }
 }

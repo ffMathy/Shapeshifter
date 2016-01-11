@@ -62,7 +62,7 @@
                      .Returns(true);
                 });
 
-            var fakeWindow = Substitute.For<IWindow>();
+            var fakeWindow = Substitute.For<IHookableWindow>();
 
             var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
             mediator.Connect(fakeWindow);

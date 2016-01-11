@@ -6,8 +6,8 @@
 
     using Mediators.Interfaces;
 
-    using Shared.Services.Arguments.Interfaces;
-    using Shared.Services.Interfaces;
+    using Services.Arguments.Interfaces;
+    using Services.Interfaces;
 
     public class Main: ISingleInstance
     {
@@ -31,7 +31,8 @@
             this.aggregateArgumentProcessor = aggregateArgumentProcessor;
         }
 
-        public void Start(params string[] arguments)
+        public void Start(
+            params string[] arguments)
         {
             processManager.CloseAllProcessesExceptCurrent();
 

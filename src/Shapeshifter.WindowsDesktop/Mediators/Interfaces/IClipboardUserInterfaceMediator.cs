@@ -17,8 +17,6 @@
 
         event EventHandler<ControlEventArgument> ControlPinned;
 
-        event EventHandler<ControlEventArgument> ControlHighlighted;
-
         event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
 
         event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;

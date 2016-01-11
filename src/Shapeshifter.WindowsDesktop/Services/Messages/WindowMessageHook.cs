@@ -17,7 +17,7 @@
         : IWindowMessageHook,
           IDisposable
     {
-        IWindow connectedWindow;
+        IHookableWindow connectedWindow;
 
         readonly IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors;
 
@@ -84,7 +84,7 @@
             }
         }
 
-        public void Connect(IWindow target)
+        public void Connect(IHookableWindow target)
         {
             if (IsConnected)
             {

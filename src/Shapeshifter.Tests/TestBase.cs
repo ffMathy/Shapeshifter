@@ -12,8 +12,6 @@
 
     using NSubstitute;
 
-    using Shared.Services.Interfaces;
-
     public abstract class TestBase
     {
         ILifetimeScope activeContainer;
@@ -47,13 +45,14 @@
 
             builder.RegisterModule(
                 new DefaultWiringModule(fakeEnvironment));
-
-            builder.RegisterFake<IUpdateService>();
+            
             builder.RegisterFake<IThreadDelay>();
 
             setupCallback?.Invoke(builder);
 
-            return activeContainer = builder.Build();
+            return activeContainer = builder
+                .Build()
+                .BeginLifetimeScope();
         }
     }
 }

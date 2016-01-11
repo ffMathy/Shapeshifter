@@ -28,7 +28,6 @@
         public event EventHandler<ControlEventArgument> ControlAdded;
         public event EventHandler<ControlEventArgument> ControlRemoved;
         public event EventHandler<ControlEventArgument> ControlPinned;
-        public event EventHandler<ControlEventArgument> ControlHighlighted;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
@@ -124,7 +123,8 @@
             clipboardCopyInterceptor.DataCopied -= ClipboardHook_DataCopied;
         }
 
-        public void Connect(IWindow targetWindow)
+        public void Connect(
+            IHookableWindow targetWindow)
         {
             if (IsConnected)
             {
@@ -134,7 +134,7 @@
 
             LoadInitialClipboardData();
             InstallClipboardHook();
-            InstallPastecombinationDurationMediator(targetWindow);
+            InstallPasteCombinationDurationMediator(targetWindow);
         }
 
         void LoadInitialClipboardData()
@@ -142,7 +142,8 @@
             AppendPackagesWithDataFromClipboard();
         }
 
-        void InstallPastecombinationDurationMediator(IWindow targetWindow)
+        void InstallPasteCombinationDurationMediator(
+            IHookableWindow targetWindow)
         {
             pasteCombinationDurationMediator.PasteCombinationDurationPassed +=
                 PasteCombinationDurationMediator_PasteCombinationDurationPassed;

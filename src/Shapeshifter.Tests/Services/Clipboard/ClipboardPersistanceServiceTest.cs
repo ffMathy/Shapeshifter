@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
 
     using Autofac;
@@ -18,11 +19,22 @@
 
     using Data.Factories.Interfaces;
 
-    using Shared.Services.Files.Interfaces;
+    using Files.Interfaces;
 
     [TestClass]
     public class ClipboardPersistanceServiceTest : TestBase
     {
+        [TestCleanup]
+        public void Cleanup()
+        {
+            var container = CreateContainer();
+
+            var fileManager = container.Resolve<IFileManager>();
+            var folder = fileManager.PrepareFolder();
+
+            Directory.Delete(folder, true);
+        }
+
         [TestMethod]
         public async Task CanPersistClipboardData()
         {

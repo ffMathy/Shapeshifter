@@ -1,12 +1,12 @@
-﻿namespace Shapeshifter.WindowsDesktop.Windows.ViewModels
+﻿namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 {
     using System;
     using System.Linq;
 
     using Autofac;
 
-    using Controls.Window.Binders.Interfaces;
-    using Controls.Window.ViewModels.Interfaces;
+    using Binders.Interfaces;
+    using Interfaces;
 
     using Data.Actions.Interfaces;
     using Data.Interfaces;
@@ -816,30 +816,6 @@
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
             fakeUserInterfaceMediator.ControlAdded +=
-                Raise.Event<EventHandler<ControlEventArgument>>(
-                    viewModel,
-                    new ControlEventArgument(
-                        fakePackage));
-
-            Assert.AreSame(fakePackage, viewModel.Elements.Single());
-        }
-
-        [TestMethod]
-        public void ControlHighlightedMovesElement()
-        {
-            var fakeUserInterfaceMediator = Substitute.For<IClipboardUserInterfaceMediator>();
-
-            var fakePackage = Substitute.For<IClipboardDataControlPackage>();
-
-            var container = CreateContainer(
-                c => {
-                    c.RegisterInstance(fakeUserInterfaceMediator);
-                });
-
-            var viewModel = container.Resolve<IClipboardListViewModel>();
-            viewModel.Elements.Add(fakePackage);
-
-            fakeUserInterfaceMediator.ControlHighlighted +=
                 Raise.Event<EventHandler<ControlEventArgument>>(
                     viewModel,
                     new ControlEventArgument(

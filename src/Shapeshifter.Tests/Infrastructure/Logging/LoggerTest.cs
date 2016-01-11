@@ -4,11 +4,11 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using Interfaces;
-
     using NSubstitute;
 
     using WindowsDesktop;
+
+    using Interfaces;
 
     [TestClass]
     public class LoggerTest: TestBase

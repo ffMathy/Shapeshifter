@@ -3,6 +3,6 @@
     using Infrastructure.Dependencies.Interfaces;
 
     public interface IClipboardListWindow
-        : IWindow,
+        : IHookableWindow,
           ISingleInstance { }
 }

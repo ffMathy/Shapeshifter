@@ -2,6 +2,8 @@
 {
     using WindowsDesktop.Services.Interfaces;
 
+    using Controls.Designer.Services;
+
     using Data.Interfaces;
 
     using Facades;
@@ -9,8 +11,6 @@
     using Interfaces;
 
     using Properties;
-
-    using Shared.Controls.Designer.Services;
 
     class DesignerFileDataSourceService
         : IDataSourceService,

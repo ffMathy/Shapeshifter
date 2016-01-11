@@ -73,7 +73,8 @@
         public int DurationInDeciseconds
             => 5;
 
-        public void Connect(IWindow targetWindow)
+        public void Connect(
+            IHookableWindow targetWindow)
         {
             if (IsConnected)
             {

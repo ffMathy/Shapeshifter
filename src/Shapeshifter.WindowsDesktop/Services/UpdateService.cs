@@ -2,18 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
-    using System.IO.Compression;
     using System.Linq;
-    using System.Reflection;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
 
-    using Autofac;
-
     using Files.Interfaces;
 
-    using Infrastructure.Environment.Interfaces;
     using Infrastructure.Logging.Interfaces;
 
     using Interfaces;
@@ -23,30 +17,24 @@
     using Web.Interfaces;
 
     class UpdateService
-        : IUpdateService,
-          IStartable
+        : IUpdateService
     {
         const string RepositoryOwner = "ffMathy";
-
         const string RepositoryName = "Shapeshifter";
 
         readonly GitHubClient client;
 
         readonly IDownloader fileDownloader;
-
         readonly IFileManager fileManager;
-
-        readonly IEnvironmentInformation environmentInformation;
-
         readonly IProcessManager processManager;
-
+        readonly IReleaseVersionManager releaseVersionManager;
         readonly ILogger logger;
 
         public UpdateService(
             IDownloader fileDownloader,
             IFileManager fileManager,
             IProcessManager processManager,
-            IEnvironmentInformation environmentInformation,
+            IReleaseVersionManager releaseVersionManager,
             ILogger logger)
         {
             client = CreateClient();
@@ -54,56 +42,13 @@
             this.fileDownloader = fileDownloader;
             this.fileManager = fileManager;
             this.processManager = processManager;
-            this.environmentInformation = environmentInformation;
+            this.releaseVersionManager = releaseVersionManager;
             this.logger = logger;
-        }
-
-        async void StartUpdateLoop()
-        {
-            while (true)
-            {
-                await UpdateAsync();
-                await WaitForNextCycle();
-            }
-
-            // ReSharper disable once FunctionNeverReturns
-        }
-
-        static async Task WaitForNextCycle()
-        {
-            //TODO: introduce a circuit breaker for this.
-            const int updateIntervalInHours = 6;
-
-            const int milliSecondsInASecond = 1000;
-            const int secondsInAMinute = 60;
-            const int minutesInAnHour = 60;
-            const int updateIntervalInMilliseconds =
-                milliSecondsInASecond*secondsInAMinute*minutesInAnHour*updateIntervalInHours;
-
-            await Task.Delay(updateIntervalInMilliseconds);
-        }
-
-        static Version GetCurrentVersion()
-        {
-            return GetAssemblyInformation()
-                .Version;
-        }
-
-        static string GetAssemblyName()
-        {
-            return GetAssemblyInformation()
-                .Name;
-        }
-
-        static AssemblyName GetAssemblyInformation()
-        {
-            return Assembly.GetExecutingAssembly()
-                           .GetName();
         }
 
         static GitHubClient CreateClient()
         {
-            var client = new GitHubClient(new ProductHeaderValue(GetAssemblyName()));
+            var client = new GitHubClient(new ProductHeaderValue(RepositoryName));
             return client;
         }
 
@@ -138,29 +83,18 @@
 
         async Task UpdateFromAssetsAsync(IReadOnlyList<ReleaseAsset> assets)
         {
-            const string targetAssetName = "Binaries.zip";
-            foreach (var asset in assets.Where(asset => asset.Name == targetAssetName))
-            {
-                await UpdateFromAssetAsync(asset);
-            }
+            const string targetAssetName = "Shapeshifter.exe";
+
+            var asset = assets.Single(x => x.Name == targetAssetName);
+            await UpdateFromAssetAsync(asset);
         }
 
         async Task UpdateFromAssetAsync(ReleaseAsset asset)
         {
             var localFilePath = await DownloadUpdateAsync(asset);
-            var temporaryDirectory = ExtractUpdate(localFilePath);
-
-            StartUpdate(temporaryDirectory);
-        }
-
-        void StartUpdate(string temporaryDirectory)
-        {
-            var concretePath = Path.Combine(
-                temporaryDirectory,
-                GetAssemblyName() + ".exe");
             processManager.LaunchFile(
-                concretePath,
-                $"update \"{Environment.CurrentDirectory}\"");
+                localFilePath,
+                $"update");
         }
 
         async Task<string> DownloadUpdateAsync(ReleaseAsset asset)
@@ -173,14 +107,7 @@
             return localFilePath;
         }
 
-        string ExtractUpdate(string localFilePath)
-        {
-            var temporaryDirectory = fileManager.PrepareTemporaryFolder("Update");
-            ZipFile.ExtractToDirectory(localFilePath, temporaryDirectory);
-            return temporaryDirectory;
-        }
-
-        static bool IsUpdateToReleaseNeeded(Release release)
+        bool IsUpdateToReleaseNeeded(Release release)
         {
             if (release.Prerelease)
             {
@@ -191,14 +118,14 @@
             return IsUpdateToVersionNeeded(releaseVersion);
         }
 
-        static bool IsUpdateToVersionNeeded(Version releaseVersion)
+        bool IsUpdateToVersionNeeded(Version releaseVersion)
         {
-            return releaseVersion > GetCurrentVersion();
+            return releaseVersion > releaseVersionManager.GetCurrentVersion();
         }
 
         static Version GetReleaseVersion(Release release)
         {
-            var versionMatch = Regex.Match(release.Name, "shapeshifter-v(.+)");
+            var versionMatch = Regex.Match(release.Name, @"shapeshifter-v([\.\d]+)");
             var versionGroup = versionMatch.Groups[1];
 
             var version = new Version(versionGroup.Value);
@@ -215,16 +142,9 @@
 
         async Task<IEnumerable<Release>> GetReleasesWithUpdatesAsync()
         {
-            var allReleases = await client.Release.GetAll(RepositoryOwner, RepositoryName);
+            var allReleases = await client.Release.GetAll(
+                RepositoryOwner, RepositoryName);
             return allReleases.Where(IsUpdateToReleaseNeeded);
-        }
-
-        public void Start()
-        {
-            if (!environmentInformation.IsDebugging && !environmentInformation.IsInDesignTime)
-            {
-                StartUpdateLoop();
-            }
         }
     }
 }

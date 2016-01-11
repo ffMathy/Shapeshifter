@@ -7,8 +7,6 @@
 
     using Autofac;
 
-    using Controls.Window.Interfaces;
-
     using Infrastructure.Events;
     using Infrastructure.Threading.Interfaces;
 
@@ -18,6 +16,7 @@
 
     using NSubstitute;
 
+    using Controls.Window.Interfaces;
     [TestClass]
     public class WindowMessageHookTest: TestBase
     {
@@ -40,7 +39,7 @@
                     c.RegisterFake<IWindowMessageInterceptor>();
                 });
 
-            var fakeWindow = Substitute.For<IWindow>();
+            var fakeWindow = Substitute.For<IHookableWindow>();
 
             var hook = container.Resolve<IWindowMessageHook>();
             hook.Connect(fakeWindow);
@@ -57,12 +56,13 @@
                 });
 
             HwndSourceHook windowHookCallback = null;
-            var fakeWindow = Substitute.For<IWindow>()
-                                       .WithFakeSettings(
-                                           x => {
-                                               x.AddHwndSourceHook(
-                                                   Arg.Do<HwndSourceHook>(
-                                                       h => windowHookCallback = h));
+            var fakeWindow = Substitute
+                .For<IHookableWindow>()
+                .WithFakeSettings(
+                    x => {
+                        x.AddHwndSourceHook(
+                            Arg.Do<HwndSourceHook>(
+                                h => windowHookCallback = h));
                                            });
 
             var hook = container.Resolve<IWindowMessageHook>();
@@ -96,7 +96,7 @@
                 });
 
             HwndSourceHook windowHookCallback = null;
-            var fakeWindow = Substitute.For<IWindow>()
+            var fakeWindow = Substitute.For<IHookableWindow>()
                                        .WithFakeSettings(
                                            x => {
                                                x.AddHwndSourceHook(
