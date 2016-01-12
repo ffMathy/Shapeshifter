@@ -51,6 +51,10 @@
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
+      <HintPath>..\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
@@ -213,6 +217,7 @@
     <Compile Include="Services\Arguments\Interfaces\INoArgumentProcessor.cs" />
     <Compile Include="Services\Arguments\Interfaces\ISingleArgumentProcessor.cs" />
     <Compile Include="Services\Arguments\InstallArgumentProcessor.cs" />
+    <Compile Include="Services\CertificateManager.cs" />
     <Compile Include="Services\Clipboard\ClipboardPasteService.cs" />
     <Compile Include="Infrastructure\Handles\ClipboardHandle.cs" />
     <Compile Include="Services\Clipboard\ClipboardPersistanceService.cs" />
@@ -220,9 +225,9 @@
     <Compile Include="Services\Clipboard\Interfaces\IClipboardPersistanceService.cs" />
     <Compile Include="Services\Files\FileManager.cs" />
     <Compile Include="Services\Files\Interfaces\IFileManager.cs" />
-    <Compile Include="Services\Interfaces\IDataSourceService.cs" />
+    <Compile Include="Services\Clipboard\Interfaces\IDataSourceService.cs" />
+    <Compile Include="Services\Interfaces\ICertificateManager.cs" />
     <Compile Include="Services\Interfaces\IProcessManager.cs" />
-    <Compile Include="Services\Interfaces\IReleaseVersionManager.cs" />
     <Compile Include="Services\Interfaces\IUpdateService.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardManager.cs" />
     <Compile Include="Services\Keyboard\KeyboardManager.cs" />
@@ -232,7 +237,7 @@
     <Compile Include="Mediators\ClipboardUserInterfaceMediator.cs" />
     <Compile Include="Services\Clipboard\ClipboardInjectionService.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IClipboardInjectionService.cs" />
-    <Compile Include="Services\DataSourceService.cs" />
+    <Compile Include="Services\Clipboard\DataSourceService.cs" />
     <Compile Include="Infrastructure\Events\ControlEventArgument.cs" />
     <Compile Include="Infrastructure\Events\DataCopiedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\PasteCombinationReleasedEventArgument.cs" />

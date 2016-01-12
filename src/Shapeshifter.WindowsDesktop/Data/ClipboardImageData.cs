@@ -2,7 +2,7 @@
 {
     using Interfaces;
 
-    using Services.Interfaces;
+    using Services.Clipboard.Interfaces;
 
     public class ClipboardImageData: IClipboardImageData
     {

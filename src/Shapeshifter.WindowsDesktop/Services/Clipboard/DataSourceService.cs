@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services
+﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
     using System;
     using System.Windows;

@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services.Interfaces
+﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard.Interfaces
 {
     using Data.Interfaces;
 
