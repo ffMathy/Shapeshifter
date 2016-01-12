@@ -86,10 +86,8 @@
             {
                 return InstallRootCertificate(name);
             }
-            else
-            {
-                return existingCertificates.First();
-            }
+
+            return existingCertificates.Single();
         }
 
         X509Certificate2 InstallRootCertificate(string name)

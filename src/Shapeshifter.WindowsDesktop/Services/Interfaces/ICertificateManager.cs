@@ -27,6 +27,6 @@
             StoreLocation storeLocation);
         
         /// <returns>The private key for the CA certificate.</returns>
-        AsymmetricKeyParameter GenerateCACertificate(string subjectName, int keyStrength = 2048);
+        AsymmetricKeyParameter GenerateCACertificate(string subjectName);
     }
 }

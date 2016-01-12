@@ -192,7 +192,7 @@
             {
                 cbSize = (uint)Marshal.SizeOf(typeof(SIGNER_CERT_STORE_INFO)),
                 pSigningCert = pCertContext,
-                dwCertPolicy = 0x2, // SIGNER_CERT_POLICY_CHAIN
+                dwCertPolicy = 0x2,
                 hCertStore = IntPtr.Zero
             };
 
