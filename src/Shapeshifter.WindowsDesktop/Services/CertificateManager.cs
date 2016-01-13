@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Cryptography;
     using System.Security.Cryptography.X509Certificates;
 
     using Interfaces;
@@ -23,51 +24,84 @@
 
     public class CertificateManager : ICertificateManager
     {
-        const int ExpireTimeInYears = 10;
+        const int ExpireTimeInYears = 30;
         const int KeyStrength = 2048;
 
-        public X509Certificate2 GenerateSelfSignedCertificate(
-            string subjectName,
-            string issuerName,
-            AsymmetricKeyParameter issuerPrivateKey)
+        public X509Certificate2 GenerateSelfSignedCertificate(string name)
         {
+            // Generating Random Numbers
             var randomGenerator = new CryptoApiRandomGenerator();
             var random = new SecureRandom(randomGenerator);
 
+            // The Certificate Generator
             var certificateGenerator = new X509V3CertificateGenerator();
 
-            SetCertificateSerialNumber(random, certificateGenerator);
-            SetCertificateSignatureAlgorithm(certificateGenerator);
-            SetCertificateNames(subjectName, certificateGenerator);
-            SetCertificateExpirationTime(certificateGenerator);
+            // Serial Number
+            var serialNumber = BigIntegers.CreateRandomInRange(BigInteger.One, BigInteger.ValueOf(long.MaxValue), random);
+            certificateGenerator.SetSerialNumber(serialNumber);
 
-            var subjectKeyPair = GenerateKeyPair(random);
+            // Signature Algorithm
+            const string signatureAlgorithm = "SHA256WithRSA";
+            certificateGenerator.SetSignatureAlgorithm(signatureAlgorithm);
+
+            // Issuer and Subject Name
+            var subjectDN = new X509Name(name);
+            var issuerDN = subjectDN;
+            certificateGenerator.SetIssuerDN(issuerDN);
+            certificateGenerator.SetSubjectDN(subjectDN);
+
+            // Valid For
+            var notBefore = DateTime.UtcNow.Date;
+            var notAfter = notBefore.AddYears(ExpireTimeInYears);
+
+            certificateGenerator.SetNotBefore(notBefore);
+            certificateGenerator.SetNotAfter(notAfter);
+
+            // Subject Public Key
+            var keyGenerationParameters = new KeyGenerationParameters(random, KeyStrength);
+            var keyPairGenerator = new RsaKeyPairGenerator();
+            keyPairGenerator.Init(keyGenerationParameters);
+
+            var subjectKeyPair = keyPairGenerator.GenerateKeyPair();
             certificateGenerator.SetPublicKey(subjectKeyPair.Public);
 
-            var certificate = certificateGenerator.Generate(issuerPrivateKey, random);
+            // Generating the Certificate
+            var issuerKeyPair = subjectKeyPair;
 
-            var privateKeyInformation = PrivateKeyInfoFactory.CreatePrivateKeyInfo(subjectKeyPair.Private);
+            // selfsign certificate
+            var certificate = certificateGenerator.Generate(issuerKeyPair.Private, random);
 
+            // correcponding private key
+            var info = PrivateKeyInfoFactory.CreatePrivateKeyInfo(subjectKeyPair.Private);
+
+            // merge into X509Certificate2
             var x509 = new X509Certificate2(certificate.GetEncoded());
 
-            var sequence = (Asn1Sequence)Asn1Object.FromByteArray(privateKeyInformation.PrivateKey.GetDerEncoded());
-            if (sequence.Count != 9)
+            var seq = (Asn1Sequence)Asn1Object.FromByteArray(info.PrivateKey.GetDerEncoded());
+            if (seq.Count != 9)
             {
                 throw new PemException("Malformed sequence in RSA private key.");
             }
 
-            var rsa = new RsaPrivateKeyStructure(sequence);
+            var rsa = new RsaPrivateKeyStructure(seq);
             var rsaParameters = new RsaPrivateCrtKeyParameters(
-                rsa.Modulus, 
-                rsa.PublicExponent, 
-                rsa.PrivateExponent, 
-                rsa.Prime1, 
-                rsa.Prime2, 
-                rsa.Exponent1, 
-                rsa.Exponent2, 
-                rsa.Coefficient);
+                rsa.Modulus, rsa.PublicExponent, rsa.PrivateExponent, rsa.Prime1, rsa.Prime2, rsa.Exponent1, rsa.Exponent2, rsa.Coefficient);
 
-            x509.PrivateKey = DotNetUtilities.ToRSA(rsaParameters);
+            var privateKey = DotNetUtilities.ToRSA(rsaParameters);
+
+            // Setup RSACryptoServiceProvider with "KeyContainerName" set
+            var csp = new CspParameters
+            {
+                KeyContainerName = "Shapeshifter"
+            };
+
+            var rsaPrivate = new RSACryptoServiceProvider(csp);
+
+            // Import private key from BouncyCastle's rsa
+            rsaPrivate.ImportParameters(privateKey.ExportParameters(true));
+
+            // Set private key on our X509Certificate2
+            x509.PrivateKey = rsaPrivate;
 
             return x509;
 
@@ -110,74 +144,6 @@
                     store.Close();
                 }
             }
-        }
-
-        public AsymmetricKeyParameter GenerateCertificateAuthorityCertificate(string subjectName)
-        {
-            var randomGenerator = new CryptoApiRandomGenerator();
-            var random = new SecureRandom(randomGenerator);
-
-            var certificateGenerator = new X509V3CertificateGenerator();
-
-            SetCertificateSerialNumber(random, certificateGenerator);
-            SetCertificateSignatureAlgorithm(certificateGenerator);
-            SetCertificateNames(subjectName, certificateGenerator);
-            SetCertificateExpirationTime(certificateGenerator);
-
-            var subjectKeyPair = GenerateKeyPair(random);
-            certificateGenerator.SetPublicKey(subjectKeyPair.Public);
-
-            var issuerKeyPair = subjectKeyPair;
-
-            var certificate = certificateGenerator.Generate(issuerKeyPair.Private, random);
-            var certificate2 = new X509Certificate2(certificate.GetEncoded());
-
-            InstallCertificateToStore(
-                certificate2,
-                StoreName.Root,
-                StoreLocation.LocalMachine);
-
-            return issuerKeyPair.Private;
-
-        }
-
-        static AsymmetricCipherKeyPair GenerateKeyPair(SecureRandom random)
-        {
-            var keyGenerationParameters = new KeyGenerationParameters(random, KeyStrength);
-            var keyPairGenerator = new RsaKeyPairGenerator();
-            keyPairGenerator.Init(keyGenerationParameters);
-
-            var subjectKeyPair = keyPairGenerator.GenerateKeyPair();
-            return subjectKeyPair;
-        }
-
-        static void SetCertificateSerialNumber(SecureRandom random, X509V3CertificateGenerator certificateGenerator)
-        {
-            var serialNumber = BigIntegers.CreateRandomInRange(BigInteger.One, BigInteger.ValueOf(Int64.MaxValue), random);
-            certificateGenerator.SetSerialNumber(serialNumber);
-        }
-
-        static void SetCertificateSignatureAlgorithm(X509V3CertificateGenerator certificateGenerator)
-        {
-            const string signatureAlgorithm = "SHA256WithRSA";
-            certificateGenerator.SetSignatureAlgorithm(signatureAlgorithm);
-        }
-
-        static void SetCertificateNames(string subjectName, X509V3CertificateGenerator certificateGenerator)
-        {
-            var subjectDN = new X509Name(subjectName);
-            var issuerDN = subjectDN;
-            certificateGenerator.SetIssuerDN(issuerDN);
-            certificateGenerator.SetSubjectDN(subjectDN);
-        }
-
-        static void SetCertificateExpirationTime(X509V3CertificateGenerator certificateGenerator)
-        {
-            var notBefore = DateTime.UtcNow.Date;
-            var notAfter = notBefore.AddYears(ExpireTimeInYears);
-
-            certificateGenerator.SetNotBefore(notBefore);
-            certificateGenerator.SetNotAfter(notAfter);
         }
     }
 }

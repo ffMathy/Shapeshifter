@@ -15,7 +15,6 @@
 
     class InstallArgumentProcessor : INoArgumentProcessor
     {
-        const string CertificateAuthorityName = "Shapeshifter CA";
         const string CertificateName = "Shapeshifter";
 
         readonly IProcessManager processManager;
@@ -72,13 +71,13 @@
             WriteManifest(targetExecutableFile);
             WriteExecutable(targetExecutableFile);
 
-            var selfSignedCertificate = InstallCertificatesIfNotFound();
+            var selfSignedCertificate = InstallCertificateIfNotFound();
             signHelper.SignAssemblyWithCertificate(targetExecutableFile, selfSignedCertificate);
 
             LaunchInstalledExecutable(targetExecutableFile, currentExecutableFile);
         }
 
-        X509Certificate2 InstallCertificatesIfNotFound()
+        X509Certificate2 InstallCertificateIfNotFound()
         {
             var existingCertificates = certificateManager.GetCertificatesByIssuerFromStore(
                 $"CN={CertificateName}",
@@ -94,12 +93,15 @@
 
         X509Certificate2 InstallCodeSigningCertificate()
         {
-            var certificateAuthorityCertificate = certificateManager.GenerateCertificateAuthorityCertificate($"CN={CertificateAuthorityName}");
             var certificate = certificateManager.GenerateSelfSignedCertificate(
-                $"CN={CertificateName}", $"CN={CertificateAuthorityName}", certificateAuthorityCertificate);
+                $"CN={CertificateName}");
             certificateManager.InstallCertificateToStore(
                 certificate,
                 StoreName.My,
+                StoreLocation.LocalMachine);
+            certificateManager.InstallCertificateToStore(
+                certificate,
+                StoreName.Root,
                 StoreLocation.LocalMachine);
 
             return certificate;
