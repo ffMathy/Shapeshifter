@@ -3,6 +3,8 @@
     using System.Diagnostics;
     using System.IO;
 
+    using Environment.Interfaces;
+
     using Interfaces;
 
     using Services.Files.Interfaces;
@@ -10,13 +12,16 @@
     class LogStream : ILogStream
     {
         readonly IFileManager fileManager;
+        readonly IEnvironmentInformation environmentInformation;
 
         string logFilePath;
 
         public LogStream(
-            IFileManager fileManager)
+            IFileManager fileManager,
+            IEnvironmentInformation environmentInformation)
         {
             this.fileManager = fileManager;
+            this.environmentInformation = environmentInformation;
             Prepare();
         }
 
@@ -29,7 +34,21 @@
         public void WriteLine(string input)
         {
             Debug.WriteLine(input);
-            File.AppendAllLines(logFilePath, new [] {input});
+
+            if (environmentInformation.GetIsInDesignTime())
+            {
+                return;
+            }
+
+            lock (this)
+            {
+                File.AppendAllLines(
+                    logFilePath,
+                    new[]
+                    {
+                        input
+                    });
+            }
         }
     }
 }

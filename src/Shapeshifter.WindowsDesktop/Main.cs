@@ -39,8 +39,6 @@
             this.aggregateArgumentProcessor = aggregateArgumentProcessor;
             this.updateService = updateService;
             this.environmentInformation = environmentInformation;
-
-            downloader.DownloadBytesAsync("http://www.google.com");
         }
 
         public async Task Start(
