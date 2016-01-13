@@ -40,7 +40,7 @@
                 return;
             }
 
-            lock (this)
+            try
             {
                 File.AppendAllLines(
                     logFilePath,
@@ -48,6 +48,10 @@
                     {
                         input
                     });
+            }
+            catch (IOException)
+            {
+                Debug.WriteLine("A log statement could not be written to the log file.");
             }
         }
     }

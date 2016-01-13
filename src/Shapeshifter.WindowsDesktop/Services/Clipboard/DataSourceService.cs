@@ -14,6 +14,8 @@
 
     using Interfaces;
 
+    using Messages;
+
     using Native;
     using Native.Interfaces;
 
