@@ -5,6 +5,8 @@
     using System.Linq;
     using System.Security.Cryptography.X509Certificates;
 
+    using Infrastructure.Environment.Interfaces;
+
     using Interfaces;
 
     using Native.Helpers.Interfaces;
@@ -20,15 +22,18 @@
         readonly IProcessManager processManager;
         readonly ICertificateManager certificateManager;
         readonly ISignHelper signHelper;
+        readonly IEnvironmentInformation environmentInformation;
 
         public InstallArgumentProcessor(
             IProcessManager processManager,
             ICertificateManager certificateManager,
-            ISignHelper signHelper)
+            ISignHelper signHelper,
+            IEnvironmentInformation environmentInformation)
         {
             this.processManager = processManager;
             this.certificateManager = certificateManager;
             this.signHelper = signHelper;
+            this.environmentInformation = environmentInformation;
         }
 
         public bool Terminates
@@ -45,7 +50,8 @@
 
         public bool CanProcess()
         {
-            return Environment.CurrentDirectory != TargetDirectory;
+            return !environmentInformation.IsDebugging && 
+                (Environment.CurrentDirectory != TargetDirectory);
         }
 
         public void Process()
