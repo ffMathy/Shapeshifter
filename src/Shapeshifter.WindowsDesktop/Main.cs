@@ -9,29 +9,41 @@
     using Services.Arguments.Interfaces;
     using Services.Interfaces;
 
+    using System.Threading.Tasks;
+
+    using Infrastructure.Environment.Interfaces;
+
+    using Services.Web.Interfaces;
+
     public class Main: ISingleInstance
     {
         readonly IProcessManager processManager;
-
         readonly IClipboardListWindow mainWindow;
-
         readonly IClipboardUserInterfaceMediator clipboardUserInterfaceMediator;
-
         readonly IAggregateArgumentProcessor aggregateArgumentProcessor;
+        readonly IUpdateService updateService;
+        readonly IEnvironmentInformation environmentInformation;
 
         public Main(
             IProcessManager processManager,
             IClipboardListWindow mainWindow,
             IClipboardUserInterfaceMediator clipboardUserInterfaceMediator,
-            IAggregateArgumentProcessor aggregateArgumentProcessor)
+            IAggregateArgumentProcessor aggregateArgumentProcessor,
+            IUpdateService updateService,
+            IEnvironmentInformation environmentInformation,
+            IDownloader downloader)
         {
             this.processManager = processManager;
             this.mainWindow = mainWindow;
             this.clipboardUserInterfaceMediator = clipboardUserInterfaceMediator;
             this.aggregateArgumentProcessor = aggregateArgumentProcessor;
+            this.updateService = updateService;
+            this.environmentInformation = environmentInformation;
+
+            downloader.DownloadBytesAsync("http://www.google.com");
         }
 
-        public void Start(
+        public async Task Start(
             params string[] arguments)
         {
             processManager.CloseAllProcessesExceptCurrent();
@@ -40,6 +52,11 @@
             if (aggregateArgumentProcessor.ShouldTerminate)
             {
                 return;
+            }
+
+            if (!environmentInformation.GetIsDebugging() && environmentInformation.GetHasInternetAccess())
+            {
+                await updateService.UpdateAsync();
             }
 
             LaunchMainWindow();

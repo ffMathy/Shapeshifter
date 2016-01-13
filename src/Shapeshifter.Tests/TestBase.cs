@@ -36,11 +36,11 @@
             var fakeEnvironment = builder.RegisterFake<IEnvironmentInformation>();
 
             fakeEnvironment
-                .IsInDesignTime
+                .GetIsInDesignTime()
                 .Returns(false);
 
             fakeEnvironment
-                .IsDebugging
+                .GetIsDebugging()
                 .Returns(true);
 
             builder.RegisterModule(

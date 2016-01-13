@@ -50,7 +50,7 @@
 
         public bool CanProcess()
         {
-            return !environmentInformation.IsDebugging && 
+            return !environmentInformation.GetIsDebugging() && 
                 (Environment.CurrentDirectory != TargetDirectory);
         }
 

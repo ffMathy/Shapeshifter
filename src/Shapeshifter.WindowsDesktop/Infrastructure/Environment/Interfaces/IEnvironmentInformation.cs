@@ -2,8 +2,10 @@
 {
     public interface IEnvironmentInformation
     {
-        bool IsInDesignTime { get; }
+        bool GetIsInDesignTime();
 
-        bool IsDebugging { get; }
+        bool GetIsDebugging();
+
+        bool GetHasInternetAccess();
     }
 }

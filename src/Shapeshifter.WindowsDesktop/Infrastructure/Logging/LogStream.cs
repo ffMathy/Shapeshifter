@@ -24,13 +24,6 @@
         {
             var folder = fileManager.PrepareFolder();
             logFilePath = Path.Combine(folder, "Application.log");
-
-            if (File.Exists(logFilePath))
-            {
-                File.Delete(logFilePath);
-            }
-
-            File.WriteAllText(logFilePath, string.Empty);
         }
 
         public void WriteLine(string input)

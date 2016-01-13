@@ -32,7 +32,7 @@
         public ClipboardTextDataViewModel(
             IEnvironmentInformation environmentInformation)
         {
-            if (environmentInformation.IsInDesignTime)
+            if (environmentInformation.GetIsInDesignTime())
             {
                 PrepareDesignMode();
             }

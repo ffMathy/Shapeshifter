@@ -1,25 +1,65 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Environment
 {
     using System.Diagnostics;
+    using System.Linq;
+    using System.Net.NetworkInformation;
     using System.Windows;
 
     using Interfaces;
 
     class EnvironmentInformation: IEnvironmentInformation
     {
+        readonly bool isInDesignTime;
+
         public EnvironmentInformation()
         {
-            IsInDesignTime = !(Application.Current is App);
+            isInDesignTime = !(Application.Current is App);
         }
 
         public EnvironmentInformation(
             bool isInDesignTime)
         {
-            this.IsInDesignTime = isInDesignTime;
+            this.isInDesignTime = isInDesignTime;
         }
 
-        public bool IsDebugging => Debugger.IsAttached;
+        public bool GetIsDebugging() => Debugger.IsAttached;
 
-        public bool IsInDesignTime { get; }
+        public bool GetHasInternetAccess()
+        {
+            if (!NetworkInterface.GetIsNetworkAvailable())
+            {
+                return false;
+            }
+            
+            var interfaces = NetworkInterface.GetAllNetworkInterfaces();
+            foreach (var face in interfaces)
+            {
+                if (ProvidesInternetAccess(face))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        static bool ProvidesInternetAccess(NetworkInterface face)
+        {
+            if ((face.OperationalStatus != OperationalStatus.Up) ||
+                (face.NetworkInterfaceType == NetworkInterfaceType.Tunnel) ||
+                (face.NetworkInterfaceType == NetworkInterfaceType.Loopback))
+            {
+                return false;
+            }
+
+            var statistics = face.GetIPv4Statistics();
+            if ((statistics.BytesReceived > 0) && (statistics.BytesSent > 0))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool GetIsInDesignTime() => isInDesignTime;
     }
 }
