@@ -87,7 +87,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controls\Designer\Services\IDesignerService.cs" />
-    <Compile Include="Controls\ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Controls\Window\Interfaces\IHookableWindow.cs" />
     <Compile Include="Controls\Window\Interfaces\IWindow.cs" />
     <Compile Include="Data\Actions\CopyImageLinkAction.cs" />
@@ -116,7 +115,7 @@
     <Compile Include="Infrastructure\Logging\Interfaces\ILogStream.cs" />
     <Compile Include="Infrastructure\Logging\Logger.cs" />
     <Compile Include="Infrastructure\Logging\LogStream.cs" />
-    <Compile Include="Message.cs" />
+    <Compile Include="Services\Messages\Message.cs" />
     <Compile Include="Controls\Clipboard\ClipboardImageDataControl.xaml.cs">
       <DependentUpon>ClipboardImageDataControl.xaml</DependentUpon>
     </Compile>
@@ -132,9 +131,9 @@
     <Compile Include="Controls\Clipboard\Factories\ClipboardTextDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardFileCollectionDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Interfaces\IClipboardControl.cs" />
-    <Compile Include="Controls\Clipboard\Unwrappers\BitmapUnwrapper.cs" />
-    <Compile Include="Controls\Clipboard\Unwrappers\GeneralUnwrapper.cs" />
-    <Compile Include="Controls\Clipboard\Unwrappers\Interfaces\IMemoryUnwrapper.cs" />
+    <Compile Include="Data\Unwrappers\BitmapUnwrapper.cs" />
+    <Compile Include="Data\Unwrappers\GeneralUnwrapper.cs" />
+    <Compile Include="Data\Unwrappers\Interfaces\IMemoryUnwrapper.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardImageDataViewModel.cs" />
     <Compile Include="Controls\Window\ActionControl.xaml.cs">
       <DependentUpon>ActionControl.xaml</DependentUpon>

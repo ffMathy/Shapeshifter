@@ -2,6 +2,8 @@
 {
     using System;
 
+    using Services.Messages;
+
     public class WindowMessageReceivedArgument: EventArgs
     {
         public WindowMessageReceivedArgument(

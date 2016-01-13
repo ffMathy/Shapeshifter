@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Http;
     using System.Reflection;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
@@ -67,6 +68,11 @@
                 logger.Warning(
                     "Did not search for updates due to the GitHub rate limit being exceed.");
             }
+            catch (HttpRequestException)
+            {
+                logger.Warning(
+                    "Did not search for updates since there was no Internet connection.");
+            }
         }
 
         async Task UpdateFromReleaseAsync(Release pendingUpdateRelease)
@@ -105,7 +111,7 @@
             return localFilePath;
         }
 
-        bool IsUpdateToReleaseNeeded(Release release)
+        static bool IsUpdateToReleaseNeeded(Release release)
         {
             if (release.Prerelease)
             {
@@ -116,7 +122,7 @@
             return IsUpdateToVersionNeeded(releaseVersion);
         }
 
-        bool IsUpdateToVersionNeeded(Version releaseVersion)
+        static bool IsUpdateToVersionNeeded(Version releaseVersion)
         {
             var assembly = Assembly.GetExecutingAssembly();
             return releaseVersion > assembly

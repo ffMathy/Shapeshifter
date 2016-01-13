@@ -37,15 +37,15 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
         protected override void Load(ContainerBuilder builder)
         {
             AssemblyRegistrationHelper
-                .RegisterAssemblyTypes(builder, typeof(DefaultWiringModule).Assembly, this.environmentInformation.IsInDesignTime);
+                .RegisterAssemblyTypes(builder, typeof(DefaultWiringModule).Assembly, this.environmentInformation.GetIsInDesignTime());
 
             AssemblyRegistrationHelper
-                .RegisterAssemblyTypes(builder, NativeAssemblyHelper.Assembly, this.environmentInformation.IsInDesignTime);
+                .RegisterAssemblyTypes(builder, NativeAssemblyHelper.Assembly, this.environmentInformation.GetIsInDesignTime());
 
             RegisterMainThread(builder);
 
             var environmentInformation = RegisterEnvironmentInformation(builder);
-            if (environmentInformation.IsInDesignTime)
+            if (environmentInformation.GetIsInDesignTime())
             {
                 DesignTimeContainerHelper.RegisterFakes(builder);
             }
