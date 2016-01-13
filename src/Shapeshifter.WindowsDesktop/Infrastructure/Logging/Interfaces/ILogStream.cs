@@ -1,6 +1,8 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging.Interfaces
 {
-    public interface ILogStream
+    using Dependencies.Interfaces;
+
+    public interface ILogStream: ISingleInstance
     {
         void WriteLine(string input);
     }

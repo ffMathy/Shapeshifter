@@ -18,7 +18,8 @@
         Title=""
         WindowStyle="None"
         Background="Transparent"
-        AllowsTransparency="True">
+        AllowsTransparency="True"
+        MaxHeight="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
