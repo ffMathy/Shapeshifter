@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Security.Cryptography.X509Certificates;
-    using System.Windows;
 
     using Interfaces;
 
@@ -113,7 +112,7 @@
             }
         }
 
-        public AsymmetricKeyParameter GenerateCACertificate(string subjectName)
+        public AsymmetricKeyParameter GenerateCertificateAuthorityCertificate(string subjectName)
         {
             var randomGenerator = new CryptoApiRandomGenerator();
             var random = new SecureRandom(randomGenerator);

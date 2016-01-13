@@ -15,6 +15,9 @@
 
     class InstallArgumentProcessor : INoArgumentProcessor
     {
+        const string CertificateAuthorityName = "Shapeshifter CA";
+        const string CertificateName = "Shapeshifter";
+
         readonly IProcessManager processManager;
         readonly ICertificateManager certificateManager;
         readonly ISignHelper signHelper;
@@ -69,34 +72,34 @@
             WriteManifest(targetExecutableFile);
             WriteExecutable(targetExecutableFile);
 
-            var rootCertificate = InstallRootCertificateIfNotFound();
-            signHelper.SignAssemblyWithCertificate(targetExecutableFile, rootCertificate);
+            var selfSignedCertificate = InstallCertificatesIfNotFound();
+            signHelper.SignAssemblyWithCertificate(targetExecutableFile, selfSignedCertificate);
 
             LaunchInstalledExecutable(targetExecutableFile, currentExecutableFile);
         }
 
-        X509Certificate2 InstallRootCertificateIfNotFound()
+        X509Certificate2 InstallCertificatesIfNotFound()
         {
-            const string name = "CN=Shapeshifter";
             var existingCertificates = certificateManager.GetCertificatesByIssuerFromStore(
-                name,
-                StoreName.Root,
+                $"CN={CertificateName}",
+                StoreName.My,
                 StoreLocation.LocalMachine);
             if (!existingCertificates.Any())
             {
-                return InstallRootCertificate(name);
+                return InstallCodeSigningCertificate();
             }
 
             return existingCertificates.Single();
         }
 
-        X509Certificate2 InstallRootCertificate(string name)
+        X509Certificate2 InstallCodeSigningCertificate()
         {
-            var privateKey = certificateManager.GenerateCACertificate(name);
-            var certificate = certificateManager.GenerateSelfSignedCertificate(name, name, privateKey);
+            var certificateAuthorityCertificate = certificateManager.GenerateCertificateAuthorityCertificate($"CN={CertificateAuthorityName}");
+            var certificate = certificateManager.GenerateSelfSignedCertificate(
+                $"CN={CertificateName}", $"CN={CertificateAuthorityName}", certificateAuthorityCertificate);
             certificateManager.InstallCertificateToStore(
                 certificate,
-                StoreName.Root,
+                StoreName.My,
                 StoreLocation.LocalMachine);
 
             return certificate;
