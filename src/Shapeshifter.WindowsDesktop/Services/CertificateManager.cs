@@ -29,52 +29,41 @@
 
         public X509Certificate2 GenerateSelfSignedCertificate(string name)
         {
-            // Generating Random Numbers
             var randomGenerator = new CryptoApiRandomGenerator();
             var random = new SecureRandom(randomGenerator);
-
-            // The Certificate Generator
+            
             var certificateGenerator = new X509V3CertificateGenerator();
-
-            // Serial Number
+            
             var serialNumber = BigIntegers.CreateRandomInRange(BigInteger.One, BigInteger.ValueOf(long.MaxValue), random);
             certificateGenerator.SetSerialNumber(serialNumber);
-
-            // Signature Algorithm
+            
             const string signatureAlgorithm = "SHA256WithRSA";
             certificateGenerator.SetSignatureAlgorithm(signatureAlgorithm);
-
-            // Issuer and Subject Name
+            
             var subjectDN = new X509Name(name);
             var issuerDN = subjectDN;
             certificateGenerator.SetIssuerDN(issuerDN);
             certificateGenerator.SetSubjectDN(subjectDN);
-
-            // Valid For
+            
             var notBefore = DateTime.UtcNow.Date;
             var notAfter = notBefore.AddYears(ExpireTimeInYears);
 
             certificateGenerator.SetNotBefore(notBefore);
             certificateGenerator.SetNotAfter(notAfter);
-
-            // Subject Public Key
+            
             var keyGenerationParameters = new KeyGenerationParameters(random, KeyStrength);
             var keyPairGenerator = new RsaKeyPairGenerator();
             keyPairGenerator.Init(keyGenerationParameters);
 
             var subjectKeyPair = keyPairGenerator.GenerateKeyPair();
             certificateGenerator.SetPublicKey(subjectKeyPair.Public);
-
-            // Generating the Certificate
+            
             var issuerKeyPair = subjectKeyPair;
-
-            // selfsign certificate
+            
             var certificate = certificateGenerator.Generate(issuerKeyPair.Private, random);
-
-            // correcponding private key
+            
             var info = PrivateKeyInfoFactory.CreatePrivateKeyInfo(subjectKeyPair.Private);
-
-            // merge into X509Certificate2
+            
             var x509 = new X509Certificate2(certificate.GetEncoded());
 
             var seq = (Asn1Sequence)Asn1Object.FromByteArray(info.PrivateKey.GetDerEncoded());
@@ -88,19 +77,14 @@
                 rsa.Modulus, rsa.PublicExponent, rsa.PrivateExponent, rsa.Prime1, rsa.Prime2, rsa.Exponent1, rsa.Exponent2, rsa.Coefficient);
 
             var privateKey = DotNetUtilities.ToRSA(rsaParameters);
-
-            // Setup RSACryptoServiceProvider with "KeyContainerName" set
+            
             var csp = new CspParameters
             {
                 KeyContainerName = "Shapeshifter"
             };
 
             var rsaPrivate = new RSACryptoServiceProvider(csp);
-
-            // Import private key from BouncyCastle's rsa
             rsaPrivate.ImportParameters(privateKey.ExportParameters(true));
-
-            // Set private key on our X509Certificate2
             x509.PrivateKey = rsaPrivate;
 
             return x509;
