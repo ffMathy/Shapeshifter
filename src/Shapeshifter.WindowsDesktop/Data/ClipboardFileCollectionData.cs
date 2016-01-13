@@ -4,7 +4,7 @@
 
     using Interfaces;
 
-    using Services.Interfaces;
+    using Services.Clipboard.Interfaces;
 
     public class ClipboardFileCollectionData: IClipboardFileCollectionData
     {

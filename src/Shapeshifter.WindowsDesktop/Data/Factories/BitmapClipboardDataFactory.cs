@@ -8,7 +8,7 @@
 
     using Native;
 
-    using Services.Interfaces;
+    using Services.Clipboard.Interfaces;
 
     class BitmapClipboardDataFactory: IBitmapClipboardDataFactory
     {

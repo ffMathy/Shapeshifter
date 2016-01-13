@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
 
@@ -27,14 +28,12 @@
         readonly IDownloader fileDownloader;
         readonly IFileManager fileManager;
         readonly IProcessManager processManager;
-        readonly IReleaseVersionManager releaseVersionManager;
         readonly ILogger logger;
 
         public UpdateService(
             IDownloader fileDownloader,
             IFileManager fileManager,
             IProcessManager processManager,
-            IReleaseVersionManager releaseVersionManager,
             ILogger logger)
         {
             client = CreateClient();
@@ -42,7 +41,6 @@
             this.fileDownloader = fileDownloader;
             this.fileManager = fileManager;
             this.processManager = processManager;
-            this.releaseVersionManager = releaseVersionManager;
             this.logger = logger;
         }
 
@@ -120,7 +118,10 @@
 
         bool IsUpdateToVersionNeeded(Version releaseVersion)
         {
-            return releaseVersion > releaseVersionManager.GetCurrentVersion();
+            var assembly = Assembly.GetExecutingAssembly();
+            return releaseVersion > assembly
+                .GetName()
+                .Version;
         }
 
         static Version GetReleaseVersion(Release release)

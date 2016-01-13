@@ -34,7 +34,12 @@
 
         public string GetCurrentProcessPath()
         {
-            throw new NotImplementedException();
+            using (var currentProcess = Process.GetCurrentProcess())
+            {
+                return Path.Combine(
+                    Environment.CurrentDirectory, 
+                    $"{currentProcess.ProcessName}.exe");
+            }
         }
 
         public void LaunchCommand(string command, string arguments = null)
