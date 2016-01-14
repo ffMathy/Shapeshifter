@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading;
+    using System.Windows.Input;
 
     using Interfaces;
 
@@ -20,7 +21,7 @@
 
         public bool NoRepeat { get; set; }
 
-        public int KeyCode { get; set; }
+        public Key Key { get; set; }
 
         public HotkeyInterception(
             IKeyboardNativeApi keyboardNativeApi)
@@ -42,16 +43,21 @@
             {
                 modifier |= KeyboardNativeApi.MOD_NOREPEAT;
             }
+            
+            InstallHotkey(windowHandle, modifier, KeyInterop.VirtualKeyFromKey(Key));
+        }
 
+        void InstallHotkey(IntPtr windowHandle, int modifier, int keyCode)
+        {
             var registrationResult = keyboardNativeApi.RegisterHotKey(
                 windowHandle,
                 InterceptionId,
                 modifier,
-                KeyCode);
+                keyCode);
             if (!registrationResult)
             {
                 throw new InvalidOperationException(
-                    $"Couldn't install the hotkey interceptor for key {KeyCode}.");
+                    $"Couldn't install the hotkey interceptor for key {Key}.");
             }
         }
 
@@ -61,7 +67,7 @@
             if (!registrationResult)
             {
                 throw new InvalidOperationException(
-                    $"Couldn't uninstall the hotkey interceptor for key {KeyCode}.");
+                    $"Couldn't uninstall the hotkey interceptor for key {Key}.");
             }
         }
 

@@ -1,17 +1,18 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Events
 {
     using System;
+    using System.Windows.Input;
 
     public class HotkeyFiredArgument: EventArgs
     {
-        public HotkeyFiredArgument(int keyCode, bool isControlDown)
+        public HotkeyFiredArgument(Key key, bool isControlDown)
         {
-            KeyCode = keyCode;
+            Key = key;
             IsControlDown = isControlDown;
         }
 
         public bool IsControlDown { get; private set; }
 
-        public int KeyCode { get; private set; }
+        public Key Key { get; private set; }
     }
 }

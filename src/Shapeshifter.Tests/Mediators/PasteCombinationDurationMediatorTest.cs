@@ -32,7 +32,7 @@
             fakePasteHotkeyInterceptor.HotkeyFired += Raise.EventWith(
                             fakePasteHotkeyInterceptor,
                             new HotkeyFiredArgument(
-                                KeyboardNativeApi.VK_KEY_V,
+                                Key.V,
                                 true));
         }
 

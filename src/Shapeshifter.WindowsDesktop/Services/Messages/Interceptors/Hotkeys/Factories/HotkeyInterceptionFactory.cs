@@ -1,5 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.Factories
 {
+    using System.Windows.Input;
+
     using Hotkeys.Interfaces;
 
     using Interfaces;
@@ -17,7 +19,7 @@
         }
 
         public IHotkeyInterception CreateInterception(
-            int hotkey,
+            Key hotkey,
             bool controlNeeded,
             bool noRepeat)
         {
@@ -25,7 +27,7 @@
             {
                 ControlNeeded = controlNeeded,
                 NoRepeat = noRepeat,
-                KeyCode = hotkey
+                Key = hotkey
             };
         }
     }
