@@ -2,6 +2,7 @@
 {
     using System;
     using System.Windows;
+    using System.Windows.Input;
     using System.Windows.Interop;
 
     using Infrastructure.Events;
@@ -60,22 +61,22 @@
         {
             keyInterceptor.AddInterceptingKey(
                 handleContainer.Handle,
-                KeyboardNativeApi.VK_KEY_UP);
+                Key.Up);
             keyInterceptor.AddInterceptingKey(
                 handleContainer.Handle,
-                KeyboardNativeApi.VK_KEY_DOWN);
+                Key.Down);
             keyInterceptor.AddInterceptingKey(
                 handleContainer.Handle,
-                KeyboardNativeApi.VK_KEY_LEFT);
+                Key.Left);
             keyInterceptor.AddInterceptingKey(
                 handleContainer.Handle,
-                KeyboardNativeApi.VK_KEY_RIGHT);
+                Key.Right);
             keyInterceptor.AddInterceptingKey(
                 handleContainer.Handle,
-                KeyboardNativeApi.VK_HOME);
+                Key.Home);
             keyInterceptor.AddInterceptingKey(
                 handleContainer.Handle,
-                KeyboardNativeApi.VK_DELETE);
+                Key.Delete);
         }
 
         public HwndSource HandleSource => PresentationSource.FromVisual(this) as HwndSource;

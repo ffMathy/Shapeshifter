@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
     using System;
+    using System.Windows.Input;
 
     using Factories.Interfaces;
 
@@ -33,7 +34,7 @@
             IsEnabled = true;
 
             hotkeyInterception = hotkeyInterceptionFactory.CreateInterception(
-                KeyboardNativeApi.VK_KEY_V,
+                Key.V,
                 true,
                 true);
         }
@@ -92,7 +93,7 @@
             HotkeyFired?.Invoke(
                 this,
                 new HotkeyFiredArgument(
-                    hotkeyInterception.KeyCode,
+                    hotkeyInterception.Key,
                     hotkeyInterception.ControlNeeded));
         }
         

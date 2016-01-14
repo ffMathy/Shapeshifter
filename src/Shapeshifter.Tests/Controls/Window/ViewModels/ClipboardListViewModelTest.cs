@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using System.Windows.Input;
 
     using Autofac;
 
@@ -78,14 +79,10 @@
             systemUnderTest.SelectedElement = fakePackage1;
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_DOWN,
-                    false));
+            fakeKeyInterceptor.HotkeyFired += 
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Down, false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage2);
         }
@@ -117,14 +114,10 @@
             systemUnderTest.SelectedElement = fakePackage2;
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_DOWN,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Down, false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage3);
         }
@@ -156,14 +149,10 @@
             systemUnderTest.SelectedElement = fakePackage3;
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_DOWN,
-                    false));
+            fakeKeyInterceptor.HotkeyFired += 
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Down, false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage1);
         }
@@ -195,14 +184,10 @@
             systemUnderTest.SelectedElement = fakePackage1;
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_UP,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Up, false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage3);
         }
@@ -234,14 +219,10 @@
             systemUnderTest.SelectedElement = fakePackage3;
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_UP,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Up, false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage2);
         }
@@ -273,14 +254,10 @@
             systemUnderTest.SelectedElement = fakePackage2;
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_UP,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Up, false));
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage1);
         }
@@ -312,23 +289,15 @@
             systemUnderTest.SelectedAction = fakeAction1;
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_RIGHT,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Right, false));
 
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_DOWN,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Down, false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction2);
         }
@@ -360,23 +329,15 @@
             systemUnderTest.SelectedAction = fakeAction2;
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_RIGHT,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Right, false));
 
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_DOWN,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Down, false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction3);
         }
@@ -395,14 +356,10 @@
             container.Resolve<IClipboardListViewModel>();
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_LEFT,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Left, false));
 
             var fakeMediator = container
                 .Resolve<IClipboardUserInterfaceMediator>();
@@ -424,22 +381,15 @@
             container.Resolve<IClipboardListViewModel>();
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_RIGHT,
-                    false));
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_RIGHT,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Right, false));
+
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Right, false));
 
             var fakeMediator = container
                 .Resolve<IClipboardUserInterfaceMediator>();
@@ -536,14 +486,10 @@
             container.Resolve<IClipboardListViewModel>();
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_LEFT,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Left, false));
 
             var fakeMediator = container
                 .Resolve<IClipboardUserInterfaceMediator>();
@@ -565,22 +511,15 @@
             container.Resolve<IClipboardListViewModel>();
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_RIGHT,
-                    false));
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_LEFT,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Right, false));
+
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Left, false));
 
             var fakeMediator = container
                 .Resolve<IClipboardUserInterfaceMediator>();
@@ -615,23 +554,15 @@
             systemUnderTest.SelectedAction = fakeAction3;
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_RIGHT,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Right, false));
 
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_DOWN,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Down, false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction1);
         }
@@ -663,23 +594,15 @@
             systemUnderTest.SelectedAction = fakeAction1;
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_RIGHT,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Right, false));
 
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_UP,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Up, false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction3);
         }
@@ -711,23 +634,15 @@
             systemUnderTest.SelectedAction = fakeAction3;
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_RIGHT,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Right, false));
 
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_UP,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Up, false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction2);
         }
@@ -759,23 +674,15 @@
             systemUnderTest.SelectedAction = fakeAction2;
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_RIGHT,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Right, false));
 
-            fakeKeyInterceptor.HotkeyFired += Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                new object
-                    (),
-                new HotkeyFiredArgument
-                    (
-                    KeyboardNativeApi
-                        .VK_KEY_UP,
-                    false));
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Up, false));
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction1);
         }

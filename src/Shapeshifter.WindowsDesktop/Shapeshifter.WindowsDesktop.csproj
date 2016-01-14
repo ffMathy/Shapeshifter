@@ -29,6 +29,8 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Shapeshifter.WindowsDesktop.Program</StartupObject>
@@ -396,17 +398,21 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
+    <CreateItem Include="$(TargetDir)\**\*.*">
+  		<Output TaskParameter="Include" ItemName="OutputFiles" />
+  	</CreateItem>
     <ItemGroup>
-      <EmbeddedResource Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.Extension)' == '.dll'">
-        <LogicalName>%(ReferenceCopyLocalPaths.DestinationSubDirectory)%(ReferenceCopyLocalPaths.Filename)%(ReferenceCopyLocalPaths.Extension)</LogicalName>
+      <EmbeddedResource Include="@(OutputFiles)" Condition="('%(OutputFiles.Extension)' == '.dll' Or '%(OutputFiles.Extension)' == '.pdb')">
+        <LogicalName>%(OutputFiles.DestinationSubDirectory)%(OutputFiles.Filename)%(OutputFiles.Extension)</LogicalName>
       </EmbeddedResource>
     </ItemGroup>
+    <Message Importance="high" Text="Embedding: @(OutputFiles->'%(Filename)%(Extension)', ', ')" />
   </Target>
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

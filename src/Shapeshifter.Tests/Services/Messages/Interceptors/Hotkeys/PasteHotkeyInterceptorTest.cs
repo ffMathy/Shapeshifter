@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
     using System;
+    using System.Windows.Input;
 
     using Autofac;
 
@@ -33,7 +34,7 @@
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IHotkeyInterceptionFactory>()
-                     .CreateInterception(KeyboardNativeApi.VK_KEY_V, true, true)
+                     .CreateInterception(Key.V, true, true)
                      .Returns(Substitute.For<IHotkeyInterception>());
                 });
 
@@ -52,7 +53,7 @@
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IHotkeyInterceptionFactory>()
-                     .CreateInterception(KeyboardNativeApi.VK_KEY_V, true, true)
+                     .CreateInterception(Key.V, true, true)
                      .Returns(Substitute.For<IHotkeyInterception>());
                 });
 

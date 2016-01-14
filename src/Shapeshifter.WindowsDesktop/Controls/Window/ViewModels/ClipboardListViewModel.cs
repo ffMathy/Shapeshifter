@@ -7,6 +7,7 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Threading.Tasks;
+    using System.Windows.Input;
 
     using Binders.Interfaces;
 
@@ -165,21 +166,21 @@
         void HotkeyInterceptor_HotkeyFired(object sender, HotkeyFiredArgument e)
         {
             // ReSharper disable once SwitchStatementMissingSomeCases
-            switch (e.KeyCode)
+            switch (e.Key)
             {
-                case KeyboardNativeApi.VK_KEY_DOWN:
+                case Key.Down:
                     HandleDownPressed();
                     break;
 
-                case KeyboardNativeApi.VK_KEY_UP:
+                case Key.Up:
                     HandleUpPressed();
                     break;
 
-                case KeyboardNativeApi.VK_KEY_LEFT:
+                case Key.Left:
                     HandleLeftPressed();
                     break;
 
-                case KeyboardNativeApi.VK_KEY_RIGHT:
+                case Key.Right:
                     HandleRightPressed();
                     break;
             }
