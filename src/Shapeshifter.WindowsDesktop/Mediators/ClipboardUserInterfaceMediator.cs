@@ -26,8 +26,6 @@
         readonly IList<IClipboardDataControlPackage> clipboardPackages;
 
         public event EventHandler<ControlEventArgument> ControlAdded;
-        public event EventHandler<ControlEventArgument> ControlRemoved;
-        public event EventHandler<ControlEventArgument> ControlPinned;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;

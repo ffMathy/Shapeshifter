@@ -1,5 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop
 {
+    using System.Threading.Tasks;
+
     using Autofac;
 
     using Controls.Window.Interfaces;
@@ -17,7 +19,7 @@
     public class MainTest: TestBase
     {
         [TestMethod]
-        public void CanStartWithNoTerminatingArgumentProcessorShowsMainWindow()
+        public async Task CanStartWithNoTerminatingArgumentProcessorShowsMainWindow()
         {
             var container = CreateContainer(
                 c => {
@@ -27,7 +29,7 @@
                 });
 
             var main = container.Resolve<Main>();
-            main.Start();
+            await main.Start();
 
             var fakeWindow = container.Resolve<IClipboardListWindow>();
             fakeWindow.Received()
@@ -35,7 +37,7 @@
         }
 
         [TestMethod]
-        public void WiresUserInterfaceMediatorUpWhenWindowIsLaunched()
+        public async Task WiresUserInterfaceMediatorUpWhenWindowIsLaunched()
         {
             var container = CreateContainer(
                 c => {
@@ -45,7 +47,7 @@
                 });
 
             var main = container.Resolve<Main>();
-            main.Start();
+            await main.Start();
 
             var fakeWindow = container.Resolve<IClipboardListWindow>();
             var fakeMediator = container.Resolve<IClipboardUserInterfaceMediator>();
@@ -56,7 +58,7 @@
         }
 
         [TestMethod]
-        public void CanStartWithTerminatingArgumentProcessorShowsMainWindow()
+        public async Task CanStartWithTerminatingArgumentProcessorShowsMainWindow()
         {
             var container = CreateContainer(
                 c => {
@@ -74,7 +76,7 @@
                 });
 
             var main = container.Resolve<Main>();
-            main.Start();
+            await main.Start();
 
             var fakeWindow = container.Resolve<IClipboardListWindow>();
             fakeWindow.DidNotReceive()

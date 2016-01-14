@@ -28,6 +28,7 @@
     <NoWarn>CS1998</NoWarn>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Shapeshifter.WindowsDesktop.Program</StartupObject>

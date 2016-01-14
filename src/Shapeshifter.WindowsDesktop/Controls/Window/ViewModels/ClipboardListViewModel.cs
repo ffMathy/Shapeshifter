@@ -75,7 +75,10 @@
                 selectedElement = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedElement)));
 
-                userInterfaceThread.Invoke(() => packageActionBinder.LoadFromKey(value));
+                lock (Elements)
+                {
+                    userInterfaceThread.Invoke(() => packageActionBinder.LoadFromKey(value));
+                }
             }
         }
 
@@ -137,7 +140,6 @@
             IClipboardUserInterfaceMediator mediator)
         {
             mediator.ControlAdded += Mediator_ControlAdded;
-            mediator.ControlRemoved += Mediator_ControlRemoved;
 
             mediator.UserInterfaceHidden += Mediator_UserInterfaceHidden;
             mediator.UserInterfaceShown += Mediator_UserInterfaceShown;
@@ -286,14 +288,6 @@
                     asyncFilter.FilterAsync(allActions, action => action.CanPerformAsync(data.Data))
                                .ConfigureAwait(false);
                 return allowedActions.OrderBy(x => x.Order);
-            }
-        }
-
-        void Mediator_ControlRemoved(object sender, ControlEventArgument e)
-        {
-            lock (Elements)
-            {
-                Elements.Remove(e.Package);
             }
         }
 

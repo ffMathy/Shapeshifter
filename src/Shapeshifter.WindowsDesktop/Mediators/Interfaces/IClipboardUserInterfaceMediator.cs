@@ -12,15 +12,8 @@
     public interface IClipboardUserInterfaceMediator: IHookService
     {
         event EventHandler<ControlEventArgument> ControlAdded;
-
-        event EventHandler<ControlEventArgument> ControlRemoved;
-
-        event EventHandler<ControlEventArgument> ControlPinned;
-
         event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
-
         event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
-
         event EventHandler<PastePerformedEventArgument> PastePerformed;
 
         IEnumerable<IClipboardDataControlPackage> ClipboardElements { get; }

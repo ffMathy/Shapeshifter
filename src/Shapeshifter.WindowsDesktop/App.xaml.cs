@@ -42,6 +42,7 @@
             base.OnExit(e);
         }
 
+#pragma warning disable 4014
         protected override void OnStartup(StartupEventArgs e)
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) => {
@@ -55,5 +56,6 @@
             var main = Container.Resolve<Main>();
             main.Start(e.Args);
         }
+#pragma warning restore 4014
     }
 }
