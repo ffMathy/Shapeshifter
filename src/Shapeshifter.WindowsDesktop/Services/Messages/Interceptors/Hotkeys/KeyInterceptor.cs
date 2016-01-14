@@ -137,6 +137,11 @@
                 return;
             }
 
+            StartInterception(windowHandle, key);
+        }
+
+        void StartInterception(IntPtr windowHandle, Key key)
+        {
             var interception = CreateNewInterception(key);
             if (isInstalled)
             {

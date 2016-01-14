@@ -44,11 +44,12 @@
                 modifier |= KeyboardNativeApi.MOD_NOREPEAT;
             }
             
-            InstallHotkey(windowHandle, modifier, KeyInterop.VirtualKeyFromKey(Key));
+            InstallHotkey(windowHandle, modifier, Key);
         }
 
-        void InstallHotkey(IntPtr windowHandle, int modifier, int keyCode)
+        void InstallHotkey(IntPtr windowHandle, int modifier, Key key)
         {
+            var keyCode = KeyInterop.VirtualKeyFromKey(key);
             var registrationResult = keyboardNativeApi.RegisterHotKey(
                 windowHandle,
                 InterceptionId,
