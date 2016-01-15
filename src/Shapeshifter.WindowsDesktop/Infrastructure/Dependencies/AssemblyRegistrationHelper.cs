@@ -12,9 +12,8 @@
 
     public static class AssemblyRegistrationHelper
     {
-
         public static void RegisterAssemblyTypes(
-            ContainerBuilder builder, 
+            ContainerBuilder builder,
             Assembly assembly,
             bool isInDesignerMode)
         {
@@ -27,7 +26,7 @@
                 }
 
                 var interfaces = type.GetInterfaces();
-                if (interfaces.Contains(typeof(IDesignerService)) && !isInDesignerMode)
+                if (interfaces.Contains(typeof (IDesignerService)) && !isInDesignerMode)
                 {
                     continue;
                 }
@@ -55,7 +54,7 @@
 
                 registration = registration.FindConstructorsWith(new PublicConstructorFinder());
 
-                if (interfaces.Contains(typeof(ISingleInstance)))
+                if (interfaces.Contains(typeof (ISingleInstance)))
                 {
                     registration.SingleInstance();
                 }

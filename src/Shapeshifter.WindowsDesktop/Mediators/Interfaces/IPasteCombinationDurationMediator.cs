@@ -11,6 +11,7 @@
         event EventHandler<PasteCombinationDurationPassedEventArgument> PasteCombinationDurationPassed;
 
         event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleased;
+
         event EventHandler<PasteCombinationReleasedEventArgument> AfterPasteCombinationReleased;
 
         int DurationInDeciseconds { get; }

@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
     using System;
+    using System.Windows.Input;
 
     using Autofac;
 
@@ -13,7 +14,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
-    using System.Windows.Input;
+
     [TestClass]
     public class KeyInterceptorTest: TestBase
     {

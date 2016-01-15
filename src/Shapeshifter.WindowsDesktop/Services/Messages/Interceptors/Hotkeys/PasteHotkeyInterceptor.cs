@@ -10,8 +10,6 @@
 
     using Interfaces;
 
-    using Native;
-
     class PasteHotkeyInterceptor: IPasteHotkeyInterceptor
     {
         readonly ILogger logger;
@@ -59,7 +57,7 @@
                 throw new InvalidOperationException(
                     "This interceptor has already been uninstalled.");
             }
-            
+
             hotkeyInterception.Stop(mainWindowHandle);
 
             isInstalled = false;
@@ -96,7 +94,7 @@
                     hotkeyInterception.Key,
                     hotkeyInterception.ControlNeeded));
         }
-        
+
         public void SkipNext()
         {
             shouldSkipNext = true;

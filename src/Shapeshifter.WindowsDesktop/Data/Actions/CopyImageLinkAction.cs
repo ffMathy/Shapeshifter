@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net.Http;
     using System.Threading.Tasks;
     using System.Windows.Media.Imaging;
 
@@ -17,7 +16,7 @@
     using Services.Web;
     using Services.Web.Interfaces;
 
-    class CopyImageLinkAction : ICopyImageLinkAction
+    class CopyImageLinkAction: ICopyImageLinkAction
     {
         readonly IClipboardInjectionService clipboardInjectionService;
 
@@ -73,7 +72,7 @@
 
         public async Task PerformAsync(IClipboardDataPackage package)
         {
-            var textData = (IClipboardTextData)await GetFirstSupportedDataAsync(package)
+            var textData = (IClipboardTextData) await GetFirstSupportedDataAsync(package)
                                                           .ConfigureAwait(false);
             var links = await linkParser.ExtractLinksFromTextAsync(textData.Text)
                                         .ConfigureAwait(false);

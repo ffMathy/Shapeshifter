@@ -22,8 +22,6 @@
 
     using Mediators.Interfaces;
 
-    using Native;
-
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
     class ClipboardListViewModel:
@@ -44,6 +42,7 @@
         readonly IUserInterfaceThread userInterfaceThread;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
+
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
 
         public event PropertyChangedEventHandler PropertyChanged;

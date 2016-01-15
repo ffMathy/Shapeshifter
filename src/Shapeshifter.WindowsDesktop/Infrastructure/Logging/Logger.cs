@@ -41,7 +41,7 @@
             var indentationString = string.Empty;
             if (threadIndentationCache.ContainsKey(ManagedThreadId))
             {
-                indentationString = new string(' ', threadIndentationCache[ManagedThreadId] * IndentationSize);
+                indentationString = new string(' ', threadIndentationCache[ManagedThreadId]*IndentationSize);
             }
             return indentationString;
         }
@@ -59,13 +59,14 @@
         public void PrintStackTrace()
         {
             var stackTrace = new StackTrace();
-            Log("Stack trace: " + stackTrace
-                    .GetFrames()
-                    .Reverse()
-                    .Select(x => x.GetMethod())
-                    .Select(x => x.Name)
-                    .TakeWhile(x => x != nameof(PrintStackTrace))
-                    .Aggregate((a, b) => $"{a} -> {b}"));
+            Log(
+                "Stack trace: " + stackTrace
+                                      .GetFrames()
+                                      .Reverse()
+                                      .Select(x => x.GetMethod())
+                                      .Select(x => x.Name)
+                                      .TakeWhile(x => x != nameof(PrintStackTrace))
+                                      .Aggregate((a, b) => $"{a} -> {b}"));
         }
 
         public IIndentationHandle Indent()

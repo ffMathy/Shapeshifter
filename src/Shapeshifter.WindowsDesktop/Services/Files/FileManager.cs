@@ -177,9 +177,9 @@
         {
             var isolatedFolderPath = PrepareIsolatedFolder();
 
-            var finalPath = path == null 
-                ? isolatedFolderPath 
-                : Path.Combine(isolatedFolderPath, path);
+            var finalPath = path == null
+                                ? isolatedFolderPath
+                                : Path.Combine(isolatedFolderPath, path);
             return finalPath;
         }
 

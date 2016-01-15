@@ -99,11 +99,17 @@
             switch ((int) e.WordParameter)
             {
                 case Shown:
-                    if(!isInstalled) Install(e.WindowHandle);
+                    if (!isInstalled)
+                    {
+                        Install(e.WindowHandle);
+                    }
                     break;
 
                 case Hidden:
-                    if (isInstalled) Uninstall();
+                    if (isInstalled)
+                    {
+                        Uninstall();
+                    }
                     break;
 
                 default:
@@ -137,6 +143,11 @@
                 return;
             }
 
+            StartInterception(windowHandle, key);
+        }
+
+        void StartInterception(IntPtr windowHandle, Key key)
+        {
             var interception = CreateNewInterception(key);
             if (isInstalled)
             {

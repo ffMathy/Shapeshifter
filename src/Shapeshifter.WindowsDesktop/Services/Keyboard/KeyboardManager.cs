@@ -12,7 +12,7 @@
 
     using static Native.KeyboardNativeApi;
 
-    class KeyboardManager : IKeyboardManager
+    class KeyboardManager: IKeyboardManager
     {
         readonly IKeyboardNativeApi nativeApi;
         readonly ILogger logger;
@@ -55,12 +55,12 @@
                         MapKeyToVirtualKey(x.Key),
                         x.Direction == KeyDirection.Down ? 0 : KEYEVENTF.KEYUP))
                 .ToArray();
-            nativeApi.SendInput((uint)inputs.Length, inputs, INPUT.Size);
+            nativeApi.SendInput((uint) inputs.Length, inputs, INPUT.Size);
         }
 
         static VirtualKeyShort MapKeyToVirtualKey(Key key)
         {
-            return (VirtualKeyShort)KeyInterop.VirtualKeyFromKey(key);
+            return (VirtualKeyShort) KeyInterop.VirtualKeyFromKey(key);
         }
 
         static INPUT GenerateKeystoke(VirtualKeyShort key, KEYEVENTF flags = 0)

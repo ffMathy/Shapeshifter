@@ -28,15 +28,13 @@
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
         {
-            return GetRelevantData(package).Any();
+            return GetRelevantData(package)
+                .Any();
         }
 
         public async Task PerformAsync(IClipboardDataPackage package)
         {
-            foreach (var item in GetRelevantData(package))
-            {
-                
-            }
+            foreach (var item in GetRelevantData(package)) { }
         }
 
         static IEnumerable<IClipboardData> GetRelevantData(IClipboardDataPackage package)

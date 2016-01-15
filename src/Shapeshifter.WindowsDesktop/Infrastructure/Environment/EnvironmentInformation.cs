@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Environment
 {
     using System.Diagnostics;
-    using System.Linq;
     using System.Net.NetworkInformation;
     using System.Windows;
 
@@ -30,7 +29,7 @@
             {
                 return false;
             }
-            
+
             var interfaces = NetworkInterface.GetAllNetworkInterfaces();
             foreach (var face in interfaces)
             {

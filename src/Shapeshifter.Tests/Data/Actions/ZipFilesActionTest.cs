@@ -18,7 +18,6 @@
     using NSubstitute;
 
     using Services.Clipboard.Interfaces;
-    using Services.Interfaces;
 
     [TestClass]
     public class ZipFilesActionTest: ActionTestBase

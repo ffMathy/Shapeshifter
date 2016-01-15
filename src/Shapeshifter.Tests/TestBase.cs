@@ -45,14 +45,14 @@
 
             builder.RegisterModule(
                 new DefaultWiringModule(fakeEnvironment));
-            
+
             builder.RegisterFake<IThreadDelay>();
 
             setupCallback?.Invoke(builder);
 
             return activeContainer = builder
-                .Build()
-                .BeginLifetimeScope();
+                                         .Build()
+                                         .BeginLifetimeScope();
         }
     }
 }

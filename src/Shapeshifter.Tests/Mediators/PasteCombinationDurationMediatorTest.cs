@@ -17,31 +17,28 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using Native;
-
     using NSubstitute;
 
     using Services.Keyboard.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
     [TestClass]
-    public class PasteCombinationDurationMediatorTest : TestBase
+    public class PasteCombinationDurationMediatorTest: TestBase
     {
         static void RaiseHotkeyFired(IPasteHotkeyInterceptor fakePasteHotkeyInterceptor)
         {
             fakePasteHotkeyInterceptor.HotkeyFired += Raise.EventWith(
-                            fakePasteHotkeyInterceptor,
-                            new HotkeyFiredArgument(
-                                Key.V,
-                                true));
+                fakePasteHotkeyInterceptor,
+                new HotkeyFiredArgument(
+                    Key.V,
+                    true));
         }
 
         [TestMethod]
         public void IsConnectedIsFalseIfConsumerThreadIsNotRunning()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IConsumerThreadLoop>()
                      .IsRunning
                      .Returns(false);
@@ -55,8 +52,7 @@
         public void IsConnectedIsTrueIfConsumerThreadIsRunning()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IConsumerThreadLoop>()
                      .IsRunning
                      .Returns(true);
@@ -70,12 +66,10 @@
         public void CombinationIsHeldDownWhenCtrlVIsDown()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyboardManager>()
                      .WithFakeSettings(
-                         x =>
-                         {
+                         x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(true);
                              x.IsKeyDown(Key.V)
@@ -91,12 +85,10 @@
         public void CombinationIsReleasedWhenOnlyCtrlIsDown()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyboardManager>()
                      .WithFakeSettings(
-                         x =>
-                         {
+                         x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(true);
                              x.IsKeyDown(Key.V)
@@ -112,12 +104,10 @@
         public void CombinationIsReleasedWhenOnlyVIsDown()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyboardManager>()
                      .WithFakeSettings(
-                         x =>
-                         {
+                         x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(false);
                              x.IsKeyDown(Key.V)
@@ -133,12 +123,10 @@
         public void CombinationIsReleasedWhenBothVAndCtrlIsReleased()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyboardManager>()
                      .WithFakeSettings(
-                         x =>
-                         {
+                         x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(false);
                              x.IsKeyDown(Key.V)
@@ -154,12 +142,10 @@
         public void PartialCombinationIsHeldDownWhenOnlyVIsDown()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyboardManager>()
                      .WithFakeSettings(
-                         x =>
-                         {
+                         x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(false);
                              x.IsKeyDown(Key.V)
@@ -175,12 +161,10 @@
         public void PartialCombinationIsHeldDownWhenOnlyCtrlIsDown()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyboardManager>()
                      .WithFakeSettings(
-                         x =>
-                         {
+                         x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(true);
                              x.IsKeyDown(Key.V)
@@ -196,12 +180,10 @@
         public void PartialCombinationIsHeldDownWhenBothVAndCtrlAreDown()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyboardManager>()
                      .WithFakeSettings(
-                         x =>
-                         {
+                         x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(true);
                              x.IsKeyDown(Key.V)
@@ -217,12 +199,10 @@
         public void PartialCombinationReleasedWhenBothVAndCtrlAreReleased()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IKeyboardManager>()
                      .WithFakeSettings(
-                         x =>
-                         {
+                         x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(false);
                              x.IsKeyDown(Key.V)
@@ -235,12 +215,11 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException(typeof (InvalidOperationException))]
         public void DisconnectingWhileNotConnectedThrowsError()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IConsumerThreadLoop>()
                      .IsRunning
                      .Returns(false);
@@ -251,12 +230,11 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException(typeof (InvalidOperationException))]
         public void ConnectingWhileAlreadyConnectedThrowsError()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IConsumerThreadLoop>()
                      .IsRunning
                      .Returns(true);
@@ -270,8 +248,7 @@
         public void WhenCtrlVIsDownMonitoringLoopRuns()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IPasteHotkeyInterceptor>();
                     c.RegisterFake<IConsumerThreadLoop>();
                 });
@@ -300,14 +277,14 @@
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IThreadDelay>()
-                     .ExecuteAsync(Arg.Do<int>(
-                         x => decisecondsPassed += x/100))
+                     .ExecuteAsync(
+                         Arg.Do<int>(
+                             x => decisecondsPassed += x/100))
                      .Returns(Task.CompletedTask);
                     c.RegisterFake<IPasteHotkeyInterceptor>();
                     c.RegisterFake<IKeyboardManager>()
                      .WithFakeSettings(
-                         x =>
-                         {
+                         x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(i => holdCombinationDown);
                              x.IsKeyDown(Key.V)

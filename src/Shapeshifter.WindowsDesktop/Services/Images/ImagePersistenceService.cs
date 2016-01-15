@@ -51,7 +51,8 @@
 
             var imageData = ConvertImageDataToByteArray(bitmap);
             return DecorateSourceWithMetaInformation(
-                imageData, metaInformation);
+                imageData,
+                metaInformation);
         }
 
         public byte[] DecorateSourceWithMetaInformation(
@@ -120,7 +121,8 @@
             var metaInformation = GetMetaInformationFromSource(bytes);
             var imageData = ExtractImageDataFromSource(bytes);
             return GenerateBitmapSource(
-                metaInformation, imageData);
+                metaInformation,
+                imageData);
         }
 
         static BitmapSource GenerateBitmapSource(

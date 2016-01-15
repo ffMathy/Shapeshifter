@@ -15,7 +15,7 @@
 
     using Messages.Interceptors.Hotkeys.Interfaces;
 
-    class ClipboardPasteService : IClipboardPasteService
+    class ClipboardPasteService: IClipboardPasteService
     {
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
         readonly ILogger logger;

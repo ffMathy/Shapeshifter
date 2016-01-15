@@ -13,7 +13,7 @@
     using NSubstitute;
 
     [TestClass]
-    public class PinClipboardDataActionTest : ActionTestBase
+    public class PinClipboardDataActionTest: ActionTestBase
     {
         [TestMethod]
         public async Task CanNotPerformWithEmptyData()

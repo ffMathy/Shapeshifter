@@ -2,6 +2,6 @@
 {
     public interface IArgumentProcessor
     {
-        bool Terminates { get; } 
+        bool Terminates { get; }
     }
 }

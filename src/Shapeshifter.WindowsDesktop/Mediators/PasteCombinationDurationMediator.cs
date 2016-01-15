@@ -16,7 +16,7 @@
     using Services.Keyboard.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
-    class PasteCombinationDurationMediator : IPasteCombinationDurationMediator
+    class PasteCombinationDurationMediator: IPasteCombinationDurationMediator
     {
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
         readonly IConsumerThreadLoop consumerLoop;
@@ -32,6 +32,7 @@
         public event EventHandler<PasteCombinationDurationPassedEventArgument> PasteCombinationDurationPassed;
 
         public event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleased;
+
         public event EventHandler<PasteCombinationReleasedEventArgument> AfterPasteCombinationReleased;
 
         public PasteCombinationDurationMediator(
@@ -158,7 +159,7 @@
             {
                 return;
             }
-            
+
             mainThreadInvoker.Invoke(
                 () => {
                     PasteCombinationDurationPassed(

@@ -6,7 +6,7 @@
 
     using Interfaces;
 
-    class AggregateArgumentProcessor : IAggregateArgumentProcessor
+    class AggregateArgumentProcessor: IAggregateArgumentProcessor
     {
         readonly IEnumerable<INoArgumentProcessor> noArgumentProcessors;
         readonly IEnumerable<ISingleArgumentProcessor> singleArgumentProcessors;
@@ -59,7 +59,7 @@
             lock (processorsUsed)
             {
                 processorsUsed.Clear();
-                
+
                 ProcessSingleArgumentProcessors(arguments);
                 if (!processorsUsed.Any())
                 {

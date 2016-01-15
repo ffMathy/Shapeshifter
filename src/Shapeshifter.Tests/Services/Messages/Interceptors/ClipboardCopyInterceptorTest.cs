@@ -40,7 +40,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException(typeof (InvalidOperationException))]
         public void InstallThrowsExceptionIfAddingClipboardFormatListenerFailed()
         {
             var windowHandle = new IntPtr(1337);
@@ -78,7 +78,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException(typeof (InvalidOperationException))]
         public void UninstallThrowsExceptionIfAddingClipboardFormatListenerFailed()
         {
             var windowHandle = new IntPtr(1337);
@@ -103,8 +103,8 @@
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IClipboardNativeApi>()
-                        .GetClipboardSequenceNumber()
-                        .Returns(1u, 1u, 1u);
+                     .GetClipboardSequenceNumber()
+                     .Returns(1u, 1u, 1u);
                     c.RegisterFake<IWindowNativeApi>();
                 });
 
@@ -113,12 +113,24 @@
             var interceptor = container.Resolve<IClipboardCopyInterceptor>();
             interceptor.DataCopied += (sender, e) => dataCopiedCount++;
 
-            interceptor.ReceiveMessageEvent(new WindowMessageReceivedArgument(
-                windowHandle, Message.WM_CLIPBOARDUPDATE, IntPtr.Zero, IntPtr.Zero));
-            interceptor.ReceiveMessageEvent(new WindowMessageReceivedArgument(
-                windowHandle, Message.WM_CLIPBOARDUPDATE, IntPtr.Zero, IntPtr.Zero));
-            interceptor.ReceiveMessageEvent(new WindowMessageReceivedArgument(
-                windowHandle, Message.WM_CLIPBOARDUPDATE, IntPtr.Zero, IntPtr.Zero));
+            interceptor.ReceiveMessageEvent(
+                new WindowMessageReceivedArgument(
+                    windowHandle,
+                    Message.WM_CLIPBOARDUPDATE,
+                    IntPtr.Zero,
+                    IntPtr.Zero));
+            interceptor.ReceiveMessageEvent(
+                new WindowMessageReceivedArgument(
+                    windowHandle,
+                    Message.WM_CLIPBOARDUPDATE,
+                    IntPtr.Zero,
+                    IntPtr.Zero));
+            interceptor.ReceiveMessageEvent(
+                new WindowMessageReceivedArgument(
+                    windowHandle,
+                    Message.WM_CLIPBOARDUPDATE,
+                    IntPtr.Zero,
+                    IntPtr.Zero));
 
             Assert.AreEqual(1, dataCopiedCount);
         }
@@ -131,8 +143,8 @@
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IClipboardNativeApi>()
-                        .GetClipboardSequenceNumber()
-                        .Returns(1u, 2u, 3u);
+                     .GetClipboardSequenceNumber()
+                     .Returns(1u, 2u, 3u);
                     c.RegisterFake<IWindowNativeApi>();
                 });
 
@@ -141,20 +153,32 @@
             var interceptor = container.Resolve<IClipboardCopyInterceptor>();
             interceptor.DataCopied += (sender, e) => dataCopiedCount++;
 
-            interceptor.ReceiveMessageEvent(new WindowMessageReceivedArgument(
-                windowHandle, Message.WM_CLIPBOARDUPDATE, IntPtr.Zero, IntPtr.Zero));
+            interceptor.ReceiveMessageEvent(
+                new WindowMessageReceivedArgument(
+                    windowHandle,
+                    Message.WM_CLIPBOARDUPDATE,
+                    IntPtr.Zero,
+                    IntPtr.Zero));
 
             Assert.AreEqual(1, dataCopiedCount);
 
             interceptor.SkipNext();
 
-            interceptor.ReceiveMessageEvent(new WindowMessageReceivedArgument(
-                windowHandle, Message.WM_CLIPBOARDUPDATE, IntPtr.Zero, IntPtr.Zero));
+            interceptor.ReceiveMessageEvent(
+                new WindowMessageReceivedArgument(
+                    windowHandle,
+                    Message.WM_CLIPBOARDUPDATE,
+                    IntPtr.Zero,
+                    IntPtr.Zero));
 
             Assert.AreEqual(1, dataCopiedCount);
 
-            interceptor.ReceiveMessageEvent(new WindowMessageReceivedArgument(
-                windowHandle, Message.WM_CLIPBOARDUPDATE, IntPtr.Zero, IntPtr.Zero));
+            interceptor.ReceiveMessageEvent(
+                new WindowMessageReceivedArgument(
+                    windowHandle,
+                    Message.WM_CLIPBOARDUPDATE,
+                    IntPtr.Zero,
+                    IntPtr.Zero));
 
             Assert.AreEqual(2, dataCopiedCount);
         }
@@ -167,8 +191,8 @@
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IClipboardNativeApi>()
-                        .GetClipboardSequenceNumber()
-                        .Returns(1u, 2u, 3u);
+                     .GetClipboardSequenceNumber()
+                     .Returns(1u, 2u, 3u);
                     c.RegisterFake<IWindowNativeApi>();
                 });
 
@@ -177,10 +201,18 @@
             var interceptor = container.Resolve<IClipboardCopyInterceptor>();
             interceptor.DataCopied += (sender, e) => dataCopiedCount++;
 
-            interceptor.ReceiveMessageEvent(new WindowMessageReceivedArgument(
-                windowHandle, Message.WM_HOTKEY, IntPtr.Zero, IntPtr.Zero));
-            interceptor.ReceiveMessageEvent(new WindowMessageReceivedArgument(
-                windowHandle, Message.WM_CLIPBOARDUPDATE, IntPtr.Zero, IntPtr.Zero));
+            interceptor.ReceiveMessageEvent(
+                new WindowMessageReceivedArgument(
+                    windowHandle,
+                    Message.WM_HOTKEY,
+                    IntPtr.Zero,
+                    IntPtr.Zero));
+            interceptor.ReceiveMessageEvent(
+                new WindowMessageReceivedArgument(
+                    windowHandle,
+                    Message.WM_CLIPBOARDUPDATE,
+                    IntPtr.Zero,
+                    IntPtr.Zero));
 
             Assert.AreEqual(1, dataCopiedCount);
         }
@@ -193,8 +225,8 @@
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IClipboardNativeApi>()
-                        .GetClipboardSequenceNumber()
-                        .Returns(1u, 2u, 3u);
+                     .GetClipboardSequenceNumber()
+                     .Returns(1u, 2u, 3u);
                     c.RegisterFake<IWindowNativeApi>();
                 });
 
@@ -203,12 +235,24 @@
             var interceptor = container.Resolve<IClipboardCopyInterceptor>();
             interceptor.DataCopied += (sender, e) => dataCopiedCount++;
 
-            interceptor.ReceiveMessageEvent(new WindowMessageReceivedArgument(
-                windowHandle, Message.WM_CLIPBOARDUPDATE, IntPtr.Zero, IntPtr.Zero));
-            interceptor.ReceiveMessageEvent(new WindowMessageReceivedArgument(
-                windowHandle, Message.WM_CLIPBOARDUPDATE, IntPtr.Zero, IntPtr.Zero));
-            interceptor.ReceiveMessageEvent(new WindowMessageReceivedArgument(
-                windowHandle, Message.WM_CLIPBOARDUPDATE, IntPtr.Zero, IntPtr.Zero));
+            interceptor.ReceiveMessageEvent(
+                new WindowMessageReceivedArgument(
+                    windowHandle,
+                    Message.WM_CLIPBOARDUPDATE,
+                    IntPtr.Zero,
+                    IntPtr.Zero));
+            interceptor.ReceiveMessageEvent(
+                new WindowMessageReceivedArgument(
+                    windowHandle,
+                    Message.WM_CLIPBOARDUPDATE,
+                    IntPtr.Zero,
+                    IntPtr.Zero));
+            interceptor.ReceiveMessageEvent(
+                new WindowMessageReceivedArgument(
+                    windowHandle,
+                    Message.WM_CLIPBOARDUPDATE,
+                    IntPtr.Zero,
+                    IntPtr.Zero));
 
             Assert.AreEqual(3, dataCopiedCount);
         }

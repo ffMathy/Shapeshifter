@@ -4,7 +4,7 @@
 
     using Logging;
 
-    class IndentationHandle : IIndentationHandle
+    class IndentationHandle: IIndentationHandle
     {
         readonly Logger logger;
 

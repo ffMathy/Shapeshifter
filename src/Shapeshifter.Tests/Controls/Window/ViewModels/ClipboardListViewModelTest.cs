@@ -7,18 +7,17 @@
     using Autofac;
 
     using Binders.Interfaces;
-    using Interfaces;
 
     using Data.Actions.Interfaces;
     using Data.Interfaces;
 
     using Infrastructure.Events;
 
+    using Interfaces;
+
     using Mediators.Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    using Native;
 
     using NSubstitute;
 
@@ -79,7 +78,7 @@
             systemUnderTest.SelectedElement = fakePackage1;
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += 
+            fakeKeyInterceptor.HotkeyFired +=
                 Raise.Event<EventHandler<HotkeyFiredArgument>>(
                     new object(),
                     new HotkeyFiredArgument(Key.Down, false));
@@ -149,7 +148,7 @@
             systemUnderTest.SelectedElement = fakePackage3;
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired += 
+            fakeKeyInterceptor.HotkeyFired +=
                 Raise.Event<EventHandler<HotkeyFiredArgument>>(
                     new object(),
                     new HotkeyFiredArgument(Key.Down, false));
@@ -352,7 +351,7 @@
                     c.RegisterFake<IAsyncListDictionaryBinder
                         <IClipboardDataControlPackage, IAction>>();
                 });
-            
+
             container.Resolve<IClipboardListViewModel>();
 
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();

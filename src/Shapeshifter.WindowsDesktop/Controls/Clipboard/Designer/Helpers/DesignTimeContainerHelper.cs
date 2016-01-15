@@ -16,8 +16,9 @@
         public static IContainer CreateDesignTimeContainer()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterModule(new DefaultWiringModule(
-                new EnvironmentInformation(true)));
+            builder.RegisterModule(
+                new DefaultWiringModule(
+                    new EnvironmentInformation(true)));
 
             return builder.Build();
         }

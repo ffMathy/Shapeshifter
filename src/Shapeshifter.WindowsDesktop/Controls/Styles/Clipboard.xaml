@@ -124,7 +124,7 @@
 
     <Style TargetType="Rectangle" x:Key="ClipboardImageDataControlOverlayStyle">
         <Setter Property="Fill" Value="{StaticResource WindowBackgroundBrush}" />
-        <Setter Property="Opacity" Value="0.75"/>
+        <Setter Property="Opacity" Value="0.75" />
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
                          Value="True">
@@ -145,11 +145,11 @@
     </Style>
 
     <Style TargetType="Path" x:Key="ClipboardDataControlPathStyle">
-        <Setter Property="Fill" Value="{StaticResource AccentBrush}"/>
+        <Setter Property="Fill" Value="{StaticResource AccentBrush}" />
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
                          Value="True">
-                <Setter Property="Fill" Value="White"/>
+                <Setter Property="Fill" Value="White" />
             </DataTrigger>
         </Style.Triggers>
     </Style>

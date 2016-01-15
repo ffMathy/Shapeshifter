@@ -1,4 +1,4 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Actions.Interfaces
 {
-    public interface IPinClipboardDataAction : IAction { }
+    public interface IPinClipboardDataAction: IAction { }
 }
