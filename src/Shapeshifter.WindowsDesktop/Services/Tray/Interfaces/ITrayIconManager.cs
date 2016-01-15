@@ -2,15 +2,16 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Windows.Forms;
 
     using Infrastructure.Events;
 
-    public interface ITrayIconManager
+    public interface ITrayIconManager: IDisposable
     {
         event EventHandler<TrayIconClickedEventArgument> IconClicked;
 
         void InstallTrayIcon(
             string boldMenuItemTitle,
-            IEnumerable<ITrayContextMenuItem> contextMenuItems);
+            IReadOnlyCollection<MenuItem> contextMenuItems);
     }
 }

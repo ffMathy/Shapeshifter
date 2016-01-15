@@ -111,7 +111,7 @@
             return localFilePath;
         }
 
-        static bool IsUpdateToReleaseNeeded(Release release)
+        bool IsUpdateToReleaseNeeded(Release release)
         {
             if (release.Prerelease)
             {
@@ -122,12 +122,17 @@
             return IsUpdateToVersionNeeded(releaseVersion);
         }
 
-        static bool IsUpdateToVersionNeeded(Version releaseVersion)
+        public Version GetCurrentVersion()
         {
             var assembly = Assembly.GetExecutingAssembly();
-            return releaseVersion > assembly
-                                        .GetName()
-                                        .Version;
+            return assembly
+                .GetName()
+                .Version;
+        }
+
+        bool IsUpdateToVersionNeeded(Version releaseVersion)
+        {
+            return releaseVersion > GetCurrentVersion();
         }
 
         static Version GetReleaseVersion(Release release)
