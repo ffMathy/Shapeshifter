@@ -16,7 +16,7 @@
 
     using Structures;
 
-    class ClipboardPersistanceService : IClipboardPersistanceService
+    class ClipboardPersistanceService: IClipboardPersistanceService
     {
         readonly IFileManager fileManager;
 
@@ -40,7 +40,8 @@
                     packageFolder,
                     i + 1 + "." + content.RawFormat);
                 fileManager.WriteBytesToTemporaryFile(
-                    filePath, content.RawData);
+                    filePath,
+                    content.RawData);
             }
         }
 

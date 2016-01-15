@@ -60,7 +60,8 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
         }
 
         void InjectPackageContents(
-            IClipboardHandle session, IClipboardDataPackage package)
+            IClipboardHandle session,
+            IClipboardDataPackage package)
         {
             foreach (var clipboardData in package.Contents)
             {
@@ -69,7 +70,8 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
         }
 
         void InjectClipboardData(
-            IClipboardHandle session, IClipboardData clipboardData)
+            IClipboardHandle session,
+            IClipboardData clipboardData)
         {
             using (var memoryHandle = memoryHandleFactory.AllocateInMemory(clipboardData.RawData))
             {

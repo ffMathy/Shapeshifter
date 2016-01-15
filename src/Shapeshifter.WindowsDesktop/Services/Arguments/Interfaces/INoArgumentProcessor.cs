@@ -1,6 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Arguments.Interfaces
 {
-    public interface INoArgumentProcessor : IArgumentProcessor
+    public interface INoArgumentProcessor: IArgumentProcessor
     {
         bool CanProcess();
 

@@ -8,7 +8,7 @@
 
     using Interfaces;
 
-    class SignHelper : ISignHelper
+    class SignHelper: ISignHelper
     {
         [StructLayout(LayoutKind.Sequential)]
         struct SIGNER_SUBJECT_INFO
@@ -25,9 +25,10 @@
             {
                 [FieldOffset(0)]
                 public IntPtr pSignerFileInfo;
+
                 [FieldOffset(0)]
                 public IntPtr pSignerBlobInfo;
-            };
+            }
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -44,11 +45,13 @@
             {
                 [FieldOffset(0)]
                 public IntPtr pwszSpcFile;
+
                 [FieldOffset(0)]
                 public IntPtr pCertStoreInfo;
+
                 [FieldOffset(0)]
                 public IntPtr pSpcChainInfo;
-            };
+            }
 
             public IntPtr hwnd;
         }
@@ -83,20 +86,21 @@
 
         [DllImport("Mssign32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         static extern int SignerSign(
-            IntPtr pSubjectInfo, 
-            IntPtr pSignerCert,   
-            IntPtr pSignatureInfo,   
-            IntPtr pProviderInfo,      
+            IntPtr pSubjectInfo,
+            IntPtr pSignerCert,
+            IntPtr pSignatureInfo,
+            IntPtr pProviderInfo,
             string pwszHttpTimeStamp,
-            IntPtr psRequest,   
+            IntPtr psRequest,
             IntPtr pSipData);
 
-        [DllImport("Crypt32.dll", EntryPoint = "CertCreateCertificateContext", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
+        [DllImport("Crypt32.dll", EntryPoint = "CertCreateCertificateContext", SetLastError = true, CharSet = CharSet.Unicode,
+            ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
         static extern IntPtr CertCreateCertificateContext(
             int dwCertEncodingType,
             byte[] pbCertEncoded,
             int cbCertEncoded);
-        
+
         public void SignAssemblyWithCertificate(string assemblyPath, X509Certificate2 certificate)
         {
             var pSignerCert = IntPtr.Zero;
@@ -120,15 +124,15 @@
             {
                 if (pSignerCert != IntPtr.Zero)
                 {
-                    Marshal.DestroyStructure(pSignerCert, typeof(SIGNER_CERT));
+                    Marshal.DestroyStructure(pSignerCert, typeof (SIGNER_CERT));
                 }
                 if (pSubjectInfo != IntPtr.Zero)
                 {
-                    Marshal.DestroyStructure(pSubjectInfo, typeof(SIGNER_SUBJECT_INFO));
+                    Marshal.DestroyStructure(pSubjectInfo, typeof (SIGNER_SUBJECT_INFO));
                 }
                 if (pSignatureInfo != IntPtr.Zero)
                 {
-                    Marshal.DestroyStructure(pSignatureInfo, typeof(SIGNER_SIGNATURE_INFO));
+                    Marshal.DestroyStructure(pSignatureInfo, typeof (SIGNER_SIGNATURE_INFO));
                 }
             }
         }
@@ -137,8 +141,8 @@
         {
             var info = new SIGNER_SUBJECT_INFO
             {
-                cbSize = (uint)Marshal.SizeOf(typeof(SIGNER_SUBJECT_INFO)),
-                pdwIndex = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(uint)))
+                cbSize = (uint) Marshal.SizeOf(typeof (SIGNER_SUBJECT_INFO)),
+                pdwIndex = Marshal.AllocHGlobal(Marshal.SizeOf(typeof (uint)))
             };
 
             const int index = 0;
@@ -149,14 +153,14 @@
 
             var fileInfo = new SIGNER_FILE_INFO
             {
-                cbSize = (uint)Marshal.SizeOf(typeof(SIGNER_FILE_INFO)),
+                cbSize = (uint) Marshal.SizeOf(typeof (SIGNER_FILE_INFO)),
                 pwszFileName = assemblyFilePtr,
                 hFile = IntPtr.Zero
             };
 
             info.Union1 = new SIGNER_SUBJECT_INFO.SubjectChoiceUnion
             {
-                pSignerFileInfo = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(SIGNER_FILE_INFO)))
+                pSignerFileInfo = Marshal.AllocHGlobal(Marshal.SizeOf(typeof (SIGNER_FILE_INFO)))
             };
 
             Marshal.StructureToPtr(fileInfo, info.Union1.pSignerFileInfo, false);
@@ -171,11 +175,11 @@
         {
             var signerCertificate = new SIGNER_CERT
             {
-                cbSize = (uint)Marshal.SizeOf(typeof(SIGNER_CERT)),
+                cbSize = (uint) Marshal.SizeOf(typeof (SIGNER_CERT)),
                 dwCertChoice = 0x2,
                 Union1 = new SIGNER_CERT.SignerCertUnion
                 {
-                    pCertStoreInfo = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(SIGNER_CERT_STORE_INFO)))
+                    pCertStoreInfo = Marshal.AllocHGlobal(Marshal.SizeOf(typeof (SIGNER_CERT_STORE_INFO)))
                 },
                 hwnd = IntPtr.Zero
             };
@@ -186,11 +190,12 @@
             var pCertContext = CertCreateCertificateContext(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                 certificate.GetRawCertData(),
-                certificate.GetRawCertData().Length);
+                certificate.GetRawCertData()
+                           .Length);
 
             var certStoreInfo = new SIGNER_CERT_STORE_INFO
             {
-                cbSize = (uint)Marshal.SizeOf(typeof(SIGNER_CERT_STORE_INFO)),
+                cbSize = (uint) Marshal.SizeOf(typeof (SIGNER_CERT_STORE_INFO)),
                 pSigningCert = pCertContext,
                 dwCertPolicy = 0x2,
                 hCertStore = IntPtr.Zero
@@ -208,7 +213,7 @@
         {
             var signatureInfo = new SIGNER_SIGNATURE_INFO
             {
-                cbSize = (uint)Marshal.SizeOf(typeof(SIGNER_SIGNATURE_INFO)),
+                cbSize = (uint) Marshal.SizeOf(typeof (SIGNER_SIGNATURE_INFO)),
                 algidHash = 0x00008004,
                 dwAttrChoice = 0x0,
                 pAttrAuthCode = IntPtr.Zero,
@@ -221,7 +226,7 @@
 
             return pSignatureInfo;
         }
-        
+
         static void SignCode(IntPtr pSubjectInfo, IntPtr pSignerCert, IntPtr pSignatureInfo, IntPtr pProviderInfo)
         {
             var hResult = SignerSign(

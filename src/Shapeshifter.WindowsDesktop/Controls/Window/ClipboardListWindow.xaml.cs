@@ -9,8 +9,6 @@
 
     using Interfaces;
 
-    using Native;
-
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interfaces;
 

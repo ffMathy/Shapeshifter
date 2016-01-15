@@ -2,13 +2,11 @@
 {
     using Autofac;
 
+    using Interfaces;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
-
-    using WindowsDesktop;
-
-    using Interfaces;
 
     [TestClass]
     public class LoggerTest: TestBase
@@ -42,10 +40,8 @@
             using (logger.Indent())
             {
                 logger.Information("inside indentation");
-                using(logger.Indent())
-                {
+                using (logger.Indent())
                     logger.Information("deep inside indentation");
-                }
             }
 
             logger.Information("outside indentation");

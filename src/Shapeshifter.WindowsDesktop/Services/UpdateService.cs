@@ -126,8 +126,8 @@
         {
             var assembly = Assembly.GetExecutingAssembly();
             return releaseVersion > assembly
-                .GetName()
-                .Version;
+                                        .GetName()
+                                        .Version;
         }
 
         static Version GetReleaseVersion(Release release)
@@ -150,7 +150,8 @@
         async Task<IEnumerable<Release>> GetReleasesWithUpdatesAsync()
         {
             var allReleases = await client.Release.GetAll(
-                RepositoryOwner, RepositoryName);
+                RepositoryOwner,
+                RepositoryName);
             return allReleases.Where(IsUpdateToReleaseNeeded);
         }
     }

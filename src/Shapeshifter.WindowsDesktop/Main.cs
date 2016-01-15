@@ -1,18 +1,16 @@
 ﻿namespace Shapeshifter.WindowsDesktop
 {
+    using System.Threading.Tasks;
+
     using Controls.Window.Interfaces;
 
     using Infrastructure.Dependencies.Interfaces;
+    using Infrastructure.Environment.Interfaces;
 
     using Mediators.Interfaces;
 
     using Services.Arguments.Interfaces;
     using Services.Interfaces;
-
-    using System.Threading.Tasks;
-
-    using Infrastructure.Environment.Interfaces;
-
     using Services.Web.Interfaces;
 
     public class Main: ISingleInstance

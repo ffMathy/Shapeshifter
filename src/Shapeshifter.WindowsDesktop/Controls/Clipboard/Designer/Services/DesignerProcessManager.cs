@@ -1,5 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
+    using System;
+
     using WindowsDesktop.Services.Interfaces;
 
     using Controls.Designer.Services;
@@ -10,7 +12,7 @@
     {
         public string GetCurrentProcessPath()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void LaunchCommand(string command, string arguments = null) { }
@@ -19,9 +21,7 @@
 
         public void LaunchFile(string fileName, string arguments = null) { }
 
-        public void LaunchFileWithAdministrativeRights(string fileName, string arguments = null)
-        {
-        }
+        public void LaunchFileWithAdministrativeRights(string fileName, string arguments = null) { }
 
         public bool IsCurrentProcessElevated()
         {

@@ -43,7 +43,7 @@
             {
                 modifier |= KeyboardNativeApi.MOD_NOREPEAT;
             }
-            
+
             InstallHotkey(windowHandle, modifier, Key);
         }
 

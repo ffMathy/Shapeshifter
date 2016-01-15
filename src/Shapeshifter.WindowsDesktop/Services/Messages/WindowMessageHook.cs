@@ -104,7 +104,6 @@
         {
             var nextMessage = pendingMessages.Dequeue();
             using (logger.Indent())
-            {
                 foreach (var interceptor in windowMessageInterceptors)
                 {
                     var messageName = FormatMessage(nextMessage.Message);
@@ -116,7 +115,6 @@
 
                     interceptor.ReceiveMessageEvent(nextMessage);
                 }
-            }
         }
 
         void InstallInterceptors()
@@ -152,7 +150,7 @@
 
             var argument = new WindowMessageReceivedArgument(hwnd, (Message) msg, wParam, lParam);
             pendingMessages.Enqueue(argument);
-            
+
             consumerLoop.Notify(HandleNextMessageAsync, cancellationTokenSource.Token);
 
             return IntPtr.Zero;

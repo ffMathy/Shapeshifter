@@ -6,7 +6,7 @@
 
     using Interfaces;
 
-    class KeyValueCache<TKey, TValue> : IKeyValueCache<TKey, TValue>
+    class KeyValueCache<TKey, TValue>: IKeyValueCache<TKey, TValue>
     {
         readonly IDictionary<TKey, TValue> data;
 

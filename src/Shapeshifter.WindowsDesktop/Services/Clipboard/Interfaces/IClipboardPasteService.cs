@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-
-namespace Shapeshifter.WindowsDesktop.Services.Clipboard.Interfaces
+﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard.Interfaces
 {
+    using System.Threading.Tasks;
+
     public interface IClipboardPasteService
     {
         Task PasteClipboardContentsAsync();

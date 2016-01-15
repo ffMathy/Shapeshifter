@@ -5,16 +5,13 @@
 
     using Autofac;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Factories.Interfaces;
 
     using Interfaces;
 
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     using NSubstitute;
-
-    using WindowsDesktop;
-    using Factories.Interfaces;
-
-    using Native;
 
     [TestClass]
     public class PasteHotkeyInterceptorTest: TestBase
@@ -27,7 +24,7 @@
             var interceptor = container.Resolve<IPasteHotkeyInterceptor>();
             Assert.IsTrue(interceptor.IsEnabled);
         }
-        
+
         [TestMethod]
         public void RetainsEnabledStateAfterUninstallIfEnabledIsTrue()
         {

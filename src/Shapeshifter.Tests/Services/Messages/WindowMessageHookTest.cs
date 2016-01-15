@@ -7,6 +7,8 @@
 
     using Autofac;
 
+    using Controls.Window.Interfaces;
+
     using Infrastructure.Events;
     using Infrastructure.Threading.Interfaces;
 
@@ -16,7 +18,6 @@
 
     using NSubstitute;
 
-    using Controls.Window.Interfaces;
     [TestClass]
     public class WindowMessageHookTest: TestBase
     {
@@ -63,7 +64,7 @@
                         x.AddHwndSourceHook(
                             Arg.Do<HwndSourceHook>(
                                 h => windowHookCallback = h));
-                                           });
+                    });
 
             var hook = container.Resolve<IWindowMessageHook>();
             hook.Connect(fakeWindow);
@@ -71,8 +72,8 @@
             Assert.IsNotNull(windowHookCallback);
 
             var handled = false;
-            windowHookCallback(IntPtr.Zero, (int)Message.WM_HOTKEY, IntPtr.Zero, IntPtr.Zero, ref handled);
-            windowHookCallback(IntPtr.Zero, (int)Message.WM_HOTKEY, IntPtr.Zero, IntPtr.Zero, ref handled);
+            windowHookCallback(IntPtr.Zero, (int) Message.WM_HOTKEY, IntPtr.Zero, IntPtr.Zero, ref handled);
+            windowHookCallback(IntPtr.Zero, (int) Message.WM_HOTKEY, IntPtr.Zero, IntPtr.Zero, ref handled);
 
             var fakeConsumerLoop = container.Resolve<IConsumerThreadLoop>();
             fakeConsumerLoop
@@ -113,7 +114,7 @@
             var wParam = new IntPtr(2);
             var lParam = new IntPtr(3);
             var handled = false;
-            windowHookCallback(hwnd, (int)Message.WM_HOTKEY, wParam, lParam, ref handled);
+            windowHookCallback(hwnd, (int) Message.WM_HOTKEY, wParam, lParam, ref handled);
 
             var fakeInterceptor = container.Resolve<IWindowMessageInterceptor>();
             fakeInterceptor

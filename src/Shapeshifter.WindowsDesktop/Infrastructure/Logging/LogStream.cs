@@ -9,7 +9,7 @@
 
     using Services.Files.Interfaces;
 
-    class LogStream : ILogStream
+    class LogStream: ILogStream
     {
         readonly IFileManager fileManager;
         readonly IEnvironmentInformation environmentInformation;

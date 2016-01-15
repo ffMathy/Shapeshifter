@@ -119,7 +119,8 @@
     <Compile Include="Infrastructure\Logging\Interfaces\ILogStream.cs" />
     <Compile Include="Infrastructure\Logging\Logger.cs" />
     <Compile Include="Infrastructure\Logging\LogStream.cs" />
-    <Compile Include="Services\Tray\ITrayIconManager.cs" />
+    <Compile Include="Services\Tray\Interfaces\ITrayContextMenuItem.cs" />
+    <Compile Include="Services\Tray\Interfaces\ITrayIconManager.cs" />
     <Compile Include="Services\Messages\Message.cs" />
     <Compile Include="Controls\Clipboard\ClipboardImageDataControl.xaml.cs">
       <DependentUpon>ClipboardImageDataControl.xaml</DependentUpon>
@@ -257,6 +258,7 @@
     <Compile Include="Services\Messages\Interfaces\IWindowMessageInterceptor.cs" />
     <Compile Include="Services\Messages\Interfaces\IWindowMessageHook.cs" />
     <Compile Include="Services\ProcessManager.cs" />
+    <Compile Include="Services\Tray\TrayIconManager.cs" />
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Services\Web\DomainNameResolver.cs" />
     <Compile Include="Services\Files\FileType.cs" />

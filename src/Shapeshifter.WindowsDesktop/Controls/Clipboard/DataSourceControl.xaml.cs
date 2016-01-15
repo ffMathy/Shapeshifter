@@ -8,15 +8,18 @@
     /// </summary>
     public partial class DataSourceControl: StackPanel
     {
-        public static readonly DependencyProperty TextVisibilityProperty = 
+        public static readonly DependencyProperty TextVisibilityProperty =
             DependencyProperty.Register(
-                nameof(TextVisibility), typeof(Visibility), typeof(DataSourceControl), new PropertyMetadata(Visibility.Visible));
+                nameof(TextVisibility),
+                typeof (Visibility),
+                typeof (DataSourceControl),
+                new PropertyMetadata(Visibility.Visible));
 
         public Visibility TextVisibility
         {
             get
             {
-                return (Visibility)GetValue(TextVisibilityProperty);
+                return (Visibility) GetValue(TextVisibilityProperty);
             }
             set
             {

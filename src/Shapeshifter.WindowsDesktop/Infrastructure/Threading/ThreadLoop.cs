@@ -32,9 +32,7 @@
             }
 
             using (logger.Indent())
-            {
                 await RunAsync(action, token);
-            }
         }
 
         async Task RunAsync(Func<Task> action, CancellationToken token = default(CancellationToken))

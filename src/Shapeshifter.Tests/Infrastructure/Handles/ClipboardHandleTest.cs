@@ -4,17 +4,15 @@
 
     using Autofac;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Controls.Window.Interfaces;
 
     using Interfaces;
 
-    using NSubstitute;
-
-    using WindowsDesktop;
-
-    using Controls.Window.Interfaces;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Native.Interfaces;
+
+    using NSubstitute;
 
     [TestClass]
     public class ClipboardHandleTest: TestBase

@@ -38,11 +38,12 @@
             mediator.Cancel();
 
             var fakeDurationMediator = container.Resolve<IPasteCombinationDurationMediator>();
-            fakeDurationMediator.Received(1).CancelCombinationRegistration();
+            fakeDurationMediator.Received(1)
+                                .CancelCombinationRegistration();
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException(typeof (InvalidOperationException))]
         public void DisconnectWhileAlreadyDisconnectedThrowsException()
         {
             var container = CreateContainer();
@@ -52,7 +53,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException(typeof (InvalidOperationException))]
         public void ConnectWhileAlreadyConnectedThrowsException()
         {
             var container = CreateContainer(
@@ -109,7 +110,11 @@
                     c.RegisterFake<IClipboardDataControlPackageFactory>()
                      .CreateFromCurrentClipboardData()
                      .Returns(fakePackage);
-                    fakePackage.Data.Contents.Returns(new[] { fakeData });
+                    fakePackage.Data.Contents.Returns(
+                        new[]
+                        {
+                            fakeData
+                        });
                     fakePackage.Control.Returns(fakeControl);
                 });
 
@@ -146,7 +151,6 @@
             Assert.AreSame(mediator, eventSender);
             Assert.AreSame(addedPackage, eventArgument.Package);
         }
-
 
         [TestMethod]
         public void ConnectConnectsHotkeyHook()

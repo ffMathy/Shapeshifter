@@ -1,6 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Arguments.Interfaces
 {
-    public interface ISingleArgumentProcessor : IArgumentProcessor
+    public interface ISingleArgumentProcessor: IArgumentProcessor
     {
         bool CanProcess(string[] arguments);
 

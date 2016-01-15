@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
     using System;
+    using System.Threading.Tasks;
 
     using Autofac;
 
@@ -15,8 +16,6 @@
     using Native.Interfaces;
 
     using NSubstitute;
-
-    using System.Threading.Tasks;
 
     [TestClass]
     public class ClipboardPasteServiceTest: TestBase
@@ -35,8 +34,10 @@
             await pasteService.PasteClipboardContentsAsync();
 
             var fakeInterceptor = container.Resolve<IPasteHotkeyInterceptor>();
-            fakeInterceptor.Received().Uninstall();
-            fakeInterceptor.Received().Install(Arg.Any<IntPtr>());
+            fakeInterceptor.Received()
+                           .Uninstall();
+            fakeInterceptor.Received()
+                           .Install(Arg.Any<IntPtr>());
         }
     }
 }

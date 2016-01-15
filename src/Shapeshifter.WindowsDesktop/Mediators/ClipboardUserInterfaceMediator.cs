@@ -28,6 +28,7 @@
         public event EventHandler<ControlEventArgument> ControlAdded;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
+
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
 
         public event EventHandler<PastePerformedEventArgument> PastePerformed;
@@ -102,11 +103,13 @@
                 PasteCombinationDurationMediator_PasteCombinationDurationPassed;
             pasteCombinationDurationMediator.PasteCombinationReleased -=
                 PasteCombinationDurationMediatorPasteCombinationReleased;
-            pasteCombinationDurationMediator.AfterPasteCombinationReleased -= AfterPasteCombinationDurationMediatorAfterPasteCombinationReleased;
+            pasteCombinationDurationMediator.AfterPasteCombinationReleased -=
+                AfterPasteCombinationDurationMediatorAfterPasteCombinationReleased;
         }
 
         void AfterPasteCombinationDurationMediatorAfterPasteCombinationReleased(
-            object sender, PasteCombinationReleasedEventArgument e)
+            object sender,
+            PasteCombinationReleasedEventArgument e)
         {
             RaisePastePerformedEvent();
         }
@@ -147,7 +150,8 @@
                 PasteCombinationDurationMediator_PasteCombinationDurationPassed;
             pasteCombinationDurationMediator.PasteCombinationReleased +=
                 PasteCombinationDurationMediatorPasteCombinationReleased;
-            pasteCombinationDurationMediator.AfterPasteCombinationReleased += AfterPasteCombinationDurationMediatorAfterPasteCombinationReleased;
+            pasteCombinationDurationMediator.AfterPasteCombinationReleased +=
+                AfterPasteCombinationDurationMediatorAfterPasteCombinationReleased;
 
             pasteCombinationDurationMediator.Connect(targetWindow);
         }

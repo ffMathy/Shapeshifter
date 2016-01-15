@@ -11,6 +11,7 @@
         }
 
         public Key Key { get; set; }
-        public KeyDirection Direction { get; set; } 
+
+        public KeyDirection Direction { get; set; }
     }
 }

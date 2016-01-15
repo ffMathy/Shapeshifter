@@ -1,16 +1,16 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services.Interfaces
+﻿namespace Shapeshifter.WindowsDesktop.Services.Tray.Interfaces
 {
     using System;
+    using System.Collections.Generic;
 
     using Infrastructure.Events;
-    using System.Collections.Generic;
 
     public interface ITrayIconManager
     {
         event EventHandler<TrayIconClickedEventArgument> IconClicked;
 
         void InstallTrayIcon(
-            string boldTitle,
-            IEnumerable<IContextMenuItem> contextMenuItems);
+            string boldMenuItemTitle,
+            IEnumerable<ITrayContextMenuItem> contextMenuItems);
     }
 }

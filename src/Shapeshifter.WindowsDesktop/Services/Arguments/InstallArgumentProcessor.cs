@@ -15,7 +15,7 @@
 
     using Services.Interfaces;
 
-    class InstallArgumentProcessor : INoArgumentProcessor
+    class InstallArgumentProcessor: INoArgumentProcessor
     {
         const string CertificateName = "Shapeshifter";
 
@@ -50,8 +50,8 @@
 
         public bool CanProcess()
         {
-            return !environmentInformation.GetIsDebugging() && 
-                (Environment.CurrentDirectory != TargetDirectory);
+            return !environmentInformation.GetIsDebugging() &&
+                   (Environment.CurrentDirectory != TargetDirectory);
         }
 
         public void Process()
@@ -121,8 +121,8 @@
         void WriteExecutable(string targetExecutableFile)
         {
             File.Copy(
-                processManager.GetCurrentProcessPath(), 
-                targetExecutableFile, 
+                processManager.GetCurrentProcessPath(),
+                targetExecutableFile,
                 true);
         }
 
@@ -130,7 +130,7 @@
         {
             var targetManifestFile = $"{targetExecutableFile}.manifest";
             File.WriteAllBytes(
-                targetManifestFile, 
+                targetManifestFile,
                 Resources.App);
         }
 

@@ -59,7 +59,9 @@
 
             if (exceptions.Count > 1)
             {
-                throw new AggregateException("The assertion timeout of " + timeout + " milliseconds was exceeded, and multiple exceptions were caught.", exceptions);
+                throw new AggregateException(
+                    "The assertion timeout of " + timeout + " milliseconds was exceeded, and multiple exceptions were caught.",
+                    exceptions);
             }
 
             throw exceptions.First();
@@ -80,7 +82,12 @@
             }
 
             var fake = Substitute.For<TInterface>();
-            var collection = new ReadOnlyCollection<TInterface>(new List<TInterface>(new [] {fake}));
+            var collection = new ReadOnlyCollection<TInterface>(
+                new List<TInterface>(
+                    new[]
+                    {
+                        fake
+                    }));
 
             Register(builder, fake);
             Register<IReadOnlyCollection<TInterface>>(builder, collection);

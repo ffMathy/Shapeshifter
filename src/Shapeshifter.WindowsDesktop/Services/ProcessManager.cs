@@ -35,11 +35,9 @@
         public string GetCurrentProcessPath()
         {
             using (var currentProcess = Process.GetCurrentProcess())
-            {
                 return Path.Combine(
-                    Environment.CurrentDirectory, 
+                    Environment.CurrentDirectory,
                     $"{currentProcess.ProcessName}.exe");
-            }
         }
 
         public void LaunchCommand(string command, string arguments = null)
