@@ -405,11 +405,15 @@
     <None Include="Resources\Shapeshifter.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="Prebuild">
+    <CallTarget Targets="Clean" />
+    <MSBuild Projects="$(SolutionPath)" Targets="Build" Properties="Configuration=Debug;IgnoreRecursion=true" />
+  </Target>
   <Target Name="BeforeBuild">
     <ItemGroup>
       <_IgnoreRecursion Include="$(IgnoreRecursion)"/>
     </ItemGroup>
-    <MSBuild Projects="$(SolutionPath)" Targets="Build" Properties="Configuration=Debug;IgnoreRecursion=true" Condition="'%(_IgnoreRecursion.Identity)' != 'true'"/>
+    <CallTarget Targets="Prebuild" Condition="'%(_IgnoreRecursion.Identity)' != 'true'" />
     <CreateItem Include="$(TargetDir)\**\*.*">
       <Output TaskParameter="Include" ItemName="OutputFiles" />
     </CreateItem>
