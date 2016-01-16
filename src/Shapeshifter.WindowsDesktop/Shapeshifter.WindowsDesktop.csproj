@@ -15,6 +15,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
+    <IgnoreRecursion>false</IgnoreRecursion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -48,6 +49,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
@@ -401,7 +405,15 @@
     <None Include="Resources\Shapeshifter.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="AfterResolveReferences">
+  <Target Name="Prebuild">
+    <CallTarget Targets="Clean" />
+    <MSBuild Projects="$(SolutionPath)" Targets="Build" Properties="Configuration=Debug;IgnoreRecursion=true" />
+  </Target>
+  <Target Name="BeforeBuild">
+    <ItemGroup>
+      <_IgnoreRecursion Include="$(IgnoreRecursion)"/>
+    </ItemGroup>
+    <CallTarget Targets="Prebuild" Condition="'%(_IgnoreRecursion.Identity)' != 'true'" />
     <CreateItem Include="$(TargetDir)\**\*.*">
       <Output TaskParameter="Include" ItemName="OutputFiles" />
     </CreateItem>
@@ -412,10 +424,6 @@
     </ItemGroup>
     <Message Importance="high" Text="Embedding: @(OutputFiles->'%(Filename)%(Extension)', ', ')" />
   </Target>
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
