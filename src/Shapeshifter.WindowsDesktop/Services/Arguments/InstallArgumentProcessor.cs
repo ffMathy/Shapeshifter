@@ -3,6 +3,7 @@
     using System;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Security.Cryptography.X509Certificates;
 
     using Infrastructure.Environment.Interfaces;
@@ -76,11 +77,37 @@
 
             WriteManifest(targetExecutableFile);
             WriteExecutable(targetExecutableFile);
+            WriteDebugInformationFile();
 
             var selfSignedCertificate = InstallCertificateIfNotFound();
             signHelper.SignAssemblyWithCertificate(targetExecutableFile, selfSignedCertificate);
 
             LaunchInstalledExecutable(targetExecutableFile, currentExecutableFile);
+        }
+
+        static void WriteDebugInformationFile()
+        {
+            const string debugInformationFileName = "Shapeshifter.pdb";
+            var targetDebugFile = Path.Combine(TargetDirectory, debugInformationFileName);
+            var debugInformation = LoadResourceBytes(debugInformationFileName);
+            File.WriteAllBytes(targetDebugFile, debugInformation);
+        }
+
+        static byte[] LoadResourceBytes(string resourceName)
+        {
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            using (var stream = executingAssembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    return null;
+                }
+
+                var data = new byte[stream.Length];
+                stream.Read(data, 0, data.Length);
+
+                return data;
+            }
         }
 
         X509Certificate2 InstallCertificateIfNotFound()
