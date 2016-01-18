@@ -3,17 +3,34 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.CompilerServices;
+    using System.Windows;
 
     public class Program
     {
         [STAThread]
-        public static void Main()
+        public static void Main(string[] args)
+        {
+            var temporaryPath = Path.GetTempPath();
+            if (Environment.CurrentDirectory != temporaryPath)
+            {
+                WriteDependentAssembliesToDisk(temporaryPath);
+                File.WriteAllBytes(
+                    Path.Combine(Environment.CurrentDirectory, ));
+            }
+
+            AppDomain.CurrentDomain.AssemblyResolve += (s, e) => ResolveAssemblyFromCache(e, assemblyCache);
+
+            Initialize();
+        }
+
+        static void WriteDependentAssembliesToDisk(string temporaryPath)
         {
             const string libraryExtension = ".dll";
 
-            var assemblyCache = new Dictionary<string, Assembly>();
             var executingAssembly = Assembly.GetExecutingAssembly();
             var allResources = executingAssembly
                 .GetManifestResourceNames();
@@ -23,19 +40,27 @@
 
             foreach (var resource in resources)
             {
-                LoadResourceToAssemblyCache(executingAssembly, resource, assemblyCache);
+                WriteResourceToDisk(executingAssembly, resource, temporaryPath);
             }
-
-            AppDomain.CurrentDomain.AssemblyResolve += (s, e) => ResolveAssemblyFromCache(e, assemblyCache);
-
-            App.Main();
         }
 
-        static Assembly ResolveAssemblyFromCache(ResolveEventArgs e, Dictionary<string, Assembly> assemblyCache)
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        static void Initialize()
+        {
+            try
+            {
+                App.Main();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        static Assembly ResolveAssemblyFromCache(ResolveEventArgs e, IReadOnlyDictionary<string, Assembly> assemblyCache)
         {
             var assemblyName = new AssemblyName(e.Name);
-            var path = $"{assemblyName.Name}.dll"
-                .ToLower();
+            var path = $"{assemblyName.Name}.dll";
             if (assemblyCache.ContainsKey(path))
             {
                 return assemblyCache[path];
@@ -49,22 +74,15 @@
             return null;
         }
 
-        static void LoadResourceToAssemblyCache(Assembly executingAssembly, string resource, Dictionary<string, Assembly> assemblies)
+        static void WriteResourceToDisk(Assembly executingAssembly, string resource, string targetPath)
         {
-            var assemblyBytes = LoadResourceBytes(executingAssembly, $"{resource}.dll");
-            var symbolBytes = LoadResourceBytes(executingAssembly, $"{resource}.pdb");
+            var assemblyFileName = $"{resource}.dll";
+            var assemblyBytes = LoadResourceBytes(executingAssembly, assemblyFileName);
+            var symbolFileName = $"{resource}.pdb";
+            var symbolBytes = LoadResourceBytes(executingAssembly, symbolFileName);
 
-            try
-            {
-                var assembly = symbolBytes != null
-                                   ? Assembly.Load(assemblyBytes, symbolBytes)
-                                   : Assembly.Load(assemblyBytes);
-                assemblies.Add(resource.ToLower(), assembly);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Failed to load: {0}, Exception: {1}", resource, ex.Message);
-            }
+            File.WriteAllBytes(Path.Combine(targetPath, assemblyFileName), assemblyBytes);
+            File.WriteAllBytes(Path.Combine(targetPath, symbolFileName), symbolBytes);
         }
 
         static byte[] LoadResourceBytes(Assembly executingAssembly, string resourceName)
