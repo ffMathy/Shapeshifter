@@ -173,6 +173,7 @@
     <Compile Include="Infrastructure\Logging\Interfaces\ILogStream.cs" />
     <Compile Include="Infrastructure\Logging\Logger.cs" />
     <Compile Include="Infrastructure\Logging\LogStream.cs" />
+    <Compile Include="Services\Interfaces\ISettingsManager.cs" />
     <Compile Include="Services\Tray\Interfaces\ITrayContextMenuItem.cs" />
     <Compile Include="Services\Tray\Interfaces\ITrayIconManager.cs" />
     <Compile Include="Services\Messages\Message.cs" />

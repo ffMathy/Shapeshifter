@@ -115,6 +115,7 @@
     <Compile Include="Services\Messages\WindowMessageHookTest.cs" />
     <Compile Include="Services\ProcessManagerTest.cs" />
     <Compile Include="Services\LinkParserTest.cs" />
+    <Compile Include="Services\SettingsManagerTest.cs" />
     <Compile Include="Services\Updates\UpdateServiceTest.cs" />
     <Compile Include="Structures\FormatDataPairTest.cs" />
     <Compile Include="TestBase.cs" />
