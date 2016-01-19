@@ -287,7 +287,9 @@
     <Compile Include="Services\Clipboard\Interfaces\IDataSourceService.cs" />
     <Compile Include="Services\Interfaces\ICertificateManager.cs" />
     <Compile Include="Services\Interfaces\IProcessManager.cs" />
-    <Compile Include="Services\Interfaces\IUpdateService.cs" />
+    <Compile Include="Services\Updates\GitHubClientFactory.cs" />
+    <Compile Include="Services\Updates\Interfaces\IGitHubClientFactory.cs" />
+    <Compile Include="Services\Updates\Interfaces\IUpdateService.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardManager.cs" />
     <Compile Include="Services\Keyboard\KeyboardManager.cs" />
     <Compile Include="Services\Keyboard\KeyDirection.cs" />
@@ -313,7 +315,7 @@
     <Compile Include="Services\Messages\Interfaces\IWindowMessageHook.cs" />
     <Compile Include="Services\ProcessManager.cs" />
     <Compile Include="Services\Tray\TrayIconManager.cs" />
-    <Compile Include="Services\UpdateService.cs" />
+    <Compile Include="Services\Updates\UpdateService.cs" />
     <Compile Include="Services\Web\DomainNameResolver.cs" />
     <Compile Include="Services\Files\FileType.cs" />
     <Compile Include="Services\Files\FileTypeInterpreter.cs" />

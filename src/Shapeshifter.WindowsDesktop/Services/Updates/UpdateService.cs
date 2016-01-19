@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services
+﻿namespace Shapeshifter.WindowsDesktop.Services.Updates
 {
     using System;
     using System.Collections.Generic;
@@ -16,6 +16,8 @@
 
     using Octokit;
 
+    using Services.Interfaces;
+
     using Web.Interfaces;
 
     class UpdateService
@@ -24,7 +26,7 @@
         const string RepositoryOwner = "ffMathy";
         const string RepositoryName = "Shapeshifter";
 
-        readonly GitHubClient client;
+        readonly IGitHubClient client;
 
         readonly IDownloader fileDownloader;
         readonly IFileManager fileManager;
@@ -35,20 +37,15 @@
             IDownloader fileDownloader,
             IFileManager fileManager,
             IProcessManager processManager,
-            ILogger logger)
+            ILogger logger,
+            IGitHubClientFactory clientFactory)
         {
-            client = CreateClient();
+            client = clientFactory.CreateClient();
 
             this.fileDownloader = fileDownloader;
             this.fileManager = fileManager;
             this.processManager = processManager;
             this.logger = logger;
-        }
-
-        static GitHubClient CreateClient()
-        {
-            var client = new GitHubClient(new ProductHeaderValue(RepositoryName));
-            return client;
         }
 
         public async Task UpdateAsync()
@@ -85,7 +82,7 @@
             await UpdateFromAssetsAsync(assets);
         }
 
-        async Task UpdateFromAssetsAsync(IReadOnlyList<ReleaseAsset> assets)
+        async Task UpdateFromAssetsAsync(IEnumerable<ReleaseAsset> assets)
         {
             const string targetAssetName = "Shapeshifter.exe";
 
@@ -95,18 +92,18 @@
 
         async Task UpdateFromAssetAsync(ReleaseAsset asset)
         {
-            var localFilePath = await DownloadUpdateAsync(asset);
+            var localFilePath = await DownloadUpdateToDiskAsync(asset);
             processManager.LaunchFile(
                 localFilePath,
-                $"update");
+                "update");
         }
 
-        async Task<string> DownloadUpdateAsync(ReleaseAsset asset)
+        async Task<string> DownloadUpdateToDiskAsync(ReleaseAsset asset)
         {
-            var url = asset.BrowserDownloadUrl;
-
-            var data = await fileDownloader.DownloadBytesAsync(url);
-            var localFilePath = fileManager.WriteBytesToTemporaryFile(asset.Name, data);
+            var data = await fileDownloader.DownloadBytesAsync(
+                asset.BrowserDownloadUrl);
+            var localFilePath = fileManager.WriteBytesToTemporaryFile(
+                asset.Name, data);
 
             return localFilePath;
         }
@@ -114,6 +111,11 @@
         bool IsUpdateToReleaseNeeded(Release release)
         {
             if (release.Prerelease)
+            {
+                return false;
+            }
+
+            if (release.Draft)
             {
                 return false;
             }

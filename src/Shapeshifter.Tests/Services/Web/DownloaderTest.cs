@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Web
+﻿namespace Shapeshifter.WindowsDesktop.Services.Web
 {
     using System.Threading.Tasks;
 

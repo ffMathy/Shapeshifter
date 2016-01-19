@@ -12,6 +12,8 @@
 
     using Services.Interfaces;
 
+    using Updates.Interfaces;
+
     public class TrayIconManager: ITrayIconManager {
         readonly IUpdateService updateService;
 

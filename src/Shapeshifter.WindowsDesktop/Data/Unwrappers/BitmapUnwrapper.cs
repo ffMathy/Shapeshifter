@@ -1,6 +1,8 @@
-﻿namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Unwrappers
+﻿namespace Shapeshifter.WindowsDesktop.Data.Unwrappers
 {
     using System.Windows;
+
+    using Controls.Window.Interfaces;
 
     using Interfaces;
 
@@ -8,8 +10,6 @@
     using Native.Interfaces;
 
     using Services.Images.Interfaces;
-
-    using Window.Interfaces;
 
     class BitmapUnwrapper: IMemoryUnwrapper
     {

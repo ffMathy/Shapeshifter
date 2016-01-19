@@ -13,6 +13,7 @@
     using Services.Arguments.Interfaces;
     using Services.Interfaces;
     using Services.Tray.Interfaces;
+    using Services.Updates.Interfaces;
 
     using Application = System.Windows.Application;
 

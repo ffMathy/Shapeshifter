@@ -3,8 +3,6 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Controls.Clipboard.Unwrappers.Interfaces;
-
     using Data.Interfaces;
 
     using Infrastructure.Handles.Factories.Interfaces;
@@ -12,6 +10,8 @@
     using Interfaces;
 
     using Structures;
+
+    using Unwrappers.Interfaces;
 
     class ClipboardDataPackageFactory: IClipboardDataPackageFactory
     {
