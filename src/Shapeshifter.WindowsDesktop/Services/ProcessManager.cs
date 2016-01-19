@@ -101,17 +101,12 @@
             }
         }
 
-        void SpawnProcess(string fileName, string workingDirectory, string verb = null)
+        void SpawnProcess(string uri, string workingDirectory, string verb = null)
         {
-            if (!File.Exists(fileName))
-            {
-                throw new ArgumentException("The given file doesn't exist.", nameof(fileName));
-            }
-
             var process = Process.Start(
                 new ProcessStartInfo
                 {
-                    FileName = fileName,
+                    FileName = uri,
                     WorkingDirectory = workingDirectory,
                     Verb = verb
                 });
