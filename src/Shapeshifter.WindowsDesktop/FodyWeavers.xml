@@ -3,5 +3,4 @@
   <Seal/>
   <CryptStr/>
   <Costura CreateTemporaryAssemblies="true"/>
-  <LoadAssembliesOnStartup/>
 </Weavers>
