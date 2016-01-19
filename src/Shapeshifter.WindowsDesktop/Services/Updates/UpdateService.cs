@@ -82,7 +82,7 @@
             await UpdateFromAssetsAsync(assets);
         }
 
-        async Task UpdateFromAssetsAsync(IReadOnlyList<ReleaseAsset> assets)
+        async Task UpdateFromAssetsAsync(IEnumerable<ReleaseAsset> assets)
         {
             const string targetAssetName = "Shapeshifter.exe";
 
@@ -92,18 +92,18 @@
 
         async Task UpdateFromAssetAsync(ReleaseAsset asset)
         {
-            var localFilePath = await DownloadUpdateAsync(asset);
+            var localFilePath = await DownloadUpdateToDiskAsync(asset);
             processManager.LaunchFile(
                 localFilePath,
-                $"update");
+                "update");
         }
 
-        async Task<string> DownloadUpdateAsync(ReleaseAsset asset)
+        async Task<string> DownloadUpdateToDiskAsync(ReleaseAsset asset)
         {
-            var url = asset.BrowserDownloadUrl;
-
-            var data = await fileDownloader.DownloadBytesAsync(url);
-            var localFilePath = fileManager.WriteBytesToTemporaryFile(asset.Name, data);
+            var data = await fileDownloader.DownloadBytesAsync(
+                asset.BrowserDownloadUrl);
+            var localFilePath = fileManager.WriteBytesToTemporaryFile(
+                asset.Name, data);
 
             return localFilePath;
         }

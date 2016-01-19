@@ -14,7 +14,13 @@
 
     using WindowsDesktop;
 
+    using Files.Interfaces;
+
     using Octokit;
+
+    using Services.Interfaces;
+
+    using Web.Interfaces;
 
     [TestClass]
     public class UpdateServiceTest: TestBase
@@ -148,7 +154,91 @@
                 .IgnoreAwait();
         }
 
-        static Release CreateRelease(int id, string name, bool isPrerelease, bool isDraft)
+        [TestMethod]
+        public async Task UpdateFoundIfLaterVersionFound()
+        {
+            var fakeReleasesClient = Substitute.For<IReleasesClient>();
+            var fakeGitHubClient = Substitute.For<IGitHubClient>();
+
+            fakeGitHubClient
+                .Release
+                .Returns(fakeReleasesClient);
+
+            fakeReleasesClient
+                .GetAllAssets("ffMathy", "Shapeshifter", 1337)
+                .Returns(
+                    Task.FromResult<IReadOnlyList<ReleaseAsset>>(
+                        new[]
+                        {
+                            CreateReleaseAsset("Shapeshifter.exe")
+                        }));
+
+            var container = CreateContainer(
+                c =>
+                {
+                    c.RegisterFake<IGitHubClientFactory>()
+                     .CreateClient()
+                     .Returns(fakeGitHubClient);
+
+                    c.RegisterFake<IDownloader>();
+
+                    c.RegisterFake<IFileManager>()
+                        .WriteBytesToTemporaryFile(
+                            "Shapeshifter.exe", Arg.Any<byte[]>())
+                        .Returns("temporaryInstallPath");
+
+                    c.RegisterFake<IProcessManager>();
+                });
+
+            fakeReleasesClient
+                .GetAll("ffMathy", "Shapeshifter")
+                .Returns(
+                    Task.FromResult<IReadOnlyList<Release>>(
+                        new[]
+                        {
+                            CreateRelease(
+                                1337,
+                                "shapeshifter-v1337.0.0.0",
+                                false,
+                                false)
+                        }));
+
+            var updateService = container.Resolve<IUpdateService>();
+            await updateService.UpdateAsync();
+
+            var fakeDownloader = container.Resolve<IDownloader>();
+            fakeDownloader
+                .Received()
+                .DownloadBytesAsync("browserDownloadUrl")
+                .IgnoreAwait();
+
+            var fakeProcessManager = container.Resolve<IProcessManager>();
+            fakeProcessManager
+                .Received()
+                .LaunchFile("temporaryInstallPath", "update");
+        }
+
+        static ReleaseAsset CreateReleaseAsset(string name)
+        {
+            return new ReleaseAsset(
+                "url",
+                1,
+                name,
+                "label",
+                "state",
+                "contentType",
+                2,
+                3,
+                DateTimeOffset.Now,
+                DateTimeOffset.Now,
+                "browserDownloadUrl");
+        }
+
+        static Release CreateRelease(
+            int id, 
+            string name, 
+            bool isPrerelease, 
+            bool isDraft)
         {
             return new Release(
                 "url",
