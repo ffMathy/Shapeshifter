@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Unwrappers
+﻿namespace Shapeshifter.WindowsDesktop.Data.Unwrappers
 {
     using System.Collections.Generic;
     using System.Linq;

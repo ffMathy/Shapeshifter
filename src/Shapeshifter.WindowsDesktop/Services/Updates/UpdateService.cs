@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services
+﻿namespace Shapeshifter.WindowsDesktop.Services.Updates
 {
     using System;
     using System.Collections.Generic;
@@ -16,6 +16,8 @@
 
     using Octokit;
 
+    using Services.Interfaces;
+
     using Web.Interfaces;
 
     class UpdateService
@@ -24,7 +26,7 @@
         const string RepositoryOwner = "ffMathy";
         const string RepositoryName = "Shapeshifter";
 
-        readonly GitHubClient client;
+        readonly IGitHubClient client;
 
         readonly IDownloader fileDownloader;
         readonly IFileManager fileManager;
@@ -35,20 +37,15 @@
             IDownloader fileDownloader,
             IFileManager fileManager,
             IProcessManager processManager,
-            ILogger logger)
+            ILogger logger,
+            IGitHubClientFactory clientFactory)
         {
-            client = CreateClient();
+            client = clientFactory.CreateClient();
 
             this.fileDownloader = fileDownloader;
             this.fileManager = fileManager;
             this.processManager = processManager;
             this.logger = logger;
-        }
-
-        static GitHubClient CreateClient()
-        {
-            var client = new GitHubClient(new ProductHeaderValue(RepositoryName));
-            return client;
         }
 
         public async Task UpdateAsync()
@@ -114,6 +111,11 @@
         bool IsUpdateToReleaseNeeded(Release release)
         {
             if (release.Prerelease)
+            {
+                return false;
+            }
+
+            if (release.Draft)
             {
                 return false;
             }
