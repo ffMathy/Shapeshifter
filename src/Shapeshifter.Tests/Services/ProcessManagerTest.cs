@@ -1,6 +1,5 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services
 {
-    using System;
     using System.ComponentModel;
     using System.Diagnostics;
 

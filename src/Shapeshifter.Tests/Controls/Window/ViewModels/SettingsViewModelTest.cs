@@ -24,10 +24,10 @@
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IRegistryManager>()
-                        .GetValue(
-                            GetRunRegistryPath(),
-                            "Shapeshifter")
-                        .Returns("somePath");
+                     .GetValue(
+                         GetRunRegistryPath(),
+                         "Shapeshifter")
+                     .Returns("somePath");
                 });
 
             var settingsViewModel = container.Resolve<ISettingsViewModel>();
@@ -40,10 +40,10 @@
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IRegistryManager>()
-                        .GetValue(
-                            GetRunRegistryPath(),
-                            "Shapeshifter")
-                        .Returns((string)null);
+                     .GetValue(
+                         GetRunRegistryPath(),
+                         "Shapeshifter")
+                     .Returns((string) null);
                 });
 
             var settingsViewModel = container.Resolve<ISettingsViewModel>();
@@ -55,7 +55,11 @@
         {
             var container = CreateContainer(
                 c => {
-                    c.RegisterFake<IRegistryManager>();
+                    c.RegisterFake<IRegistryManager>()
+                     .GetValue(
+                         GetRunRegistryPath(),
+                         "Shapeshifter")
+                     .Returns((string) null);
 
                     c.RegisterFake<IProcessManager>()
                      .GetCurrentProcessPath()
@@ -69,9 +73,9 @@
             fakeRegistryManager
                 .Received()
                 .AddValue(
-                    GetRunRegistryPath(), 
+                    GetRunRegistryPath(),
                     "Shapeshifter",
-                    "executablePath");
+                    @"""executablePath""");
         }
     }
 }
