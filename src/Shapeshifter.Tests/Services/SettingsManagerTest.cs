@@ -22,7 +22,7 @@
             settingsManager.SaveSetting("string", "foobar");
 
             var setting = settingsManager.LoadSetting<string>("string");
-            Assert.AreEqual("bar", setting);
+            Assert.AreEqual("foobar", setting);
         }
 
         [TestMethod]
@@ -34,7 +34,7 @@
             settingsManager.SaveSetting("integer", 1337);
 
             var setting = settingsManager.LoadSetting<int>("integer");
-            Assert.AreEqual("bar", setting);
+            Assert.AreEqual(1337, setting);
         }
     }
 }
