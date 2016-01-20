@@ -35,7 +35,7 @@
             var newWindow = new SettingsWindow(viewModel);
             newWindow.Closed += WindowOnClosed;
 
-            return currentWindow;
+            return newWindow;
         }
 
         void WindowOnClosed(object sender, EventArgs eventArgs)

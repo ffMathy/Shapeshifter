@@ -6,8 +6,8 @@
         xmlns:viewModels="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Window.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewModels:SettingsViewModel}"
         mc:Ignorable="d"
-        Title="SettingsWindow" Height="300" Width="300">
-    <Grid>
-        
+        Title="Settings" Height="265" Width="350" ResizeMode="NoResize">
+    <Grid Margin="20">
+        <CheckBox IsChecked="{Binding StartWithWindows}" Content="Start with Windows" />
     </Grid>
 </Window>

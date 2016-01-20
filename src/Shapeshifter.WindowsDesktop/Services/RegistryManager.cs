@@ -1,4 +1,5 @@
-﻿using Shapeshifter.WindowsDesktop.Services.Interfaces;
+﻿using Microsoft.Win32;
+using Shapeshifter.WindowsDesktop.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 
@@ -6,39 +7,67 @@ namespace Shapeshifter.WindowsDesktop.Services
 {
     class RegistryManager: IRegistryManager
     {
-        public string AddKey(string path, string keyName)
+        public void AddKey(string path, string keyName)
         {
-            throw new NotImplementedException();
+            var registryKey = Registry
+                .CurrentUser
+                .CreateSubKey(path);
+            registryKey?.Dispose();
         }
 
         public IReadOnlyCollection<string> GetKeys(string path)
         {
-            throw new NotImplementedException();
+            using (var registryKey = Registry
+                .CurrentUser
+                .OpenSubKey(path))
+            {
+                return registryKey?.GetSubKeyNames();
+            }
         }
 
-        public string RemoveKey(string path, string keyName)
+        public void RemoveKey(string path, string keyName)
         {
-            throw new NotImplementedException();
+            Registry.CurrentUser.DeleteSubKeyTree(path);
         }
 
         public string GetValue(string path, string valueName)
         {
-            throw new NotImplementedException();
+            using (var registryKey = Registry
+                .CurrentUser
+                .OpenSubKey(path))
+            {
+                return (string)registryKey?.GetValue(valueName);
+            }
         }
 
         public void AddValue(string path, string valueName, string value)
         {
-            throw new NotImplementedException();
+            using (var registryKey = Registry
+                .CurrentUser
+                .OpenSubKey(path, true))
+            {
+                registryKey?.SetValue(valueName, value);
+            }
         }
 
-        public IReadOnlyCollection<string> GetValues(string path)
+        public IReadOnlyCollection<string> GetValueNames(string path)
         {
-            throw new NotImplementedException();
+            using (var registryKey = Registry
+                .CurrentUser
+                .OpenSubKey(path, true))
+            {
+                return registryKey?.GetValueNames();
+            }
         }
 
-        public string RemoveValue(string path, string valueName)
+        public void RemoveValue(string path, string valueName)
         {
-            throw new NotImplementedException();
+            using (var registryKey = Registry
+                .CurrentUser
+                .OpenSubKey(path, true))
+            {
+                registryKey?.DeleteValue(valueName);
+            }
         }
     }
 }

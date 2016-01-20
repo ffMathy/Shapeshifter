@@ -6,6 +6,8 @@
 
     using Interfaces;
 
+    using NSubstitute;
+
     using WindowsDesktop;
 
     [TestClass]

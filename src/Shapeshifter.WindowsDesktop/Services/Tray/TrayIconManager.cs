@@ -35,10 +35,7 @@
             
             var contextMenu = new ContextMenu();
             contextMenu.MenuItems.Add(
-                new MenuItem(
-                    boldMenuItemTitle,
-                    (sender, e) => 
-                        OnIconClicked(new TrayIconClickedEventArgument()))
+                new MenuItem(boldMenuItemTitle)
                 {
                     DefaultItem = true,
                     BarBreak = true

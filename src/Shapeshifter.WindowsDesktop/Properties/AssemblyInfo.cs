@@ -3,12 +3,12 @@ using System.Resources;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: AssemblyTitle("Shapeshifter")]
+[assembly: AssemblyTitle(nameof(Shapeshifter))]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Shapeshifter")]
-[assembly: AssemblyCopyright("Copyright © 2015")]
+[assembly: AssemblyProduct(nameof(Shapeshifter))]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
