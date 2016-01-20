@@ -51,7 +51,7 @@
         }
 
         [TestMethod]
-        public void ChangingStartWithWindowsWritesRunKey()
+        public void ChangingStartWithWindowsToTrueWritesRunKey()
         {
             var container = CreateContainer(
                 c => {
@@ -76,6 +76,29 @@
                     GetRunRegistryPath(),
                     "Shapeshifter",
                     @"""executablePath""");
+        }
+
+        [TestMethod]
+        public void ChangingStartWithWindowsToFalseRemovesRunKey()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IRegistryManager>()
+                     .GetValue(
+                         GetRunRegistryPath(),
+                         "Shapeshifter")
+                     .Returns((string)null);
+                });
+
+            var settingsViewModel = container.Resolve<ISettingsViewModel>();
+            settingsViewModel.StartWithWindows = true;
+
+            var fakeRegistryManager = container.Resolve<IRegistryManager>();
+            fakeRegistryManager
+                .Received()
+                .RemoveValue(
+                    GetRunRegistryPath(),
+                    "Shapeshifter");
         }
     }
 }

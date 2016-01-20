@@ -10,8 +10,6 @@
     using Interfaces;
     using Properties;
 
-    using Services.Interfaces;
-
     using Updates.Interfaces;
 
     public class TrayIconManager: ITrayIconManager {

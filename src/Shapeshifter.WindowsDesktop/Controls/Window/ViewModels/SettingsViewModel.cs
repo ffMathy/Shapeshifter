@@ -47,11 +47,20 @@
                 }
 
                 var runRegistryPath = GetRunRegistryPath();
-                var currentExecutablePath = processManager.GetCurrentProcessPath();
-                registryManager.AddValue(
-                    runRegistryPath, 
-                    nameof(Shapeshifter),
-                    $@"""{currentExecutablePath}""");
+                if (value)
+                {
+                    var currentExecutablePath = processManager.GetCurrentProcessPath();
+                    registryManager.AddValue(
+                        runRegistryPath,
+                        nameof(Shapeshifter),
+                        $@"""{currentExecutablePath}""");
+                }
+                else
+                {
+                    registryManager.RemoveValue(
+                        runRegistryPath,
+                        nameof(Shapeshifter));
+                }
 
                 OnPropertyChanged();
             }
