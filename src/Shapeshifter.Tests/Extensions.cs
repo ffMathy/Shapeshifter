@@ -12,7 +12,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
-
+    using System.IO;
     static class Extensions
     {
         static readonly IDictionary<Type, object> fakeCache;
@@ -25,6 +25,29 @@
         internal static void ClearCache()
         {
             fakeCache.Clear();
+        }
+
+        public static string GetSolutionRoot()
+        {
+            var currentPath = Environment.CurrentDirectory;
+
+            var found = false;
+            while (!found)
+            {
+                var files = Directory.GetFiles(currentPath);
+                if (files
+                    .Select(Path.GetFileName)
+                    .Contains("README.md"))
+                {
+                    found = true;
+                }
+                else
+                {
+                    currentPath = Path.GetDirectoryName(currentPath);
+                }
+            }
+
+            return Path.Combine(currentPath, "src");
         }
 
         public static void AssertWait(Action expression)

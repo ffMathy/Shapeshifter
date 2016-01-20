@@ -57,6 +57,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase">
       <Private>True</Private>
     </Reference>
@@ -76,6 +77,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Controls\Window\ViewModels\SettingsViewModelTest.cs" />
     <Compile Include="Data\Actions\ActionTestBase.cs" />
     <Compile Include="Data\Actions\OpenLinkActionTest.cs" />
     <Compile Include="Data\Actions\CopyImageLinkActionTest.cs" />
@@ -86,6 +88,7 @@
     <Compile Include="Data\Actions\PasteActionTest.cs" />
     <Compile Include="Infrastructure\Handles\ClipboardHandleTest.cs" />
     <Compile Include="Infrastructure\Logging\LoggerTest.cs" />
+    <Compile Include="ProjectAnalysisTest.cs" />
     <Compile Include="Services\Clipboard\ClipboardPasteServiceTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardImageDataControlFactoryTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardTextDataControlFactoryTest.cs" />
