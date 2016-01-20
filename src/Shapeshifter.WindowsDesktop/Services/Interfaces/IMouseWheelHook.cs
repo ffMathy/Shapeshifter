@@ -7,5 +7,7 @@
         event EventHandler WheelScrolledDown;
 
         event EventHandler WheelScrolledUp;
+
+        event EventHandler WheelTilted;
     }
 }

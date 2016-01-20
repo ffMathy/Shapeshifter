@@ -54,16 +54,22 @@
         {
             mouseWheelHook.Connect(this);
 
-            mouseWheelHook.WheelScrolledDown += MouseWheelHookOnWheelScrolledDown;
-            mouseWheelHook.WheelScrolledUp += MouseWheelHookOnWheelScrolledUp;
+            mouseWheelHook.WheelScrolledDown += MouseWheelHookOnScrolledDown;
+            mouseWheelHook.WheelScrolledUp += MouseWheelHookOnScrolledUp;
+            mouseWheelHook.WheelTilted += MouseWheelHook_WheelTilted;
         }
 
-        void MouseWheelHookOnWheelScrolledUp(object sender, EventArgs eventArgs)
+        private void MouseWheelHook_WheelTilted(object sender, EventArgs e)
+        {
+            viewModel.SwapBetweenPanes();
+        }
+
+        void MouseWheelHookOnScrolledUp(object sender, EventArgs eventArgs)
         {
             viewModel.ShowPreviousItem();
         }
 
-        void MouseWheelHookOnWheelScrolledDown(object sender, EventArgs eventArgs)
+        void MouseWheelHookOnScrolledDown(object sender, EventArgs eventArgs)
         {
             viewModel.ShowNextItem();
         }
@@ -153,8 +159,9 @@
             viewModel.UserInterfaceShown -= ViewModel_UserInterfaceShown;
             viewModel.UserInterfaceHidden -= ViewModel_UserInterfaceHidden;
 
-            mouseWheelHook.WheelScrolledDown -= MouseWheelHookOnWheelScrolledDown;
-            mouseWheelHook.WheelScrolledUp -= MouseWheelHookOnWheelScrolledUp;
+            mouseWheelHook.WheelScrolledDown -= MouseWheelHookOnScrolledDown;
+            mouseWheelHook.WheelScrolledUp -= MouseWheelHookOnScrolledUp;
+            mouseWheelHook.WheelTilted -= MouseWheelHook_WheelTilted;
         }
     }
 }

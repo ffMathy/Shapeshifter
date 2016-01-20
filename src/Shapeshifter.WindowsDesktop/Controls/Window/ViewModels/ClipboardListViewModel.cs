@@ -185,6 +185,11 @@
             }
         }
 
+        public void SwapBetweenPanes()
+        {
+            isFocusInActionsList = !isFocusInActionsList;
+        }
+
         void HandleLeftPressed()
         {
             if (!isFocusInActionsList)

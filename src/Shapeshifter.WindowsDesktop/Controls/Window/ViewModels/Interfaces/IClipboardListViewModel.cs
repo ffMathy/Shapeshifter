@@ -26,5 +26,7 @@
         void ShowNextItem();
 
         void ShowPreviousItem();
+
+        void SwapBetweenPanes();
     }
 }

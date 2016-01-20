@@ -16,23 +16,36 @@ namespace Shapeshifter.WindowsDesktop.Services
 
         public event EventHandler WheelScrolledUp;
 
+        public event EventHandler WheelTilted;
+
         public bool IsConnected
             => connectedWindow != null;
 
         public void Disconnect()
         {
-            Mouse.RemovePreviewMouseWheelHandler((DependencyObject)connectedWindow, Handler);
+            Mouse.RemovePreviewMouseWheelHandler((DependencyObject)connectedWindow, MouseWheelHandler);
+            Mouse.RemovePreviewMouseDownHandler((DependencyObject)connectedWindow, MouseDownHandler);
 
             connectedWindow = null;
         }
 
+        void MouseDownHandler(object sender, MouseButtonEventArgs e)
+        {
+            if ((e.XButton1 == MouseButtonState.Pressed) ||
+                (e.XButton2 == MouseButtonState.Pressed))
+            {
+                OnWheelTilted();
+            }
+        }
+
         public void Connect(IHookableWindow window)
         {
-            Mouse.AddPreviewMouseWheelHandler((DependencyObject)window, Handler);
+            Mouse.AddPreviewMouseWheelHandler((DependencyObject)window, MouseWheelHandler);
+            Mouse.AddPreviewMouseDownHandler((DependencyObject)window, MouseDownHandler);
             this.connectedWindow = window;
         }
 
-        void Handler(object sender, MouseWheelEventArgs mouseWheelEventArgs)
+        void MouseWheelHandler(object sender, MouseWheelEventArgs mouseWheelEventArgs)
         {
             if (mouseWheelEventArgs.Delta > 0)
             {
@@ -51,6 +64,11 @@ namespace Shapeshifter.WindowsDesktop.Services
         protected virtual void OnWheelScrolledUp()
         {
             WheelScrolledUp?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnWheelTilted()
+        {
+            WheelTilted?.Invoke(this, EventArgs.Empty);
         }
     }
 }
