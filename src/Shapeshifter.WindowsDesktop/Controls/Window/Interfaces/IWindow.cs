@@ -5,6 +5,7 @@
     public interface IWindow
     {
         event EventHandler SourceInitialized;
+        event EventHandler Closed;
 
         void Show();
     }

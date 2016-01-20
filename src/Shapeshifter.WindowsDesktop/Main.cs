@@ -7,6 +7,7 @@
 
     using Infrastructure.Dependencies.Interfaces;
     using Infrastructure.Environment.Interfaces;
+    using Infrastructure.Events;
 
     using Mediators.Interfaces;
 
@@ -16,6 +17,8 @@
     using Services.Updates.Interfaces;
 
     using Application = System.Windows.Application;
+    using Controls.Window;
+    using Controls.Window.Factories.Interfaces;
 
     public class Main: ISingleInstance
     {
@@ -26,6 +29,7 @@
         readonly IUpdateService updateService;
         readonly IEnvironmentInformation environmentInformation;
         readonly ITrayIconManager trayIconManager;
+        readonly ISettingsWindowFactory settingsWindowFactory;
 
         public Main(
             IProcessManager processManager,
@@ -34,7 +38,8 @@
             IAggregateArgumentProcessor aggregateArgumentProcessor,
             IUpdateService updateService,
             IEnvironmentInformation environmentInformation,
-            ITrayIconManager trayIconManager)
+            ITrayIconManager trayIconManager,
+            ISettingsWindowFactory settingsWindowFactory)
         {
             this.processManager = processManager;
             this.mainWindow = mainWindow;
@@ -43,6 +48,7 @@
             this.updateService = updateService;
             this.environmentInformation = environmentInformation;
             this.trayIconManager = trayIconManager;
+            this.settingsWindowFactory = settingsWindowFactory;
         }
 
         public async Task Start(
@@ -65,6 +71,7 @@
 
         void InstallTrayIcon()
         {
+            trayIconManager.IconClicked += TrayIconManager_IconClicked;
             trayIconManager.InstallTrayIcon(
                 "Settings",
                 new[]
@@ -73,6 +80,12 @@
                     "Exit",
                     (sender, e) => Application.Current.Shutdown())
                 });
+        }
+
+        void TrayIconManager_IconClicked(object sender, TrayIconClickedEventArgument e)
+        {
+            var window = settingsWindowFactory.Create();
+            window.Show();
         }
 
         async Task Update()

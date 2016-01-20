@@ -148,6 +148,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controls\Designer\Services\IDesignerService.cs" />
+    <Compile Include="Controls\Window\Factories\Interfaces\ISettingsWindowFactory.cs" />
+    <Compile Include="Controls\Window\Factories\SettingsWindowFactory.cs" />
     <Compile Include="Controls\Window\Interfaces\IHookableWindow.cs" />
     <Compile Include="Controls\Window\Interfaces\ISettingsWindow.cs" />
     <Compile Include="Controls\Window\Interfaces\IWindow.cs" />
