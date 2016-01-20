@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services
 {
     using System;
+    using System.ComponentModel;
     using System.Diagnostics;
 
     using Autofac;
@@ -45,7 +46,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof (ArgumentException))]
+        [ExpectedException(typeof (Win32Exception))]
         public void ThrowsExceptionWhenLaunchingFileThatDoesNotExist()
         {
             var container = CreateContainer();
