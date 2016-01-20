@@ -149,7 +149,13 @@
     </ApplicationDefinition>
     <Compile Include="Controls\Designer\Services\IDesignerService.cs" />
     <Compile Include="Controls\Window\Interfaces\IHookableWindow.cs" />
+    <Compile Include="Controls\Window\Interfaces\ISettingsWindow.cs" />
     <Compile Include="Controls\Window\Interfaces\IWindow.cs" />
+    <Compile Include="Controls\Window\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Window\ViewModels\Interfaces\ISettingsViewModel.cs" />
+    <Compile Include="Controls\Window\ViewModels\SettingsViewModel.cs" />
     <Compile Include="Data\Actions\CopyImageLinkAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IPasteAction.cs" />
@@ -177,6 +183,7 @@
     <Compile Include="Infrastructure\Logging\Interfaces\ILogStream.cs" />
     <Compile Include="Infrastructure\Logging\Logger.cs" />
     <Compile Include="Infrastructure\Logging\LogStream.cs" />
+    <Compile Include="Services\Interfaces\IRegistryManager.cs" />
     <Compile Include="Services\Interfaces\ISettingsManager.cs" />
     <Compile Include="Services\SettingsManager.cs" />
     <Compile Include="Services\Tray\Interfaces\ITrayContextMenuItem.cs" />
@@ -419,6 +426,10 @@
     <Page Include="Controls\Styles\Light.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Window\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
