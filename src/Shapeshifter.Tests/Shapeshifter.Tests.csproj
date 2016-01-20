@@ -76,6 +76,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Controls\Window\ViewModels\SettingsViewModelTest.cs" />
     <Compile Include="Data\Actions\ActionTestBase.cs" />
     <Compile Include="Data\Actions\OpenLinkActionTest.cs" />
     <Compile Include="Data\Actions\CopyImageLinkActionTest.cs" />
