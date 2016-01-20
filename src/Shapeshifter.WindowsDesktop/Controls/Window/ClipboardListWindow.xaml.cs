@@ -9,6 +9,7 @@
 
     using Interfaces;
 
+    using Services.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interfaces;
 
@@ -22,30 +23,49 @@
           IClipboardListWindow
     {
         readonly IMainWindowHandleContainer handleContainer;
-
         readonly IKeyInterceptor keyInterceptor;
-
         readonly IClipboardListViewModel viewModel;
-
         readonly IWindowMessageHook windowMessageHook;
+        readonly IMouseWheelHook mouseWheelHook;
 
         public ClipboardListWindow(
             IClipboardListViewModel viewModel,
             IKeyInterceptor keyInterceptor,
             IWindowMessageHook windowMessageHook,
+            IMouseWheelHook mouseWheelHook,
             IMainWindowHandleContainer handleContainer)
         {
             this.handleContainer = handleContainer;
             this.keyInterceptor = keyInterceptor;
             this.viewModel = viewModel;
             this.windowMessageHook = windowMessageHook;
+            this.mouseWheelHook = mouseWheelHook;
 
             SourceInitialized += ClipboardListWindow_SourceInitialized;
             Activated += ClipboardListWindow_Activated;
 
             InitializeComponent();
+            SetupMouseHook();
 
             SetupViewModel();
+        }
+
+        void SetupMouseHook()
+        {
+            mouseWheelHook.Connect(this);
+
+            mouseWheelHook.WheelScrolledDown += MouseWheelHookOnWheelScrolledDown;
+            mouseWheelHook.WheelScrolledUp += MouseWheelHookOnWheelScrolledUp;
+        }
+
+        void MouseWheelHookOnWheelScrolledUp(object sender, EventArgs eventArgs)
+        {
+            viewModel.ShowPreviousItem();
+        }
+
+        void MouseWheelHookOnWheelScrolledDown(object sender, EventArgs eventArgs)
+        {
+            viewModel.ShowNextItem();
         }
 
         void ClipboardListWindow_SourceInitialized(object sender, EventArgs e)
@@ -126,6 +146,15 @@
         public void RemoveHwndSourceHook(HwndSourceHook hook)
         {
             HandleSource.RemoveHook(hook);
+        }
+
+        public void Dispose()
+        {
+            viewModel.UserInterfaceShown -= ViewModel_UserInterfaceShown;
+            viewModel.UserInterfaceHidden -= ViewModel_UserInterfaceHidden;
+
+            mouseWheelHook.WheelScrolledDown -= MouseWheelHookOnWheelScrolledDown;
+            mouseWheelHook.WheelScrolledUp -= MouseWheelHookOnWheelScrolledUp;
         }
     }
 }

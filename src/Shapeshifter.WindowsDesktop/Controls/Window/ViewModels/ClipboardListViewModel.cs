@@ -168,11 +168,11 @@
             switch (e.Key)
             {
                 case Key.Down:
-                    HandleDownPressed();
+                    ShowNextItem();
                     break;
 
                 case Key.Up:
-                    HandleUpPressed();
+                    ShowPreviousItem();
                     break;
 
                 case Key.Left:
@@ -214,7 +214,7 @@
             clipboardUserInterfaceMediator.Cancel();
         }
 
-        void HandleUpPressed()
+        public void ShowPreviousItem()
         {
             if (isFocusInActionsList)
             {
@@ -226,7 +226,7 @@
             }
         }
 
-        void HandleDownPressed()
+        public void ShowNextItem()
         {
             if (isFocusInActionsList)
             {
