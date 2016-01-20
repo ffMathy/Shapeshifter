@@ -27,7 +27,7 @@
             fakeCache.Clear();
         }
 
-        public static string GetProjectRoot()
+        public static string GetSolutionRoot()
         {
             var currentPath = Environment.CurrentDirectory;
 
@@ -47,7 +47,7 @@
                 }
             }
 
-            return currentPath;
+            return Path.Combine(currentPath, "src");
         }
 
         public static void AssertWait(Action expression)
