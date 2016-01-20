@@ -47,7 +47,31 @@
                 });
 
             var settingsViewModel = container.Resolve<ISettingsViewModel>();
-            Assert.IsTrue(settingsViewModel.StartWithWindows);
+            Assert.IsFalse(settingsViewModel.StartWithWindows);
+        }
+
+        [TestMethod]
+        public void ChangingStartWithWindowsWritesRunKey()
+        {
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<IRegistryManager>();
+
+                    c.RegisterFake<IProcessManager>()
+                     .GetCurrentProcessPath()
+                     .Returns("executablePath");
+                });
+
+            var settingsViewModel = container.Resolve<ISettingsViewModel>();
+            settingsViewModel.StartWithWindows = true;
+
+            var fakeRegistryManager = container.Resolve<IRegistryManager>();
+            fakeRegistryManager
+                .Received()
+                .AddValue(
+                    GetRunRegistryPath(), 
+                    "Shapeshifter",
+                    "executablePath");
         }
     }
 }
