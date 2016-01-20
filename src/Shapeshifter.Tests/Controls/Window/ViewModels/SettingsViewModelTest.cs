@@ -87,11 +87,11 @@
                      .GetValue(
                          GetRunRegistryPath(),
                          "Shapeshifter")
-                     .Returns((string)null);
+                     .Returns("somePath");
                 });
 
             var settingsViewModel = container.Resolve<ISettingsViewModel>();
-            settingsViewModel.StartWithWindows = true;
+            settingsViewModel.StartWithWindows = false;
 
             var fakeRegistryManager = container.Resolve<IRegistryManager>();
             fakeRegistryManager
