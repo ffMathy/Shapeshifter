@@ -6,21 +6,15 @@
     using System.IO;
     using System.Security.Principal;
 
-    using Infrastructure.Threading.Interfaces;
-
     using Interfaces;
 
     class ProcessManager
         : IProcessManager
     {
-        readonly IThreadDelay delay;
-
         readonly ICollection<Process> processes;
 
-        public ProcessManager(IThreadDelay delay)
+        public ProcessManager()
         {
-            this.delay = delay;
-
             processes = new HashSet<Process>();
         }
 
@@ -54,7 +48,7 @@
             }
         }
 
-        void CloseProcessesExceptProcessWithId(
+        static void CloseProcessesExceptProcessWithId(
             int processId,
             params Process[] targetProcesses)
         {
@@ -69,15 +63,36 @@
             }
         }
 
-        void CloseProcess(Process process)
+        static void CloseProcess(Process process)
+        {
+            try
+            {
+                if (process.HasExited)
+                {
+                    return;
+                }
+
+                if (CloseMainWindow(process))
+                {
+                    return;
+                }
+
+                process.Kill();
+            }
+            finally
+            {
+                process.Dispose();
+            }
+        }
+
+        static bool CloseMainWindow(Process process)
         {
             process.CloseMainWindow();
-            if (!process.WaitForExit(3000))
+            if (process.WaitForExit(3000))
             {
-                process.Kill();
-                delay.Execute(3000);
+                return true;
             }
-            process.Dispose();
+            return false;
         }
 
         public void LaunchFile(string fileName, string arguments = null)

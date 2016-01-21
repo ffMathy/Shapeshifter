@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     using Infrastructure.Dependencies.Interfaces;
 
@@ -9,18 +10,35 @@
         : ISingleInstance,
           IDisposable
     {
-        string WriteBytesToTemporaryFile(string path, byte[] bytes);
+        string WriteBytesToTemporaryFile(
+            string path, 
+            byte[] bytes);
 
-        string PrepareTemporaryFolder(string relativePath);
+        string PrepareTemporaryFolder(
+            string relativePath);
 
-        string PrepareFolder(string relativePath = null);
+        string PrepareIsolatedFolder(
+            string relativePath = null);
 
-        string PrepareNewFolder(string relativePath);
+        string PrepareNewIsolatedFolder(
+            string relativePath);
 
-        void DeleteDirectoryIfExists(string path);
+        string PrepareFolder(
+            string path);
 
-        void DeleteFileIfExists(string path);
+        Task DeleteDirectoryIfExistsAsync(
+            string relativePath);
 
-        string FindCommonFolderFromPaths(IReadOnlyCollection<string> paths);
+        Task DeleteFileIfExistsAsync(
+            string relativePath);
+
+        Task DeleteIsolatedFileIfExistsAsync(
+            string path);
+
+        Task DeleteIsolatedDirectoryIfExistsAsync(
+            string path);
+
+        string FindCommonFolderFromPaths(
+            IReadOnlyCollection<string> paths);
     }
 }

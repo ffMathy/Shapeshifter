@@ -47,7 +47,7 @@
 
         string PrepareUniquePackageFolder()
         {
-            var packageFolder = fileManager.PrepareNewFolder(
+            var packageFolder = fileManager.PrepareNewIsolatedFolder(
                 Path.Combine("Pinned"));
             return packageFolder;
         }
@@ -55,7 +55,7 @@
         public async Task<IEnumerable<IClipboardDataPackage>> GetPersistedPackagesAsync()
         {
             var packageList = new List<IClipboardDataPackage>();
-            var packageFolder = fileManager.PrepareFolder("Pinned");
+            var packageFolder = fileManager.PrepareIsolatedFolder("Pinned");
             var packageDirectories = Directory.GetDirectories(packageFolder);
             foreach (var packageDirectory in packageDirectories)
             {

@@ -27,7 +27,7 @@
             var container = CreateContainer();
 
             var fileManager = container.Resolve<IFileManager>();
-            var folder = fileManager.PrepareFolder();
+            var folder = fileManager.PrepareIsolatedFolder();
 
             Directory.Delete(folder, true);
         }
@@ -38,7 +38,7 @@
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IFileManager>()
-                     .PrepareNewFolder(
+                     .PrepareNewIsolatedFolder(
                          Arg.Is<string>(
                              x => x.StartsWith("Pinned")))
                      .Returns("preparedFolder");
