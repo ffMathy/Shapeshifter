@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using Interfaces;
@@ -61,7 +60,8 @@
             catch (Exception ex)
             {
                 exceptionsCaught.Add(ex);
-                if (!IsExceptionIgnored(job, ex))
+                if ((job.IsExceptionIgnored != null) && 
+                    !job.IsExceptionIgnored(ex))
                 {
                     throw;
                 }
@@ -75,16 +75,6 @@
 
                 await Task.Delay(job.IntervalInMilliseconds);
             }
-        }
-
-        static bool IsExceptionIgnored(
-            RetryingThreadLoopJob job, 
-            Exception ex)
-        {
-            var type = ex.GetType();
-            return job
-                .IgnoredExceptionTypes
-                .Contains(type);
         }
 
         public void Stop()

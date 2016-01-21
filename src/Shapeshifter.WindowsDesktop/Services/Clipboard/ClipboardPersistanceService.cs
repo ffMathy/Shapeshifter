@@ -55,7 +55,7 @@
         public async Task<IEnumerable<IClipboardDataPackage>> GetPersistedPackagesAsync()
         {
             var packageList = new List<IClipboardDataPackage>();
-            var packageFolder = fileManager.GetIsolatedPathRoot("Pinned");
+            var packageFolder = fileManager.PrepareIsolatedFolder("Pinned");
             var packageDirectories = Directory.GetDirectories(packageFolder);
             foreach (var packageDirectory in packageDirectories)
             {
