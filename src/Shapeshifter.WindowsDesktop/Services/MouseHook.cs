@@ -1,6 +1,4 @@
-﻿using Shapeshifter.WindowsDesktop.Services.Interfaces;
-
-namespace Shapeshifter.WindowsDesktop.Services
+﻿namespace Shapeshifter.WindowsDesktop.Services
 {
     using System;
     using System.Windows;
@@ -8,9 +6,13 @@ namespace Shapeshifter.WindowsDesktop.Services
 
     using Controls.Window.Interfaces;
 
+    using Interfaces;
+
     public class MouseWheelHook: IMouseWheelHook
     {
         IHookableWindow connectedWindow;
+
+        int currentDelta;
 
         public event EventHandler WheelScrolledDown;
 
@@ -21,10 +23,15 @@ namespace Shapeshifter.WindowsDesktop.Services
         public bool IsConnected
             => connectedWindow != null;
 
+        public void ResetAccumulatedWheelDelta()
+        {
+            currentDelta = 0;
+        }
+
         public void Disconnect()
         {
-            Mouse.RemovePreviewMouseWheelHandler((DependencyObject)connectedWindow, MouseWheelHandler);
-            Mouse.RemovePreviewMouseDownHandler((DependencyObject)connectedWindow, MouseDownHandler);
+            Mouse.RemovePreviewMouseWheelHandler((DependencyObject) connectedWindow, MouseWheelHandler);
+            Mouse.RemovePreviewMouseDownHandler((DependencyObject) connectedWindow, MouseDownHandler);
 
             connectedWindow = null;
         }
@@ -40,20 +47,45 @@ namespace Shapeshifter.WindowsDesktop.Services
 
         public void Connect(IHookableWindow window)
         {
-            Mouse.AddPreviewMouseWheelHandler((DependencyObject)window, MouseWheelHandler);
-            Mouse.AddPreviewMouseDownHandler((DependencyObject)window, MouseDownHandler);
+            Mouse.AddPreviewMouseWheelHandler((DependencyObject) window, MouseWheelHandler);
+            Mouse.AddPreviewMouseDownHandler((DependencyObject) window, MouseDownHandler);
             this.connectedWindow = window;
         }
 
         void MouseWheelHandler(object sender, MouseWheelEventArgs mouseWheelEventArgs)
         {
-            if (mouseWheelEventArgs.Delta > 0)
+            var delta = mouseWheelEventArgs.Delta;
+            var isSwitchingDirection = GetIsSwitchingDirection(delta);
+            if (isSwitchingDirection)
             {
+                ResetAccumulatedWheelDelta();
+            }
+
+            currentDelta += delta;
+
+            TriggerScrollEventsIfNeeded();
+        }
+
+        void TriggerScrollEventsIfNeeded()
+        {
+            const int scrollAmountNeeded =
+                Mouse.MouseWheelDeltaForOneLine;
+            if (currentDelta > scrollAmountNeeded)
+            {
+                ResetAccumulatedWheelDelta();
                 OnWheelScrolledDown();
-            } else if (mouseWheelEventArgs.Delta < 0)
+            }
+            else if (currentDelta < -scrollAmountNeeded)
             {
+                ResetAccumulatedWheelDelta();
                 OnWheelScrolledUp();
             }
+        }
+
+        bool GetIsSwitchingDirection(int delta)
+        {
+            return ((delta > 0) && (currentDelta < 0)) ||
+                   ((delta < 0) && (currentDelta > 0));
         }
 
         protected virtual void OnWheelScrolledDown()

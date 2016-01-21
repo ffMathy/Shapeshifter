@@ -9,5 +9,7 @@
         event EventHandler WheelScrolledUp;
 
         event EventHandler WheelTilted;
+
+        void ResetAccumulatedWheelDelta();
     }
 }

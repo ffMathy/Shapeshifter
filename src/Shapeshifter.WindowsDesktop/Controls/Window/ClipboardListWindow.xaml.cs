@@ -59,7 +59,7 @@
             mouseWheelHook.WheelTilted += MouseWheelHook_WheelTilted;
         }
 
-        private void MouseWheelHook_WheelTilted(object sender, EventArgs e)
+        void MouseWheelHook_WheelTilted(object sender, EventArgs e)
         {
             viewModel.SwapBetweenPanes();
         }
@@ -135,6 +135,7 @@
             UserInterfaceHiddenEventArgument e)
         {
             Hide();
+            mouseWheelHook.ResetAccumulatedWheelDelta();
         }
 
         void ViewModel_UserInterfaceShown(
