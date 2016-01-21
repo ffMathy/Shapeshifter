@@ -45,25 +45,37 @@
             }
         }
 
-        public void Connect(IHookableWindow window)
+        public void Connect(
+            IHookableWindow window)
         {
-            Mouse.AddPreviewMouseWheelHandler((DependencyObject) window, MouseWheelHandler);
-            Mouse.AddPreviewMouseDownHandler((DependencyObject) window, MouseDownHandler);
-            this.connectedWindow = window;
+            var dependencyObject = (DependencyObject) window;
+            Mouse.AddPreviewMouseWheelHandler(
+                dependencyObject, MouseWheelHandler);
+            Mouse.AddPreviewMouseDownHandler(
+                dependencyObject, MouseDownHandler);
+
+            connectedWindow = window;
         }
 
-        void MouseWheelHandler(object sender, MouseWheelEventArgs mouseWheelEventArgs)
+        void MouseWheelHandler(
+            object sender, 
+            MouseWheelEventArgs mouseWheelEventArgs)
         {
             var delta = mouseWheelEventArgs.Delta;
+            CheckForSwitchingDirections(delta);
+
+            currentDelta += delta;
+
+            TriggerScrollEventsIfNeeded();
+        }
+
+        void CheckForSwitchingDirections(int delta)
+        {
             var isSwitchingDirection = GetIsSwitchingDirection(delta);
             if (isSwitchingDirection)
             {
                 ResetAccumulatedWheelDelta();
             }
-
-            currentDelta += delta;
-
-            TriggerScrollEventsIfNeeded();
         }
 
         void TriggerScrollEventsIfNeeded()
