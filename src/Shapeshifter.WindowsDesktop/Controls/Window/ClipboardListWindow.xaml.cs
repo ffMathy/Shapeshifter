@@ -9,6 +9,7 @@
 
     using Interfaces;
 
+    using Services.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interfaces;
 
@@ -22,30 +23,53 @@
           IClipboardListWindow
     {
         readonly IMainWindowHandleContainer handleContainer;
-
         readonly IKeyInterceptor keyInterceptor;
-
         readonly IClipboardListViewModel viewModel;
-
         readonly IWindowMessageHook windowMessageHook;
+        readonly IMouseWheelHook mouseWheelHook;
 
         public ClipboardListWindow(
             IClipboardListViewModel viewModel,
             IKeyInterceptor keyInterceptor,
             IWindowMessageHook windowMessageHook,
+            IMouseWheelHook mouseWheelHook,
             IMainWindowHandleContainer handleContainer)
         {
             this.handleContainer = handleContainer;
             this.keyInterceptor = keyInterceptor;
             this.viewModel = viewModel;
             this.windowMessageHook = windowMessageHook;
+            this.mouseWheelHook = mouseWheelHook;
 
             SourceInitialized += ClipboardListWindow_SourceInitialized;
             Activated += ClipboardListWindow_Activated;
 
             InitializeComponent();
+            SetupMouseHook();
 
             SetupViewModel();
+        }
+
+        void SetupMouseHook()
+        {
+            mouseWheelHook.WheelScrolledDown += MouseWheelHookOnScrolledDown;
+            mouseWheelHook.WheelScrolledUp += MouseWheelHookOnScrolledUp;
+            mouseWheelHook.WheelTilted += MouseWheelHook_WheelTilted;
+        }
+
+        void MouseWheelHook_WheelTilted(object sender, EventArgs e)
+        {
+            viewModel.SwapBetweenPanes();
+        }
+
+        void MouseWheelHookOnScrolledUp(object sender, EventArgs eventArgs)
+        {
+            viewModel.ShowPreviousItem();
+        }
+
+        void MouseWheelHookOnScrolledDown(object sender, EventArgs eventArgs)
+        {
+            viewModel.ShowNextItem();
         }
 
         void ClipboardListWindow_SourceInitialized(object sender, EventArgs e)
@@ -109,6 +133,7 @@
             UserInterfaceHiddenEventArgument e)
         {
             Hide();
+            mouseWheelHook.ResetAccumulatedWheelDelta();
         }
 
         void ViewModel_UserInterfaceShown(
@@ -126,6 +151,16 @@
         public void RemoveHwndSourceHook(HwndSourceHook hook)
         {
             HandleSource.RemoveHook(hook);
+        }
+
+        public void Dispose()
+        {
+            viewModel.UserInterfaceShown -= ViewModel_UserInterfaceShown;
+            viewModel.UserInterfaceHidden -= ViewModel_UserInterfaceHidden;
+
+            mouseWheelHook.WheelScrolledDown -= MouseWheelHookOnScrolledDown;
+            mouseWheelHook.WheelScrolledUp -= MouseWheelHookOnScrolledUp;
+            mouseWheelHook.WheelTilted -= MouseWheelHook_WheelTilted;
         }
     }
 }

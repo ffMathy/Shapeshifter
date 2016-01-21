@@ -22,5 +22,11 @@
         ObservableCollection<IClipboardDataControlPackage> Elements { get; }
 
         ObservableCollection<IAction> Actions { get; }
+
+        void ShowNextItem();
+
+        void ShowPreviousItem();
+
+        void SwapBetweenPanes();
     }
 }
