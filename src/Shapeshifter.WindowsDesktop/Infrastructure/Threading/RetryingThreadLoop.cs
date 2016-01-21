@@ -46,7 +46,7 @@
                 job.CancellationToken);
         }
 
-        static async Task WrapJobInRetryingMechanism(
+        async Task WrapJobInRetryingMechanism(
             RetryingThreadLoopJob job)
         {
             var attempts = 0;
@@ -56,6 +56,7 @@
             {
                 attempts++;
                 await job.Action();
+                threadLoop.Stop();
             }
             catch (Exception ex)
             {
