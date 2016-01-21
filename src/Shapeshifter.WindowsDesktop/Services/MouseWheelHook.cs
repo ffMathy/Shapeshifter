@@ -1,10 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services
 {
     using System;
-    using System.Windows;
     using System.Windows.Input;
-
-    using Controls.Window.Interfaces;
 
     using Infrastructure.Events;
 
@@ -14,9 +11,9 @@
 
     public class MouseWheelHook: IMouseWheelHook
     {
-        IClipboardListWindow mainWindow;
-
         int currentDelta;
+
+        Message currentScrollTypeMessage;
 
         public event EventHandler WheelScrolledDown;
 
@@ -26,48 +23,9 @@
 
         public bool IsConnected { get; private set; }
 
-        public MouseWheelHook(
-            IClipboardListWindow mainWindow)
-        {
-            this.mainWindow = mainWindow;
-        }
-
         public void ResetAccumulatedWheelDelta()
         {
             currentDelta = 0;
-        }
-
-        void MouseDownHandler(
-            object sender,
-            MouseButtonEventArgs e)
-        {
-            if ((e.XButton1 == MouseButtonState.Pressed) ||
-                (e.XButton2 == MouseButtonState.Pressed))
-            {
-                OnWheelTilted();
-            }
-        }
-
-        void MouseWheelHandler(
-            object sender,
-            MouseWheelEventArgs mouseWheelEventArgs)
-        {
-            var delta = mouseWheelEventArgs.Delta;
-            CheckForSwitchingDirections(delta);
-
-            currentDelta += delta;
-
-            TriggerScrollEventsIfNeeded();
-        }
-
-        void CheckForSwitchingDirections(
-            int delta)
-        {
-            var isSwitchingDirection = GetIsSwitchingDirection(delta);
-            if (isSwitchingDirection)
-            {
-                ResetAccumulatedWheelDelta();
-            }
         }
 
         void TriggerScrollEventsIfNeeded()
@@ -77,19 +35,50 @@
             if (currentDelta > scrollAmountNeeded)
             {
                 ResetAccumulatedWheelDelta();
-                OnWheelScrolledDown();
+                TriggerNeededEventsOnIncreasingDelta();
             }
             else if (currentDelta < -scrollAmountNeeded)
             {
                 ResetAccumulatedWheelDelta();
-                OnWheelScrolledUp();
+                TriggerNeededEventsOnDecreasingDelta();
+            }
+        }
+
+        void TriggerNeededEventsOnDecreasingDelta()
+        {
+            switch (currentScrollTypeMessage)
+            {
+
+                case Message.WM_MOUSEWHEEL:
+                    OnWheelScrolledUp();
+                    break;
+
+                case Message.WM_MOUSEHWHEEL:
+                    OnWheelTilted();
+                    break;
+            }
+        }
+
+        void TriggerNeededEventsOnIncreasingDelta()
+        {
+            switch (currentScrollTypeMessage) {
+
+                case Message.WM_MOUSEWHEEL:
+                    OnWheelScrolledDown();
+                    break;
+
+                case Message.WM_MOUSEHWHEEL:
+                    OnWheelTilted();
+                    break;
             }
         }
 
         bool GetIsSwitchingDirection(
-            int delta)
+            int delta,
+            Message scrollTypeMessage)
         {
-            return ((delta > 0) && (currentDelta < 0)) ||
+            return (scrollTypeMessage != currentScrollTypeMessage) ||
+                   ((delta > 0) && (currentDelta < 0)) ||
                    ((delta < 0) && (currentDelta > 0));
         }
 
@@ -111,38 +100,89 @@
         public void Install(
             IntPtr windowHandle)
         {
-            var dependencyObject = (DependencyObject) mainWindow;
-            Mouse.AddPreviewMouseWheelHandler(
-                dependencyObject,
-                MouseWheelHandler);
-            Mouse.AddPreviewMouseDownHandler(
-                dependencyObject,
-                MouseDownHandler);
+            if (IsConnected)
+            {
+                throw new InvalidOperationException("Can't connect when already connected.");
+            }
 
             IsConnected = true;
         }
 
         public void Uninstall()
         {
-            var dependencyObject = (DependencyObject) mainWindow;
-            Mouse.RemovePreviewMouseWheelHandler(
-                dependencyObject,
-                MouseWheelHandler);
-            Mouse.RemovePreviewMouseDownHandler(
-                dependencyObject,
-                MouseDownHandler);
+            if (!IsConnected)
+            {
+                throw new InvalidOperationException("Can't disconnect when already disconnected.");
+            }
 
-            mainWindow = null;
+            IsConnected = false;
         }
 
         public void ReceiveMessageEvent(
             WindowMessageReceivedArgument e)
         {
-            if ((e.Message == Message.WM_MOUSEWHEEL) ||
-                (e.Message == Message.WM_MOUSEHWHEEL))
+            switch (e.Message)
             {
-                
+                case Message.WM_MOUSEWHEEL:
+                case Message.WM_MOUSEHWHEEL:
+                    HandleScrollingMessage(e);
+                    break;
+
+                case Message.WM_XBUTTONDOWN:
+                    HandleExtraButtonMessage(e);
+                    break;
             }
+        }
+
+        void HandleExtraButtonMessage(
+            WindowMessageReceivedArgument e)
+        {
+            var buttonClicked = GetExtraButtonClickedFromWordParameter(e);
+
+            const int XBUTTON1 = 0x0001;
+            const int XBUTTON2 = 0x0002;
+            if ((buttonClicked == XBUTTON1) || 
+                (buttonClicked == XBUTTON2))
+            {
+                OnWheelTilted();
+            }
+        }
+
+        void HandleScrollingMessage(WindowMessageReceivedArgument e)
+        {
+            var delta = GetDeltaFromWordParameter(e);
+            ResetDeltaIfNewScrollDirection(e, delta);
+
+            currentDelta += delta;
+            currentScrollTypeMessage = e.Message;
+
+            TriggerScrollEventsIfNeeded();
+        }
+
+        void ResetDeltaIfNewScrollDirection(WindowMessageReceivedArgument e, short delta)
+        {
+            var isSwitchingDirection = GetIsSwitchingDirection(
+                delta,
+                e.Message);
+            if (isSwitchingDirection)
+            {
+                ResetAccumulatedWheelDelta();
+            }
+        }
+
+        static short GetDeltaFromWordParameter(WindowMessageReceivedArgument e)
+        {
+            return GetHighOrderWord(e);
+        }
+
+        static short GetExtraButtonClickedFromWordParameter(WindowMessageReceivedArgument e)
+        {
+            return GetHighOrderWord(e);
+        }
+
+        static short GetHighOrderWord(WindowMessageReceivedArgument e)
+        {
+            return (short)(e.WordParameter.ToInt32() >> 16);
         }
     }
 }
