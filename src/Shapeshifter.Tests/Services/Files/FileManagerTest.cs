@@ -22,7 +22,7 @@
             string temporaryPath;
             using (var fileManager = container.Resolve<IFileManager>())
             {
-                permanentPath = fileManager.PrepareFolder("Permanent");
+                permanentPath = fileManager.GetIsolatedPathRoot("Permanent");
                 temporaryPath = fileManager.PrepareTemporaryFolder("Temporary");
 
                 Assert.IsTrue(Directory.Exists(permanentPath));

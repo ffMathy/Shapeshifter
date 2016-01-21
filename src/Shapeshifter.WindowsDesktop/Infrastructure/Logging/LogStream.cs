@@ -27,7 +27,7 @@
 
         void Prepare()
         {
-            var folder = fileManager.PrepareFolder();
+            var folder = fileManager.GetIsolatedPathRoot();
             logFilePath = Path.Combine(folder, "Application.log");
         }
 

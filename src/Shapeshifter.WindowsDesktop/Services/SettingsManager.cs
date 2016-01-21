@@ -14,7 +14,7 @@
         public SettingsManager(
             IFileManager fileManager)
         {
-            settingsPath = fileManager.PrepareFolder("Settings");
+            settingsPath = fileManager.PrepareIsolatedFolder("Settings");
         }
 
         public void SaveSetting<T>(string key, T value)

@@ -108,7 +108,7 @@
             var destinationFilePath = Path.Combine(
                 directory,
                 fileData.FileName);
-            fileManager.DeleteFileIfExists(destinationFilePath);
+            fileManager.DeleteFileIfExistsAsync(destinationFilePath);
             File.Copy(fileData.FullPath, destinationFilePath);
         }
 
@@ -118,7 +118,7 @@
             var compressedFolderDirectory = fileManager.PrepareTemporaryFolder($"Compressed folders");
             var zipFile = Path.Combine(compressedFolderDirectory, $"{directoryName}.zip");
 
-            fileManager.DeleteFileIfExists(zipFile);
+            fileManager.DeleteFileIfExistsAsync(zipFile);
             ZipFile.CreateFromDirectory(directory, zipFile);
 
             return zipFile;

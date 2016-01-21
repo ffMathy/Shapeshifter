@@ -4,24 +4,34 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
+
+    using Infrastructure.Threading;
+    using Infrastructure.Threading.Interfaces;
 
     using Interfaces;
 
     class FileManager
         : IFileManager
     {
+        readonly IRetryingThreadLoop retryingThreadLoop;
+
         readonly ICollection<string> temporaryPaths;
 
-        public FileManager()
+        public FileManager(
+            IRetryingThreadLoop retryingThreadLoop)
         {
+            this.retryingThreadLoop = retryingThreadLoop;
+
             temporaryPaths = new HashSet<string>();
-            ClearDirectory();
+
+            PurgeTemporaryDirectory();
         }
 
-        static void ClearDirectory()
+        void PurgeTemporaryDirectory()
         {
-            var directory = PrepareIsolatedTemporaryFolder();
-            Directory.Delete(directory, true);
+            var directory = PrepareTemporaryFolder();
+            DeleteIsolatedDirectoryIfExistsAsync(directory);
         }
 
         public void Dispose()
@@ -34,11 +44,35 @@
 
         void PurgePath(string temporaryPath)
         {
-            DeleteFileIfExists(temporaryPath);
-            DeleteDirectoryIfExists(temporaryPath);
+            DeleteFileIfExistsAsync(temporaryPath);
+            DeleteDirectoryIfExistsAsync(temporaryPath);
         }
 
-        public void DeleteFileIfExists(string path)
+        static RetryingThreadLoopJob CreateRetryingFileJob(
+            Func<Task> task)
+        {
+            return new RetryingThreadLoopJob
+            {
+                Action = task,
+                AttemptsBeforeFailing = 5,
+                IntervalInMilliseconds = 1000,
+                IsExceptionIgnored = IsExceptionIgnored
+            };
+        }
+
+        static bool IsExceptionIgnored(Exception ex)
+        {
+            return ex is IOException;
+        }
+
+        public Task DeleteFileIfExistsAsync(string path)
+        {
+            return retryingThreadLoop.StartAsync(
+                CreateRetryingFileJob(
+                    async () => DeleteFileIfExists(path)));
+        }
+
+        static void DeleteFileIfExists(string path)
         {
             if (File.Exists(path))
             {
@@ -46,7 +80,26 @@
             }
         }
 
-        public void DeleteDirectoryIfExists(string path)
+        public Task DeleteIsolatedFileIfExistsAsync(string path)
+        {
+            return DeleteFileIfExistsAsync(
+                GetFullPathFromIsolatedPath(path));
+        }
+
+        public Task DeleteIsolatedDirectoryIfExistsAsync(string path)
+        {
+            return DeleteDirectoryIfExistsAsync(
+                GetFullPathFromIsolatedPath(path));
+        }
+
+        public Task DeleteDirectoryIfExistsAsync(string path)
+        {
+            return retryingThreadLoop.StartAsync(
+                CreateRetryingFileJob(
+                    async () => DeleteDirectoryIfExists(path)));
+        }
+
+        static void DeleteDirectoryIfExists(string path)
         {
             if (Directory.Exists(path))
             {
@@ -54,13 +107,14 @@
             }
         }
 
-        static string PrepareIsolatedFolder()
+        static string GetIsolatedPathRoot()
         {
-            return PrepareIsolatedFolder(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+            return PrepareShapeshifterFolder(
+                Environment.GetFolderPath(
+                    Environment.SpecialFolder.LocalApplicationData));
         }
 
-        static string PrepareIsolatedFolder(string basePath)
+        static string PrepareShapeshifterFolder(string basePath)
         {
             const string folderName = "Shapeshifter";
 
@@ -70,9 +124,10 @@
             return path;
         }
 
-        static string PrepareIsolatedTemporaryFolder()
+        static string PrepareTemporaryFolder()
         {
-            return PrepareIsolatedFolder(Path.GetTempPath());
+            return PrepareShapeshifterFolder(
+                Path.GetTempPath());
         }
 
         public string FindCommonFolderFromPaths(IReadOnlyCollection<string> paths)
@@ -125,35 +180,35 @@
             return originPath.Split('\\', '/');
         }
 
-        public string PrepareNewFolder(string relativePath)
+        public string PrepareNewIsolatedFolder(string relativePath)
         {
             var count = 0;
 
             string finalPath = null;
             while ((finalPath == null) || Directory.Exists(finalPath))
             {
-                finalPath = GetFullPathFromRelativePath(
+                finalPath = GetFullPathFromIsolatedPath(
                     Path.Combine(relativePath, (++count).ToString()));
             }
 
-            return PrepareFullFolderPath(finalPath);
+            return PrepareFolder(finalPath);
         }
 
-        public string PrepareFolder(string relativePath = null)
+        public string PrepareFolder(string path)
         {
-            var finalPath = GetFullPathFromRelativePath(relativePath);
-            return PrepareFullFolderPath(finalPath);
+            CreateDirectoryIfNotExists(path);
+            return path;
         }
 
-        static string PrepareFullFolderPath(string finalPath)
+        public string PrepareIsolatedFolder(string relativePath = null)
         {
-            CreateDirectoryIfNotExists(finalPath);
-            return finalPath;
+            var finalPath = GetFullPathFromIsolatedPath(relativePath);
+            return PrepareFolder(finalPath);
         }
 
         public string PrepareTemporaryFolder(string relativePath)
         {
-            var finalPath = GetFullPathFromRelativeTemporaryPath(relativePath);
+            var finalPath = GetFullPathFromTemporaryPath(relativePath);
             WatchDirectory(finalPath);
 
             return finalPath;
@@ -173,9 +228,9 @@
             }
         }
 
-        static string GetFullPathFromRelativePath(string path = null)
+        static string GetFullPathFromIsolatedPath(string path = null)
         {
-            var isolatedFolderPath = PrepareIsolatedFolder();
+            var isolatedFolderPath = GetIsolatedPathRoot();
 
             var finalPath = path == null
                                 ? isolatedFolderPath
@@ -183,9 +238,9 @@
             return finalPath;
         }
 
-        static string GetFullPathFromRelativeTemporaryPath(string path)
+        static string GetFullPathFromTemporaryPath(string path)
         {
-            var isolatedFolderPath = PrepareIsolatedTemporaryFolder();
+            var isolatedFolderPath = PrepareTemporaryFolder();
 
             var finalPath = Path.Combine(isolatedFolderPath, path);
             return finalPath;
@@ -193,7 +248,7 @@
 
         public string WriteBytesToTemporaryFile(string fileName, byte[] bytes)
         {
-            var finalPath = GetFullPathFromRelativeTemporaryPath(fileName);
+            var finalPath = GetFullPathFromTemporaryPath(fileName);
             temporaryPaths.Add(finalPath);
 
             File.WriteAllBytes(finalPath, bytes);

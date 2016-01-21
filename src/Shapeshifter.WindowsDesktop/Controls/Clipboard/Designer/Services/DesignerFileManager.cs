@@ -15,19 +15,19 @@
             return null;
         }
 
-        public string PrepareFolder(string relativePath)
+        public string GetIsolatedPathRoot(string relativePath)
         {
             return null;
         }
 
-        public string PrepareNewFolder(string relativePath)
+        public string PrepareNewIsolatedFolder(string relativePath)
         {
             return null;
         }
 
-        public void DeleteDirectoryIfExists(string path) { }
+        public void DeleteDirectoryIfExistsAsync(string path) { }
 
-        public void DeleteFileIfExists(string path) { }
+        public void DeleteFileIfExistsAsync(string path) { }
 
         public string FindCommonFolderFromPaths(IReadOnlyCollection<string> paths)
         {

@@ -8,19 +8,13 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
 
     public class RetryingThreadLoopJob
     {
-        public Func<Task> Action { get; }
-        public IReadOnlyCollection<Type> IgnoredExceptionTypes { get; }
+        public Func<Task> Action { get; set; }
+        public Func<Exception, bool> IsExceptionIgnored { get; set; }
 
-        public int Attempts { get; }
-        public int Interval { get; }
-
-        public CancellationToken CancellationToken { get; }
+        public CancellationToken CancellationToken { get; set; }
             = default(CancellationToken);
 
-        public RetryingThreadLoopJob(
-            Func<Task> action)
-        {
-            Action = action;
-        }
+        public int AttemptsBeforeFailing { get; set; }
+        public int IntervalInMilliseconds { get; set; }
     }
 }
