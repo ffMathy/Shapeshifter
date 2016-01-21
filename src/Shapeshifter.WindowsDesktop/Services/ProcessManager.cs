@@ -67,7 +67,7 @@
         {
             try
             {
-                if (HasProcessExited(process))
+                if (process.HasExited)
                 {
                     return;
                 }
@@ -83,16 +83,6 @@
             {
                 process.Dispose();
             }
-        }
-
-        static bool HasProcessExited(Process process)
-        {
-            process.Refresh();
-            if (process.HasExited)
-            {
-                return true;
-            }
-            return false;
         }
 
         static bool CloseMainWindow(Process process)
