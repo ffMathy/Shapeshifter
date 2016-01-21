@@ -2,7 +2,10 @@
 {
     using System;
 
-    public interface IMouseWheelHook: IHookService
+    using Messages.Interfaces;
+
+    public interface IMouseWheelHook
+        : IWindowMessageInterceptor
     {
         event EventHandler WheelScrolledDown;
 

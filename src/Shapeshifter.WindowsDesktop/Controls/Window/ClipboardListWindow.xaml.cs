@@ -32,6 +32,7 @@
             IClipboardListViewModel viewModel,
             IKeyInterceptor keyInterceptor,
             IWindowMessageHook windowMessageHook,
+            IMouseWheelHook mouseWheelHook,
             IMainWindowHandleContainer handleContainer)
         {
             this.handleContainer = handleContainer;
