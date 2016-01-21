@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 using Shapeshifter.WindowsDesktop.Services.Interfaces;
-using System;
+
 using System.Collections.Generic;
 
 namespace Shapeshifter.WindowsDesktop.Services

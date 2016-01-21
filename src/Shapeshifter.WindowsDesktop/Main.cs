@@ -17,7 +17,7 @@
     using Services.Updates.Interfaces;
 
     using Application = System.Windows.Application;
-    using Controls.Window;
+
     using Controls.Window.Factories.Interfaces;
 
     public class Main: ISingleInstance
