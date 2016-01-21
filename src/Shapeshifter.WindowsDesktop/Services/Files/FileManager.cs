@@ -42,10 +42,10 @@
             }
         }
 
-        void PurgePath(string temporaryPath)
+        static void PurgePath(string temporaryPath)
         {
-            DeleteFileIfExistsAsync(temporaryPath);
-            DeleteDirectoryIfExistsAsync(temporaryPath);
+            DeleteFileIfExists(temporaryPath);
+            DeleteDirectoryIfExists(temporaryPath);
         }
 
         static RetryingThreadLoopJob CreateRetryingFileJob(

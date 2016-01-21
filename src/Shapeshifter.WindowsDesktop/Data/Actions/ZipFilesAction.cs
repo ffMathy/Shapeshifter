@@ -68,11 +68,11 @@
             var supportedDataCollection = await GetSupportedData(processedData);
             var firstSupportedData = supportedDataCollection.FirstOrDefault();
 
-            var zipFilePath = ZipData(firstSupportedData);
+            var zipFilePath = await ZipDataAsync(firstSupportedData);
             clipboardInjectionService.InjectFiles(zipFilePath);
         }
 
-        string ZipFileCollectionData(params IClipboardFileData[] fileDataItems)
+        async Task<string> ZipFileCollectionDataAsync(params IClipboardFileData[] fileDataItems)
         {
             if (fileDataItems.Length == 0)
             {
@@ -87,28 +87,29 @@
             var commonPath = fileManager.FindCommonFolderFromPaths(filePaths);
             var directoryName = Path.GetFileName(commonPath);
             var directoryPath = fileManager.PrepareTemporaryFolder(directoryName);
-            CopyFilesToTemporaryFolder(fileDataItems, directoryPath);
+            await CopyFilesToTemporaryFolderAsync(
+                fileDataItems, directoryPath);
 
             var zipFile = ZipDirectory(directoryPath);
             return zipFile;
         }
 
-        void CopyFilesToTemporaryFolder(
+        async Task CopyFilesToTemporaryFolderAsync(
             IEnumerable<IClipboardFileData> fileDataItems,
             string directory)
         {
             foreach (var fileData in fileDataItems)
             {
-                CopyFileToTemporaryFolder(directory, fileData);
+                await CopyFileToTemporaryFolderAsync(directory, fileData);
             }
         }
 
-        void CopyFileToTemporaryFolder(string directory, IClipboardFileData fileData)
+        async Task CopyFileToTemporaryFolderAsync(string directory, IClipboardFileData fileData)
         {
             var destinationFilePath = Path.Combine(
                 directory,
                 fileData.FileName);
-            fileManager.DeleteFileIfExistsAsync(destinationFilePath);
+            await fileManager.DeleteFileIfExistsAsync(destinationFilePath);
             File.Copy(fileData.FullPath, destinationFilePath);
         }
 
@@ -124,18 +125,18 @@
             return zipFile;
         }
 
-        string ZipData(IClipboardData data)
+        async Task<string> ZipDataAsync(IClipboardData data)
         {
             var clipboardFileData = data as IClipboardFileData;
             if (clipboardFileData != null)
             {
-                return ZipFileCollectionData(clipboardFileData);
+                return await ZipFileCollectionDataAsync(clipboardFileData);
             }
 
             var clipboardFileCollectionData = data as IClipboardFileCollectionData;
             if (clipboardFileCollectionData != null)
             {
-                return ZipFileCollectionData(
+                return await ZipFileCollectionDataAsync(
                     clipboardFileCollectionData
                         .Files
                         .ToArray());
