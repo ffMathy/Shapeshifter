@@ -188,7 +188,7 @@
     <Compile Include="Services\Interfaces\IMouseWheelHook.cs" />
     <Compile Include="Services\Interfaces\IRegistryManager.cs" />
     <Compile Include="Services\Interfaces\ISettingsManager.cs" />
-    <Compile Include="Services\MouseHook.cs" />
+    <Compile Include="Services\MouseWheelHook.cs" />
     <Compile Include="Services\RegistryManager.cs" />
     <Compile Include="Services\SettingsManager.cs" />
     <Compile Include="Services\Tray\Interfaces\ITrayContextMenuItem.cs" />

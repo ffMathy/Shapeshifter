@@ -32,7 +32,6 @@
             IClipboardListViewModel viewModel,
             IKeyInterceptor keyInterceptor,
             IWindowMessageHook windowMessageHook,
-            IMouseWheelHook mouseWheelHook,
             IMainWindowHandleContainer handleContainer)
         {
             this.handleContainer = handleContainer;
@@ -52,8 +51,6 @@
 
         void SetupMouseHook()
         {
-            mouseWheelHook.Connect(this);
-
             mouseWheelHook.WheelScrolledDown += MouseWheelHookOnScrolledDown;
             mouseWheelHook.WheelScrolledUp += MouseWheelHookOnScrolledUp;
             mouseWheelHook.WheelTilted += MouseWheelHook_WheelTilted;
