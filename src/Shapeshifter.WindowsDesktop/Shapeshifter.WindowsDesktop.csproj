@@ -291,7 +291,7 @@
     <Compile Include="Infrastructure\Threading\ThreadDelay.cs" />
     <Compile Include="Infrastructure\Threading\ThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\UserInterfaceThread.cs" />
-    <Compile Include="Main.cs" />
+    <Compile Include="Startup\ApplicationEntrypoint.cs" />
     <Compile Include="Mediators\PasteCombinationDurationMediator.cs" />
     <Compile Include="Mediators\Interfaces\IPasteCombinationDurationMediator.cs" />
     <Compile Include="Program.cs" />
@@ -366,6 +366,15 @@
     <Compile Include="Services\Web\LinkParser.cs" />
     <Compile Include="Services\Web\LinkType.cs" />
     <Compile Include="Services\Messages\WindowMessageHook.cs" />
+    <Compile Include="Startup\Interfaces\IMainWindowPreparationOperation.cs" />
+    <Compile Include="Startup\Interfaces\IPostPreparationOperation.cs" />
+    <Compile Include="Startup\Interfaces\IStartupOperation.cs" />
+    <Compile Include="Startup\Interfaces\IStartupPreparationOperation.cs" />
+    <Compile Include="Startup\Interfaces\ITrayPreparationOperation.cs" />
+    <Compile Include="Startup\MainWindowPreparationOperation.cs" />
+    <Compile Include="Startup\PostPreparationOperation.cs" />
+    <Compile Include="Startup\StartupPreparationOperation.cs" />
+    <Compile Include="Startup\TrayPreparationOperation.cs" />
     <Compile Include="Structures\FormatDataPair.cs" />
     <Compile Include="Controls\Window\Binders\PackageToActionBinder.cs" />
     <Compile Include="Controls\Window\ClipboardListWindow.xaml.cs">

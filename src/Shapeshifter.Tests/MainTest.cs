@@ -15,6 +15,8 @@
     using Services.Arguments.Interfaces;
     using Services.Interfaces;
 
+    using Startup;
+
     [TestClass]
     public class MainTest: TestBase
     {
@@ -28,7 +30,7 @@
                     c.RegisterFake<IProcessManager>();
                 });
 
-            var main = container.Resolve<Main>();
+            var main = container.Resolve<ApplicationEntrypoint>();
             await main.Start();
 
             var fakeWindow = container.Resolve<IClipboardListWindow>();
@@ -46,7 +48,7 @@
                     c.RegisterFake<IProcessManager>();
                 });
 
-            var main = container.Resolve<Main>();
+            var main = container.Resolve<ApplicationEntrypoint>();
             await main.Start();
 
             var fakeWindow = container.Resolve<IClipboardListWindow>();
@@ -75,7 +77,7 @@
                     c.RegisterFake<IProcessManager>();
                 });
 
-            var main = container.Resolve<Main>();
+            var main = container.Resolve<ApplicationEntrypoint>();
             await main.Start();
 
             var fakeWindow = container.Resolve<IClipboardListWindow>();

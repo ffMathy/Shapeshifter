@@ -14,6 +14,6 @@
 
         void LaunchCommand(string command, string arguments = null);
 
-        void CloseAllProcessesExceptCurrent();
+        void CloseAllDuplicateProcessesExceptCurrent();
     }
 }
