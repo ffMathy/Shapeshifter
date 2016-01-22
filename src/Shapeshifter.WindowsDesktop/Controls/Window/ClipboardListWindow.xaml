@@ -20,13 +20,13 @@
         WindowStyle="None"
         Background="#60000000"
         AllowsTransparency="True">
-    <Grid>
+    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="5" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <ListBox HorizontalAlignment="Left" SelectedItem="{Binding SelectedElement, Mode=TwoWay}"
+        <ListBox SelectedItem="{Binding SelectedElement, Mode=TwoWay}"
                  ItemsSource="{Binding Elements}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
