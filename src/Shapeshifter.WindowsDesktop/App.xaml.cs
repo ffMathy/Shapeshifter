@@ -7,6 +7,8 @@
 
     using Infrastructure.Dependencies;
 
+    using Startup;
+
     /// <summary>
     ///     Interaction logic for App.xaml
     /// </summary>
@@ -53,7 +55,7 @@
                 Current.Shutdown();
             };
 
-            var main = Container.Resolve<Main>();
+            var main = Container.Resolve<ApplicationEntrypoint>();
             main.Start(e.Args);
         }
 #pragma warning restore 4014

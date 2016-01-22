@@ -39,7 +39,7 @@
             SpawnProcess(command, Environment.CurrentDirectory);
         }
 
-        public void CloseAllProcessesExceptCurrent()
+        public void CloseAllDuplicateProcessesExceptCurrent()
         {
             using (var currentProcess = Process.GetCurrentProcess())
             {

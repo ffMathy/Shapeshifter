@@ -17,7 +17,7 @@
 
         public void LaunchCommand(string command, string arguments = null) { }
 
-        public void CloseAllProcessesExceptCurrent() { }
+        public void CloseAllDuplicateProcessesExceptCurrent() { }
 
         public void LaunchFile(string fileName, string arguments = null) { }
 
