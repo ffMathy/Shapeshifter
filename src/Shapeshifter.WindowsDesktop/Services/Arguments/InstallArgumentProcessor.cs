@@ -5,6 +5,8 @@
     using System.Linq;
     using System.Security.Cryptography.X509Certificates;
 
+    using Controls.Window.ViewModels.Interfaces;
+
     using Infrastructure.Environment.Interfaces;
 
     using Interfaces;
@@ -23,17 +25,20 @@
         readonly ICertificateManager certificateManager;
         readonly ISignHelper signHelper;
         readonly IEnvironmentInformation environmentInformation;
+        readonly ISettingsViewModel settingsViewModel;
 
         public InstallArgumentProcessor(
             IProcessManager processManager,
             ICertificateManager certificateManager,
             ISignHelper signHelper,
-            IEnvironmentInformation environmentInformation)
+            IEnvironmentInformation environmentInformation,
+            ISettingsViewModel settingsViewModel)
         {
             this.processManager = processManager;
             this.certificateManager = certificateManager;
             this.signHelper = signHelper;
             this.environmentInformation = environmentInformation;
+            this.settingsViewModel = settingsViewModel;
         }
 
         public bool Terminates
@@ -80,7 +85,14 @@
             var selfSignedCertificate = InstallCertificateIfNotFound();
             signHelper.SignAssemblyWithCertificate(targetExecutableFile, selfSignedCertificate);
 
+            ConfigureDefaultSettings();
+
             LaunchInstalledExecutable(targetExecutableFile, currentExecutableFile);
+        }
+
+        void ConfigureDefaultSettings()
+        {
+            settingsViewModel.StartWithWindows = true;
         }
 
         X509Certificate2 InstallCertificateIfNotFound()
