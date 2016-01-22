@@ -9,7 +9,7 @@
 
     using Infrastructure.Events;
 
-    public interface IClipboardListViewModel
+    public interface IClipboardListViewModel: INotifyPropertyChanged
     {
         event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
 

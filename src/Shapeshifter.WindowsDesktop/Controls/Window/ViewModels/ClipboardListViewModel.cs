@@ -31,8 +31,7 @@
     using Services.Screen.Interfaces;
 
     class ClipboardListViewModel:
-        IClipboardListViewModel,
-        INotifyPropertyChanged
+        IClipboardListViewModel
     {
         IClipboardDataControlPackage selectedElement;
 
