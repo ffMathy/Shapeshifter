@@ -5,7 +5,9 @@
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
     using System.Windows.Input;
 
@@ -20,12 +22,17 @@
 
     using Interfaces;
 
+    using JetBrains.Annotations;
+
     using Mediators.Interfaces;
 
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
+    using Services.Screen;
+    using Services.Screen.Interfaces;
 
     class ClipboardListViewModel:
-        IClipboardListViewModel
+        IClipboardListViewModel,
+        INotifyPropertyChanged
     {
         IClipboardDataControlPackage selectedElement;
 
@@ -40,16 +47,33 @@
         readonly IAsyncFilter asyncFilter;
         readonly IPerformanceHandleFactory performanceHandleFactory;
         readonly IUserInterfaceThread userInterfaceThread;
+        readonly IScreenManager screenManager;
+        ScreenInformation activeScreen;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
 
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public ObservableCollection<IClipboardDataControlPackage> Elements { get; }
 
         public ObservableCollection<IAction> Actions { get; }
+
+        public ScreenInformation ActiveScreen
+        {
+            get
+            {
+                return activeScreen;
+            }
+            set
+            {
+                if (Equals(value, activeScreen))
+                {
+                    return;
+                }
+                activeScreen = value;
+                OnPropertyChanged();
+            }
+        }
 
         public IAction SelectedAction
         {
@@ -59,8 +83,13 @@
             }
             set
             {
+                if (Equals(value, selectedAction))
+                {
+                    return;
+                }
+
                 selectedAction = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedAction)));
+                OnPropertyChanged();
             }
         }
 
@@ -72,8 +101,13 @@
             }
             set
             {
+                if (Equals(value, selectedElement))
+                {
+                    return;
+                }
+
                 selectedElement = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedElement)));
+                OnPropertyChanged();
 
                 lock (Elements)
                 {
@@ -82,16 +116,16 @@
             }
         }
 
+        [SuppressMessage("ReSharper", "SuggestBaseTypeForParameter")]
         public ClipboardListViewModel(
             IAction[] allActions,
             IClipboardUserInterfaceMediator clipboardUserInterfaceMediator,
-
-            // ReSharper disable once SuggestBaseTypeForParameter
             IKeyInterceptor hotkeyInterceptor,
             IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder,
             IAsyncFilter asyncFilter,
             IPerformanceHandleFactory performanceHandleFactory,
-            IUserInterfaceThread userInterfaceThread)
+            IUserInterfaceThread userInterfaceThread,
+            IScreenManager screenManager)
         {
             Elements = new ObservableCollection<IClipboardDataControlPackage>();
             Actions = new ObservableCollection<IAction>();
@@ -108,6 +142,7 @@
             this.asyncFilter = asyncFilter;
             this.performanceHandleFactory = performanceHandleFactory;
             this.userInterfaceThread = userInterfaceThread;
+            this.screenManager = screenManager;
 
             PreparePackageBinder(pasteAction);
 
@@ -269,6 +304,8 @@
 
         async void Mediator_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
         {
+            ActiveScreen = screenManager.GetPrimaryScreen();
+
             UserInterfaceShown?.Invoke(this, e);
         }
 
@@ -303,6 +340,14 @@
                 userInterfaceThread.Invoke(() => Elements.Insert(0, e.Package));
                 SelectedElement = e.Package;
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
