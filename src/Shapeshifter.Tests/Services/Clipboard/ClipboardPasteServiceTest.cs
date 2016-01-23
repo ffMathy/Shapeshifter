@@ -5,15 +5,11 @@
 
     using Autofac;
 
-    using Infrastructure.Threading.Interfaces;
-
     using Interfaces;
 
     using Messages.Interceptors.Hotkeys.Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    using Native.Interfaces;
 
     using NSubstitute;
 

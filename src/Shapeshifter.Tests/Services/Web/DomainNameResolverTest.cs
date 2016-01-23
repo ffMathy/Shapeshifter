@@ -4,8 +4,6 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Autofac;
-
     using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;

@@ -2,8 +2,6 @@
 {
     using System;
 
-    using Autofac;
-
     using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;

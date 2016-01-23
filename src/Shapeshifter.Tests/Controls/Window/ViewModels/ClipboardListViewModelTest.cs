@@ -6,8 +6,6 @@
 
     using Autofac;
 
-    using Binders.Interfaces;
-
     using Data.Actions.Interfaces;
     using Data.Interfaces;
 

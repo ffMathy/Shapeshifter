@@ -1,7 +1,5 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Unwrappers
 {
-    using Autofac;
-
     using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;

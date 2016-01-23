@@ -6,7 +6,6 @@
 
     using Infrastructure.Dependencies;
     using Infrastructure.Environment.Interfaces;
-    using Infrastructure.Threading.Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 

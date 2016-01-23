@@ -2,8 +2,6 @@
 {
     using System.Linq;
 
-    using Autofac;
-
     using Data.Interfaces;
 
     using FileCollection.Interfaces;

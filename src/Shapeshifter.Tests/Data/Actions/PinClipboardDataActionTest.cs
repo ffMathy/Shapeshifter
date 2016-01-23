@@ -2,8 +2,6 @@
 {
     using System.Threading.Tasks;
 
-    using Autofac;
-
     using Data.Interfaces;
 
     using Interfaces;

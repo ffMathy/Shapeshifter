@@ -3,8 +3,6 @@
     using System.IO;
     using System.Text;
 
-    using Autofac;
-
     using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;

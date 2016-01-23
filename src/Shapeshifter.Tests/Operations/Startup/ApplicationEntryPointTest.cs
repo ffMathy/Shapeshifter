@@ -15,7 +15,6 @@
     using Operations.Startup;
 
     using Services.Arguments.Interfaces;
-    using Services.Interfaces;
 
     [TestClass]
     public class ApplicationEntryPointTest: UnitTestFor<ApplicationEntrypoint>

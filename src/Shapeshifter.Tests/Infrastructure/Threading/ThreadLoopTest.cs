@@ -6,11 +6,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
     using System.Threading;
     using System.Threading.Tasks;
 
-    using Autofac;
-
     using Interfaces;
-
-    using Logging.Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
