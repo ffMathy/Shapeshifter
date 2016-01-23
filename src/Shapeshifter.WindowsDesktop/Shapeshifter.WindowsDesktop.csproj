@@ -148,6 +148,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controls\Designer\Services\IDesignerService.cs" />
+    <Compile Include="Controls\Window\Binders\Interfaces\IPackageToActionSwitch.cs" />
+    <Compile Include="Controls\Window\Binders\SelectedElementToActionsSwitchMechanism.cs" />
     <Compile Include="Controls\Window\Factories\Interfaces\ISettingsWindowFactory.cs" />
     <Compile Include="Controls\Window\Factories\SettingsWindowFactory.cs" />
     <Compile Include="Controls\Window\Interfaces\IHookableWindow.cs" />
@@ -188,6 +190,7 @@
     <Compile Include="Infrastructure\Threading\Interfaces\IRetryingThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\RetryingThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\RetryingThreadLoopJob.cs" />
+    <Compile Include="Mediators\Interfaces\ClipboardUserInterfacePane.cs" />
     <Compile Include="Services\Interfaces\IMouseWheelHook.cs" />
     <Compile Include="Services\Interfaces\IPixelConversionService.cs" />
     <Compile Include="Services\Interfaces\IRegistryManager.cs" />
@@ -321,11 +324,11 @@
     <Compile Include="Services\Keyboard\KeyDirection.cs" />
     <Compile Include="Services\Keyboard\KeyOperation.cs" />
     <Compile Include="Services\Messages\Interceptors\ClipboardCopyInterceptor.cs" />
-    <Compile Include="Mediators\ClipboardUserInterfaceMediator.cs" />
+    <Compile Include="Mediators\ClipboardUserInterfaceInteractionMediator.cs" />
     <Compile Include="Services\Clipboard\ClipboardInjectionService.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IClipboardInjectionService.cs" />
     <Compile Include="Services\Clipboard\DataSourceService.cs" />
-    <Compile Include="Infrastructure\Events\ControlEventArgument.cs" />
+    <Compile Include="Infrastructure\Events\PackageEventArgument.cs" />
     <Compile Include="Infrastructure\Events\DataCopiedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\PasteCombinationReleasedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\HotkeyFiredArgument.cs" />
@@ -351,7 +354,7 @@
     <Compile Include="Services\Images\ImagePersistenceService.cs" />
     <Compile Include="Services\Images\Interfaces\IImageFileInterpreter.cs" />
     <Compile Include="Services\Messages\Interceptors\Interfaces\IClipboardCopyInterceptor.cs" />
-    <Compile Include="Mediators\Interfaces\IClipboardUserInterfaceMediator.cs" />
+    <Compile Include="Mediators\Interfaces\IClipboardUserInterfaceInteractionMediator.cs" />
     <Compile Include="Services\Web\Downloader.cs" />
     <Compile Include="Services\Web\Interfaces\IDomainNameResolver.cs" />
     <Compile Include="Services\Interfaces\IHookService.cs" />

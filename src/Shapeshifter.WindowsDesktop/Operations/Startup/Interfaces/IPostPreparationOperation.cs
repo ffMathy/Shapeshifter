@@ -2,8 +2,5 @@
 {
     using Operations.Interfaces;
 
-    public interface IPostPreparationOperation: IOperation
-    {
-         
-    }
+    public interface IPostPreparationOperation: IOperation { }
 }

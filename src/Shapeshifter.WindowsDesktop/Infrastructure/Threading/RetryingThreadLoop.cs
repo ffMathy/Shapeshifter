@@ -6,7 +6,7 @@
 
     using Interfaces;
 
-    public class RetryingThreadLoop : IRetryingThreadLoop
+    public class RetryingThreadLoop: IRetryingThreadLoop
     {
         readonly IThreadLoop threadLoop;
 
@@ -41,7 +41,8 @@
                     nameof(job.AttemptsBeforeFailing));
             }
 
-            return threadLoop.StartAsync(async () => 
+            return threadLoop.StartAsync(
+                async () =>
                 await WrapJobInRetryingMechanism(job),
                 job.CancellationToken);
         }
@@ -61,12 +62,12 @@
             catch (Exception ex)
             {
                 exceptionsCaught.Add(ex);
-                if ((job.IsExceptionIgnored != null) && 
+                if ((job.IsExceptionIgnored != null) &&
                     !job.IsExceptionIgnored(ex))
                 {
                     throw;
                 }
-                
+
                 if (attempts == job.AttemptsBeforeFailing)
                 {
                     throw new AggregateException(

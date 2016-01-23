@@ -9,15 +9,17 @@
 
     using Services.Interfaces;
 
-    public interface IClipboardUserInterfaceMediator: IHookService
+    public interface IClipboardUserInterfaceInteractionMediator
+        : IHookService
     {
-        event EventHandler<ControlEventArgument> ControlAdded;
-
+        event EventHandler<PackageEventArgument> PackageAdded;
         event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
-
         event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
-
         event EventHandler<PastePerformedEventArgument> PastePerformed;
+        event EventHandler SelectedNextItem;
+        event EventHandler SelectedPreviousItem;
+
+        ClipboardUserInterfacePane CurrentPane { get; set; }
 
         IEnumerable<IClipboardDataControlPackage> ClipboardElements { get; }
 

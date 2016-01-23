@@ -347,7 +347,7 @@
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IKeyInterceptor>();
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
+                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
                     c.RegisterFake<IAsyncListDictionaryBinder
                         <IClipboardDataControlPackage, IAction>>();
                 });
@@ -361,7 +361,7 @@
                     new HotkeyFiredArgument(Key.Left, false));
 
             var fakeMediator = container
-                .Resolve<IClipboardUserInterfaceMediator>();
+                .Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.Received()
                         .Cancel();
         }
@@ -372,7 +372,7 @@
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IKeyInterceptor>();
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
+                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
                     c.RegisterFake<IAsyncListDictionaryBinder
                         <IClipboardDataControlPackage, IAction>>();
                 });
@@ -391,7 +391,7 @@
                     new HotkeyFiredArgument(Key.Right, false));
 
             var fakeMediator = container
-                .Resolve<IClipboardUserInterfaceMediator>();
+                .Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.Received()
                         .Cancel();
         }
@@ -401,7 +401,7 @@
         {
             var container = CreateContainer(
                 c => {
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
+                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
                     c
                         .RegisterFake<IAsyncListDictionaryBinder
                             <IClipboardDataControlPackage, IAction>>
@@ -416,7 +416,7 @@
             var fakeElement = Substitute.For<IClipboardDataControlPackage>();
             systemUnderTest.SelectedElement = fakeElement;
 
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.PastePerformed +=
                 Raise.Event<EventHandler
                     <PastePerformedEventArgument>>(new object());
@@ -430,7 +430,7 @@
         {
             var container = CreateContainer(
                 c => {
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
+                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
                     c
                         .RegisterFake<IAsyncListDictionaryBinder
                             <IClipboardDataControlPackage, IAction>>
@@ -442,7 +442,7 @@
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
             systemUnderTest.UserInterfaceShown += (sender, e) => showEventCount++;
 
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.UserInterfaceShown += Raise.Event<EventHandler<UserInterfaceShownEventArgument>>(new object());
 
             Assert.AreEqual(1, showEventCount);
@@ -453,7 +453,7 @@
         {
             var container = CreateContainer(
                 c => {
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
+                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
                     c
                         .RegisterFake<IAsyncListDictionaryBinder
                             <IClipboardDataControlPackage, IAction>>
@@ -465,7 +465,7 @@
             var systemUnderTest = container.Resolve<IClipboardListViewModel>();
             systemUnderTest.UserInterfaceHidden += (sender, e) => hideEventCount++;
 
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.UserInterfaceHidden += Raise.Event<EventHandler<UserInterfaceHiddenEventArgument>>(new object());
 
             Assert.AreEqual(1, hideEventCount);
@@ -477,7 +477,7 @@
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IKeyInterceptor>();
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
+                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
                     c.RegisterFake<IAsyncListDictionaryBinder
                         <IClipboardDataControlPackage, IAction>>();
                 });
@@ -491,7 +491,7 @@
                     new HotkeyFiredArgument(Key.Left, false));
 
             var fakeMediator = container
-                .Resolve<IClipboardUserInterfaceMediator>();
+                .Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.Received()
                         .Cancel();
         }
@@ -502,7 +502,7 @@
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IKeyInterceptor>();
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
+                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
                     c.RegisterFake<IAsyncListDictionaryBinder
                         <IClipboardDataControlPackage, IAction>>();
                 });
@@ -521,7 +521,7 @@
                     new HotkeyFiredArgument(Key.Left, false));
 
             var fakeMediator = container
-                .Resolve<IClipboardUserInterfaceMediator>();
+                .Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.DidNotReceive()
                         .Cancel();
         }
@@ -689,7 +689,7 @@
         [TestMethod]
         public void ControlAddedSetsSelected()
         {
-            var fakeUserInterfaceMediator = Substitute.For<IClipboardUserInterfaceMediator>();
+            var fakeUserInterfaceMediator = Substitute.For<IClipboardUserInterfaceInteractionMediator>();
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
@@ -699,10 +699,10 @@
                 });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
-            fakeUserInterfaceMediator.ControlAdded +=
-                Raise.Event<EventHandler<ControlEventArgument>>(
+            fakeUserInterfaceMediator.PackageAdded +=
+                Raise.Event<EventHandler<PackageEventArgument>>(
                     viewModel,
-                    new ControlEventArgument(
+                    new PackageEventArgument(
                         fakePackage));
 
             Assert.AreSame(fakePackage, viewModel.SelectedElement);
@@ -711,7 +711,7 @@
         [TestMethod]
         public void ControlAddedInsertsElement()
         {
-            var fakeUserInterfaceMediator = Substitute.For<IClipboardUserInterfaceMediator>();
+            var fakeUserInterfaceMediator = Substitute.For<IClipboardUserInterfaceInteractionMediator>();
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
 
@@ -721,10 +721,10 @@
                 });
 
             var viewModel = container.Resolve<IClipboardListViewModel>();
-            fakeUserInterfaceMediator.ControlAdded +=
-                Raise.Event<EventHandler<ControlEventArgument>>(
+            fakeUserInterfaceMediator.PackageAdded +=
+                Raise.Event<EventHandler<PackageEventArgument>>(
                     viewModel,
-                    new ControlEventArgument(
+                    new PackageEventArgument(
                         fakePackage));
 
             Assert.AreSame(fakePackage, viewModel.Elements.Single());

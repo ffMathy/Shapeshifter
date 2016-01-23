@@ -6,15 +6,13 @@
 
     using Autofac;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Files.Interfaces;
 
     using Interfaces;
 
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     using NSubstitute;
-
-    using WindowsDesktop;
-
-    using Files.Interfaces;
 
     using Octokit;
 
@@ -36,8 +34,7 @@
                 .Returns(fakeReleasesClient);
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IGitHubClientFactory>()
                      .CreateClient()
                      .Returns(fakeGitHubClient);
@@ -50,9 +47,9 @@
                         new[]
                         {
                             CreateRelease(
-                                1337, 
-                                "shapeshifter-v0.0.0.0", 
-                                false, 
+                                1337,
+                                "shapeshifter-v0.0.0.0",
+                                false,
                                 false)
                         }));
 
@@ -79,8 +76,7 @@
                 .Returns(fakeReleasesClient);
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IGitHubClientFactory>()
                      .CreateClient()
                      .Returns(fakeGitHubClient);
@@ -122,8 +118,7 @@
                 .Returns(fakeReleasesClient);
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IGitHubClientFactory>()
                      .CreateClient()
                      .Returns(fakeGitHubClient);
@@ -174,8 +169,7 @@
                         }));
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IGitHubClientFactory>()
                      .CreateClient()
                      .Returns(fakeGitHubClient);
@@ -183,9 +177,10 @@
                     c.RegisterFake<IDownloader>();
 
                     c.RegisterFake<IFileManager>()
-                        .WriteBytesToTemporaryFile(
-                            "Shapeshifter.exe", Arg.Any<byte[]>())
-                        .Returns("temporaryInstallPath");
+                     .WriteBytesToTemporaryFile(
+                         "Shapeshifter.exe",
+                         Arg.Any<byte[]>())
+                     .Returns("temporaryInstallPath");
 
                     c.RegisterFake<IProcessManager>();
                 });
@@ -235,9 +230,9 @@
         }
 
         static Release CreateRelease(
-            int id, 
-            string name, 
-            bool isPrerelease, 
+            int id,
+            string name,
+            bool isPrerelease,
             bool isDraft)
         {
             return new Release(

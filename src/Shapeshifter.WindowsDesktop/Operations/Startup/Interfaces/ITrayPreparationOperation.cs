@@ -2,8 +2,5 @@
 {
     using Operations.Interfaces;
 
-    public interface ITrayPreparationOperation: IOperation
-    {
-         
-    }
+    public interface ITrayPreparationOperation: IOperation { }
 }

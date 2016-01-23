@@ -13,7 +13,7 @@
         [Category("Integration")]
         public void ProjectFilesShouldCopyAllReferences()
         {
-            var root = Extensions.GetSolutionRoot(); 
+            var root = Extensions.GetSolutionRoot();
             var projectsToTest = new[]
             {
                 "Shapeshifter.WindowsDesktop",
@@ -23,7 +23,7 @@
             foreach (var project in projectsToTest)
             {
                 var projectPath = Path.Combine(
-                    root, 
+                    root,
                     project,
                     $"{project}.csproj");
 

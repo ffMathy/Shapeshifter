@@ -26,7 +26,7 @@
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IClipboardListWindow>();
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
+                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
                     c.RegisterFake<IProcessManager>();
                 });
 
@@ -44,7 +44,7 @@
             var container = CreateContainer(
                 c => {
                     c.RegisterFake<IClipboardListWindow>();
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
+                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
                     c.RegisterFake<IProcessManager>();
                 });
 
@@ -52,7 +52,7 @@
             await main.Start();
 
             var fakeWindow = container.Resolve<IClipboardListWindow>();
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
 
             fakeWindow.SourceInitialized += Raise.Event();
             fakeMediator.Received()
@@ -73,7 +73,7 @@
                          });
 
                     c.RegisterFake<IClipboardListWindow>();
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
+                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
                     c.RegisterFake<IProcessManager>();
                 });
 

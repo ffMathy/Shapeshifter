@@ -2,8 +2,5 @@
 {
     using Operations.Interfaces;
 
-    public interface IMainWindowPreparationOperation: IOperation
-    {
-         
-    }
+    public interface IMainWindowPreparationOperation: IOperation { }
 }

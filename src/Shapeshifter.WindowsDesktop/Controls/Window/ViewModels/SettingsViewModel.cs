@@ -9,7 +9,7 @@
 
     using Services.Interfaces;
 
-    class SettingsViewModel : ISettingsViewModel
+    class SettingsViewModel: ISettingsViewModel
     {
         readonly IRegistryManager registryManager;
         readonly IProcessManager processManager;

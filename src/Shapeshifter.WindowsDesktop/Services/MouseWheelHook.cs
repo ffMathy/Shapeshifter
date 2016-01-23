@@ -48,7 +48,6 @@
         {
             switch (currentScrollTypeMessage)
             {
-
                 case Message.WM_MOUSEWHEEL:
                     OnWheelScrolledUp();
                     break;
@@ -61,8 +60,8 @@
 
         void TriggerNeededEventsOnIncreasingDelta()
         {
-            switch (currentScrollTypeMessage) {
-
+            switch (currentScrollTypeMessage)
+            {
                 case Message.WM_MOUSEWHEEL:
                     OnWheelScrolledDown();
                     break;
@@ -141,7 +140,7 @@
 
             const int XBUTTON1 = 0x0001;
             const int XBUTTON2 = 0x0002;
-            if ((buttonClicked == XBUTTON1) || 
+            if ((buttonClicked == XBUTTON1) ||
                 (buttonClicked == XBUTTON2))
             {
                 OnWheelTilted();
@@ -182,7 +181,7 @@
 
         static short GetHighOrderWord(WindowMessageReceivedArgument e)
         {
-            return (short)(e.WordParameter.ToInt32() >> 16);
+            return (short) (e.WordParameter.ToInt32() >> 16);
         }
     }
 }

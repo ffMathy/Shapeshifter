@@ -1,13 +1,14 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services
 {
+    using System.IO;
+
     using Files.Interfaces;
 
     using Interfaces;
-    using System.IO;
 
     using Newtonsoft.Json;
 
-    class SettingsManager : ISettingsManager
+    class SettingsManager: ISettingsManager
     {
         readonly string settingsPath;
 

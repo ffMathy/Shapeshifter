@@ -2,19 +2,14 @@
 {
     using System;
     using System.Windows;
-    using System.Windows.Input;
     using System.Windows.Interop;
 
     using Infrastructure.Events;
 
     using Interfaces;
 
-    using Services.Interfaces;
-    using Services.Messages.Interceptors.Hotkeys.Interfaces;
-    using Services.Messages.Interfaces;
-
     using ViewModels.Interfaces;
-    
+
     public partial class ClipboardListWindow
         : Window,
           IClipboardListWindow

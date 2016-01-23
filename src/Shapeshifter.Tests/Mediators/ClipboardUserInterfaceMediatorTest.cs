@@ -34,7 +34,7 @@
                      .Returns(false);
                 });
 
-            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var mediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             mediator.Cancel();
 
             var fakeDurationMediator = container.Resolve<IPasteCombinationDurationMediator>();
@@ -48,7 +48,7 @@
         {
             var container = CreateContainer();
 
-            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var mediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             mediator.Disconnect();
         }
 
@@ -65,7 +65,7 @@
 
             var fakeWindow = Substitute.For<IHookableWindow>();
 
-            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var mediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             mediator.Connect(fakeWindow);
         }
 
@@ -79,7 +79,7 @@
                      .Returns(false);
                 });
 
-            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var mediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             Assert.IsFalse(mediator.IsConnected);
         }
 
@@ -93,7 +93,7 @@
                      .Returns(true);
                 });
 
-            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var mediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             Assert.IsTrue(mediator.IsConnected);
         }
 
@@ -118,7 +118,7 @@
                     fakePackage.Control.Returns(fakeControl);
                 });
 
-            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var mediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             mediator.Connect(null);
 
             var addedPackage = mediator.ClipboardElements.Single();
@@ -136,10 +136,10 @@
                     c.RegisterFake<IPasteCombinationDurationMediator>();
                     c.RegisterFake<IClipboardDataControlPackageFactory>();
                 });
-            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var mediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             object eventSender = null;
-            ControlEventArgument eventArgument = null;
-            mediator.ControlAdded += (sender, e) => {
+            PackageEventArgument eventArgument = null;
+            mediator.PackageAdded += (sender, e) => {
                 eventSender = sender;
                 eventArgument = e;
             };
@@ -162,7 +162,7 @@
                     c.RegisterFake<IClipboardDataControlPackageFactory>();
                 });
 
-            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var mediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             mediator.Connect(null);
 
             var fakeHotkeyHookService = container.Resolve<IPasteCombinationDurationMediator>();
@@ -180,7 +180,7 @@
                      .Returns(true);
                 });
 
-            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var mediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             mediator.Disconnect();
 
             var fakeKeyboardHookService = container.Resolve<IPasteCombinationDurationMediator>();
@@ -211,7 +211,7 @@
                      .Returns(fakePackage);
                 });
 
-            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var mediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             mediator.Connect(null);
 
             var numberOfPackagesBeforeDataCopied = mediator.ClipboardElements.Count();
@@ -249,7 +249,7 @@
                      .Returns(fakePackage);
                 });
 
-            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var mediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             mediator.Connect(null);
 
             var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
@@ -276,12 +276,12 @@
                         );
                 });
 
-            var mediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var mediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             mediator.Connect(null);
 
             object eventSender = null;
-            ControlEventArgument eventArgument = null;
-            mediator.ControlAdded += (sender, e) => {
+            PackageEventArgument eventArgument = null;
+            mediator.PackageAdded += (sender, e) => {
                 eventSender = sender;
                 eventArgument = e;
             };

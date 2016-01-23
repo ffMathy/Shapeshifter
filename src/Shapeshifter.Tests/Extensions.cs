@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.IO;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -12,7 +13,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
-    using System.IO;
+
     static class Extensions
     {
         static readonly IDictionary<Type, object> fakeCache;

@@ -4,9 +4,9 @@
 
     using Autofac;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Interfaces;
 
-    using Services.Web.Interfaces;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
     public class DownloaderTest: TestBase

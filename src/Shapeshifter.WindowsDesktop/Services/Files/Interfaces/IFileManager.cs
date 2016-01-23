@@ -11,7 +11,7 @@
           IDisposable
     {
         string WriteBytesToTemporaryFile(
-            string path, 
+            string path,
             byte[] bytes);
 
         string PrepareTemporaryFolder(
