@@ -59,10 +59,15 @@
 
         public static void RegisterFakesForDependencies<TClass>(this ContainerBuilder builder) where TClass : class
         {
-            var constructors = typeof(TClass)
+            var type = typeof(TClass);
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => type.IsAssignableFrom(p));
+
+            var constructors = types
+                .First()
                 .GetConstructors()
-                .Where(x => x.IsPublic && !x.IsStatic)
-                .Where(x => AreParametersInterfaces(x.GetParameters()));
+                .Where(x => x.IsPublic && !x.IsStatic);
             var targetConstructor = constructors
                 .OrderByDescending(x => x.GetParameters().Count())
                 .First();
@@ -78,12 +83,6 @@
                     .MakeGenericMethod(parameter.ParameterType);
                 genericMethod.Invoke(null, new object[] { builder });
             }
-        }
-
-        static bool AreParametersInterfaces(
-            IEnumerable<ParameterInfo> parameters)
-        {
-            return parameters.All(x => x.ParameterType.IsInterface);
         }
 
         public static void AssertWait(int timeout, Action expression)
