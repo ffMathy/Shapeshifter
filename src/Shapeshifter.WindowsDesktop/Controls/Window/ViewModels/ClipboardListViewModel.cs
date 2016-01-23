@@ -17,7 +17,6 @@
     using Data.Interfaces;
 
     using Infrastructure.Events;
-    using Infrastructure.Handles.Factories.Interfaces;
     using Infrastructure.Threading.Interfaces;
 
     using Interfaces;
@@ -26,27 +25,30 @@
 
     using Mediators.Interfaces;
 
+    using Services.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Screen;
     using Services.Screen.Interfaces;
 
-    class ClipboardListViewModel:
-        IClipboardListViewModel
+    class ClipboardListViewModel :
+        IClipboardListViewModel,
+        IDisposable
     {
         IClipboardDataControlPackage selectedElement;
-
         IAction selectedAction;
 
         bool isFocusInActionsList;
 
         readonly IAction[] allActions;
 
-        readonly IClipboardUserInterfaceMediator clipboardUserInterfaceMediator;
         readonly IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder;
+
+        readonly IClipboardUserInterfaceMediator clipboardUserInterfaceMediator;
         readonly IAsyncFilter asyncFilter;
-        readonly IPerformanceHandleFactory performanceHandleFactory;
         readonly IUserInterfaceThread userInterfaceThread;
         readonly IScreenManager screenManager;
+        readonly IMouseWheelHook mouseWheelHook;
+
         ScreenInformation activeScreen;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
@@ -118,13 +120,14 @@
         [SuppressMessage("ReSharper", "SuggestBaseTypeForParameter")]
         public ClipboardListViewModel(
             IAction[] allActions,
+            IAsyncFilter asyncFilter,
+
             IClipboardUserInterfaceMediator clipboardUserInterfaceMediator,
             IKeyInterceptor hotkeyInterceptor,
             IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder,
-            IAsyncFilter asyncFilter,
-            IPerformanceHandleFactory performanceHandleFactory,
             IUserInterfaceThread userInterfaceThread,
-            IScreenManager screenManager)
+            IScreenManager screenManager,
+            IMouseWheelHook mouseWheelHook)
         {
             Elements = new ObservableCollection<IClipboardDataControlPackage>();
             Actions = new ObservableCollection<IAction>();
@@ -139,14 +142,15 @@
             this.clipboardUserInterfaceMediator = clipboardUserInterfaceMediator;
             this.packageActionBinder = packageActionBinder;
             this.asyncFilter = asyncFilter;
-            this.performanceHandleFactory = performanceHandleFactory;
             this.userInterfaceThread = userInterfaceThread;
             this.screenManager = screenManager;
+            this.mouseWheelHook = mouseWheelHook;
 
             PreparePackageBinder(pasteAction);
 
             RegisterMediatorEvents(clipboardUserInterfaceMediator);
             RegisterKeyEvents(hotkeyInterceptor);
+            SetupMouseHook();
         }
 
         void PreparePackageBinder(
@@ -162,6 +166,28 @@
             {
                 SelectedAction = Actions.First();
             }
+        }
+
+        void SetupMouseHook()
+        {
+            mouseWheelHook.WheelScrolledDown += MouseWheelHookOnScrolledDown;
+            mouseWheelHook.WheelScrolledUp += MouseWheelHookOnScrolledUp;
+            mouseWheelHook.WheelTilted += MouseWheelHook_WheelTilted;
+        }
+
+        void MouseWheelHook_WheelTilted(object sender, EventArgs e)
+        {
+            SwapBetweenPanes();
+        }
+
+        void MouseWheelHookOnScrolledUp(object sender, EventArgs eventArgs)
+        {
+            ShowPreviousItem();
+        }
+
+        void MouseWheelHookOnScrolledDown(object sender, EventArgs eventArgs)
+        {
+            ShowNextItem();
         }
 
         void RegisterKeyEvents(
@@ -279,7 +305,8 @@
             }
         }
 
-        static T GetNewSelectedElementAfterHandlingUpKey<T>(IList<T> list, T selectedElement)
+        static T GetNewSelectedElementAfterHandlingUpKey<T>(
+            IList<T> list, T selectedElement)
         {
             var indexToUse = list.IndexOf(selectedElement) - 1;
             if (indexToUse < 0)
@@ -290,7 +317,8 @@
             return list[indexToUse];
         }
 
-        static T GetNewSelectedElementAfterHandlingDownKey<T>(IList<T> list, T selectedElement)
+        static T GetNewSelectedElementAfterHandlingDownKey<T>(
+            IList<T> list, T selectedElement)
         {
             var indexToUse = list.IndexOf(selectedElement) + 1;
             if (indexToUse == list.Count)
@@ -316,20 +344,20 @@
         void HideInterface()
         {
             isFocusInActionsList = false;
-            UserInterfaceHidden?.Invoke(this, new UserInterfaceHiddenEventArgument());
+            UserInterfaceHidden?.Invoke(
+                this, new UserInterfaceHiddenEventArgument());
+            mouseWheelHook.ResetAccumulatedWheelDelta();
         }
 
         async Task<IEnumerable<IAction>> GetSupportedActionsFromDataAsync(
             IClipboardDataControlPackage data)
         {
-            using (performanceHandleFactory.StartMeasuringPerformance())
-            {
-                var allowedActions =
-                    await
-                    asyncFilter.FilterAsync(allActions, action => action.CanPerformAsync(data.Data))
-                               .ConfigureAwait(false);
-                return allowedActions.OrderBy(x => x.Order);
-            }
+            var allowedActions = await asyncFilter
+                .FilterAsync(
+                    allActions, 
+                    action => action.CanPerformAsync(data.Data));
+            return allowedActions
+                .OrderBy(x => x.Order);
         }
 
         void Mediator_ControlAdded(object sender, ControlEventArgument e)
@@ -347,6 +375,13 @@
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Dispose()
+        {
+            mouseWheelHook.WheelScrolledDown -= MouseWheelHookOnScrolledDown;
+            mouseWheelHook.WheelScrolledUp -= MouseWheelHookOnScrolledUp;
+            mouseWheelHook.WheelTilted -= MouseWheelHook_WheelTilted;
         }
     }
 }

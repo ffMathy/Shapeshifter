@@ -1,9 +1,7 @@
-﻿namespace Shapeshifter.WindowsDesktop.Startup
+﻿namespace Shapeshifter.WindowsDesktop.Operations.Startup
 {
     using System.Threading.Tasks;
     using System.Windows.Forms;
-
-    using Application = System.Windows.Application;
 
     using Controls.Window.Factories.Interfaces;
 
@@ -12,6 +10,8 @@
     using Interfaces;
 
     using Services.Tray.Interfaces;
+
+    using Application = System.Windows.Application;
 
     public class TrayPreparationOperation: ITrayPreparationOperation
     {

@@ -1,14 +1,14 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Shapeshifter.WindowsDesktop.Startup
+﻿namespace Shapeshifter.WindowsDesktop.Operations.Startup
 {
+    using System;
+    using System.Threading.Tasks;
+
     using Interfaces;
 
     using Services.Arguments.Interfaces;
     using Services.Interfaces;
 
-    class StartupPreparationOperation: IStartupPreparationOperation
+    class PreparationOperation: IPreparationOperation
     {
         readonly IProcessManager processManager;
         readonly IAggregateArgumentProcessor aggregateArgumentProcessor;
@@ -20,7 +20,7 @@ namespace Shapeshifter.WindowsDesktop.Startup
 
         public string[] Arguments { get; set; }
 
-        public StartupPreparationOperation(
+        public PreparationOperation(
             IProcessManager processManager,
             IAggregateArgumentProcessor aggregateArgumentProcessor)
         {

@@ -12,10 +12,10 @@
 
     using NSubstitute;
 
+    using Operations.Startup;
+
     using Services.Arguments.Interfaces;
     using Services.Interfaces;
-
-    using Startup;
 
     [TestClass]
     public class MainTest: TestBase

@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Startup
+﻿namespace Shapeshifter.WindowsDesktop.Operations.Startup
 {
     using System.Threading.Tasks;
 
@@ -8,16 +8,16 @@
 
     public class ApplicationEntrypoint: ISingleInstance
     {
-        readonly IStartupPreparationOperation startupPreparationOperation;
+        readonly IPreparationOperation preparationOperation;
         readonly IPostPreparationOperation postPreparationOperation;
         readonly IMainWindowPreparationOperation mainWindowPreparationOperation;
 
         public ApplicationEntrypoint(
-            IStartupPreparationOperation startupPreparationOperation,
+            IPreparationOperation preparationOperation,
             IPostPreparationOperation postPreparationOperation,
             IMainWindowPreparationOperation mainWindowPreparationOperation)
         {
-            this.startupPreparationOperation = startupPreparationOperation;
+            this.preparationOperation = preparationOperation;
             this.postPreparationOperation = postPreparationOperation;
             this.mainWindowPreparationOperation = mainWindowPreparationOperation;
         }
@@ -26,7 +26,7 @@
             params string[] arguments)
         {
             await Prepare(arguments);
-            if (startupPreparationOperation.ShouldTerminate)
+            if (preparationOperation.ShouldTerminate)
             {
                 return;
             }
@@ -37,8 +37,8 @@
 
         async Task Prepare(string[] arguments)
         {
-            startupPreparationOperation.Arguments = arguments;
-            await startupPreparationOperation.RunAsync();
+            preparationOperation.Arguments = arguments;
+            await preparationOperation.RunAsync();
         }
     }
 }

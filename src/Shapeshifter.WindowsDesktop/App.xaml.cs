@@ -7,7 +7,7 @@
 
     using Infrastructure.Dependencies;
 
-    using Startup;
+    using Operations.Startup;
 
     /// <summary>
     ///     Interaction logic for App.xaml
