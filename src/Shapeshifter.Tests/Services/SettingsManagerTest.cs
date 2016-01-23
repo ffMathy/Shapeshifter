@@ -7,29 +7,23 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
-    public class SettingsManagerTest: TestBase
+    public class SettingsManagerTest: UnitTestFor<ISettingsManager>
     {
         [TestMethod]
         public void CanPersistAndFetchStrings()
         {
-            var container = CreateContainer();
+            systemUnderTest.SaveSetting("string", "foobar");
 
-            var settingsManager = container.Resolve<ISettingsManager>();
-            settingsManager.SaveSetting("string", "foobar");
-
-            var setting = settingsManager.LoadSetting<string>("string");
+            var setting = systemUnderTest.LoadSetting<string>("string");
             Assert.AreEqual("foobar", setting);
         }
 
         [TestMethod]
         public void CanPersistAndFetchIntegers()
         {
-            var container = CreateContainer();
+            systemUnderTest.SaveSetting("integer", 1337);
 
-            var settingsManager = container.Resolve<ISettingsManager>();
-            settingsManager.SaveSetting("integer", 1337);
-
-            var setting = settingsManager.LoadSetting<int>("integer");
+            var setting = systemUnderTest.LoadSetting<int>("integer");
             Assert.AreEqual(1337, setting);
         }
     }

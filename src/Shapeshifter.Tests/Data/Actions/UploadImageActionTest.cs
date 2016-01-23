@@ -16,87 +16,64 @@
     using Services.Files.Interfaces;
 
     [TestClass]
-    public class UploadImageActionTest: ActionTestBase
+    public class UploadImageActionTest: ActionTestBase<IUploadImageAction>
     {
         [TestMethod]
         public async Task CanNotPerformWithUnknownDataType()
         {
-            var container = CreateContainer();
-
             var fakeData = Substitute.For<IClipboardDataPackage>();
-
-            var action = container.Resolve<IUploadImageAction>();
-            Assert.IsFalse(await action.CanPerformAsync(fakeData));
+            Assert.IsFalse(
+                await systemUnderTest.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
         public void CanReadTitle()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IUploadImageAction>();
-            Assert.IsNotNull(action.Title);
+            Assert.IsNotNull(systemUnderTest.Title);
         }
 
         [TestMethod]
         public void CanReadDescription()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IUploadImageAction>();
-            Assert.IsNotNull(action.Description);
+            Assert.IsNotNull(systemUnderTest.Description);
         }
 
         [TestMethod]
         public void OrderIsCorrect()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IUploadImageAction>();
-            Assert.AreEqual(50, action.Order);
+            Assert.AreEqual(50, systemUnderTest.Order);
         }
 
         [TestMethod]
         public async Task CanNotPerformWithFileWithNoImage()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IFileTypeInterpreter>()
-                     .GetFileTypeFromFileName(Arg.Any<string>())
-                     .Returns(FileType.Other);
-                });
+            container.Resolve<IFileTypeInterpreter>()
+             .GetFileTypeFromFileName(Arg.Any<string>())
+             .Returns(FileType.Other);
 
             var fakeData = Substitute.For<IClipboardDataPackage>();
-
-            var action = container.Resolve<IUploadImageAction>();
-            Assert.IsFalse(await action.CanPerformAsync(fakeData));
+            Assert.IsFalse(
+                await systemUnderTest.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
         public async Task CanPerformWithImageFile()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IFileTypeInterpreter>()
-                     .GetFileTypeFromFileName(Arg.Any<string>())
-                     .Returns(FileType.Image);
-                });
+            container.Resolve<IFileTypeInterpreter>()
+             .GetFileTypeFromFileName(Arg.Any<string>())
+             .Returns(FileType.Image);
 
             var fakeData = GetPackageContaining<IClipboardFileData>();
-
-            var action = container.Resolve<IUploadImageAction>();
-            Assert.IsTrue(await action.CanPerformAsync(fakeData));
+            Assert.IsTrue(
+                await systemUnderTest.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
         public async Task CanPerformWithImageData()
         {
-            var container = CreateContainer();
-
             var fakeData = GetPackageContaining<IClipboardImageData>();
-
-            var action = container.Resolve<IUploadImageAction>();
-            Assert.IsTrue(await action.CanPerformAsync(fakeData));
+            Assert.IsTrue(
+                await systemUnderTest.CanPerformAsync(fakeData));
         }
     }
 }

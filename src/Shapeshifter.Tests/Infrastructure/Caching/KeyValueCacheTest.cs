@@ -10,54 +10,38 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
-    public class KeyValueCacheTest: TestBase
+    public class KeyValueCacheTest: UnitTestFor<IKeyValueCache<string, int>>
     {
         [TestMethod]
         public void GetForUnknownKeyInStringCacheReturnsNull()
         {
-            var container = CreateContainer();
-
-            var systemUnderTest = container.Resolve<IKeyValueCache<string, string>>();
             Assert.IsNull(systemUnderTest.Get("foobar"));
         }
 
         [TestMethod]
         public void GetForUnknownKeyInIntegerCacheReturnsZero()
         {
-            var container = CreateContainer();
-
-            var systemUnderTest = container.Resolve<IKeyValueCache<string, int>>();
             Assert.AreEqual(0, systemUnderTest.Get("foobar"));
         }
 
         [TestMethod]
         public void ValueWithKeyCanBeFetchedFromKeyAgain()
         {
-            var container = CreateContainer();
-
-            var systemUnderTest = container.Resolve<IKeyValueCache<string, string>>();
-            systemUnderTest.Set("foobar", "hello world");
-            Assert.AreEqual("hello world", systemUnderTest.Get("foobar"));
+            systemUnderTest.Set("foobar", 123);
+            Assert.AreEqual(123, systemUnderTest.Get("foobar"));
         }
 
         [TestMethod]
         public void CallingSetOnExistingKeyUpdatesValue()
         {
-            var container = CreateContainer();
-
-            var systemUnderTest = container.Resolve<IKeyValueCache<string, string>>();
-            systemUnderTest.Set("foobar", "hello world");
-            systemUnderTest.Set("foobar", "hello there world");
-            Assert.AreEqual("hello there world", systemUnderTest.Get("foobar"));
+            systemUnderTest.Set("foobar", 123);
+            systemUnderTest.Set("foobar", 456);
+            Assert.AreEqual(456, systemUnderTest.Get("foobar"));
         }
 
         [TestMethod]
         public void ThunkifyCachesFunctionArguments()
         {
-            var container = CreateContainer();
-
-            var systemUnderTest = container.Resolve<IKeyValueCache<string, int>>();
-
             var value = 0;
             var action = new Func<string, int>(input => value += input.Length);
 
@@ -73,10 +57,6 @@
         [TestMethod]
         public async Task ThunkifyAsyncCachesFunctionArguments()
         {
-            var container = CreateContainer();
-
-            var systemUnderTest = container.Resolve<IKeyValueCache<string, int>>();
-
             var value = 0;
             var action = new Func<string, Task<int>>(
                 input => Task.FromResult(value += input.Length));

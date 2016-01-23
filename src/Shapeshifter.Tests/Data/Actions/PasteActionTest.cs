@@ -16,59 +16,39 @@
     using Services.Clipboard.Interfaces;
 
     [TestClass]
-    public class PasteActionTest: ActionTestBase
+    public class PasteActionTest: ActionTestBase<IPasteAction>
     {
         [TestMethod]
         public async Task CanAlwaysPerformIfDataIsGiven()
         {
-            var container = CreateContainer();
-
             var fakeData = Substitute.For<IClipboardDataPackage>();
-
-            var action = container.Resolve<IPasteAction>();
-            Assert.IsTrue(await action.CanPerformAsync(fakeData));
+            Assert.IsTrue(
+                await systemUnderTest.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
         public void OrderIsCorrect()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IPasteAction>();
-            Assert.AreEqual(0, action.Order);
+            Assert.AreEqual(0, systemUnderTest.Order);
         }
 
         [TestMethod]
         public void CanGetTitle()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IPasteAction>();
-            Assert.IsNotNull(action.Title);
+            Assert.IsNotNull(systemUnderTest.Title);
         }
 
         [TestMethod]
         public void CanGetDescription()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IPasteAction>();
-            Assert.IsNotNull(action.Description);
+            Assert.IsNotNull(systemUnderTest.Description);
         }
 
         [TestMethod]
         public async Task PerformTriggersPaste()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IClipboardInjectionService>();
-                    c.RegisterFake<IClipboardPasteService>();
-                });
-
             var fakeData = GetPackageContaining<IClipboardData>();
-
-            var action = container.Resolve<IPasteAction>();
-            await action.PerformAsync(fakeData);
+            await systemUnderTest.PerformAsync(fakeData);
 
             var fakeClipboardInjectionService = container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService
@@ -80,10 +60,7 @@
         [ExpectedException(typeof (ArgumentNullException))]
         public async Task ThrowsExceptionIfNoDataGiven()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IPasteAction>();
-            await action.CanPerformAsync(null);
+            await systemUnderTest.CanPerformAsync(null);
         }
     }
 }

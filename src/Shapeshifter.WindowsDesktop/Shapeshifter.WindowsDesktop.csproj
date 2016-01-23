@@ -147,6 +147,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardFileDataControlFactory.cs" />
+    <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardImageDataControlFactory.cs" />
+    <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardTextDataControlFactory.cs" />
+    <Compile Include="Controls\Clipboard\ViewModels\Interfaces\IClipboardTextDataViewModel.cs" />
     <Compile Include="Controls\Designer\Services\IDesignerService.cs" />
     <Compile Include="Controls\Window\Binders\Interfaces\IPackageToActionSwitch.cs" />
     <Compile Include="Controls\Window\Binders\SelectedElementToActionsSwitchMechanism.cs" />
@@ -236,7 +240,6 @@
     <Compile Include="Controls\Clipboard\ViewModels\FileCollection\Interfaces\IFileTypeGroupViewModel.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\FileCollection\Interfaces\IClipboardFileCollectionDataViewModel.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\Interfaces\IClipboardDataViewModel.cs" />
-    <Compile Include="Controls\Clipboard\ViewModels\Interfaces\IClipboardTextDataViewModel.cs" />
     <Compile Include="Controls\Converters\InjectedConverterMarkupExtension.cs" />
     <Compile Include="Data\ClipboardDataPackage.cs" />
     <Compile Include="Data\ClipboardDataControlPackage.cs" />

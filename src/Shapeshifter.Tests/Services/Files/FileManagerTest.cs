@@ -10,20 +10,20 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
-    public class FileManagerTest: TestBase
+    public class FileManagerTest: UnitTestFor<IFileManager>
     {
         [TestMethod]
         [TestCategory("Integration")]
         public void CanCreateFoldersAndDisposeThemAgain()
         {
-            var container = CreateContainer();
-
             string permanentPath;
             string temporaryPath;
-            using (var fileManager = container.Resolve<IFileManager>())
+            using (systemUnderTest)
             {
-                permanentPath = fileManager.PrepareIsolatedFolder("Permanent");
-                temporaryPath = fileManager.PrepareTemporaryFolder("Temporary");
+                permanentPath = systemUnderTest.PrepareIsolatedFolder(
+                    "Permanent");
+                temporaryPath = systemUnderTest.PrepareTemporaryFolder(
+                    "Temporary");
 
                 Assert.IsTrue(Directory.Exists(permanentPath));
                 Assert.IsTrue(Directory.Exists(temporaryPath));
@@ -41,12 +41,12 @@
         [TestCategory("Integration")]
         public void CanCreateFilesAndDisposeThemAgain()
         {
-            var container = CreateContainer();
-
             string temporaryPath;
-            using (var fileManager = container.Resolve<IFileManager>())
+            using (systemUnderTest)
             {
-                temporaryPath = fileManager.WriteBytesToTemporaryFile("Temporary.txt", Encoding.Default.GetBytes("hello world"));
+                temporaryPath = systemUnderTest.WriteBytesToTemporaryFile(
+                    "Temporary.txt", 
+                    Encoding.Default.GetBytes("hello world"));
                 Assert.IsTrue(File.Exists(temporaryPath));
             }
 
@@ -56,10 +56,7 @@
         [TestMethod]
         public void CanGetCommonPathWithBiggestPathFirst()
         {
-            var container = CreateContainer();
-            var fileManager = container.Resolve<IFileManager>();
-
-            var commonPath = fileManager.FindCommonFolderFromPaths(
+            var commonPath = systemUnderTest.FindCommonFolderFromPaths(
                 new[]
                 {
                     "foo\\bar\\baz\\lol",
@@ -73,10 +70,7 @@
         [TestMethod]
         public void CanGetCommonPathWithSmallestPathFirst()
         {
-            var container = CreateContainer();
-            var fileManager = container.Resolve<IFileManager>();
-
-            var commonPath = fileManager.FindCommonFolderFromPaths(
+            var commonPath = systemUnderTest.FindCommonFolderFromPaths(
                 new[]
                 {
                     "foo\\bar",
@@ -90,10 +84,7 @@
         [TestMethod]
         public void CanGetCommonPathWithBiggestPathInMiddle()
         {
-            var container = CreateContainer();
-            var fileManager = container.Resolve<IFileManager>();
-
-            var commonPath = fileManager.FindCommonFolderFromPaths(
+            var commonPath = systemUnderTest.FindCommonFolderFromPaths(
                 new[]
                 {
                     "foo\\bar",

@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -56,6 +57,35 @@
             AssertWait(10000, expression);
         }
 
+        public static void RegisterFakesForDependencies<TClass>(this ContainerBuilder builder) where TClass : class
+        {
+            var constructors = typeof(TClass)
+                .GetConstructors()
+                .Where(x => x.IsPublic && !x.IsStatic)
+                .Where(x => AreParametersInterfaces(x.GetParameters()));
+            var targetConstructor = constructors
+                .OrderByDescending(x => x.GetParameters().Count())
+                .First();
+            var parameters = targetConstructor.GetParameters();
+            foreach (var parameter in parameters)
+            {
+                const string methodName = nameof(RegisterFake);
+                var genericMethod = typeof(Extensions)
+                    .GetMethods()
+                    .Single(x => 
+                        (x.Name == methodName) && 
+                        (x.GetParameters().Length == 1))
+                    .MakeGenericMethod(parameter.ParameterType);
+                genericMethod.Invoke(null, new object[] { builder });
+            }
+        }
+
+        static bool AreParametersInterfaces(
+            IEnumerable<ParameterInfo> parameters)
+        {
+            return parameters.All(x => x.ParameterType.IsInterface);
+        }
+
         public static void AssertWait(int timeout, Action expression)
         {
             var time = DateTime.Now;
@@ -91,7 +121,7 @@
             throw exceptions.First();
         }
 
-        public static TInterface WithFakeSettings<TInterface>(this TInterface item, Action<TInterface> method)
+        public static TInterface With<TInterface>(this TInterface item, Action<TInterface> method)
         {
             method(item);
             return item;

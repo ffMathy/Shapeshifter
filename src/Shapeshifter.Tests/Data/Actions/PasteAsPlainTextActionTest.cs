@@ -15,72 +15,51 @@
     using Services.Clipboard.Interfaces;
 
     [TestClass]
-    public class PasteAsPlainTextActionTest: ActionTestBase
+    public class PasteAsPlainTextActionTest: ActionTestBase<IPasteAsPlainTextAction>
     {
         [TestMethod]
         public async Task CanNotPerformWithNonTextData()
         {
-            var container = CreateContainer();
-
             var fakeData = Substitute.For<IClipboardDataPackage>();
-
-            var action = container.Resolve<IPasteAsPlainTextAction>();
-            Assert.IsFalse(await action.CanPerformAsync(fakeData));
+            Assert.IsFalse(
+                await systemUnderTest.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
         public async Task CanPerformWithTextData()
         {
-            var container = CreateContainer();
-
             var fakeData = GetPackageContaining<IClipboardTextData>();
-
-            var action = container.Resolve<IPasteAsPlainTextAction>();
-            Assert.IsTrue(await action.CanPerformAsync(fakeData));
+            Assert.IsTrue(
+                await systemUnderTest.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
         public void CanGetDescription()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IPasteAsPlainTextAction>();
-            Assert.IsNotNull(action.Description);
+            Assert.IsNotNull(systemUnderTest.Description);
         }
 
         [TestMethod]
         public void OrderIsCorrect()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IPasteAsPlainTextAction>();
-            Assert.AreEqual(25, action.Order);
+            Assert.AreEqual(25, systemUnderTest.Order);
         }
 
         [TestMethod]
         public void CanGetTitle()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IPasteAsPlainTextAction>();
-            Assert.IsNotNull(action.Title);
+            Assert.IsNotNull(systemUnderTest.Title);
         }
 
         [TestMethod]
         public async Task PerformCausesTextOfDataToBeCopied()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IClipboardInjectionService>();
-                });
-
             var fakeTextData = Substitute.For<IClipboardTextData>();
             fakeTextData.Text.Returns("foobar hello");
 
             var fakeData = GetPackageContaining(fakeTextData);
-
-            var action = container.Resolve<IPasteAsPlainTextAction>();
-            await action.PerformAsync(fakeData);
+            
+            await systemUnderTest.PerformAsync(fakeData);
 
             var fakeClipboardInjectionService = container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService.Received(1)

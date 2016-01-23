@@ -9,34 +9,28 @@
     using Native;
 
     [TestClass]
-    public class TextClipboardDataFactoryTest: TestBase
+    public class TextClipboardDataFactoryTest: UnitTestFor<ITextClipboardDataFactory>
     {
         [TestMethod]
         public void CanBuildDataReturnsTrueForTextFormats()
         {
-            var container = CreateContainer();
-
-            var factory = container.Resolve<IClipboardDataFactory>();
-            Assert.IsTrue(factory.CanBuildData(ClipboardNativeApi.CF_TEXT));
+            Assert.IsTrue(
+                systemUnderTest.CanBuildData(
+                    ClipboardNativeApi.CF_TEXT));
         }
 
         [TestMethod]
         public void CanBuildDataReturnsFalseForNonTextFormats()
         {
-            var container = CreateContainer();
-
-            var factory = container.Resolve<IClipboardDataFactory>();
-            Assert.IsFalse(factory.CanBuildData(uint.MaxValue));
+            Assert.IsFalse(
+                systemUnderTest.CanBuildData(uint.MaxValue));
         }
 
         [TestMethod]
         public void BuildDataReturnsTextData()
         {
-            var container = CreateContainer();
-
-            var factory = container.Resolve<IClipboardDataFactory>();
-            var data = factory.BuildData(ClipboardNativeApi.CF_TEXT, new byte[0]);
-
+            var data = systemUnderTest.BuildData(
+                ClipboardNativeApi.CF_TEXT, new byte[0]);
             Assert.IsInstanceOfType(data, typeof (ClipboardTextData));
         }
     }

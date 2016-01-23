@@ -10,20 +10,18 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
-    public class ProcessManagerTest: TestBase
+    public class ProcessManagerTest: UnitTestFor<IProcessManager>
     {
         [Ignore]
         [TestMethod]
         [TestCategory("Integration")]
         public void CanLaunchProcessesAndKillThemAfterDisposing()
         {
-            var container = CreateContainer();
-
             var initialRunningProcesses = GetTimeoutProcesses()
                 .Length;
-            using (var processManager = container.Resolve<IProcessManager>())
+            using (systemUnderTest)
             {
-                processManager.LaunchCommand("timeout", "/t -1 /nobreak");
+                systemUnderTest.LaunchCommand("timeout", "/t -1 /nobreak");
 
                 var runningProcessesBeforeDisposal = GetTimeoutProcesses()
                     .Length;
@@ -48,10 +46,7 @@
         [ExpectedException(typeof (Win32Exception))]
         public void ThrowsExceptionWhenLaunchingFileThatDoesNotExist()
         {
-            var container = CreateContainer();
-
-            var processManager = container.Resolve<IProcessManager>();
-            processManager.LaunchFile("foobar.txt");
+            systemUnderTest.LaunchFile("foobar.txt");
         }
     }
 }

@@ -11,55 +11,44 @@
     using NSubstitute;
 
     [TestClass]
-    public class ClipboardTextDataViewModelTest: TestBase
+    public class ClipboardTextDataViewModelTest: UnitTestFor<IClipboardTextDataViewModel>
     {
         [TestMethod]
         public void FriendlyTextRemovesDuplicateWhitespaces()
         {
-            var container = CreateContainer();
-
             var fakeTextData = Substitute.For<IClipboardTextData>();
             fakeTextData.Text.Returns("hello  \t  world");
 
-            var viewModel = container.Resolve<IClipboardTextDataViewModel>();
-            viewModel.Data = fakeTextData;
+            systemUnderTest.Data = fakeTextData;
 
-            Assert.AreEqual("hello world", viewModel.FriendlyText);
+            Assert.AreEqual("hello world", systemUnderTest.FriendlyText);
         }
 
         [TestMethod]
         public void FriendlyTextDoesNotRemoveSingleWhitespace()
         {
-            var container = CreateContainer();
-
             var fakeTextData = Substitute.For<IClipboardTextData>();
             fakeTextData.Text.Returns("hello world");
 
-            var viewModel = container.Resolve<IClipboardTextDataViewModel>();
-            viewModel.Data = fakeTextData;
+            systemUnderTest.Data = fakeTextData;
 
-            Assert.AreEqual("hello world", viewModel.FriendlyText);
+            Assert.AreEqual("hello world", systemUnderTest.FriendlyText);
         }
 
         [TestMethod]
         public void FriendlyTextSubstitutesTabCharacters()
         {
-            var container = CreateContainer();
-
             var fakeTextData = Substitute.For<IClipboardTextData>();
             fakeTextData.Text.Returns("hello\tworld");
 
-            var viewModel = container.Resolve<IClipboardTextDataViewModel>();
-            viewModel.Data = fakeTextData;
+            systemUnderTest.Data = fakeTextData;
 
-            Assert.AreEqual("hello world", viewModel.FriendlyText);
+            Assert.AreEqual("hello world", systemUnderTest.FriendlyText);
         }
 
         [TestMethod]
         public void FriendlyTextIsNotLongerThanHalfKilobyte()
         {
-            var container = CreateContainer();
-
             var fakeTextData = Substitute.For<IClipboardTextData>();
 
             var repeatText = "hello world";
@@ -70,24 +59,20 @@
 
             fakeTextData.Text.Returns(repeatText);
 
-            var viewModel = container.Resolve<IClipboardTextDataViewModel>();
-            viewModel.Data = fakeTextData;
+            systemUnderTest.Data = fakeTextData;
 
-            Assert.AreEqual(512, viewModel.FriendlyText.Length);
+            Assert.AreEqual(512, systemUnderTest.FriendlyText.Length);
         }
 
         [TestMethod]
         public void FriendlyTextTrimsLeadingWhitespaces()
         {
-            var container = CreateContainer();
-
             var fakeTextData = Substitute.For<IClipboardTextData>();
             fakeTextData.Text.Returns("   hello world   ");
 
-            var viewModel = container.Resolve<IClipboardTextDataViewModel>();
-            viewModel.Data = fakeTextData;
+            systemUnderTest.Data = fakeTextData;
 
-            Assert.AreEqual("hello world", viewModel.FriendlyText);
+            Assert.AreEqual("hello world", systemUnderTest.FriendlyText);
         }
     }
 }

@@ -11,7 +11,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
-    public class MainThreadInvokerTest: TestBase
+    public class MainThreadInvokerTest: UnitTestFor<IMainThreadInvoker>
     {
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public static void DoEvents()
@@ -33,10 +33,6 @@
         [TestMethod]
         public void InvokesItemsOnMainThread()
         {
-            var container = CreateContainer();
-
-            var mainThreadInvoker = container.Resolve<IMainThreadInvoker>();
-
             var backgroundThreadId = 0;
             var dispatcherThreadId = 0;
             var currentThreadId = Thread.CurrentThread.ManagedThreadId;
@@ -45,7 +41,7 @@
             var thread = new Thread(
                 () => {
                     backgroundThreadId = Thread.CurrentThread.ManagedThreadId;
-                    mainThreadInvoker.Invoke(
+                    systemUnderTest.Invoke(
                         () => {
                             dispatcherThreadId = Thread.CurrentThread.ManagedThreadId;
                         });

@@ -15,7 +15,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
-    public class ThreadLoopTest: TestBase
+    public class ThreadLoopTest: UnitTestFor<IThreadLoop>
     {
         static Func<Task> CreateTestAction(IThreadLoop loop, Func<bool> callback)
         {
@@ -31,82 +31,66 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
         [TestMethod]
         public async Task StartRunsMethod()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<ILogger>();
-                });
-
-            var loop = container.Resolve<IThreadLoop>();
-
             var invoked = false;
             var action = CreateTestAction(
-                loop,
+                systemUnderTest,
                 () => invoked = true);
 
-            await loop.StartAsync(action, CancellationToken.None);
+            await systemUnderTest.StartAsync(
+                action, CancellationToken.None);
 
             Assert.IsTrue(invoked);
-            Assert.IsFalse(loop.IsRunning);
+            Assert.IsFalse(systemUnderTest.IsRunning);
         }
 
         [TestMethod]
         public async Task KeepsRunningMethod()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<ILogger>();
-                });
-
-            var loop = container.Resolve<IThreadLoop>();
-
             var runCount = 0;
             var action = CreateTestAction(
-                loop,
+                systemUnderTest,
                 () => ++runCount == 3);
 
-            await loop.StartAsync(action, CancellationToken.None);
+            await systemUnderTest.StartAsync(
+                action, CancellationToken.None);
 
             Assert.AreEqual(3, runCount);
-            Assert.IsFalse(loop.IsRunning);
+            Assert.IsFalse(systemUnderTest.IsRunning);
         }
 
         [TestMethod]
         [ExpectedException(typeof (TestException))]
         public async Task ForwardsExceptionsThrown()
         {
-            var container = CreateContainer();
-            var loop = container.Resolve<IThreadLoop>();
-
             var action = CreateTestAction(
-                loop,
+                systemUnderTest,
                 () => {
                     throw new TestException();
                 });
 
-            await loop.StartAsync(action, CancellationToken.None);
+            await systemUnderTest.StartAsync(
+                action, CancellationToken.None);
         }
 
         [TestMethod]
         public async Task StopsLoopWhenExceptionIsThrown()
         {
-            var container = CreateContainer();
-            var loop = container.Resolve<IThreadLoop>();
-
             var action = CreateTestAction(
-                loop,
+                systemUnderTest,
                 () => {
                     throw new TestException();
                 });
 
             try
             {
-                await loop.StartAsync(action, CancellationToken.None);
+                await systemUnderTest.StartAsync(
+                    action, CancellationToken.None);
 
                 Assert.Fail();
             }
             catch (TestException)
             {
-                Assert.IsFalse(loop.IsRunning);
+                Assert.IsFalse(systemUnderTest.IsRunning);
             }
         }
 
@@ -114,23 +98,21 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
         [ExpectedException(typeof (InvalidOperationException))]
         public async Task StartTwiceThrowsException()
         {
-            var container = CreateContainer();
-            var loop = container.Resolve<IThreadLoop>();
-
             var shouldEndFirstAction = false;
             var firstAction = CreateTestAction(
-                loop,
+                systemUnderTest,
                 () => shouldEndFirstAction);
             var secondAction = CreateTestAction(
-                loop,
+                systemUnderTest,
                 () => shouldEndFirstAction = true);
 
-            loop.StartAsync(firstAction)
+            systemUnderTest
+                .StartAsync(firstAction)
                 .IgnoreAwait();
 
             try
             {
-                await loop.StartAsync(secondAction);
+                await systemUnderTest.StartAsync(secondAction);
             }
             catch
             {

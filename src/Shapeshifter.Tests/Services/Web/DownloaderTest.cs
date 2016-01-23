@@ -9,17 +9,16 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
-    public class DownloaderTest: TestBase
+    public class DownloaderTest: UnitTestFor<IDownloader>
     {
         [TestMethod]
         [TestCategory("Integration")]
         public async Task CanDownloadGoogle()
         {
-            var container = CreateContainer();
-
-            using (var downloader = container.Resolve<IDownloader>())
+            using (systemUnderTest)
             {
-                var bytes = await downloader.DownloadBytesAsync("http://google.com");
+                var bytes = await systemUnderTest.DownloadBytesAsync(
+                    "http://google.com");
                 Assert.AreNotEqual(0, bytes.Length);
             }
         }

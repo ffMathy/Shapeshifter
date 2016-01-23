@@ -9,18 +9,12 @@
     using NSubstitute;
 
     [TestClass]
-    public class LoggerTest: TestBase
+    public class LoggerTest: UnitTestFor<ILogger>
     {
         [TestMethod]
         public void InformationHasPrefix()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<ILogStream>();
-                });
-
-            var logger = container.Resolve<ILogger>();
-            logger.Information("hello world");
+            systemUnderTest.Information("hello world");
 
             var fakeStream = container.Resolve<ILogStream>();
             fakeStream
@@ -31,20 +25,14 @@
         [TestMethod]
         public void IndentationWorks()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<ILogStream>();
-                });
-
-            var logger = container.Resolve<ILogger>();
-            using (logger.Indent())
+            using (systemUnderTest.Indent())
             {
-                logger.Information("inside indentation");
-                using (logger.Indent())
-                    logger.Information("deep inside indentation");
+                systemUnderTest.Information("inside indentation");
+                using (systemUnderTest.Indent())
+                    systemUnderTest.Information("deep inside indentation");
             }
 
-            logger.Information("outside indentation");
+            systemUnderTest.Information("outside indentation");
 
             var fakeStream = container.Resolve<ILogStream>();
             fakeStream

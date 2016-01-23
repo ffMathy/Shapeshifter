@@ -13,15 +13,11 @@
     using NSubstitute;
 
     [TestClass]
-    public class ClipboardFileCollectionDataViewModelTest: TestBase
+    public class ClipboardFileCollectionDataViewModelTest: UnitTestFor<IClipboardFileCollectionDataViewModel>
     {
         [TestMethod]
         public void FileCountReturnsAmountOfFiles()
         {
-            var container = CreateContainer();
-
-            var viewModel = container.Resolve<IClipboardFileCollectionDataViewModel>();
-
             var fakeData = Substitute.For<IClipboardFileCollectionData>();
 
             var kitten = GenerateFakeFileData("kitten.jpg");
@@ -36,18 +32,14 @@
                     notes
                 });
 
-            viewModel.Data = fakeData;
+            systemUnderTest.Data = fakeData;
 
-            Assert.AreEqual(3, viewModel.FileCount);
+            Assert.AreEqual(3, systemUnderTest.FileCount);
         }
 
         [TestMethod]
         public void FileTypeGroupsAreGroupedByFileExtensions()
         {
-            var container = CreateContainer();
-
-            var viewModel = container.Resolve<IClipboardFileCollectionDataViewModel>();
-
             var fakeData = Substitute.For<IClipboardFileCollectionData>();
 
             var notes = GenerateFakeFileData("notes.docx");
@@ -62,9 +54,9 @@
                     house
                 });
 
-            viewModel.Data = fakeData;
+            systemUnderTest.Data = fakeData;
 
-            var groups = viewModel.FileTypeGroups.ToArray();
+            var groups = systemUnderTest.FileTypeGroups.ToArray();
             Assert.AreEqual(2, groups.Length);
 
             Assert.AreEqual(".jpg", groups[0].FileType);

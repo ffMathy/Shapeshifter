@@ -11,52 +11,37 @@
     using Native;
 
     [TestClass]
-    public class FileClipboardDataFactoryTest: TestBase
+    public class FileClipboardDataFactoryTest: UnitTestFor<IFileClipboardDataFactory>
     {
         [TestMethod]
         public void CanBuildDataReturnsTrueForSingleFileFormats()
         {
-            var container = CreateContainer();
-
-            var factory = container.Resolve<IFileClipboardDataFactory>();
-            Assert.IsTrue(factory.CanBuildData(ClipboardNativeApi.CF_HDROP));
+            Assert.IsTrue(systemUnderTest.CanBuildData(ClipboardNativeApi.CF_HDROP));
         }
 
         [TestMethod]
         public void CanBuildDataReturnsFalseForNonFileFormats()
         {
-            var container = CreateContainer();
-
-            var factory = container.Resolve<IFileClipboardDataFactory>();
-            Assert.IsFalse(factory.CanBuildData(uint.MaxValue));
+            Assert.IsFalse(systemUnderTest.CanBuildData(uint.MaxValue));
         }
 
         [TestMethod]
         [ExpectedException(typeof (ArgumentException))]
         public void BuildDataForIncompatibleFormatThrowsException()
         {
-            var container = CreateContainer();
-
-            var factory = container.Resolve<IFileClipboardDataFactory>();
-            factory.BuildData(uint.MaxValue, new byte[0]);
+            systemUnderTest.BuildData(uint.MaxValue, new byte[0]);
         }
 
         [TestMethod]
         public void CanBuildDataReturnsTrueForFileDropFormat()
         {
-            var container = CreateContainer();
-
-            var factory = container.Resolve<IFileClipboardDataFactory>();
-            Assert.IsTrue(factory.CanBuildData(ClipboardNativeApi.CF_HDROP));
+            Assert.IsTrue(systemUnderTest.CanBuildData(ClipboardNativeApi.CF_HDROP));
         }
 
         [TestMethod]
         public void CanBuildDataReturnsFalseForInvalidFormat()
         {
-            var container = CreateContainer();
-
-            var factory = container.Resolve<IFileClipboardDataFactory>();
-            Assert.IsFalse(factory.CanBuildData(uint.MaxValue));
+            Assert.IsFalse(systemUnderTest.CanBuildData(uint.MaxValue));
         }
     }
 }

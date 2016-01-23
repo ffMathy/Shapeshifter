@@ -3,7 +3,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
-    public class FormatDataPairTest: TestBase
+    public class FormatDataPairTest
     {
         [TestMethod]
         public void CanConstructFormatDataPair()

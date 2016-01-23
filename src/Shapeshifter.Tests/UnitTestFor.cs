@@ -12,9 +12,18 @@
 
     using NSubstitute;
 
-    public abstract class TestBase
+    public abstract class UnitTestFor<TSystemUnderTest>
+        where TSystemUnderTest : class
     {
-        ILifetimeScope activeContainer;
+        protected ILifetimeScope container;
+        protected TSystemUnderTest systemUnderTest;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            container = CreateContainerWithFakeDependencies();
+            systemUnderTest = container.Resolve<TSystemUnderTest>();
+        }
 
         [TestCleanup]
         public void ClearCacheOnEnd()
@@ -25,11 +34,17 @@
 
         void DisposeContainer()
         {
-            activeContainer?.Dispose();
-            activeContainer = null;
+            container?.Dispose();
+            container = null;
         }
 
-        protected ILifetimeScope CreateContainer(Action<ContainerBuilder> setupCallback = null)
+        ILifetimeScope CreateContainerWithFakeDependencies()
+        {
+            return CreateContainerWithCallback(c => c.RegisterFakesForDependencies<TSystemUnderTest>());
+        }
+
+        ILifetimeScope CreateContainerWithCallback(
+            Action<ContainerBuilder> setupCallback = null)
         {
             var builder = new ContainerBuilder();
 
@@ -46,13 +61,11 @@
             builder.RegisterModule(
                 new DefaultWiringModule(fakeEnvironment));
 
-            builder.RegisterFake<IThreadDelay>();
-
             setupCallback?.Invoke(builder);
 
-            return activeContainer = builder
-                                         .Build()
-                                         .BeginLifetimeScope();
+            return container = builder
+                .Build()
+                .BeginLifetimeScope();
         }
     }
 }

@@ -24,49 +24,27 @@
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
     [TestClass]
-    public class ClipboardListViewModelTest: TestBase
+    public class ClipboardListViewModelTest: UnitTestFor<IClipboardListViewModel>
     {
         [TestMethod]
         public void SelectedElementChangedTriggersChangedEvent()
         {
-            var container =
-                CreateContainer(
-                    c => {
-                        c.RegisterFake<IAsyncListDictionaryBinder
-                            <IClipboardDataControlPackage, IAction>>();
-                    });
-
-            var viewModel = container.Resolve<IClipboardListViewModel>();
-
             object eventSender = null;
 
-            viewModel.PropertyChanged += (sender, e) => {
-                if (e.PropertyName == nameof(viewModel.SelectedElement))
+            systemUnderTest.PropertyChanged += (sender, e) => {
+                if (e.PropertyName == nameof(systemUnderTest.SelectedElement))
                 {
                     eventSender = sender;
                 }
             };
-            viewModel.SelectedElement = Substitute.For<IClipboardDataControlPackage>();
+            systemUnderTest.SelectedElement = Substitute.For<IClipboardDataControlPackage>();
 
-            Assert.AreSame(viewModel, eventSender);
+            Assert.AreSame(systemUnderTest, eventSender);
         }
 
         [TestMethod]
         public void SelectedElementChangesToTheSecondWhenFirstIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakePackage1 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
@@ -89,19 +67,6 @@
         [TestMethod]
         public void SelectedElementChangesToTheThirdWhenSecondIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakePackage1 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
@@ -124,19 +89,6 @@
         [TestMethod]
         public void SelectedElementChangesToTheFirstWhenThirdIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakePackage1 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
@@ -159,19 +111,6 @@
         [TestMethod]
         public void SelectedElementChangesToTheThirdWhenFirstIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakePackage1 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
@@ -194,19 +133,6 @@
         [TestMethod]
         public void SelectedElementChangesToTheSecondWhenThirdIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakePackage1 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
@@ -229,19 +155,6 @@
         [TestMethod]
         public void SelectedElementChangesToTheFirstWhenSecondIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakePackage1 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
@@ -264,19 +177,6 @@
         [TestMethod]
         public void SelectedActionChangesToTheSecondWhenFirstIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakeAction1 = Substitute.For<IAction>();
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
@@ -304,19 +204,6 @@
         [TestMethod]
         public void SelectedActionChangesToTheThirdWhenSecondIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakeAction1 = Substitute.For<IAction>();
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
@@ -344,16 +231,6 @@
         [TestMethod]
         public void MediatorIsCancelledWhenInDataListAndLeftIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
-                    c.RegisterFake<IAsyncListDictionaryBinder
-                        <IClipboardDataControlPackage, IAction>>();
-                });
-
-            container.Resolve<IClipboardListViewModel>();
-
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired +=
                 Raise.Event<EventHandler<HotkeyFiredArgument>>(
@@ -369,16 +246,6 @@
         [TestMethod]
         public void MediatorIsCancelledWhenInActionListAndRightIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
-                    c.RegisterFake<IAsyncListDictionaryBinder
-                        <IClipboardDataControlPackage, IAction>>();
-                });
-
-            container.Resolve<IClipboardListViewModel>();
-
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired +=
                 Raise.Event<EventHandler<HotkeyFiredArgument>>(
@@ -399,17 +266,6 @@
         [TestMethod]
         public void WhenPasteIsRequestedSelectedActionIsInvoked()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
-                    c
-                        .RegisterFake<IAsyncListDictionaryBinder
-                            <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakeAction = Substitute.For<IAction>();
             systemUnderTest.SelectedAction = fakeAction;
 
@@ -428,18 +284,8 @@
         [TestMethod]
         public void UserInterfaceShownIsBubbledUpFromDurationMediator()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
-                    c
-                        .RegisterFake<IAsyncListDictionaryBinder
-                            <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
             var showEventCount = 0;
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
+            
             systemUnderTest.UserInterfaceShown += (sender, e) => showEventCount++;
 
             var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
@@ -451,18 +297,8 @@
         [TestMethod]
         public void UserInterfaceHiddenIsBubbledUpFromDurationMediator()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
-                    c
-                        .RegisterFake<IAsyncListDictionaryBinder
-                            <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
             var hideEventCount = 0;
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
+            
             systemUnderTest.UserInterfaceHidden += (sender, e) => hideEventCount++;
 
             var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
@@ -474,16 +310,6 @@
         [TestMethod]
         public void MediatorIsCancelledWhenInItemListAndLeftIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
-                    c.RegisterFake<IAsyncListDictionaryBinder
-                        <IClipboardDataControlPackage, IAction>>();
-                });
-
-            container.Resolve<IClipboardListViewModel>();
-
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired +=
                 Raise.Event<EventHandler<HotkeyFiredArgument>>(
@@ -499,16 +325,6 @@
         [TestMethod]
         public void CanAlternateBetweenListsWithoutCancellingMediator()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c.RegisterFake<IClipboardUserInterfaceInteractionMediator>();
-                    c.RegisterFake<IAsyncListDictionaryBinder
-                        <IClipboardDataControlPackage, IAction>>();
-                });
-
-            container.Resolve<IClipboardListViewModel>();
-
             var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
             fakeKeyInterceptor.HotkeyFired +=
                 Raise.Event<EventHandler<HotkeyFiredArgument>>(
@@ -529,19 +345,6 @@
         [TestMethod]
         public void SelectedActionChangesToTheFirstWhenThirdIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakeAction1 = Substitute.For<IAction>();
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
@@ -569,19 +372,6 @@
         [TestMethod]
         public void SelectedActionChangesToTheThirdWhenFirstIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakeAction1 = Substitute.For<IAction>();
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
@@ -609,19 +399,6 @@
         [TestMethod]
         public void SelectedActionChangesToTheSecondWhenThirdIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakeAction1 = Substitute.For<IAction>();
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
@@ -649,19 +426,6 @@
         [TestMethod]
         public void SelectedActionChangesToTheFirstWhenSecondIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakeAction1 = Substitute.For<IAction>();
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
@@ -692,42 +456,30 @@
             var fakeUserInterfaceMediator = Substitute.For<IClipboardUserInterfaceInteractionMediator>();
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
-
-            var container = CreateContainer(
-                c => {
-                    c.RegisterInstance(fakeUserInterfaceMediator);
-                });
-
-            var viewModel = container.Resolve<IClipboardListViewModel>();
+            
             fakeUserInterfaceMediator.PackageAdded +=
                 Raise.Event<EventHandler<PackageEventArgument>>(
-                    viewModel,
+                    fakePackage,
                     new PackageEventArgument(
                         fakePackage));
 
-            Assert.AreSame(fakePackage, viewModel.SelectedElement);
+            Assert.AreSame(fakePackage, systemUnderTest.SelectedElement);
         }
 
         [TestMethod]
         public void ControlAddedInsertsElement()
         {
-            var fakeUserInterfaceMediator = Substitute.For<IClipboardUserInterfaceInteractionMediator>();
+            var fakeUserInterfaceMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
-
-            var container = CreateContainer(
-                c => {
-                    c.RegisterInstance(fakeUserInterfaceMediator);
-                });
-
-            var viewModel = container.Resolve<IClipboardListViewModel>();
+            
             fakeUserInterfaceMediator.PackageAdded +=
                 Raise.Event<EventHandler<PackageEventArgument>>(
-                    viewModel,
+                    systemUnderTest,
                     new PackageEventArgument(
                         fakePackage));
 
-            Assert.AreSame(fakePackage, viewModel.Elements.Single());
+            Assert.AreSame(fakePackage, systemUnderTest.Elements.Single());
         }
     }
 }

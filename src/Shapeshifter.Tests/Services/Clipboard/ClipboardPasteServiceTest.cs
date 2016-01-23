@@ -18,20 +18,12 @@
     using NSubstitute;
 
     [TestClass]
-    public class ClipboardPasteServiceTest: TestBase
+    public class ClipboardPasteServiceTest: UnitTestFor<IClipboardPasteService>
     {
         [TestMethod]
         public async Task PasteDisablesAndEnablesPasteInterceptor()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IThreadDelay>();
-                    c.RegisterFake<IKeyboardNativeApi>();
-                    c.RegisterFake<IPasteHotkeyInterceptor>();
-                });
-
-            var pasteService = container.Resolve<IClipboardPasteService>();
-            await pasteService.PasteClipboardContentsAsync();
+            await systemUnderTest.PasteClipboardContentsAsync();
 
             var fakeInterceptor = container.Resolve<IPasteHotkeyInterceptor>();
             fakeInterceptor.Received()

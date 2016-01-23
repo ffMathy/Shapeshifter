@@ -4,7 +4,8 @@
 
     using NSubstitute;
 
-    public abstract class ActionTestBase: TestBase
+    public abstract class ActionTestBase<TSystemUnderTest> : UnitTestFor<TSystemUnderTest>
+        where TSystemUnderTest: class
     {
         protected IClipboardDataPackage GetPackageContaining<TData>()
             where TData : class, IClipboardData

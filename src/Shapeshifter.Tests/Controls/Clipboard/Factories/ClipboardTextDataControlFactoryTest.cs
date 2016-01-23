@@ -2,10 +2,6 @@
 {
     using System;
 
-    using Autofac;
-
-    using Clipboard.Interfaces;
-
     using Data.Interfaces;
 
     using Interfaces;
@@ -15,56 +11,25 @@
     using NSubstitute;
 
     [TestClass]
-    public class ClipboardTextDataControlFactoryTest: TestBase
+    public class ClipboardTextDataControlFactoryTest: UnitTestFor<IClipboardTextDataControlFactory>
     {
         [TestMethod]
         [ExpectedException(typeof (ArgumentException))]
         public void CreateControlWithNoDataThrowsException()
         {
-            var container = CreateContainer();
-
-            var factory =
-                container
-                    .Resolve
-                    <IClipboardDataControlFactory>();
-            factory.BuildControl(null);
+            systemUnderTest.BuildControl(null);
         }
 
         [TestMethod]
         public void CanBuildControlReturnsTrueForTextData()
         {
-            var container = CreateContainer();
-
-            var factory = container.Resolve<IClipboardDataControlFactory>();
-            Assert.IsTrue(factory.CanBuildControl(Substitute.For<IClipboardTextData>()));
+            Assert.IsTrue(systemUnderTest.CanBuildControl(Substitute.For<IClipboardTextData>()));
         }
 
         [TestMethod]
         public void CanBuildControlReturnsFalseForNonTextData()
         {
-            var container = CreateContainer();
-
-            var factory = container.Resolve<IClipboardDataControlFactory>();
-            Assert.IsFalse(factory.CanBuildControl(Substitute.For<IClipboardData>()));
-        }
-
-        [TestMethod]
-        public void BuildControlReturnsTextControl()
-        {
-            var fakeTextDataControl = Substitute.For<IClipboardControl>();
-            var fakeTextData = Substitute.For<IClipboardTextData>();
-
-            var container = CreateContainer(
-                c => {
-                    c
-                        .RegisterFake<IClipboardDataControlFactory>()
-                        .BuildControl(fakeTextData)
-                        .Returns(fakeTextDataControl);
-                });
-
-            var factory = container.Resolve<IClipboardDataControlFactory>();
-            var control = factory.BuildControl(fakeTextData);
-            Assert.AreSame(fakeTextDataControl, control);
+            Assert.IsFalse(systemUnderTest.CanBuildControl(Substitute.For<IClipboardData>()));
         }
     }
 }

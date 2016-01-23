@@ -13,7 +13,7 @@
     using ViewModels;
 
     class ClipboardImageDataControlFactory
-        : IClipboardDataControlFactory
+        : IClipboardImageDataControlFactory
     {
         readonly IEnvironmentInformation environmentInformation;
 

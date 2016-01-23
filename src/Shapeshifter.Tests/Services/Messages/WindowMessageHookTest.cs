@@ -19,55 +19,39 @@
     using NSubstitute;
 
     [TestClass]
-    public class WindowMessageHookTest: TestBase
+    public class WindowMessageHookTest: UnitTestFor<IWindowMessageHook>
     {
         [TestMethod]
         [ExpectedException(typeof (InvalidOperationException))]
         public void DisconnectWhenAlreadyDisconnectedThrowsException()
         {
-            var container = CreateContainer();
-
-            var hook = container.Resolve<IWindowMessageHook>();
-            hook.Disconnect();
+            systemUnderTest.Disconnect();
         }
 
         [TestMethod]
         [ExpectedException(typeof (InvalidOperationException))]
         public void ConnectWhenAlreadyConnectedThrowsException()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IWindowMessageInterceptor>();
-                });
-
             var fakeWindow = Substitute.For<IHookableWindow>();
-
-            var hook = container.Resolve<IWindowMessageHook>();
-            hook.Connect(fakeWindow);
-            hook.Connect(fakeWindow);
+            
+            systemUnderTest.Connect(fakeWindow);
+            systemUnderTest.Connect(fakeWindow);
         }
 
         [TestMethod]
         public void ReceivingTwoMessagesNotifiesConsumerTwice()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IWindowMessageInterceptor>();
-                    c.RegisterFake<IConsumerThreadLoop>();
-                });
-
             HwndSourceHook windowHookCallback = null;
             var fakeWindow = Substitute
                 .For<IHookableWindow>()
-                .WithFakeSettings(
+                .With(
                     x => {
                         x.AddHwndSourceHook(
                             Arg.Do<HwndSourceHook>(
                                 h => windowHookCallback = h));
                     });
 
-            var hook = container.Resolve<IWindowMessageHook>();
-            hook.Connect(fakeWindow);
+            systemUnderTest.Connect(fakeWindow);
 
             Assert.IsNotNull(windowHookCallback);
 
@@ -86,27 +70,22 @@
         [TestMethod]
         public void ReceivingMessageGetsParsedOnToInterceptors()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IWindowMessageInterceptor>();
-                    c.RegisterFake<IConsumerThreadLoop>()
-                     .Notify(
-                         Arg.Do<Func<Task>>(
-                             async x => await x()),
-                         Arg.Any<CancellationToken>());
-                });
+            container.Resolve<IConsumerThreadLoop>()
+             .Notify(
+                 Arg.Do<Func<Task>>(
+                     async x => await x()),
+                 Arg.Any<CancellationToken>());
 
             HwndSourceHook windowHookCallback = null;
             var fakeWindow = Substitute.For<IHookableWindow>()
-                                       .WithFakeSettings(
+                                       .With(
                                            x => {
                                                x.AddHwndSourceHook(
                                                    Arg.Do<HwndSourceHook>(
                                                        h => windowHookCallback = h));
                                            });
 
-            var hook = container.Resolve<IWindowMessageHook>();
-            hook.Connect(fakeWindow);
+            systemUnderTest.Connect(fakeWindow);
 
             Assert.IsNotNull(windowHookCallback);
 

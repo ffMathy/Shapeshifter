@@ -15,24 +15,15 @@
     using NSubstitute;
 
     [TestClass]
-    public class ClipboardHandleTest: TestBase
+    public class ClipboardHandleTest: UnitTestFor<IClipboardHandle>
     {
-        ILifetimeScope GetContainer()
-        {
-            return CreateContainer(
-                c => {
-                    c.RegisterFake<IClipboardNativeApi>();
-                    c.RegisterFake<IMainWindowHandleContainer>()
-                     .Handle
-                     .Returns(new IntPtr(1337));
-                });
-        }
 
         [TestMethod]
         public void CreatingHandleOpensClipboardWithWindowHandle()
         {
-            var container = GetContainer();
-            container.Resolve<IClipboardHandle>();
+            container.Resolve<IMainWindowHandleContainer>()
+             .Handle
+             .Returns(new IntPtr(1337));
 
             var fakeClipboardNativeApi = container.Resolve<IClipboardNativeApi>();
             fakeClipboardNativeApi.Received()
@@ -42,10 +33,11 @@
         [TestMethod]
         public void DisposingHandleClosesClipboard()
         {
-            var container = GetContainer();
-
-            var handle = container.Resolve<IClipboardHandle>();
-            handle.Dispose();
+            container.Resolve<IMainWindowHandleContainer>()
+             .Handle
+             .Returns(new IntPtr(1337));
+            
+            systemUnderTest.Dispose();
 
             var fakeClipboardNativeApi = container.Resolve<IClipboardNativeApi>();
             fakeClipboardNativeApi.Received()
@@ -60,11 +52,12 @@
                 1337,
                 1338
             };
+            
+            container.Resolve<IMainWindowHandleContainer>()
+             .Handle
+             .Returns(new IntPtr(1337));
 
-            var container = GetContainer();
-
-            var fakeClipboardNativeApi = container.Resolve<IClipboardNativeApi>();
-            fakeClipboardNativeApi
+            container.Resolve<IClipboardNativeApi>()
                 .GetClipboardFormats()
                 .Returns(fakeFormats);
 
@@ -77,17 +70,15 @@
         [TestMethod]
         public void SetClipboardDataForwardsCallToNativeApi()
         {
-            var container = GetContainer();
-
             var fakeClipboardNativeApi = container.Resolve<IClipboardNativeApi>();
             fakeClipboardNativeApi
                 .SetClipboardData(Arg.Any<uint>(), Arg.Any<IntPtr>())
                 .Returns(new IntPtr(1338));
-
-            var handle = container.Resolve<IClipboardHandle>();
-
-            var pointer = handle.SetClipboardData(1339, new IntPtr(1340));
-            Assert.AreEqual(new IntPtr(1338), pointer);
+            
+            var pointer = systemUnderTest.SetClipboardData(
+                1339, new IntPtr(1340));
+            Assert.AreEqual(
+                new IntPtr(1338), pointer);
 
             fakeClipboardNativeApi
                 .Received()

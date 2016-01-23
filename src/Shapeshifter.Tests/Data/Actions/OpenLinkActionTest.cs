@@ -17,88 +17,68 @@
     using Services.Web.Interfaces;
 
     [TestClass]
-    public class OpenLinkActionTest: ActionTestBase
+    public class OpenLinkActionTest: ActionTestBase<IOpenLinkAction>
     {
         [TestMethod]
         public void CanReadDescription()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IOpenLinkAction>();
-            Assert.IsNotNull(action.Description);
+            Assert.IsNotNull(systemUnderTest.Description);
         }
 
         [TestMethod]
         public void CanReadTitle()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IOpenLinkAction>();
-            Assert.IsNotNull(action.Title);
+            Assert.IsNotNull(systemUnderTest.Title);
         }
 
         [TestMethod]
         public async Task CanPerformIsFalseForNonTextTypes()
         {
-            var container = CreateContainer();
-
             var someNonTextData = Substitute.For<IClipboardDataPackage>();
-
-            var action = container.Resolve<IOpenLinkAction>();
-            Assert.IsFalse(await action.CanPerformAsync(someNonTextData));
+            Assert.IsFalse(
+                await systemUnderTest.CanPerformAsync(
+                    someNonTextData));
         }
 
         [TestMethod]
         public async Task CanPerformIsFalseForTextTypesWithNoLink()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<ILinkParser>()
-                     .HasLinkAsync(Arg.Any<string>())
-                     .Returns(Task.FromResult(false));
-                });
+            container.Resolve<ILinkParser>()
+             .HasLinkAsync(Arg.Any<string>())
+             .Returns(Task.FromResult(false));
 
             var textDataWithLinkButNoImageLink = Substitute.For<IClipboardDataPackage>();
-
-            var action = container.Resolve<IOpenLinkAction>();
-            Assert.IsFalse(await action.CanPerformAsync(textDataWithLinkButNoImageLink));
+            
+            Assert.IsFalse(await systemUnderTest.CanPerformAsync(textDataWithLinkButNoImageLink));
         }
 
         [TestMethod]
         public void OrderIsCorrect()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IOpenLinkAction>();
-            Assert.AreEqual(200, action.Order);
+            Assert.AreEqual(200, systemUnderTest.Order);
         }
 
         [TestMethod]
         public async Task PerformLaunchesDefaultBrowsersForEachLink()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IProcessManager>();
+            container.Resolve<ILinkParser>()
+             .HasLinkAsync(Arg.Any<string>())
+             .Returns(Task.FromResult(true));
 
-                    c.RegisterFake<ILinkParser>()
-                     .HasLinkAsync(Arg.Any<string>())
-                     .Returns(Task.FromResult(true));
-
-                    c.RegisterFake<ILinkParser>()
-                     .ExtractLinksFromTextAsync(Arg.Any<string>())
-                     .Returns(
-                         Task
-                             .FromResult
-                             <IReadOnlyCollection<string>>(
-                                 new[]
-                                 {
+            container.Resolve<ILinkParser>()
+             .ExtractLinksFromTextAsync(Arg.Any<string>())
+             .Returns(
+                 Task
+                     .FromResult
+                     <IReadOnlyCollection<string>>(
+                         new[]
+                         {
                                      "foo.com",
                                      "bar.com"
-                                 }));
-                });
-
-            var action = container.Resolve<IOpenLinkAction>();
-            await action.PerformAsync(GetPackageContaining<IClipboardTextData>());
+                         }));
+            
+            await systemUnderTest.PerformAsync(
+                GetPackageContaining<IClipboardTextData>());
 
             var fakeProcessManager = container.Resolve<IProcessManager>();
             fakeProcessManager.Received(1)

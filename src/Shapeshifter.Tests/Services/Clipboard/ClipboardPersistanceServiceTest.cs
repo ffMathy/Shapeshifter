@@ -19,33 +19,26 @@
     using NSubstitute;
 
     [TestClass]
-    public class ClipboardPersistanceServiceTest: TestBase
+    public class ClipboardPersistanceServiceTest: UnitTestFor<IFileManager>
     {
         [TestCleanup]
         public void Cleanup()
         {
-            var container = CreateContainer();
-
-            var fileManager = container.Resolve<IFileManager>();
-            var folder = fileManager.PrepareIsolatedFolder();
-
+            var folder = systemUnderTest.PrepareIsolatedFolder();
             Directory.Delete(folder, true);
         }
 
         [TestMethod]
         public async Task CanPersistClipboardData()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IFileManager>()
-                     .PrepareNewIsolatedFolder(
-                         Arg.Is<string>(
-                             x => x.StartsWith("Pinned")))
-                     .Returns("preparedFolder");
-                });
+            container.Resolve<IFileManager>()
+             .PrepareNewIsolatedFolder(
+                 Arg.Is<string>(
+                     x => x.StartsWith("Pinned")))
+             .Returns("preparedFolder");
 
             var fakeData1 = Substitute.For<IClipboardData>()
-                                      .WithFakeSettings(
+                                      .With(
                                           x => {
                                               x.RawFormat.Returns(1337u);
                                               x.RawData.Returns(
@@ -56,7 +49,7 @@
                                                   });
                                           });
             var fakeData2 = Substitute.For<IClipboardData>()
-                                      .WithFakeSettings(
+                                      .With(
                                           x => {
                                               x.RawFormat.Returns(1338u);
                                               x.RawData.Returns(
@@ -98,35 +91,32 @@
         [TestMethod]
         public async Task CanFetchPersistedPackages()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IClipboardDataFactory>()
-                     .WithFakeSettings(
-                         x => {
-                             x.CanBuildData(Arg.Any<uint>())
-                              .Returns(true);
+            container.Resolve<IClipboardDataFactory>()
+             .With(
+                 x => {
+                     x.CanBuildData(Arg.Any<uint>())
+                      .Returns(true);
 
-                             x.BuildData(
-                                 Arg.Any<uint>(),
-                                 Arg.Any<byte[]>())
-                              .Returns(
-                                  r => {
-                                      var resultingData = Substitute.For<IClipboardData>();
-                                      resultingData
-                                          .RawData
-                                          .Returns(
-                                              r.Arg<byte[]>());
-                                      resultingData
-                                          .RawFormat
-                                          .Returns(
-                                              r.Arg<uint>());
-                                      return resultingData;
-                                  });
-                         });
-                });
+                     x.BuildData(
+                         Arg.Any<uint>(),
+                         Arg.Any<byte[]>())
+                      .Returns(
+                          r => {
+                              var resultingData = Substitute.For<IClipboardData>();
+                              resultingData
+                                  .RawData
+                                  .Returns(
+                                      r.Arg<byte[]>());
+                              resultingData
+                                  .RawFormat
+                                  .Returns(
+                                      r.Arg<uint>());
+                              return resultingData;
+                          });
+                 });
 
             var fakeData1 = Substitute.For<IClipboardData>()
-                                      .WithFakeSettings(
+                                      .With(
                                           x => {
                                               x.RawFormat.Returns(1337u);
                                               x.RawData.Returns(
@@ -137,7 +127,7 @@
                                                   });
                                           });
             var fakeData2 = Substitute.For<IClipboardData>()
-                                      .WithFakeSettings(
+                                      .With(
                                           x => {
                                               x.RawFormat.Returns(1338u);
                                               x.RawData.Returns(

@@ -21,7 +21,7 @@
     using Web.Interfaces;
 
     [TestClass]
-    public class UpdateServiceTest: TestBase
+    public class UpdateServiceTest: UnitTestFor<IUpdateService>
     {
         [TestMethod]
         public async Task UpdateNotFoundIfNoLaterVersionFound()
@@ -33,12 +33,9 @@
                 .Release
                 .Returns(fakeReleasesClient);
 
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IGitHubClientFactory>()
+            container.Resolve<IGitHubClientFactory>()
                      .CreateClient()
                      .Returns(fakeGitHubClient);
-                });
 
             fakeReleasesClient
                 .GetAll("ffMathy", "Shapeshifter")
@@ -52,9 +49,8 @@
                                 false,
                                 false)
                         }));
-
-            var updateService = container.Resolve<IUpdateService>();
-            await updateService.UpdateAsync();
+            
+            await systemUnderTest.UpdateAsync();
 
             fakeReleasesClient
                 .DidNotReceive()
@@ -75,12 +71,9 @@
                 .Release
                 .Returns(fakeReleasesClient);
 
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IGitHubClientFactory>()
+            container.Resolve<IGitHubClientFactory>()
                      .CreateClient()
                      .Returns(fakeGitHubClient);
-                });
 
             fakeReleasesClient
                 .GetAll("ffMathy", "Shapeshifter")
@@ -94,9 +87,8 @@
                                 true,
                                 false)
                         }));
-
-            var updateService = container.Resolve<IUpdateService>();
-            await updateService.UpdateAsync();
+            
+            await systemUnderTest.UpdateAsync();
 
             fakeReleasesClient
                 .DidNotReceive()
@@ -117,12 +109,9 @@
                 .Release
                 .Returns(fakeReleasesClient);
 
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IGitHubClientFactory>()
+            container.Resolve<IGitHubClientFactory>()
                      .CreateClient()
                      .Returns(fakeGitHubClient);
-                });
 
             fakeReleasesClient
                 .GetAll("ffMathy", "Shapeshifter")
@@ -136,9 +125,8 @@
                                 false,
                                 true)
                         }));
-
-            var updateService = container.Resolve<IUpdateService>();
-            await updateService.UpdateAsync();
+            
+            await systemUnderTest.UpdateAsync();
 
             fakeReleasesClient
                 .DidNotReceive()
@@ -168,22 +156,15 @@
                             CreateReleaseAsset("Shapeshifter.exe")
                         }));
 
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IGitHubClientFactory>()
+            container.Resolve<IGitHubClientFactory>()
                      .CreateClient()
                      .Returns(fakeGitHubClient);
-
-                    c.RegisterFake<IDownloader>();
-
-                    c.RegisterFake<IFileManager>()
-                     .WriteBytesToTemporaryFile(
-                         "Shapeshifter.exe",
-                         Arg.Any<byte[]>())
-                     .Returns("temporaryInstallPath");
-
-                    c.RegisterFake<IProcessManager>();
-                });
+            
+            container.Resolve<IFileManager>()
+             .WriteBytesToTemporaryFile(
+                 "Shapeshifter.exe",
+                 Arg.Any<byte[]>())
+             .Returns("temporaryInstallPath");
 
             fakeReleasesClient
                 .GetAll("ffMathy", "Shapeshifter")
@@ -197,9 +178,8 @@
                                 false,
                                 false)
                         }));
-
-            var updateService = container.Resolve<IUpdateService>();
-            await updateService.UpdateAsync();
+            
+            await systemUnderTest.UpdateAsync();
 
             var fakeDownloader = container.Resolve<IDownloader>();
             fakeDownloader
