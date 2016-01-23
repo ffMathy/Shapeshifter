@@ -9,6 +9,8 @@
     using System.Threading.Tasks;
 
     using Autofac;
+    using Autofac.Core;
+    using Autofac.Core.Activators.Reflection;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -56,13 +58,23 @@
             AssertWait(10000, expression);
         }
 
+        static IEnumerable<Type> GetImplementingTypes(Type type)
+        {
+            var groups = AppDomain
+                .CurrentDomain.GetAssemblies()
+                .SelectMany(x => x.GetTypes())
+                .Where(x => x.IsAssignableFrom(type))
+                .GroupBy(x => x.FullName);
+            return groups.Single();
+        }
+
         public static void RegisterFakesForDependencies<TClass>(this ContainerBuilder builder) where TClass : class
         {
             var type = typeof(TClass);
 
-            var classType = type.IsClass ? type : AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .First(p => type.IsAssignableFrom(p));
+            var classType = type.IsClass ? 
+                type : 
+                GetImplementingTypes(type).Single();
 
             var constructors = classType
                 .GetConstructors()
