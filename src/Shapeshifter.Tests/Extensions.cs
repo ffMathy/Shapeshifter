@@ -60,12 +60,12 @@
         public static void RegisterFakesForDependencies<TClass>(this ContainerBuilder builder) where TClass : class
         {
             var type = typeof(TClass);
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => type.IsAssignableFrom(p));
 
-            var constructors = types
-                .First()
+            var classType = type.IsClass ? type : AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .First(p => type.IsAssignableFrom(p));
+
+            var constructors = classType
                 .GetConstructors()
                 .Where(x => x.IsPublic && !x.IsStatic);
             var targetConstructor = constructors
