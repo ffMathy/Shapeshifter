@@ -2,15 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
     using Autofac;
 
-    using NSubstitute;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using NSubstitute;
+    using System.IO;
     static class Extensions
     {
         static readonly IDictionary<Type, object> fakeCache;
@@ -25,6 +27,29 @@
             fakeCache.Clear();
         }
 
+        public static string GetSolutionRoot()
+        {
+            var currentPath = Environment.CurrentDirectory;
+
+            var found = false;
+            while (!found)
+            {
+                var files = Directory.GetFiles(currentPath);
+                if (files
+                    .Select(Path.GetFileName)
+                    .Contains("README.md"))
+                {
+                    found = true;
+                }
+                else
+                {
+                    currentPath = Path.GetDirectoryName(currentPath);
+                }
+            }
+
+            return Path.Combine(currentPath, "src");
+        }
+
         public static void AssertWait(Action expression)
         {
             AssertWait(10000, expression);
@@ -36,7 +61,7 @@
 
             var exceptions = new List<AssertFailedException>();
             while (
-                ((DateTime.Now - time).TotalMilliseconds < timeout) || 
+                ((DateTime.Now - time).TotalMilliseconds < timeout) ||
                 (exceptions.Count == 0))
             {
                 try
@@ -57,7 +82,9 @@
 
             if (exceptions.Count > 1)
             {
-                throw new AggregateException(exceptions);
+                throw new AggregateException(
+                    "The assertion timeout of " + timeout + " milliseconds was exceeded, and multiple exceptions were caught.",
+                    exceptions);
             }
 
             throw exceptions.First();
@@ -78,15 +105,26 @@
             }
 
             var fake = Substitute.For<TInterface>();
-            return Register(builder, fake);
+            var collection = new ReadOnlyCollection<TInterface>(
+                new List<TInterface>(
+                    new[]
+                    {
+                        fake
+                    }));
+
+            Register(builder, fake);
+            Register<IReadOnlyCollection<TInterface>>(builder, collection);
+            Register<IEnumerable<TInterface>>(builder, collection);
+
+            return fake;
         }
 
-        static TInterface Register<TInterface>(ContainerBuilder builder, TInterface fake) where TInterface : class
+        static void Register<TInterface>(ContainerBuilder builder, TInterface fake) where TInterface : class
         {
             fakeCache.Add(typeof (TInterface), fake);
             builder.Register(c => fake)
-                   .As<TInterface>();
-            return fake;
+                   .As<TInterface>()
+                   .SingleInstance();
         }
 
         public static void IgnoreAwait(this Task task) { }

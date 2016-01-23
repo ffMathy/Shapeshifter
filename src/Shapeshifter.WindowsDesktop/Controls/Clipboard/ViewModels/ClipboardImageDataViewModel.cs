@@ -10,26 +10,26 @@
     using Infrastructure.Environment;
     using Infrastructure.Environment.Interfaces;
 
-    
     class ClipboardImageDataViewModel: ClipboardDataViewModel<IClipboardImageData>
     {
         public ClipboardImageDataViewModel()
-            : this(new EnvironmentInformation()) { }
+            : this(new EnvironmentInformation(true)) { }
 
         public ClipboardImageDataViewModel(
             IEnvironmentInformation environmentInformation)
         {
-            if (environmentInformation.IsInDesignTime)
+            if (environmentInformation.GetIsInDesignTime())
             {
                 PrepareDesignerMode();
             }
         }
 
-        
         void PrepareDesignerMode()
         {
-            var container = DesignTimeContainerHelper.CreateDesignTimeContainer();
-            Data = container.Resolve<DesignerClipboardImageDataFacade>();
+            var container = DesignTimeContainerHelper
+                .CreateDesignTimeContainer();
+            Data = container
+                .Resolve<DesignerClipboardImageDataFacade>();
         }
     }
 }

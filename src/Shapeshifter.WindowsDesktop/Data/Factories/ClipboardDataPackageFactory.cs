@@ -3,11 +3,6 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Api;
-
-    using Controls.Clipboard.Unwrappers.Interfaces;
-
-    using Data;
     using Data.Interfaces;
 
     using Infrastructure.Handles.Factories.Interfaces;
@@ -16,8 +11,9 @@
 
     using Structures;
 
-    
-    class ClipboardDataPackageFactory : IClipboardDataPackageFactory
+    using Unwrappers.Interfaces;
+
+    class ClipboardDataPackageFactory: IClipboardDataPackageFactory
     {
         readonly IClipboardHandleFactory clipboardSessionFactory;
 
@@ -44,9 +40,9 @@
 
         public IClipboardDataPackage CreateFromCurrentClipboardData()
         {
-            using (clipboardSessionFactory.StartNewSession())
+            using (var session = clipboardSessionFactory.StartNewSession())
             {
-                var formats = ClipboardApi.GetClipboardFormats();
+                var formats = session.GetClipboardFormats();
                 return IsAnyFormatSupported(formats)
                            ? ConstructPackageFromFormats(formats)
                            : null;
@@ -55,7 +51,8 @@
 
         public IClipboardDataPackage CreateFromFormatsAndData(params FormatDataPair[] formatsAndData)
         {
-            if (!IsAnyFormatSupported(formatsAndData.Select(x => x.Format)))
+            if (!IsAnyFormatSupported(
+                formatsAndData.Select(x => x.Format)))
             {
                 return null;
             }
@@ -97,7 +94,9 @@
             IClipboardDataPackage package,
             uint format)
         {
-            var unwrapper = memoryUnwrappers.FirstOrDefault(x => x.CanUnwrap(format));
+            var unwrapper = memoryUnwrappers
+                .FirstOrDefault(
+                    x => x.CanUnwrap(format));
 
             var rawData = unwrapper?.UnwrapStructure(format);
             if (rawData == null)
@@ -114,9 +113,8 @@
             byte[] rawData)
         {
             var factory = FindCapableFactoryFromFormat(format);
-            if (factory == null) return;
 
-            var clipboardData = factory.BuildData(format, rawData);
+            var clipboardData = factory?.BuildData(format, rawData);
             if (clipboardData != null)
             {
                 package.AddData(clipboardData);

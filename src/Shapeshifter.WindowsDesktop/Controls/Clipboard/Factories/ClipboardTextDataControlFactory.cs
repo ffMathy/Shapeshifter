@@ -12,7 +12,7 @@
 
     using ViewModels;
 
-    class ClipboardTextDataControlFactory :
+    class ClipboardTextDataControlFactory:
         IClipboardDataControlFactory
     {
         readonly IEnvironmentInformation environmentInformation;
@@ -37,10 +37,9 @@
                     nameof(data));
             }
 
-            return CreateClipboardTextDataControl((IClipboardTextData)data);
+            return CreateClipboardTextDataControl((IClipboardTextData) data);
         }
 
-        
         IClipboardControl CreateClipboardTextDataControl(IClipboardTextData data)
         {
             return new ClipboardTextDataControl

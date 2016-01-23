@@ -2,7 +2,7 @@
 {
     using System;
 
-    using Api;
+    using Services.Messages;
 
     public class WindowMessageReceivedArgument: EventArgs
     {

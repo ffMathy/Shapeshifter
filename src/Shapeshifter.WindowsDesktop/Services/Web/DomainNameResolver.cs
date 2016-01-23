@@ -10,7 +10,6 @@
 
     using Interfaces;
 
-    
     class DomainNameResolver: IDomainNameResolver
     {
         readonly IKeyValueCache<string, IPAddress[]> domainResolveCache;

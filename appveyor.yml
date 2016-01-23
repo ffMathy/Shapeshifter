@@ -1,9 +1,9 @@
-version: 6.0.0.{build}
+version: 6.1.{build}
 pull_requests:
   do_not_increment_build_number: true
 skip_tags: true
 os: Visual Studio 2015
-configuration: Release
+configuration: Debug
 platform: Any CPU
 assembly_info:
   patch: true
@@ -16,18 +16,8 @@ before_build:
 build:
   project: src\Shapeshifter.sln
   verbosity: normal
-after_build:
-- cmd: >-
-    cd src\Shapeshifter.WindowsDesktop\bin\Release\
-    
-    7z a Binaries.zip *.dll
-    
-    7z a Binaries.zip *.exe
-    
-    cd ..\..\..
-    
 artifacts:
-- path: src\Shapeshifter.WindowsDesktop\bin\Release\Binaries.zip
+- path: build\application\Shapeshifter.exe
   name: Deployment
 deploy:
 - provider: GitHub
@@ -36,11 +26,11 @@ deploy:
     secure: bEEQPxNCa8Kb1CYtJddx0wPImmY2T/ZCrXVFf+RVtEC0Lvb0pVDE2D6sjfy9NxdV
   on:
     branch: master
-test_script: 
+test_script:
   - nuget install opencover -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
-    
-    %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -output:"coverage.xml" -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\src\Shapeshifter.Tests\bin\Release\Shapeshifter.Tests.dll\"" -register:user -skipautoprops -returntargetcode
-    
+
+    %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -output:"coverage.xml" -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\build\tests\Shapeshifter.Tests.dll\"" -register:user -skipautoprops -returntargetcode
+
     C:\Python35-x64\python.exe -m pip install codecov
-    
+
     C:\Python35-x64\Scripts\codecov -f coverage.xml

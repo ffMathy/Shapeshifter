@@ -1,6 +1,8 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
-    using WindowsDesktop.Services.Interfaces;
+    using WindowsDesktop.Services.Clipboard.Interfaces;
+
+    using Controls.Designer.Services;
 
     using Data.Interfaces;
 
@@ -10,7 +12,6 @@
 
     using Properties;
 
-    
     class DesignerTextDataSourceService
         : IDataSourceService,
           IDesignerService

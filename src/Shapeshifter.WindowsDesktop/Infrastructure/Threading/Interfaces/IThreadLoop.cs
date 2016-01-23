@@ -8,7 +8,9 @@
     {
         bool IsRunning { get; }
 
-        Task StartAsync(Func<Task> action, CancellationToken token = default(CancellationToken));
+        Task StartAsync(
+            Func<Task> action, 
+            CancellationToken token = default(CancellationToken));
 
         void Stop();
     }

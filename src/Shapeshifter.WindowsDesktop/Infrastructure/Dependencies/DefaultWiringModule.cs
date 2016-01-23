@@ -3,20 +3,16 @@
 namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 {
     using System;
-    using System.Linq;
-    using System.Reflection;
     using System.Windows.Threading;
 
     using Autofac;
-    using Autofac.Builder;
 
     using Controls.Clipboard.Designer.Helpers;
-    using Controls.Clipboard.Designer.Services.Interfaces;
 
     using Environment;
     using Environment.Interfaces;
 
-    using Interfaces;
+    using Native;
 
     using Threading;
 
@@ -26,24 +22,30 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 
         readonly Action<ContainerBuilder> callback;
 
-        public DefaultWiringModule(IEnvironmentInformation environmentInformation)
+        public DefaultWiringModule(
+            IEnvironmentInformation environmentInformation)
         {
             this.environmentInformation = environmentInformation;
         }
 
         public DefaultWiringModule(Action<ContainerBuilder> callback = null)
+            : this(new EnvironmentInformation())
         {
             this.callback = callback;
         }
 
         protected override void Load(ContainerBuilder builder)
         {
-            RegisterAssemblyTypes(builder, typeof (DefaultWiringModule).Assembly);
+            AssemblyRegistrationHelper
+                .RegisterAssemblyTypes(builder, typeof (DefaultWiringModule).Assembly, this.environmentInformation.GetIsInDesignTime());
+
+            AssemblyRegistrationHelper
+                .RegisterAssemblyTypes(builder, NativeAssemblyHelper.Assembly, this.environmentInformation.GetIsInDesignTime());
 
             RegisterMainThread(builder);
 
             var environmentInformation = RegisterEnvironmentInformation(builder);
-            if (environmentInformation.IsInDesignTime)
+            if (environmentInformation.GetIsInDesignTime())
             {
                 DesignTimeContainerHelper.RegisterFakes(builder);
             }
@@ -67,52 +69,6 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
                 .As<IEnvironmentInformation>()
                 .SingleInstance();
             return environmentInformation;
-        }
-
-        static void RegisterAssemblyTypes(ContainerBuilder builder, Assembly assembly)
-        {
-            var types = assembly.GetTypes();
-            foreach (var type in types)
-            {
-                if (!type.IsClass || type.IsAbstract)
-                {
-                    continue;
-                }
-
-                var interfaces = type.GetInterfaces();
-                if (interfaces.Contains(typeof (IDesignerService)))
-                {
-                    continue;
-                }
-
-                IRegistrationBuilder<object, ReflectionActivatorData, object> registration;
-                if (type.IsGenericType)
-                {
-                    registration = builder.RegisterGeneric(type);
-
-                    var genericInterfaces = interfaces
-                        .Where(x => x.IsGenericType);
-                    foreach (var genericInterface in genericInterfaces)
-                    {
-                        registration.As(genericInterface);
-                    }
-                }
-                else
-                {
-                    var standardRegistration = builder.RegisterType(type);
-                    standardRegistration.AsSelf();
-                    standardRegistration.AsImplementedInterfaces();
-
-                    registration = standardRegistration;
-                }
-
-                registration.FindConstructorsWith(new PublicConstructorFinder());
-
-                if (interfaces.Contains(typeof (ISingleInstance)))
-                {
-                    registration.SingleInstance();
-                }
-            }
         }
     }
 }

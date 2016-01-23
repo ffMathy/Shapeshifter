@@ -17,33 +17,42 @@
 
         public TValue Get(TKey key)
         {
-            return data.ContainsKey(key) ? data[key] : default(TValue);
+            lock (this)
+            {
+                return data.ContainsKey(key) ? data[key] : default(TValue);
+            }
         }
 
         public void Set(TKey key, TValue value)
         {
-            if (data.ContainsKey(key))
+            lock (this)
             {
-                data[key] = value;
-            }
-            else
-            {
-                data.Add(key, value);
+                if (data.ContainsKey(key))
+                {
+                    data[key] = value;
+                }
+                else
+                {
+                    data.Add(key, value);
+                }
             }
         }
 
         public TValue Thunkify(TKey argument, Func<TKey, TValue> method)
         {
-            var cachedResult = Get(argument);
-            if (!Equals(cachedResult, default(TValue)))
+            lock (this)
             {
-                return cachedResult;
+                var cachedResult = Get(argument);
+                if (!Equals(cachedResult, default(TValue)))
+                {
+                    return cachedResult;
+                }
+
+                var result = method(argument);
+                Set(argument, result);
+
+                return result;
             }
-
-            var result = method(argument);
-            Set(argument, result);
-
-            return result;
         }
 
         public async Task<TValue> ThunkifyAsync(TKey argument, Func<TKey, Task<TValue>> method)

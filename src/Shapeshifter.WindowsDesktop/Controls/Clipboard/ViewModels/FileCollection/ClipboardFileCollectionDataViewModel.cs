@@ -20,20 +20,18 @@
         : ClipboardDataViewModel<IClipboardFileCollectionData>,
           IClipboardFileCollectionDataViewModel
     {
-        
         public ClipboardFileCollectionDataViewModel()
-            : this(new EnvironmentInformation()) { }
+            : this(new EnvironmentInformation(true)) { }
 
         public ClipboardFileCollectionDataViewModel(
             IEnvironmentInformation environmentInformation)
         {
-            if (environmentInformation.IsInDesignTime)
+            if (environmentInformation.GetIsInDesignTime())
             {
                 PrepareDesignerMode();
             }
         }
 
-        
         void PrepareDesignerMode()
         {
             var container = DesignTimeContainerHelper.CreateDesignTimeContainer();

@@ -5,10 +5,13 @@
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
             xmlns:facades="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Clipboard.Designer.Facades"
             xmlns:converters="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Converters"
+            xmlns:clipboard="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Clipboard"
             mc:Ignorable="d"
             d:DataContext="{d:DesignInstance Type=facades:DesignerDataSourceFacade, IsDesignTimeCreatable=True}"
             Orientation="Horizontal" VerticalAlignment="Center">
     <Image Style="{StaticResource DataSourceIconStyle}"
            Source="{Binding Icon, Converter={converters:ByteArrayToImageSourceConverter}}" />
-    <TextBlock Style="{StaticResource DataSourceTextStyle}" Text="{Binding Text}" />
+    <TextBlock Style="{StaticResource DataSourceTextStyle}"
+               Visibility="{Binding RelativeSource={RelativeSource AncestorType=clipboard:DataSourceControl}, Path=TextVisibility}"
+               Text="{Binding Text}" />
 </StackPanel>

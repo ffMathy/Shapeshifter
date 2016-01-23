@@ -53,8 +53,7 @@
         public async Task<IReadOnlyCollection<string>> ExtractLinksFromTextAsync(string text)
         {
             return await Task.Run(
-                async () =>
-                {
+                async () => {
                     var words = GetWords(text);
                     return await asyncFilter.FilterAsync(words, IsValidLinkAsync);
                 });
@@ -125,8 +124,7 @@
         {
             using (performanceHandleFactory.StartMeasuringPerformance())
                 return await Task.Run(
-                    async () =>
-                    {
+                    async () => {
                         var words = GetWords(text);
 
                         var suspiciousWords = ExtractSuspiciousWords(words);
@@ -155,8 +153,7 @@
                 Func<string, Task<bool>> validationFunction =
                     async word => IsLinkOfType(word, linkType) && await IsValidLinkAsync(word);
                 return await Task.Run(
-                    async () =>
-                    {
+                    async () => {
                         var words = GetWords(text);
 
                         var suspiciousWords = ExtractSuspiciousWords(words);

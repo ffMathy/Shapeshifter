@@ -5,7 +5,9 @@
 
     using Infrastructure.Dependencies.Interfaces;
 
-    public interface IDownloader: ISingleInstance, IDisposable
+    public interface IDownloader
+        : ISingleInstance,
+          IDisposable
     {
         Task<byte[]> DownloadBytesAsync(string url);
     }

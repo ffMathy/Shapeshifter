@@ -6,11 +6,11 @@
 
     using Autofac;
 
+    using Interfaces;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
-
-    using Interfaces;
 
     [TestClass]
     public class ConsumerThreadLoopTest: TestBase
@@ -19,8 +19,7 @@
         public void IsRunningWhenInnerLoopIsRunning()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IThreadLoop>()
                      .IsRunning
                      .Returns(true);
@@ -34,8 +33,7 @@
         public void IsNotRunningWhenInnerLoopIsNotRunning()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IThreadLoop>()
                      .IsRunning
                      .Returns(false);
@@ -49,8 +47,7 @@
         public void StopStopsInnerLoop()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IThreadLoop>();
                 });
 
@@ -66,8 +63,7 @@
         public void NotifyForTheFirstTimeSpawnsThread()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IThreadLoop>();
                 });
 
@@ -85,13 +81,11 @@
             IThreadLoop fakeInnerLoop = null;
             Func<Task> innerLoopTick = null;
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     fakeInnerLoop = c.RegisterFake<IThreadLoop>();
                     fakeInnerLoop.StartAsync(
                         Arg.Do<Func<Task>>(
-                            x =>
-                            {
+                            x => {
                                 innerLoopTick
                                     = x;
                             }),

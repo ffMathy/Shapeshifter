@@ -33,29 +33,33 @@
         public async Task PersistClipboardPackageAsync(IClipboardDataPackage package)
         {
             var packageFolder = PrepareUniquePackageFolder();
-            for (var i = 1; i <= package.Contents.Count; i++)
+            for (var i = 0; i < package.Contents.Count; i++)
             {
                 var content = package.Contents[i];
-                var filePath = Path.Combine(packageFolder, i.ToString());
-                fileManager.WriteBytesToTemporaryFile(filePath, content.RawData);
+                var filePath = Path.Combine(
+                    packageFolder,
+                    i + 1 + "." + content.RawFormat);
+                fileManager.WriteBytesToTemporaryFile(
+                    filePath,
+                    content.RawData);
             }
         }
 
         string PrepareUniquePackageFolder()
         {
-            var unixTimestamp = DateTime.UtcNow.ToFileTime();
-            var packageFolder = fileManager.PrepareFolder(
-                Path.Combine("Pinned", unixTimestamp.ToString()));
+            var packageFolder = fileManager.PrepareNewIsolatedFolder(
+                Path.Combine("Pinned"));
             return packageFolder;
         }
 
         public async Task<IEnumerable<IClipboardDataPackage>> GetPersistedPackagesAsync()
         {
             var packageList = new List<IClipboardDataPackage>();
-            var packageFolder = fileManager.PrepareFolder("Pinned");
-            foreach (var directory in Directory.GetDirectories(packageFolder))
+            var packageFolder = fileManager.PrepareIsolatedFolder("Pinned");
+            var packageDirectories = Directory.GetDirectories(packageFolder);
+            foreach (var packageDirectory in packageDirectories)
             {
-                packageList.Add(await GetPersistedPackageAsync(directory));
+                packageList.Add(await GetPersistedPackageAsync(packageDirectory));
             }
 
             return packageList;
@@ -63,7 +67,9 @@
 
         async Task<IClipboardDataPackage> GetPersistedPackageAsync(string directory)
         {
-            var packageFiles = Directory.GetFiles(directory).OrderBy(x => x);
+            var packageFiles = Directory
+                .GetFiles(directory)
+                .OrderBy(x => x);
 
             var dataPairs = new List<FormatDataPair>();
             foreach (var file in packageFiles)

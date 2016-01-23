@@ -2,9 +2,10 @@
 {
     using WindowsDesktop.Services.Images.Interfaces;
 
+    using Controls.Designer.Services;
+
     using Interfaces;
 
-    
     class DesignerImageConverterService
         : IDesignerImageConverterService,
           IDesignerService

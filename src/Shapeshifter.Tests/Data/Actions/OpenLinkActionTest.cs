@@ -5,8 +5,9 @@
 
     using Autofac;
 
-    using Interfaces;
     using Data.Interfaces;
+
+    using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -51,8 +52,7 @@
         public async Task CanPerformIsFalseForTextTypesWithNoLink()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<ILinkParser>()
                      .HasLinkAsync(Arg.Any<string>())
                      .Returns(Task.FromResult(false));
@@ -77,8 +77,7 @@
         public async Task PerformLaunchesDefaultBrowsersForEachLink()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IProcessManager>();
 
                     c.RegisterFake<ILinkParser>()

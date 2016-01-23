@@ -6,22 +6,31 @@
     using System.Runtime.InteropServices;
     using System.Windows.Media.Imaging;
 
-    using Api;
-
     using Interfaces;
 
-    
+    using Native.Interfaces;
+
     class ImagePersistenceService: IImagePersistenceService
     {
-        static ImageMetaInformation ConvertByteArrayToMetaInformation(byte[] data)
+        readonly IGeneralNativeApi generalNativeApi;
+
+        public ImagePersistenceService(
+            IGeneralNativeApi generalNativeApi)
         {
-            return GeneralApi.ByteArrayToStructure<ImageMetaInformation>(data);
+            this.generalNativeApi = generalNativeApi;
         }
 
-        static IEnumerable<byte> ConvertMetaInformationToByteArray(
+        ImageMetaInformation ConvertByteArrayToMetaInformation(byte[] data)
+        {
+            return generalNativeApi
+                .ByteArrayToStructure<ImageMetaInformation>(data);
+        }
+
+        IEnumerable<byte> ConvertMetaInformationToByteArray(
             ImageMetaInformation metaInformation)
         {
-            return GeneralApi.StructureToByteArray(metaInformation);
+            return generalNativeApi
+                .StructureToByteArray(metaInformation);
         }
 
         public byte[] ConvertBitmapSourceToByteArray(BitmapSource bitmap)
@@ -41,7 +50,9 @@
             };
 
             var imageData = ConvertImageDataToByteArray(bitmap);
-            return DecorateSourceWithMetaInformation(imageData, metaInformation);
+            return DecorateSourceWithMetaInformation(
+                imageData,
+                metaInformation);
         }
 
         public byte[] DecorateSourceWithMetaInformation(
@@ -79,13 +90,13 @@
             return GenerateBitmapSourceFromSource(bytes);
         }
 
-        static bool DoesSourceHaveMetaInformation(byte[] source)
+        bool DoesSourceHaveMetaInformation(byte[] source)
         {
             var metaInformation = GetMetaInformationFromSource(source);
             return (metaInformation.Width > 0) && (metaInformation.Height > 0);
         }
 
-        static ImageMetaInformation GetMetaInformationFromSource(byte[] bytes)
+        ImageMetaInformation GetMetaInformationFromSource(byte[] bytes)
         {
             var metaInformationData = ExtractMetaInformationFromSource(bytes);
             var metaInformation = ConvertByteArrayToMetaInformation(metaInformationData);
@@ -105,11 +116,13 @@
             return Marshal.SizeOf<ImageMetaInformation>();
         }
 
-        static BitmapSource GenerateBitmapSourceFromSource(byte[] bytes)
+        BitmapSource GenerateBitmapSourceFromSource(byte[] bytes)
         {
             var metaInformation = GetMetaInformationFromSource(bytes);
             var imageData = ExtractImageDataFromSource(bytes);
-            return GenerateBitmapSource(metaInformation, imageData);
+            return GenerateBitmapSource(
+                metaInformation,
+                imageData);
         }
 
         static BitmapSource GenerateBitmapSource(

@@ -9,104 +9,161 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Shapeshifter.WindowsDesktop</RootNamespace>
     <AssemblyName>Shapeshifter</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
+    <IgnoreRecursion>false</IgnoreRecursion>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>..\..\build\application\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>CS1998</NoWarn>
     <UseVSHostingProcess>false</UseVSHostingProcess>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <NoWarn>CS1998</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Shapeshifter.WindowsDesktop.App</StartupObject>
+    <StartupObject>Shapeshifter.WindowsDesktop.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationIcon>Resources\Shapeshifter.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
+      <HintPath>..\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Octokit, Version=0.17.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Octokit.0.17.0\lib\net45\Octokit.dll</HintPath>
       <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System">
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System.Data">
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem">
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsBase">
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\Designer\Services\IDesignerService.cs" />
+    <Compile Include="Controls\Window\Factories\Interfaces\ISettingsWindowFactory.cs" />
+    <Compile Include="Controls\Window\Factories\SettingsWindowFactory.cs" />
+    <Compile Include="Controls\Window\Interfaces\IHookableWindow.cs" />
+    <Compile Include="Controls\Window\Interfaces\ISettingsWindow.cs" />
+    <Compile Include="Controls\Window\Interfaces\IWindow.cs" />
+    <Compile Include="Controls\Window\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Window\ViewModels\Interfaces\ISettingsViewModel.cs" />
+    <Compile Include="Controls\Window\ViewModels\SettingsViewModel.cs" />
     <Compile Include="Data\Actions\CopyImageLinkAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IPasteAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IOpenLinkAction.cs" />
     <Compile Include="Data\Actions\Interfaces\ICopyImageLinkAction.cs" />
+    <Compile Include="Data\Actions\Interfaces\IPinClipboardDataAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IZipFilesAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IUploadImageAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IPasteAsPlainTextAction.cs" />
@@ -116,9 +173,35 @@
     <Compile Include="Data\Actions\PinClipboardDataAction.cs" />
     <Compile Include="Data\Actions\UploadImageAction.cs" />
     <Compile Include="Data\Actions\ZipFilesAction.cs" />
-    <Compile Include="Api\GeneralApi.cs" />
-    <Compile Include="Api\ImageApi.cs" />
-    <Compile Include="Api\Message.cs" />
+    <Compile Include="Infrastructure\Dependencies\AssemblyRegistrationHelper.cs" />
+    <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
+    <Compile Include="Infrastructure\Dependencies\PublicConstructorFinder.cs" />
+    <Compile Include="Infrastructure\Events\PastePerformedEventArgument.cs" />
+    <Compile Include="Infrastructure\Events\TrayIconClickedEventArgument.cs" />
+    <Compile Include="Infrastructure\Handles\IndentationHandle.cs" />
+    <Compile Include="Infrastructure\Handles\Interfaces\IHandle.cs" />
+    <Compile Include="Infrastructure\Handles\Interfaces\IIndentationHandle.cs" />
+    <Compile Include="Infrastructure\Logging\Interfaces\ILogger.cs" />
+    <Compile Include="Infrastructure\Logging\Interfaces\ILogStream.cs" />
+    <Compile Include="Infrastructure\Logging\Logger.cs" />
+    <Compile Include="Infrastructure\Logging\LogStream.cs" />
+    <Compile Include="Infrastructure\Threading\Interfaces\IRetryingThreadLoop.cs" />
+    <Compile Include="Infrastructure\Threading\RetryingThreadLoop.cs" />
+    <Compile Include="Infrastructure\Threading\RetryingThreadLoopJob.cs" />
+    <Compile Include="Services\Interfaces\IMouseWheelHook.cs" />
+    <Compile Include="Services\Interfaces\IPixelConversionService.cs" />
+    <Compile Include="Services\Interfaces\IRegistryManager.cs" />
+    <Compile Include="Services\Interfaces\ISettingsManager.cs" />
+    <Compile Include="Services\MouseWheelHook.cs" />
+    <Compile Include="Services\PixelConversionService.cs" />
+    <Compile Include="Services\RegistryManager.cs" />
+    <Compile Include="Services\Screen\ScreenInformation.cs" />
+    <Compile Include="Services\Screen\Interfaces\IScreenManager.cs" />
+    <Compile Include="Services\Screen\ScreenManager.cs" />
+    <Compile Include="Services\SettingsManager.cs" />
+    <Compile Include="Services\Tray\Interfaces\ITrayContextMenuItem.cs" />
+    <Compile Include="Services\Tray\Interfaces\ITrayIconManager.cs" />
+    <Compile Include="Services\Messages\Message.cs" />
     <Compile Include="Controls\Clipboard\ClipboardImageDataControl.xaml.cs">
       <DependentUpon>ClipboardImageDataControl.xaml</DependentUpon>
     </Compile>
@@ -127,7 +210,6 @@
     <Compile Include="Controls\Clipboard\Designer\Services\DesignerDomainNameResolver.cs" />
     <Compile Include="Controls\Clipboard\Designer\Services\DesignerFileManager.cs" />
     <Compile Include="Controls\Clipboard\Designer\Services\DesignerProcessManager.cs" />
-    <Compile Include="Controls\Clipboard\Designer\Services\DesignerUpdateService.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardDataControlPackageFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardFileCollectionDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardImageDataControlFactory.cs" />
@@ -135,9 +217,9 @@
     <Compile Include="Controls\Clipboard\Factories\ClipboardTextDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardFileCollectionDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Interfaces\IClipboardControl.cs" />
-    <Compile Include="Controls\Clipboard\Unwrappers\BitmapUnwrapper.cs" />
-    <Compile Include="Controls\Clipboard\Unwrappers\GeneralUnwrapper.cs" />
-    <Compile Include="Controls\Clipboard\Unwrappers\Interfaces\IMemoryUnwrapper.cs" />
+    <Compile Include="Data\Unwrappers\BitmapUnwrapper.cs" />
+    <Compile Include="Data\Unwrappers\GeneralUnwrapper.cs" />
+    <Compile Include="Data\Unwrappers\Interfaces\IMemoryUnwrapper.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardImageDataViewModel.cs" />
     <Compile Include="Controls\Window\ActionControl.xaml.cs">
       <DependentUpon>ActionControl.xaml</DependentUpon>
@@ -181,10 +263,6 @@
     <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardDataControlPackageFactory.cs" />
     <Compile Include="Infrastructure\Handles\Factories\Interfaces\IClipboardHandleFactory.cs" />
     <Compile Include="Data\Factories\TextClipboardDataFactory.cs" />
-    <Compile Include="Api\IconApi.cs" />
-    <Compile Include="Api\KeyboardApi.cs" />
-    <Compile Include="Api\ClipboardApi.cs" />
-    <Compile Include="Api\WindowApi.cs" />
     <Compile Include="Infrastructure\Handles\Factories\Interfaces\IMemoryHandleFactory.cs" />
     <Compile Include="Infrastructure\Handles\Factories\Interfaces\IPerformanceHandleFactory.cs" />
     <Compile Include="Infrastructure\Handles\Factories\MemoryHandleFactory.cs" />
@@ -194,18 +272,13 @@
     <Compile Include="Infrastructure\Handles\Interfaces\IPerformanceHandle.cs" />
     <Compile Include="Infrastructure\Handles\MemoryHandle.cs" />
     <Compile Include="Infrastructure\Handles\PerformanceHandle.cs" />
-    <Compile Include="Controls\Clipboard\Designer\Services\Interfaces\IDesignerService.cs" />
     <Compile Include="Infrastructure\Caching\Interfaces\IKeyValueCache.cs" />
     <Compile Include="Infrastructure\Caching\KeyValueCache.cs" />
     <Compile Include="Infrastructure\Dependencies\DefaultWiringModule.cs" />
-    <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
-    <Compile Include="Infrastructure\Dependencies\PublicConstructorFinder.cs" />
     <Compile Include="Infrastructure\Environment\EnvironmentInformation.cs" />
     <Compile Include="Infrastructure\Environment\Interfaces\IEnvironmentInformation.cs" />
     <Compile Include="Infrastructure\Events\UserInterfaceHiddenEventArgument.cs" />
     <Compile Include="Infrastructure\Events\UserInterfaceShownEventArgument.cs" />
-    <Compile Include="Infrastructure\Logging\Interfaces\ILogger.cs" />
-    <Compile Include="Infrastructure\Logging\Logger.cs" />
     <Compile Include="Infrastructure\Threading\AsyncFilter.cs" />
     <Compile Include="Infrastructure\Threading\ConsumerThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IAsyncFilter.cs" />
@@ -218,24 +291,40 @@
     <Compile Include="Infrastructure\Threading\ThreadDelay.cs" />
     <Compile Include="Infrastructure\Threading\ThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\UserInterfaceThread.cs" />
-    <Compile Include="Main.cs" />
+    <Compile Include="Startup\ApplicationEntrypoint.cs" />
     <Compile Include="Mediators\PasteCombinationDurationMediator.cs" />
     <Compile Include="Mediators\Interfaces\IPasteCombinationDurationMediator.cs" />
-    <Compile Include="Services\Arguments\Interfaces\IArgumentProcessor.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Services\Arguments\AggregateArgumentProcessor.cs" />
     <Compile Include="Services\Arguments\CleanupArgumentProcessor.cs" />
-    <Compile Include="Services\Arguments\UpdateArgumentProcessor.cs" />
+    <Compile Include="Services\Arguments\Interfaces\IAggregateArgumentProcessor.cs" />
+    <Compile Include="Services\Arguments\Interfaces\IArgumentProcessor.cs" />
+    <Compile Include="Services\Arguments\Interfaces\INoArgumentProcessor.cs" />
+    <Compile Include="Services\Arguments\Interfaces\ISingleArgumentProcessor.cs" />
+    <Compile Include="Services\Arguments\InstallArgumentProcessor.cs" />
+    <Compile Include="Services\CertificateManager.cs" />
     <Compile Include="Services\Clipboard\ClipboardPasteService.cs" />
     <Compile Include="Infrastructure\Handles\ClipboardHandle.cs" />
     <Compile Include="Services\Clipboard\ClipboardPersistanceService.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IClipboardPasteService.cs" />
-    <Compile Include="Infrastructure\Handles\Interfaces\IHandle.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IClipboardPersistanceService.cs" />
-    <Compile Include="Services\Interfaces\IDataSourceService.cs" />
+    <Compile Include="Services\Files\FileManager.cs" />
+    <Compile Include="Services\Files\Interfaces\IFileManager.cs" />
+    <Compile Include="Services\Clipboard\Interfaces\IDataSourceService.cs" />
+    <Compile Include="Services\Interfaces\ICertificateManager.cs" />
+    <Compile Include="Services\Interfaces\IProcessManager.cs" />
+    <Compile Include="Services\Updates\GitHubClientFactory.cs" />
+    <Compile Include="Services\Updates\Interfaces\IGitHubClientFactory.cs" />
+    <Compile Include="Services\Updates\Interfaces\IUpdateService.cs" />
+    <Compile Include="Services\Keyboard\Interfaces\IKeyboardManager.cs" />
+    <Compile Include="Services\Keyboard\KeyboardManager.cs" />
+    <Compile Include="Services\Keyboard\KeyDirection.cs" />
+    <Compile Include="Services\Keyboard\KeyOperation.cs" />
     <Compile Include="Services\Messages\Interceptors\ClipboardCopyInterceptor.cs" />
     <Compile Include="Mediators\ClipboardUserInterfaceMediator.cs" />
     <Compile Include="Services\Clipboard\ClipboardInjectionService.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IClipboardInjectionService.cs" />
-    <Compile Include="Services\DataSourceService.cs" />
+    <Compile Include="Services\Clipboard\DataSourceService.cs" />
     <Compile Include="Infrastructure\Events\ControlEventArgument.cs" />
     <Compile Include="Infrastructure\Events\DataCopiedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\PasteCombinationReleasedEventArgument.cs" />
@@ -250,9 +339,10 @@
     <Compile Include="Services\Messages\Interceptors\Hotkeys\KeyInterceptor.cs" />
     <Compile Include="Services\Messages\Interfaces\IWindowMessageInterceptor.cs" />
     <Compile Include="Services\Messages\Interfaces\IWindowMessageHook.cs" />
+    <Compile Include="Services\ProcessManager.cs" />
+    <Compile Include="Services\Tray\TrayIconManager.cs" />
+    <Compile Include="Services\Updates\UpdateService.cs" />
     <Compile Include="Services\Web\DomainNameResolver.cs" />
-    <Compile Include="Services\Web\Downloader.cs" />
-    <Compile Include="Services\Files\FileManager.cs" />
     <Compile Include="Services\Files\FileType.cs" />
     <Compile Include="Services\Files\FileTypeInterpreter.cs" />
     <Compile Include="Services\Files\Interfaces\IFileTypeInterpreter.cs" />
@@ -262,14 +352,12 @@
     <Compile Include="Services\Images\Interfaces\IImageFileInterpreter.cs" />
     <Compile Include="Services\Messages\Interceptors\Interfaces\IClipboardCopyInterceptor.cs" />
     <Compile Include="Mediators\Interfaces\IClipboardUserInterfaceMediator.cs" />
+    <Compile Include="Services\Web\Downloader.cs" />
     <Compile Include="Services\Web\Interfaces\IDomainNameResolver.cs" />
-    <Compile Include="Services\Web\Interfaces\IDownloader.cs" />
-    <Compile Include="Services\Files\Interfaces\IFileManager.cs" />
     <Compile Include="Services\Interfaces\IHookService.cs" />
     <Compile Include="Services\Images\Interfaces\IImagePersistenceService.cs" />
+    <Compile Include="Services\Web\Interfaces\IDownloader.cs" />
     <Compile Include="Services\Web\Interfaces\ILinkParser.cs" />
-    <Compile Include="Services\Interfaces\IProcessManager.cs" />
-    <Compile Include="Services\Interfaces\IUpdateService.cs" />
     <Compile Include="Services\Messages\Interceptors\Hotkeys\Interfaces\IPasteHotkeyInterceptor.cs" />
     <Compile Include="Infrastructure\Events\WindowMessageReceivedArgument.cs" />
     <Compile Include="Services\Files\FileIconService.cs" />
@@ -277,9 +365,16 @@
     <Compile Include="Services\Messages\Interceptors\Hotkeys\PasteHotkeyInterceptor.cs" />
     <Compile Include="Services\Web\LinkParser.cs" />
     <Compile Include="Services\Web\LinkType.cs" />
-    <Compile Include="Services\ProcessManager.cs" />
-    <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Services\Messages\WindowMessageHook.cs" />
+    <Compile Include="Startup\Interfaces\IMainWindowPreparationOperation.cs" />
+    <Compile Include="Startup\Interfaces\IPostPreparationOperation.cs" />
+    <Compile Include="Startup\Interfaces\IStartupOperation.cs" />
+    <Compile Include="Startup\Interfaces\IStartupPreparationOperation.cs" />
+    <Compile Include="Startup\Interfaces\ITrayPreparationOperation.cs" />
+    <Compile Include="Startup\MainWindowPreparationOperation.cs" />
+    <Compile Include="Startup\PostPreparationOperation.cs" />
+    <Compile Include="Startup\StartupPreparationOperation.cs" />
+    <Compile Include="Startup\TrayPreparationOperation.cs" />
     <Compile Include="Structures\FormatDataPair.cs" />
     <Compile Include="Controls\Window\Binders\PackageToActionBinder.cs" />
     <Compile Include="Controls\Window\ClipboardListWindow.xaml.cs">
@@ -288,7 +383,6 @@
     <Compile Include="Controls\Window\Binders\Interfaces\IAsyncListDictionaryBinder.cs" />
     <Compile Include="Controls\Window\Interfaces\IClipboardListWindow.cs" />
     <Compile Include="Controls\Window\Interfaces\IMainWindowHandleContainer.cs" />
-    <Compile Include="Controls\Window\Interfaces\IWindow.cs" />
     <Compile Include="Controls\Window\MainWindowHandleContainer.cs" />
     <Compile Include="Controls\Window\ViewModels\ClipboardListViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\IClipboardListViewModel.cs" />
@@ -312,15 +406,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileDataSourceIcon.dat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileDataFileIcon.dat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\TextDataSourceIcon.dat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileDataSourceIcon.dat" />
+    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileDataFileIcon.dat" />
+    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\TextDataSourceIcon.dat" />
     <Page Include="Controls\Clipboard\DataSourceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -329,7 +417,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Resource Include="Controls\Clipboard\Resources\ClipboardTextDataIcon.png" />
     <Page Include="Controls\Styles\Clipboard.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -362,6 +449,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\Window\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -381,9 +472,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.manifest">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="App.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -395,16 +484,28 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileImageSample.dat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileImageSample.dat" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shapeshifter.WindowsDesktop.Native\Shapeshifter.WindowsDesktop.Native.csproj">
+      <Project>{25acb6f2-f5e2-4c38-ab51-697eaa995cc4}</Project>
+      <Name>Shapeshifter.WindowsDesktop.Native</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shapeshifter.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+  <Import Project="..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.29.4\build\dotnet\Fody.targets'))" />
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

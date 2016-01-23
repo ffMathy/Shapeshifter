@@ -1,8 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
     using System;
-
-    using Api;
+    using System.Windows.Input;
 
     using Factories.Interfaces;
 
@@ -11,7 +10,6 @@
 
     using Interfaces;
 
-    
     class PasteHotkeyInterceptor: IPasteHotkeyInterceptor
     {
         readonly ILogger logger;
@@ -21,6 +19,7 @@
         IntPtr mainWindowHandle;
 
         bool isInstalled;
+        bool shouldSkipNext;
 
         public event EventHandler<HotkeyFiredArgument> HotkeyFired;
 
@@ -30,8 +29,10 @@
         {
             this.logger = logger;
 
+            IsEnabled = true;
+
             hotkeyInterception = hotkeyInterceptionFactory.CreateInterception(
-                KeyboardApi.VK_KEY_V,
+                Key.V,
                 true,
                 true);
         }
@@ -43,7 +44,7 @@
                 throw new InvalidOperationException("This interceptor has already been installed.");
             }
 
-            this.mainWindowHandle = windowHandle;
+            mainWindowHandle = windowHandle;
             hotkeyInterception.Start(windowHandle);
 
             isInstalled = true;
@@ -57,7 +58,6 @@
                     "This interceptor has already been uninstalled.");
             }
 
-            //TODO: proper exceptions for uninstall for ALL uninstalls (don't uninstall when already uninstalled etc).
             hotkeyInterception.Stop(mainWindowHandle);
 
             isInstalled = false;
@@ -74,13 +74,32 @@
 
         void HandleHotkeyMessage()
         {
+            if (!IsEnabled)
+            {
+                logger.Information("Skipped paste hotkey message because the interceptor is disabled.");
+                return;
+            }
+
+            if (shouldSkipNext)
+            {
+                shouldSkipNext = false;
+                return;
+            }
+
             logger.Information("Paste hotkey message received.", 1);
 
             HotkeyFired?.Invoke(
                 this,
                 new HotkeyFiredArgument(
-                    hotkeyInterception.KeyCode,
+                    hotkeyInterception.Key,
                     hotkeyInterception.ControlNeeded));
         }
+
+        public void SkipNext()
+        {
+            shouldSkipNext = true;
+        }
+
+        public bool IsEnabled { get; set; }
     }
 }

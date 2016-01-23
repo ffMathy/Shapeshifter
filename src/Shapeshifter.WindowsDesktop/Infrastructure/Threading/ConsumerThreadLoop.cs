@@ -70,7 +70,7 @@
                 DecrementAvailableWorkCount();
             }
 
-            logger.Information("Consuming.");
+            logger.Information("Consuming item.");
             await action();
         }
 

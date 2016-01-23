@@ -1,18 +1,17 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using System.Threading;
-
-namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
+﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
 {
     using System.Security.Permissions;
+    using System.Threading;
     using System.Windows.Threading;
 
     using Autofac;
 
     using Interfaces;
 
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     [TestClass]
-    public class MainThreadInvokerTest : TestBase
+    public class MainThreadInvokerTest: TestBase
     {
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public static void DoEvents()
@@ -27,7 +26,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
 
         static object ExitFrame(object frame)
         {
-            ((DispatcherFrame)frame).Continue = false;
+            ((DispatcherFrame) frame).Continue = false;
             return null;
         }
 
@@ -44,12 +43,10 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
 
             var hasRun = false;
             var thread = new Thread(
-                () =>
-                {
+                () => {
                     backgroundThreadId = Thread.CurrentThread.ManagedThreadId;
                     mainThreadInvoker.Invoke(
-                        () =>
-                        {
+                        () => {
                             dispatcherThreadId = Thread.CurrentThread.ManagedThreadId;
                         });
                     hasRun = true;
@@ -63,11 +60,14 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
             }
 
             Assert.AreNotEqual(
-                backgroundThreadId, dispatcherThreadId);
+                backgroundThreadId,
+                dispatcherThreadId);
             Assert.AreNotEqual(
-                backgroundThreadId, currentThreadId);
+                backgroundThreadId,
+                currentThreadId);
             Assert.AreEqual(
-                dispatcherThreadId, currentThreadId);
+                dispatcherThreadId,
+                currentThreadId);
             Assert.AreNotEqual(default(int), backgroundThreadId);
             Assert.AreNotEqual(default(int), dispatcherThreadId);
         }

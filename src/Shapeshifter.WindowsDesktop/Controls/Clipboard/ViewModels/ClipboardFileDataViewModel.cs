@@ -10,16 +10,15 @@
     using Infrastructure.Environment;
     using Infrastructure.Environment.Interfaces;
 
-    
     class ClipboardFileDataViewModel: ClipboardDataViewModel<IClipboardFileData>
     {
         public ClipboardFileDataViewModel()
-            : this(new EnvironmentInformation()) { }
+            : this(new EnvironmentInformation(true)) { }
 
         public ClipboardFileDataViewModel(
             IEnvironmentInformation environmentInformation)
         {
-            if (environmentInformation.IsInDesignTime)
+            if (environmentInformation.GetIsInDesignTime())
             {
                 PrepareDesignerMode();
             }

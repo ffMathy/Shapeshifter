@@ -10,6 +10,6 @@
 
         void Disconnect();
 
-        void Connect(IWindow window);
+        void Connect(IHookableWindow window);
     }
 }

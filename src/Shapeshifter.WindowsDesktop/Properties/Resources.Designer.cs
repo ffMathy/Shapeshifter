@@ -63,6 +63,16 @@ namespace Shapeshifter.WindowsDesktop.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] App {
+            get {
+                object obj = ResourceManager.GetObject("App", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] FileDataFileIcon {
             get {
                 object obj = ResourceManager.GetObject("FileDataFileIcon", resourceCulture);
@@ -87,6 +97,16 @@ namespace Shapeshifter.WindowsDesktop.Properties {
             get {
                 object obj = ResourceManager.GetObject("FileImageSample", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon ShapeshifterIcon {
+            get {
+                object obj = ResourceManager.GetObject("ShapeshifterIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

@@ -33,7 +33,7 @@
             }
 
             var environmentInformation = new EnvironmentInformation();
-            if (environmentInformation.IsInDesignTime)
+            if (environmentInformation.GetIsInDesignTime())
             {
                 container = DesignTimeContainerHelper.CreateDesignTimeContainer();
             }

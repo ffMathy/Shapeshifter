@@ -26,20 +26,18 @@
             whitespaceSubstitutionExpression = new Regex(@"\s+", RegexOptions.Compiled);
         }
 
-        
         public ClipboardTextDataViewModel()
-            : this(new EnvironmentInformation()) { }
+            : this(new EnvironmentInformation(true)) { }
 
         public ClipboardTextDataViewModel(
             IEnvironmentInformation environmentInformation)
         {
-            if (environmentInformation.IsInDesignTime)
+            if (environmentInformation.GetIsInDesignTime())
             {
                 PrepareDesignMode();
             }
         }
 
-        
         void PrepareDesignMode()
         {
             var container = DesignTimeContainerHelper.CreateDesignTimeContainer();

@@ -6,12 +6,13 @@
 
     using Clipboard.Interfaces;
 
+    using Data.Interfaces;
+
+    using Interfaces;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
-
-    using Interfaces;
-    using Data.Interfaces;
 
     [TestClass]
     public class ClipboardTextDataControlFactoryTest: TestBase
@@ -54,8 +55,7 @@
             var fakeTextData = Substitute.For<IClipboardTextData>();
 
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c
                         .RegisterFake<IClipboardDataControlFactory>()
                         .BuildControl(fakeTextData)

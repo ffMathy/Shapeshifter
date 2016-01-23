@@ -2,9 +2,9 @@
 {
     using Autofac;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-
     using Interfaces;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
     public class FileTypeInterpreterTest: TestBase

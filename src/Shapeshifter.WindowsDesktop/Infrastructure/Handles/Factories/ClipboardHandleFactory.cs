@@ -6,19 +6,27 @@
 
     using Interfaces;
 
+    using Native.Interfaces;
+
     class ClipboardHandleFactory: IClipboardHandleFactory
     {
         readonly IMainWindowHandleContainer mainWindow;
 
+        readonly IClipboardNativeApi clipboardNativeApi;
+
         public ClipboardHandleFactory(
-            IMainWindowHandleContainer mainWindow)
+            IMainWindowHandleContainer mainWindow,
+            IClipboardNativeApi clipboardNativeApi)
         {
             this.mainWindow = mainWindow;
+            this.clipboardNativeApi = clipboardNativeApi;
         }
 
         public IClipboardHandle StartNewSession()
         {
-            return new ClipboardHandle(mainWindow);
+            return new ClipboardHandle(
+                clipboardNativeApi,
+                mainWindow);
         }
     }
 }

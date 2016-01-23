@@ -3,8 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using Api;
+    using System.Windows.Input;
 
     using Factories.Interfaces;
 
@@ -19,7 +18,7 @@
 
         readonly IUserInterfaceThread userInterfaceThread;
 
-        readonly IDictionary<int, IHotkeyInterception> keyInterceptions;
+        readonly IDictionary<Key, IHotkeyInterception> keyInterceptions;
 
         bool isInstalled;
 
@@ -34,7 +33,7 @@
             this.hotkeyInterceptionFactory = hotkeyInterceptionFactory;
             this.userInterfaceThread = userInterfaceThread;
 
-            keyInterceptions = new Dictionary<int, IHotkeyInterception>();
+            keyInterceptions = new Dictionary<Key, IHotkeyInterception>();
         }
 
         public void Install(IntPtr windowHandle)
@@ -87,7 +86,7 @@
                 HotkeyFired?.Invoke(
                     this,
                     new HotkeyFiredArgument(
-                        interception.KeyCode,
+                        interception.Key,
                         interception.ControlNeeded));
             }
         }
@@ -100,12 +99,22 @@
             switch ((int) e.WordParameter)
             {
                 case Shown:
-                    Install(e.WindowHandle);
+                    if (!isInstalled)
+                    {
+                        Install(e.WindowHandle);
+                    }
                     break;
 
                 case Hidden:
-                    Uninstall();
+                    if (isInstalled)
+                    {
+                        Uninstall();
+                    }
                     break;
+
+                default:
+                    throw new InvalidOperationException(
+                        $"Invalid {nameof(e.WordParameter)} received for {nameof(Message.WM_SHOWWINDOW)} message.");
             }
         }
 
@@ -127,26 +136,31 @@
 
         public void AddInterceptingKey(
             IntPtr windowHandle,
-            int keyCode)
+            Key key)
         {
-            if (keyInterceptions.ContainsKey(keyCode))
+            if (keyInterceptions.ContainsKey(key))
             {
                 return;
             }
 
-            var interception = CreateNewInterception(keyCode);
+            StartInterception(windowHandle, key);
+        }
+
+        void StartInterception(IntPtr windowHandle, Key key)
+        {
+            var interception = CreateNewInterception(key);
             if (isInstalled)
             {
                 interception.Start(windowHandle);
             }
 
-            keyInterceptions.Add(keyCode, interception);
+            keyInterceptions.Add(key, interception);
         }
 
-        IHotkeyInterception CreateNewInterception(int keyCode)
+        IHotkeyInterception CreateNewInterception(Key key)
         {
             var interception = hotkeyInterceptionFactory.CreateInterception(
-                keyCode,
+                key,
                 true,
                 false);
             return interception;
@@ -154,20 +168,20 @@
 
         public void RemoveInterceptingKey(
             IntPtr windowHandle,
-            int keyCode)
+            Key key)
         {
-            if (!keyInterceptions.ContainsKey(keyCode))
+            if (!keyInterceptions.ContainsKey(key))
             {
                 return;
             }
 
-            var interception = keyInterceptions[keyCode];
+            var interception = keyInterceptions[key];
             if (isInstalled)
             {
                 interception.Stop(windowHandle);
             }
 
-            keyInterceptions.Remove(keyCode);
+            keyInterceptions.Remove(key);
         }
     }
 }

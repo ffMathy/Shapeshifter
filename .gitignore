@@ -4,8 +4,8 @@
 
 packages/
 .vs/
-
+build/
 bin/
 obj/
 /src/_NCrunch_Shapeshifter
-/src/Shapeshifter.sln.DotSettings.user
+/src/**/*.user

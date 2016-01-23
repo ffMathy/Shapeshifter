@@ -5,7 +5,6 @@
     /// <summary>
     ///     Interaction logic for ActionControl.xaml
     /// </summary>
-    
     public partial class ActionControl: UserControl
     {
         public ActionControl()

@@ -37,10 +37,9 @@
                     nameof(data));
             }
 
-            return CreateFileDataControl((IClipboardFileData)data);
+            return CreateFileDataControl((IClipboardFileData) data);
         }
 
-        
         IClipboardControl CreateFileDataControl(IClipboardFileData data)
         {
             return new ClipboardFileDataControl

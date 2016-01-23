@@ -5,10 +5,11 @@
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
-
-    using Api;
+    using System.Windows.Input;
 
     using Binders.Interfaces;
 
@@ -21,9 +22,13 @@
 
     using Interfaces;
 
+    using JetBrains.Annotations;
+
     using Mediators.Interfaces;
 
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
+    using Services.Screen;
+    using Services.Screen.Interfaces;
 
     class ClipboardListViewModel:
         IClipboardListViewModel
@@ -32,28 +37,42 @@
 
         IAction selectedAction;
 
+        bool isFocusInActionsList;
+
         readonly IAction[] allActions;
 
-        readonly IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>
-            packageActionBinder;
-
+        readonly IClipboardUserInterfaceMediator clipboardUserInterfaceMediator;
+        readonly IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder;
         readonly IAsyncFilter asyncFilter;
-
         readonly IPerformanceHandleFactory performanceHandleFactory;
-
         readonly IUserInterfaceThread userInterfaceThread;
-
-        bool isFocusInActionsList;
+        readonly IScreenManager screenManager;
+        ScreenInformation activeScreen;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
 
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public ObservableCollection<IClipboardDataControlPackage> Elements { get; }
 
         public ObservableCollection<IAction> Actions { get; }
+
+        public ScreenInformation ActiveScreen
+        {
+            get
+            {
+                return activeScreen;
+            }
+            set
+            {
+                if (Equals(value, activeScreen))
+                {
+                    return;
+                }
+                activeScreen = value;
+                OnPropertyChanged();
+            }
+        }
 
         public IAction SelectedAction
         {
@@ -63,8 +82,13 @@
             }
             set
             {
+                if (Equals(value, selectedAction))
+                {
+                    return;
+                }
+
                 selectedAction = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedAction)));
+                OnPropertyChanged();
             }
         }
 
@@ -76,13 +100,22 @@
             }
             set
             {
-                selectedElement = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedElement)));
+                if (Equals(value, selectedElement))
+                {
+                    return;
+                }
 
-                userInterfaceThread.Invoke(() => packageActionBinder.LoadFromKey(value));
+                selectedElement = value;
+                OnPropertyChanged();
+
+                lock (Elements)
+                {
+                    userInterfaceThread.Invoke(() => packageActionBinder.LoadFromKey(value));
+                }
             }
         }
 
+        [SuppressMessage("ReSharper", "SuggestBaseTypeForParameter")]
         public ClipboardListViewModel(
             IAction[] allActions,
             IClipboardUserInterfaceMediator clipboardUserInterfaceMediator,
@@ -90,7 +123,8 @@
             IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder,
             IAsyncFilter asyncFilter,
             IPerformanceHandleFactory performanceHandleFactory,
-            IUserInterfaceThread userInterfaceThread)
+            IUserInterfaceThread userInterfaceThread,
+            IScreenManager screenManager)
         {
             Elements = new ObservableCollection<IClipboardDataControlPackage>();
             Actions = new ObservableCollection<IAction>();
@@ -102,10 +136,12 @@
 
             this.allActions = allActions.Where(x => x != pasteAction)
                                         .ToArray();
+            this.clipboardUserInterfaceMediator = clipboardUserInterfaceMediator;
             this.packageActionBinder = packageActionBinder;
             this.asyncFilter = asyncFilter;
             this.performanceHandleFactory = performanceHandleFactory;
             this.userInterfaceThread = userInterfaceThread;
+            this.screenManager = screenManager;
 
             PreparePackageBinder(pasteAction);
 
@@ -137,42 +173,87 @@
         void RegisterMediatorEvents(
             IClipboardUserInterfaceMediator mediator)
         {
-            mediator.ControlAdded += Service_ControlAdded;
-            mediator.ControlHighlighted += Service_ControlHighlighted;
-            mediator.ControlRemoved += Service_ControlRemoved;
+            mediator.ControlAdded += Mediator_ControlAdded;
 
-            mediator.UserInterfaceHidden += Service_UserInterfaceHidden;
-            mediator.UserInterfaceShown += Service_UserInterfaceShown;
+            mediator.UserInterfaceHidden += Mediator_UserInterfaceHidden;
+            mediator.UserInterfaceShown += Mediator_UserInterfaceShown;
+
+            mediator.PastePerformed += Mediator_PastePerformed;
+        }
+
+        async void Mediator_PastePerformed(
+            object sender,
+            PastePerformedEventArgument e)
+        {
+            await PerformPaste();
+        }
+
+        async Task PerformPaste()
+        {
+            if (SelectedAction != null)
+            {
+                await SelectedAction.PerformAsync(SelectedElement.Data);
+            }
         }
 
         void HotkeyInterceptor_HotkeyFired(object sender, HotkeyFiredArgument e)
         {
-            switch (e.KeyCode)
+            // ReSharper disable once SwitchStatementMissingSomeCases
+            switch (e.Key)
             {
-                case KeyboardApi.VK_KEY_DOWN:
-                    HandleDownPressed();
+                case Key.Down:
+                    ShowNextItem();
                     break;
 
-                case KeyboardApi.VK_KEY_UP:
-                    HandleUpPressed();
+                case Key.Up:
+                    ShowPreviousItem();
                     break;
 
-                case KeyboardApi.VK_KEY_LEFT:
-                    HandleRightOrLeftPressed();
+                case Key.Left:
+                    HandleLeftPressed();
                     break;
 
-                case KeyboardApi.VK_KEY_RIGHT:
-                    HandleRightOrLeftPressed();
+                case Key.Right:
+                    HandleRightPressed();
                     break;
             }
         }
 
-        void HandleRightOrLeftPressed()
+        public void SwapBetweenPanes()
         {
             isFocusInActionsList = !isFocusInActionsList;
         }
 
-        void HandleUpPressed()
+        void HandleLeftPressed()
+        {
+            if (!isFocusInActionsList)
+            {
+                Cancel();
+            }
+            else
+            {
+                isFocusInActionsList = !isFocusInActionsList;
+            }
+        }
+
+        void HandleRightPressed()
+        {
+            if (isFocusInActionsList)
+            {
+                Cancel();
+            }
+            else
+            {
+                isFocusInActionsList = !isFocusInActionsList;
+            }
+        }
+
+        void Cancel()
+        {
+            clipboardUserInterfaceMediator.Cancel();
+        }
+
+        public void ShowPreviousItem()
         {
             if (isFocusInActionsList)
             {
@@ -184,7 +265,7 @@
             }
         }
 
-        void HandleDownPressed()
+        public void ShowNextItem()
         {
             if (isFocusInActionsList)
             {
@@ -220,21 +301,22 @@
             return list[indexToUse];
         }
 
-        
-        async void Service_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
+        async void Mediator_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
         {
+            ActiveScreen = screenManager.GetPrimaryScreen();
+
             UserInterfaceShown?.Invoke(this, e);
         }
 
-        
-        async void Service_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
+        async void Mediator_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
         {
-            UserInterfaceHidden?.Invoke(this, e);
+            HideInterface();
+        }
 
-            if (SelectedAction != null)
-            {
-                await SelectedAction.PerformAsync(SelectedElement.Data);
-            }
+        void HideInterface()
+        {
+            isFocusInActionsList = false;
+            UserInterfaceHidden?.Invoke(this, new UserInterfaceHiddenEventArgument());
         }
 
         async Task<IEnumerable<IAction>> GetSupportedActionsFromDataAsync(
@@ -250,30 +332,21 @@
             }
         }
 
-        void Service_ControlRemoved(object sender, ControlEventArgument e)
-        {
-            lock (Elements)
-            {
-                Elements.Remove(e.Package);
-            }
-        }
-
-        void Service_ControlHighlighted(object sender, ControlEventArgument e)
-        {
-            lock (Elements)
-            {
-                Elements.Remove(e.Package);
-                Elements.Insert(0, e.Package);
-            }
-        }
-
-        void Service_ControlAdded(object sender, ControlEventArgument e)
+        void Mediator_ControlAdded(object sender, ControlEventArgument e)
         {
             lock (Elements)
             {
                 userInterfaceThread.Invoke(() => Elements.Insert(0, e.Package));
                 SelectedElement = e.Package;
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

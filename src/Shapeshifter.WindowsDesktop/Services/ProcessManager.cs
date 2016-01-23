@@ -4,10 +4,10 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using System.Security.Principal;
 
     using Interfaces;
 
-    
     class ProcessManager
         : IProcessManager
     {
@@ -17,7 +17,7 @@
         {
             processes = new HashSet<Process>();
         }
-        
+
         public void Dispose()
         {
             foreach (var process in processes)
@@ -25,13 +25,21 @@
                 CloseProcess(process);
             }
         }
-        
+
+        public string GetCurrentProcessPath()
+        {
+            using (var currentProcess = Process.GetCurrentProcess())
+                return Path.Combine(
+                    Environment.CurrentDirectory,
+                    $"{currentProcess.ProcessName}.exe");
+        }
+
         public void LaunchCommand(string command, string arguments = null)
         {
             SpawnProcess(command, Environment.CurrentDirectory);
         }
 
-        public void CloseAllProcessesExceptCurrent()
+        public void CloseAllDuplicateProcessesExceptCurrent()
         {
             using (var currentProcess = Process.GetCurrentProcess())
             {
@@ -42,9 +50,9 @@
 
         static void CloseProcessesExceptProcessWithId(
             int processId,
-            params Process[] processes)
+            params Process[] targetProcesses)
         {
-            foreach (var process in processes)
+            foreach (var process in targetProcesses)
             {
                 if (process.Id == processId)
                 {
@@ -57,32 +65,65 @@
 
         static void CloseProcess(Process process)
         {
-            process.CloseMainWindow();
-            if (!process.WaitForExit(3000))
+            try
             {
+                if (process.HasExited)
+                {
+                    return;
+                }
+
+                if (CloseMainWindow(process))
+                {
+                    return;
+                }
+
                 process.Kill();
             }
-            process.Dispose();
+            finally
+            {
+                process.Dispose();
+            }
+        }
+
+        static bool CloseMainWindow(Process process)
+        {
+            process.CloseMainWindow();
+            if (process.WaitForExit(3000))
+            {
+                return true;
+            }
+            return false;
         }
 
         public void LaunchFile(string fileName, string arguments = null)
         {
-            if (!File.Exists(fileName))
-            {
-                throw new ArgumentException("The given file doesn't exist.", nameof(fileName));
-            }
-
             var workingDirectory = Path.GetDirectoryName(fileName);
             SpawnProcess(fileName, workingDirectory);
         }
 
-        void SpawnProcess(string fileName, string workingDirectory)
+        public void LaunchFileWithAdministrativeRights(string fileName, string arguments = null)
+        {
+            var workingDirectory = Path.GetDirectoryName(fileName);
+            SpawnProcess(fileName, workingDirectory, "runas");
+        }
+
+        public bool IsCurrentProcessElevated()
+        {
+            using (var identity = WindowsIdentity.GetCurrent())
+            {
+                var principal = new WindowsPrincipal(identity);
+                return principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+        }
+
+        void SpawnProcess(string uri, string workingDirectory, string verb = null)
         {
             var process = Process.Start(
                 new ProcessStartInfo
                 {
-                    FileName = fileName,
-                    WorkingDirectory = workingDirectory
+                    FileName = uri,
+                    WorkingDirectory = workingDirectory,
+                    Verb = verb
                 });
             processes.Add(process);
         }

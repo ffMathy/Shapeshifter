@@ -4,12 +4,13 @@
 
     using Autofac;
 
+    using Data.Interfaces;
+
+    using FileCollection.Interfaces;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
-
-    using FileCollection.Interfaces;
-    using Data.Interfaces;
 
     [TestClass]
     public class ClipboardFileCollectionDataViewModelTest: TestBase

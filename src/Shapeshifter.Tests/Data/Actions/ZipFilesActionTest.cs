@@ -2,10 +2,9 @@
 {
     using System;
     using System.Collections.ObjectModel;
-    using System.Linq;
-
     using System.IO;
     using System.IO.Compression;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Autofac;
@@ -19,10 +18,9 @@
     using NSubstitute;
 
     using Services.Clipboard.Interfaces;
-    using Services.Interfaces;
 
     [TestClass]
-    public class ZipFilesActionTest : ActionTestBase
+    public class ZipFilesActionTest: ActionTestBase
     {
         [TestMethod]
         public async Task CanPerformForFiles()
@@ -72,7 +70,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException(typeof (InvalidOperationException))]
         [TestCategory("Integration")]
         public async Task ThrowsExceptionForInvalidData()
         {
@@ -89,7 +87,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof (ArgumentException))]
         [TestCategory("Integration")]
         public async Task NoFilesAddedThrowsException()
         {
@@ -115,8 +113,7 @@
         public async Task ProducesProperZipFileForCollection()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IClipboardInjectionService>();
                 });
 
@@ -154,11 +151,11 @@
             string zipPath = null;
             fakeClipboardInjectionService
                 .When(x => x.InjectFiles(Arg.Any<string[]>()))
-                .Do(parameters =>
-                {
-                    var files = (string[])parameters[0];
-                    zipPath = files[0];
-                });
+                .Do(
+                    parameters => {
+                        var files = (string[]) parameters[0];
+                        zipPath = files[0];
+                    });
 
             await action.PerformAsync(package);
 
@@ -169,20 +166,23 @@
                 var entries = archive.Entries;
 
                 Assert.AreEqual(2, entries.Count);
-                Assert.AreEqual(1, entries
-                    .Count(x => x.FullName == Path.GetFileName(file1)));
-                Assert.AreEqual(1, entries
-                    .Count(x => x.FullName == Path.GetFileName(file2)));
+                Assert.AreEqual(
+                    1,
+                    entries
+                        .Count(x => x.FullName == Path.GetFileName(file1)));
+                Assert.AreEqual(
+                    1,
+                    entries
+                        .Count(x => x.FullName == Path.GetFileName(file2)));
             }
         }
-        
+
         [TestMethod]
         [TestCategory("Integration")]
         public async Task ProducesProperZipFileForSingleFile()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IClipboardInjectionService>();
                 });
 
@@ -207,11 +207,11 @@
             string zipPath = null;
             fakeClipboardInjectionService
                 .When(x => x.InjectFiles(Arg.Any<string[]>()))
-                .Do(parameters =>
-                {
-                    var files = (string[])parameters[0];
-                    zipPath = files[0];
-                });
+                .Do(
+                    parameters => {
+                        var files = (string[]) parameters[0];
+                        zipPath = files[0];
+                    });
 
             await action.PerformAsync(package);
 
@@ -222,8 +222,10 @@
                 var entries = archive.Entries;
 
                 Assert.AreEqual(1, entries.Count);
-                Assert.AreEqual(1, entries
-                    .Count(x => x.FullName == Path.GetFileName(file)));
+                Assert.AreEqual(
+                    1,
+                    entries
+                        .Count(x => x.FullName == Path.GetFileName(file)));
             }
         }
     }

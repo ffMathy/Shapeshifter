@@ -4,8 +4,9 @@
 
     using Autofac;
 
-    using Interfaces;
     using Data.Interfaces;
+
+    using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -69,8 +70,7 @@
         public async Task PerformCausesTextOfDataToBeCopied()
         {
             var container = CreateContainer(
-                c =>
-                {
+                c => {
                     c.RegisterFake<IClipboardInjectionService>();
                 });
 

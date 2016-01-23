@@ -1,13 +1,11 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Window.Interfaces
 {
     using System;
-    using System.Windows.Interop;
 
     public interface IWindow
     {
         event EventHandler SourceInitialized;
-
-        HwndSource HandleSource { get; }
+        event EventHandler Closed;
 
         void Show();
     }

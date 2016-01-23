@@ -4,28 +4,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:window="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Window"
+        xmlns:viewModels="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Window.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewModels:ClipboardListViewModel}"
-        Top="0"
-        Left="0"
+        Top="{Binding ActiveScreen.Y, Mode=TwoWay}"
+        Left="{Binding ActiveScreen.X, Mode=TwoWay}"
+        Width="{Binding ActiveScreen.Width, Mode=TwoWay}"
+        Height="{Binding ActiveScreen.Height, Mode=TwoWay}"
         Topmost="True"
         mc:Ignorable="d"
         ShowInTaskbar="False"
         SnapsToDevicePixels="True"
         UseLayoutRounding="True"
-        SizeToContent="WidthAndHeight"
         ResizeMode="NoResize"
         Title=""
         WindowStyle="None"
-        Background="Transparent"
+        Background="#60000000"
         AllowsTransparency="True">
-    <Grid>
+    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="5" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <!-- TODO: semi transparent border around this. it'll look sexy. -->
-        <ListBox HorizontalAlignment="Left" SelectedItem="{Binding SelectedElement, Mode=TwoWay}"
+        <ListBox SelectedItem="{Binding SelectedElement, Mode=TwoWay}"
                  ItemsSource="{Binding Elements}">
             <ListBox.ItemTemplate>
                 <DataTemplate>

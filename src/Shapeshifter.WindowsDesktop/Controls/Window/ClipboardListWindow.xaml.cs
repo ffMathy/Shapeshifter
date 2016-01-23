@@ -2,14 +2,14 @@
 {
     using System;
     using System.Windows;
+    using System.Windows.Input;
     using System.Windows.Interop;
-
-    using Api;
 
     using Infrastructure.Events;
 
     using Interfaces;
 
+    using Services.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interfaces;
 
@@ -18,36 +18,58 @@
     /// <summary>
     ///     Interaction logic for ClipboardListWindow.xaml
     /// </summary>
-    
     public partial class ClipboardListWindow
         : Window,
           IClipboardListWindow
     {
         readonly IMainWindowHandleContainer handleContainer;
-
         readonly IKeyInterceptor keyInterceptor;
-
         readonly IClipboardListViewModel viewModel;
-
         readonly IWindowMessageHook windowMessageHook;
+        readonly IMouseWheelHook mouseWheelHook;
 
         public ClipboardListWindow(
             IClipboardListViewModel viewModel,
             IKeyInterceptor keyInterceptor,
             IWindowMessageHook windowMessageHook,
+            IMouseWheelHook mouseWheelHook,
             IMainWindowHandleContainer handleContainer)
         {
             this.handleContainer = handleContainer;
             this.keyInterceptor = keyInterceptor;
             this.viewModel = viewModel;
             this.windowMessageHook = windowMessageHook;
+            this.mouseWheelHook = mouseWheelHook;
 
             SourceInitialized += ClipboardListWindow_SourceInitialized;
             Activated += ClipboardListWindow_Activated;
 
             InitializeComponent();
+            SetupMouseHook();
 
             SetupViewModel();
+        }
+
+        void SetupMouseHook()
+        {
+            mouseWheelHook.WheelScrolledDown += MouseWheelHookOnScrolledDown;
+            mouseWheelHook.WheelScrolledUp += MouseWheelHookOnScrolledUp;
+            mouseWheelHook.WheelTilted += MouseWheelHook_WheelTilted;
+        }
+
+        void MouseWheelHook_WheelTilted(object sender, EventArgs e)
+        {
+            viewModel.SwapBetweenPanes();
+        }
+
+        void MouseWheelHookOnScrolledUp(object sender, EventArgs eventArgs)
+        {
+            viewModel.ShowPreviousItem();
+        }
+
+        void MouseWheelHookOnScrolledDown(object sender, EventArgs eventArgs)
+        {
+            viewModel.ShowNextItem();
         }
 
         void ClipboardListWindow_SourceInitialized(object sender, EventArgs e)
@@ -61,22 +83,22 @@
         {
             keyInterceptor.AddInterceptingKey(
                 handleContainer.Handle,
-                KeyboardApi.VK_KEY_UP);
+                Key.Up);
             keyInterceptor.AddInterceptingKey(
                 handleContainer.Handle,
-                KeyboardApi.VK_KEY_DOWN);
+                Key.Down);
             keyInterceptor.AddInterceptingKey(
                 handleContainer.Handle,
-                KeyboardApi.VK_KEY_LEFT);
+                Key.Left);
             keyInterceptor.AddInterceptingKey(
                 handleContainer.Handle,
-                KeyboardApi.VK_KEY_RIGHT);
+                Key.Right);
             keyInterceptor.AddInterceptingKey(
                 handleContainer.Handle,
-                KeyboardApi.VK_HOME);
+                Key.Home);
             keyInterceptor.AddInterceptingKey(
                 handleContainer.Handle,
-                KeyboardApi.VK_DELETE);
+                Key.Delete);
         }
 
         public HwndSource HandleSource => PresentationSource.FromVisual(this) as HwndSource;
@@ -111,6 +133,7 @@
             UserInterfaceHiddenEventArgument e)
         {
             Hide();
+            mouseWheelHook.ResetAccumulatedWheelDelta();
         }
 
         void ViewModel_UserInterfaceShown(
@@ -118,6 +141,26 @@
             UserInterfaceShownEventArgument e)
         {
             Show();
+        }
+
+        public void AddHwndSourceHook(HwndSourceHook hook)
+        {
+            HandleSource.AddHook(hook);
+        }
+
+        public void RemoveHwndSourceHook(HwndSourceHook hook)
+        {
+            HandleSource.RemoveHook(hook);
+        }
+
+        public void Dispose()
+        {
+            viewModel.UserInterfaceShown -= ViewModel_UserInterfaceShown;
+            viewModel.UserInterfaceHidden -= ViewModel_UserInterfaceHidden;
+
+            mouseWheelHook.WheelScrolledDown -= MouseWheelHookOnScrolledDown;
+            mouseWheelHook.WheelScrolledUp -= MouseWheelHookOnScrolledUp;
+            mouseWheelHook.WheelTilted -= MouseWheelHook_WheelTilted;
         }
     }
 }

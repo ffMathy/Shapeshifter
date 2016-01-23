@@ -118,6 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="App" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\app.manifest;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="FileDataFileIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\controls\clipboard\designer\resources\filedatafileicon.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -126,6 +129,9 @@
   </data>
   <data name="FileImageSample" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\controls\clipboard\designer\resources\fileimagesample.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ShapeshifterIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Shapeshifter.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TextDataSourceIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\controls\clipboard\designer\resources\textdatasourceicon.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

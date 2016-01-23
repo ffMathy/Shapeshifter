@@ -7,10 +7,11 @@
 
     using Infrastructure.Dependencies;
 
+    using Startup;
+
     /// <summary>
     ///     Interaction logic for App.xaml
     /// </summary>
-    
     public partial class App: Application
     {
         static ILifetimeScope container;
@@ -43,10 +44,10 @@
             base.OnExit(e);
         }
 
+#pragma warning disable 4014
         protected override void OnStartup(StartupEventArgs e)
         {
-            AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) =>
-            {
+            AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) => {
                 MessageBox.Show(
                     exceptionEventArguments.ExceptionObject.ToString(),
                     "Shapeshifter error",
@@ -54,8 +55,9 @@
                 Current.Shutdown();
             };
 
-            var main = Container.Resolve<Main>();
+            var main = Container.Resolve<ApplicationEntrypoint>();
             main.Start(e.Args);
         }
+#pragma warning restore 4014
     }
 }

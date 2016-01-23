@@ -2,21 +2,43 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     using Infrastructure.Dependencies.Interfaces;
 
-    public interface IFileManager: ISingleInstance, IDisposable
+    public interface IFileManager
+        : ISingleInstance,
+          IDisposable
     {
-        string WriteBytesToTemporaryFile(string path, byte[] bytes);
+        string WriteBytesToTemporaryFile(
+            string path, 
+            byte[] bytes);
 
-        string PrepareTemporaryFolder(string relativePath);
+        string PrepareTemporaryFolder(
+            string relativePath);
 
-        string PrepareFolder(string relativePath);
+        string PrepareIsolatedFolder(
+            string relativePath = null);
 
-        void DeleteDirectoryIfExists(string path);
+        string PrepareNewIsolatedFolder(
+            string relativePath);
 
-        void DeleteFileIfExists(string path);
+        string PrepareFolder(
+            string path);
 
-        string FindCommonFolderFromPaths(IReadOnlyCollection<string> paths);
+        Task DeleteDirectoryIfExistsAsync(
+            string relativePath);
+
+        Task DeleteFileIfExistsAsync(
+            string relativePath);
+
+        Task DeleteIsolatedFileIfExistsAsync(
+            string path);
+
+        Task DeleteIsolatedDirectoryIfExistsAsync(
+            string path);
+
+        string FindCommonFolderFromPaths(
+            IReadOnlyCollection<string> paths);
     }
 }

@@ -9,29 +9,74 @@
              d:DataContext="{d:DesignInstance Type=viewModels:ClipboardImageDataViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d">
 
-    <Border Style="{StaticResource ClipboardDataControlContentStyle}">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
+    <Grid>
+        <Border Style="{StaticResource ClipboardDataControlContentStyle}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
 
-            <Image Stretch="UniformToFill"
-                   Source="{Binding Data.Image, Converter={converters:ByteArrayToImageSourceConverter}}"
-                   Grid.ColumnSpan="3" />
+                <Border Grid.Column="0" Style="{StaticResource ClipboardDataControlImageAreaStyle}">
+                    <Canvas x:Name="appbar_image_macro" Style="{StaticResource ClipboardDataCanvasStyle}"
+                            Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">
+                        <Path Style="{StaticResource ClipboardDataControlPathStyle}" Width="50" Height="42"
+                              Canvas.Left="7" Canvas.Top="12" Stretch="Fill"
+                              Data="F1 M 17,20L 59,20L 59,56L 17,56L 17,20 Z M 20,23L 20,53L 56,53L 56,23L 20,23 Z M 27,37.5L 34,44L 34,51C 31.6667,51 29.3333,51 28.1667,48.75C 27,46.5 27,42 27,37.5 Z M 48.9999,37.5C 48.9999,42 48.9999,46.5 47.8333,48.75C 46.6666,51 44.3333,51 42,51L 40,51L 36,51L 36,41L 31,36L 31,30L 33,25L 35.25,29.5001L 37.9999,25.0001L 40.75,29.5001L 43,25L 45,30L 45,36L 40,41L 40,44L 42,44L 48.9999,37.5 Z " />
+                    </Canvas>
+                </Border>
 
-            <Border Grid.Column="0" Style="{StaticResource ClipboardDataControlImageAreaStyleFaded}">
-                <Image ClipToBounds="True" Style="{StaticResource ClipboardDataImageStyle}" />
-            </Border>
+                <Rectangle Grid.Column="1" Style="{StaticResource ClipboardDataControlIconContentSplitterStyle}" />
 
-            <Rectangle Grid.Column="1" Style="{StaticResource ClipboardDataControlIconContentSplitterStyle}" />
-
-            <Grid Grid.Column="2" Style="{StaticResource ClipboardDataControlContentAreaStyleFaded}">
-                <Grid Style="{StaticResource ClipboardDataControlContentAreaInnerStyle}">
-                    <local:DataSourceControl VerticalAlignment="Bottom" DataContext="{Binding Data.Source}" />
+                <Grid Grid.Column="2" Style="{StaticResource ClipboardDataControlContentAreaStyle}">
+                    <Grid Style="{StaticResource ClipboardDataControlContentAreaInnerStyle}">
+                        <local:DataSourceControl VerticalAlignment="Bottom" TextVisibility="Collapsed"
+                                                 DataContext="{Binding Data.Source}" />
+                    </Grid>
                 </Grid>
             </Grid>
-        </Grid>
-    </Border>
+        </Border>
+
+        <Image Margin="-1" Height="92" Style="{StaticResource ClipboardImageDataControlImageStyle}"
+               Source="{Binding Data.Image, Converter={converters:ByteArrayToImageSourceConverter}}">
+            <Image.OpacityMask>
+                <DrawingBrush Stretch="None" AlignmentX="Right" AlignmentY="Top">
+                    <DrawingBrush.RelativeTransform>
+                        <TranslateTransform Y="-0.05" X="0.115" />
+                    </DrawingBrush.RelativeTransform>
+                    <DrawingBrush.Drawing>
+                        <GeometryDrawing>
+                            <GeometryDrawing.Geometry>
+                                <GeometryGroup>
+                                    <LineGeometry StartPoint=" 67,110" EndPoint="019,0" />
+                                    <LineGeometry StartPoint=" 87,110" EndPoint="039,0" />
+                                    <LineGeometry StartPoint="107,110" EndPoint="059,0" />
+                                    <LineGeometry StartPoint="127,110" EndPoint="079,0" />
+                                    <LineGeometry StartPoint="147,110" EndPoint="099,0" />
+                                    <LineGeometry StartPoint="167,110" EndPoint="119,0" />
+                                    <LineGeometry StartPoint="187,110" EndPoint="139,0" />
+                                    <LineGeometry StartPoint="207,110" EndPoint="159,0" />
+                                    <LineGeometry StartPoint="227,110" EndPoint="179,0" />
+                                    <LineGeometry StartPoint="247,110" EndPoint="199,0" />
+                                    <LineGeometry StartPoint="267,110" EndPoint="219,0" />
+                                    <LineGeometry StartPoint="287,110" EndPoint="239,0" />
+                                    <LineGeometry StartPoint="307,110" EndPoint="259,0" />
+                                    <LineGeometry StartPoint="327,110" EndPoint="279,0" />
+                                    <LineGeometry StartPoint="347,110" EndPoint="299,0" />
+                                    <LineGeometry StartPoint="367,110" EndPoint="319,0" />
+                                    <LineGeometry StartPoint="387,110" EndPoint="339,0" />
+                                    <LineGeometry StartPoint="407,110" EndPoint="359,0" />
+                                </GeometryGroup>
+                            </GeometryDrawing.Geometry>
+                            <GeometryDrawing.Pen>
+                                <Pen Thickness="15" Brush="Black" />
+                            </GeometryDrawing.Pen>
+                        </GeometryDrawing>
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+            </Image.OpacityMask>
+
+        </Image>
+    </Grid>
 </UserControl>

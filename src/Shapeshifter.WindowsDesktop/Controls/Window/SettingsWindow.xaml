@@ -1,0 +1,13 @@
+﻿<Window x:Class="Shapeshifter.WindowsDesktop.Controls.Window.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Window.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewModels:SettingsViewModel}"
+        mc:Ignorable="d"
+        Title="Settings" Height="265" Width="350" ResizeMode="NoResize">
+    <Grid Margin="20">
+        <CheckBox IsChecked="{Binding StartWithWindows}" Content="Start with Windows" />
+    </Grid>
+</Window>

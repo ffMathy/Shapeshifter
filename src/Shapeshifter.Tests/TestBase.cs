@@ -12,14 +12,21 @@
 
     using NSubstitute;
 
-    using Services.Interfaces;
-
     public abstract class TestBase
     {
+        ILifetimeScope activeContainer;
+
         [TestCleanup]
         public void ClearCacheOnEnd()
         {
             Extensions.ClearCache();
+            DisposeContainer();
+        }
+
+        void DisposeContainer()
+        {
+            activeContainer?.Dispose();
+            activeContainer = null;
         }
 
         protected ILifetimeScope CreateContainer(Action<ContainerBuilder> setupCallback = null)
@@ -27,19 +34,25 @@
             var builder = new ContainerBuilder();
 
             var fakeEnvironment = builder.RegisterFake<IEnvironmentInformation>();
+
             fakeEnvironment
-                .IsInDesignTime
+                .GetIsInDesignTime()
                 .Returns(false);
+
+            fakeEnvironment
+                .GetIsDebugging()
+                .Returns(true);
 
             builder.RegisterModule(
                 new DefaultWiringModule(fakeEnvironment));
 
-            builder.RegisterFake<IUpdateService>();
             builder.RegisterFake<IThreadDelay>();
 
             setupCallback?.Invoke(builder);
 
-            return builder.Build();
+            return activeContainer = builder
+                                         .Build()
+                                         .BeginLifetimeScope();
         }
     }
 }

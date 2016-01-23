@@ -2,6 +2,7 @@
     Interfaces
 {
     using System;
+    using System.Windows.Input;
 
     public interface IHotkeyInterception
     {
@@ -11,7 +12,7 @@
 
         int InterceptionId { get; }
 
-        int KeyCode { get; }
+        Key Key { get; }
 
         bool ControlNeeded { get; }
 

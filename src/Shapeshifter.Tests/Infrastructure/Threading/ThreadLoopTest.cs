@@ -1,4 +1,5 @@
 ﻿// ReSharper disable AccessToModifiedClosure
+
 namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
 {
     using System;
@@ -8,6 +9,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
     using Autofac;
 
     using Interfaces;
+
+    using Logging.Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -28,7 +31,11 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
         [TestMethod]
         public async Task StartRunsMethod()
         {
-            var container = CreateContainer();
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<ILogger>();
+                });
+
             var loop = container.Resolve<IThreadLoop>();
 
             var invoked = false;
@@ -45,7 +52,11 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
         [TestMethod]
         public async Task KeepsRunningMethod()
         {
-            var container = CreateContainer();
+            var container = CreateContainer(
+                c => {
+                    c.RegisterFake<ILogger>();
+                });
+
             var loop = container.Resolve<IThreadLoop>();
 
             var runCount = 0;
@@ -60,12 +71,12 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
         }
 
         [TestMethod]
-        [ExpectedException(typeof(TestException))]
+        [ExpectedException(typeof (TestException))]
         public async Task ForwardsExceptionsThrown()
         {
             var container = CreateContainer();
             var loop = container.Resolve<IThreadLoop>();
-            
+
             var action = CreateTestAction(
                 loop,
                 () => {
@@ -100,7 +111,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException(typeof (InvalidOperationException))]
         public async Task StartTwiceThrowsException()
         {
             var container = CreateContainer();
@@ -114,7 +125,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
                 loop,
                 () => shouldEndFirstAction = true);
 
-            loop.StartAsync(firstAction).IgnoreAwait();
+            loop.StartAsync(firstAction)
+                .IgnoreAwait();
 
             try
             {

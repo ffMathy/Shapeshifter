@@ -4,7 +4,7 @@
     using System.Windows.Threading;
 
     using Interfaces;
-    
+
     class MainThreadInvoker: IMainThreadInvoker
     {
         readonly Dispatcher dispatcher;

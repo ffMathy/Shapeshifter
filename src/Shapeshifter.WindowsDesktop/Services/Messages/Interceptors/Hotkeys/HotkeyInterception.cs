@@ -2,13 +2,17 @@
 {
     using System;
     using System.Threading;
-
-    using Api;
+    using System.Windows.Input;
 
     using Interfaces;
 
+    using Native;
+    using Native.Interfaces;
+
     class HotkeyInterception: IHotkeyInterception
     {
+        readonly IKeyboardNativeApi keyboardNativeApi;
+
         static int interceptionId;
 
         public int InterceptionId { get; }
@@ -17,10 +21,12 @@
 
         public bool NoRepeat { get; set; }
 
-        public int KeyCode { get; set; }
+        public Key Key { get; set; }
 
-        public HotkeyInterception()
+        public HotkeyInterception(
+            IKeyboardNativeApi keyboardNativeApi)
         {
+            this.keyboardNativeApi = keyboardNativeApi;
             InterceptionId = Interlocked.Increment(ref interceptionId);
         }
 
@@ -31,22 +37,28 @@
             var modifier = 0;
             if (ControlNeeded)
             {
-                modifier |= KeyboardApi.MOD_CONTROL;
+                modifier |= KeyboardNativeApi.MOD_CONTROL;
             }
             if (NoRepeat)
             {
-                modifier |= KeyboardApi.MOD_NOREPEAT;
+                modifier |= KeyboardNativeApi.MOD_NOREPEAT;
             }
 
-            var registrationResult = KeyboardApi.RegisterHotKey(
+            InstallHotkey(windowHandle, modifier, Key);
+        }
+
+        void InstallHotkey(IntPtr windowHandle, int modifier, Key key)
+        {
+            var keyCode = KeyInterop.VirtualKeyFromKey(key);
+            var registrationResult = keyboardNativeApi.RegisterHotKey(
                 windowHandle,
                 InterceptionId,
                 modifier,
-                KeyCode);
+                keyCode);
             if (!registrationResult)
             {
                 throw new InvalidOperationException(
-                    $"Couldn't install the hotkey interceptor for key {KeyCode}.");
+                    $"Couldn't install the hotkey interceptor for key {Key}.");
             }
         }
 
@@ -56,13 +68,13 @@
             if (!registrationResult)
             {
                 throw new InvalidOperationException(
-                    $"Couldn't uninstall the hotkey interceptor for key {KeyCode}.");
+                    $"Couldn't uninstall the hotkey interceptor for key {Key}.");
             }
         }
 
         bool UnregisterHotkey(IntPtr windowHandle)
         {
-            return KeyboardApi.UnregisterHotKey(
+            return keyboardNativeApi.UnregisterHotKey(
                 windowHandle,
                 InterceptionId);
         }

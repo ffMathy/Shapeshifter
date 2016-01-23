@@ -1,6 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop
 {
-    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     using Autofac;
 
@@ -12,14 +12,16 @@
 
     using NSubstitute;
 
-    using Services.Interfaces;
     using Services.Arguments.Interfaces;
+    using Services.Interfaces;
+
+    using Startup;
 
     [TestClass]
     public class MainTest: TestBase
     {
         [TestMethod]
-        public void CanStartWithNoTerminatingArgumentProcessorShowsMainWindow()
+        public async Task CanStartWithNoTerminatingArgumentProcessorShowsMainWindow()
         {
             var container = CreateContainer(
                 c => {
@@ -28,15 +30,16 @@
                     c.RegisterFake<IProcessManager>();
                 });
 
-            var main = container.Resolve<Main>();
-            main.Start();
+            var main = container.Resolve<ApplicationEntrypoint>();
+            await main.Start();
 
             var fakeWindow = container.Resolve<IClipboardListWindow>();
-            fakeWindow.Received().Show();
+            fakeWindow.Received()
+                      .Show();
         }
 
         [TestMethod]
-        public void WiresUserInterfaceMediatorUpWhenWindowIsLaunched()
+        public async Task WiresUserInterfaceMediatorUpWhenWindowIsLaunched()
         {
             var container = CreateContainer(
                 c => {
@@ -45,8 +48,8 @@
                     c.RegisterFake<IProcessManager>();
                 });
 
-            var main = container.Resolve<Main>();
-            main.Start();
+            var main = container.Resolve<ApplicationEntrypoint>();
+            await main.Start();
 
             var fakeWindow = container.Resolve<IClipboardListWindow>();
             var fakeMediator = container.Resolve<IClipboardUserInterfaceMediator>();
@@ -57,11 +60,11 @@
         }
 
         [TestMethod]
-        public void CanStartWithTerminatingArgumentProcessorShowsMainWindow()
+        public async Task CanStartWithTerminatingArgumentProcessorShowsMainWindow()
         {
             var container = CreateContainer(
                 c => {
-                    c.RegisterFake<IArgumentProcessor>()
+                    c.RegisterFake<ISingleArgumentProcessor>()
                      .WithFakeSettings(
                          x => {
                              x.Terminates.Returns(true);
@@ -74,11 +77,12 @@
                     c.RegisterFake<IProcessManager>();
                 });
 
-            var main = container.Resolve<Main>();
-            main.Start();
+            var main = container.Resolve<ApplicationEntrypoint>();
+            await main.Start();
 
             var fakeWindow = container.Resolve<IClipboardListWindow>();
-            fakeWindow.DidNotReceive().Show();
+            fakeWindow.DidNotReceive()
+                      .Show();
         }
     }
 }

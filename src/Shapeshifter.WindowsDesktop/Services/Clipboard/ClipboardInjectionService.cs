@@ -6,16 +6,18 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
     using System.Collections.Specialized;
     using System.Windows.Media.Imaging;
 
-    using Api;
-
     using Data.Interfaces;
 
     using Infrastructure.Handles.Factories.Interfaces;
+    using Infrastructure.Handles.Interfaces;
     using Infrastructure.Logging.Interfaces;
 
     using Interfaces;
 
     using Messages.Interceptors.Interfaces;
+
+    using Native;
+    using Native.Interfaces;
 
     class ClipboardInjectionService: IClipboardInjectionService
     {
@@ -27,94 +29,97 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 
         readonly ILogger logger;
 
+        readonly IGeneralNativeApi generalNativeApi;
+
         public ClipboardInjectionService(
             IClipboardCopyInterceptor clipboardCopyInterceptor,
             IClipboardHandleFactory clipboardHandleFactory,
             IMemoryHandleFactory memoryHandleFactory,
-            ILogger logger)
+            ILogger logger,
+            IClipboardNativeApi clipboardNativeApi,
+            IGeneralNativeApi generalNativeApi)
         {
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;
             this.clipboardHandleFactory = clipboardHandleFactory;
             this.memoryHandleFactory = memoryHandleFactory;
             this.logger = logger;
+            this.generalNativeApi = generalNativeApi;
         }
 
         public void InjectData(IClipboardDataPackage package)
         {
             clipboardCopyInterceptor.SkipNext();
 
-            using (clipboardHandleFactory.StartNewSession())
+            using (var session = clipboardHandleFactory.StartNewSession())
             {
-                ClipboardApi.EmptyClipboard();
-                InjectPackageContents(package);
+                session.EmptyClipboard();
+                InjectPackageContents(session, package);
             }
 
             logger.Information("Clipboard package has been injected to the clipboard.", 1);
         }
 
-        
-        void InjectPackageContents(IClipboardDataPackage package)
+        void InjectPackageContents(
+            IClipboardHandle session,
+            IClipboardDataPackage package)
         {
             foreach (var clipboardData in package.Contents)
             {
-                InjectClipboardData(clipboardData);
+                InjectClipboardData(session, clipboardData);
             }
         }
 
-        
-        void InjectClipboardData(IClipboardData clipboardData)
+        void InjectClipboardData(
+            IClipboardHandle session,
+            IClipboardData clipboardData)
         {
             using (var memoryHandle = memoryHandleFactory.AllocateInMemory(clipboardData.RawData))
             {
                 var globalPointer = AllocateInMemory(clipboardData);
 
-                var target = GeneralApi.GlobalLock(globalPointer);
+                var target = generalNativeApi.GlobalLock(globalPointer);
                 if (target == IntPtr.Zero)
                 {
                     throw new InvalidOperationException("Could not allocate memory.");
                 }
 
-                GeneralApi.CopyMemory(
+                generalNativeApi.CopyMemory(
                     target,
                     memoryHandle.Pointer,
                     (uint) clipboardData.RawData.Length);
 
-                GeneralApi.GlobalUnlock(target);
+                generalNativeApi.GlobalUnlock(target);
 
-                if (ClipboardApi.SetClipboardData(clipboardData.RawFormat, globalPointer) !=
+                if (session.SetClipboardData(clipboardData.RawFormat, globalPointer) !=
                     IntPtr.Zero)
                 {
                     return;
                 }
 
-                GeneralApi.GlobalFree(globalPointer);
+                generalNativeApi.GlobalFree(globalPointer);
                 throw new Exception("Could not set clipboard data.");
             }
         }
 
-        
-        static IntPtr AllocateInMemory(IClipboardData clipboardData)
+        IntPtr AllocateInMemory(IClipboardData clipboardData)
         {
-            return GeneralApi.GlobalAlloc(
-                GeneralApi.GMEM_ZEROINIT | GeneralApi.GMEM_MOVABLE,
+            return generalNativeApi.GlobalAlloc(
+                GeneralNativeApi.GMEM_ZEROINIT | GeneralNativeApi.GMEM_MOVABLE,
                 (UIntPtr) clipboardData.RawData.Length);
         }
 
-        
         public void InjectImage(BitmapSource image)
         {
             clipboardCopyInterceptor.SkipNext();
             WindowsClipboard.SetImage(image);
         }
 
-        
         public void InjectText(string text)
         {
             clipboardCopyInterceptor.SkipNext();
             WindowsClipboard.SetText(text);
         }
 
-        
         public void InjectFiles(params string[] files)
         {
             clipboardCopyInterceptor.SkipNext();

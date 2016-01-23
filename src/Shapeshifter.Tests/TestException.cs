@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Shapeshifter.WindowsDesktop
+﻿namespace Shapeshifter.WindowsDesktop
 {
-    class TestException : Exception
-    {
-    }
+    using System;
+
+    class TestException: Exception { }
 }

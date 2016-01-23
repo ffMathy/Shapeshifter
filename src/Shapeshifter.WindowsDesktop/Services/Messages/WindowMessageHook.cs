@@ -4,9 +4,6 @@
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Windows.Interop;
-
-    using Api;
 
     using Controls.Window.Interfaces;
 
@@ -16,14 +13,11 @@
 
     using Interfaces;
 
-    
     class WindowMessageHook
         : IWindowMessageHook,
           IDisposable
     {
-        HwndSource hooker;
-
-        IWindow connectedWindow;
+        IHookableWindow connectedWindow;
 
         readonly IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors;
 
@@ -35,16 +29,20 @@
 
         readonly IConsumerThreadLoop consumerLoop;
 
+        readonly IMainWindowHandleContainer mainWindowHandleContainer;
+
         public bool IsConnected { get; private set; }
 
         public WindowMessageHook(
             IReadOnlyCollection<IWindowMessageInterceptor> windowMessageInterceptors,
             ILogger logger,
-            IConsumerThreadLoop consumerLoop)
+            IConsumerThreadLoop consumerLoop,
+            IMainWindowHandleContainer mainWindowHandleContainer)
         {
             this.windowMessageInterceptors = windowMessageInterceptors;
             this.logger = logger;
             this.consumerLoop = consumerLoop;
+            this.mainWindowHandleContainer = mainWindowHandleContainer;
 
             pendingMessages = new Queue<WindowMessageReceivedArgument>();
             cancellationTokenSource = new CancellationTokenSource();
@@ -57,7 +55,7 @@
         {
             if (!IsConnected)
             {
-                return;
+                throw new InvalidOperationException("Can't disconnect the hook when it is already disconnected.");
             }
 
             UninstallInterceptors();
@@ -75,7 +73,7 @@
 
         void UninstallWindowMessageHook()
         {
-            hooker.RemoveHook(WindowHookCallback);
+            connectedWindow.RemoveHwndSourceHook(WindowHookCallback);
         }
 
         void UninstallInterceptors()
@@ -86,7 +84,7 @@
             }
         }
 
-        public void Connect(IWindow target)
+        public void Connect(IHookableWindow target)
         {
             if (IsConnected)
             {
@@ -105,25 +103,23 @@
         async Task HandleNextMessageAsync()
         {
             var nextMessage = pendingMessages.Dequeue();
-            foreach (var interceptor in windowMessageInterceptors)
-            {
-                var messageName = FormatMessage(nextMessage.Message);
-                var interceptorName = interceptor.GetType()
-                                                 .Name;
+            using (logger.Indent())
+                foreach (var interceptor in windowMessageInterceptors)
+                {
+                    var messageName = FormatMessage(nextMessage.Message);
+                    var interceptorName = interceptor.GetType()
+                                                     .Name;
 
-                logger.Information(
-                    $"Passing message {messageName} to interceptor {interceptorName}.");
+                    logger.Information(
+                        $"Passing message {messageName} to interceptor {interceptorName}.");
 
-                interceptor.ReceiveMessageEvent(nextMessage);
-
-                logger.Information(
-                    $"Message of type {messageName} passed to interceptor {interceptorName}.");
-            }
+                    interceptor.ReceiveMessageEvent(nextMessage);
+                }
         }
 
         void InstallInterceptors()
         {
-            var mainWindowHandle = hooker.Handle;
+            var mainWindowHandle = mainWindowHandleContainer.Handle;
             foreach (var interceptor in windowMessageInterceptors)
             {
                 interceptor.Install(mainWindowHandle);
@@ -133,12 +129,8 @@
 
         void InstallWindowMessageHook()
         {
-            var hooker = connectedWindow.HandleSource;
-            hooker.AddHook(WindowHookCallback);
-
+            connectedWindow.AddHwndSourceHook(WindowHookCallback);
             logger.Information("Installed message hook.");
-
-            this.hooker = hooker;
         }
 
         IntPtr WindowHookCallback(
@@ -171,7 +163,7 @@
 
         public void Dispose()
         {
-            hooker?.Dispose();
+            consumerLoop.Stop();
         }
     }
 }

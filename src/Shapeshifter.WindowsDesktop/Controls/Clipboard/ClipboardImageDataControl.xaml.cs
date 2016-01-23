@@ -11,7 +11,6 @@
         : UserControl,
           IClipboardControl
     {
-        
         public ClipboardImageDataControl()
         {
             InitializeComponent();

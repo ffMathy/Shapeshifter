@@ -6,7 +6,7 @@
 
     using Interfaces;
 
-    class CleanupArgumentProcessor: IArgumentProcessor
+    class CleanupArgumentProcessor: ISingleArgumentProcessor
     {
         public bool Terminates
             => true;
@@ -16,13 +16,12 @@
             return arguments.Contains("cleanup");
         }
 
-        
         public void Process(string[] arguments)
         {
             var updateIndex = Array.IndexOf(arguments, "cleanup");
             var targetDirectory = arguments[updateIndex + 1];
 
-            Directory.Delete(targetDirectory);
+            File.Delete(targetDirectory);
         }
     }
 }

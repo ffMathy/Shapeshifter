@@ -7,26 +7,24 @@
     using Autofac;
 
     using Infrastructure.Dependencies;
+    using Infrastructure.Environment;
 
     using Services;
 
-    
     static class DesignTimeContainerHelper
     {
         public static IContainer CreateDesignTimeContainer()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterModule(new DefaultWiringModule());
+            builder.RegisterModule(
+                new DefaultWiringModule(
+                    new EnvironmentInformation(true)));
 
             return builder.Build();
         }
 
         public static void RegisterFakes(ContainerBuilder builder)
         {
-            builder.RegisterType<DesignerUpdateService>()
-                   .AsSelf()
-                   .As<IUpdateService>()
-                   .SingleInstance();
             builder.RegisterType<DesignerFileManager>()
                    .AsSelf()
                    .As<IFileManager>()
