@@ -4,6 +4,8 @@
 [![codecov.io](https://codecov.io/github/ffMathy/Shapeshifter/coverage.svg?branch=master)](https://codecov.io/github/ffMathy/Shapeshifter?branch=master)
 
 # Shapeshifter
+
+[![Join the chat at https://gitter.im/ffMathy/Shapeshifter](https://badges.gitter.im/ffMathy/Shapeshifter.svg)](https://gitter.im/ffMathy/Shapeshifter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Shapeshifter is a revolutionary clipboard manager that you might know of already. It can be downloaded [here](http://flamefusion.net/software/shapeshifter),
 although that link is for Version 5.
 
