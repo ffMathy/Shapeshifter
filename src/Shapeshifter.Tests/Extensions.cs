@@ -69,7 +69,7 @@
                 .GetConstructors()
                 .Where(x => x.IsPublic && !x.IsStatic);
             var targetConstructor = constructors
-                .OrderByDescending(x => x.GetParameters().Count())
+                .OrderByDescending(x => x.GetParameters().Length)
                 .First();
             var parameters = targetConstructor.GetParameters();
             foreach (var parameter in parameters)
