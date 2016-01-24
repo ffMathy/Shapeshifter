@@ -11,12 +11,6 @@
     public class KeyValueCacheTest: UnitTestFor<IKeyValueCache<string, int>>
     {
         [TestMethod]
-        public void GetForUnknownKeyInStringCacheReturnsNull()
-        {
-            Assert.IsNull(systemUnderTest.Get("foobar"));
-        }
-
-        [TestMethod]
         public void GetForUnknownKeyInIntegerCacheReturnsZero()
         {
             Assert.AreEqual(0, systemUnderTest.Get("foobar"));

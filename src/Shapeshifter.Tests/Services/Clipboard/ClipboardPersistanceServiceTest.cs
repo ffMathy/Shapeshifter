@@ -19,15 +19,8 @@
     using NSubstitute;
 
     [TestClass]
-    public class ClipboardPersistanceServiceTest: UnitTestFor<IFileManager>
+    public class ClipboardPersistanceServiceTest: UnitTestFor<IClipboardPersistanceService>
     {
-        [TestCleanup]
-        public void Cleanup()
-        {
-            var folder = systemUnderTest.PrepareIsolatedFolder();
-            Directory.Delete(folder, true);
-        }
-
         [TestMethod]
         public async Task CanPersistClipboardData()
         {

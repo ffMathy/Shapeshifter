@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using System.Windows.Input;
 
     using Autofac;
 
@@ -19,6 +20,7 @@
 
     using NSubstitute;
 
+    using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interceptors.Interfaces;
 
     [TestClass]
@@ -36,6 +38,27 @@
             var fakeDurationMediator = container.Resolve<IPasteCombinationDurationMediator>();
             fakeDurationMediator.Received(1)
                                 .CancelCombinationRegistration();
+        }
+
+        [TestMethod]
+        public void MediatorIsCancelledWhenInActionListAndRightIsPressed()
+        {
+            var called = false;
+            systemUnderTest.UserInterfaceHidden += (sender, argument) =>
+                                                   called = true;
+
+            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Right, false));
+
+            fakeKeyInterceptor.HotkeyFired +=
+                Raise.Event<EventHandler<HotkeyFiredArgument>>(
+                    new object(),
+                    new HotkeyFiredArgument(Key.Right, false));
+
+            Assert.IsTrue(called);
         }
 
         [TestMethod]

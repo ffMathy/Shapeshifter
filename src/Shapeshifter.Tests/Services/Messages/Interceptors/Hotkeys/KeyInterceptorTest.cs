@@ -8,6 +8,7 @@
     using Factories.Interfaces;
 
     using Infrastructure.Events;
+    using Infrastructure.Threading.Interfaces;
 
     using Interfaces;
 
@@ -18,6 +19,11 @@
     [TestClass]
     public class KeyInterceptorTest: UnitTestFor<IKeyInterceptor>
     {
+        public KeyInterceptorTest()
+        {
+            ExcludeFakeFor<IUserInterfaceThread>();
+        }
+
         [TestMethod]
         [ExpectedException(typeof (InvalidOperationException))]
         public void InstallWhenAlreadyInstalledThrowsException()

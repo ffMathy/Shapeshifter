@@ -8,16 +8,16 @@
 
     public class ApplicationEntrypoint: ISingleInstance
     {
-        readonly IPreparationOperation preparationOperation;
+        readonly IStartupPreparationOperation startupPreparationOperation;
         readonly IPostPreparationOperation postPreparationOperation;
         readonly IMainWindowPreparationOperation mainWindowPreparationOperation;
 
         public ApplicationEntrypoint(
-            IPreparationOperation preparationOperation,
+            IStartupPreparationOperation startupPreparationOperation,
             IPostPreparationOperation postPreparationOperation,
             IMainWindowPreparationOperation mainWindowPreparationOperation)
         {
-            this.preparationOperation = preparationOperation;
+            this.startupPreparationOperation = startupPreparationOperation;
             this.postPreparationOperation = postPreparationOperation;
             this.mainWindowPreparationOperation = mainWindowPreparationOperation;
         }
@@ -26,7 +26,7 @@
             params string[] arguments)
         {
             await Prepare(arguments);
-            if (preparationOperation.ShouldTerminate)
+            if (startupPreparationOperation.ShouldTerminate)
             {
                 return;
             }
@@ -37,8 +37,8 @@
 
         async Task Prepare(string[] arguments)
         {
-            preparationOperation.Arguments = arguments;
-            await preparationOperation.RunAsync();
+            startupPreparationOperation.Arguments = arguments;
+            await startupPreparationOperation.RunAsync();
         }
     }
 }

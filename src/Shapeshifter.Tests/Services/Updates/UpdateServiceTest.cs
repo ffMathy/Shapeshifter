@@ -148,6 +148,19 @@
                 .Returns(fakeReleasesClient);
 
             fakeReleasesClient
+                .GetAll("ffMathy", "Shapeshifter")
+                .Returns(
+                    Task.FromResult<IReadOnlyList<Release>>(
+                        new[]
+                        {
+                            CreateRelease(
+                                1337,
+                                "shapeshifter-v1337.0.0.0",
+                                false,
+                                false)
+                        }));
+
+            fakeReleasesClient
                 .GetAllAssets("ffMathy", "Shapeshifter", 1337)
                 .Returns(
                     Task.FromResult<IReadOnlyList<ReleaseAsset>>(
@@ -165,19 +178,6 @@
                  "Shapeshifter.exe",
                  Arg.Any<byte[]>())
              .Returns("temporaryInstallPath");
-
-            fakeReleasesClient
-                .GetAll("ffMathy", "Shapeshifter")
-                .Returns(
-                    Task.FromResult<IReadOnlyList<Release>>(
-                        new[]
-                        {
-                            CreateRelease(
-                                1337,
-                                "shapeshifter-v1337.0.0.0",
-                                false,
-                                false)
-                        }));
             
             await systemUnderTest.UpdateAsync();
 

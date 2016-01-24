@@ -8,7 +8,7 @@
     using Services.Arguments.Interfaces;
     using Services.Interfaces;
 
-    class PreparationOperation: IPreparationOperation
+    class StartupPreparationOperation: IStartupPreparationOperation
     {
         readonly IProcessManager processManager;
         readonly IAggregateArgumentProcessor aggregateArgumentProcessor;
@@ -20,7 +20,7 @@
 
         public string[] Arguments { get; set; }
 
-        public PreparationOperation(
+        public StartupPreparationOperation(
             IProcessManager processManager,
             IAggregateArgumentProcessor aggregateArgumentProcessor)
         {

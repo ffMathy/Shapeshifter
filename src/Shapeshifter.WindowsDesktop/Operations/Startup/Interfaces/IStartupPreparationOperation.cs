@@ -2,7 +2,7 @@
 {
     using Operations.Interfaces;
 
-    public interface IPreparationOperation: IOperation
+    public interface IStartupPreparationOperation: IOperation
     {
         bool ShouldTerminate { get; }
 

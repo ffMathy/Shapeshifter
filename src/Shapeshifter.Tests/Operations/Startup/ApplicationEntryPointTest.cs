@@ -13,6 +13,7 @@
     using NSubstitute;
 
     using Operations.Startup;
+    using Operations.Startup.Interfaces;
 
     using Services.Arguments.Interfaces;
 
@@ -20,45 +21,18 @@
     public class ApplicationEntryPointTest: UnitTestFor<ApplicationEntrypoint>
     {
         [TestMethod]
-        public async Task CanStartWithNoTerminatingArgumentProcessorShowsMainWindow()
-        {
-            await systemUnderTest.Start();
-
-            container.Resolve<IClipboardListWindow>()
-                .Received()
-                .Show();
-        }
-
-        [TestMethod]
-        public async Task WiresUserInterfaceMediatorUpWhenWindowIsLaunched()
-        {
-            await systemUnderTest.Start();
-
-            var fakeWindow = container.Resolve<IClipboardListWindow>();
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
-
-            fakeWindow.SourceInitialized += Raise.Event();
-            fakeMediator.Received()
-                        .Connect(fakeWindow);
-        }
-
-        [TestMethod]
         public async Task CanStartWithTerminatingArgumentProcessorShowsMainWindow()
         {
             container
-                .Resolve<ISingleArgumentProcessor>()
-                .With(
-                    x => {
-                        x.Terminates.Returns(true);
-                        x.CanProcess(Arg.Any<string[]>())
-                        .Returns(true);
-                    });
+                .Resolve<IStartupPreparationOperation>()
+                .ShouldTerminate.Returns(true);
             
             await systemUnderTest.Start();
 
-            var fakeWindow = container.Resolve<IClipboardListWindow>();
+            var fakeWindow = container.Resolve<IMainWindowPreparationOperation>();
             fakeWindow.DidNotReceive()
-                      .Show();
+                      .RunAsync()
+                      .IgnoreAwait();
         }
     }
 }

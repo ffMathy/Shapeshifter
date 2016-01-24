@@ -48,11 +48,11 @@
         }
 
         [TestMethod]
-        public void UninstallAddsClipboardFormatListener()
+        public void UninstallRemovesClipboardFormatListener()
         {
             container.Resolve<IClipboardNativeApi>()
-             .AddClipboardFormatListener(Arg.Any<IntPtr>())
-             .Returns(false);
+             .RemoveClipboardFormatListener(Arg.Any<IntPtr>())
+             .Returns(true);
 
             systemUnderTest.Uninstall();
 
@@ -117,7 +117,7 @@
 
             container.Resolve<IClipboardNativeApi>()
                      .GetClipboardSequenceNumber()
-                     .Returns(1u, 1u, 1u);
+                     .Returns(1u, 2u, 3u);
 
             var dataCopiedCount = 0;
             

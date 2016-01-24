@@ -5,6 +5,11 @@
 
     using Autofac;
 
+    using Files;
+    using Files.Interfaces;
+
+    using Infrastructure.Threading.Interfaces;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
@@ -15,6 +20,11 @@
     [TestClass]
     public class LinkParserTest: UnitTestFor<ILinkParser>
     {
+        public LinkParserTest()
+        {
+            ExcludeFakeFor<IAsyncFilter>();
+        }
+
         [TestMethod]
         public async Task ExtractsAllLinksFromText()
         {
@@ -112,7 +122,11 @@
         public void ImageLinkHasImageType()
         {
             const string text = "google.com/foo/image.png";
-            
+
+            container.Resolve<IFileTypeInterpreter>()
+             .GetFileTypeFromFileName(text)
+             .Returns(FileType.Image);
+
             var linkType = systemUnderTest.GetLinkType(text);
             Assert.IsTrue(linkType.HasFlag(LinkType.ImageFile));
         }
@@ -129,8 +143,12 @@
         public async Task SeveralLinksCanFindProperType()
         {
             container.Resolve<IDomainNameResolver>()
-             .IsValidDomainAsync(Arg.Any<string>())
+             .IsValidDomainAsync("google.com")
              .Returns(Task.FromResult(true));
+
+            container.Resolve<IFileTypeInterpreter>()
+             .GetFileTypeFromFileName(Arg.Any<string>())
+             .Returns(FileType.Image);
 
             const string text = "http://google.com foo.com/img.jpg";
 

@@ -21,6 +21,11 @@
     [TestClass]
     public class WindowMessageHookTest: UnitTestFor<IWindowMessageHook>
     {
+        public WindowMessageHookTest()
+        {
+            IncludeFakeFor<IWindowMessageInterceptor>();
+        }
+
         [TestMethod]
         [ExpectedException(typeof (InvalidOperationException))]
         public void DisconnectWhenAlreadyDisconnectedThrowsException()

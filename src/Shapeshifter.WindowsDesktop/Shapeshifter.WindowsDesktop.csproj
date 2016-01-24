@@ -375,11 +375,11 @@
     <Compile Include="Operations\Startup\Interfaces\IMainWindowPreparationOperation.cs" />
     <Compile Include="Operations\Startup\Interfaces\IPostPreparationOperation.cs" />
     <Compile Include="Operations\Interfaces\IOperation.cs" />
-    <Compile Include="Operations\Startup\Interfaces\IPreparationOperation.cs" />
+    <Compile Include="Operations\Startup\Interfaces\IStartupPreparationOperation.cs" />
     <Compile Include="Operations\Startup\Interfaces\ITrayPreparationOperation.cs" />
     <Compile Include="Operations\Startup\MainWindowPreparationOperation.cs" />
     <Compile Include="Operations\Startup\PostPreparationOperation.cs" />
-    <Compile Include="Operations\Startup\PreparationOperation.cs" />
+    <Compile Include="Operations\Startup\StartupPreparationOperation.cs" />
     <Compile Include="Operations\Startup\TrayPreparationOperation.cs" />
     <Compile Include="Structures\FormatDataPair.cs" />
     <Compile Include="Controls\Window\Binders\PackageToActionBinder.cs" />

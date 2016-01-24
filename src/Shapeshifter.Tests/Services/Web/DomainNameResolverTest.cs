@@ -2,7 +2,10 @@
 {
     using System;
     using System.Linq;
+    using System.Net;
     using System.Threading.Tasks;
+
+    using Infrastructure.Caching.Interfaces;
 
     using Interfaces;
 
@@ -11,6 +14,11 @@
     [TestClass]
     public class DomainNameResolverTest: UnitTestFor<IDomainNameResolver>
     {
+        public DomainNameResolverTest()
+        {
+            ExcludeFakeFor<IKeyValueCache<string, IPAddress[]>>();
+        }
+
         [TestMethod]
         [TestCategory("Integration")]
         public async Task CanResolveGoogleDomain()

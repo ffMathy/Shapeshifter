@@ -53,11 +53,8 @@
 
             systemUnderTest.SelectedElement = fakePackage1;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Down, false));
+            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.SelectedNextItem += Raise.Event();
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage2);
         }
@@ -75,11 +72,8 @@
 
             systemUnderTest.SelectedElement = fakePackage2;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Down, false));
+            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.SelectedNextItem += Raise.Event();
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage3);
         }
@@ -97,11 +91,8 @@
 
             systemUnderTest.SelectedElement = fakePackage3;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Down, false));
+            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.SelectedNextItem += Raise.Event();
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage1);
         }
@@ -119,11 +110,8 @@
 
             systemUnderTest.SelectedElement = fakePackage1;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Up, false));
+            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.SelectedPreviousItem += Raise.Event();
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage3);
         }
@@ -141,11 +129,8 @@
 
             systemUnderTest.SelectedElement = fakePackage3;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Up, false));
+            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.SelectedPreviousItem += Raise.Event();
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage2);
         }
@@ -163,11 +148,8 @@
 
             systemUnderTest.SelectedElement = fakePackage2;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Up, false));
+            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.SelectedPreviousItem += Raise.Event();
 
             Assert.AreSame(systemUnderTest.SelectedElement, fakePackage1);
         }
@@ -185,16 +167,9 @@
 
             systemUnderTest.SelectedAction = fakeAction1;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
-
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Down, false));
+            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
+            fakeMediator.SelectedNextItem += Raise.Event();
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction2);
         }
@@ -212,16 +187,9 @@
 
             systemUnderTest.SelectedAction = fakeAction2;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
-
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Down, false));
+            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
+            fakeMediator.SelectedNextItem += Raise.Event();
 
             Assert.AreSame(systemUnderTest.SelectedAction, fakeAction3);
         }
@@ -234,26 +202,6 @@
                 Raise.Event<EventHandler<HotkeyFiredArgument>>(
                     new object(),
                     new HotkeyFiredArgument(Key.Left, false));
-
-            var fakeMediator = container
-                .Resolve<IClipboardUserInterfaceInteractionMediator>();
-            fakeMediator.Received()
-                        .Cancel();
-        }
-
-        [TestMethod]
-        public void MediatorIsCancelledWhenInActionListAndRightIsPressed()
-        {
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
-
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
 
             var fakeMediator = container
                 .Resolve<IClipboardUserInterfaceInteractionMediator>();
