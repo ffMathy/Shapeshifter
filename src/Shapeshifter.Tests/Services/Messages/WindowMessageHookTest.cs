@@ -30,7 +30,7 @@
         [ExpectedException(typeof (InvalidOperationException))]
         public void DisconnectWhenAlreadyDisconnectedThrowsException()
         {
-            systemUnderTest.Disconnect();
+            SystemUnderTest.Disconnect();
         }
 
         [TestMethod]
@@ -39,8 +39,8 @@
         {
             var fakeWindow = Substitute.For<IHookableWindow>();
             
-            systemUnderTest.Connect(fakeWindow);
-            systemUnderTest.Connect(fakeWindow);
+            SystemUnderTest.Connect(fakeWindow);
+            SystemUnderTest.Connect(fakeWindow);
         }
 
         [TestMethod]
@@ -56,7 +56,7 @@
                                 h => windowHookCallback = h));
                     });
 
-            systemUnderTest.Connect(fakeWindow);
+            SystemUnderTest.Connect(fakeWindow);
 
             Assert.IsNotNull(windowHookCallback);
 
@@ -64,7 +64,7 @@
             windowHookCallback(IntPtr.Zero, (int) Message.WM_HOTKEY, IntPtr.Zero, IntPtr.Zero, ref handled);
             windowHookCallback(IntPtr.Zero, (int) Message.WM_HOTKEY, IntPtr.Zero, IntPtr.Zero, ref handled);
 
-            var fakeConsumerLoop = container.Resolve<IConsumerThreadLoop>();
+            var fakeConsumerLoop = Container.Resolve<IConsumerThreadLoop>();
             fakeConsumerLoop
                 .Received(2)
                 .Notify(
@@ -75,7 +75,7 @@
         [TestMethod]
         public void ReceivingMessageGetsParsedOnToInterceptors()
         {
-            container.Resolve<IConsumerThreadLoop>()
+            Container.Resolve<IConsumerThreadLoop>()
              .Notify(
                  Arg.Do<Func<Task>>(
                      async x => await x()),
@@ -90,7 +90,7 @@
                                                        h => windowHookCallback = h));
                                            });
 
-            systemUnderTest.Connect(fakeWindow);
+            SystemUnderTest.Connect(fakeWindow);
 
             Assert.IsNotNull(windowHookCallback);
 
@@ -100,7 +100,7 @@
             var handled = false;
             windowHookCallback(hwnd, (int) Message.WM_HOTKEY, wParam, lParam, ref handled);
 
-            var fakeInterceptor = container.Resolve<IWindowMessageInterceptor>();
+            var fakeInterceptor = Container.Resolve<IWindowMessageInterceptor>();
             fakeInterceptor
                 .Received()
                 .ReceiveMessageEvent(

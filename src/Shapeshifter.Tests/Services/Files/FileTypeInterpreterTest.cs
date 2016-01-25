@@ -12,7 +12,7 @@
         {
             Assert.AreEqual(
                 FileType.Image, 
-                systemUnderTest.GetFileTypeFromFileName("foo.png"));
+                SystemUnderTest.GetFileTypeFromFileName("foo.png"));
         }
 
         [TestMethod]
@@ -20,7 +20,7 @@
         {
             Assert.AreEqual(
                 FileType.Image,
-                systemUnderTest.GetFileTypeFromFileName("foo.jpg"));
+                SystemUnderTest.GetFileTypeFromFileName("foo.jpg"));
         }
 
         [TestMethod]
@@ -28,7 +28,7 @@
         {
             Assert.AreEqual(
                 FileType.Text,
-                systemUnderTest.GetFileTypeFromFileName("foo.txt"));
+                SystemUnderTest.GetFileTypeFromFileName("foo.txt"));
         }
 
         [TestMethod]
@@ -36,7 +36,7 @@
         {
             Assert.AreEqual(
                 FileType.Other,
-                systemUnderTest.GetFileTypeFromFileName("foo"));
+                SystemUnderTest.GetFileTypeFromFileName("foo"));
         }
 
         [TestMethod]
@@ -44,7 +44,7 @@
         {
             Assert.AreEqual(
                 FileType.Other,
-                systemUnderTest.GetFileTypeFromFileName("foo.other"));
+                SystemUnderTest.GetFileTypeFromFileName("foo.other"));
         }
     }
 }

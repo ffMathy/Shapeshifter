@@ -91,6 +91,12 @@
                     return;
                 }
 
+                if (implementingTypes.Count > 1)
+                {
+                    throw new InvalidOperationException(
+                        $"The type {typeof(TClass).Name} has several implementing types.");
+                }
+
                 classType = implementingTypes.Single();
             }
 

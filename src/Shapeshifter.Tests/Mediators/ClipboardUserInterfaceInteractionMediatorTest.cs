@@ -29,75 +29,54 @@
         [TestMethod]
         public void CancelCancelsCombinationRegistrationOnDurationMediator()
         {
-            container.Resolve<IPasteCombinationDurationMediator>()
+            Container.Resolve<IPasteCombinationDurationMediator>()
                      .IsConnected
                      .Returns(false);
             
-            systemUnderTest.Cancel();
+            SystemUnderTest.Cancel();
 
-            var fakeDurationMediator = container.Resolve<IPasteCombinationDurationMediator>();
+            var fakeDurationMediator = Container.Resolve<IPasteCombinationDurationMediator>();
             fakeDurationMediator.Received(1)
                                 .CancelCombinationRegistration();
-        }
-
-        [TestMethod]
-        public void MediatorIsCancelledWhenInActionListAndRightIsPressed()
-        {
-            var called = false;
-            systemUnderTest.UserInterfaceHidden += (sender, argument) =>
-                                                   called = true;
-
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
-
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
-
-            Assert.IsTrue(called);
         }
 
         [TestMethod]
         [ExpectedException(typeof (InvalidOperationException))]
         public void DisconnectWhileAlreadyDisconnectedThrowsException()
         {
-            systemUnderTest.Disconnect();
+            SystemUnderTest.Disconnect();
         }
 
         [TestMethod]
         [ExpectedException(typeof (InvalidOperationException))]
         public void ConnectWhileAlreadyConnectedThrowsException()
         {
-            container.Resolve<IPasteCombinationDurationMediator>()
+            Container.Resolve<IPasteCombinationDurationMediator>()
                      .IsConnected
                      .Returns(true);
 
             var fakeWindow = Substitute.For<IHookableWindow>();
-            systemUnderTest.Connect(fakeWindow);
+            SystemUnderTest.Connect(fakeWindow);
         }
 
         [TestMethod]
         public void IsConnectedIsFalseIfPasteCombinationDurationMonitorIsNotConnected()
         {
-            container.Resolve<IPasteCombinationDurationMediator>()
+            Container.Resolve<IPasteCombinationDurationMediator>()
                      .IsConnected
                      .Returns(false);
             
-            Assert.IsFalse(systemUnderTest.IsConnected);
+            Assert.IsFalse(SystemUnderTest.IsConnected);
         }
 
         [TestMethod]
         public void IsConnectedIsTrueIfAllHooksAreConnected()
         {
-            container.Resolve<IPasteCombinationDurationMediator>()
+            Container.Resolve<IPasteCombinationDurationMediator>()
                      .IsConnected
                      .Returns(true);
             
-            Assert.IsTrue(systemUnderTest.IsConnected);
+            Assert.IsTrue(SystemUnderTest.IsConnected);
         }
 
         [TestMethod]
@@ -113,11 +92,11 @@
                 });
             fakePackage.Control.Returns(fakeControl);
 
-            container.Resolve<IClipboardDataControlPackageFactory>()
+            Container.Resolve<IClipboardDataControlPackageFactory>()
                      .CreateFromCurrentClipboardData()
                      .Returns(fakePackage);
 
-            var mediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            var mediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             mediator.Connect(null);
 
             var addedPackage = mediator.ClipboardElements.Single();
@@ -131,25 +110,25 @@
         {
             object eventSender = null;
             PackageEventArgument eventArgument = null;
-            systemUnderTest.PackageAdded += (sender, e) => {
+            SystemUnderTest.PackageAdded += (sender, e) => {
                 eventSender = sender;
                 eventArgument = e;
             };
 
-            systemUnderTest.Connect(null);
+            SystemUnderTest.Connect(null);
 
-            var addedPackage = systemUnderTest.ClipboardElements.Single();
+            var addedPackage = SystemUnderTest.ClipboardElements.Single();
             Assert.IsNotNull(addedPackage);
-            Assert.AreSame(systemUnderTest, eventSender);
+            Assert.AreSame(SystemUnderTest, eventSender);
             Assert.AreSame(addedPackage, eventArgument.Package);
         }
 
         [TestMethod]
         public void ConnectConnectsHotkeyHook()
         {
-            systemUnderTest.Connect(null);
+            SystemUnderTest.Connect(null);
 
-            var fakeHotkeyHookService = container.Resolve<IPasteCombinationDurationMediator>();
+            var fakeHotkeyHookService = Container.Resolve<IPasteCombinationDurationMediator>();
             fakeHotkeyHookService.Received()
                                  .Connect(null);
         }
@@ -157,13 +136,13 @@
         [TestMethod]
         public void DisconnectDisconnectsKeyboardHook()
         {
-            container.Resolve<IPasteCombinationDurationMediator>()
+            Container.Resolve<IPasteCombinationDurationMediator>()
                      .IsConnected
                      .Returns(true);
 
-            systemUnderTest.Disconnect();
+            SystemUnderTest.Disconnect();
 
-            var fakeKeyboardHookService = container.Resolve<IPasteCombinationDurationMediator>();
+            var fakeKeyboardHookService = Container.Resolve<IPasteCombinationDurationMediator>();
             fakeKeyboardHookService.Received()
                                    .Disconnect();
         }
@@ -182,20 +161,20 @@
                             <IClipboardData>()
                 });
 
-            container.Resolve<IClipboardDataControlPackageFactory>()
+            Container.Resolve<IClipboardDataControlPackageFactory>()
              .CreateFromCurrentClipboardData()
              .Returns(fakePackage);
             
-            systemUnderTest.Connect(null);
+            SystemUnderTest.Connect(null);
 
-            var numberOfPackagesBeforeDataCopied = systemUnderTest.ClipboardElements.Count();
-            var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
+            var numberOfPackagesBeforeDataCopied = SystemUnderTest.ClipboardElements.Count();
+            var fakeClipboardHookService = Container.Resolve<IClipboardCopyInterceptor>();
             fakeClipboardHookService.DataCopied +=
                 Raise.Event<EventHandler<DataCopiedEventArgument>>(
                     fakeClipboardHookService,
                     new DataCopiedEventArgument());
 
-            Assert.AreEqual(1, systemUnderTest.ClipboardElements.Count() - numberOfPackagesBeforeDataCopied);
+            Assert.AreEqual(1, SystemUnderTest.ClipboardElements.Count() - numberOfPackagesBeforeDataCopied);
         }
 
         [TestMethod]
@@ -213,19 +192,19 @@
                 });
             fakePackage.Control.Returns(fakeControl);
 
-            container.Resolve<IClipboardDataControlPackageFactory>()
+            Container.Resolve<IClipboardDataControlPackageFactory>()
              .CreateFromCurrentClipboardData()
              .Returns(fakePackage);
             
-            systemUnderTest.Connect(null);
+            SystemUnderTest.Connect(null);
 
-            var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
+            var fakeClipboardHookService = Container.Resolve<IClipboardCopyInterceptor>();
             fakeClipboardHookService.DataCopied +=
                 Raise.Event<EventHandler<DataCopiedEventArgument>>(
                     fakeClipboardHookService,
                     new DataCopiedEventArgument());
 
-            var addedPackage = systemUnderTest.ClipboardElements.Last();
+            var addedPackage = SystemUnderTest.ClipboardElements.Last();
             var content = addedPackage.Data.Contents.Last();
             Assert.AreSame(fakeData, content);
             Assert.AreSame(fakeControl, addedPackage.Control);
@@ -234,25 +213,25 @@
         [TestMethod]
         public void DataCopiedTriggersEvent()
         {
-            systemUnderTest.Connect(null);
+            SystemUnderTest.Connect(null);
 
             object eventSender = null;
             PackageEventArgument eventArgument = null;
-            systemUnderTest.PackageAdded += (sender, e) => {
+            SystemUnderTest.PackageAdded += (sender, e) => {
                 eventSender = sender;
                 eventArgument = e;
             };
 
-            var fakeClipboardHookService = container.Resolve<IClipboardCopyInterceptor>();
+            var fakeClipboardHookService = Container.Resolve<IClipboardCopyInterceptor>();
             fakeClipboardHookService.DataCopied +=
                 Raise.Event<EventHandler<DataCopiedEventArgument>>(
                     fakeClipboardHookService,
                     new DataCopiedEventArgument());
 
-            var addedPackage = systemUnderTest.ClipboardElements.Last();
+            var addedPackage = SystemUnderTest.ClipboardElements.Last();
             Assert.IsNotNull(addedPackage);
 
-            Assert.AreSame(systemUnderTest, eventSender);
+            Assert.AreSame(SystemUnderTest, eventSender);
             Assert.AreSame(addedPackage, eventArgument.Package);
         }
     }

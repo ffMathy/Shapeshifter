@@ -29,15 +29,15 @@
         {
             object eventSender = null;
 
-            systemUnderTest.PropertyChanged += (sender, e) => {
-                if (e.PropertyName == nameof(systemUnderTest.SelectedElement))
+            SystemUnderTest.PropertyChanged += (sender, e) => {
+                if (e.PropertyName == nameof(SystemUnderTest.SelectedElement))
                 {
                     eventSender = sender;
                 }
             };
-            systemUnderTest.SelectedElement = Substitute.For<IClipboardDataControlPackage>();
+            SystemUnderTest.SelectedElement = Substitute.For<IClipboardDataControlPackage>();
 
-            Assert.AreSame(systemUnderTest, eventSender);
+            Assert.AreSame(SystemUnderTest, eventSender);
         }
 
         [TestMethod]
@@ -47,16 +47,16 @@
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
 
-            systemUnderTest.Elements.Add(fakePackage1);
-            systemUnderTest.Elements.Add(fakePackage2);
-            systemUnderTest.Elements.Add(fakePackage3);
+            SystemUnderTest.Elements.Add(fakePackage1);
+            SystemUnderTest.Elements.Add(fakePackage2);
+            SystemUnderTest.Elements.Add(fakePackage3);
 
-            systemUnderTest.SelectedElement = fakePackage1;
+            SystemUnderTest.SelectedElement = fakePackage1;
 
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.SelectedNextItem += Raise.Event();
 
-            Assert.AreSame(systemUnderTest.SelectedElement, fakePackage2);
+            Assert.AreSame(SystemUnderTest.SelectedElement, fakePackage2);
         }
 
         [TestMethod]
@@ -66,16 +66,16 @@
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
 
-            systemUnderTest.Elements.Add(fakePackage1);
-            systemUnderTest.Elements.Add(fakePackage2);
-            systemUnderTest.Elements.Add(fakePackage3);
+            SystemUnderTest.Elements.Add(fakePackage1);
+            SystemUnderTest.Elements.Add(fakePackage2);
+            SystemUnderTest.Elements.Add(fakePackage3);
 
-            systemUnderTest.SelectedElement = fakePackage2;
+            SystemUnderTest.SelectedElement = fakePackage2;
 
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.SelectedNextItem += Raise.Event();
 
-            Assert.AreSame(systemUnderTest.SelectedElement, fakePackage3);
+            Assert.AreSame(SystemUnderTest.SelectedElement, fakePackage3);
         }
 
         [TestMethod]
@@ -85,16 +85,16 @@
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
 
-            systemUnderTest.Elements.Add(fakePackage1);
-            systemUnderTest.Elements.Add(fakePackage2);
-            systemUnderTest.Elements.Add(fakePackage3);
+            SystemUnderTest.Elements.Add(fakePackage1);
+            SystemUnderTest.Elements.Add(fakePackage2);
+            SystemUnderTest.Elements.Add(fakePackage3);
 
-            systemUnderTest.SelectedElement = fakePackage3;
+            SystemUnderTest.SelectedElement = fakePackage3;
 
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.SelectedNextItem += Raise.Event();
 
-            Assert.AreSame(systemUnderTest.SelectedElement, fakePackage1);
+            Assert.AreSame(SystemUnderTest.SelectedElement, fakePackage1);
         }
 
         [TestMethod]
@@ -104,16 +104,16 @@
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
 
-            systemUnderTest.Elements.Add(fakePackage1);
-            systemUnderTest.Elements.Add(fakePackage2);
-            systemUnderTest.Elements.Add(fakePackage3);
+            SystemUnderTest.Elements.Add(fakePackage1);
+            SystemUnderTest.Elements.Add(fakePackage2);
+            SystemUnderTest.Elements.Add(fakePackage3);
 
-            systemUnderTest.SelectedElement = fakePackage1;
+            SystemUnderTest.SelectedElement = fakePackage1;
 
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.SelectedPreviousItem += Raise.Event();
 
-            Assert.AreSame(systemUnderTest.SelectedElement, fakePackage3);
+            Assert.AreSame(SystemUnderTest.SelectedElement, fakePackage3);
         }
 
         [TestMethod]
@@ -123,16 +123,16 @@
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
 
-            systemUnderTest.Elements.Add(fakePackage1);
-            systemUnderTest.Elements.Add(fakePackage2);
-            systemUnderTest.Elements.Add(fakePackage3);
+            SystemUnderTest.Elements.Add(fakePackage1);
+            SystemUnderTest.Elements.Add(fakePackage2);
+            SystemUnderTest.Elements.Add(fakePackage3);
 
-            systemUnderTest.SelectedElement = fakePackage3;
+            SystemUnderTest.SelectedElement = fakePackage3;
 
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.SelectedPreviousItem += Raise.Event();
 
-            Assert.AreSame(systemUnderTest.SelectedElement, fakePackage2);
+            Assert.AreSame(SystemUnderTest.SelectedElement, fakePackage2);
         }
 
         [TestMethod]
@@ -142,16 +142,16 @@
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
 
-            systemUnderTest.Elements.Add(fakePackage1);
-            systemUnderTest.Elements.Add(fakePackage2);
-            systemUnderTest.Elements.Add(fakePackage3);
+            SystemUnderTest.Elements.Add(fakePackage1);
+            SystemUnderTest.Elements.Add(fakePackage2);
+            SystemUnderTest.Elements.Add(fakePackage3);
 
-            systemUnderTest.SelectedElement = fakePackage2;
+            SystemUnderTest.SelectedElement = fakePackage2;
 
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.SelectedPreviousItem += Raise.Event();
 
-            Assert.AreSame(systemUnderTest.SelectedElement, fakePackage1);
+            Assert.AreSame(SystemUnderTest.SelectedElement, fakePackage1);
         }
 
         [TestMethod]
@@ -161,17 +161,17 @@
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
 
-            systemUnderTest.Actions.Add(fakeAction1);
-            systemUnderTest.Actions.Add(fakeAction2);
-            systemUnderTest.Actions.Add(fakeAction3);
+            SystemUnderTest.Actions.Add(fakeAction1);
+            SystemUnderTest.Actions.Add(fakeAction2);
+            SystemUnderTest.Actions.Add(fakeAction3);
 
-            systemUnderTest.SelectedAction = fakeAction1;
+            SystemUnderTest.SelectedAction = fakeAction1;
 
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
             fakeMediator.SelectedNextItem += Raise.Event();
 
-            Assert.AreSame(systemUnderTest.SelectedAction, fakeAction2);
+            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction2);
         }
 
         [TestMethod]
@@ -181,44 +181,29 @@
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
 
-            systemUnderTest.Actions.Add(fakeAction1);
-            systemUnderTest.Actions.Add(fakeAction2);
-            systemUnderTest.Actions.Add(fakeAction3);
+            SystemUnderTest.Actions.Add(fakeAction1);
+            SystemUnderTest.Actions.Add(fakeAction2);
+            SystemUnderTest.Actions.Add(fakeAction3);
 
-            systemUnderTest.SelectedAction = fakeAction2;
+            SystemUnderTest.SelectedAction = fakeAction2;
 
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
             fakeMediator.SelectedNextItem += Raise.Event();
 
-            Assert.AreSame(systemUnderTest.SelectedAction, fakeAction3);
-        }
-
-        [TestMethod]
-        public void MediatorIsCancelledWhenInDataListAndLeftIsPressed()
-        {
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Left, false));
-
-            var fakeMediator = container
-                .Resolve<IClipboardUserInterfaceInteractionMediator>();
-            fakeMediator.Received()
-                        .Cancel();
+            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction3);
         }
 
         [TestMethod]
         public void WhenPasteIsRequestedSelectedActionIsInvoked()
         {
             var fakeAction = Substitute.For<IAction>();
-            systemUnderTest.SelectedAction = fakeAction;
+            SystemUnderTest.SelectedAction = fakeAction;
 
             var fakeElement = Substitute.For<IClipboardDataControlPackage>();
-            systemUnderTest.SelectedElement = fakeElement;
+            SystemUnderTest.SelectedElement = fakeElement;
 
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.PastePerformed +=
                 Raise.Event<EventHandler
                     <PastePerformedEventArgument>>(new object());
@@ -232,9 +217,9 @@
         {
             var showEventCount = 0;
             
-            systemUnderTest.UserInterfaceShown += (sender, e) => showEventCount++;
+            SystemUnderTest.UserInterfaceShown += (sender, e) => showEventCount++;
 
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.UserInterfaceShown += Raise.Event<EventHandler<UserInterfaceShownEventArgument>>(new object());
 
             Assert.AreEqual(1, showEventCount);
@@ -245,47 +230,12 @@
         {
             var hideEventCount = 0;
             
-            systemUnderTest.UserInterfaceHidden += (sender, e) => hideEventCount++;
+            SystemUnderTest.UserInterfaceHidden += (sender, e) => hideEventCount++;
 
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.UserInterfaceHidden += Raise.Event<EventHandler<UserInterfaceHiddenEventArgument>>(new object());
 
             Assert.AreEqual(1, hideEventCount);
-        }
-
-        [TestMethod]
-        public void MediatorIsCancelledWhenInItemListAndLeftIsPressed()
-        {
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Left, false));
-
-            var fakeMediator = container
-                .Resolve<IClipboardUserInterfaceInteractionMediator>();
-            fakeMediator.Received()
-                        .Cancel();
-        }
-
-        [TestMethod]
-        public void CanAlternateBetweenListsWithoutCancellingMediator()
-        {
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
-
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Left, false));
-
-            var fakeMediator = container
-                .Resolve<IClipboardUserInterfaceInteractionMediator>();
-            fakeMediator.DidNotReceive()
-                        .Cancel();
         }
 
         [TestMethod]
@@ -295,24 +245,17 @@
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
 
-            systemUnderTest.Actions.Add(fakeAction1);
-            systemUnderTest.Actions.Add(fakeAction2);
-            systemUnderTest.Actions.Add(fakeAction3);
+            SystemUnderTest.Actions.Add(fakeAction1);
+            SystemUnderTest.Actions.Add(fakeAction2);
+            SystemUnderTest.Actions.Add(fakeAction3);
 
-            systemUnderTest.SelectedAction = fakeAction3;
+            SystemUnderTest.SelectedAction = fakeAction3;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
+            fakeMediator.SelectedNextItem += Raise.Event();
 
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Down, false));
-
-            Assert.AreSame(systemUnderTest.SelectedAction, fakeAction1);
+            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction1);
         }
 
         [TestMethod]
@@ -322,24 +265,17 @@
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
 
-            systemUnderTest.Actions.Add(fakeAction1);
-            systemUnderTest.Actions.Add(fakeAction2);
-            systemUnderTest.Actions.Add(fakeAction3);
+            SystemUnderTest.Actions.Add(fakeAction1);
+            SystemUnderTest.Actions.Add(fakeAction2);
+            SystemUnderTest.Actions.Add(fakeAction3);
 
-            systemUnderTest.SelectedAction = fakeAction1;
+            SystemUnderTest.SelectedAction = fakeAction1;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
+            fakeMediator.SelectedPreviousItem += Raise.Event();
 
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Up, false));
-
-            Assert.AreSame(systemUnderTest.SelectedAction, fakeAction3);
+            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction3);
         }
 
         [TestMethod]
@@ -349,24 +285,17 @@
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
 
-            systemUnderTest.Actions.Add(fakeAction1);
-            systemUnderTest.Actions.Add(fakeAction2);
-            systemUnderTest.Actions.Add(fakeAction3);
+            SystemUnderTest.Actions.Add(fakeAction1);
+            SystemUnderTest.Actions.Add(fakeAction2);
+            SystemUnderTest.Actions.Add(fakeAction3);
 
-            systemUnderTest.SelectedAction = fakeAction3;
+            SystemUnderTest.SelectedAction = fakeAction3;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
+            fakeMediator.SelectedPreviousItem += Raise.Event();
 
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Up, false));
-
-            Assert.AreSame(systemUnderTest.SelectedAction, fakeAction2);
+            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction2);
         }
 
         [TestMethod]
@@ -376,30 +305,23 @@
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
 
-            systemUnderTest.Actions.Add(fakeAction1);
-            systemUnderTest.Actions.Add(fakeAction2);
-            systemUnderTest.Actions.Add(fakeAction3);
+            SystemUnderTest.Actions.Add(fakeAction1);
+            SystemUnderTest.Actions.Add(fakeAction2);
+            SystemUnderTest.Actions.Add(fakeAction3);
 
-            systemUnderTest.SelectedAction = fakeAction2;
+            SystemUnderTest.SelectedAction = fakeAction2;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
+            fakeMediator.SelectedPreviousItem += Raise.Event();
 
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Up, false));
-
-            Assert.AreSame(systemUnderTest.SelectedAction, fakeAction1);
+            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction1);
         }
 
         [TestMethod]
         public void ControlAddedSetsSelected()
         {
-            var fakeUserInterfaceMediator = Substitute.For<IClipboardUserInterfaceInteractionMediator>();
+            var fakeUserInterfaceMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
             
@@ -409,23 +331,23 @@
                     new PackageEventArgument(
                         fakePackage));
 
-            Assert.AreSame(fakePackage, systemUnderTest.SelectedElement);
+            Assert.AreSame(fakePackage, SystemUnderTest.SelectedElement);
         }
 
         [TestMethod]
         public void ControlAddedInsertsElement()
         {
-            var fakeUserInterfaceMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            var fakeUserInterfaceMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
             
             fakeUserInterfaceMediator.PackageAdded +=
                 Raise.Event<EventHandler<PackageEventArgument>>(
-                    systemUnderTest,
+                    SystemUnderTest,
                     new PackageEventArgument(
                         fakePackage));
 
-            Assert.AreSame(fakePackage, systemUnderTest.Elements.Single());
+            Assert.AreSame(fakePackage, SystemUnderTest.Elements.Single());
         }
     }
 }

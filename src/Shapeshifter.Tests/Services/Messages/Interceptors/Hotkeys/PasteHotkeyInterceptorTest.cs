@@ -19,37 +19,37 @@
         [TestMethod]
         public void IsEnabledByDefault()
         {
-            Assert.IsTrue(systemUnderTest.IsEnabled);
+            Assert.IsTrue(SystemUnderTest.IsEnabled);
         }
 
         [TestMethod]
         public void RetainsEnabledStateAfterUninstallIfEnabledIsTrue()
         {
-            container.Resolve<IHotkeyInterceptionFactory>()
+            Container.Resolve<IHotkeyInterceptionFactory>()
              .CreateInterception(Key.V, true, true)
              .Returns(Substitute.For<IHotkeyInterception>());
 
-            systemUnderTest.IsEnabled = true;
+            SystemUnderTest.IsEnabled = true;
 
-            systemUnderTest.Install(IntPtr.Zero);
-            systemUnderTest.Uninstall();
+            SystemUnderTest.Install(IntPtr.Zero);
+            SystemUnderTest.Uninstall();
 
-            Assert.IsTrue(systemUnderTest.IsEnabled);
+            Assert.IsTrue(SystemUnderTest.IsEnabled);
         }
 
         [TestMethod]
         public void RetainsEnabledStateAfterUninstallIfEnabledIsFalse()
         {
-            container.Resolve<IHotkeyInterceptionFactory>()
+            Container.Resolve<IHotkeyInterceptionFactory>()
              .CreateInterception(Key.V, true, true)
              .Returns(Substitute.For<IHotkeyInterception>());
 
-            systemUnderTest.IsEnabled = false;
+            SystemUnderTest.IsEnabled = false;
 
-            systemUnderTest.Install(IntPtr.Zero);
-            systemUnderTest.Uninstall();
+            SystemUnderTest.Install(IntPtr.Zero);
+            SystemUnderTest.Uninstall();
 
-            Assert.IsFalse(systemUnderTest.IsEnabled);
+            Assert.IsFalse(SystemUnderTest.IsEnabled);
         }
     }
 }

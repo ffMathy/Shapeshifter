@@ -29,14 +29,14 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
         {
             var invoked = false;
             var action = CreateTestAction(
-                systemUnderTest,
+                SystemUnderTest,
                 () => invoked = true);
 
-            await systemUnderTest.StartAsync(
+            await SystemUnderTest.StartAsync(
                 action, CancellationToken.None);
 
             Assert.IsTrue(invoked);
-            Assert.IsFalse(systemUnderTest.IsRunning);
+            Assert.IsFalse(SystemUnderTest.IsRunning);
         }
 
         [TestMethod]
@@ -44,14 +44,14 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
         {
             var runCount = 0;
             var action = CreateTestAction(
-                systemUnderTest,
+                SystemUnderTest,
                 () => ++runCount == 3);
 
-            await systemUnderTest.StartAsync(
+            await SystemUnderTest.StartAsync(
                 action, CancellationToken.None);
 
             Assert.AreEqual(3, runCount);
-            Assert.IsFalse(systemUnderTest.IsRunning);
+            Assert.IsFalse(SystemUnderTest.IsRunning);
         }
 
         [TestMethod]
@@ -59,12 +59,12 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
         public async Task ForwardsExceptionsThrown()
         {
             var action = CreateTestAction(
-                systemUnderTest,
+                SystemUnderTest,
                 () => {
                     throw new TestException();
                 });
 
-            await systemUnderTest.StartAsync(
+            await SystemUnderTest.StartAsync(
                 action, CancellationToken.None);
         }
 
@@ -72,21 +72,21 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
         public async Task StopsLoopWhenExceptionIsThrown()
         {
             var action = CreateTestAction(
-                systemUnderTest,
+                SystemUnderTest,
                 () => {
                     throw new TestException();
                 });
 
             try
             {
-                await systemUnderTest.StartAsync(
+                await SystemUnderTest.StartAsync(
                     action, CancellationToken.None);
 
                 Assert.Fail();
             }
             catch (TestException)
             {
-                Assert.IsFalse(systemUnderTest.IsRunning);
+                Assert.IsFalse(SystemUnderTest.IsRunning);
             }
         }
 
@@ -96,19 +96,19 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
         {
             var shouldEndFirstAction = false;
             var firstAction = CreateTestAction(
-                systemUnderTest,
+                SystemUnderTest,
                 () => shouldEndFirstAction);
             var secondAction = CreateTestAction(
-                systemUnderTest,
+                SystemUnderTest,
                 () => shouldEndFirstAction = true);
 
-            systemUnderTest
+            SystemUnderTest
                 .StartAsync(firstAction)
                 .IgnoreAwait();
 
             try
             {
-                await systemUnderTest.StartAsync(secondAction);
+                await SystemUnderTest.StartAsync(secondAction);
             }
             catch
             {

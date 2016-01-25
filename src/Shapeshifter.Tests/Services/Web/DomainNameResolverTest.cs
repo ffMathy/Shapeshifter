@@ -23,7 +23,7 @@
         [TestCategory("Integration")]
         public async Task CanResolveGoogleDomain()
         {
-            var ipAddresses = await systemUnderTest.GetDomainIpAddressesAsync(
+            var ipAddresses = await SystemUnderTest.GetDomainIpAddressesAsync(
                 "google.com");
             var firstIpAddress = ipAddresses.First();
 
@@ -34,7 +34,7 @@
         [TestCategory("Integration")]
         public async Task CanDetectGoogleAsValidDomain()
         {
-            var isValid = await systemUnderTest.IsValidDomainAsync(
+            var isValid = await SystemUnderTest.IsValidDomainAsync(
                 "google.com");
             Assert.IsTrue(isValid);
         }
@@ -43,14 +43,14 @@
         [ExpectedException(typeof (ArgumentNullException))]
         public async Task NoDomainSpecifiedThrowsException()
         {
-            await systemUnderTest.GetDomainIpAddressesAsync(null);
+            await SystemUnderTest.GetDomainIpAddressesAsync(null);
         }
 
         [TestMethod]
         [TestCategory("Integration")]
         public async Task IsNotValidWhenUsingGarbageText()
         {
-            var isValid = await systemUnderTest.IsValidDomainAsync(
+            var isValid = await SystemUnderTest.IsValidDomainAsync(
                 "hello world foobar");
             Assert.IsFalse(isValid);
         }
@@ -59,7 +59,7 @@
         [TestCategory("Integration")]
         public async Task IsNotValidWithInvalidDomain()
         {
-            var isValid = await systemUnderTest.IsValidDomainAsync(
+            var isValid = await SystemUnderTest.IsValidDomainAsync(
                 "fooooooooooooooooooo.com");
             Assert.IsFalse(isValid);
         }

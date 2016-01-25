@@ -18,31 +18,31 @@
         [TestMethod]
         public void IsRunningWhenInnerLoopIsRunning()
         {
-            container
+            Container
                 .Resolve<IThreadLoop>()
                 .IsRunning
                 .Returns(true);
 
-            Assert.IsTrue(systemUnderTest.IsRunning);
+            Assert.IsTrue(SystemUnderTest.IsRunning);
         }
 
         [TestMethod]
         public void IsNotRunningWhenInnerLoopIsNotRunning()
         {
-            container
+            Container
                 .Resolve<IThreadLoop>()
                 .IsRunning
                 .Returns(false);
 
-            Assert.IsFalse(systemUnderTest.IsRunning);
+            Assert.IsFalse(SystemUnderTest.IsRunning);
         }
 
         [TestMethod]
         public void StopStopsInnerLoop()
         {
-            systemUnderTest.Stop();
+            SystemUnderTest.Stop();
 
-            container.Resolve<IThreadLoop>()
+            Container.Resolve<IThreadLoop>()
                      .Received()
                      .Stop();
         }
@@ -50,9 +50,9 @@
         [TestMethod]
         public void NotifyForTheFirstTimeSpawnsThread()
         {
-            systemUnderTest.Notify(() => Task.CompletedTask, CancellationToken.None);
+            SystemUnderTest.Notify(() => Task.CompletedTask, CancellationToken.None);
 
-            container
+            Container
                 .Resolve<IThreadLoop>()
                 .Received()
                 .StartAsync(
@@ -65,7 +65,7 @@
         {
             Func<Task> innerLoopTick = null;
 
-            var fakeInnerLoop = container.Resolve<IThreadLoop>();
+            var fakeInnerLoop = Container.Resolve<IThreadLoop>();
             fakeInnerLoop.StartAsync(
                     Arg.Do<Func<Task>>(
                         x =>
@@ -76,7 +76,7 @@
                     CancellationToken.None)
                 .IgnoreAwait();
 
-            var systemUnderTest = container.Resolve<IConsumerThreadLoop>();
+            var systemUnderTest = Container.Resolve<IConsumerThreadLoop>();
 
             systemUnderTest.Notify(() => Task.CompletedTask, CancellationToken.None);
             systemUnderTest.Notify(() => Task.CompletedTask, CancellationToken.None);

@@ -37,27 +37,27 @@
         [TestMethod]
         public void IsConnectedIsFalseIfConsumerThreadIsNotRunning()
         {
-            container.Resolve<IConsumerThreadLoop>()
+            Container.Resolve<IConsumerThreadLoop>()
                      .IsRunning
                      .Returns(false);
             
-            Assert.IsFalse(systemUnderTest.IsConnected);
+            Assert.IsFalse(SystemUnderTest.IsConnected);
         }
 
         [TestMethod]
         public void IsConnectedIsTrueIfConsumerThreadIsRunning()
         {
-            container.Resolve<IConsumerThreadLoop>()
+            Container.Resolve<IConsumerThreadLoop>()
                      .IsRunning
                      .Returns(true);
             
-            Assert.IsTrue(systemUnderTest.IsConnected);
+            Assert.IsTrue(SystemUnderTest.IsConnected);
         }
 
         [TestMethod]
         public void CombinationIsHeldDownWhenCtrlVIsDown()
         {
-            container.Resolve<IKeyboardManager>()
+            Container.Resolve<IKeyboardManager>()
                      .With(
                          x => {
                              x.IsKeyDown(Key.LeftCtrl)
@@ -66,13 +66,13 @@
                               .Returns(true);
                          });
             
-            Assert.IsTrue(systemUnderTest.IsCombinationFullyHeldDown);
+            Assert.IsTrue(SystemUnderTest.IsCombinationFullyHeldDown);
         }
 
         [TestMethod]
         public void CombinationIsReleasedWhenOnlyCtrlIsDown()
         {
-            container.Resolve<IKeyboardManager>()
+            Container.Resolve<IKeyboardManager>()
                      .With(
                          x => {
                              x.IsKeyDown(Key.LeftCtrl)
@@ -81,13 +81,13 @@
                               .Returns(false);
                          });
             
-            Assert.IsFalse(systemUnderTest.IsCombinationFullyHeldDown);
+            Assert.IsFalse(SystemUnderTest.IsCombinationFullyHeldDown);
         }
 
         [TestMethod]
         public void CombinationIsReleasedWhenOnlyVIsDown()
         {
-            container.Resolve<IKeyboardManager>()
+            Container.Resolve<IKeyboardManager>()
                      .With(
                          x => {
                              x.IsKeyDown(Key.LeftCtrl)
@@ -96,13 +96,13 @@
                               .Returns(true);
                          });
             
-            Assert.IsFalse(systemUnderTest.IsCombinationFullyHeldDown);
+            Assert.IsFalse(SystemUnderTest.IsCombinationFullyHeldDown);
         }
 
         [TestMethod]
         public void CombinationIsReleasedWhenBothVAndCtrlIsReleased()
         {
-            container.Resolve<IKeyboardManager>()
+            Container.Resolve<IKeyboardManager>()
                      .With(
                          x => {
                              x.IsKeyDown(Key.LeftCtrl)
@@ -111,13 +111,13 @@
                               .Returns(false);
                          });
             
-            Assert.IsFalse(systemUnderTest.IsCombinationFullyHeldDown);
+            Assert.IsFalse(SystemUnderTest.IsCombinationFullyHeldDown);
         }
 
         [TestMethod]
         public void PartialCombinationIsHeldDownWhenOnlyVIsDown()
         {
-            container.Resolve<IKeyboardManager>()
+            Container.Resolve<IKeyboardManager>()
                      .With(
                          x => {
                              x.IsKeyDown(Key.LeftCtrl)
@@ -126,13 +126,13 @@
                               .Returns(true);
                          });
             
-            Assert.IsTrue(systemUnderTest.IsCombinationPartiallyHeldDown);
+            Assert.IsTrue(SystemUnderTest.IsCombinationPartiallyHeldDown);
         }
 
         [TestMethod]
         public void PartialCombinationIsHeldDownWhenOnlyCtrlIsDown()
         {
-            container.Resolve<IKeyboardManager>()
+            Container.Resolve<IKeyboardManager>()
                      .With(
                          x => {
                              x.IsKeyDown(Key.LeftCtrl)
@@ -141,13 +141,13 @@
                               .Returns(false);
                          });
             
-            Assert.IsTrue(systemUnderTest.IsCombinationPartiallyHeldDown);
+            Assert.IsTrue(SystemUnderTest.IsCombinationPartiallyHeldDown);
         }
 
         [TestMethod]
         public void PartialCombinationIsHeldDownWhenBothVAndCtrlAreDown()
         {
-            container.Resolve<IKeyboardManager>()
+            Container.Resolve<IKeyboardManager>()
                      .With(
                          x => {
                              x.IsKeyDown(Key.LeftCtrl)
@@ -156,13 +156,13 @@
                               .Returns(true);
                          });
             
-            Assert.IsTrue(systemUnderTest.IsCombinationPartiallyHeldDown);
+            Assert.IsTrue(SystemUnderTest.IsCombinationPartiallyHeldDown);
         }
 
         [TestMethod]
         public void PartialCombinationReleasedWhenBothVAndCtrlAreReleased()
         {
-            container.Resolve<IKeyboardManager>()
+            Container.Resolve<IKeyboardManager>()
                      .With(
                          x => {
                              x.IsKeyDown(Key.LeftCtrl)
@@ -171,40 +171,40 @@
                               .Returns(false);
                          });
             
-            Assert.IsFalse(systemUnderTest.IsCombinationPartiallyHeldDown);
+            Assert.IsFalse(SystemUnderTest.IsCombinationPartiallyHeldDown);
         }
 
         [TestMethod]
         [ExpectedException(typeof (InvalidOperationException))]
         public void DisconnectingWhileNotConnectedThrowsError()
         {
-            container.Resolve<IConsumerThreadLoop>()
+            Container.Resolve<IConsumerThreadLoop>()
                      .IsRunning
                      .Returns(false);
             
-            systemUnderTest.Disconnect();
+            SystemUnderTest.Disconnect();
         }
 
         [TestMethod]
         [ExpectedException(typeof (InvalidOperationException))]
         public void ConnectingWhileAlreadyConnectedThrowsError()
         {
-            container.Resolve<IConsumerThreadLoop>()
+            Container.Resolve<IConsumerThreadLoop>()
                      .IsRunning
                      .Returns(true);
 
-            systemUnderTest.Connect(Substitute.For<IHookableWindow>());
+            SystemUnderTest.Connect(Substitute.For<IHookableWindow>());
         }
 
         [TestMethod]
         public void WhenCtrlVIsDownMonitoringLoopRuns()
         {
-            systemUnderTest.Connect(Substitute.For<IHookableWindow>());
+            SystemUnderTest.Connect(Substitute.For<IHookableWindow>());
 
-            var fakePasteHotkeyInterceptor = container.Resolve<IPasteHotkeyInterceptor>();
+            var fakePasteHotkeyInterceptor = Container.Resolve<IPasteHotkeyInterceptor>();
             RaiseHotkeyFired(fakePasteHotkeyInterceptor);
 
-            var fakeConsumerThreadLoop = container.Resolve<IConsumerThreadLoop>();
+            var fakeConsumerThreadLoop = Container.Resolve<IConsumerThreadLoop>();
             fakeConsumerThreadLoop
                 .Received()
                 .Notify(

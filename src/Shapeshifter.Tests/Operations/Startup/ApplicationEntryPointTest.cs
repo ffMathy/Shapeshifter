@@ -23,13 +23,13 @@
         [TestMethod]
         public async Task CanStartWithTerminatingArgumentProcessorShowsMainWindow()
         {
-            container
+            Container
                 .Resolve<IStartupPreparationOperation>()
                 .ShouldTerminate.Returns(true);
             
-            await systemUnderTest.Start();
+            await SystemUnderTest.Start();
 
-            var fakeWindow = container.Resolve<IMainWindowPreparationOperation>();
+            var fakeWindow = Container.Resolve<IMainWindowPreparationOperation>();
             fakeWindow.DidNotReceive()
                       .RunAsync()
                       .IgnoreAwait();

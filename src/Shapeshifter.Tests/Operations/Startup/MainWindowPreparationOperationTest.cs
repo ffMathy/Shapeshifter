@@ -22,9 +22,9 @@
         [TestMethod]
         public async Task PreparingWindowShowsIt()
         {
-            await systemUnderTest.RunAsync();
+            await SystemUnderTest.RunAsync();
 
-            container.Resolve<IClipboardListWindow>()
+            Container.Resolve<IClipboardListWindow>()
                 .Received()
                 .Show();
         }
@@ -32,10 +32,10 @@
         [TestMethod]
         public async Task WiresUserInterfaceMediatorUpWhenWindowIsLaunched()
         {
-            await systemUnderTest.RunAsync();
+            await SystemUnderTest.RunAsync();
 
-            var fakeWindow = container.Resolve<IClipboardListWindow>();
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            var fakeWindow = Container.Resolve<IClipboardListWindow>();
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
 
             fakeWindow.SourceInitialized += Raise.Event();
             fakeMediator.Received()

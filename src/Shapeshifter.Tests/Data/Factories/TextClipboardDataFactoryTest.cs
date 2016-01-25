@@ -13,7 +13,7 @@
         public void CanBuildDataReturnsTrueForTextFormats()
         {
             Assert.IsTrue(
-                systemUnderTest.CanBuildData(
+                SystemUnderTest.CanBuildData(
                     ClipboardNativeApi.CF_TEXT));
         }
 
@@ -21,13 +21,13 @@
         public void CanBuildDataReturnsFalseForNonTextFormats()
         {
             Assert.IsFalse(
-                systemUnderTest.CanBuildData(uint.MaxValue));
+                SystemUnderTest.CanBuildData(uint.MaxValue));
         }
 
         [TestMethod]
         public void BuildDataReturnsTextData()
         {
-            var data = systemUnderTest.BuildData(
+            var data = SystemUnderTest.BuildData(
                 ClipboardNativeApi.CF_TEXT, new byte[0]);
             Assert.IsInstanceOfType(data, typeof (ClipboardTextData));
         }

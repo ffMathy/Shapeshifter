@@ -17,25 +17,25 @@
         [ExpectedException(typeof (ArgumentException))]
         public void CreateControlWithNoDataThrowsException()
         {
-            systemUnderTest.BuildControl(null);
+            SystemUnderTest.BuildControl(null);
         }
 
         [TestMethod]
         public void CanBuildControlReturnsFalseForNonFileData()
         {
-            Assert.IsFalse(systemUnderTest.CanBuildControl(Substitute.For<IClipboardData>()));
+            Assert.IsFalse(SystemUnderTest.CanBuildControl(Substitute.For<IClipboardData>()));
         }
 
         [TestMethod]
         public void CanBuildControlReturnsTrueForFileData()
         {
-            Assert.IsTrue(systemUnderTest.CanBuildControl(Substitute.For<IClipboardFileCollectionData>()));
+            Assert.IsTrue(SystemUnderTest.CanBuildControl(Substitute.For<IClipboardFileCollectionData>()));
         }
 
         [TestMethod]
         public void CanBuildControlReturnsTrueForFileCollectionData()
         {
-            Assert.IsTrue(systemUnderTest.CanBuildControl(Substitute.For<IClipboardFileCollectionData>()));
+            Assert.IsTrue(SystemUnderTest.CanBuildControl(Substitute.For<IClipboardFileCollectionData>()));
         }
     }
 }

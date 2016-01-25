@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
 
     using Autofac;
 
@@ -12,11 +13,31 @@
 
     using NSubstitute;
 
+    using Services.Files.Interfaces;
+
     public abstract class UnitTestFor<TSystemUnderTest>
         where TSystemUnderTest : class
     {
-        protected ILifetimeScope container;
-        protected TSystemUnderTest systemUnderTest;
+
+        ILifetimeScope container;
+        protected ILifetimeScope Container
+        {
+            get
+            {
+                Setup();
+                return container;
+            }
+        }
+
+        TSystemUnderTest systemUnderTest;
+        protected TSystemUnderTest SystemUnderTest
+        {
+            get
+            {
+                Setup();
+                return systemUnderTest;
+            }
+        }
 
         readonly List<Type> fakeExceptions;
         readonly List<Type> fakeInclusions;
@@ -37,9 +58,13 @@
             fakeInclusions.Add(typeof(T));
         }
 
-        [TestInitialize]
-        public void Setup()
+        void Setup()
         {
+            if ((container != null) && (systemUnderTest != null))
+            {
+                return;
+            }
+
             container = CreateContainerWithFakeDependencies(
                 (c) => {
                     foreach (var fake in fakeInclusions)
@@ -48,7 +73,12 @@
                             .GetMethod(
                                 nameof(Extensions.RegisterFake))
                             .MakeGenericMethod(fake);
-                        method.Invoke(null, new object[] { c });
+                        method.Invoke(
+                            null,
+                            new object[]
+                            {
+                                c
+                            });
                     }
                 },
                 fakeExceptions.ToArray());
@@ -56,8 +86,18 @@
         }
 
         [TestCleanup]
-        public void ClearCacheOnEnd()
+        public void Cleanup()
         {
+            var fileManager = Container.Resolve<IFileManager>();
+            var folder = fileManager.PrepareIsolatedFolder();
+            if (!string.IsNullOrEmpty(folder))
+            {
+                Directory.Delete(folder, true);
+            }
+
+            fakeExceptions.Clear();
+            fakeInclusions.Clear();
+
             Extensions.ClearCache();
             DisposeContainer();
         }
@@ -68,18 +108,19 @@
             container = null;
         }
 
-        ILifetimeScope CreateContainerWithFakeDependencies(
+        static ILifetimeScope CreateContainerWithFakeDependencies(
             Action<ContainerBuilder> setupCallback,
             params Type[] exceptTypes)
         {
             return CreateContainerWithCallback(
-                c => {
+                c =>
+                {
                     c.RegisterFakesForDependencies<TSystemUnderTest>(exceptTypes);
                     setupCallback(c);
                 });
         }
 
-        ILifetimeScope CreateContainerWithCallback(
+        static ILifetimeScope CreateContainerWithCallback(
             Action<ContainerBuilder> setupCallback = null)
         {
             var builder = new ContainerBuilder();
@@ -99,7 +140,7 @@
 
             setupCallback?.Invoke(builder);
 
-            return container = builder
+            return builder
                 .Build()
                 .BeginLifetimeScope();
         }

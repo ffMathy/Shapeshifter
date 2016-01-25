@@ -8,6 +8,8 @@
 
     using Data.Interfaces;
 
+    using Infrastructure.Threading.Interfaces;
+
     using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -27,50 +29,50 @@
         {
             var someNonTextData = GetPackageContaining<IClipboardData>();
 
-            Assert.IsFalse(await systemUnderTest.CanPerformAsync(someNonTextData));
+            Assert.IsFalse(await SystemUnderTest.CanPerformAsync(someNonTextData));
         }
 
         [TestMethod]
         public void CanReadTitle()
         {
-            Assert.IsNotNull(systemUnderTest.Title);
+            Assert.IsNotNull(SystemUnderTest.Title);
         }
 
         [TestMethod]
         public void OrderIsCorrect()
         {
-            Assert.AreEqual(100, systemUnderTest.Order);
+            Assert.AreEqual(100, SystemUnderTest.Order);
         }
 
         [TestMethod]
         public void CanReadDescription()
         {
-            Assert.IsNotNull(systemUnderTest.Description);
+            Assert.IsNotNull(SystemUnderTest.Description);
         }
 
         [TestMethod]
         public async Task CanPerformIsFalseForTextTypesWithNoImageLink()
         {
-            container.Resolve<ILinkParser>()
+            Container.Resolve<ILinkParser>()
                 .HasLinkOfTypeAsync(
                     Arg.Any<string>(),
                     LinkType.ImageFile)
                 .Returns(Task.FromResult(false));
             
-            var canPerform = await systemUnderTest.CanPerformAsync(Substitute.For<IClipboardDataPackage>());
+            var canPerform = await SystemUnderTest.CanPerformAsync(Substitute.For<IClipboardDataPackage>());
             Assert.IsFalse(canPerform);
         }
 
         [TestMethod]
         public async Task CanPerformIsTrueForTextTypesWithImageLink()
         {
-            container.Resolve<ILinkParser>()
+            Container.Resolve<ILinkParser>()
                 .HasLinkOfTypeAsync(
                     Arg.Any<string>(),
                     LinkType.ImageFile)
                 .Returns(Task.FromResult(true));
             
-            Assert.IsTrue(await systemUnderTest.CanPerformAsync(GetPackageContaining<IClipboardTextData>()));
+            Assert.IsTrue(await SystemUnderTest.CanPerformAsync(GetPackageContaining<IClipboardTextData>()));
         }
 
         [TestMethod]
@@ -85,7 +87,7 @@
                 2
             };
             
-            container.Resolve<IDownloader>()
+            Container.Resolve<IDownloader>()
              .DownloadBytesAsync(Arg.Any<string>())
              .Returns(
                  Task.FromResult(
@@ -93,13 +95,13 @@
                  Task.FromResult(
                      secondFakeDownloadedImageBytes));
 
-            container.Resolve<ILinkParser>()
+            Container.Resolve<ILinkParser>()
              .HasLinkOfTypeAsync(
                  Arg.Any<string>(),
                  LinkType.ImageFile)
              .Returns(Task.FromResult(true));
 
-            container.Resolve<ILinkParser>()
+            Container.Resolve<ILinkParser>()
              .ExtractLinksFromTextAsync(Arg.Any<string>())
              .Returns(
                  Task
@@ -111,19 +113,19 @@
                                      "example.com"
                          }));
             
-            await systemUnderTest.PerformAsync(GetPackageContaining<IClipboardTextData>());
+            await SystemUnderTest.PerformAsync(GetPackageContaining<IClipboardTextData>());
 
-            var fakeClipboardInjectionService = container.Resolve<IClipboardInjectionService>();
+            var fakeClipboardInjectionService = Container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService.Received(2)
                                          .InjectImage(Arg.Any<BitmapSource>());
 
-            var fakeImageFileInterpreter = container.Resolve<IImageFileInterpreter>();
+            var fakeImageFileInterpreter = Container.Resolve<IImageFileInterpreter>();
             fakeImageFileInterpreter.Received(1)
                                     .Interpret(firstFakeDownloadedImageBytes);
             fakeImageFileInterpreter.Received(1)
                                     .Interpret(secondFakeDownloadedImageBytes);
 
-            var fakeDownloader = container.Resolve<IDownloader>();
+            var fakeDownloader = Container.Resolve<IDownloader>();
             fakeDownloader.Received(1)
                           .DownloadBytesAsync("foobar.com")
                           .IgnoreAwait();

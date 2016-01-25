@@ -19,9 +19,9 @@
         [TestMethod]
         public async Task PasteDisablesAndEnablesPasteInterceptor()
         {
-            await systemUnderTest.PasteClipboardContentsAsync();
+            await SystemUnderTest.PasteClipboardContentsAsync();
 
-            var fakeInterceptor = container.Resolve<IPasteHotkeyInterceptor>();
+            var fakeInterceptor = Container.Resolve<IPasteHotkeyInterceptor>();
             fakeInterceptor.Received()
                            .Uninstall();
             fakeInterceptor.Received()

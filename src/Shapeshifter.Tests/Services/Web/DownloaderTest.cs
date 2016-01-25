@@ -13,9 +13,9 @@
         [TestCategory("Integration")]
         public async Task CanDownloadGoogle()
         {
-            using (systemUnderTest)
+            using (SystemUnderTest)
             {
-                var bytes = await systemUnderTest.DownloadBytesAsync(
+                var bytes = await SystemUnderTest.DownloadBytesAsync(
                     "http://google.com");
                 Assert.AreNotEqual(0, bytes.Length);
             }

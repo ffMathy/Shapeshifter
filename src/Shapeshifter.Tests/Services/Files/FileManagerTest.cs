@@ -16,11 +16,11 @@
         {
             string permanentPath;
             string temporaryPath;
-            using (systemUnderTest)
+            using (SystemUnderTest)
             {
-                permanentPath = systemUnderTest.PrepareIsolatedFolder(
+                permanentPath = SystemUnderTest.PrepareIsolatedFolder(
                     "Permanent");
-                temporaryPath = systemUnderTest.PrepareTemporaryFolder(
+                temporaryPath = SystemUnderTest.PrepareTemporaryFolder(
                     "Temporary");
 
                 Assert.IsTrue(Directory.Exists(permanentPath));
@@ -40,9 +40,9 @@
         public void CanCreateFilesAndDisposeThemAgain()
         {
             string temporaryPath;
-            using (systemUnderTest)
+            using (SystemUnderTest)
             {
-                temporaryPath = systemUnderTest.WriteBytesToTemporaryFile(
+                temporaryPath = SystemUnderTest.WriteBytesToTemporaryFile(
                     "Temporary.txt", 
                     Encoding.Default.GetBytes("hello world"));
                 Assert.IsTrue(File.Exists(temporaryPath));
@@ -54,7 +54,7 @@
         [TestMethod]
         public void CanGetCommonPathWithBiggestPathFirst()
         {
-            var commonPath = systemUnderTest.FindCommonFolderFromPaths(
+            var commonPath = SystemUnderTest.FindCommonFolderFromPaths(
                 new[]
                 {
                     "foo\\bar\\baz\\lol",
@@ -68,7 +68,7 @@
         [TestMethod]
         public void CanGetCommonPathWithSmallestPathFirst()
         {
-            var commonPath = systemUnderTest.FindCommonFolderFromPaths(
+            var commonPath = SystemUnderTest.FindCommonFolderFromPaths(
                 new[]
                 {
                     "foo\\bar",
@@ -82,7 +82,7 @@
         [TestMethod]
         public void CanGetCommonPathWithBiggestPathInMiddle()
         {
-            var commonPath = systemUnderTest.FindCommonFolderFromPaths(
+            var commonPath = SystemUnderTest.FindCommonFolderFromPaths(
                 new[]
                 {
                     "foo\\bar",

@@ -21,47 +21,47 @@
         [TestMethod]
         public void StartWithWindowsIsTrueWhenRunKeyIsAdded()
         {
-            container
+            Container
                 .Resolve<IRegistryManager>()
                 .GetValue(
                     GetRunRegistryPath(),
                     "Shapeshifter")
                 .Returns("somePath");
             
-            Assert.IsTrue(systemUnderTest.StartWithWindows);
+            Assert.IsTrue(SystemUnderTest.StartWithWindows);
         }
 
         [TestMethod]
         public void StartWithWindowsIsFalseWhenRunKeyIsNotPresent()
         {
-            container
+            Container
                 .Resolve<IRegistryManager>()
                 .GetValue(
                     GetRunRegistryPath(),
                     "Shapeshifter")
                 .Returns((string)null);
             
-            Assert.IsFalse(systemUnderTest.StartWithWindows);
+            Assert.IsFalse(SystemUnderTest.StartWithWindows);
         }
 
         [TestMethod]
         public void ChangingStartWithWindowsToTrueWritesRunKey()
         {
-            container
+            Container
                 .Resolve<IRegistryManager>()
                 .GetValue(
                     GetRunRegistryPath(),
                     "Shapeshifter")
                 .Returns((string)null);
 
-            container
+            Container
                 .Resolve<IProcessManager>()
                 .GetCurrentProcessPath()
                 .Returns("executablePath");
             
-            systemUnderTest.StartWithWindows = true;
+            SystemUnderTest.StartWithWindows = true;
 
-            container
+            Container
                 .Resolve<IRegistryManager>()
                 .Received()
                 .AddValue(
@@ -73,16 +73,16 @@
         [TestMethod]
         public void ChangingStartWithWindowsToFalseRemovesRunKey()
         {
-            container
+            Container
                 .Resolve<IRegistryManager>()
                 .GetValue(
                     GetRunRegistryPath(),
                     "Shapeshifter")
                 .Returns("somePath");
 
-            systemUnderTest.StartWithWindows = false;
+            SystemUnderTest.StartWithWindows = false;
 
-            container
+            Container
                 .Resolve<IRegistryManager>()
                 .Received()
                 .RemoveValue(

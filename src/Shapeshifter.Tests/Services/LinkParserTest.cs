@@ -28,14 +28,14 @@
         [TestMethod]
         public async Task ExtractsAllLinksFromText()
         {
-            container.Resolve<IDomainNameResolver>()
+            Container.Resolve<IDomainNameResolver>()
              .IsValidDomainAsync(Arg.Any<string>())
              .Returns(Task.FromResult(true));
 
             const string text = "hello http://google.com world https://foo.com foobar blah.dk/hey/lol%20kitten.jpg lolz foobar.com www.baz.com test.net/news+list.txt?cat=pic&id=foo28";
             
             var links = 
-                await systemUnderTest.ExtractLinksFromTextAsync(text);
+                await SystemUnderTest.ExtractLinksFromTextAsync(text);
 
             Assert.IsTrue(links.Contains("http://google.com"));
             Assert.IsTrue(links.Contains("https://foo.com"));
@@ -49,73 +49,73 @@
         public async Task HasLinkReturnsFalseWhenNoLinkPresent()
         {
             const string text = "hello world";
-            Assert.IsFalse(await systemUnderTest.HasLinkAsync(text));
+            Assert.IsFalse(await SystemUnderTest.HasLinkAsync(text));
         }
 
         [TestMethod]
         public async Task HasLinkReturnsTrueWithoutProtocol()
         {
-            container.Resolve<IDomainNameResolver>()
+            Container.Resolve<IDomainNameResolver>()
              .IsValidDomainAsync("google.com")
              .Returns(Task.FromResult(true));
 
             const string text = "hello google.com world";
-            Assert.IsTrue(await systemUnderTest.HasLinkAsync(text));
+            Assert.IsTrue(await SystemUnderTest.HasLinkAsync(text));
         }
 
         [TestMethod]
         public async Task LinkWithSubdomainIsValid()
         {
-            container.Resolve<IDomainNameResolver>()
+            Container.Resolve<IDomainNameResolver>()
                      .IsValidDomainAsync("foo.subdomain.google.com")
                      .Returns(Task.FromResult(true));
 
             const string text = "http://foo.subdomain.google.com";
-            Assert.IsTrue(await systemUnderTest.IsValidLinkAsync(text));
+            Assert.IsTrue(await SystemUnderTest.IsValidLinkAsync(text));
         }
 
         [TestMethod]
         public async Task LinkWithHttpProtocolIsValid()
         {
-            container.Resolve<IDomainNameResolver>()
+            Container.Resolve<IDomainNameResolver>()
              .IsValidDomainAsync("google.com")
              .Returns(Task.FromResult(true));
 
             const string text = "http://google.com";
-            Assert.IsTrue(await systemUnderTest.IsValidLinkAsync(text));
+            Assert.IsTrue(await SystemUnderTest.IsValidLinkAsync(text));
         }
 
         [TestMethod]
         public async Task LinkWithHttpsProtocolIsValid()
         {
-            container.Resolve<IDomainNameResolver>()
+            Container.Resolve<IDomainNameResolver>()
              .IsValidDomainAsync("google.com")
              .Returns(Task.FromResult(true));
 
             const string text = "https://google.com";
-            Assert.IsTrue(await systemUnderTest.IsValidLinkAsync(text));
+            Assert.IsTrue(await SystemUnderTest.IsValidLinkAsync(text));
         }
 
         [TestMethod]
         public async Task LinkWithParametersIsValid()
         {
-            container.Resolve<IDomainNameResolver>()
+            Container.Resolve<IDomainNameResolver>()
              .IsValidDomainAsync("google.com")
              .Returns(Task.FromResult(true));
 
             const string text = "http://google.com?hello=flyp&version=1";
-            Assert.IsTrue(await systemUnderTest.IsValidLinkAsync(text));
+            Assert.IsTrue(await SystemUnderTest.IsValidLinkAsync(text));
         }
 
         [TestMethod]
         public async Task LinkWithDirectoriesIsValid()
         {
-            container.Resolve<IDomainNameResolver>()
+            Container.Resolve<IDomainNameResolver>()
              .IsValidDomainAsync("google.com")
              .Returns(Task.FromResult(true));
 
             const string text = "http://google.com/foo/bar";
-            Assert.IsTrue(await systemUnderTest.IsValidLinkAsync(text));
+            Assert.IsTrue(await SystemUnderTest.IsValidLinkAsync(text));
         }
 
         [TestMethod]
@@ -123,11 +123,11 @@
         {
             const string text = "google.com/foo/image.png";
 
-            container.Resolve<IFileTypeInterpreter>()
+            Container.Resolve<IFileTypeInterpreter>()
              .GetFileTypeFromFileName(text)
              .Returns(FileType.Image);
 
-            var linkType = systemUnderTest.GetLinkType(text);
+            var linkType = SystemUnderTest.GetLinkType(text);
             Assert.IsTrue(linkType.HasFlag(LinkType.ImageFile));
         }
 
@@ -135,28 +135,28 @@
         public void HttpLinkHasHttpType()
         {
             const string text = "http://google.com";
-            var linkType = systemUnderTest.GetLinkType(text);
+            var linkType = SystemUnderTest.GetLinkType(text);
             Assert.IsTrue(linkType.HasFlag(LinkType.Http));
         }
 
         [TestMethod]
         public async Task SeveralLinksCanFindProperType()
         {
-            container.Resolve<IDomainNameResolver>()
+            Container.Resolve<IDomainNameResolver>()
              .IsValidDomainAsync("google.com")
              .Returns(Task.FromResult(true));
 
-            container.Resolve<IFileTypeInterpreter>()
+            Container.Resolve<IFileTypeInterpreter>()
              .GetFileTypeFromFileName(Arg.Any<string>())
              .Returns(FileType.Image);
 
             const string text = "http://google.com foo.com/img.jpg";
 
             Assert.IsTrue(
-                await systemUnderTest.HasLinkOfTypeAsync(
+                await SystemUnderTest.HasLinkOfTypeAsync(
                     text, LinkType.Http));
             Assert.IsTrue(
-                await systemUnderTest.HasLinkOfTypeAsync(
+                await SystemUnderTest.HasLinkOfTypeAsync(
                     text, LinkType.ImageFile));
         }
 
@@ -166,7 +166,7 @@
             const string text = "google.com";
             Assert.AreEqual(
                 LinkType.NoType, 
-                systemUnderTest.GetLinkType(text));
+                SystemUnderTest.GetLinkType(text));
         }
 
         [TestMethod]
@@ -174,7 +174,7 @@
         {
             const string text = "https://google.com";
             Assert.IsTrue(
-                systemUnderTest.GetLinkType(text)
+                SystemUnderTest.GetLinkType(text)
                           .HasFlag(LinkType.Https));
         }
     }

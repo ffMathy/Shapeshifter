@@ -23,49 +23,49 @@
         {
             var fakeData = Substitute.For<IClipboardDataPackage>();
             Assert.IsFalse(
-                await systemUnderTest.CanPerformAsync(fakeData));
+                await SystemUnderTest.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
         public void CanReadTitle()
         {
-            Assert.IsNotNull(systemUnderTest.Title);
+            Assert.IsNotNull(SystemUnderTest.Title);
         }
 
         [TestMethod]
         public void CanReadDescription()
         {
-            Assert.IsNotNull(systemUnderTest.Description);
+            Assert.IsNotNull(SystemUnderTest.Description);
         }
 
         [TestMethod]
         public void OrderIsCorrect()
         {
-            Assert.AreEqual(50, systemUnderTest.Order);
+            Assert.AreEqual(50, SystemUnderTest.Order);
         }
 
         [TestMethod]
         public async Task CanNotPerformWithFileWithNoImage()
         {
-            container.Resolve<IFileTypeInterpreter>()
+            Container.Resolve<IFileTypeInterpreter>()
              .GetFileTypeFromFileName(Arg.Any<string>())
              .Returns(FileType.Other);
 
             var fakeData = Substitute.For<IClipboardDataPackage>();
             Assert.IsFalse(
-                await systemUnderTest.CanPerformAsync(fakeData));
+                await SystemUnderTest.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
         public async Task CanPerformWithImageFile()
         {
-            container.Resolve<IFileTypeInterpreter>()
+            Container.Resolve<IFileTypeInterpreter>()
              .GetFileTypeFromFileName(Arg.Any<string>())
              .Returns(FileType.Image);
 
             var fakeData = GetPackageContaining<IClipboardFileData>();
             Assert.IsTrue(
-                await systemUnderTest.CanPerformAsync(fakeData));
+                await SystemUnderTest.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
@@ -73,7 +73,7 @@
         {
             var fakeData = GetPackageContaining<IClipboardImageData>();
             Assert.IsTrue(
-                await systemUnderTest.CanPerformAsync(fakeData));
+                await SystemUnderTest.CanPerformAsync(fakeData));
         }
     }
 }

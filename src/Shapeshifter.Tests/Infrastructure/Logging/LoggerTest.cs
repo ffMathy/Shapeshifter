@@ -14,9 +14,9 @@
         [TestMethod]
         public void InformationHasPrefix()
         {
-            systemUnderTest.Information("hello world");
+            SystemUnderTest.Information("hello world");
 
-            var fakeStream = container.Resolve<ILogStream>();
+            var fakeStream = Container.Resolve<ILogStream>();
             fakeStream
                 .Received()
                 .WriteLine("Information: hello world");
@@ -25,16 +25,16 @@
         [TestMethod]
         public void IndentationWorks()
         {
-            using (systemUnderTest.Indent())
+            using (SystemUnderTest.Indent())
             {
-                systemUnderTest.Information("inside indentation");
-                using (systemUnderTest.Indent())
-                    systemUnderTest.Information("deep inside indentation");
+                SystemUnderTest.Information("inside indentation");
+                using (SystemUnderTest.Indent())
+                    SystemUnderTest.Information("deep inside indentation");
             }
 
-            systemUnderTest.Information("outside indentation");
+            SystemUnderTest.Information("outside indentation");
 
-            var fakeStream = container.Resolve<ILogStream>();
+            var fakeStream = Container.Resolve<ILogStream>();
             fakeStream
                 .Received()
                 .WriteLine("    Information: deep inside indentation");

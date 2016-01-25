@@ -18,6 +18,7 @@
     using NSubstitute;
 
     using Services.Clipboard.Interfaces;
+    using Services.Files.Interfaces;
 
     [TestClass]
     public class ZipFilesActionTest: ActionTestBase<IZipFilesAction>
@@ -26,32 +27,32 @@
         public async Task CanPerformForFiles()
         {
             Assert.IsTrue(
-                await systemUnderTest.CanPerformAsync(GetPackageContaining<IClipboardFileData>()));
+                await SystemUnderTest.CanPerformAsync(GetPackageContaining<IClipboardFileData>()));
         }
 
         [TestMethod]
         public async Task CanPerformForFileCollections()
         {
             var fakeData = GetPackageContaining<IClipboardFileCollectionData>();
-            Assert.IsTrue(await systemUnderTest.CanPerformAsync(fakeData));
+            Assert.IsTrue(await SystemUnderTest.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
         public void CanGetDescription()
         {
-            Assert.IsNotNull(systemUnderTest.Description);
+            Assert.IsNotNull(SystemUnderTest.Description);
         }
 
         [TestMethod]
         public void CanGetTitle()
         {
-            Assert.IsNotNull(systemUnderTest.Title);
+            Assert.IsNotNull(SystemUnderTest.Title);
         }
 
         [TestMethod]
         public void OrderIsCorrect()
         {
-            Assert.AreEqual(75, systemUnderTest.Order);
+            Assert.AreEqual(75, SystemUnderTest.Order);
         }
 
         [TestMethod]
@@ -64,7 +65,7 @@
             var package = new ClipboardDataPackage();
             package.AddData(fakeData);
 
-            await systemUnderTest.PerformAsync(package);
+            await SystemUnderTest.PerformAsync(package);
         }
 
         [TestMethod]
@@ -82,13 +83,15 @@
             var package = new ClipboardDataPackage();
             package.AddData(fileCollectionData);
 
-            await systemUnderTest.PerformAsync(package);
+            await SystemUnderTest.PerformAsync(package);
         }
 
         [TestMethod]
         [TestCategory("Integration")]
         public async Task ProducesProperZipFileForCollection()
         {
+            ExcludeFakeFor<IFileManager>();
+
             var file1 = Path.GetTempFileName();
             var file2 = Path.GetTempFileName();
 
@@ -118,7 +121,7 @@
             package.AddData(fileCollectionData);
 
             string zipPath = null;
-            container.Resolve<IClipboardInjectionService>()
+            Container.Resolve<IClipboardInjectionService>()
                 .When(x => x.InjectFiles(Arg.Any<string[]>()))
                 .Do(
                     parameters => {
@@ -126,7 +129,7 @@
                         zipPath = files[0];
                     });
 
-            await systemUnderTest.PerformAsync(package);
+            await SystemUnderTest.PerformAsync(package);
 
             Assert.IsNotNull(zipPath);
 
@@ -150,6 +153,7 @@
         [TestCategory("Integration")]
         public async Task ProducesProperZipFileForSingleFile()
         {
+            ExcludeFakeFor<IFileManager>();
 
             var file = Path.GetTempFileName();
 
@@ -167,7 +171,7 @@
             package.AddData(fileData);
 
             string zipPath = null;
-            container.Resolve<IClipboardInjectionService>()
+            Container.Resolve<IClipboardInjectionService>()
                 .When(x => x.InjectFiles(Arg.Any<string[]>()))
                 .Do(
                     parameters => {
@@ -175,7 +179,7 @@
                         zipPath = files[0];
                     });
 
-            await systemUnderTest.PerformAsync(package);
+            await SystemUnderTest.PerformAsync(package);
 
             Assert.IsNotNull(zipPath);
 

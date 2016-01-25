@@ -18,9 +18,9 @@
         [TestMethod]
         public void InjectingDataSkipsNextCopyInterception()
         {
-            systemUnderTest.InjectData(Substitute.For<IClipboardDataPackage>());
+            SystemUnderTest.InjectData(Substitute.For<IClipboardDataPackage>());
 
-            var fakeInterceptor = container.Resolve<IClipboardCopyInterceptor>();
+            var fakeInterceptor = Container.Resolve<IClipboardCopyInterceptor>();
             fakeInterceptor.Received()
                            .SkipNext();
         }

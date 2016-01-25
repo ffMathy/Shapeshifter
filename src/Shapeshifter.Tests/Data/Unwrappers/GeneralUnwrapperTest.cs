@@ -7,34 +7,34 @@
     using Native;
 
     [TestClass]
-    public class GeneralUnwrapperTest: UnitTestFor<IMemoryUnwrapper>
+    public class GeneralUnwrapperTest: UnitTestFor<IGeneralUnwrapper>
     {
         [TestMethod]
         public void CantUnwrapDspBitmaps()
         {
             Assert.IsFalse(
-                systemUnderTest.CanUnwrap(ClipboardNativeApi.CF_DSPBITMAP));
+                SystemUnderTest.CanUnwrap(ClipboardNativeApi.CF_DSPBITMAP));
         }
 
         [TestMethod]
         public void CantUnwrapDspEnhancedMetafile()
         {
             Assert.IsFalse(
-                systemUnderTest.CanUnwrap(ClipboardNativeApi.CF_DSPENHMETAFILE));
+                SystemUnderTest.CanUnwrap(ClipboardNativeApi.CF_DSPENHMETAFILE));
         }
 
         [TestMethod]
         public void CantUnwrapEnhancedMetafile()
         {
             Assert.IsFalse(
-                systemUnderTest.CanUnwrap(ClipboardNativeApi.CF_ENHMETAFILE));
+                SystemUnderTest.CanUnwrap(ClipboardNativeApi.CF_ENHMETAFILE));
         }
 
         [TestMethod]
         public void CantUnwrapMetafilePicture()
         {
             Assert.IsFalse(
-                systemUnderTest.CanUnwrap(ClipboardNativeApi.CF_METAFILEPICT));
+                SystemUnderTest.CanUnwrap(ClipboardNativeApi.CF_METAFILEPICT));
         }
     }
 }

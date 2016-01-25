@@ -13,7 +13,7 @@
         [ExpectedException(typeof (ArgumentException))]
         public void CreateControlWithNoDataThrowsException()
         {
-            systemUnderTest.BuildControl(null);
+            SystemUnderTest.BuildControl(null);
         }
     }
 }

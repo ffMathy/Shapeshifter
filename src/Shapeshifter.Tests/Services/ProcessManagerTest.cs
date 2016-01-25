@@ -17,9 +17,9 @@
         {
             var initialRunningProcesses = GetTimeoutProcesses()
                 .Length;
-            using (systemUnderTest)
+            using (SystemUnderTest)
             {
-                systemUnderTest.LaunchCommand("timeout", "/t -1 /nobreak");
+                SystemUnderTest.LaunchCommand("timeout", "/t -1 /nobreak");
 
                 var runningProcessesBeforeDisposal = GetTimeoutProcesses()
                     .Length;
@@ -44,7 +44,7 @@
         [ExpectedException(typeof (Win32Exception))]
         public void ThrowsExceptionWhenLaunchingFileThatDoesNotExist()
         {
-            systemUnderTest.LaunchFile("foobar.txt");
+            SystemUnderTest.LaunchFile("foobar.txt");
         }
     }
 }

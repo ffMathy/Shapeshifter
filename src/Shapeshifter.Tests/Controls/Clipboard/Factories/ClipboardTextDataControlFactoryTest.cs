@@ -17,19 +17,19 @@
         [ExpectedException(typeof (ArgumentException))]
         public void CreateControlWithNoDataThrowsException()
         {
-            systemUnderTest.BuildControl(null);
+            SystemUnderTest.BuildControl(null);
         }
 
         [TestMethod]
         public void CanBuildControlReturnsTrueForTextData()
         {
-            Assert.IsTrue(systemUnderTest.CanBuildControl(Substitute.For<IClipboardTextData>()));
+            Assert.IsTrue(SystemUnderTest.CanBuildControl(Substitute.For<IClipboardTextData>()));
         }
 
         [TestMethod]
         public void CanBuildControlReturnsFalseForNonTextData()
         {
-            Assert.IsFalse(systemUnderTest.CanBuildControl(Substitute.For<IClipboardData>()));
+            Assert.IsFalse(SystemUnderTest.CanBuildControl(Substitute.For<IClipboardData>()));
         }
     }
 }

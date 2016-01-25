@@ -17,9 +17,9 @@
             var fakeTextData = Substitute.For<IClipboardTextData>();
             fakeTextData.Text.Returns("hello  \t  world");
 
-            systemUnderTest.Data = fakeTextData;
+            SystemUnderTest.Data = fakeTextData;
 
-            Assert.AreEqual("hello world", systemUnderTest.FriendlyText);
+            Assert.AreEqual("hello world", SystemUnderTest.FriendlyText);
         }
 
         [TestMethod]
@@ -28,9 +28,9 @@
             var fakeTextData = Substitute.For<IClipboardTextData>();
             fakeTextData.Text.Returns("hello world");
 
-            systemUnderTest.Data = fakeTextData;
+            SystemUnderTest.Data = fakeTextData;
 
-            Assert.AreEqual("hello world", systemUnderTest.FriendlyText);
+            Assert.AreEqual("hello world", SystemUnderTest.FriendlyText);
         }
 
         [TestMethod]
@@ -39,9 +39,9 @@
             var fakeTextData = Substitute.For<IClipboardTextData>();
             fakeTextData.Text.Returns("hello\tworld");
 
-            systemUnderTest.Data = fakeTextData;
+            SystemUnderTest.Data = fakeTextData;
 
-            Assert.AreEqual("hello world", systemUnderTest.FriendlyText);
+            Assert.AreEqual("hello world", SystemUnderTest.FriendlyText);
         }
 
         [TestMethod]
@@ -57,9 +57,9 @@
 
             fakeTextData.Text.Returns(repeatText);
 
-            systemUnderTest.Data = fakeTextData;
+            SystemUnderTest.Data = fakeTextData;
 
-            Assert.AreEqual(512, systemUnderTest.FriendlyText.Length);
+            Assert.AreEqual(512, SystemUnderTest.FriendlyText.Length);
         }
 
         [TestMethod]
@@ -68,9 +68,9 @@
             var fakeTextData = Substitute.For<IClipboardTextData>();
             fakeTextData.Text.Returns("   hello world   ");
 
-            systemUnderTest.Data = fakeTextData;
+            SystemUnderTest.Data = fakeTextData;
 
-            Assert.AreEqual("hello world", systemUnderTest.FriendlyText);
+            Assert.AreEqual("hello world", SystemUnderTest.FriendlyText);
         }
     }
 }

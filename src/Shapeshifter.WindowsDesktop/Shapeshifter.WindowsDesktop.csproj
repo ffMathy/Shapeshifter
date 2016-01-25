@@ -179,6 +179,8 @@
     <Compile Include="Data\Actions\PinClipboardDataAction.cs" />
     <Compile Include="Data\Actions\UploadImageAction.cs" />
     <Compile Include="Data\Actions\ZipFilesAction.cs" />
+    <Compile Include="Data\Unwrappers\Interfaces\IBitmapUnwrapper.cs" />
+    <Compile Include="Data\Unwrappers\Interfaces\IGeneralUnwrapper.cs" />
     <Compile Include="Infrastructure\Dependencies\AssemblyRegistrationHelper.cs" />
     <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
     <Compile Include="Infrastructure\Dependencies\PublicConstructorFinder.cs" />

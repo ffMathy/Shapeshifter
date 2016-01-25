@@ -7,6 +7,8 @@
 
     using Data.Interfaces;
 
+    using Infrastructure.Threading.Interfaces;
+
     using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -22,13 +24,13 @@
         [TestMethod]
         public void CanReadDescription()
         {
-            Assert.IsNotNull(systemUnderTest.Description);
+            Assert.IsNotNull(SystemUnderTest.Description);
         }
 
         [TestMethod]
         public void CanReadTitle()
         {
-            Assert.IsNotNull(systemUnderTest.Title);
+            Assert.IsNotNull(SystemUnderTest.Title);
         }
 
         [TestMethod]
@@ -36,51 +38,52 @@
         {
             var someNonTextData = Substitute.For<IClipboardDataPackage>();
             Assert.IsFalse(
-                await systemUnderTest.CanPerformAsync(
+                await SystemUnderTest.CanPerformAsync(
                     someNonTextData));
         }
 
         [TestMethod]
         public async Task CanPerformIsFalseForTextTypesWithNoLink()
         {
-            container.Resolve<ILinkParser>()
+            Container.Resolve<ILinkParser>()
              .HasLinkAsync(Arg.Any<string>())
              .Returns(Task.FromResult(false));
 
             var textDataWithLinkButNoImageLink = Substitute.For<IClipboardDataPackage>();
             
-            Assert.IsFalse(await systemUnderTest.CanPerformAsync(textDataWithLinkButNoImageLink));
+            Assert.IsFalse(await SystemUnderTest.CanPerformAsync(textDataWithLinkButNoImageLink));
         }
 
         [TestMethod]
         public void OrderIsCorrect()
         {
-            Assert.AreEqual(200, systemUnderTest.Order);
+            Assert.AreEqual(200, SystemUnderTest.Order);
         }
 
         [TestMethod]
         public async Task PerformLaunchesDefaultBrowsersForEachLink()
         {
-            container.Resolve<ILinkParser>()
+            ExcludeFakeFor<IAsyncFilter>();
+
+            Container.Resolve<ILinkParser>()
              .HasLinkAsync(Arg.Any<string>())
              .Returns(Task.FromResult(true));
 
-            container.Resolve<ILinkParser>()
+            Container.Resolve<ILinkParser>()
              .ExtractLinksFromTextAsync(Arg.Any<string>())
              .Returns(
                  Task
-                     .FromResult
-                     <IReadOnlyCollection<string>>(
+                     .FromResult<IReadOnlyCollection<string>>(
                          new[]
                          {
                                      "foo.com",
                                      "bar.com"
                          }));
             
-            await systemUnderTest.PerformAsync(
+            await SystemUnderTest.PerformAsync(
                 GetPackageContaining<IClipboardTextData>());
 
-            var fakeProcessManager = container.Resolve<IProcessManager>();
+            var fakeProcessManager = Container.Resolve<IProcessManager>();
             fakeProcessManager.Received(1)
                               .LaunchCommand("foo.com");
             fakeProcessManager.Received(1)

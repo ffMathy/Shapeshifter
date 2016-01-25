@@ -22,13 +22,13 @@
         {
             var windowHandle = new IntPtr(1337);
 
-            container.Resolve<IClipboardNativeApi>()
+            Container.Resolve<IClipboardNativeApi>()
              .AddClipboardFormatListener(windowHandle)
              .Returns(true);
             
-            systemUnderTest.Install(windowHandle);
+            SystemUnderTest.Install(windowHandle);
 
-            var fakeClipboardNativeApi = container.Resolve<IClipboardNativeApi>();
+            var fakeClipboardNativeApi = Container.Resolve<IClipboardNativeApi>();
             fakeClipboardNativeApi
                 .Received()
                 .AddClipboardFormatListener(windowHandle);
@@ -40,23 +40,23 @@
         {
             var windowHandle = new IntPtr(1337);
 
-            container.Resolve<IClipboardNativeApi>()
+            Container.Resolve<IClipboardNativeApi>()
              .AddClipboardFormatListener(windowHandle)
              .Returns(false);
 
-            systemUnderTest.Install(windowHandle);
+            SystemUnderTest.Install(windowHandle);
         }
 
         [TestMethod]
         public void UninstallRemovesClipboardFormatListener()
         {
-            container.Resolve<IClipboardNativeApi>()
+            Container.Resolve<IClipboardNativeApi>()
              .RemoveClipboardFormatListener(Arg.Any<IntPtr>())
              .Returns(true);
 
-            systemUnderTest.Uninstall();
+            SystemUnderTest.Uninstall();
 
-            var fakeClipboardNativeApi = container.Resolve<IClipboardNativeApi>();
+            var fakeClipboardNativeApi = Container.Resolve<IClipboardNativeApi>();
             fakeClipboardNativeApi
                 .Received()
                 .RemoveClipboardFormatListener(Arg.Any<IntPtr>());
@@ -68,11 +68,11 @@
         {
             var windowHandle = new IntPtr(1337);
 
-            container.Resolve<IClipboardNativeApi>()
+            Container.Resolve<IClipboardNativeApi>()
              .AddClipboardFormatListener(windowHandle)
              .Returns(false);
             
-            systemUnderTest.Uninstall();
+            SystemUnderTest.Uninstall();
         }
 
         [TestMethod]
@@ -80,27 +80,27 @@
         {
             var windowHandle = new IntPtr(1337);
 
-            container.Resolve<IClipboardNativeApi>()
+            Container.Resolve<IClipboardNativeApi>()
                      .GetClipboardSequenceNumber()
                      .Returns(1u, 1u, 1u);
 
             var dataCopiedCount = 0;
             
-            systemUnderTest.DataCopied += (sender, e) => dataCopiedCount++;
+            SystemUnderTest.DataCopied += (sender, e) => dataCopiedCount++;
 
-            systemUnderTest.ReceiveMessageEvent(
+            SystemUnderTest.ReceiveMessageEvent(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
                     IntPtr.Zero,
                     IntPtr.Zero));
-            systemUnderTest.ReceiveMessageEvent(
+            SystemUnderTest.ReceiveMessageEvent(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
                     IntPtr.Zero,
                     IntPtr.Zero));
-            systemUnderTest.ReceiveMessageEvent(
+            SystemUnderTest.ReceiveMessageEvent(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
@@ -115,15 +115,15 @@
         {
             var windowHandle = new IntPtr(1337);
 
-            container.Resolve<IClipboardNativeApi>()
+            Container.Resolve<IClipboardNativeApi>()
                      .GetClipboardSequenceNumber()
                      .Returns(1u, 2u, 3u);
 
             var dataCopiedCount = 0;
             
-            systemUnderTest.DataCopied += (sender, e) => dataCopiedCount++;
+            SystemUnderTest.DataCopied += (sender, e) => dataCopiedCount++;
 
-            systemUnderTest.ReceiveMessageEvent(
+            SystemUnderTest.ReceiveMessageEvent(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
@@ -132,9 +132,9 @@
 
             Assert.AreEqual(1, dataCopiedCount);
 
-            systemUnderTest.SkipNext();
+            SystemUnderTest.SkipNext();
 
-            systemUnderTest.ReceiveMessageEvent(
+            SystemUnderTest.ReceiveMessageEvent(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
@@ -143,7 +143,7 @@
 
             Assert.AreEqual(1, dataCopiedCount);
 
-            systemUnderTest.ReceiveMessageEvent(
+            SystemUnderTest.ReceiveMessageEvent(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
@@ -158,21 +158,21 @@
         {
             var windowHandle = new IntPtr(1337);
 
-            container.Resolve<IClipboardNativeApi>()
+            Container.Resolve<IClipboardNativeApi>()
                      .GetClipboardSequenceNumber()
                      .Returns(1u, 2u, 3u);
 
             var dataCopiedCount = 0;
             
-            systemUnderTest.DataCopied += (sender, e) => dataCopiedCount++;
+            SystemUnderTest.DataCopied += (sender, e) => dataCopiedCount++;
 
-            systemUnderTest.ReceiveMessageEvent(
+            SystemUnderTest.ReceiveMessageEvent(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_HOTKEY,
                     IntPtr.Zero,
                     IntPtr.Zero));
-            systemUnderTest.ReceiveMessageEvent(
+            SystemUnderTest.ReceiveMessageEvent(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
@@ -187,27 +187,27 @@
         {
             var windowHandle = new IntPtr(1337);
 
-            container.Resolve<IClipboardNativeApi>()
+            Container.Resolve<IClipboardNativeApi>()
                      .GetClipboardSequenceNumber()
                      .Returns(1u, 2u, 3u);
 
             var dataCopiedCount = 0;
 
-            systemUnderTest.DataCopied += (sender, e) => dataCopiedCount++;
+            SystemUnderTest.DataCopied += (sender, e) => dataCopiedCount++;
 
-            systemUnderTest.ReceiveMessageEvent(
+            SystemUnderTest.ReceiveMessageEvent(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
                     IntPtr.Zero,
                     IntPtr.Zero));
-            systemUnderTest.ReceiveMessageEvent(
+            SystemUnderTest.ReceiveMessageEvent(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
                     IntPtr.Zero,
                     IntPtr.Zero));
-            systemUnderTest.ReceiveMessageEvent(
+            SystemUnderTest.ReceiveMessageEvent(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,

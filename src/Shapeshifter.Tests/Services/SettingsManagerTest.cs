@@ -10,18 +10,18 @@
         [TestMethod]
         public void CanPersistAndFetchStrings()
         {
-            systemUnderTest.SaveSetting("string", "foobar");
+            SystemUnderTest.SaveSetting("string", "foobar");
 
-            var setting = systemUnderTest.LoadSetting<string>("string");
+            var setting = SystemUnderTest.LoadSetting<string>("string");
             Assert.AreEqual("foobar", setting);
         }
 
         [TestMethod]
         public void CanPersistAndFetchIntegers()
         {
-            systemUnderTest.SaveSetting("integer", 1337);
+            SystemUnderTest.SaveSetting("integer", 1337);
 
-            var setting = systemUnderTest.LoadSetting<int>("integer");
+            var setting = SystemUnderTest.LoadSetting<int>("integer");
             Assert.AreEqual(1337, setting);
         }
     }

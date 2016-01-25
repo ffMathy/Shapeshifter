@@ -23,34 +23,34 @@
         {
             var fakeData = Substitute.For<IClipboardDataPackage>();
             Assert.IsTrue(
-                await systemUnderTest.CanPerformAsync(fakeData));
+                await SystemUnderTest.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
         public void OrderIsCorrect()
         {
-            Assert.AreEqual(0, systemUnderTest.Order);
+            Assert.AreEqual(0, SystemUnderTest.Order);
         }
 
         [TestMethod]
         public void CanGetTitle()
         {
-            Assert.IsNotNull(systemUnderTest.Title);
+            Assert.IsNotNull(SystemUnderTest.Title);
         }
 
         [TestMethod]
         public void CanGetDescription()
         {
-            Assert.IsNotNull(systemUnderTest.Description);
+            Assert.IsNotNull(SystemUnderTest.Description);
         }
 
         [TestMethod]
         public async Task PerformTriggersPaste()
         {
             var fakeData = GetPackageContaining<IClipboardData>();
-            await systemUnderTest.PerformAsync(fakeData);
+            await SystemUnderTest.PerformAsync(fakeData);
 
-            var fakeClipboardInjectionService = container.Resolve<IClipboardInjectionService>();
+            var fakeClipboardInjectionService = Container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService
                 .Received()
                 .InjectData(fakeData);
@@ -60,7 +60,7 @@
         [ExpectedException(typeof (ArgumentNullException))]
         public async Task ThrowsExceptionIfNoDataGiven()
         {
-            await systemUnderTest.CanPerformAsync(null);
+            await SystemUnderTest.CanPerformAsync(null);
         }
     }
 }

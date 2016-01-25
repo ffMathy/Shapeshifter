@@ -7,6 +7,8 @@
 
     using Autofac;
 
+    using Controls.Clipboard.Factories.Interfaces;
+
     using Data.Factories.Interfaces;
     using Data.Interfaces;
 
@@ -21,10 +23,11 @@
     [TestClass]
     public class ClipboardPersistanceServiceTest: UnitTestFor<IClipboardPersistanceService>
     {
+
         [TestMethod]
         public async Task CanPersistClipboardData()
         {
-            container.Resolve<IFileManager>()
+            Container.Resolve<IFileManager>()
              .PrepareNewIsolatedFolder(
                  Arg.Is<string>(
                      x => x.StartsWith("Pinned")))
@@ -64,10 +67,10 @@
                             fakeData2
                         }));
 
-            var service = container.Resolve<IClipboardPersistanceService>();
+            var service = Container.Resolve<IClipboardPersistanceService>();
             await service.PersistClipboardPackageAsync(fakePackage);
 
-            var fakeFileManager = container.Resolve<IFileManager>();
+            var fakeFileManager = Container.Resolve<IFileManager>();
             fakeFileManager
                 .Received()
                 .WriteBytesToTemporaryFile(
@@ -84,7 +87,10 @@
         [TestMethod]
         public async Task CanFetchPersistedPackages()
         {
-            container.Resolve<IClipboardDataFactory>()
+            IncludeFakeFor<IClipboardDataFactory>();
+            ExcludeFakeFor<IFileManager>();
+
+            Container.Resolve<IClipboardDataFactory>()
              .With(
                  x => {
                      x.CanBuildData(Arg.Any<uint>())
@@ -152,12 +158,11 @@
                             fakeData2,
                             fakeData1
                         }));
+            
+            await SystemUnderTest.PersistClipboardPackageAsync(fakePackage1);
+            await SystemUnderTest.PersistClipboardPackageAsync(fakePackage2);
 
-            var service = container.Resolve<IClipboardPersistanceService>();
-            await service.PersistClipboardPackageAsync(fakePackage1);
-            await service.PersistClipboardPackageAsync(fakePackage2);
-
-            var persistedPackages = await service.GetPersistedPackagesAsync();
+            var persistedPackages = await SystemUnderTest.GetPersistedPackagesAsync();
             var persistedPackagesArray = persistedPackages.ToArray();
 
             Assert.AreEqual(2, persistedPackagesArray.Length);

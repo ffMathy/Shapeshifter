@@ -30,9 +30,9 @@
                     notes
                 });
 
-            systemUnderTest.Data = fakeData;
+            SystemUnderTest.Data = fakeData;
 
-            Assert.AreEqual(3, systemUnderTest.FileCount);
+            Assert.AreEqual(3, SystemUnderTest.FileCount);
         }
 
         [TestMethod]
@@ -52,9 +52,9 @@
                     house
                 });
 
-            systemUnderTest.Data = fakeData;
+            SystemUnderTest.Data = fakeData;
 
-            var groups = systemUnderTest.FileTypeGroups.ToArray();
+            var groups = SystemUnderTest.FileTypeGroups.ToArray();
             Assert.AreEqual(2, groups.Length);
 
             Assert.AreEqual(".jpg", groups[0].FileType);

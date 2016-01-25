@@ -22,7 +22,7 @@
         {
             var fakeData = Substitute.For<IClipboardDataPackage>();
             Assert.IsFalse(
-                await systemUnderTest.CanPerformAsync(fakeData));
+                await SystemUnderTest.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
@@ -30,25 +30,25 @@
         {
             var fakeData = GetPackageContaining<IClipboardTextData>();
             Assert.IsTrue(
-                await systemUnderTest.CanPerformAsync(fakeData));
+                await SystemUnderTest.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
         public void CanGetDescription()
         {
-            Assert.IsNotNull(systemUnderTest.Description);
+            Assert.IsNotNull(SystemUnderTest.Description);
         }
 
         [TestMethod]
         public void OrderIsCorrect()
         {
-            Assert.AreEqual(25, systemUnderTest.Order);
+            Assert.AreEqual(25, SystemUnderTest.Order);
         }
 
         [TestMethod]
         public void CanGetTitle()
         {
-            Assert.IsNotNull(systemUnderTest.Title);
+            Assert.IsNotNull(SystemUnderTest.Title);
         }
 
         [TestMethod]
@@ -59,9 +59,9 @@
 
             var fakeData = GetPackageContaining(fakeTextData);
             
-            await systemUnderTest.PerformAsync(fakeData);
+            await SystemUnderTest.PerformAsync(fakeData);
 
-            var fakeClipboardInjectionService = container.Resolve<IClipboardInjectionService>();
+            var fakeClipboardInjectionService = Container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService.Received(1)
                                          .InjectText("foobar hello");
         }

@@ -18,25 +18,25 @@
         {
             var fakeData = Substitute.For<IClipboardDataPackage>();
             Assert.IsFalse(
-                await systemUnderTest.CanPerformAsync(fakeData));
+                await SystemUnderTest.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
         public void CanReadTitle()
         {
-            Assert.IsNotNull(systemUnderTest.Title);
+            Assert.IsNotNull(SystemUnderTest.Title);
         }
 
         [TestMethod]
         public void CanReadDescription()
         {
-            Assert.IsNotNull(systemUnderTest.Description);
+            Assert.IsNotNull(SystemUnderTest.Description);
         }
 
         [TestMethod]
         public void OrderIsCorrect()
         {
-            Assert.AreEqual(byte.MaxValue, systemUnderTest.Order);
+            Assert.AreEqual(byte.MaxValue, SystemUnderTest.Order);
         }
     }
 }
