@@ -147,32 +147,20 @@
 
         static int GetPathSegmentsInCommonCount(IReadOnlyCollection<string> paths)
         {
-            var commonIndex = 0;
-            foreach (var originPath in paths)
-            {
-                var originSegments = GetPathSegments(originPath);
-                for (var index = 0; index < originSegments.Length; index++)
-                {
-                    var originSegment = originSegments[index];
-                    foreach (var referencePath in paths)
-                    {
-                        var referenceSegments = GetPathSegments(referencePath);
-                        if (index >= referenceSegments.Length)
-                        {
-                            return commonIndex;
-                        }
+            var splitPaths = paths
+                .Select(p => p.Split('\\', '/'))
+                .ToList();
 
-                        var referenceSegment = referenceSegments[index];
-                        if (originSegment != referenceSegment)
-                        {
-                            return commonIndex;
-                        }
-                    }
-                    commonIndex++;
-                }
-            }
+            var shortestPath = splitPaths
+                .OrderBy(p => p.Count())
+                .First();
 
-            return commonIndex;
+            var commonCount = shortestPath
+                .TakeWhile((s, i) =>
+                    splitPaths.All(sp => sp[i] == s))
+                .Count();
+
+            return commonCount;
         }
 
         static string[] GetPathSegments(string originPath)
