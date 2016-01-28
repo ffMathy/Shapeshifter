@@ -79,7 +79,6 @@
             object sender,
             HotkeyFiredArgument e)
         {
-            // ReSharper disable once SwitchStatementMissingSomeCases
             switch (e.Key)
             {
                 case Key.Down:
