@@ -96,10 +96,7 @@
         [TestMethod]
         public void CanGetCommonPathWhenItIsShorterThanAnyOfThePaths()
         {
-            var container = CreateContainer();
-            var fileManager = container.Resolve<IFileManager>();
-
-            var commonPath = fileManager.FindCommonFolderFromPaths(
+            var commonPath = SystemUnderTest.FindCommonFolderFromPaths(
                 new[]
                 {
                     "foo\\bar\\foo",
@@ -113,10 +110,7 @@
         [TestMethod]
         public void CanGetCommonPathWhenSeparatorsDiffer()
         {
-            var container = CreateContainer();
-            var fileManager = container.Resolve<IFileManager>();
-
-            var commonPath = fileManager.FindCommonFolderFromPaths(
+            var commonPath = SystemUnderTest.FindCommonFolderFromPaths(
                 new[]
                 {
                     "foo\\bar\\foo",
