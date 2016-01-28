@@ -23,7 +23,7 @@
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
     [TestClass]
-    public class PasteCombinationDurationMediatorTest: TestBase
+    public class PasteCombinationDurationMediatorTest: UnitTestFor<IPasteCombinationDurationMediator>
     {
         static void RaiseHotkeyFired(IPasteHotkeyInterceptor fakePasteHotkeyInterceptor)
         {
@@ -37,229 +37,174 @@
         [TestMethod]
         public void IsConnectedIsFalseIfConsumerThreadIsNotRunning()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IConsumerThreadLoop>()
+            Container.Resolve<IConsumerThreadLoop>()
                      .IsRunning
                      .Returns(false);
-                });
-
-            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            Assert.IsFalse(mediator.IsConnected);
+            
+            Assert.IsFalse(SystemUnderTest.IsConnected);
         }
 
         [TestMethod]
         public void IsConnectedIsTrueIfConsumerThreadIsRunning()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IConsumerThreadLoop>()
+            Container.Resolve<IConsumerThreadLoop>()
                      .IsRunning
                      .Returns(true);
-                });
-
-            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            Assert.IsTrue(mediator.IsConnected);
+            
+            Assert.IsTrue(SystemUnderTest.IsConnected);
         }
 
         [TestMethod]
         public void CombinationIsHeldDownWhenCtrlVIsDown()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyboardManager>()
-                     .WithFakeSettings(
+            Container.Resolve<IKeyboardManager>()
+                     .With(
                          x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(true);
                              x.IsKeyDown(Key.V)
                               .Returns(true);
                          });
-                });
-
-            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            Assert.IsTrue(mediator.IsCombinationFullyHeldDown);
+            
+            Assert.IsTrue(SystemUnderTest.IsCombinationFullyHeldDown);
         }
 
         [TestMethod]
         public void CombinationIsReleasedWhenOnlyCtrlIsDown()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyboardManager>()
-                     .WithFakeSettings(
+            Container.Resolve<IKeyboardManager>()
+                     .With(
                          x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(true);
                              x.IsKeyDown(Key.V)
                               .Returns(false);
                          });
-                });
-
-            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            Assert.IsFalse(mediator.IsCombinationFullyHeldDown);
+            
+            Assert.IsFalse(SystemUnderTest.IsCombinationFullyHeldDown);
         }
 
         [TestMethod]
         public void CombinationIsReleasedWhenOnlyVIsDown()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyboardManager>()
-                     .WithFakeSettings(
+            Container.Resolve<IKeyboardManager>()
+                     .With(
                          x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(false);
                              x.IsKeyDown(Key.V)
                               .Returns(true);
                          });
-                });
-
-            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            Assert.IsFalse(mediator.IsCombinationFullyHeldDown);
+            
+            Assert.IsFalse(SystemUnderTest.IsCombinationFullyHeldDown);
         }
 
         [TestMethod]
         public void CombinationIsReleasedWhenBothVAndCtrlIsReleased()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyboardManager>()
-                     .WithFakeSettings(
+            Container.Resolve<IKeyboardManager>()
+                     .With(
                          x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(false);
                              x.IsKeyDown(Key.V)
                               .Returns(false);
                          });
-                });
-
-            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            Assert.IsFalse(mediator.IsCombinationFullyHeldDown);
+            
+            Assert.IsFalse(SystemUnderTest.IsCombinationFullyHeldDown);
         }
 
         [TestMethod]
         public void PartialCombinationIsHeldDownWhenOnlyVIsDown()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyboardManager>()
-                     .WithFakeSettings(
+            Container.Resolve<IKeyboardManager>()
+                     .With(
                          x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(false);
                              x.IsKeyDown(Key.V)
                               .Returns(true);
                          });
-                });
-
-            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            Assert.IsTrue(mediator.IsCombinationPartiallyHeldDown);
+            
+            Assert.IsTrue(SystemUnderTest.IsCombinationPartiallyHeldDown);
         }
 
         [TestMethod]
         public void PartialCombinationIsHeldDownWhenOnlyCtrlIsDown()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyboardManager>()
-                     .WithFakeSettings(
+            Container.Resolve<IKeyboardManager>()
+                     .With(
                          x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(true);
                              x.IsKeyDown(Key.V)
                               .Returns(false);
                          });
-                });
-
-            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            Assert.IsTrue(mediator.IsCombinationPartiallyHeldDown);
+            
+            Assert.IsTrue(SystemUnderTest.IsCombinationPartiallyHeldDown);
         }
 
         [TestMethod]
         public void PartialCombinationIsHeldDownWhenBothVAndCtrlAreDown()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyboardManager>()
-                     .WithFakeSettings(
+            Container.Resolve<IKeyboardManager>()
+                     .With(
                          x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(true);
                              x.IsKeyDown(Key.V)
                               .Returns(true);
                          });
-                });
-
-            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            Assert.IsTrue(mediator.IsCombinationPartiallyHeldDown);
+            
+            Assert.IsTrue(SystemUnderTest.IsCombinationPartiallyHeldDown);
         }
 
         [TestMethod]
         public void PartialCombinationReleasedWhenBothVAndCtrlAreReleased()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyboardManager>()
-                     .WithFakeSettings(
+            Container.Resolve<IKeyboardManager>()
+                     .With(
                          x => {
                              x.IsKeyDown(Key.LeftCtrl)
                               .Returns(false);
                              x.IsKeyDown(Key.V)
                               .Returns(false);
                          });
-                });
-
-            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            Assert.IsFalse(mediator.IsCombinationPartiallyHeldDown);
+            
+            Assert.IsFalse(SystemUnderTest.IsCombinationPartiallyHeldDown);
         }
 
         [TestMethod]
         [ExpectedException(typeof (InvalidOperationException))]
         public void DisconnectingWhileNotConnectedThrowsError()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IConsumerThreadLoop>()
+            Container.Resolve<IConsumerThreadLoop>()
                      .IsRunning
                      .Returns(false);
-                });
-
-            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            mediator.Disconnect();
+            
+            SystemUnderTest.Disconnect();
         }
 
         [TestMethod]
         [ExpectedException(typeof (InvalidOperationException))]
         public void ConnectingWhileAlreadyConnectedThrowsError()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IConsumerThreadLoop>()
+            Container.Resolve<IConsumerThreadLoop>()
                      .IsRunning
                      .Returns(true);
-                });
 
-            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            mediator.Connect(Substitute.For<IHookableWindow>());
+            SystemUnderTest.Connect(Substitute.For<IHookableWindow>());
         }
 
         [TestMethod]
         public void WhenCtrlVIsDownMonitoringLoopRuns()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IPasteHotkeyInterceptor>();
-                    c.RegisterFake<IConsumerThreadLoop>();
-                });
+            SystemUnderTest.Connect(Substitute.For<IHookableWindow>());
 
-            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            mediator.Connect(Substitute.For<IHookableWindow>());
-
-            var fakePasteHotkeyInterceptor = container.Resolve<IPasteHotkeyInterceptor>();
+            var fakePasteHotkeyInterceptor = Container.Resolve<IPasteHotkeyInterceptor>();
             RaiseHotkeyFired(fakePasteHotkeyInterceptor);
 
-            var fakeConsumerThreadLoop = container.Resolve<IConsumerThreadLoop>();
+            var fakeConsumerThreadLoop = Container.Resolve<IConsumerThreadLoop>();
             fakeConsumerThreadLoop
                 .Received()
                 .Notify(
@@ -271,39 +216,36 @@
         [SuppressMessage("ReSharper", "ImplicitlyCapturedClosure")]
         public void WhenCombinationIsDownForLongEnoughThenEventFires()
         {
-            var decisecondsPassed = 0;
-            var holdCombinationDown = true;
+            //var decisecondsPassed = 0;
+            //var holdCombinationDown = true;
 
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IThreadDelay>()
-                     .ExecuteAsync(
-                         Arg.Do<int>(
-                             x => decisecondsPassed += x/100))
-                     .Returns(Task.CompletedTask);
-                    c.RegisterFake<IPasteHotkeyInterceptor>();
-                    c.RegisterFake<IKeyboardManager>()
-                     .WithFakeSettings(
-                         x => {
-                             x.IsKeyDown(Key.LeftCtrl)
-                              .Returns(i => holdCombinationDown);
-                             x.IsKeyDown(Key.V)
-                              .Returns(i => holdCombinationDown);
-                         });
-                    c.RegisterFake<IConsumerThreadLoop>()
-                     .Notify(
-                         Arg.Do<Func<Task>>(async x => await x()),
-                         Arg.Any<CancellationToken>());
-                });
+            //container.Resolve<IThreadDelay>()
+            //         .ExecuteAsync(
+            //             Arg.Do<int>(
+            //                 x => decisecondsPassed += x / 100))
+            //         .Returns(Task.CompletedTask);
 
-            var mediator = container.Resolve<IPasteCombinationDurationMediator>();
-            mediator.PasteCombinationDurationPassed += (sender, e) => holdCombinationDown = false;
-            mediator.Connect(Substitute.For<IHookableWindow>());
+            //container.Resolve<IKeyboardManager>()
+            //         .With(
+            //             x => {
+            //                 x.IsKeyDown(Key.LeftCtrl)
+            //                  .Returns(i => holdCombinationDown);
+            //                 x.IsKeyDown(Key.V)
+            //                  .Returns(i => holdCombinationDown);
+            //             });
 
-            var fakePasteHotkeyInterceptor = container.Resolve<IPasteHotkeyInterceptor>();
-            RaiseHotkeyFired(fakePasteHotkeyInterceptor);
+            //container.Resolve<IConsumerThreadLoop>()
+            //         .Notify(
+            //             Arg.Do<Func<Task>>(async x => await x()),
+            //             Arg.Any<CancellationToken>());
+            
+            //systemUnderTest.PasteCombinationDurationPassed += (sender, e) => holdCombinationDown = false;
+            //systemUnderTest.Connect(Substitute.For<IHookableWindow>());
 
-            Assert.AreEqual(mediator.DurationInDeciseconds, decisecondsPassed);
+            //var fakePasteHotkeyInterceptor = container.Resolve<IPasteHotkeyInterceptor>();
+            //RaiseHotkeyFired(fakePasteHotkeyInterceptor);
+
+            //Assert.AreEqual(systemUnderTest.DurationInDeciseconds, decisecondsPassed);
         }
     }
 }

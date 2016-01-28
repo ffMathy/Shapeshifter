@@ -1,10 +1,11 @@
-﻿using Microsoft.Win32;
-using Shapeshifter.WindowsDesktop.Services.Interfaces;
-
-using System.Collections.Generic;
-
-namespace Shapeshifter.WindowsDesktop.Services
+﻿namespace Shapeshifter.WindowsDesktop.Services
 {
+    using System.Collections.Generic;
+
+    using Interfaces;
+
+    using Microsoft.Win32;
+
     class RegistryManager: IRegistryManager
     {
         public void AddKey(string path, string keyName)
@@ -20,9 +21,7 @@ namespace Shapeshifter.WindowsDesktop.Services
             using (var registryKey = Registry
                 .CurrentUser
                 .OpenSubKey(path))
-            {
                 return registryKey?.GetSubKeyNames();
-            }
         }
 
         public void RemoveKey(string path, string keyName)
@@ -35,9 +34,7 @@ namespace Shapeshifter.WindowsDesktop.Services
             using (var registryKey = Registry
                 .CurrentUser
                 .OpenSubKey(path))
-            {
-                return (string)registryKey?.GetValue(valueName);
-            }
+                return (string) registryKey?.GetValue(valueName);
         }
 
         public void AddValue(string path, string valueName, string value)
@@ -45,9 +42,7 @@ namespace Shapeshifter.WindowsDesktop.Services
             using (var registryKey = Registry
                 .CurrentUser
                 .OpenSubKey(path, true))
-            {
                 registryKey?.SetValue(valueName, value);
-            }
         }
 
         public IReadOnlyCollection<string> GetValueNames(string path)
@@ -55,9 +50,7 @@ namespace Shapeshifter.WindowsDesktop.Services
             using (var registryKey = Registry
                 .CurrentUser
                 .OpenSubKey(path, true))
-            {
                 return registryKey?.GetValueNames();
-            }
         }
 
         public void RemoveValue(string path, string valueName)
@@ -65,9 +58,7 @@ namespace Shapeshifter.WindowsDesktop.Services
             using (var registryKey = Registry
                 .CurrentUser
                 .OpenSubKey(path, true))
-            {
                 registryKey?.DeleteValue(valueName);
-            }
         }
     }
 }

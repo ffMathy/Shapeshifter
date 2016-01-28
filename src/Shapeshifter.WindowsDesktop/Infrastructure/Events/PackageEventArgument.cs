@@ -4,9 +4,9 @@
 
     using Data.Interfaces;
 
-    public class ControlEventArgument: EventArgs
+    public class PackageEventArgument: EventArgs
     {
-        public ControlEventArgument(IClipboardDataControlPackage package)
+        public PackageEventArgument(IClipboardDataControlPackage package)
         {
             Package = package;
         }

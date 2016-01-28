@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
+﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
 {
-    using System.Collections.Generic;
+    using System;
     using System.Threading;
+    using System.Threading.Tasks;
 
     public class RetryingThreadLoopJob
     {

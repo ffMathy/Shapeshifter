@@ -10,7 +10,8 @@
     using Infrastructure.Environment;
     using Infrastructure.Environment.Interfaces;
 
-    class ClipboardFileDataViewModel: ClipboardDataViewModel<IClipboardFileData>
+    class ClipboardFileDataViewModel: 
+        ClipboardDataViewModel<IClipboardFileData>
     {
         public ClipboardFileDataViewModel()
             : this(new EnvironmentInformation(true)) { }

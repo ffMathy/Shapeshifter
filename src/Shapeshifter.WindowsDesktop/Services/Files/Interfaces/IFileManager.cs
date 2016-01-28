@@ -10,8 +10,12 @@
         : ISingleInstance,
           IDisposable
     {
+        void WriteBytesToFile(
+            string path,
+            byte[] bytes);
+
         string WriteBytesToTemporaryFile(
-            string path, 
+            string relativePath,
             byte[] bytes);
 
         string PrepareTemporaryFolder(
@@ -27,16 +31,16 @@
             string path);
 
         Task DeleteDirectoryIfExistsAsync(
-            string relativePath);
+            string path);
 
         Task DeleteFileIfExistsAsync(
-            string relativePath);
+            string path);
 
         Task DeleteIsolatedFileIfExistsAsync(
-            string path);
+            string relativePath);
 
         Task DeleteIsolatedDirectoryIfExistsAsync(
-            string path);
+            string relativePath);
 
         string FindCommonFolderFromPaths(
             IReadOnlyCollection<string> paths);

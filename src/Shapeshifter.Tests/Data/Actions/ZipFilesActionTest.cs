@@ -18,55 +18,41 @@
     using NSubstitute;
 
     using Services.Clipboard.Interfaces;
+    using Services.Files.Interfaces;
 
     [TestClass]
-    public class ZipFilesActionTest: ActionTestBase
+    public class ZipFilesActionTest: ActionTestBase<IZipFilesAction>
     {
         [TestMethod]
         public async Task CanPerformForFiles()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IZipFilesAction>();
-            Assert.IsTrue(await action.CanPerformAsync(GetPackageContaining<IClipboardFileData>()));
+            Assert.IsTrue(
+                await SystemUnderTest.CanPerformAsync(GetPackageContaining<IClipboardFileData>()));
         }
 
         [TestMethod]
         public async Task CanPerformForFileCollections()
         {
-            var container = CreateContainer();
-
             var fakeData = GetPackageContaining<IClipboardFileCollectionData>();
-
-            var action = container.Resolve<IZipFilesAction>();
-            Assert.IsTrue(await action.CanPerformAsync(fakeData));
+            Assert.IsTrue(await SystemUnderTest.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
         public void CanGetDescription()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IZipFilesAction>();
-            Assert.IsNotNull(action.Description);
+            Assert.IsNotNull(SystemUnderTest.Description);
         }
 
         [TestMethod]
         public void CanGetTitle()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IZipFilesAction>();
-            Assert.IsNotNull(action.Title);
+            Assert.IsNotNull(SystemUnderTest.Title);
         }
 
         [TestMethod]
         public void OrderIsCorrect()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IZipFilesAction>();
-            Assert.AreEqual(75, action.Order);
+            Assert.AreEqual(75, SystemUnderTest.Order);
         }
 
         [TestMethod]
@@ -74,16 +60,12 @@
         [TestCategory("Integration")]
         public async Task ThrowsExceptionForInvalidData()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IZipFilesAction>();
-
             var fakeData = Substitute.For<IClipboardData>();
 
             var package = new ClipboardDataPackage();
             package.AddData(fakeData);
 
-            await action.PerformAsync(package);
+            await SystemUnderTest.PerformAsync(package);
         }
 
         [TestMethod]
@@ -91,10 +73,6 @@
         [TestCategory("Integration")]
         public async Task NoFilesAddedThrowsException()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IZipFilesAction>();
-
             var fakeDataSourceService = Substitute.For<IDataSourceService>();
 
             var fileCollectionData = new ClipboardFileCollectionData(fakeDataSourceService)
@@ -105,20 +83,14 @@
             var package = new ClipboardDataPackage();
             package.AddData(fileCollectionData);
 
-            await action.PerformAsync(package);
+            await SystemUnderTest.PerformAsync(package);
         }
 
         [TestMethod]
         [TestCategory("Integration")]
         public async Task ProducesProperZipFileForCollection()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IClipboardInjectionService>();
-                });
-
-            var fakeClipboardInjectionService = container.Resolve<IClipboardInjectionService>();
-            var action = container.Resolve<IZipFilesAction>();
+            ExcludeFakeFor<IFileManager>();
 
             var file1 = Path.GetTempFileName();
             var file2 = Path.GetTempFileName();
@@ -149,7 +121,7 @@
             package.AddData(fileCollectionData);
 
             string zipPath = null;
-            fakeClipboardInjectionService
+            Container.Resolve<IClipboardInjectionService>()
                 .When(x => x.InjectFiles(Arg.Any<string[]>()))
                 .Do(
                     parameters => {
@@ -157,7 +129,7 @@
                         zipPath = files[0];
                     });
 
-            await action.PerformAsync(package);
+            await SystemUnderTest.PerformAsync(package);
 
             Assert.IsNotNull(zipPath);
 
@@ -181,13 +153,7 @@
         [TestCategory("Integration")]
         public async Task ProducesProperZipFileForSingleFile()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IClipboardInjectionService>();
-                });
-
-            var fakeClipboardInjectionService = container.Resolve<IClipboardInjectionService>();
-            var action = container.Resolve<IZipFilesAction>();
+            ExcludeFakeFor<IFileManager>();
 
             var file = Path.GetTempFileName();
 
@@ -205,7 +171,7 @@
             package.AddData(fileData);
 
             string zipPath = null;
-            fakeClipboardInjectionService
+            Container.Resolve<IClipboardInjectionService>()
                 .When(x => x.InjectFiles(Arg.Any<string[]>()))
                 .Do(
                     parameters => {
@@ -213,7 +179,7 @@
                         zipPath = files[0];
                     });
 
-            await action.PerformAsync(package);
+            await SystemUnderTest.PerformAsync(package);
 
             Assert.IsNotNull(zipPath);
 

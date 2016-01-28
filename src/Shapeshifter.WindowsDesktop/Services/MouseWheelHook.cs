@@ -30,46 +30,35 @@
 
         void TriggerScrollEventsIfNeeded()
         {
-            const int scrollAmountNeeded =
-                Mouse.MouseWheelDeltaForOneLine;
-            if (currentDelta > scrollAmountNeeded)
+            if ((currentDelta < Mouse.MouseWheelDeltaForOneLine) || 
+                (currentDelta > -Mouse.MouseWheelDeltaForOneLine))
             {
-                ResetAccumulatedWheelDelta();
-                TriggerNeededEventsOnIncreasingDelta();
+                return;
             }
-            else if (currentDelta < -scrollAmountNeeded)
-            {
-                ResetAccumulatedWheelDelta();
-                TriggerNeededEventsOnDecreasingDelta();
-            }
-        }
 
-        void TriggerNeededEventsOnDecreasingDelta()
-        {
-            switch (currentScrollTypeMessage)
-            {
+            ResetAccumulatedWheelDelta();
 
-                case Message.WM_MOUSEWHEEL:
-                    OnWheelScrolledUp();
-                    break;
-
-                case Message.WM_MOUSEHWHEEL:
-                    OnWheelTilted();
-                    break;
-            }
-        }
-
-        void TriggerNeededEventsOnIncreasingDelta()
-        {
             switch (currentScrollTypeMessage) {
 
-                case Message.WM_MOUSEWHEEL:
-                    OnWheelScrolledDown();
-                    break;
-
                 case Message.WM_MOUSEHWHEEL:
                     OnWheelTilted();
                     break;
+
+                case Message.WM_MOUSEWHEEL:
+                    TriggerNeededEventsForCurrentDelta();
+                    break;
+            }
+        }
+
+        void TriggerNeededEventsForCurrentDelta()
+        {
+            if (currentDelta > Mouse.MouseWheelDeltaForOneLine)
+            {
+                OnWheelScrolledUp();
+            }
+            else if (currentDelta < -Mouse.MouseWheelDeltaForOneLine)
+            {
+                OnWheelScrolledDown();
             }
         }
 
@@ -141,7 +130,7 @@
 
             const int XBUTTON1 = 0x0001;
             const int XBUTTON2 = 0x0002;
-            if ((buttonClicked == XBUTTON1) || 
+            if ((buttonClicked == XBUTTON1) ||
                 (buttonClicked == XBUTTON2))
             {
                 OnWheelTilted();
@@ -182,7 +171,7 @@
 
         static short GetHighOrderWord(WindowMessageReceivedArgument e)
         {
-            return (short)(e.WordParameter.ToInt32() >> 16);
+            return (short) (e.WordParameter.ToInt32() >> 16);
         }
     }
 }

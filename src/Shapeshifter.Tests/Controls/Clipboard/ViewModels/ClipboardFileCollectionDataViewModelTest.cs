@@ -2,8 +2,6 @@
 {
     using System.Linq;
 
-    using Autofac;
-
     using Data.Interfaces;
 
     using FileCollection.Interfaces;
@@ -13,15 +11,11 @@
     using NSubstitute;
 
     [TestClass]
-    public class ClipboardFileCollectionDataViewModelTest: TestBase
+    public class ClipboardFileCollectionDataViewModelTest: UnitTestFor<IClipboardFileCollectionDataViewModel>
     {
         [TestMethod]
         public void FileCountReturnsAmountOfFiles()
         {
-            var container = CreateContainer();
-
-            var viewModel = container.Resolve<IClipboardFileCollectionDataViewModel>();
-
             var fakeData = Substitute.For<IClipboardFileCollectionData>();
 
             var kitten = GenerateFakeFileData("kitten.jpg");
@@ -36,18 +30,14 @@
                     notes
                 });
 
-            viewModel.Data = fakeData;
+            SystemUnderTest.Data = fakeData;
 
-            Assert.AreEqual(3, viewModel.FileCount);
+            Assert.AreEqual(3, SystemUnderTest.FileCount);
         }
 
         [TestMethod]
         public void FileTypeGroupsAreGroupedByFileExtensions()
         {
-            var container = CreateContainer();
-
-            var viewModel = container.Resolve<IClipboardFileCollectionDataViewModel>();
-
             var fakeData = Substitute.For<IClipboardFileCollectionData>();
 
             var notes = GenerateFakeFileData("notes.docx");
@@ -62,9 +52,9 @@
                     house
                 });
 
-            viewModel.Data = fakeData;
+            SystemUnderTest.Data = fakeData;
 
-            var groups = viewModel.FileTypeGroups.ToArray();
+            var groups = SystemUnderTest.FileTypeGroups.ToArray();
             Assert.AreEqual(2, groups.Length);
 
             Assert.AreEqual(".jpg", groups[0].FileType);

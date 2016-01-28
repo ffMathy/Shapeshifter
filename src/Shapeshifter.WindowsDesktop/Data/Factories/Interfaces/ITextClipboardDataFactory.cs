@@ -1,4 +1,4 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Factories.Interfaces
 {
-    interface ITextClipboardDataFactory: IClipboardDataFactory { }
+    public interface ITextClipboardDataFactory: IClipboardDataFactory { }
 }

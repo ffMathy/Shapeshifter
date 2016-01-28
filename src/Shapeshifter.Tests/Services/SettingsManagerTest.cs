@@ -1,37 +1,27 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services
 {
-    using Autofac;
+    using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using Interfaces;
-
-    using WindowsDesktop;
-
     [TestClass]
-    public class SettingsManagerTest: TestBase
+    public class SettingsManagerTest: UnitTestFor<ISettingsManager>
     {
         [TestMethod]
         public void CanPersistAndFetchStrings()
         {
-            var container = CreateContainer();
+            SystemUnderTest.SaveSetting("string", "foobar");
 
-            var settingsManager = container.Resolve<ISettingsManager>();
-            settingsManager.SaveSetting("string", "foobar");
-
-            var setting = settingsManager.LoadSetting<string>("string");
+            var setting = SystemUnderTest.LoadSetting<string>("string");
             Assert.AreEqual("foobar", setting);
         }
 
         [TestMethod]
         public void CanPersistAndFetchIntegers()
         {
-            var container = CreateContainer();
+            SystemUnderTest.SaveSetting("integer", 1337);
 
-            var settingsManager = container.Resolve<ISettingsManager>();
-            settingsManager.SaveSetting("integer", 1337);
-
-            var setting = settingsManager.LoadSetting<int>("integer");
+            var setting = SystemUnderTest.LoadSetting<int>("integer");
             Assert.AreEqual(1337, setting);
         }
     }

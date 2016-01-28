@@ -9,7 +9,6 @@
     using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
-    using System.Windows.Input;
 
     using Binders.Interfaces;
 
@@ -17,8 +16,6 @@
     using Data.Interfaces;
 
     using Infrastructure.Events;
-    using Infrastructure.Handles.Factories.Interfaces;
-    using Infrastructure.Threading.Interfaces;
 
     using Interfaces;
 
@@ -26,27 +23,20 @@
 
     using Mediators.Interfaces;
 
-    using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Screen;
     using Services.Screen.Interfaces;
 
-    class ClipboardListViewModel:
-        IClipboardListViewModel
+    class ClipboardListViewModel
+        :
+            IClipboardListViewModel,
+            IDisposable
     {
         IClipboardDataControlPackage selectedElement;
-
         IAction selectedAction;
 
-        bool isFocusInActionsList;
-
-        readonly IAction[] allActions;
-
-        readonly IClipboardUserInterfaceMediator clipboardUserInterfaceMediator;
-        readonly IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder;
-        readonly IAsyncFilter asyncFilter;
-        readonly IPerformanceHandleFactory performanceHandleFactory;
-        readonly IUserInterfaceThread userInterfaceThread;
+        readonly IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator;
         readonly IScreenManager screenManager;
+
         ScreenInformation activeScreen;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
@@ -69,7 +59,9 @@
                 {
                     return;
                 }
+
                 activeScreen = value;
+
                 OnPropertyChanged();
             }
         }
@@ -107,53 +99,26 @@
 
                 selectedElement = value;
                 OnPropertyChanged();
-
-                lock (Elements)
-                {
-                    userInterfaceThread.Invoke(() => packageActionBinder.LoadFromKey(value));
-                }
             }
         }
 
         [SuppressMessage("ReSharper", "SuggestBaseTypeForParameter")]
         public ClipboardListViewModel(
-            IAction[] allActions,
-            IClipboardUserInterfaceMediator clipboardUserInterfaceMediator,
-            IKeyInterceptor hotkeyInterceptor,
-            IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction> packageActionBinder,
-            IAsyncFilter asyncFilter,
-            IPerformanceHandleFactory performanceHandleFactory,
-            IUserInterfaceThread userInterfaceThread,
-            IScreenManager screenManager)
+            IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator,
+            IScreenManager screenManager,
+            IPackageToActionSwitch packageToActionSwitch)
         {
             Elements = new ObservableCollection<IClipboardDataControlPackage>();
             Actions = new ObservableCollection<IAction>();
 
             Actions.CollectionChanged += Actions_CollectionChanged;
 
-            var pasteAction = allActions.OfType<IPasteAction>()
-                                        .Single();
-
-            this.allActions = allActions.Where(x => x != pasteAction)
-                                        .ToArray();
-            this.clipboardUserInterfaceMediator = clipboardUserInterfaceMediator;
-            this.packageActionBinder = packageActionBinder;
-            this.asyncFilter = asyncFilter;
-            this.performanceHandleFactory = performanceHandleFactory;
-            this.userInterfaceThread = userInterfaceThread;
+            this.clipboardUserInterfaceInteractionMediator = clipboardUserInterfaceInteractionMediator;
             this.screenManager = screenManager;
 
-            PreparePackageBinder(pasteAction);
+            SetUpClipboardUserInterfaceInteractionMediator();
 
-            RegisterMediatorEvents(clipboardUserInterfaceMediator);
-            RegisterKeyEvents(hotkeyInterceptor);
-        }
-
-        void PreparePackageBinder(
-            IAction defaultAction)
-        {
-            packageActionBinder.Default = defaultAction;
-            packageActionBinder.Bind(Elements, Actions, GetSupportedActionsFromDataAsync);
+            packageToActionSwitch.PrepareBinder(this);
         }
 
         void Actions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -164,21 +129,59 @@
             }
         }
 
-        void RegisterKeyEvents(
-            IHotkeyInterceptor hotkeyInterceptor)
+        void SetUpClipboardUserInterfaceInteractionMediator()
         {
-            hotkeyInterceptor.HotkeyFired += HotkeyInterceptor_HotkeyFired;
+            clipboardUserInterfaceInteractionMediator.PackageAdded += MediatorPackageAdded;
+
+            clipboardUserInterfaceInteractionMediator.UserInterfaceHidden += Mediator_UserInterfaceHidden;
+            clipboardUserInterfaceInteractionMediator.UserInterfaceShown += Mediator_UserInterfaceShown;
+
+            clipboardUserInterfaceInteractionMediator.PastePerformed += Mediator_PastePerformed;
+
+            clipboardUserInterfaceInteractionMediator.SelectedNextItem += ClipboardUserInterfaceInteractionMediator_SelectedNextItem;
+            clipboardUserInterfaceInteractionMediator.SelectedPreviousItem += ClipboardUserInterfaceInteractionMediator_SelectedPreviousItem;
         }
 
-        void RegisterMediatorEvents(
-            IClipboardUserInterfaceMediator mediator)
+        void ClipboardUserInterfaceInteractionMediator_SelectedPreviousItem(
+            object sender,
+            EventArgs e)
         {
-            mediator.ControlAdded += Mediator_ControlAdded;
+            switch (clipboardUserInterfaceInteractionMediator.CurrentPane)
+            {
+                case ClipboardUserInterfacePane.Actions:
+                    SelectedAction = GetNewSelectedElementAfterHandlingUpKey(Actions, SelectedAction);
+                    break;
 
-            mediator.UserInterfaceHidden += Mediator_UserInterfaceHidden;
-            mediator.UserInterfaceShown += Mediator_UserInterfaceShown;
+                case ClipboardUserInterfacePane.ClipboardPackages:
+                    SelectedElement = GetNewSelectedElementAfterHandlingUpKey(Elements, SelectedElement);
+                    break;
 
-            mediator.PastePerformed += Mediator_PastePerformed;
+                default:
+                    throw new InvalidOperationException(
+                        "Unknown user interface pane.");
+            }
+        }
+
+        void ClipboardUserInterfaceInteractionMediator_SelectedNextItem(
+            object sender,
+            EventArgs e)
+        {
+            switch (clipboardUserInterfaceInteractionMediator.CurrentPane)
+            {
+                case ClipboardUserInterfacePane.Actions:
+                    SelectedAction = GetNewSelectedElementAfterHandlingDownKey(Actions, SelectedAction);
+                    break;
+
+                case ClipboardUserInterfacePane.ClipboardPackages:
+                    SelectedElement = GetNewSelectedElementAfterHandlingDownKey(
+                        Elements,
+                        SelectedElement);
+                    break;
+
+                default:
+                    throw new InvalidOperationException(
+                        "Unknown user interface pane.");
+            }
         }
 
         async void Mediator_PastePerformed(
@@ -196,90 +199,9 @@
             }
         }
 
-        void HotkeyInterceptor_HotkeyFired(object sender, HotkeyFiredArgument e)
-        {
-            // ReSharper disable once SwitchStatementMissingSomeCases
-            switch (e.Key)
-            {
-                case Key.Down:
-                    ShowNextItem();
-                    break;
-
-                case Key.Up:
-                    ShowPreviousItem();
-                    break;
-
-                case Key.Left:
-                    HandleLeftPressed();
-                    break;
-
-                case Key.Right:
-                    HandleRightPressed();
-                    break;
-            }
-        }
-
-        public void SwapBetweenPanes()
-        {
-            isFocusInActionsList = !isFocusInActionsList;
-        }
-
-        void HandleLeftPressed()
-        {
-            if (!isFocusInActionsList)
-            {
-                Cancel();
-            }
-            else
-            {
-                isFocusInActionsList = !isFocusInActionsList;
-            }
-        }
-
-        void HandleRightPressed()
-        {
-            if (isFocusInActionsList)
-            {
-                Cancel();
-            }
-            else
-            {
-                isFocusInActionsList = !isFocusInActionsList;
-            }
-        }
-
-        void Cancel()
-        {
-            clipboardUserInterfaceMediator.Cancel();
-        }
-
-        public void ShowPreviousItem()
-        {
-            if (isFocusInActionsList)
-            {
-                SelectedAction = GetNewSelectedElementAfterHandlingUpKey(Actions, SelectedAction);
-            }
-            else
-            {
-                SelectedElement = GetNewSelectedElementAfterHandlingUpKey(Elements, SelectedElement);
-            }
-        }
-
-        public void ShowNextItem()
-        {
-            if (isFocusInActionsList)
-            {
-                SelectedAction = GetNewSelectedElementAfterHandlingDownKey(Actions, SelectedAction);
-            }
-            else
-            {
-                SelectedElement = GetNewSelectedElementAfterHandlingDownKey(
-                    Elements,
-                    SelectedElement);
-            }
-        }
-
-        static T GetNewSelectedElementAfterHandlingUpKey<T>(IList<T> list, T selectedElement)
+        static T GetNewSelectedElementAfterHandlingUpKey<T>(
+            IList<T> list,
+            T selectedElement)
         {
             var indexToUse = list.IndexOf(selectedElement) - 1;
             if (indexToUse < 0)
@@ -290,7 +212,9 @@
             return list[indexToUse];
         }
 
-        static T GetNewSelectedElementAfterHandlingDownKey<T>(IList<T> list, T selectedElement)
+        static T GetNewSelectedElementAfterHandlingDownKey<T>(
+            IList<T> list,
+            T selectedElement)
         {
             var indexToUse = list.IndexOf(selectedElement) + 1;
             if (indexToUse == list.Count)
@@ -315,28 +239,16 @@
 
         void HideInterface()
         {
-            isFocusInActionsList = false;
-            UserInterfaceHidden?.Invoke(this, new UserInterfaceHiddenEventArgument());
+            UserInterfaceHidden?.Invoke(
+                this,
+                new UserInterfaceHiddenEventArgument());
         }
 
-        async Task<IEnumerable<IAction>> GetSupportedActionsFromDataAsync(
-            IClipboardDataControlPackage data)
-        {
-            using (performanceHandleFactory.StartMeasuringPerformance())
-            {
-                var allowedActions =
-                    await
-                    asyncFilter.FilterAsync(allActions, action => action.CanPerformAsync(data.Data))
-                               .ConfigureAwait(false);
-                return allowedActions.OrderBy(x => x.Order);
-            }
-        }
-
-        void Mediator_ControlAdded(object sender, ControlEventArgument e)
+        void MediatorPackageAdded(object sender, PackageEventArgument e)
         {
             lock (Elements)
             {
-                userInterfaceThread.Invoke(() => Elements.Insert(0, e.Package));
+                Elements.Insert(0, e.Package);
                 SelectedElement = e.Package;
             }
         }
@@ -347,6 +259,24 @@
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Dispose()
+        {
+            UnsubscribeUserInterfaceInteractionMediatorEvents();
+        }
+
+        void UnsubscribeUserInterfaceInteractionMediatorEvents()
+        {
+            clipboardUserInterfaceInteractionMediator.PackageAdded -= MediatorPackageAdded;
+
+            clipboardUserInterfaceInteractionMediator.UserInterfaceHidden -= Mediator_UserInterfaceHidden;
+            clipboardUserInterfaceInteractionMediator.UserInterfaceShown -= Mediator_UserInterfaceShown;
+
+            clipboardUserInterfaceInteractionMediator.PastePerformed -= Mediator_PastePerformed;
+
+            clipboardUserInterfaceInteractionMediator.SelectedNextItem -= ClipboardUserInterfaceInteractionMediator_SelectedNextItem;
+            clipboardUserInterfaceInteractionMediator.SelectedPreviousItem -= ClipboardUserInterfaceInteractionMediator_SelectedPreviousItem;
         }
     }
 }

@@ -19,55 +19,44 @@
     using NSubstitute;
 
     [TestClass]
-    public class WindowMessageHookTest: TestBase
+    public class WindowMessageHookTest: UnitTestFor<IWindowMessageHook>
     {
+        public WindowMessageHookTest()
+        {
+            IncludeFakeFor<IWindowMessageInterceptor>();
+        }
+
         [TestMethod]
         [ExpectedException(typeof (InvalidOperationException))]
         public void DisconnectWhenAlreadyDisconnectedThrowsException()
         {
-            var container = CreateContainer();
-
-            var hook = container.Resolve<IWindowMessageHook>();
-            hook.Disconnect();
+            SystemUnderTest.Disconnect();
         }
 
         [TestMethod]
         [ExpectedException(typeof (InvalidOperationException))]
         public void ConnectWhenAlreadyConnectedThrowsException()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IWindowMessageInterceptor>();
-                });
-
             var fakeWindow = Substitute.For<IHookableWindow>();
-
-            var hook = container.Resolve<IWindowMessageHook>();
-            hook.Connect(fakeWindow);
-            hook.Connect(fakeWindow);
+            
+            SystemUnderTest.Connect(fakeWindow);
+            SystemUnderTest.Connect(fakeWindow);
         }
 
         [TestMethod]
         public void ReceivingTwoMessagesNotifiesConsumerTwice()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IWindowMessageInterceptor>();
-                    c.RegisterFake<IConsumerThreadLoop>();
-                });
-
             HwndSourceHook windowHookCallback = null;
             var fakeWindow = Substitute
                 .For<IHookableWindow>()
-                .WithFakeSettings(
+                .With(
                     x => {
                         x.AddHwndSourceHook(
                             Arg.Do<HwndSourceHook>(
                                 h => windowHookCallback = h));
                     });
 
-            var hook = container.Resolve<IWindowMessageHook>();
-            hook.Connect(fakeWindow);
+            SystemUnderTest.Connect(fakeWindow);
 
             Assert.IsNotNull(windowHookCallback);
 
@@ -75,7 +64,7 @@
             windowHookCallback(IntPtr.Zero, (int) Message.WM_HOTKEY, IntPtr.Zero, IntPtr.Zero, ref handled);
             windowHookCallback(IntPtr.Zero, (int) Message.WM_HOTKEY, IntPtr.Zero, IntPtr.Zero, ref handled);
 
-            var fakeConsumerLoop = container.Resolve<IConsumerThreadLoop>();
+            var fakeConsumerLoop = Container.Resolve<IConsumerThreadLoop>();
             fakeConsumerLoop
                 .Received(2)
                 .Notify(
@@ -86,27 +75,22 @@
         [TestMethod]
         public void ReceivingMessageGetsParsedOnToInterceptors()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IWindowMessageInterceptor>();
-                    c.RegisterFake<IConsumerThreadLoop>()
-                     .Notify(
-                         Arg.Do<Func<Task>>(
-                             async x => await x()),
-                         Arg.Any<CancellationToken>());
-                });
+            Container.Resolve<IConsumerThreadLoop>()
+             .Notify(
+                 Arg.Do<Func<Task>>(
+                     async x => await x()),
+                 Arg.Any<CancellationToken>());
 
             HwndSourceHook windowHookCallback = null;
             var fakeWindow = Substitute.For<IHookableWindow>()
-                                       .WithFakeSettings(
+                                       .With(
                                            x => {
                                                x.AddHwndSourceHook(
                                                    Arg.Do<HwndSourceHook>(
                                                        h => windowHookCallback = h));
                                            });
 
-            var hook = container.Resolve<IWindowMessageHook>();
-            hook.Connect(fakeWindow);
+            SystemUnderTest.Connect(fakeWindow);
 
             Assert.IsNotNull(windowHookCallback);
 
@@ -116,7 +100,7 @@
             var handled = false;
             windowHookCallback(hwnd, (int) Message.WM_HOTKEY, wParam, lParam, ref handled);
 
-            var fakeInterceptor = container.Resolve<IWindowMessageInterceptor>();
+            var fakeInterceptor = Container.Resolve<IWindowMessageInterceptor>();
             fakeInterceptor
                 .Received()
                 .ReceiveMessageEvent(

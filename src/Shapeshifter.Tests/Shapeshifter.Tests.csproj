@@ -88,6 +88,7 @@
     <Compile Include="Data\Actions\PasteActionTest.cs" />
     <Compile Include="Infrastructure\Handles\ClipboardHandleTest.cs" />
     <Compile Include="Infrastructure\Logging\LoggerTest.cs" />
+    <Compile Include="Operations\Startup\MainWindowPreparationOperationTest.cs" />
     <Compile Include="ProjectAnalysisTest.cs" />
     <Compile Include="Services\Clipboard\ClipboardPasteServiceTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardImageDataControlFactoryTest.cs" />
@@ -104,11 +105,10 @@
     <Compile Include="Data\Factories\TextClipboardDataFactoryTest.cs" />
     <Compile Include="Infrastructure\Caching\KeyValueCacheTest.cs" />
     <Compile Include="Infrastructure\Threading\ConsumerThreadLoopTest.cs" />
-    <Compile Include="Infrastructure\Threading\MainThreadInvokerTest.cs" />
     <Compile Include="Infrastructure\Threading\ThreadLoopTest.cs" />
-    <Compile Include="MainTest.cs" />
+    <Compile Include="Operations\Startup\ApplicationEntryPointTest.cs" />
     <Compile Include="Mediators\PasteCombinationDurationMediatorTest.cs" />
-    <Compile Include="Mediators\ClipboardUserInterfaceMediatorTest.cs" />
+    <Compile Include="Mediators\ClipboardUserInterfaceInteractionMediatorTest.cs" />
     <Compile Include="Services\Clipboard\ClipboardPersistanceServiceTest.cs" />
     <Compile Include="Services\Files\FileManagerTest.cs" />
     <Compile Include="Services\Files\FileTypeInterpreterTest.cs" />
@@ -121,7 +121,7 @@
     <Compile Include="Services\SettingsManagerTest.cs" />
     <Compile Include="Services\Updates\UpdateServiceTest.cs" />
     <Compile Include="Structures\FormatDataPairTest.cs" />
-    <Compile Include="TestBase.cs" />
+    <Compile Include="UnitTestFor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestException.cs" />
     <Compile Include="Services\Web\DownloaderTest.cs" />

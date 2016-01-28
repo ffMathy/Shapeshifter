@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services
 {
     using System.Diagnostics;
-    using System.Drawing.Drawing2D;
     using System.Windows;
     using System.Windows.Interop;
 
@@ -12,7 +11,7 @@
         public Vector ConvertDeviceToDeviceIndependentPixels(
             Vector devicePixels)
         {
-            using (var source = 
+            using (var source =
                 new HwndSource(
                     new HwndSourceParameters()))
             {

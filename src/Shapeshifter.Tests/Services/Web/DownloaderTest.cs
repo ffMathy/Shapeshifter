@@ -2,24 +2,21 @@
 {
     using System.Threading.Tasks;
 
-    using Autofac;
+    using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using Services.Web.Interfaces;
-
     [TestClass]
-    public class DownloaderTest: TestBase
+    public class DownloaderTest: UnitTestFor<IDownloader>
     {
         [TestMethod]
         [TestCategory("Integration")]
         public async Task CanDownloadGoogle()
         {
-            var container = CreateContainer();
-
-            using (var downloader = container.Resolve<IDownloader>())
+            using (SystemUnderTest)
             {
-                var bytes = await downloader.DownloadBytesAsync("http://google.com");
+                var bytes = await SystemUnderTest.DownloadBytesAsync(
+                    "http://google.com");
                 Assert.AreNotEqual(0, bytes.Length);
             }
         }

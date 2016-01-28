@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Shapeshifter.WindowsDesktop.Startup
+﻿namespace Shapeshifter.WindowsDesktop.Operations.Startup
 {
+    using System;
+    using System.Threading.Tasks;
+
     using Interfaces;
 
     using Services.Arguments.Interfaces;

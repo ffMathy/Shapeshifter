@@ -11,6 +11,11 @@
         : IFileManager,
           IDesignerService
     {
+        public string WriteBytesToTemporaryFile(string relativePath, byte[] bytes)
+        {
+            return null;
+        }
+
         public string PrepareTemporaryFolder(string path)
         {
             return null;
@@ -61,9 +66,8 @@
             return null;
         }
 
-        public string WriteBytesToTemporaryFile(string path, byte[] bytes)
+        public void WriteBytesToFile(string relativePath, byte[] bytes)
         {
-            return null;
         }
 
         public void Dispose() { }

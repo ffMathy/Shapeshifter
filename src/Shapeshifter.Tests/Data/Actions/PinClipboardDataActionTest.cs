@@ -2,8 +2,6 @@
 {
     using System.Threading.Tasks;
 
-    using Autofac;
-
     using Data.Interfaces;
 
     using Interfaces;
@@ -13,44 +11,32 @@
     using NSubstitute;
 
     [TestClass]
-    public class PinClipboardDataActionTest: ActionTestBase
+    public class PinClipboardDataActionTest: ActionTestBase<IPinClipboardDataAction>
     {
         [TestMethod]
         public async Task CanNotPerformWithEmptyData()
         {
-            var container = CreateContainer();
-
             var fakeData = Substitute.For<IClipboardDataPackage>();
-
-            var action = container.Resolve<IPinClipboardDataAction>();
-            Assert.IsFalse(await action.CanPerformAsync(fakeData));
+            Assert.IsFalse(
+                await SystemUnderTest.CanPerformAsync(fakeData));
         }
 
         [TestMethod]
         public void CanReadTitle()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IPinClipboardDataAction>();
-            Assert.IsNotNull(action.Title);
+            Assert.IsNotNull(SystemUnderTest.Title);
         }
 
         [TestMethod]
         public void CanReadDescription()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IPinClipboardDataAction>();
-            Assert.IsNotNull(action.Description);
+            Assert.IsNotNull(SystemUnderTest.Description);
         }
 
         [TestMethod]
         public void OrderIsCorrect()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IPinClipboardDataAction>();
-            Assert.AreEqual(byte.MaxValue, action.Order);
+            Assert.AreEqual(byte.MaxValue, SystemUnderTest.Order);
         }
     }
 }

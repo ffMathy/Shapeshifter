@@ -11,7 +11,7 @@
 
     using Services.Images.Interfaces;
 
-    class BitmapUnwrapper: IMemoryUnwrapper
+    class BitmapUnwrapper: IBitmapUnwrapper
     {
         readonly IImagePersistenceService imagePersistenceService;
         readonly IClipboardNativeApi clipboardNativeApi;

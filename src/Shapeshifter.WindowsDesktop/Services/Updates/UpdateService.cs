@@ -103,7 +103,8 @@
             var data = await fileDownloader.DownloadBytesAsync(
                 asset.BrowserDownloadUrl);
             var localFilePath = fileManager.WriteBytesToTemporaryFile(
-                asset.Name, data);
+                asset.Name,
+                data);
 
             return localFilePath;
         }

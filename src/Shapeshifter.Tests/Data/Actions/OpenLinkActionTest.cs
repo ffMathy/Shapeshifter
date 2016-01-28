@@ -7,6 +7,8 @@
 
     using Data.Interfaces;
 
+    using Infrastructure.Threading.Interfaces;
+
     using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,90 +19,71 @@
     using Services.Web.Interfaces;
 
     [TestClass]
-    public class OpenLinkActionTest: ActionTestBase
+    public class OpenLinkActionTest: ActionTestBase<IOpenLinkAction>
     {
         [TestMethod]
         public void CanReadDescription()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IOpenLinkAction>();
-            Assert.IsNotNull(action.Description);
+            Assert.IsNotNull(SystemUnderTest.Description);
         }
 
         [TestMethod]
         public void CanReadTitle()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IOpenLinkAction>();
-            Assert.IsNotNull(action.Title);
+            Assert.IsNotNull(SystemUnderTest.Title);
         }
 
         [TestMethod]
         public async Task CanPerformIsFalseForNonTextTypes()
         {
-            var container = CreateContainer();
-
             var someNonTextData = Substitute.For<IClipboardDataPackage>();
-
-            var action = container.Resolve<IOpenLinkAction>();
-            Assert.IsFalse(await action.CanPerformAsync(someNonTextData));
+            Assert.IsFalse(
+                await SystemUnderTest.CanPerformAsync(
+                    someNonTextData));
         }
 
         [TestMethod]
         public async Task CanPerformIsFalseForTextTypesWithNoLink()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<ILinkParser>()
-                     .HasLinkAsync(Arg.Any<string>())
-                     .Returns(Task.FromResult(false));
-                });
+            Container.Resolve<ILinkParser>()
+             .HasLinkAsync(Arg.Any<string>())
+             .Returns(Task.FromResult(false));
 
             var textDataWithLinkButNoImageLink = Substitute.For<IClipboardDataPackage>();
-
-            var action = container.Resolve<IOpenLinkAction>();
-            Assert.IsFalse(await action.CanPerformAsync(textDataWithLinkButNoImageLink));
+            
+            Assert.IsFalse(await SystemUnderTest.CanPerformAsync(textDataWithLinkButNoImageLink));
         }
 
         [TestMethod]
         public void OrderIsCorrect()
         {
-            var container = CreateContainer();
-
-            var action = container.Resolve<IOpenLinkAction>();
-            Assert.AreEqual(200, action.Order);
+            Assert.AreEqual(200, SystemUnderTest.Order);
         }
 
         [TestMethod]
         public async Task PerformLaunchesDefaultBrowsersForEachLink()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IProcessManager>();
+            ExcludeFakeFor<IAsyncFilter>();
 
-                    c.RegisterFake<ILinkParser>()
-                     .HasLinkAsync(Arg.Any<string>())
-                     .Returns(Task.FromResult(true));
+            Container.Resolve<ILinkParser>()
+             .HasLinkAsync(Arg.Any<string>())
+             .Returns(Task.FromResult(true));
 
-                    c.RegisterFake<ILinkParser>()
-                     .ExtractLinksFromTextAsync(Arg.Any<string>())
-                     .Returns(
-                         Task
-                             .FromResult
-                             <IReadOnlyCollection<string>>(
-                                 new[]
-                                 {
+            Container.Resolve<ILinkParser>()
+             .ExtractLinksFromTextAsync(Arg.Any<string>())
+             .Returns(
+                 Task
+                     .FromResult<IReadOnlyCollection<string>>(
+                         new[]
+                         {
                                      "foo.com",
                                      "bar.com"
-                                 }));
-                });
+                         }));
+            
+            await SystemUnderTest.PerformAsync(
+                GetPackageContaining<IClipboardTextData>());
 
-            var action = container.Resolve<IOpenLinkAction>();
-            await action.PerformAsync(GetPackageContaining<IClipboardTextData>());
-
-            var fakeProcessManager = container.Resolve<IProcessManager>();
+            var fakeProcessManager = Container.Resolve<IProcessManager>();
             fakeProcessManager.Received(1)
                               .LaunchCommand("foo.com");
             fakeProcessManager.Received(1)

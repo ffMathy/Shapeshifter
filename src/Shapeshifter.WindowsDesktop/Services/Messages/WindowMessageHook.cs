@@ -26,9 +26,7 @@
         readonly CancellationTokenSource cancellationTokenSource;
 
         readonly ILogger logger;
-
         readonly IConsumerThreadLoop consumerLoop;
-
         readonly IMainWindowHandleContainer mainWindowHandleContainer;
 
         public bool IsConnected { get; private set; }

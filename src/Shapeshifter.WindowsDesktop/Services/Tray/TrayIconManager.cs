@@ -8,11 +8,13 @@
     using Infrastructure.Events;
 
     using Interfaces;
+
     using Properties;
 
     using Updates.Interfaces;
 
-    public class TrayIconManager: ITrayIconManager {
+    public class TrayIconManager: ITrayIconManager
+    {
         readonly IUpdateService updateService;
 
         readonly NotifyIcon trayIcon;
@@ -27,12 +29,12 @@
         }
 
         public void InstallTrayIcon(
-            string boldMenuItemTitle, 
+            string boldMenuItemTitle,
             IReadOnlyCollection<MenuItem> contextMenuItems)
         {
-            trayIcon.Click += (sender, e) => 
-                OnIconClicked(new TrayIconClickedEventArgument());
-            
+            trayIcon.Click += (sender, e) =>
+                              OnIconClicked(new TrayIconClickedEventArgument());
+
             var contextMenu = new ContextMenu();
             contextMenu.MenuItems.Add(
                 new MenuItem(boldMenuItemTitle)

@@ -14,53 +14,42 @@
     using NSubstitute;
 
     [TestClass]
-    public class PasteHotkeyInterceptorTest: TestBase
+    public class PasteHotkeyInterceptorTest: UnitTestFor<IPasteHotkeyInterceptor>
     {
         [TestMethod]
         public void IsEnabledByDefault()
         {
-            var container = CreateContainer();
-
-            var interceptor = container.Resolve<IPasteHotkeyInterceptor>();
-            Assert.IsTrue(interceptor.IsEnabled);
+            Assert.IsTrue(SystemUnderTest.IsEnabled);
         }
 
         [TestMethod]
         public void RetainsEnabledStateAfterUninstallIfEnabledIsTrue()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IHotkeyInterceptionFactory>()
-                     .CreateInterception(Key.V, true, true)
-                     .Returns(Substitute.For<IHotkeyInterception>());
-                });
+            Container.Resolve<IHotkeyInterceptionFactory>()
+             .CreateInterception(Key.V, true, true)
+             .Returns(Substitute.For<IHotkeyInterception>());
 
-            var interceptor = container.Resolve<IPasteHotkeyInterceptor>();
-            interceptor.IsEnabled = true;
+            SystemUnderTest.IsEnabled = true;
 
-            interceptor.Install(IntPtr.Zero);
-            interceptor.Uninstall();
+            SystemUnderTest.Install(IntPtr.Zero);
+            SystemUnderTest.Uninstall();
 
-            Assert.IsTrue(interceptor.IsEnabled);
+            Assert.IsTrue(SystemUnderTest.IsEnabled);
         }
 
         [TestMethod]
         public void RetainsEnabledStateAfterUninstallIfEnabledIsFalse()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IHotkeyInterceptionFactory>()
-                     .CreateInterception(Key.V, true, true)
-                     .Returns(Substitute.For<IHotkeyInterception>());
-                });
+            Container.Resolve<IHotkeyInterceptionFactory>()
+             .CreateInterception(Key.V, true, true)
+             .Returns(Substitute.For<IHotkeyInterception>());
 
-            var interceptor = container.Resolve<IPasteHotkeyInterceptor>();
-            interceptor.IsEnabled = false;
+            SystemUnderTest.IsEnabled = false;
 
-            interceptor.Install(IntPtr.Zero);
-            interceptor.Uninstall();
+            SystemUnderTest.Install(IntPtr.Zero);
+            SystemUnderTest.Uninstall();
 
-            Assert.IsFalse(interceptor.IsEnabled);
+            Assert.IsFalse(SystemUnderTest.IsEnabled);
         }
     }
 }

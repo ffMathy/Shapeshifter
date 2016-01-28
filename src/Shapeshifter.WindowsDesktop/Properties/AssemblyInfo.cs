@@ -11,14 +11,10 @@ using System.Windows;
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-
 [assembly: ComVisible(false)]
-
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.SourceAssembly,
     ResourceDictionaryLocation.SourceAssembly)]
-
 [assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.MainAssembly)]
-
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

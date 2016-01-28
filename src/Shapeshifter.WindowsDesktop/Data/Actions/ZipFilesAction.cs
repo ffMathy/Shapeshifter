@@ -88,7 +88,8 @@
             var directoryName = Path.GetFileName(commonPath);
             var directoryPath = fileManager.PrepareTemporaryFolder(directoryName);
             await CopyFilesToTemporaryFolderAsync(
-                fileDataItems, directoryPath);
+                fileDataItems,
+                directoryPath);
 
             var zipFile = ZipDirectory(directoryPath);
             return zipFile;

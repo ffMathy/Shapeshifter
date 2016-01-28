@@ -2,24 +2,18 @@
 {
     using System;
 
-    using Autofac;
-
     using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
-    public class ClipboardImageDataControlFactoryTest: TestBase
+    public class ClipboardImageDataControlFactoryTest: UnitTestFor<IClipboardImageDataControlFactory>
     {
         [TestMethod]
         [ExpectedException(typeof (ArgumentException))]
         public void CreateControlWithNoDataThrowsException()
         {
-            var container = CreateContainer();
-
-            var factory = container
-                .Resolve<IClipboardDataControlFactory>();
-            factory.BuildControl(null);
+            SystemUnderTest.BuildControl(null);
         }
     }
 }

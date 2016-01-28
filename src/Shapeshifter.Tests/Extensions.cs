@@ -3,16 +3,21 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.IO;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
     using Autofac;
+    using Autofac.Core;
+    using Autofac.Core.Activators.Reflection;
+
+    using Controls.Designer.Services;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
-    using System.IO;
+
     static class Extensions
     {
         static readonly IDictionary<Type, object> fakeCache;
@@ -55,6 +60,90 @@
             AssertWait(10000, expression);
         }
 
+        static IReadOnlyCollection<Type> GetImplementingTypes(Type type)
+        {
+            var assemblies = AppDomain
+                .CurrentDomain.GetAssemblies()
+                .Where(x => x.FullName.StartsWith(nameof(Shapeshifter)));
+            var types = assemblies
+                .SelectMany(x => x.GetTypes())
+                .Where(x => type.IsAssignableFrom(x) && x.IsClass)
+                .Where(x => !x.GetInterfaces().Contains(typeof(IDesignerService)));
+            return types.ToArray();
+        }
+
+        public static void RegisterFakesForDependencies<TClass>(
+            this ContainerBuilder builder,
+            params Type[] exceptTypes) where TClass : class
+        {
+            var type = typeof(TClass);
+
+            Type classType;
+            if (type.IsClass)
+            {
+                classType = type;
+            }
+            else
+            {
+                var implementingTypes = GetImplementingTypes(type);
+                if (!implementingTypes.Any())
+                {
+                    return;
+                }
+
+                if (implementingTypes.Count > 1)
+                {
+                    throw new InvalidOperationException(
+                        $"The type {typeof(TClass).Name} has several implementing types.");
+                }
+
+                classType = implementingTypes.Single();
+            }
+
+            var constructors = classType
+                .GetConstructors()
+                .Where(x => x.IsPublic && !x.IsStatic);
+            var targetConstructor = constructors
+                .OrderByDescending(x => x.GetParameters().Length)
+                .First();
+            var parameters = targetConstructor.GetParameters();
+            foreach (var parameter in parameters)
+            {
+                if (!exceptTypes.Contains(parameter.ParameterType))
+                {
+                    var genericMethod = typeof (Extensions)
+                        .GetMethods()
+                        .Single(
+                            x =>
+                            (x.Name == nameof(RegisterFake)) &&
+                            (x.GetParameters()
+                              .Length == 1))
+                        .MakeGenericMethod(parameter.ParameterType);
+                    genericMethod.Invoke(
+                        null,
+                        new object[]
+                        {
+                            builder
+                        });
+                }
+                else
+                {
+                    var genericMethod = typeof(Extensions)
+                        .GetMethods()
+                        .Single(x => 
+                            x.Name == nameof(RegisterFakesForDependencies))
+                        .MakeGenericMethod(parameter.ParameterType);
+                    genericMethod.Invoke(
+                        null,
+                        new object[]
+                        {
+                            builder,
+                            exceptTypes
+                        });
+                }
+            }
+        }
+
         public static void AssertWait(int timeout, Action expression)
         {
             var time = DateTime.Now;
@@ -90,7 +179,7 @@
             throw exceptions.First();
         }
 
-        public static TInterface WithFakeSettings<TInterface>(this TInterface item, Action<TInterface> method)
+        public static TInterface With<TInterface>(this TInterface item, Action<TInterface> method)
         {
             method(item);
             return item;
@@ -104,24 +193,36 @@
                 return (TInterface) fakeCache[typeof (TInterface)];
             }
 
-            var fake = Substitute.For<TInterface>();
-            var collection = new ReadOnlyCollection<TInterface>(
-                new List<TInterface>(
-                    new[]
-                    {
-                        fake
-                    }));
+            if (!typeof (TInterface).IsSealed)
+            {
+                var fake = Substitute.For<TInterface>();
+                var collection = new ReadOnlyCollection<TInterface>(
+                    new List<TInterface>(
+                        new[]
+                        {
+                            fake
+                        }));
 
-            Register(builder, fake);
-            Register<IReadOnlyCollection<TInterface>>(builder, collection);
-            Register<IEnumerable<TInterface>>(builder, collection);
+                Register(builder, fake);
+                Register<IReadOnlyCollection<TInterface>>(builder, collection);
+                Register<IEnumerable<TInterface>>(builder, collection);
 
-            return fake;
+                return fake;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         static void Register<TInterface>(ContainerBuilder builder, TInterface fake) where TInterface : class
         {
-            fakeCache.Add(typeof (TInterface), fake);
+            if (fakeCache.ContainsKey(typeof (TInterface)))
+            {
+                fakeCache.Add(typeof(TInterface), fake);
+                return;
+            }
+
             builder.Register(c => fake)
                    .As<TInterface>()
                    .SingleInstance();

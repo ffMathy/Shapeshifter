@@ -9,7 +9,7 @@
         bool IsRunning { get; }
 
         void Notify(
-            Func<Task> action, 
+            Func<Task> action,
             CancellationToken token = default(CancellationToken));
 
         void Stop();

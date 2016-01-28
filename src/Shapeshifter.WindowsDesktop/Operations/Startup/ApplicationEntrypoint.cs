@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Startup
+﻿namespace Shapeshifter.WindowsDesktop.Operations.Startup
 {
     using System.Threading.Tasks;
 

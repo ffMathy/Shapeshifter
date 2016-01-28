@@ -1,7 +1,5 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Factories
 {
-    using Autofac;
-
     using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,34 +7,28 @@
     using Native;
 
     [TestClass]
-    public class TextClipboardDataFactoryTest: TestBase
+    public class TextClipboardDataFactoryTest: UnitTestFor<ITextClipboardDataFactory>
     {
         [TestMethod]
         public void CanBuildDataReturnsTrueForTextFormats()
         {
-            var container = CreateContainer();
-
-            var factory = container.Resolve<IClipboardDataFactory>();
-            Assert.IsTrue(factory.CanBuildData(ClipboardNativeApi.CF_TEXT));
+            Assert.IsTrue(
+                SystemUnderTest.CanBuildData(
+                    ClipboardNativeApi.CF_TEXT));
         }
 
         [TestMethod]
         public void CanBuildDataReturnsFalseForNonTextFormats()
         {
-            var container = CreateContainer();
-
-            var factory = container.Resolve<IClipboardDataFactory>();
-            Assert.IsFalse(factory.CanBuildData(uint.MaxValue));
+            Assert.IsFalse(
+                SystemUnderTest.CanBuildData(uint.MaxValue));
         }
 
         [TestMethod]
         public void BuildDataReturnsTextData()
         {
-            var container = CreateContainer();
-
-            var factory = container.Resolve<IClipboardDataFactory>();
-            var data = factory.BuildData(ClipboardNativeApi.CF_TEXT, new byte[0]);
-
+            var data = SystemUnderTest.BuildData(
+                ClipboardNativeApi.CF_TEXT, new byte[0]);
             Assert.IsInstanceOfType(data, typeof (ClipboardTextData));
         }
     }

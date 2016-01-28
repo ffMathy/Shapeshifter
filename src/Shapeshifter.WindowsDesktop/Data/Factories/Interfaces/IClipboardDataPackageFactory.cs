@@ -4,7 +4,7 @@
 
     using Structures;
 
-    interface IClipboardDataPackageFactory
+    public interface IClipboardDataPackageFactory
     {
         IClipboardDataPackage CreateFromCurrentClipboardData();
 

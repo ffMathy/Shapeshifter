@@ -1,15 +1,17 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Window
 {
+    using System.Windows;
+
     using Interfaces;
 
     using ViewModels.Interfaces;
 
-    using Window = System.Windows.Window;
-
     /// <summary>
-    /// Interaction logic for SettingsWindow.xaml
+    ///     Interaction logic for SettingsWindow.xaml
     /// </summary>
-    public partial class SettingsWindow : Window, ISettingsWindow
+    public partial class SettingsWindow
+        : Window,
+          ISettingsWindow
     {
         public SettingsWindow(
             ISettingsViewModel viewModel)

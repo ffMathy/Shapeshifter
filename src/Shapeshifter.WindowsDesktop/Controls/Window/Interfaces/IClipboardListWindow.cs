@@ -6,6 +6,6 @@
 
     public interface IClipboardListWindow
         : IHookableWindow,
-            IDisposable,
+          IDisposable,
           ISingleInstance { }
 }

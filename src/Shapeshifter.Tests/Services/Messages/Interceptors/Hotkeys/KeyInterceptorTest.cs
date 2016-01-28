@@ -8,6 +8,7 @@
     using Factories.Interfaces;
 
     using Infrastructure.Events;
+    using Infrastructure.Threading.Interfaces;
 
     using Interfaces;
 
@@ -16,27 +17,26 @@
     using NSubstitute;
 
     [TestClass]
-    public class KeyInterceptorTest: TestBase
+    public class KeyInterceptorTest: UnitTestFor<IKeyInterceptor>
     {
+        public KeyInterceptorTest()
+        {
+            ExcludeFakeFor<IUserInterfaceThread>();
+        }
+
         [TestMethod]
         [ExpectedException(typeof (InvalidOperationException))]
         public void InstallWhenAlreadyInstalledThrowsException()
         {
-            var container = CreateContainer();
-
-            var systemUnderTest = container.Resolve<IKeyInterceptor>();
-            systemUnderTest.Install(IntPtr.Zero);
-            systemUnderTest.Install(IntPtr.Zero);
+            SystemUnderTest.Install(IntPtr.Zero);
+            SystemUnderTest.Install(IntPtr.Zero);
         }
 
         [TestMethod]
         [ExpectedException(typeof (InvalidOperationException))]
         public void UninstallWhenNotInstalledThrowsException()
         {
-            var container = CreateContainer();
-
-            var systemUnderTest = container.Resolve<IKeyInterceptor>();
-            systemUnderTest.Uninstall();
+            SystemUnderTest.Uninstall();
         }
 
         [TestMethod]
@@ -45,18 +45,14 @@
             var fakeInterception1 = Substitute.For<IHotkeyInterception>();
             var fakeInterception2 = Substitute.For<IHotkeyInterception>();
 
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IHotkeyInterceptionFactory>()
-                     .CreateInterception(Arg.Any<Key>(), true, false)
-                     .Returns(fakeInterception1, fakeInterception2);
-                });
+            Container.Resolve<IHotkeyInterceptionFactory>()
+             .CreateInterception(Arg.Any<Key>(), true, false)
+             .Returns(fakeInterception1, fakeInterception2);
+            
+            SystemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
+            SystemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.B);
 
-            var systemUnderTest = container.Resolve<IKeyInterceptor>();
-            systemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
-            systemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.B);
-
-            systemUnderTest.Install(IntPtr.Zero);
+            SystemUnderTest.Install(IntPtr.Zero);
 
             fakeInterception1.Received()
                              .Start(IntPtr.Zero);
@@ -69,17 +65,13 @@
         {
             var fakeInterception = Substitute.For<IHotkeyInterception>();
 
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IHotkeyInterceptionFactory>()
-                     .CreateInterception(Arg.Any<Key>(), true, false)
-                     .Returns(fakeInterception);
-                });
+            Container.Resolve<IHotkeyInterceptionFactory>()
+             .CreateInterception(Arg.Any<Key>(), true, false)
+             .Returns(fakeInterception);
+            
+            SystemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
 
-            var systemUnderTest = container.Resolve<IKeyInterceptor>();
-            systemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
-
-            systemUnderTest.ReceiveMessageEvent(
+            SystemUnderTest.ReceiveMessageEvent(
                 new WindowMessageReceivedArgument(
                     IntPtr.Zero,
                     Message.WM_SHOWWINDOW,
@@ -94,15 +86,12 @@
         public void ReceivingWindowHiddenEventUninstallsHotkeys()
         {
             var fakeInterception = Substitute.For<IHotkeyInterception>();
+            
+            Container.Resolve<IHotkeyInterceptionFactory>()
+             .CreateInterception(Arg.Any<Key>(), true, false)
+             .Returns(fakeInterception);
 
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IHotkeyInterceptionFactory>()
-                     .CreateInterception(Arg.Any<Key>(), true, false)
-                     .Returns(fakeInterception);
-                });
-
-            var systemUnderTest = container.Resolve<IKeyInterceptor>();
+            var systemUnderTest = Container.Resolve<IKeyInterceptor>();
             systemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
             systemUnderTest.Install(IntPtr.Zero);
 
@@ -124,23 +113,19 @@
             fakeInterception.InterceptionId.Returns(1337);
             fakeInterception.Key.Returns(Key.B);
 
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IHotkeyInterceptionFactory>()
-                     .CreateInterception(Arg.Any<Key>(), true, false)
-                     .Returns(fakeInterception);
-                });
-
-            var systemUnderTest = container.Resolve<IKeyInterceptor>();
-            systemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
-            systemUnderTest.Install(IntPtr.Zero);
+            Container.Resolve<IHotkeyInterceptionFactory>()
+             .CreateInterception(Arg.Any<Key>(), true, false)
+             .Returns(fakeInterception);
+            
+            SystemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
+            SystemUnderTest.Install(IntPtr.Zero);
 
             var eventFired = false;
-            systemUnderTest.HotkeyFired += (sender, e) => {
+            SystemUnderTest.HotkeyFired += (sender, e) => {
                 eventFired = e.Key == Key.B;
             };
 
-            systemUnderTest.ReceiveMessageEvent(
+            SystemUnderTest.ReceiveMessageEvent(
                 new WindowMessageReceivedArgument(
                     IntPtr.Zero,
                     Message.WM_HOTKEY,
@@ -156,19 +141,16 @@
             var fakeInterception1 = Substitute.For<IHotkeyInterception>();
             var fakeInterception2 = Substitute.For<IHotkeyInterception>();
 
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IHotkeyInterceptionFactory>()
-                     .CreateInterception(Arg.Any<Key>(), true, false)
-                     .Returns(fakeInterception1, fakeInterception2);
-                });
 
-            var systemUnderTest = container.Resolve<IKeyInterceptor>();
-            systemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
-            systemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.B);
+            Container.Resolve<IHotkeyInterceptionFactory>()
+             .CreateInterception(Arg.Any<Key>(), true, false)
+             .Returns(fakeInterception1, fakeInterception2);
+            
+            SystemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
+            SystemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.B);
 
-            systemUnderTest.Install(IntPtr.Zero);
-            systemUnderTest.Uninstall();
+            SystemUnderTest.Install(IntPtr.Zero);
+            SystemUnderTest.Uninstall();
 
             fakeInterception1.Received()
                              .Stop(IntPtr.Zero);
@@ -179,15 +161,9 @@
         [TestMethod]
         public void AddInterceptingKeyCreatesInterception()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IHotkeyInterceptionFactory>();
-                });
+            SystemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
 
-            var systemUnderTest = container.Resolve<IKeyInterceptor>();
-            systemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
-
-            var fakeFactory = container.Resolve<IHotkeyInterceptionFactory>();
+            var fakeFactory = Container.Resolve<IHotkeyInterceptionFactory>();
             fakeFactory.Received()
                        .CreateInterception(Key.A, true, false);
         }
@@ -196,16 +172,13 @@
         public void AddInterceptingKeyOnInstalledInterceptorInstallsInterception()
         {
             var fakeInterception = Substitute.For<IHotkeyInterception>();
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IHotkeyInterceptionFactory>()
-                     .CreateInterception(Key.A, true, false)
-                     .Returns(fakeInterception);
-                });
 
-            var systemUnderTest = container.Resolve<IKeyInterceptor>();
-            systemUnderTest.Install(IntPtr.Zero);
-            systemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
+            Container.Resolve<IHotkeyInterceptionFactory>()
+             .CreateInterception(Key.A, true, false)
+             .Returns(fakeInterception);
+            
+            SystemUnderTest.Install(IntPtr.Zero);
+            SystemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
 
             fakeInterception.Received()
                             .Start(IntPtr.Zero);
@@ -214,25 +187,16 @@
         [TestMethod]
         public void RemoveInterceptingKeyWithNoKeysDoesNotDoAnything()
         {
-            var container = CreateContainer();
-
-            var systemUnderTest = container.Resolve<IKeyInterceptor>();
-            systemUnderTest.RemoveInterceptingKey(IntPtr.Zero, Key.A);
+            SystemUnderTest.RemoveInterceptingKey(IntPtr.Zero, Key.A);
         }
 
         [TestMethod]
         public void AddInterceptingKeyWithKeyAlreadyThereDoesNotDoAnything()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IHotkeyInterceptionFactory>();
-                });
+            SystemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
+            SystemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.B);
 
-            var systemUnderTest = container.Resolve<IKeyInterceptor>();
-            systemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
-            systemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.B);
-
-            var fakeFactory = container.Resolve<IHotkeyInterceptionFactory>();
+            var fakeFactory = Container.Resolve<IHotkeyInterceptionFactory>();
             fakeFactory.Received(1)
                        .CreateInterception(Key.A, true, false);
         }
@@ -241,18 +205,15 @@
         public void RemoveInterceptingKeyOnInstalledInterceptorUninstallsInterception()
         {
             var fakeInterception = Substitute.For<IHotkeyInterception>();
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IHotkeyInterceptionFactory>()
-                     .CreateInterception(Key.A, true, false)
-                     .Returns(fakeInterception);
-                });
 
-            var systemUnderTest = container.Resolve<IKeyInterceptor>();
-            systemUnderTest.Install(IntPtr.Zero);
+            Container.Resolve<IHotkeyInterceptionFactory>()
+             .CreateInterception(Key.A, true, false)
+             .Returns(fakeInterception);
+            
+            SystemUnderTest.Install(IntPtr.Zero);
 
-            systemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
-            systemUnderTest.RemoveInterceptingKey(IntPtr.Zero, Key.A);
+            SystemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
+            SystemUnderTest.RemoveInterceptingKey(IntPtr.Zero, Key.A);
 
             fakeInterception.Received()
                             .Stop(IntPtr.Zero);

@@ -29,8 +29,7 @@
             this.processManager = processManager;
             this.asyncFilter = asyncFilter;
         }
-
-        //TODO: make the description include the links that will be opened by making a GetDescription(data) method instead.
+        
         public string Description => "Open the link that is present in the clipboard.";
 
         public byte Order => 200;

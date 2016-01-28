@@ -6,8 +6,6 @@
 
     using Autofac;
 
-    using Binders.Interfaces;
-
     using Data.Actions.Interfaces;
     using Data.Interfaces;
 
@@ -24,399 +22,188 @@
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
     [TestClass]
-    public class ClipboardListViewModelTest: TestBase
+    public class ClipboardListViewModelTest: UnitTestFor<IClipboardListViewModel>
     {
         [TestMethod]
         public void SelectedElementChangedTriggersChangedEvent()
         {
-            var container =
-                CreateContainer(
-                    c => {
-                        c.RegisterFake<IAsyncListDictionaryBinder
-                            <IClipboardDataControlPackage, IAction>>();
-                    });
-
-            var viewModel = container.Resolve<IClipboardListViewModel>();
-
             object eventSender = null;
 
-            viewModel.PropertyChanged += (sender, e) => {
-                if (e.PropertyName == nameof(viewModel.SelectedElement))
+            SystemUnderTest.PropertyChanged += (sender, e) => {
+                if (e.PropertyName == nameof(SystemUnderTest.SelectedElement))
                 {
                     eventSender = sender;
                 }
             };
-            viewModel.SelectedElement = Substitute.For<IClipboardDataControlPackage>();
+            SystemUnderTest.SelectedElement = Substitute.For<IClipboardDataControlPackage>();
 
-            Assert.AreSame(viewModel, eventSender);
+            Assert.AreSame(SystemUnderTest, eventSender);
         }
 
         [TestMethod]
         public void SelectedElementChangesToTheSecondWhenFirstIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakePackage1 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
 
-            systemUnderTest.Elements.Add(fakePackage1);
-            systemUnderTest.Elements.Add(fakePackage2);
-            systemUnderTest.Elements.Add(fakePackage3);
+            SystemUnderTest.Elements.Add(fakePackage1);
+            SystemUnderTest.Elements.Add(fakePackage2);
+            SystemUnderTest.Elements.Add(fakePackage3);
 
-            systemUnderTest.SelectedElement = fakePackage1;
+            SystemUnderTest.SelectedElement = fakePackage1;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Down, false));
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.SelectedNextItem += Raise.Event();
 
-            Assert.AreSame(systemUnderTest.SelectedElement, fakePackage2);
+            Assert.AreSame(SystemUnderTest.SelectedElement, fakePackage2);
         }
 
         [TestMethod]
         public void SelectedElementChangesToTheThirdWhenSecondIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakePackage1 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
 
-            systemUnderTest.Elements.Add(fakePackage1);
-            systemUnderTest.Elements.Add(fakePackage2);
-            systemUnderTest.Elements.Add(fakePackage3);
+            SystemUnderTest.Elements.Add(fakePackage1);
+            SystemUnderTest.Elements.Add(fakePackage2);
+            SystemUnderTest.Elements.Add(fakePackage3);
 
-            systemUnderTest.SelectedElement = fakePackage2;
+            SystemUnderTest.SelectedElement = fakePackage2;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Down, false));
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.SelectedNextItem += Raise.Event();
 
-            Assert.AreSame(systemUnderTest.SelectedElement, fakePackage3);
+            Assert.AreSame(SystemUnderTest.SelectedElement, fakePackage3);
         }
 
         [TestMethod]
         public void SelectedElementChangesToTheFirstWhenThirdIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakePackage1 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
 
-            systemUnderTest.Elements.Add(fakePackage1);
-            systemUnderTest.Elements.Add(fakePackage2);
-            systemUnderTest.Elements.Add(fakePackage3);
+            SystemUnderTest.Elements.Add(fakePackage1);
+            SystemUnderTest.Elements.Add(fakePackage2);
+            SystemUnderTest.Elements.Add(fakePackage3);
 
-            systemUnderTest.SelectedElement = fakePackage3;
+            SystemUnderTest.SelectedElement = fakePackage3;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Down, false));
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.SelectedNextItem += Raise.Event();
 
-            Assert.AreSame(systemUnderTest.SelectedElement, fakePackage1);
+            Assert.AreSame(SystemUnderTest.SelectedElement, fakePackage1);
         }
 
         [TestMethod]
         public void SelectedElementChangesToTheThirdWhenFirstIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakePackage1 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
 
-            systemUnderTest.Elements.Add(fakePackage1);
-            systemUnderTest.Elements.Add(fakePackage2);
-            systemUnderTest.Elements.Add(fakePackage3);
+            SystemUnderTest.Elements.Add(fakePackage1);
+            SystemUnderTest.Elements.Add(fakePackage2);
+            SystemUnderTest.Elements.Add(fakePackage3);
 
-            systemUnderTest.SelectedElement = fakePackage1;
+            SystemUnderTest.SelectedElement = fakePackage1;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Up, false));
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.SelectedPreviousItem += Raise.Event();
 
-            Assert.AreSame(systemUnderTest.SelectedElement, fakePackage3);
+            Assert.AreSame(SystemUnderTest.SelectedElement, fakePackage3);
         }
 
         [TestMethod]
         public void SelectedElementChangesToTheSecondWhenThirdIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakePackage1 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
 
-            systemUnderTest.Elements.Add(fakePackage1);
-            systemUnderTest.Elements.Add(fakePackage2);
-            systemUnderTest.Elements.Add(fakePackage3);
+            SystemUnderTest.Elements.Add(fakePackage1);
+            SystemUnderTest.Elements.Add(fakePackage2);
+            SystemUnderTest.Elements.Add(fakePackage3);
 
-            systemUnderTest.SelectedElement = fakePackage3;
+            SystemUnderTest.SelectedElement = fakePackage3;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Up, false));
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.SelectedPreviousItem += Raise.Event();
 
-            Assert.AreSame(systemUnderTest.SelectedElement, fakePackage2);
+            Assert.AreSame(SystemUnderTest.SelectedElement, fakePackage2);
         }
 
         [TestMethod]
         public void SelectedElementChangesToTheFirstWhenSecondIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakePackage1 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage2 = Substitute.For<IClipboardDataControlPackage>();
             var fakePackage3 = Substitute.For<IClipboardDataControlPackage>();
 
-            systemUnderTest.Elements.Add(fakePackage1);
-            systemUnderTest.Elements.Add(fakePackage2);
-            systemUnderTest.Elements.Add(fakePackage3);
+            SystemUnderTest.Elements.Add(fakePackage1);
+            SystemUnderTest.Elements.Add(fakePackage2);
+            SystemUnderTest.Elements.Add(fakePackage3);
 
-            systemUnderTest.SelectedElement = fakePackage2;
+            SystemUnderTest.SelectedElement = fakePackage2;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Up, false));
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.SelectedPreviousItem += Raise.Event();
 
-            Assert.AreSame(systemUnderTest.SelectedElement, fakePackage1);
+            Assert.AreSame(SystemUnderTest.SelectedElement, fakePackage1);
         }
 
         [TestMethod]
         public void SelectedActionChangesToTheSecondWhenFirstIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakeAction1 = Substitute.For<IAction>();
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
 
-            systemUnderTest.Actions.Add(fakeAction1);
-            systemUnderTest.Actions.Add(fakeAction2);
-            systemUnderTest.Actions.Add(fakeAction3);
+            SystemUnderTest.Actions.Add(fakeAction1);
+            SystemUnderTest.Actions.Add(fakeAction2);
+            SystemUnderTest.Actions.Add(fakeAction3);
 
-            systemUnderTest.SelectedAction = fakeAction1;
+            SystemUnderTest.SelectedAction = fakeAction1;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
+            fakeMediator.SelectedNextItem += Raise.Event();
 
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Down, false));
-
-            Assert.AreSame(systemUnderTest.SelectedAction, fakeAction2);
+            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction2);
         }
 
         [TestMethod]
         public void SelectedActionChangesToTheThirdWhenSecondIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakeAction1 = Substitute.For<IAction>();
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
 
-            systemUnderTest.Actions.Add(fakeAction1);
-            systemUnderTest.Actions.Add(fakeAction2);
-            systemUnderTest.Actions.Add(fakeAction3);
+            SystemUnderTest.Actions.Add(fakeAction1);
+            SystemUnderTest.Actions.Add(fakeAction2);
+            SystemUnderTest.Actions.Add(fakeAction3);
 
-            systemUnderTest.SelectedAction = fakeAction2;
+            SystemUnderTest.SelectedAction = fakeAction2;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
+            fakeMediator.SelectedNextItem += Raise.Event();
 
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Down, false));
-
-            Assert.AreSame(systemUnderTest.SelectedAction, fakeAction3);
-        }
-
-        [TestMethod]
-        public void MediatorIsCancelledWhenInDataListAndLeftIsPressed()
-        {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
-                    c.RegisterFake<IAsyncListDictionaryBinder
-                        <IClipboardDataControlPackage, IAction>>();
-                });
-
-            container.Resolve<IClipboardListViewModel>();
-
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Left, false));
-
-            var fakeMediator = container
-                .Resolve<IClipboardUserInterfaceMediator>();
-            fakeMediator.Received()
-                        .Cancel();
-        }
-
-        [TestMethod]
-        public void MediatorIsCancelledWhenInActionListAndRightIsPressed()
-        {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
-                    c.RegisterFake<IAsyncListDictionaryBinder
-                        <IClipboardDataControlPackage, IAction>>();
-                });
-
-            container.Resolve<IClipboardListViewModel>();
-
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
-
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
-
-            var fakeMediator = container
-                .Resolve<IClipboardUserInterfaceMediator>();
-            fakeMediator.Received()
-                        .Cancel();
+            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction3);
         }
 
         [TestMethod]
         public void WhenPasteIsRequestedSelectedActionIsInvoked()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
-                    c
-                        .RegisterFake<IAsyncListDictionaryBinder
-                            <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakeAction = Substitute.For<IAction>();
-            systemUnderTest.SelectedAction = fakeAction;
+            SystemUnderTest.SelectedAction = fakeAction;
 
             var fakeElement = Substitute.For<IClipboardDataControlPackage>();
-            systemUnderTest.SelectedElement = fakeElement;
+            SystemUnderTest.SelectedElement = fakeElement;
 
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.PastePerformed +=
                 Raise.Event<EventHandler
                     <PastePerformedEventArgument>>(new object());
@@ -428,21 +215,11 @@
         [TestMethod]
         public void UserInterfaceShownIsBubbledUpFromDurationMediator()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
-                    c
-                        .RegisterFake<IAsyncListDictionaryBinder
-                            <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
             var showEventCount = 0;
+            
+            SystemUnderTest.UserInterfaceShown += (sender, e) => showEventCount++;
 
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-            systemUnderTest.UserInterfaceShown += (sender, e) => showEventCount++;
-
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.UserInterfaceShown += Raise.Event<EventHandler<UserInterfaceShownEventArgument>>(new object());
 
             Assert.AreEqual(1, showEventCount);
@@ -451,283 +228,126 @@
         [TestMethod]
         public void UserInterfaceHiddenIsBubbledUpFromDurationMediator()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
-                    c
-                        .RegisterFake<IAsyncListDictionaryBinder
-                            <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
             var hideEventCount = 0;
+            
+            SystemUnderTest.UserInterfaceHidden += (sender, e) => hideEventCount++;
 
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-            systemUnderTest.UserInterfaceHidden += (sender, e) => hideEventCount++;
-
-            var fakeMediator = container.Resolve<IClipboardUserInterfaceMediator>();
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             fakeMediator.UserInterfaceHidden += Raise.Event<EventHandler<UserInterfaceHiddenEventArgument>>(new object());
 
             Assert.AreEqual(1, hideEventCount);
         }
 
         [TestMethod]
-        public void MediatorIsCancelledWhenInItemListAndLeftIsPressed()
-        {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
-                    c.RegisterFake<IAsyncListDictionaryBinder
-                        <IClipboardDataControlPackage, IAction>>();
-                });
-
-            container.Resolve<IClipboardListViewModel>();
-
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Left, false));
-
-            var fakeMediator = container
-                .Resolve<IClipboardUserInterfaceMediator>();
-            fakeMediator.Received()
-                        .Cancel();
-        }
-
-        [TestMethod]
-        public void CanAlternateBetweenListsWithoutCancellingMediator()
-        {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c.RegisterFake<IClipboardUserInterfaceMediator>();
-                    c.RegisterFake<IAsyncListDictionaryBinder
-                        <IClipboardDataControlPackage, IAction>>();
-                });
-
-            container.Resolve<IClipboardListViewModel>();
-
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
-
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Left, false));
-
-            var fakeMediator = container
-                .Resolve<IClipboardUserInterfaceMediator>();
-            fakeMediator.DidNotReceive()
-                        .Cancel();
-        }
-
-        [TestMethod]
         public void SelectedActionChangesToTheFirstWhenThirdIsSelectedAndDownIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakeAction1 = Substitute.For<IAction>();
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
 
-            systemUnderTest.Actions.Add(fakeAction1);
-            systemUnderTest.Actions.Add(fakeAction2);
-            systemUnderTest.Actions.Add(fakeAction3);
+            SystemUnderTest.Actions.Add(fakeAction1);
+            SystemUnderTest.Actions.Add(fakeAction2);
+            SystemUnderTest.Actions.Add(fakeAction3);
 
-            systemUnderTest.SelectedAction = fakeAction3;
+            SystemUnderTest.SelectedAction = fakeAction3;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
+            fakeMediator.SelectedNextItem += Raise.Event();
 
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Down, false));
-
-            Assert.AreSame(systemUnderTest.SelectedAction, fakeAction1);
+            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction1);
         }
 
         [TestMethod]
         public void SelectedActionChangesToTheThirdWhenFirstIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakeAction1 = Substitute.For<IAction>();
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
 
-            systemUnderTest.Actions.Add(fakeAction1);
-            systemUnderTest.Actions.Add(fakeAction2);
-            systemUnderTest.Actions.Add(fakeAction3);
+            SystemUnderTest.Actions.Add(fakeAction1);
+            SystemUnderTest.Actions.Add(fakeAction2);
+            SystemUnderTest.Actions.Add(fakeAction3);
 
-            systemUnderTest.SelectedAction = fakeAction1;
+            SystemUnderTest.SelectedAction = fakeAction1;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
+            fakeMediator.SelectedPreviousItem += Raise.Event();
 
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Up, false));
-
-            Assert.AreSame(systemUnderTest.SelectedAction, fakeAction3);
+            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction3);
         }
 
         [TestMethod]
         public void SelectedActionChangesToTheSecondWhenThirdIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakeAction1 = Substitute.For<IAction>();
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
 
-            systemUnderTest.Actions.Add(fakeAction1);
-            systemUnderTest.Actions.Add(fakeAction2);
-            systemUnderTest.Actions.Add(fakeAction3);
+            SystemUnderTest.Actions.Add(fakeAction1);
+            SystemUnderTest.Actions.Add(fakeAction2);
+            SystemUnderTest.Actions.Add(fakeAction3);
 
-            systemUnderTest.SelectedAction = fakeAction3;
+            SystemUnderTest.SelectedAction = fakeAction3;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
+            fakeMediator.SelectedPreviousItem += Raise.Event();
 
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Up, false));
-
-            Assert.AreSame(systemUnderTest.SelectedAction, fakeAction2);
+            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction2);
         }
 
         [TestMethod]
         public void SelectedActionChangesToTheFirstWhenSecondIsSelectedAndUpIsPressed()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IKeyInterceptor>();
-                    c
-                        .RegisterFake
-                        <
-                            IAsyncListDictionaryBinder
-                                <IClipboardDataControlPackage, IAction>>
-                        ();
-                });
-
-            var systemUnderTest = container.Resolve<IClipboardListViewModel>();
-
             var fakeAction1 = Substitute.For<IAction>();
             var fakeAction2 = Substitute.For<IAction>();
             var fakeAction3 = Substitute.For<IAction>();
 
-            systemUnderTest.Actions.Add(fakeAction1);
-            systemUnderTest.Actions.Add(fakeAction2);
-            systemUnderTest.Actions.Add(fakeAction3);
+            SystemUnderTest.Actions.Add(fakeAction1);
+            SystemUnderTest.Actions.Add(fakeAction2);
+            SystemUnderTest.Actions.Add(fakeAction3);
 
-            systemUnderTest.SelectedAction = fakeAction2;
+            SystemUnderTest.SelectedAction = fakeAction2;
 
-            var fakeKeyInterceptor = container.Resolve<IKeyInterceptor>();
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Right, false));
+            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
+            fakeMediator.SelectedPreviousItem += Raise.Event();
 
-            fakeKeyInterceptor.HotkeyFired +=
-                Raise.Event<EventHandler<HotkeyFiredArgument>>(
-                    new object(),
-                    new HotkeyFiredArgument(Key.Up, false));
-
-            Assert.AreSame(systemUnderTest.SelectedAction, fakeAction1);
+            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction1);
         }
 
         [TestMethod]
         public void ControlAddedSetsSelected()
         {
-            var fakeUserInterfaceMediator = Substitute.For<IClipboardUserInterfaceMediator>();
+            var fakeUserInterfaceMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
-
-            var container = CreateContainer(
-                c => {
-                    c.RegisterInstance(fakeUserInterfaceMediator);
-                });
-
-            var viewModel = container.Resolve<IClipboardListViewModel>();
-            fakeUserInterfaceMediator.ControlAdded +=
-                Raise.Event<EventHandler<ControlEventArgument>>(
-                    viewModel,
-                    new ControlEventArgument(
+            
+            fakeUserInterfaceMediator.PackageAdded +=
+                Raise.Event<EventHandler<PackageEventArgument>>(
+                    fakePackage,
+                    new PackageEventArgument(
                         fakePackage));
 
-            Assert.AreSame(fakePackage, viewModel.SelectedElement);
+            Assert.AreSame(fakePackage, SystemUnderTest.SelectedElement);
         }
 
         [TestMethod]
         public void ControlAddedInsertsElement()
         {
-            var fakeUserInterfaceMediator = Substitute.For<IClipboardUserInterfaceMediator>();
+            var fakeUserInterfaceMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
-
-            var container = CreateContainer(
-                c => {
-                    c.RegisterInstance(fakeUserInterfaceMediator);
-                });
-
-            var viewModel = container.Resolve<IClipboardListViewModel>();
-            fakeUserInterfaceMediator.ControlAdded +=
-                Raise.Event<EventHandler<ControlEventArgument>>(
-                    viewModel,
-                    new ControlEventArgument(
+            
+            fakeUserInterfaceMediator.PackageAdded +=
+                Raise.Event<EventHandler<PackageEventArgument>>(
+                    SystemUnderTest,
+                    new PackageEventArgument(
                         fakePackage));
 
-            Assert.AreSame(fakePackage, viewModel.Elements.Single());
+            Assert.AreSame(fakePackage, SystemUnderTest.Elements.Single());
         }
     }
 }

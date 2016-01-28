@@ -4,6 +4,6 @@
 
     public interface IClipboardTextDataViewModel: IClipboardDataViewModel<IClipboardTextData>
     {
-        string FriendlyText { get; }
+        string FriendlyText { get; } 
     }
 }

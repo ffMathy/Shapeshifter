@@ -13,20 +13,14 @@
     using NSubstitute;
 
     [TestClass]
-    public class ClipboardInjectionServiceTest: TestBase
+    public class ClipboardInjectionServiceTest: UnitTestFor<IClipboardInjectionService>
     {
         [TestMethod]
         public void InjectingDataSkipsNextCopyInterception()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IClipboardCopyInterceptor>();
-                });
+            SystemUnderTest.InjectData(Substitute.For<IClipboardDataPackage>());
 
-            var injectionService = container.Resolve<IClipboardInjectionService>();
-            injectionService.InjectData(Substitute.For<IClipboardDataPackage>());
-
-            var fakeInterceptor = container.Resolve<IClipboardCopyInterceptor>();
+            var fakeInterceptor = Container.Resolve<IClipboardCopyInterceptor>();
             fakeInterceptor.Received()
                            .SkipNext();
         }

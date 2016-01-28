@@ -7,6 +7,8 @@
 
     using Autofac;
 
+    using Controls.Clipboard.Factories.Interfaces;
+
     using Data.Factories.Interfaces;
     using Data.Interfaces;
 
@@ -19,33 +21,20 @@
     using NSubstitute;
 
     [TestClass]
-    public class ClipboardPersistanceServiceTest: TestBase
+    public class ClipboardPersistanceServiceTest: UnitTestFor<IClipboardPersistanceService>
     {
-        [TestCleanup]
-        public void Cleanup()
-        {
-            var container = CreateContainer();
-
-            var fileManager = container.Resolve<IFileManager>();
-            var folder = fileManager.PrepareIsolatedFolder();
-
-            Directory.Delete(folder, true);
-        }
 
         [TestMethod]
         public async Task CanPersistClipboardData()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IFileManager>()
-                     .PrepareNewIsolatedFolder(
-                         Arg.Is<string>(
-                             x => x.StartsWith("Pinned")))
-                     .Returns("preparedFolder");
-                });
+            Container.Resolve<IFileManager>()
+             .PrepareNewIsolatedFolder(
+                 Arg.Is<string>(
+                     x => x.StartsWith("Pinned")))
+             .Returns("preparedFolder");
 
             var fakeData1 = Substitute.For<IClipboardData>()
-                                      .WithFakeSettings(
+                                      .With(
                                           x => {
                                               x.RawFormat.Returns(1337u);
                                               x.RawData.Returns(
@@ -56,7 +45,7 @@
                                                   });
                                           });
             var fakeData2 = Substitute.For<IClipboardData>()
-                                      .WithFakeSettings(
+                                      .With(
                                           x => {
                                               x.RawFormat.Returns(1338u);
                                               x.RawData.Returns(
@@ -78,18 +67,18 @@
                             fakeData2
                         }));
 
-            var service = container.Resolve<IClipboardPersistanceService>();
+            var service = Container.Resolve<IClipboardPersistanceService>();
             await service.PersistClipboardPackageAsync(fakePackage);
 
-            var fakeFileManager = container.Resolve<IFileManager>();
+            var fakeFileManager = Container.Resolve<IFileManager>();
             fakeFileManager
                 .Received()
-                .WriteBytesToTemporaryFile(
+                .WriteBytesToFile(
                     @"preparedFolder\1.1337",
                     fakeData1.RawData);
             fakeFileManager
                 .Received()
-                .WriteBytesToTemporaryFile(
+                .WriteBytesToFile(
                     @"preparedFolder\2.1338",
                     fakeData2.RawData);
         }
@@ -98,35 +87,37 @@
         [TestMethod]
         public async Task CanFetchPersistedPackages()
         {
-            var container = CreateContainer(
-                c => {
-                    c.RegisterFake<IClipboardDataFactory>()
-                     .WithFakeSettings(
-                         x => {
-                             x.CanBuildData(Arg.Any<uint>())
-                              .Returns(true);
+            IncludeFakeFor<IClipboardDataFactory>();
 
-                             x.BuildData(
-                                 Arg.Any<uint>(),
-                                 Arg.Any<byte[]>())
-                              .Returns(
-                                  r => {
-                                      var resultingData = Substitute.For<IClipboardData>();
-                                      resultingData
-                                          .RawData
-                                          .Returns(
-                                              r.Arg<byte[]>());
-                                      resultingData
-                                          .RawFormat
-                                          .Returns(
-                                              r.Arg<uint>());
-                                      return resultingData;
-                                  });
-                         });
-                });
+            ExcludeFakeFor<IClipboardDataPackageFactory>();
+            ExcludeFakeFor<IFileManager>();
+
+            Container.Resolve<IClipboardDataFactory>()
+             .With(
+                 x => {
+                     x.CanBuildData(Arg.Any<uint>())
+                      .Returns(true);
+
+                     x.BuildData(
+                         Arg.Any<uint>(),
+                         Arg.Any<byte[]>())
+                      .Returns(
+                          r => {
+                              var resultingData = Substitute.For<IClipboardData>();
+                              resultingData
+                                  .RawData
+                                  .Returns(
+                                      r.Arg<byte[]>());
+                              resultingData
+                                  .RawFormat
+                                  .Returns(
+                                      r.Arg<uint>());
+                              return resultingData;
+                          });
+                 });
 
             var fakeData1 = Substitute.For<IClipboardData>()
-                                      .WithFakeSettings(
+                                      .With(
                                           x => {
                                               x.RawFormat.Returns(1337u);
                                               x.RawData.Returns(
@@ -137,7 +128,7 @@
                                                   });
                                           });
             var fakeData2 = Substitute.For<IClipboardData>()
-                                      .WithFakeSettings(
+                                      .With(
                                           x => {
                                               x.RawFormat.Returns(1338u);
                                               x.RawData.Returns(
@@ -169,12 +160,11 @@
                             fakeData2,
                             fakeData1
                         }));
+            
+            await SystemUnderTest.PersistClipboardPackageAsync(fakePackage1);
+            await SystemUnderTest.PersistClipboardPackageAsync(fakePackage2);
 
-            var service = container.Resolve<IClipboardPersistanceService>();
-            await service.PersistClipboardPackageAsync(fakePackage1);
-            await service.PersistClipboardPackageAsync(fakePackage2);
-
-            var persistedPackages = await service.GetPersistedPackagesAsync();
+            var persistedPackages = await SystemUnderTest.GetPersistedPackagesAsync();
             var persistedPackagesArray = persistedPackages.ToArray();
 
             Assert.AreEqual(2, persistedPackagesArray.Length);

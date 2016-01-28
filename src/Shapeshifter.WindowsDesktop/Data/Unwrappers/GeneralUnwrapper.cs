@@ -8,7 +8,7 @@
     using Native;
     using Native.Interfaces;
 
-    class GeneralUnwrapper: IMemoryUnwrapper
+    class GeneralUnwrapper: IGeneralUnwrapper
     {
         readonly IClipboardNativeApi clipboardNativeApi;
 

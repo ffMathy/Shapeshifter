@@ -1,12 +1,12 @@
-﻿namespace Shapeshifter.WindowsDesktop.Startup
+﻿namespace Shapeshifter.WindowsDesktop.Operations.Startup
 {
     using System.Threading.Tasks;
 
     using Infrastructure.Environment.Interfaces;
 
-    using Services.Updates.Interfaces;
-
     using Interfaces;
+
+    using Services.Updates.Interfaces;
 
     public class PostPreparationOperation: IPostPreparationOperation
     {

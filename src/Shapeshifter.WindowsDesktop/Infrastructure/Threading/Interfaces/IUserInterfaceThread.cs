@@ -2,7 +2,7 @@
 {
     using System;
 
-    interface IUserInterfaceThread
+    public interface IUserInterfaceThread
     {
         void Invoke(Action action);
     }
