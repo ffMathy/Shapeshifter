@@ -20,6 +20,10 @@
     {
 
         ILifetimeScope container;
+
+        /// <summary>
+        /// Represents the container, which has the class of the unit's dependencies automatically registered as fakes. You can use the <see cref="IncludeFakeFor{T}"/> and <see cref="ExcludeFakeFor{T}"/> method to exclude or include fakes other than the ones automatically registered.
+        /// </summary>
         protected ILifetimeScope Container
         {
             get
@@ -30,6 +34,10 @@
         }
 
         TSystemUnderTest systemUnderTest;
+
+        /// <summary>
+        /// Represents the class of the unit being tested, with all its dependencies registered as fakes in the container automatically. You can use the <see cref="IncludeFakeFor{T}"/> and <see cref="ExcludeFakeFor{T}"/> method to exclude or include fakes other than the ones automatically registered.
+        /// </summary>
         protected TSystemUnderTest SystemUnderTest
         {
             get
