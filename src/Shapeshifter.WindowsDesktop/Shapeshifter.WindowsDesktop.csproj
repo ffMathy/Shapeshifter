@@ -184,6 +184,7 @@
     <Compile Include="Infrastructure\Dependencies\AssemblyRegistrationHelper.cs" />
     <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
     <Compile Include="Infrastructure\Dependencies\PublicConstructorFinder.cs" />
+    <Compile Include="Infrastructure\Events\KeyDetectedArgument.cs" />
     <Compile Include="Infrastructure\Events\PastePerformedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\TrayIconClickedEventArgument.cs" />
     <Compile Include="Infrastructure\Handles\IndentationHandle.cs" />
@@ -201,6 +202,7 @@
     <Compile Include="Services\Interfaces\IPixelConversionService.cs" />
     <Compile Include="Services\Interfaces\IRegistryManager.cs" />
     <Compile Include="Services\Interfaces\ISettingsManager.cs" />
+    <Compile Include="Services\Keyboard\Interfaces\IKeyboardHook.cs" />
     <Compile Include="Services\MouseWheelHook.cs" />
     <Compile Include="Services\PixelConversionService.cs" />
     <Compile Include="Services\RegistryManager.cs" />
@@ -208,6 +210,7 @@
     <Compile Include="Services\Screen\Interfaces\IScreenManager.cs" />
     <Compile Include="Services\Screen\ScreenManager.cs" />
     <Compile Include="Services\SettingsManager.cs" />
+    <Compile Include="Services\Stability\Interfaces\IKeyboardDominanceWatcher.cs" />
     <Compile Include="Services\Tray\Interfaces\ITrayContextMenuItem.cs" />
     <Compile Include="Services\Tray\Interfaces\ITrayIconManager.cs" />
     <Compile Include="Services\Messages\Message.cs" />
@@ -321,9 +324,9 @@
     <Compile Include="Services\Clipboard\Interfaces\IDataSourceService.cs" />
     <Compile Include="Services\Interfaces\ICertificateManager.cs" />
     <Compile Include="Services\Interfaces\IProcessManager.cs" />
-    <Compile Include="Services\Updates\GitHubClientFactory.cs" />
-    <Compile Include="Services\Updates\Interfaces\IGitHubClientFactory.cs" />
-    <Compile Include="Services\Updates\Interfaces\IUpdateService.cs" />
+    <Compile Include="Services\Web\Updates\GitHubClientFactory.cs" />
+    <Compile Include="Services\Web\Updates\Interfaces\IGitHubClientFactory.cs" />
+    <Compile Include="Services\Web\Updates\Interfaces\IUpdateService.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardManager.cs" />
     <Compile Include="Services\Keyboard\KeyboardManager.cs" />
     <Compile Include="Services\Keyboard\KeyDirection.cs" />
@@ -349,7 +352,7 @@
     <Compile Include="Services\Messages\Interfaces\IWindowMessageHook.cs" />
     <Compile Include="Services\ProcessManager.cs" />
     <Compile Include="Services\Tray\TrayIconManager.cs" />
-    <Compile Include="Services\Updates\UpdateService.cs" />
+    <Compile Include="Services\Web\Updates\UpdateService.cs" />
     <Compile Include="Services\Web\DomainNameResolver.cs" />
     <Compile Include="Services\Files\FileType.cs" />
     <Compile Include="Services\Files\FileTypeInterpreter.cs" />

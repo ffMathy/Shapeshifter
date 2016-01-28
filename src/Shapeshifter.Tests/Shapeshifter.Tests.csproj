@@ -119,7 +119,7 @@
     <Compile Include="Services\ProcessManagerTest.cs" />
     <Compile Include="Services\LinkParserTest.cs" />
     <Compile Include="Services\SettingsManagerTest.cs" />
-    <Compile Include="Services\Updates\UpdateServiceTest.cs" />
+    <Compile Include="Services\Web\Updates\UpdateServiceTest.cs" />
     <Compile Include="Structures\FormatDataPairTest.cs" />
     <Compile Include="UnitTestFor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
