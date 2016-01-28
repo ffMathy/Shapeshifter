@@ -30,45 +30,35 @@
 
         void TriggerScrollEventsIfNeeded()
         {
-            const int scrollAmountNeeded =
-                Mouse.MouseWheelDeltaForOneLine;
-            if (currentDelta > scrollAmountNeeded)
+            if ((currentDelta < Mouse.MouseWheelDeltaForOneLine) || 
+                (currentDelta > -Mouse.MouseWheelDeltaForOneLine))
             {
-                ResetAccumulatedWheelDelta();
-                TriggerNeededEventsOnIncreasingDelta();
+                return;
             }
-            else if (currentDelta < -scrollAmountNeeded)
-            {
-                ResetAccumulatedWheelDelta();
-                TriggerNeededEventsOnDecreasingDelta();
-            }
-        }
 
-        void TriggerNeededEventsOnDecreasingDelta()
-        {
-            switch (currentScrollTypeMessage)
-            {
-                case Message.WM_MOUSEWHEEL:
-                    OnWheelScrolledUp();
-                    break;
+            ResetAccumulatedWheelDelta();
+
+            switch (currentScrollTypeMessage) {
 
                 case Message.WM_MOUSEHWHEEL:
                     OnWheelTilted();
                     break;
+
+                case Message.WM_MOUSEWHEEL:
+                    TriggerNeededEventsForCurrentDelta();
+                    break;
             }
         }
 
-        void TriggerNeededEventsOnIncreasingDelta()
+        void TriggerNeededEventsForCurrentDelta()
         {
-            switch (currentScrollTypeMessage)
+            if (currentDelta > Mouse.MouseWheelDeltaForOneLine)
             {
-                case Message.WM_MOUSEWHEEL:
-                    OnWheelScrolledDown();
-                    break;
-
-                case Message.WM_MOUSEHWHEEL:
-                    OnWheelTilted();
-                    break;
+                OnWheelScrolledUp();
+            }
+            else if (currentDelta < -Mouse.MouseWheelDeltaForOneLine)
+            {
+                OnWheelScrolledDown();
             }
         }
 
