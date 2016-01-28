@@ -92,5 +92,39 @@
 
             Assert.AreEqual("foo\\bar", commonPath);
         }
+
+        [TestMethod]
+        public void CanGetCommonPathWhenItIsShorterThanAnyOfThePaths()
+        {
+            var container = CreateContainer();
+            var fileManager = container.Resolve<IFileManager>();
+
+            var commonPath = fileManager.FindCommonFolderFromPaths(
+                new[]
+                {
+                    "foo\\bar\\foo",
+                    "foo\\bar\\baz\\lol",
+                    "foo\\bar\\baz"
+                });
+
+            Assert.AreEqual("foo\\bar", commonPath);
+        }
+
+        [TestMethod]
+        public void CanGetCommonPathWhenSeparatorsDiffer()
+        {
+            var container = CreateContainer();
+            var fileManager = container.Resolve<IFileManager>();
+
+            var commonPath = fileManager.FindCommonFolderFromPaths(
+                new[]
+                {
+                    "foo\\bar\\foo",
+                    "foo/bar/baz/lol",
+                    "foo/bar\\baz"
+                });
+
+            Assert.AreEqual("foo\\bar", commonPath);
+        }
     }
 }
