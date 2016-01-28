@@ -206,6 +206,14 @@
             return PrepareFolder(finalPath);
         }
 
+        public string WriteBytesToTemporaryFile(string relativePath, byte[] bytes)
+        {
+            var finalPath = GetFullPathFromTemporaryPath(relativePath);
+            WriteBytesToFile(finalPath, bytes);
+
+            return finalPath;
+        }
+
         public string PrepareTemporaryFolder(string relativePath)
         {
             var finalPath = GetFullPathFromTemporaryPath(relativePath);
@@ -246,14 +254,9 @@
             return finalPath;
         }
 
-        public string WriteBytesToTemporaryFile(string fileName, byte[] bytes)
+        public void WriteBytesToFile(string relativePath, byte[] bytes)
         {
-            var finalPath = GetFullPathFromTemporaryPath(fileName);
-            temporaryPaths.Add(finalPath);
-
-            File.WriteAllBytes(finalPath, bytes);
-
-            return finalPath;
+            File.WriteAllBytes(relativePath, bytes);
         }
     }
 }

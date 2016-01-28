@@ -73,12 +73,12 @@
             var fakeFileManager = Container.Resolve<IFileManager>();
             fakeFileManager
                 .Received()
-                .WriteBytesToTemporaryFile(
+                .WriteBytesToFile(
                     @"preparedFolder\1.1337",
                     fakeData1.RawData);
             fakeFileManager
                 .Received()
-                .WriteBytesToTemporaryFile(
+                .WriteBytesToFile(
                     @"preparedFolder\2.1338",
                     fakeData2.RawData);
         }
