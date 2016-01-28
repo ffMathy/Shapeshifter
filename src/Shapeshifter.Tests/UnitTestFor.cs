@@ -69,6 +69,7 @@
                 (c) => {
                     foreach (var fake in fakeInclusions)
                     {
+                        //TODO: clean this up
                         var method = typeof (Extensions)
                             .GetMethod(
                                 nameof(Extensions.RegisterFake))

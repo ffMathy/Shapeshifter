@@ -211,6 +211,8 @@
             var finalPath = GetFullPathFromTemporaryPath(relativePath);
             WriteBytesToFile(finalPath, bytes);
 
+            temporaryPaths.Add(finalPath);
+
             return finalPath;
         }
 

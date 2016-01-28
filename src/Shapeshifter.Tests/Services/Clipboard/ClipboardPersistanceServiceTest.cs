@@ -88,6 +88,8 @@
         public async Task CanFetchPersistedPackages()
         {
             IncludeFakeFor<IClipboardDataFactory>();
+
+            ExcludeFakeFor<IClipboardDataPackageFactory>();
             ExcludeFakeFor<IFileManager>();
 
             Container.Resolve<IClipboardDataFactory>()
