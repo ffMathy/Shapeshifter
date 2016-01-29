@@ -202,6 +202,7 @@
     <Compile Include="Services\Interfaces\IPixelConversionService.cs" />
     <Compile Include="Services\Interfaces\IRegistryManager.cs" />
     <Compile Include="Services\Interfaces\ISettingsManager.cs" />
+    <Compile Include="Services\Interfaces\IWindowManager.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardHook.cs" />
     <Compile Include="Services\Keyboard\KeyboardDominanceWatcher.cs" />
     <Compile Include="Services\MouseWheelHook.cs" />
@@ -212,8 +213,7 @@
     <Compile Include="Services\Screen\ScreenManager.cs" />
     <Compile Include="Services\SettingsManager.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardDominanceWatcher.cs" />
-    <Compile Include="Services\Tray\Interfaces\ITrayContextMenuItem.cs" />
-    <Compile Include="Services\Tray\Interfaces\ITrayIconManager.cs" />
+    <Compile Include="Services\Interfaces\ITrayIconManager.cs" />
     <Compile Include="Services\Messages\Message.cs" />
     <Compile Include="Controls\Clipboard\ClipboardImageDataControl.xaml.cs">
       <DependentUpon>ClipboardImageDataControl.xaml</DependentUpon>
@@ -352,7 +352,7 @@
     <Compile Include="Services\Messages\Interfaces\IWindowMessageInterceptor.cs" />
     <Compile Include="Services\Messages\Interfaces\IWindowMessageHook.cs" />
     <Compile Include="Services\ProcessManager.cs" />
-    <Compile Include="Services\Tray\TrayIconManager.cs" />
+    <Compile Include="Services\TrayIconManager.cs" />
     <Compile Include="Services\Web\Updates\UpdateService.cs" />
     <Compile Include="Services\Web\DomainNameResolver.cs" />
     <Compile Include="Services\Files\FileType.cs" />
@@ -387,6 +387,7 @@
     <Compile Include="Operations\Startup\PostPreparationOperation.cs" />
     <Compile Include="Operations\Startup\StartupPreparationOperation.cs" />
     <Compile Include="Operations\Startup\TrayPreparationOperation.cs" />
+    <Compile Include="Services\WindowManager.cs" />
     <Compile Include="Structures\FormatDataPair.cs" />
     <Compile Include="Controls\Window\Binders\PackageToActionBinder.cs" />
     <Compile Include="Controls\Window\ClipboardListWindow.xaml.cs">
