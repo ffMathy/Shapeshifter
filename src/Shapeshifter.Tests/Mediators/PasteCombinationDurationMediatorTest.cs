@@ -193,13 +193,13 @@
                      .IsRunning
                      .Returns(true);
 
-            SystemUnderTest.Connect(Substitute.For<IHookableWindow>());
+            SystemUnderTest.Connect();
         }
 
         [TestMethod]
         public void WhenCtrlVIsDownMonitoringLoopRuns()
         {
-            SystemUnderTest.Connect(Substitute.For<IHookableWindow>());
+            SystemUnderTest.Connect();
 
             var fakePasteHotkeyInterceptor = Container.Resolve<IPasteHotkeyInterceptor>();
             RaiseHotkeyFired(fakePasteHotkeyInterceptor);

@@ -5,7 +5,6 @@
     using System.Windows.Input;
 
     using Controls.Clipboard.Factories.Interfaces;
-    using Controls.Window.Interfaces;
 
     using Data.Interfaces;
 
@@ -215,8 +214,7 @@
             clipboardCopyInterceptor.DataCopied -= ClipboardHook_DataCopied;
         }
 
-        public void Connect(
-            IHookableWindow targetWindow)
+        public void Connect()
         {
             if (IsConnected)
             {
@@ -226,7 +224,7 @@
 
             LoadInitialClipboardData();
             InstallClipboardHook();
-            InstallPasteCombinationDurationMediator(targetWindow);
+            InstallPasteCombinationDurationMediator();
         }
 
         void LoadInitialClipboardData()
@@ -234,8 +232,7 @@
             AppendPackagesWithDataFromClipboard();
         }
 
-        void InstallPasteCombinationDurationMediator(
-            IHookableWindow targetWindow)
+        void InstallPasteCombinationDurationMediator()
         {
             pasteCombinationDurationMediator.PasteCombinationDurationPassed +=
                 PasteCombinationDurationMediator_PasteCombinationDurationPassed;
@@ -244,7 +241,7 @@
             pasteCombinationDurationMediator.AfterPasteCombinationReleased +=
                 AfterPasteCombinationDurationMediatorAfterPasteCombinationReleased;
 
-            pasteCombinationDurationMediator.Connect(targetWindow);
+            pasteCombinationDurationMediator.Connect();
         }
 
         void InstallClipboardHook()

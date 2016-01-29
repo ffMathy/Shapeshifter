@@ -3,6 +3,8 @@
     using System;
     using System.Windows.Input;
 
+    using Controls.Window.Interfaces;
+
     using Factories.Interfaces;
 
     using Infrastructure.Events;
@@ -10,12 +12,15 @@
 
     using Interfaces;
 
+    using Keyboard.Interfaces;
+
     using Stability.Interfaces;
 
     class PasteHotkeyInterceptor: IPasteHotkeyInterceptor
     {
         readonly ILogger logger;
         readonly IKeyboardDominanceWatcher keyboardDominanceWatcher;
+        readonly IKeyboardHook keyboardHook;
         readonly IHotkeyInterception hotkeyInterception;
 
         IntPtr mainWindowHandle;
@@ -28,10 +33,12 @@
         public PasteHotkeyInterceptor(
             ILogger logger,
             IHotkeyInterceptionFactory hotkeyInterceptionFactory,
-            IKeyboardDominanceWatcher keyboardDominanceWatcher)
+            IKeyboardDominanceWatcher keyboardDominanceWatcher,
+            IKeyboardHook keyboardHook)
         {
             this.logger = logger;
             this.keyboardDominanceWatcher = keyboardDominanceWatcher;
+            this.keyboardHook = keyboardHook;
 
             IsEnabled = true;
 
@@ -49,14 +56,14 @@
             keyboardDominanceWatcher.KeyboardAccessRestored += KeyboardDominanceWatcher_KeyboardAccessRestored;
         }
 
-        static void KeyboardDominanceWatcher_KeyboardAccessRestored(object sender, EventArgs e)
+        void KeyboardDominanceWatcher_KeyboardAccessRestored(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            keyboardHook.Disconnect();
         }
 
-        static void KeyboardDominanceWatcher_KeyboardAccessOverruled(object sender, EventArgs e)
+        void KeyboardDominanceWatcher_KeyboardAccessOverruled(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            keyboardHook.Connect();
         }
 
         public void Install(IntPtr windowHandle)

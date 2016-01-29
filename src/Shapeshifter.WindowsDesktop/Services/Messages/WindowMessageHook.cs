@@ -29,6 +29,8 @@
         readonly IConsumerThreadLoop consumerLoop;
         readonly IMainWindowHandleContainer mainWindowHandleContainer;
 
+        public IHookableWindow TargetWindow { get; set; }
+
         public bool IsConnected { get; private set; }
 
         public WindowMessageHook(
@@ -82,7 +84,7 @@
             }
         }
 
-        public void Connect(IHookableWindow target)
+        public void Connect()
         {
             if (IsConnected)
             {
@@ -90,7 +92,12 @@
                     "The window message hook has already been connected.");
             }
 
-            connectedWindow = target;
+            if (TargetWindow == null)
+            {
+                throw new InvalidOperationException($"You must first specify the {nameof(TargetWindow)} to connect to.");
+            }
+
+            connectedWindow = TargetWindow;
 
             InstallWindowMessageHook();
             InstallInterceptors();
@@ -102,6 +109,7 @@
         {
             var nextMessage = pendingMessages.Dequeue();
             using (logger.Indent())
+            {
                 foreach (var interceptor in windowMessageInterceptors)
                 {
                     var messageName = FormatMessage(nextMessage.Message);
@@ -113,6 +121,7 @@
 
                     interceptor.ReceiveMessageEvent(nextMessage);
                 }
+            }
         }
 
         void InstallInterceptors()

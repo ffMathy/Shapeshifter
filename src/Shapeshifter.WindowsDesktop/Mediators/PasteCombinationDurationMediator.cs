@@ -5,8 +5,6 @@
     using System.Threading.Tasks;
     using System.Windows.Input;
 
-    using Controls.Window.Interfaces;
-
     using Infrastructure.Events;
     using Infrastructure.Logging.Interfaces;
     using Infrastructure.Threading.Interfaces;
@@ -24,16 +22,15 @@
         readonly ILogger logger;
         readonly IKeyboardManager keyboardManager;
         readonly IMainThreadInvoker mainThreadInvoker;
-
+        
         readonly CancellationTokenSource threadCancellationTokenSource;
 
         bool combinationCancellationRequested;
 
         public event EventHandler<PasteCombinationDurationPassedEventArgument> PasteCombinationDurationPassed;
-
         public event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleased;
-
         public event EventHandler<PasteCombinationReleasedEventArgument> AfterPasteCombinationReleased;
+        public event EventHandler PasteCombinationHeldDown;
 
         public PasteCombinationDurationMediator(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
@@ -74,8 +71,7 @@
         public int DurationInDeciseconds
             => 5;
 
-        public void Connect(
-            IHookableWindow targetWindow)
+        public void Connect()
         {
             if (IsConnected)
             {
@@ -183,8 +179,9 @@
         void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, HotkeyFiredArgument e)
         {
             logger.Information(
-                "Paste combination duration mediator reacted to paste hotkey.",
-                1);
+                "Paste combination duration mediator reacted to paste hotkey.", 1);
+
+            OnPasteCombinationHeldDown();
 
             consumerLoop.Notify(
                 MonitorClipboardCombinationStateAsync,
@@ -201,6 +198,11 @@
 
             threadCancellationTokenSource.Cancel();
             UninstallPasteHotkeyInterceptor();
+        }
+
+        protected virtual void OnPasteCombinationHeldDown()
+        {
+            PasteCombinationHeldDown?.Invoke(this, EventArgs.Empty);
         }
     }
 }

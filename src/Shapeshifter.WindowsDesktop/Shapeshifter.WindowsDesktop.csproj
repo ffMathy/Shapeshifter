@@ -203,6 +203,7 @@
     <Compile Include="Services\Interfaces\IRegistryManager.cs" />
     <Compile Include="Services\Interfaces\ISettingsManager.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardHook.cs" />
+    <Compile Include="Services\Keyboard\KeyboardDominanceWatcher.cs" />
     <Compile Include="Services\MouseWheelHook.cs" />
     <Compile Include="Services\PixelConversionService.cs" />
     <Compile Include="Services\RegistryManager.cs" />
@@ -210,7 +211,7 @@
     <Compile Include="Services\Screen\Interfaces\IScreenManager.cs" />
     <Compile Include="Services\Screen\ScreenManager.cs" />
     <Compile Include="Services\SettingsManager.cs" />
-    <Compile Include="Services\Stability\Interfaces\IKeyboardDominanceWatcher.cs" />
+    <Compile Include="Services\Keyboard\Interfaces\IKeyboardDominanceWatcher.cs" />
     <Compile Include="Services\Tray\Interfaces\ITrayContextMenuItem.cs" />
     <Compile Include="Services\Tray\Interfaces\ITrayIconManager.cs" />
     <Compile Include="Services\Messages\Message.cs" />
