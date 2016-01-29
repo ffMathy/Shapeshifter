@@ -2,13 +2,11 @@
 {
     using System;
     using System.Linq;
-    using System.Windows.Input;
 
     using Autofac;
 
     using Controls.Clipboard.Factories.Interfaces;
     using Controls.Clipboard.Interfaces;
-    using Controls.Window.Interfaces;
 
     using Data.Interfaces;
 
@@ -20,7 +18,6 @@
 
     using NSubstitute;
 
-    using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interceptors.Interfaces;
 
     [TestClass]

@@ -1,13 +1,10 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Autofac;
-
-    using Controls.Clipboard.Factories.Interfaces;
 
     using Data.Factories.Interfaces;
     using Data.Interfaces;

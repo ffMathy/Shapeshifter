@@ -1,7 +1,5 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Interfaces
 {
-    using Controls.Window.Interfaces;
-
     using Infrastructure.Dependencies.Interfaces;
 
     public interface IHookService: ISingleInstance

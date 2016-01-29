@@ -10,7 +10,6 @@
 
     using Controls.Window.Interfaces;
 
-    using Infrastructure.Events;
     using Infrastructure.Threading.Interfaces;
 
     using Interfaces;
@@ -27,11 +26,7 @@
     {
         static void RaiseHotkeyFired(IPasteHotkeyInterceptor fakePasteHotkeyInterceptor)
         {
-            fakePasteHotkeyInterceptor.HotkeyFired += Raise.EventWith(
-                fakePasteHotkeyInterceptor,
-                new HotkeyFiredArgument(
-                    Key.V,
-                    true));
+            fakePasteHotkeyInterceptor.PasteDetected += Raise.Event();
         }
 
         [TestMethod]
@@ -90,42 +85,6 @@
                 .Notify(
                     Arg.Any<Func<Task>>(),
                     Arg.Any<CancellationToken>());
-        }
-
-        [TestMethod]
-        [SuppressMessage("ReSharper", "ImplicitlyCapturedClosure")]
-        public void WhenCombinationIsDownForLongEnoughThenEventFires()
-        {
-            //var decisecondsPassed = 0;
-            //var holdCombinationDown = true;
-
-            //container.Resolve<IThreadDelay>()
-            //         .ExecuteAsync(
-            //             Arg.Do<int>(
-            //                 x => decisecondsPassed += x / 100))
-            //         .Returns(Task.CompletedTask);
-
-            //container.Resolve<IKeyboardManager>()
-            //         .With(
-            //             x => {
-            //                 x.IsKeyDown(Key.LeftCtrl)
-            //                  .Returns(i => holdCombinationDown);
-            //                 x.IsKeyDown(Key.V)
-            //                  .Returns(i => holdCombinationDown);
-            //             });
-
-            //container.Resolve<IConsumerThreadLoop>()
-            //         .Notify(
-            //             Arg.Do<Func<Task>>(async x => await x()),
-            //             Arg.Any<CancellationToken>());
-            
-            //systemUnderTest.PasteCombinationDurationPassed += (sender, e) => holdCombinationDown = false;
-            //systemUnderTest.Connect(Substitute.For<IHookableWindow>());
-
-            //var fakePasteHotkeyInterceptor = container.Resolve<IPasteHotkeyInterceptor>();
-            //RaiseHotkeyFired(fakePasteHotkeyInterceptor);
-
-            //Assert.AreEqual(systemUnderTest.DurationInDeciseconds, decisecondsPassed);
         }
     }
 }

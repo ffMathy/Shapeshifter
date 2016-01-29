@@ -4,11 +4,11 @@
 
     using Interfaces;
 
-    public class PasteCombinationStateService: IPasteCombinationStateService
+    public class KeyboardPasteCombinationStateService: IKeyboardPasteCombinationStateService
     {
         readonly IKeyboardManager keyboardManager;
 
-        public PasteCombinationStateService(
+        public KeyboardPasteCombinationStateService(
             IKeyboardManager keyboardManager)
         {
             this.keyboardManager = keyboardManager;

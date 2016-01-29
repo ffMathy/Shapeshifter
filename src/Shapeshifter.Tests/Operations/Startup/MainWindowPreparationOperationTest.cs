@@ -8,8 +8,6 @@
     
     using NSubstitute;
 
-    using WindowsDesktop;
-
     using Controls.Window.Interfaces;
 
     using Mediators.Interfaces;

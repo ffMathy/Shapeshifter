@@ -3,8 +3,6 @@
     using System;
     using System.Windows.Input;
 
-    using Controls.Window.Interfaces;
-
     using Factories.Interfaces;
 
     using Infrastructure.Events;
@@ -12,15 +10,9 @@
 
     using Interfaces;
 
-    using Keyboard.Interfaces;
-
-    using Stability.Interfaces;
-
     class PasteHotkeyInterceptor: IPasteHotkeyInterceptor
     {
         readonly ILogger logger;
-        readonly IKeyboardDominanceWatcher keyboardDominanceWatcher;
-        readonly IKeyboardHook keyboardHook;
         readonly IHotkeyInterception hotkeyInterception;
 
         IntPtr mainWindowHandle;
@@ -28,17 +20,15 @@
         bool isInstalled;
         bool shouldSkipNext;
 
-        public event EventHandler<HotkeyFiredArgument> HotkeyFired;
+        public event EventHandler PasteDetected;
+
+        public bool IsEnabled { get; set; }
 
         public PasteHotkeyInterceptor(
             ILogger logger,
-            IHotkeyInterceptionFactory hotkeyInterceptionFactory,
-            IKeyboardDominanceWatcher keyboardDominanceWatcher,
-            IKeyboardHook keyboardHook)
+            IHotkeyInterceptionFactory hotkeyInterceptionFactory)
         {
             this.logger = logger;
-            this.keyboardDominanceWatcher = keyboardDominanceWatcher;
-            this.keyboardHook = keyboardHook;
 
             IsEnabled = true;
 
@@ -46,24 +36,6 @@
                 Key.V,
                 true,
                 true);
-
-            SetupDominanceWatcher();
-        }
-
-        void SetupDominanceWatcher()
-        {
-            keyboardDominanceWatcher.KeyboardAccessOverruled += KeyboardDominanceWatcher_KeyboardAccessOverruled;
-            keyboardDominanceWatcher.KeyboardAccessRestored += KeyboardDominanceWatcher_KeyboardAccessRestored;
-        }
-
-        void KeyboardDominanceWatcher_KeyboardAccessRestored(object sender, EventArgs e)
-        {
-            keyboardHook.Disconnect();
-        }
-
-        void KeyboardDominanceWatcher_KeyboardAccessOverruled(object sender, EventArgs e)
-        {
-            keyboardHook.Connect();
         }
 
         public void Install(IntPtr windowHandle)
@@ -75,8 +47,6 @@
 
             mainWindowHandle = windowHandle;
             hotkeyInterception.Start(windowHandle);
-
-            keyboardDominanceWatcher.Start();
 
             isInstalled = true;
         }
@@ -90,8 +60,6 @@
             }
 
             hotkeyInterception.Stop(mainWindowHandle);
-
-            keyboardDominanceWatcher.Stop();
 
             isInstalled = false;
         }
@@ -121,10 +89,7 @@
 
             logger.Information("Paste hotkey message received.", 1);
 
-            OnHotkeyFired(
-                new HotkeyFiredArgument(
-                    hotkeyInterception.Key,
-                    hotkeyInterception.ControlNeeded));
+            OnPasteDetected();
         }
 
         public void SkipNext()
@@ -132,11 +97,9 @@
             shouldSkipNext = true;
         }
 
-        public bool IsEnabled { get; set; }
-
-        protected virtual void OnHotkeyFired(HotkeyFiredArgument e)
+        protected virtual void OnPasteDetected()
         {
-            HotkeyFired?.Invoke(this, e);
+            PasteDetected?.Invoke(this, new EventArgs());
         }
     }
 }

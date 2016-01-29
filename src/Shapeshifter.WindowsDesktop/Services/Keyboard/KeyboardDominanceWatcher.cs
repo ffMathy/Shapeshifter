@@ -7,7 +7,7 @@
 
     using Interfaces;
 
-    using Mediators.Interfaces;
+    using Messages.Interceptors.Hotkeys.Interfaces;
 
     using Stability.Interfaces;
 
@@ -15,8 +15,8 @@
     {
         readonly IThreadLoop threadLoop;
         readonly IThreadDelay threadDelay;
-        readonly IPasteCombinationDurationMediator pasteDurationMediator;
-        readonly IPasteCombinationStateService pasteState;
+        readonly IKeyboardPasteCombinationStateService keyboardPasteState;
+        readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
 
         int ticks;
         bool wasNotifiedOfCombination;
@@ -27,13 +27,13 @@
         public KeyboardDominanceWatcher(
             IThreadLoop threadLoop,
             IThreadDelay threadDelay,
-            IPasteCombinationDurationMediator pasteDurationMediator,
-            IPasteCombinationStateService pasteState)
+            IKeyboardPasteCombinationStateService keyboardPasteState,
+            IPasteHotkeyInterceptor pasteHotkeyInterceptor)
         {
             this.threadLoop = threadLoop;
             this.threadDelay = threadDelay;
-            this.pasteDurationMediator = pasteDurationMediator;
-            this.pasteState = pasteState;
+            this.keyboardPasteState = keyboardPasteState;
+            this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
 
             wasNotifiedOfCombination = true;
 
@@ -42,11 +42,10 @@
 
         void SetupPasteDurationMediator()
         {
-            pasteDurationMediator.PasteCombinationHeldDown += PasteDurationMediator_PasteCombinationHeldDown;
+            pasteHotkeyInterceptor.PasteDetected += PasteHotkeyInterceptor_PasteDetected;
         }
 
-        void PasteDurationMediator_PasteCombinationHeldDown(
-            object sender, EventArgs e)
+        void PasteHotkeyInterceptor_PasteDetected(object sender, EventArgs e)
         {
             if (!wasNotifiedOfCombination)
             {
@@ -65,7 +64,7 @@
 
         async Task RunDetection()
         {
-            if (pasteState.IsCombinationFullyHeldDown)
+            if (keyboardPasteState.IsCombinationFullyHeldDown)
             {
                 HandleCombinationHeldDown();
             }
@@ -74,12 +73,12 @@
                 ticks = 0;
             }
 
-            await threadDelay.ExecuteAsync(10);
+            await threadDelay.ExecuteAsync(100);
         }
 
         void HandleCombinationHeldDown()
         {
-            const int ticksNeeded = 10;
+            const int ticksNeeded = 2;
             ticks++;
 
             var isOverruled =

@@ -13,7 +13,7 @@
     using WindowsDesktop;
 
     [TestClass]
-    public class PasteCombinationStateServiceTest: UnitTestFor<IPasteCombinationStateService>
+    public class PasteCombinationStateServiceTest: UnitTestFor<IKeyboardPasteCombinationStateService>
     {
         [TestMethod]
         public void CombinationIsHeldDownWhenCtrlVIsDown()

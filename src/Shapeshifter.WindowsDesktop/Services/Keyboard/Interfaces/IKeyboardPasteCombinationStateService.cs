@@ -1,6 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Keyboard.Interfaces
 {
-    public interface IPasteCombinationStateService
+    public interface IKeyboardPasteCombinationStateService
     {
         bool IsCombinationFullyHeldDown { get; }
         bool IsCombinationPartiallyHeldDown { get; }

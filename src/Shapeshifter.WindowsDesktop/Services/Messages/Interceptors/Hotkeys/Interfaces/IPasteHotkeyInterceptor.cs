@@ -1,7 +1,13 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Messages.Interceptors.Hotkeys.
     Interfaces
 {
-    public interface IPasteHotkeyInterceptor: IHotkeyInterceptor
+    using Keyboard.Interfaces;
+
+    using Messages.Interfaces;
+
+    public interface IPasteHotkeyInterceptor: 
+        IPasteDetector,
+        IWindowMessageInterceptor
     {
         bool IsEnabled { get; set; }
 

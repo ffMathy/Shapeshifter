@@ -8,8 +8,6 @@
 
     using Data.Interfaces;
 
-    using Infrastructure.Threading.Interfaces;
-
     using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;

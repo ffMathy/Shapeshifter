@@ -9,8 +9,6 @@
     using System.Threading.Tasks;
 
     using Autofac;
-    using Autofac.Core;
-    using Autofac.Core.Activators.Reflection;
 
     using Controls.Designer.Services;
 
