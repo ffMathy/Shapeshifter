@@ -5,6 +5,8 @@
 
     using Infrastructure.Threading.Interfaces;
 
+    using Interfaces;
+
     using Mediators.Interfaces;
 
     using Stability.Interfaces;
@@ -14,6 +16,7 @@
         readonly IThreadLoop threadLoop;
         readonly IThreadDelay threadDelay;
         readonly IPasteCombinationDurationMediator pasteDurationMediator;
+        readonly IPasteCombinationStateService pasteState;
 
         int ticks;
         bool wasNotifiedOfCombination;
@@ -24,11 +27,13 @@
         public KeyboardDominanceWatcher(
             IThreadLoop threadLoop,
             IThreadDelay threadDelay,
-            IPasteCombinationDurationMediator pasteDurationMediator)
+            IPasteCombinationDurationMediator pasteDurationMediator,
+            IPasteCombinationStateService pasteState)
         {
             this.threadLoop = threadLoop;
             this.threadDelay = threadDelay;
             this.pasteDurationMediator = pasteDurationMediator;
+            this.pasteState = pasteState;
 
             wasNotifiedOfCombination = true;
 
@@ -60,7 +65,7 @@
 
         async Task RunDetection()
         {
-            if (pasteDurationMediator.IsCombinationFullyHeldDown)
+            if (pasteState.IsCombinationFullyHeldDown)
             {
                 HandleCombinationHeldDown();
             }

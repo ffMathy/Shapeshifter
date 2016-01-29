@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop
 {
     using System;
+    using System.Diagnostics;
     using System.Windows;
 
     using Autofac;
@@ -48,11 +49,17 @@
         protected override void OnStartup(StartupEventArgs e)
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) => {
+                if (Debugger.IsAttached)
+                {
+                    return;
+                }
+
                 MessageBox.Show(
                     exceptionEventArguments.ExceptionObject.ToString(),
                     "Shapeshifter error",
                     MessageBoxButton.OK);
-                Current.Shutdown();
+                Process.GetCurrentProcess()
+                       .Kill();
             };
 
             var main = Container.Resolve<ApplicationEntrypoint>();

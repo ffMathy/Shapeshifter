@@ -15,10 +15,6 @@
 
         int DurationInDeciseconds { get; }
 
-        bool IsCombinationFullyHeldDown { get; }
-
-        bool IsCombinationPartiallyHeldDown { get; }
-
         void CancelCombinationRegistration();
     }
 }

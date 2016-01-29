@@ -204,7 +204,10 @@
     <Compile Include="Services\Interfaces\ISettingsManager.cs" />
     <Compile Include="Services\Interfaces\IWindowManager.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardHook.cs" />
+    <Compile Include="Services\Keyboard\Interfaces\IPasteCombinationStateService.cs" />
     <Compile Include="Services\Keyboard\KeyboardDominanceWatcher.cs" />
+    <Compile Include="Services\Keyboard\KeyboardHook.cs" />
+    <Compile Include="Services\Keyboard\PasteCombinationStateService.cs" />
     <Compile Include="Services\MouseWheelHook.cs" />
     <Compile Include="Services\PixelConversionService.cs" />
     <Compile Include="Services\RegistryManager.cs" />

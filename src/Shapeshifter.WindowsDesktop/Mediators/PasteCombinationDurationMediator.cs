@@ -20,12 +20,12 @@
         readonly IConsumerThreadLoop consumerLoop;
         readonly IThreadDelay threadDelay;
         readonly ILogger logger;
-        readonly IKeyboardManager keyboardManager;
+        readonly IPasteCombinationStateService pasteState;
         readonly IMainThreadInvoker mainThreadInvoker;
         
         readonly CancellationTokenSource threadCancellationTokenSource;
 
-        bool combinationCancellationRequested;
+        bool shouldCancel;
 
         public event EventHandler<PasteCombinationDurationPassedEventArgument> PasteCombinationDurationPassed;
         public event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleased;
@@ -38,14 +38,14 @@
             IThreadDelay threadDelay,
             IMainThreadInvoker mainThreadInvoker,
             ILogger logger,
-            IKeyboardManager keyboardManager)
+            IPasteCombinationStateService pasteState)
         {
             this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
             this.consumerLoop = consumerLoop;
             this.threadDelay = threadDelay;
             this.mainThreadInvoker = mainThreadInvoker;
             this.logger = logger;
-            this.keyboardManager = keyboardManager;
+            this.pasteState = pasteState;
 
             threadCancellationTokenSource = new CancellationTokenSource();
         }
@@ -56,17 +56,11 @@
         bool IsCancellationRequested
             => threadCancellationTokenSource.Token.IsCancellationRequested;
 
-        public bool IsCombinationFullyHeldDown
-            => keyboardManager.IsKeyDown(Key.LeftCtrl) && keyboardManager.IsKeyDown(Key.V);
-
         public void CancelCombinationRegistration()
         {
             logger.Information("Cancelling duration mediator combination registration.");
-            combinationCancellationRequested = true;
+            shouldCancel = true;
         }
-
-        public bool IsCombinationPartiallyHeldDown
-            => keyboardManager.IsKeyDown(Key.LeftCtrl) || keyboardManager.IsKeyDown(Key.V);
 
         public int DurationInDeciseconds
             => 5;
@@ -86,7 +80,7 @@
         {
             logger.Information("Paste combination duration loop has ticked.");
 
-            combinationCancellationRequested = false;
+            shouldCancel = false;
 
             await WaitForCombinationReleaseOrDurationPass();
             if (IsCancellationRequested)
@@ -95,7 +89,7 @@
             }
 
             RegisterCombinationReleased();
-            if (combinationCancellationRequested)
+            if (shouldCancel)
             {
                 return;
             }
@@ -138,7 +132,10 @@
         async Task WaitForCombinationReleaseOrDurationPass()
         {
             var decisecondsPassed = 0;
-            while (!IsCancellationRequested && IsCombinationFullyHeldDown && !combinationCancellationRequested)
+            while (
+                !IsCancellationRequested &&
+                pasteState.IsCombinationFullyHeldDown && 
+                !shouldCancel)
             {
                 await threadDelay.ExecuteAsync(100);
                 decisecondsPassed++;
