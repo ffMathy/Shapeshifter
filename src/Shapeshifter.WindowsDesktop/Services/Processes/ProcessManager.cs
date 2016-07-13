@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services
+﻿namespace Shapeshifter.WindowsDesktop.Services.Processes
 {
     using System;
     using System.Collections.Generic;
@@ -26,12 +26,18 @@
             }
         }
 
-        public string GetCurrentProcessPath()
+        public string GetCurrentProcessName()
         {
             using (var currentProcess = Process.GetCurrentProcess())
-                return Path.Combine(
-                    Environment.CurrentDirectory,
-                    $"{currentProcess.ProcessName}.exe");
+                return
+                    $"{currentProcess.ProcessName}";
+        }
+
+        public string GetCurrentProcessPath()
+        {
+            return Path.Combine(
+                Environment.CurrentDirectory,
+                $"{GetCurrentProcessName()}.exe");
         }
 
         public void LaunchCommand(string command, string arguments = null)

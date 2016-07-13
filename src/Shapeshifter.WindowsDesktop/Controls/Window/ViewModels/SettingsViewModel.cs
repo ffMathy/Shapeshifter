@@ -8,6 +8,7 @@
     using JetBrains.Annotations;
 
     using Services.Interfaces;
+    using Services.Processes.Interfaces;
 
     class SettingsViewModel: ISettingsViewModel
     {

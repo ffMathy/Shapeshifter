@@ -6,7 +6,7 @@
 
     using Interfaces;
 
-    using Services.Updates.Interfaces;
+    using Services.Web.Updates.Interfaces;
 
     public class PostPreparationOperation: IPostPreparationOperation
     {

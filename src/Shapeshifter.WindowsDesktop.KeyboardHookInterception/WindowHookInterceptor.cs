@@ -6,10 +6,14 @@ using static Shapeshifter.WindowsDesktop.Native.KeyboardNativeApi;
 
 namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
 {
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+
     public class WindowHookInterceptor: IEntryPoint
     {
-        private HookHostCommunicator _interface;
+        readonly HookHostCommunicator _interface;
 
+        [SuppressMessage("ReSharper", "UnusedParameter.Local")]
         public WindowHookInterceptor(
                RemoteHooking.IContext InContext,
                string InChannelName)
@@ -66,8 +70,10 @@ namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
             }
         }
 
-        private void InterceptUser32Method(string methodName, Delegate callback)
+        void InterceptUser32Method(string methodName, Delegate callback)
         {
+            _interface.DebugWriteLine("Intercepting " + methodName + ".");
+
             var hook = LocalHook.Create(
                 LocalHook.GetProcAddress("user32.dll", methodName),
                 callback,

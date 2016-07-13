@@ -9,6 +9,7 @@
     using NSubstitute;
 
     using Services.Interfaces;
+    using Services.Processes.Interfaces;
 
     [TestClass]
     public class SettingsViewModelTest: UnitTestFor<ISettingsViewModel>

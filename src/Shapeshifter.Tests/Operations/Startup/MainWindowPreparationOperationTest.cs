@@ -1,16 +1,16 @@
-﻿namespace Shapeshifter.WindowsDesktop
+﻿namespace Shapeshifter.WindowsDesktop.Operations.Startup
 {
     using System.Threading.Tasks;
 
     using Autofac;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    
-    using NSubstitute;
-
     using Controls.Window.Interfaces;
 
     using Mediators.Interfaces;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using NSubstitute;
 
     using Operations.Startup.Interfaces;
 

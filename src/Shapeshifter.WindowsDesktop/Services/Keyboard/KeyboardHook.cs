@@ -12,13 +12,15 @@ namespace Shapeshifter.WindowsDesktop.Services.Keyboard
 {
     class KeyboardHook : IKeyboardHook
     {
-        private delegate void KeyboardCallback(KeyEvent keyEvent, int vkCode, ref bool block);
+        delegate void KeyboardCallback(KeyEvent keyEvent, int vkCode, ref bool block);
 
-        private KeyboardCallback _hookedKeyboardCallback;
-        private KeyboardHookDelegate _hookedKeyboardHook;
+        KeyboardCallback _hookedKeyboardCallback;
 
-        private bool _ctrlIsDown;
-        private IntPtr _hookId;
+        KeyboardHookDelegate _hookedKeyboardHook;
+
+        bool _ctrlIsDown;
+
+        IntPtr _hookId;
 
         public ICollection<Key> IgnoredKeys
         {
@@ -45,7 +47,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Keyboard
             _hookedKeyboardCallback = KeyboardListener_KeyboardCallbackAsync;
         }
 
-        private IntPtr SetHook(KeyboardHookDelegate hook)
+        IntPtr SetHook(KeyboardHookDelegate hook)
         {
             using (var currentProcess = Process.GetCurrentProcess())
             using (var currentModule = currentProcess.MainModule)
@@ -56,9 +58,9 @@ namespace Shapeshifter.WindowsDesktop.Services.Keyboard
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        private IntPtr LowLevelKeyboardProc(int nCode, UIntPtr wParam, IntPtr lParam)
+        IntPtr LowLevelKeyboardProc(int nCode, UIntPtr wParam, IntPtr lParam)
         {
-            bool block = false;
+            var block = false;
 
             if (nCode >= 0)
             {
@@ -85,7 +87,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Keyboard
         /// <param name="keyEvent">The type of press performed.</param>
         /// <param name="vkCode">The keycode pressed.</param>
         /// <param name="block">Wether or not the key should be blocked.</param>
-        private void KeyboardListener_KeyboardCallbackAsync(KeyEvent keyEvent, int vkCode, ref bool block)
+        void KeyboardListener_KeyboardCallbackAsync(KeyEvent keyEvent, int vkCode, ref bool block)
         {
             var key = KeyInterop.KeyFromVirtualKey(vkCode);
             var keyState = keyEvent == KeyEvent.WM_KEYDOWN ?

@@ -9,7 +9,7 @@
 
     using Interfaces;
 
-    using Services.Tray.Interfaces;
+    using Services.Interfaces;
 
     using Application = System.Windows.Application;
 

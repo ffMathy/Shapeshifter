@@ -13,6 +13,7 @@
     using Org.BouncyCastle.Asn1.X509;
     using Org.BouncyCastle.Crypto;
     using Org.BouncyCastle.Crypto.Generators;
+    using Org.BouncyCastle.Crypto.Operators;
     using Org.BouncyCastle.Crypto.Parameters;
     using Org.BouncyCastle.Crypto.Prng;
     using Org.BouncyCastle.Math;
@@ -37,9 +38,6 @@
             var serialNumber = BigIntegers.CreateRandomInRange(BigInteger.One, BigInteger.ValueOf(long.MaxValue), random);
             certificateGenerator.SetSerialNumber(serialNumber);
 
-            const string signatureAlgorithm = "SHA256WithRSA";
-            certificateGenerator.SetSignatureAlgorithm(signatureAlgorithm);
-
             var subjectDN = new X509Name(name);
             var issuerDN = subjectDN;
             certificateGenerator.SetIssuerDN(issuerDN);
@@ -60,19 +58,21 @@
 
             var issuerKeyPair = subjectKeyPair;
 
-            var certificate = certificateGenerator.Generate(issuerKeyPair.Private, random);
+            var signatureFactory = new Asn1SignatureFactory("SHA512WITHRSA", issuerKeyPair.Private, random);
+            var certificate = certificateGenerator.Generate(signatureFactory);
 
             var info = PrivateKeyInfoFactory.CreatePrivateKeyInfo(subjectKeyPair.Private);
 
             var x509 = new X509Certificate2(certificate.GetEncoded());
 
-            var seq = (Asn1Sequence) Asn1Object.FromByteArray(info.PrivateKey.GetDerEncoded());
-            if (seq.Count != 9)
+            var privateKey = info.ParsePrivateKey();
+            var sequence = (Asn1Sequence) Asn1Object.FromByteArray(privateKey.GetDerEncoded());
+            if (sequence.Count != 9)
             {
                 throw new PemException("Malformed sequence in RSA private key.");
             }
-
-            var rsa = new RsaPrivateKeyStructure(seq);
+            
+            var rsa = RsaPrivateKeyStructure.GetInstance(sequence);
             var rsaParameters = new RsaPrivateCrtKeyParameters(
                 rsa.Modulus,
                 rsa.PublicExponent,
@@ -83,7 +83,7 @@
                 rsa.Exponent2,
                 rsa.Coefficient);
 
-            var privateKey = DotNetUtilities.ToRSA(rsaParameters);
+            var privateKeyRSA = DotNetUtilities.ToRSA(rsaParameters);
 
             var csp = new CspParameters
             {
@@ -91,7 +91,7 @@
             };
 
             var rsaPrivate = new RSACryptoServiceProvider(csp);
-            rsaPrivate.ImportParameters(privateKey.ExportParameters(true));
+            rsaPrivate.ImportParameters(privateKeyRSA.ExportParameters(true));
             x509.PrivateKey = rsaPrivate;
 
             return x509;

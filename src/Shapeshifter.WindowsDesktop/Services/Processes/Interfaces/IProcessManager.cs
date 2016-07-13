@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services.Interfaces
+﻿namespace Shapeshifter.WindowsDesktop.Services.Processes.Interfaces
 {
     using System;
 
@@ -11,6 +11,8 @@
         bool IsCurrentProcessElevated();
 
         string GetCurrentProcessPath();
+
+        string GetCurrentProcessName();
 
         void LaunchCommand(string command, string arguments = null);
 

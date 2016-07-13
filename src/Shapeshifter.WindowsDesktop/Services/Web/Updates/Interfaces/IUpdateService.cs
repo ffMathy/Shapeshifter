@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services.Updates.Interfaces
+﻿namespace Shapeshifter.WindowsDesktop.Services.Web.Updates.Interfaces
 {
     using System;
     using System.Threading.Tasks;

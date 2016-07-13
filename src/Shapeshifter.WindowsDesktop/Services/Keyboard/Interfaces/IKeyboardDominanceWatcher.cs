@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services.Stability.Interfaces
+﻿namespace Shapeshifter.WindowsDesktop.Services.Keyboard.Interfaces
 {
     using System;
 

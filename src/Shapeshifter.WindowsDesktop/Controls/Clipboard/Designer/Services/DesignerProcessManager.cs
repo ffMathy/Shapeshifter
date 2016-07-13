@@ -3,6 +3,7 @@
     using System;
 
     using WindowsDesktop.Services.Interfaces;
+    using WindowsDesktop.Services.Processes.Interfaces;
 
     using Controls.Designer.Services;
 
@@ -11,6 +12,11 @@
           IDesignerService
     {
         public string GetCurrentProcessPath()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetCurrentProcessName()
         {
             throw new NotImplementedException();
         }

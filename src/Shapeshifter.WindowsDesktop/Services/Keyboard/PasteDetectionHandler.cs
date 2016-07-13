@@ -6,8 +6,6 @@
 
     using Messages.Interceptors.Hotkeys.Interfaces;
 
-    using Stability.Interfaces;
-
     class PasteDetectionHandler: IPasteDetectionHandler
     {
         readonly IKeyboardDominanceWatcher keyboardDominanceWatcher;

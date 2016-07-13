@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop
+﻿namespace Shapeshifter.WindowsDesktop.Operations.Startup
 {
     using System.Threading.Tasks;
 
@@ -8,7 +8,6 @@
 
     using NSubstitute;
 
-    using Operations.Startup;
     using Operations.Startup.Interfaces;
 
     [TestClass]

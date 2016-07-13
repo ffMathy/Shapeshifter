@@ -7,6 +7,8 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using Processes.Interfaces;
+
     [TestClass]
     public class ProcessManagerTest: UnitTestFor<IProcessManager>
     {
