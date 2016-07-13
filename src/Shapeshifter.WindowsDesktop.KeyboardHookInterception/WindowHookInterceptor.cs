@@ -2,27 +2,36 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+using static Shapeshifter.WindowsDesktop.Native.KeyboardNativeApi;
 
 namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
 {
     public class WindowHookInterceptor: IEntryPoint
     {
-        public HookHostCommunicator Interface { get; private set; }
+        private HookHostCommunicator _interface;
 
         public WindowHookInterceptor(
                RemoteHooking.IContext InContext,
                string InChannelName)
         {
-            Interface = RemoteHooking.IpcConnectClient<HookHostCommunicator>(InChannelName);
+            _interface = RemoteHooking.IpcConnectClient<HookHostCommunicator>(InChannelName);
         }
         
-        static public bool MessageBeepHook(uint uType)
+        public IntPtr SetWindowsHookEx(int idHook, KeyboardHookDelegate lpfn, IntPtr hMod, uint dwThreadId)
         {
-            return false;
+            return new IntPtr(1337);
         }
-        
+
+        public bool UnhookWindowsHookEx(IntPtr hhk)
+        {
+            return true;
+        }
+
         [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
-        delegate bool MessageBeepDelegate(uint uType);
+        public delegate IntPtr SetWindowsHookExDelegate(int idHook, KeyboardHookDelegate lpfn, IntPtr hMod, uint dwThreadId);
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
+        public delegate bool UnhookWindowsHookExDelegate(IntPtr hhk);
 
         public void Run(
             RemoteHooking.IContext InContext,
@@ -30,15 +39,16 @@ namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
         {
             try
             {
-                var hook = LocalHook.Create(
-                         LocalHook.GetProcAddress("user32.dll", "MessageBeep"),
-                         new MessageBeepDelegate(MessageBeepHook),
-                         null);
-                hook.ThreadACL.SetExclusiveACL(new int[] { });
+                InterceptUser32Method(
+                    nameof(SetWindowsHookEx),
+                    new SetWindowsHookExDelegate(SetWindowsHookEx));
+                InterceptUser32Method(
+                    nameof(UnhookWindowsHookEx),
+                    new UnhookWindowsHookExDelegate(UnhookWindowsHookEx));
             }
             catch (Exception exception)
             {
-                Interface.ReportException(exception);
+                _interface.ReportException(exception);
                 return;
             }
             
@@ -46,14 +56,23 @@ namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
             {
                 while (true)
                 {
-                    Thread.Sleep(500);
-                    Interface.Ping();
+                    Thread.Sleep(1000);
+                    _interface.Ping();
                 }
             }
             catch
             {
                 // NET Remoting will raise an exception if host is unreachable
             }
+        }
+
+        private void InterceptUser32Method(string methodName, Delegate callback)
+        {
+            var hook = LocalHook.Create(
+                LocalHook.GetProcAddress("user32.dll", methodName),
+                callback,
+                null);
+            hook.ThreadACL.SetExclusiveACL(new int[] { });
         }
     }
 }

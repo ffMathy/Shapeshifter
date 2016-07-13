@@ -48,12 +48,10 @@ namespace Shapeshifter.WindowsDesktop.Services.Keyboard
         private IntPtr SetHook(KeyboardHookDelegate hook)
         {
             using (var currentProcess = Process.GetCurrentProcess())
+            using (var currentModule = currentProcess.MainModule)
             {
-                using (var curModule = currentProcess.MainModule)
-                {
-                    return SetWindowsHookEx(WH_KEYBOARD_LL, hook,
-                                            GetModuleHandle(curModule.ModuleName), 0);
-                }
+                return SetWindowsHookEx(WH_KEYBOARD_LL, hook,
+                                        GetModuleHandle(currentModule.ModuleName), 0);
             }
         }
 
@@ -94,7 +92,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Keyboard
                 KeyStates.Down :
                 KeyStates.None;
 
-            if(key == Key.LeftCtrl || key == Key.RightCtrl)
+            if (key == Key.LeftCtrl || key == Key.RightCtrl)
             {
                 _ctrlIsDown = keyState == KeyStates.Down;
             }

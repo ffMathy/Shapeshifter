@@ -189,6 +189,7 @@
     <Compile Include="Infrastructure\Dependencies\AssemblyRegistrationHelper.cs" />
     <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
     <Compile Include="Infrastructure\Dependencies\PublicConstructorFinder.cs" />
+    <Compile Include="Infrastructure\Events\ProcessStartedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\KeyDetectedArgument.cs" />
     <Compile Include="Infrastructure\Events\PastePerformedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\TrayIconClickedEventArgument.cs" />
@@ -218,6 +219,8 @@
     <Compile Include="Services\Keyboard\PasteDetectionHandler.cs" />
     <Compile Include="Services\MouseWheelHook.cs" />
     <Compile Include="Services\PixelConversionService.cs" />
+    <Compile Include="Services\Processes\Interfaces\IProcessWatcher.cs" />
+    <Compile Include="Services\Processes\ProcessWatcher.cs" />
     <Compile Include="Services\RegistryManager.cs" />
     <Compile Include="Services\Screen\ScreenInformation.cs" />
     <Compile Include="Services\Screen\Interfaces\IScreenManager.cs" />
@@ -335,7 +338,7 @@
     <Compile Include="Services\Files\Interfaces\IFileManager.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IDataSourceService.cs" />
     <Compile Include="Services\Interfaces\ICertificateManager.cs" />
-    <Compile Include="Services\Interfaces\IProcessManager.cs" />
+    <Compile Include="Services\Processes\Interfaces\IProcessManager.cs" />
     <Compile Include="Services\Web\Updates\GitHubClientFactory.cs" />
     <Compile Include="Services\Web\Updates\Interfaces\IGitHubClientFactory.cs" />
     <Compile Include="Services\Web\Updates\Interfaces\IUpdateService.cs" />
@@ -362,7 +365,7 @@
     <Compile Include="Services\Messages\Interceptors\Hotkeys\KeyInterceptor.cs" />
     <Compile Include="Services\Messages\Interfaces\IWindowMessageInterceptor.cs" />
     <Compile Include="Services\Messages\Interfaces\IWindowMessageHook.cs" />
-    <Compile Include="Services\ProcessManager.cs" />
+    <Compile Include="Services\Processes\ProcessManager.cs" />
     <Compile Include="Services\TrayIconManager.cs" />
     <Compile Include="Services\Web\Updates\UpdateService.cs" />
     <Compile Include="Services\Web\DomainNameResolver.cs" />

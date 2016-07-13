@@ -12,6 +12,7 @@
         }
 
         public event EventHandler KeyboardAccessOverruled;
+        public event EventHandler KeyboardAccessRestored;
 
         public void Start()
         {
@@ -26,6 +27,11 @@
         protected virtual void OnKeyboardAccessOverruled()
         {
             KeyboardAccessOverruled?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnKeyboardAccessRestored()
+        {
+            KeyboardAccessRestored?.Invoke(this, EventArgs.Empty);
         }
     }
 }

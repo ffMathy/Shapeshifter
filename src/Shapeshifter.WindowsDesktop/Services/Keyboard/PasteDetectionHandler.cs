@@ -40,21 +40,29 @@
         {
             OnPasteDetected();
         }
-
         void SetupDominanceWatcher()
         {
             keyboardDominanceWatcher.KeyboardAccessOverruled += KeyboardDominanceWatcher_KeyboardAccessOverruled;
+            keyboardDominanceWatcher.KeyboardAccessRestored += KeyboardDominanceWatcher_KeyboardAccessRestored;
+        }
+
+        void KeyboardDominanceWatcher_KeyboardAccessRestored(object sender, EventArgs e)
+        {
+            keyboardHook.Disconnect();
         }
 
         void KeyboardDominanceWatcher_KeyboardAccessOverruled(object sender, EventArgs e)
         {
-            keyboardHook.Disconnect();
             keyboardHook.Connect();
         }
 
         public void Disconnect()
         {
             keyboardDominanceWatcher.Stop();
+            if (keyboardHook.IsConnected)
+            {
+                keyboardHook.Disconnect();
+            }
             IsConnected = false;
         }
 
