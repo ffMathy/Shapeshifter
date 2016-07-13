@@ -5,13 +5,19 @@
 
     public class KeyDetectedArgument: EventArgs
     {
-        public KeyDetectedArgument(Key key, bool isControlDown)
+        public KeyDetectedArgument(
+            Key key, 
+            KeyStates keyState,
+            bool isControlDown)
         {
             Key = key;
+            KeyState = keyState;
             IsControlDown = isControlDown;
         }
 
         public bool Cancel { get; set; }
+
+        public KeyStates KeyState { get; private set; }
 
         public bool IsControlDown { get; private set; }
 

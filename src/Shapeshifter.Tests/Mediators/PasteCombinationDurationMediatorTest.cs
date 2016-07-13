@@ -1,14 +1,10 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Mediators
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Windows.Input;
 
     using Autofac;
-
-    using Controls.Window.Interfaces;
 
     using Infrastructure.Threading.Interfaces;
 
@@ -17,8 +13,6 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
-
-    using Services.Keyboard.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
     [TestClass]

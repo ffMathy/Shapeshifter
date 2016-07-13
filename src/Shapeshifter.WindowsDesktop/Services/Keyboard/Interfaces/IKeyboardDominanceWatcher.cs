@@ -7,7 +7,6 @@
     public interface IKeyboardDominanceWatcher: ISingleInstance
     {
         event EventHandler KeyboardAccessOverruled;
-        event EventHandler KeyboardAccessRestored;
 
         void Start();
         void Stop();
