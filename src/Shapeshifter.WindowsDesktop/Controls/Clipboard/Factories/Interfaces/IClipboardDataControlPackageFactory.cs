@@ -5,5 +5,6 @@
     public interface IClipboardDataControlPackageFactory
     {
         IClipboardDataControlPackage CreateFromCurrentClipboardData();
+        IClipboardDataControlPackage CreateFromDataPackage(IClipboardDataPackage package);
     }
 }

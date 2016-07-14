@@ -92,5 +92,10 @@
         {
             throw new NotImplementedException();
         }
+
+        public Task IsPinnedAsync(IClipboardDataPackage package)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

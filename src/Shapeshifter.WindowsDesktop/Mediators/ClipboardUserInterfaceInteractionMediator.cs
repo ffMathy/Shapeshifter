@@ -12,6 +12,7 @@
 
     using Interfaces;
 
+    using Services.Clipboard.Interfaces;
     using Services.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interceptors.Interfaces;
@@ -22,6 +23,7 @@
         readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
         readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
+        readonly IClipboardPersistanceService clipboardPersistanceService;
         readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
         readonly IKeyInterceptor hotkeyInterceptor;
         readonly IMouseWheelHook mouseWheelHook;
@@ -52,6 +54,7 @@
             IClipboardCopyInterceptor clipboardCopyInterceptor,
             IPasteCombinationDurationMediator pasteCombinationDurationMediator,
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
+            IClipboardPersistanceService clipboardPersistanceService,
             IClipboardDataControlPackageFactory clipboardDataControlPackageFactory,
             IKeyInterceptor hotkeyInterceptor,
             IMouseWheelHook mouseWheelHook)
@@ -59,6 +62,7 @@
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;
             this.pasteCombinationDurationMediator = pasteCombinationDurationMediator;
             this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
+            this.clipboardPersistanceService = clipboardPersistanceService;
             this.clipboardDataControlPackageFactory = clipboardDataControlPackageFactory;
             this.hotkeyInterceptor = hotkeyInterceptor;
             this.mouseWheelHook = mouseWheelHook;
@@ -67,6 +71,16 @@
 
             SetupHotkeyInterceptor();
             SetupMouseHook();
+        }
+
+        async void LoadPersistedPackagesAsync()
+        {
+            var packages = await clipboardPersistanceService.GetPersistedPackagesAsync();
+            foreach (var package in packages)
+            {
+                var controlPackage = clipboardDataControlPackageFactory.CreateFromDataPackage(package);
+                AddControlPackage(controlPackage);
+            }
         }
 
         public void SetupHotkeyInterceptor()
@@ -149,15 +163,20 @@
 
         void AppendPackagesWithDataFromClipboard()
         {
-            var package = clipboardDataControlPackageFactory.CreateFromCurrentClipboardData();
-            if (package == null)
+            var controlPackage = clipboardDataControlPackageFactory.CreateFromCurrentClipboardData();
+            if (controlPackage == null)
             {
                 return;
             }
 
-            clipboardPackages.Add(package);
+            AddControlPackage(controlPackage);
+        }
 
-            FireControlAddedEvent(package);
+        void AddControlPackage(IClipboardDataControlPackage controlPackage)
+        {
+            clipboardPackages.Add(controlPackage);
+
+            FireControlAddedEvent(controlPackage);
         }
 
         void FireControlAddedEvent(IClipboardDataControlPackage package)
@@ -229,6 +248,7 @@
 
         void LoadInitialClipboardData()
         {
+            LoadPersistedPackagesAsync();
             AppendPackagesWithDataFromClipboard();
         }
 

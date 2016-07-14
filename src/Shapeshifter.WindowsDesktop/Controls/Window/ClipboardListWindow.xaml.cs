@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Window
 {
     using System;
+    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Interop;
 

@@ -12,6 +12,7 @@
 
     class PinClipboardDataAction: IPinClipboardDataAction
     {
+        readonly IClipboardPersistanceService clipboardPersistanceService;
         public string Title => "Pin to clipboard";
 
         public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
@@ -21,6 +22,12 @@
 
         public byte Order => byte.MaxValue;
 
+        public PinClipboardDataAction(
+            IClipboardPersistanceService clipboardPersistanceService)
+        {
+            this.clipboardPersistanceService = clipboardPersistanceService;
+        }
+
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
         {
             return GetRelevantData(package)
@@ -29,7 +36,7 @@
 
         public async Task PerformAsync(IClipboardDataPackage package)
         {
-            foreach (var item in GetRelevantData(package)) { }
+            await clipboardPersistanceService.PersistClipboardPackageAsync(package);
         }
 
         static IEnumerable<IClipboardData> GetRelevantData(IClipboardDataPackage package)

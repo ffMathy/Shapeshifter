@@ -41,15 +41,28 @@
 
             ClipboardDataControlPackage package = null;
             mainThreadInvoker.Invoke(
-                () => {
-                    var control = CreateControlFromDataPackage(dataPackage);
-                    if (control == null)
-                    {
-                        return;
-                    }
+                () => package = CreateDataControlPackageFromDataPackage(dataPackage));
 
-                    package = new ClipboardDataControlPackage(dataPackage, control);
-                });
+            return package;
+        }
+
+        ClipboardDataControlPackage CreateDataControlPackageFromDataPackage(IClipboardDataPackage dataPackage)
+        {
+            var control = CreateControlFromDataPackage(dataPackage);
+            if (control == null)
+            {
+                return null;
+            }
+
+            var package = new ClipboardDataControlPackage(dataPackage, control);
+            return package;
+        }
+
+        public IClipboardDataControlPackage CreateFromDataPackage(IClipboardDataPackage dataPackage)
+        {
+            ClipboardDataControlPackage package = null;
+            mainThreadInvoker.Invoke(
+                () => package = CreateDataControlPackageFromDataPackage(dataPackage));
 
             return package;
         }

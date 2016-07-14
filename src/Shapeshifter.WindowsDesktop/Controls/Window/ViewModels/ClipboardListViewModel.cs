@@ -24,6 +24,7 @@
 
     using Mediators.Interfaces;
 
+    using Services.Clipboard.Interfaces;
     using Services.Screen;
     using Services.Screen.Interfaces;
 

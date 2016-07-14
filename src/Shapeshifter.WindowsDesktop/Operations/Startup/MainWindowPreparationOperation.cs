@@ -10,6 +10,7 @@
 
     using Mediators.Interfaces;
 
+    using Services.Clipboard.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interfaces;
 
