@@ -14,14 +14,16 @@
     class PasteAsPlainTextAction: IPasteAsPlainTextAction
     {
         readonly IClipboardInjectionService clipboardInjectionService;
-
+        readonly IClipboardPasteService clipboardPasteService;
         readonly IAsyncFilter asyncFilter;
 
         public PasteAsPlainTextAction(
             IClipboardInjectionService clipboardInjectionService,
+            IClipboardPasteService clipboardPasteService,
             IAsyncFilter asyncFilter)
         {
             this.clipboardInjectionService = clipboardInjectionService;
+            this.clipboardPasteService = clipboardPasteService;
             this.asyncFilter = asyncFilter;
         }
 
@@ -54,6 +56,8 @@
         {
             var textData = (IClipboardTextData) await GetFirstSupportedItem(package);
             clipboardInjectionService.InjectText(textData.Text);
+
+            await clipboardPasteService.PasteClipboardContentsAsync();
         }
     }
 }
