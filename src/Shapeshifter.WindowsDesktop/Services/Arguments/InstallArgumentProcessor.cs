@@ -8,10 +8,9 @@
     using Controls.Window.ViewModels.Interfaces;
 
     using Infrastructure.Environment.Interfaces;
+    using Infrastructure.Signing.Interfaces;
 
     using Interfaces;
-
-    using Native.Helpers.Interfaces;
 
     using Processes.Interfaces;
 

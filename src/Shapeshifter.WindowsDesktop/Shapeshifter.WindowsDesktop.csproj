@@ -201,6 +201,8 @@
     <Compile Include="Infrastructure\Logging\Interfaces\ILogStream.cs" />
     <Compile Include="Infrastructure\Logging\Logger.cs" />
     <Compile Include="Infrastructure\Logging\LogStream.cs" />
+    <Compile Include="Infrastructure\Signing\Interfaces\ISignHelper.cs" />
+    <Compile Include="Infrastructure\Signing\SignHelper.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IRetryingThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\RetryingThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\RetryingThreadLoopJob.cs" />
