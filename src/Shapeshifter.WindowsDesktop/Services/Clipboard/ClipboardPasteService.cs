@@ -39,12 +39,12 @@
             var isVDown = keyboardManager.IsKeyDown(Key.V);
             var isCtrlDown = keyboardManager.IsKeyDown(Key.LeftCtrl);
 
-            SimulatePaste(isCtrlDown, isVDown);
+            await SimulatePaste(isCtrlDown, isVDown);
 
             logger.Information("Paste simulated.", 1);
         }
 
-        void SimulatePaste(bool isCtrlDown, bool isVDown)
+        async Task SimulatePaste(bool isCtrlDown, bool isVDown)
         {
             logger.Information(
                 $"Simulating paste with CTRL {(isCtrlDown ? "down" : "released")} and V {(isVDown ? "down" : "released")}.");
@@ -52,11 +52,11 @@
             DisablePasteHotkeyInterceptor();
             UninstallPasteHotkeyInterceptor();
 
-            RunFirstKeyboardPhase(isCtrlDown, isVDown);
+            await RunFirstKeyboardPhase(isCtrlDown, isVDown);
 
             InstallPasteHotkeyInterceptor();
 
-            RunSecondKeyboardPhase(isCtrlDown, isVDown);
+            await RunSecondKeyboardPhaseAsync(isCtrlDown, isVDown);
 
             EnablePasteHotkeyInterceptor();
         }
@@ -73,13 +73,13 @@
             logger.Information("Disabled paste hotkey interceptor.");
         }
 
-        void RunFirstKeyboardPhase(bool isCtrlDown, bool isVDown)
+        async Task RunFirstKeyboardPhase(bool isCtrlDown, bool isVDown)
         {
             var firstPhaseOperations = GetFirstPhaseKeyOperations(isCtrlDown, isVDown);
-            keyboardManager.SendKeys(firstPhaseOperations.ToArray());
+            await keyboardManager.SendKeysAsync(firstPhaseOperations.ToArray());
         }
 
-        void RunSecondKeyboardPhase(bool isCtrlDown, bool isVDown)
+        async Task RunSecondKeyboardPhaseAsync(bool isCtrlDown, bool isVDown)
         {
             if (!isCtrlDown && !isVDown)
             {
@@ -87,7 +87,7 @@
             }
 
             var secondPhaseOperations = GetSecondPhaseKeyOperations(isCtrlDown, isVDown);
-            keyboardManager.SendKeys(secondPhaseOperations.ToArray());
+            await keyboardManager.SendKeysAsync(secondPhaseOperations.ToArray());
         }
 
         static List<KeyOperation> GetSecondPhaseKeyOperations(bool isCtrlDown, bool isVDown)

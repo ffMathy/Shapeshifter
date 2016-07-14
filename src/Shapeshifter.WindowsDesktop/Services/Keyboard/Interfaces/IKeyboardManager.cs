@@ -1,13 +1,14 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Keyboard.Interfaces
 {
+    using System.Threading.Tasks;
     using System.Windows.Input;
 
     public interface IKeyboardManager
     {
         bool IsKeyDown(Key key);
 
-        void SendKeys(params Key[] keys);
+        Task SendKeysAsync(params Key[] keys);
 
-        void SendKeys(params KeyOperation[] keyOperations);
+        Task SendKeysAsync(params KeyOperation[] keyOperations);
     }
 }

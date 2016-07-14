@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
     using System.Windows.Input;
 
     using Infrastructure.Logging.Interfaces;
@@ -30,7 +32,7 @@
             return Keyboard.IsKeyDown(key);
         }
 
-        public void SendKeys(params Key[] keys)
+        public async Task SendKeysAsync(params Key[] keys)
         {
             var operations = new LinkedList<KeyOperation>();
             foreach (var key in keys)
@@ -39,10 +41,10 @@
                 operations.AddLast(new KeyOperation(key, KeyDirection.Up));
             }
 
-            SendKeys(operations.ToArray());
+            await SendKeysAsync(operations.ToArray());
         }
 
-        public void SendKeys(params KeyOperation[] keyOperations)
+        public async Task SendKeysAsync(params KeyOperation[] keyOperations)
         {
             var logString = keyOperations
                 .Select(x => $"[{x.Key}: {x.Direction}]")
@@ -55,7 +57,18 @@
                         MapKeyToVirtualKey(x.Key),
                         x.Direction == KeyDirection.Down ? 0 : KEYEVENTF.KEYUP))
                 .ToArray();
-            nativeApi.SendInput((uint) inputs.Length, inputs, INPUT.Size);
+            foreach (var input in inputs)
+            {
+                await Task.Delay(10);
+                nativeApi.SendInput(
+                    (uint)1,
+                    new[]
+                    {
+                        input
+                    },
+                    INPUT.Size);
+                await Task.Delay(10);
+            }
         }
 
         static VirtualKeyShort MapKeyToVirtualKey(Key key)
