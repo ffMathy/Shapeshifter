@@ -8,6 +8,7 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using System.Threading;
     using System.Threading.Tasks;
 
     using Binders.Interfaces;
@@ -33,6 +34,8 @@
     {
         IClipboardDataControlPackage selectedElement;
         IAction selectedAction;
+
+        SemaphoreSlim singlePasteLock;
 
         readonly IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator;
         readonly IScreenManager screenManager;
@@ -110,6 +113,8 @@
         {
             Elements = new ObservableCollection<IClipboardDataControlPackage>();
             Actions = new ObservableCollection<IAction>();
+
+            singlePasteLock = new SemaphoreSlim(1);
 
             Actions.CollectionChanged += Actions_CollectionChanged;
 
@@ -195,7 +200,9 @@
         {
             if (SelectedAction != null)
             {
+                await singlePasteLock.WaitAsync();
                 await SelectedAction.PerformAsync(SelectedElement.Data);
+                singlePasteLock.Release();
             }
         }
 
