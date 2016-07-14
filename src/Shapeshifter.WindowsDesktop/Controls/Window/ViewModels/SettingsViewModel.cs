@@ -16,6 +16,8 @@
         readonly IProcessManager processManager;
         readonly ISettingsManager settingsManager;
 
+        int pasteDurationBeforeUserInterfaceShowsInMilliseconds;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public SettingsViewModel(
@@ -26,6 +28,10 @@
             this.registryManager = registryManager;
             this.processManager = processManager;
             this.settingsManager = settingsManager;
+
+            pasteDurationBeforeUserInterfaceShowsInMilliseconds = settingsManager.LoadSetting(
+                nameof(PasteDurationBeforeUserInterfaceShowsInMilliseconds),
+                300);
         }
 
         [NotifyPropertyChangedInvocator]
@@ -74,9 +80,7 @@
         {
             get
             {
-                return settingsManager.LoadSetting<int>(
-                    nameof(PasteDurationBeforeUserInterfaceShowsInMilliseconds),
-                    300);
+                return pasteDurationBeforeUserInterfaceShowsInMilliseconds;
             }
             set
             {
@@ -84,7 +88,7 @@
 
                 settingsManager.SaveSetting(
                     nameof(PasteDurationBeforeUserInterfaceShowsInMilliseconds),
-                    value);
+                    pasteDurationBeforeUserInterfaceShowsInMilliseconds = value);
                 
                 OnPropertyChanged();
             }

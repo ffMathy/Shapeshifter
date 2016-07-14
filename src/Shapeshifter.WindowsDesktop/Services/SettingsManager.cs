@@ -41,11 +41,6 @@
             var json = File.ReadAllText(path);
 
             var value = JsonConvert.DeserializeObject<T>(json);
-            if (Equals(default(T), value))
-            {
-                return defaultValue;
-            }
-
             return value;
         }
     }

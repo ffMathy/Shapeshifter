@@ -152,14 +152,14 @@
 
         void RaiseDurationPassedEventIfNeeded(int decisecondsPassed)
         {
-            if ((decisecondsPassed != DurationInDeciseconds) || (PasteCombinationDurationPassed == null))
+            if ((DurationInDeciseconds != 0) && ((decisecondsPassed != DurationInDeciseconds) || (PasteCombinationDurationPassed == null)))
             {
                 return;
             }
 
             mainThreadInvoker.Invoke(
                 () => {
-                    PasteCombinationDurationPassed(
+                    PasteCombinationDurationPassed?.Invoke(
                         this,
                         new PasteCombinationDurationPassedEventArgument
                             ());

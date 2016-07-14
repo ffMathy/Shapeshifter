@@ -2,7 +2,9 @@
 {
     using System.ComponentModel;
 
-    public interface ISettingsViewModel: INotifyPropertyChanged
+    using Infrastructure.Dependencies.Interfaces;
+
+    public interface ISettingsViewModel: INotifyPropertyChanged, ISingleInstance
     {
         bool StartWithWindows { get; set; }
 
