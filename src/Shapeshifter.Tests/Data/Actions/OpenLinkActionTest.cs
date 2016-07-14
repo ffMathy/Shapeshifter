@@ -26,7 +26,20 @@
         [TestMethod]
         public async Task CanReadDescription()
         {
-            Assert.IsNotNull(await SystemUnderTest.GetDescriptionAsync(Substitute.For<IClipboardDataPackage>()));
+            FakeHasLinks(
+                new[]
+                {
+                    "foo.com",
+                    "bar.com"
+                });
+
+            Assert.IsNotNull(await SystemUnderTest.GetDescriptionAsync(Substitute
+                .For<IClipboardDataPackage>()
+                .With(x => x.Contents.Returns(
+                    new []
+                    {
+                        Substitute.For<IClipboardTextData>() 
+                    }))));
         }
 
         [TestMethod]
@@ -67,21 +80,13 @@
         {
             ExcludeFakeFor<IAsyncFilter>();
 
-            Container.Resolve<ILinkParser>()
-             .HasLinkAsync(Arg.Any<string>())
-             .Returns(Task.FromResult(true));
+            FakeHasLinks(
+                new[]
+                {
+                    "foo.com",
+                    "bar.com"
+                });
 
-            Container.Resolve<ILinkParser>()
-             .ExtractLinksFromTextAsync(Arg.Any<string>())
-             .Returns(
-                 Task
-                     .FromResult<IReadOnlyCollection<string>>(
-                         new[]
-                         {
-                                     "foo.com",
-                                     "bar.com"
-                         }));
-            
             await SystemUnderTest.PerformAsync(
                 GetPackageContaining<IClipboardTextData>());
 
@@ -90,6 +95,20 @@
                               .LaunchCommand("foo.com");
             fakeProcessManager.Received(1)
                               .LaunchCommand("bar.com");
+        }
+
+        void FakeHasLinks(string[] links)
+        {
+            Container.Resolve<ILinkParser>()
+                     .HasLinkAsync(Arg.Any<string>())
+                     .Returns(Task.FromResult(true));
+
+            Container.Resolve<ILinkParser>()
+                     .ExtractLinksFromTextAsync(Arg.Any<string>())
+                     .Returns(
+                         Task
+                             .FromResult<IReadOnlyCollection<string>>(
+                                 links));
         }
     }
 }

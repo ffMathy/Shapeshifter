@@ -45,7 +45,14 @@
         [TestMethod]
         public async Task CanReadDescription()
         {
-            Assert.IsNotNull(await SystemUnderTest.GetDescriptionAsync(Substitute.For<IClipboardDataPackage>()));
+            FakeHasImageLinks(
+                new[]
+                {
+                    "foobar.com",
+                    "example.com"
+                });
+
+            Assert.IsNotNull(await SystemUnderTest.GetDescriptionAsync(GetPackageContaining<IClipboardTextData>()));
         }
 
         [TestMethod]
@@ -93,24 +100,13 @@
                  Task.FromResult(
                      secondFakeDownloadedImageBytes));
 
-            Container.Resolve<ILinkParser>()
-             .HasLinkOfTypeAsync(
-                 Arg.Any<string>(),
-                 LinkType.ImageFile)
-             .Returns(Task.FromResult(true));
+            FakeHasImageLinks(
+                new[]
+                {
+                    "foobar.com",
+                    "example.com"
+                });
 
-            Container.Resolve<ILinkParser>()
-             .ExtractLinksFromTextAsync(Arg.Any<string>())
-             .Returns(
-                 Task
-                     .FromResult
-                     <IReadOnlyCollection<string>>(
-                         new[]
-                         {
-                                     "foobar.com",
-                                     "example.com"
-                         }));
-            
             await SystemUnderTest.PerformAsync(GetPackageContaining<IClipboardTextData>());
 
             var fakeClipboardInjectionService = Container.Resolve<IClipboardInjectionService>();
@@ -130,6 +126,23 @@
             fakeDownloader.Received(1)
                           .DownloadBytesAsync("example.com")
                           .IgnoreAwait();
+        }
+
+        void FakeHasImageLinks(string[] linkUrls)
+        {
+            Container.Resolve<ILinkParser>()
+                     .HasLinkOfTypeAsync(
+                         Arg.Any<string>(),
+                         LinkType.ImageFile)
+                     .Returns(Task.FromResult(true));
+
+            Container.Resolve<ILinkParser>()
+                     .ExtractLinksFromTextAsync(Arg.Any<string>())
+                     .Returns(
+                         Task
+                             .FromResult
+                             <IReadOnlyCollection<string>>(
+                                 linkUrls));
         }
     }
 }

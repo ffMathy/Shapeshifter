@@ -18,9 +18,7 @@
     class OpenLinkAction: IOpenLinkAction
     {
         readonly ILinkParser linkParser;
-
         readonly IProcessManager processManager;
-
         readonly IAsyncFilter asyncFilter;
 
         public OpenLinkAction(
