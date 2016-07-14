@@ -75,8 +75,6 @@
                 return;
             }
 
-            IncludeFakeFor<ISettingsViewModel>();
-
             container = CreateContainerWithFakeDependencies(
                 (c) => {
                     foreach (var fake in fakeInclusions)
@@ -95,9 +93,6 @@
                 },
                 fakeExceptions.ToArray());
             systemUnderTest = container.Resolve<TSystemUnderTest>();
-
-            var settingsViewModel = container.Resolve<ISettingsViewModel>();
-            settingsViewModel.MaximumAmountOfItemsInClipboard.Returns(8);
         }
 
         [TestCleanup]
