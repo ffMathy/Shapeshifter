@@ -30,11 +30,22 @@
             return Path.Combine(settingsPath, $"{key}.json");
         }
 
-        public T LoadSetting<T>(string key)
+        public T LoadSetting<T>(string key, T defaultValue = default(T))
         {
             var path = GetPathForKey(key);
+            if (!File.Exists(path))
+            {
+                return defaultValue;
+            }
+
             var json = File.ReadAllText(path);
+
             var value = JsonConvert.DeserializeObject<T>(json);
+            if (Equals(default(T), value))
+            {
+                return defaultValue;
+            }
+
             return value;
         }
     }

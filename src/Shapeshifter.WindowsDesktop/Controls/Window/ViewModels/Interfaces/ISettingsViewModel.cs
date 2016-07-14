@@ -5,5 +5,7 @@
     public interface ISettingsViewModel: INotifyPropertyChanged
     {
         bool StartWithWindows { get; set; }
+
+        int PasteDurationBeforeUserInterfaceShowsInMilliseconds { get; set; }
     }
 }

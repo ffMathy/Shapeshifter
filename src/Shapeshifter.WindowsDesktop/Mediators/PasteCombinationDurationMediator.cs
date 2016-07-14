@@ -4,6 +4,8 @@
     using System.Threading;
     using System.Threading.Tasks;
 
+    using Controls.Window.ViewModels.Interfaces;
+
     using Infrastructure.Events;
     using Infrastructure.Logging.Interfaces;
     using Infrastructure.Threading.Interfaces;
@@ -16,6 +18,7 @@
     {
         readonly IPasteDetectionHandler pasteDetectionHandler;
         readonly IConsumerThreadLoop consumerLoop;
+        readonly ISettingsViewModel settingsViewModel;
         readonly IThreadDelay threadDelay;
         readonly ILogger logger;
         readonly IKeyboardPasteCombinationStateService keyboardPasteState;
@@ -33,6 +36,7 @@
         public PasteCombinationDurationMediator(
             IPasteDetectionHandler pasteDetectionHandler,
             IConsumerThreadLoop consumerLoop,
+            ISettingsViewModel settingsViewModel,
             IThreadDelay threadDelay,
             IMainThreadInvoker mainThreadInvoker,
             ILogger logger,
@@ -40,6 +44,7 @@
         {
             this.pasteDetectionHandler = pasteDetectionHandler;
             this.consumerLoop = consumerLoop;
+            this.settingsViewModel = settingsViewModel;
             this.threadDelay = threadDelay;
             this.mainThreadInvoker = mainThreadInvoker;
             this.logger = logger;
@@ -61,7 +66,7 @@
         }
 
         public int DurationInDeciseconds
-            => 5;
+            => settingsViewModel.PasteDurationBeforeUserInterfaceShowsInMilliseconds / 100;
 
         public void Connect()
         {

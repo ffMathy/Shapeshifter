@@ -6,8 +6,17 @@
         xmlns:viewModels="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Window.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewModels:SettingsViewModel}"
         mc:Ignorable="d"
-        Title="Settings" Height="265" Width="350" ResizeMode="NoResize">
+        Title="Settings" Height="274.603" Width="390.242" ResizeMode="NoResize">
     <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         <CheckBox IsChecked="{Binding StartWithWindows}" Content="Start with Windows" />
+        <StackPanel Grid.Row="1">
+            <Label>Paste duration before user interface shows up (milliseconds)</Label>
+            <Slider TickFrequency="100" Minimum="0" Maximum="3000" SmallChange="100" Value="{Binding PasteDurationBeforeUserInterfaceShowsInMilliseconds}" TickPlacement="Both" IsSnapToTickEnabled="True" AutoToolTipPlacement="TopLeft" />
+            <TextBlock HorizontalAlignment="Center" Text="{Binding PasteDurationBeforeUserInterfaceShowsInMilliseconds}" FontWeight="Bold" />
+        </StackPanel>
     </Grid>
 </Window>

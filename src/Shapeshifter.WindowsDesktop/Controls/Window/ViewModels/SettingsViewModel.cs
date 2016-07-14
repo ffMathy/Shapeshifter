@@ -14,15 +14,18 @@
     {
         readonly IRegistryManager registryManager;
         readonly IProcessManager processManager;
+        readonly ISettingsManager settingsManager;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public SettingsViewModel(
             IRegistryManager registryManager,
-            IProcessManager processManager)
+            IProcessManager processManager,
+            ISettingsManager settingsManager)
         {
             this.registryManager = registryManager;
             this.processManager = processManager;
+            this.settingsManager = settingsManager;
         }
 
         [NotifyPropertyChangedInvocator]
@@ -63,6 +66,26 @@
                         nameof(Shapeshifter));
                 }
 
+                OnPropertyChanged();
+            }
+        }
+
+        public int PasteDurationBeforeUserInterfaceShowsInMilliseconds
+        {
+            get
+            {
+                return settingsManager.LoadSetting<int>(
+                    nameof(PasteDurationBeforeUserInterfaceShowsInMilliseconds),
+                    300);
+            }
+            set
+            {
+                if (value == PasteDurationBeforeUserInterfaceShowsInMilliseconds) return;
+
+                settingsManager.SaveSetting(
+                    nameof(PasteDurationBeforeUserInterfaceShowsInMilliseconds),
+                    value);
+                
                 OnPropertyChanged();
             }
         }
