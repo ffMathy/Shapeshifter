@@ -75,6 +75,8 @@
                 return;
             }
 
+            IncludeFakeFor<ISettingsViewModel>();
+
             container = CreateContainerWithFakeDependencies(
                 (c) => {
                     foreach (var fake in fakeInclusions)
