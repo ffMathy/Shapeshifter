@@ -19,13 +19,9 @@
     class CopyImageLinkAction: ICopyImageLinkAction
     {
         readonly IClipboardInjectionService clipboardInjectionService;
-
         readonly IDownloader downloader;
-
         readonly IImageFileInterpreter imageFileInterpreter;
-
         readonly ILinkParser linkParser;
-
         readonly IAsyncFilter asyncFilter;
 
         public CopyImageLinkAction(
@@ -42,10 +38,46 @@
             this.clipboardInjectionService = clipboardInjectionService;
         }
 
-        public string Description
-            => "Copies the image that the link in the clipboard text points to.";
+        public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
+        {
+            var links = await ExtractLinksFromPackageAsync(package);
 
-        public string Title => "Copy image from link";
+            var description = string.Empty;
+            for (var i = 0; i < links.Count; i++)
+            {
+                if (i == 0)
+                {
+                    description += "Copies the images from the ";
+                    if (links.Count == 1)
+                    {
+                        description += "link ";
+                    }
+                    else
+                    {
+                        description += "links ";
+                    }
+                }
+                else
+                {
+                    if (i == links.Count - 1)
+                    {
+                        description += " and ";
+                    }
+                    else
+                    {
+                        description += ", ";
+                    }
+                }
+
+                var link = links[i];
+                description += link;
+            }
+            description += " to the clipboard.";
+
+            return description;
+        }
+
+        public string Title => "Copy images from links";
 
         public byte Order => 100;
 
@@ -72,16 +104,22 @@
 
         public async Task PerformAsync(IClipboardDataPackage package)
         {
-            var textData = (IClipboardTextData) await GetFirstSupportedDataAsync(package)
-                                                          .ConfigureAwait(false);
-            var links = await linkParser.ExtractLinksFromTextAsync(textData.Text)
-                                        .ConfigureAwait(false);
+            var links = await ExtractLinksFromPackageAsync(package);
 
             var imagesBytes = await DownloadLinksAsync(links)
                                         .ConfigureAwait(false);
 
             var images = InterpretImages(imagesBytes);
             InjectImages(images);
+        }
+
+        async Task<IReadOnlyList<string>> ExtractLinksFromPackageAsync(IClipboardDataPackage package)
+        {
+            var textData = (IClipboardTextData) await GetFirstSupportedDataAsync(package)
+                                                          .ConfigureAwait(false);
+            var links = await linkParser.ExtractLinksFromTextAsync(textData.Text)
+                                        .ConfigureAwait(false);
+            return new List<string>(links);
         }
 
         IEnumerable<BitmapSource> InterpretImages(IEnumerable<byte[]> imagesBytes)

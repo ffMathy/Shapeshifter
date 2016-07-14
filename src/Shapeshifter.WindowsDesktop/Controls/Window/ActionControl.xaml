@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d" Style="{StaticResource ActionControlContentAreaStyle}">
+             xmlns:interfaces="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Window.ViewModels.Interfaces"
+             mc:Ignorable="d" Style="{StaticResource ActionControlContentAreaStyle}"
+             d:DataContext="{d:DesignInstance interfaces:IActionViewModel}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />

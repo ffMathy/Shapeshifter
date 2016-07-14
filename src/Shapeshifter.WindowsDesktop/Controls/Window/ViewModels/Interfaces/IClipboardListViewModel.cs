@@ -17,10 +17,10 @@
 
         IClipboardDataControlPackage SelectedElement { get; set; }
 
-        IAction SelectedAction { get; set; }
+        IActionViewModel SelectedAction { get; set; }
 
         ObservableCollection<IClipboardDataControlPackage> Elements { get; }
 
-        ObservableCollection<IAction> Actions { get; }
+        ObservableCollection<IActionViewModel> Actions { get; }
     }
 }

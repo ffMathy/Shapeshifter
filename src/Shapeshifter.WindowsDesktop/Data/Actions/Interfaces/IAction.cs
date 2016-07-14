@@ -8,7 +8,7 @@
     {
         string Title { get; }
 
-        string Description { get; }
+        Task<string> GetDescriptionAsync(IClipboardDataPackage package);
 
         byte Order { get; }
 

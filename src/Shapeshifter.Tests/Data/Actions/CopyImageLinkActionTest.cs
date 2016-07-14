@@ -43,9 +43,9 @@
         }
 
         [TestMethod]
-        public void CanReadDescription()
+        public async Task CanReadDescription()
         {
-            Assert.IsNotNull(SystemUnderTest.Description);
+            Assert.IsNotNull(await SystemUnderTest.GetDescriptionAsync(Substitute.For<IClipboardDataPackage>()));
         }
 
         [TestMethod]

@@ -28,8 +28,11 @@
             this.clipboardPasteService = clipboardPasteService;
             this.logger = logger;
         }
-
-        public string Description => "Pastes clipboard contents as-is.";
+        
+        public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
+        {
+            return "Pastes clipboard contents as-is.";
+        }
 
         public byte Order => 0;
 

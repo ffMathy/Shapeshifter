@@ -168,6 +168,8 @@
     <Compile Include="Controls\Window\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Window\ViewModels\ActionViewModel.cs" />
+    <Compile Include="Controls\Window\ViewModels\Interfaces\IActionViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\ISettingsViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\SettingsViewModel.cs" />
     <Compile Include="Data\Actions\CopyImageLinkAction.cs" />

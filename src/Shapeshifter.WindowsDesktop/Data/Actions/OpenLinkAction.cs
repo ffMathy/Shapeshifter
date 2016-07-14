@@ -1,5 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Actions
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -30,20 +32,57 @@
             this.processManager = processManager;
             this.asyncFilter = asyncFilter;
         }
-        
-        public string Description => "Open the link that is present in the clipboard.";
+
+        public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
+        {
+            var links = await ExtractLinksFromPackageAsync(package);
+
+            var description = string.Empty;
+            for (var i = 0; i < links.Count; i++)
+            {
+                if (i == 0)
+                {
+                    description += "Open the ";
+                    if (links.Count == 1)
+                    {
+                        description += "link ";
+                    }
+                    else
+                    {
+                        description += "links ";
+                    }
+                }
+                else
+                {
+                    if (i == links.Count - 1)
+                    {
+                        description += " and ";
+                    }
+                    else
+                    {
+                        description += ", ";
+                    }
+                }
+
+                var link = links[i];
+                description += link;
+            }
+            description += ".";
+
+            return description;
+        }
 
         public byte Order => 200;
 
-        public string Title => "Open link";
+        public string Title => "Open links";
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
         {
-            return await GetFirstSupportedItem(package)
+            return await GetFirstSupportedItemAsync(package)
                              .ConfigureAwait(false) != null;
         }
 
-        async Task<IClipboardData> GetFirstSupportedItem(IClipboardDataPackage package)
+        async Task<IClipboardData> GetFirstSupportedItemAsync(IClipboardDataPackage package)
         {
             var supportedItems = await asyncFilter.FilterAsync(package.Contents, CanPerformAsync)
                                                   .ConfigureAwait(false);
@@ -60,14 +99,26 @@
         public async Task PerformAsync(
             IClipboardDataPackage package)
         {
-            var textData = (IClipboardTextData) await GetFirstSupportedItem(package)
-                                                          .ConfigureAwait(false);
-            var links = await linkParser.ExtractLinksFromTextAsync(textData.Text)
-                                        .ConfigureAwait(false);
+            await DoForEveryLinkAsync(
+                package,
+                link => processManager.LaunchCommand(link));
+        }
+
+        async Task DoForEveryLinkAsync(IClipboardDataPackage package, Action<string> action)
+        {
+            var links = await ExtractLinksFromPackageAsync(package);
             foreach (var link in links)
             {
-                processManager.LaunchCommand(link);
+                action(link);
             }
+        }
+
+        async Task<IReadOnlyList<string>> ExtractLinksFromPackageAsync(IClipboardDataPackage package)
+        {
+            var textData = (IClipboardTextData) await GetFirstSupportedItemAsync(package)
+                                                          .ConfigureAwait(false);
+            var links = await linkParser.ExtractLinksFromTextAsync(textData.Text);
+            return new List<string>(links);
         }
     }
 }

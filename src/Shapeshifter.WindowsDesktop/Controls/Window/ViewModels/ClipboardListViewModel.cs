@@ -33,9 +33,9 @@
             IDisposable
     {
         IClipboardDataControlPackage selectedElement;
-        IAction selectedAction;
+        IActionViewModel selectedAction;
 
-        SemaphoreSlim singlePasteLock;
+        readonly SemaphoreSlim singlePasteLock;
 
         readonly IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator;
         readonly IScreenManager screenManager;
@@ -48,7 +48,7 @@
 
         public ObservableCollection<IClipboardDataControlPackage> Elements { get; }
 
-        public ObservableCollection<IAction> Actions { get; }
+        public ObservableCollection<IActionViewModel> Actions { get; }
 
         public ScreenInformation ActiveScreen
         {
@@ -69,7 +69,7 @@
             }
         }
 
-        public IAction SelectedAction
+        public IActionViewModel SelectedAction
         {
             get
             {
@@ -112,7 +112,7 @@
             IPackageToActionSwitch packageToActionSwitch)
         {
             Elements = new ObservableCollection<IClipboardDataControlPackage>();
-            Actions = new ObservableCollection<IAction>();
+            Actions = new ObservableCollection<IActionViewModel>();
 
             singlePasteLock = new SemaphoreSlim(1);
 
@@ -201,7 +201,7 @@
             if (SelectedAction != null)
             {
                 await singlePasteLock.WaitAsync();
-                await SelectedAction.PerformAsync(SelectedElement.Data);
+                await SelectedAction.Action.PerformAsync(SelectedElement.Data);
                 singlePasteLock.Release();
             }
         }
