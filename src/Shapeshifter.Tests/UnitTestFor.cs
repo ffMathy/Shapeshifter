@@ -6,6 +6,8 @@
 
     using Autofac;
 
+    using Controls.Window.ViewModels.Interfaces;
+
     using Infrastructure.Dependencies;
     using Infrastructure.Environment.Interfaces;
 
@@ -77,7 +79,6 @@
                 (c) => {
                     foreach (var fake in fakeInclusions)
                     {
-                        //TODO: clean this up
                         var method = typeof (Extensions)
                             .GetMethod(
                                 nameof(Extensions.RegisterFake))
@@ -92,6 +93,9 @@
                 },
                 fakeExceptions.ToArray());
             systemUnderTest = container.Resolve<TSystemUnderTest>();
+
+            var settingsViewModel = container.Resolve<ISettingsViewModel>();
+            settingsViewModel.MaximumAmountOfItemsInClipboard.Returns(8);
         }
 
         [TestCleanup]

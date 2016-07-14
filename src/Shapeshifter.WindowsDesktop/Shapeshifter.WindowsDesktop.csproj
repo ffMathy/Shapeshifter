@@ -172,8 +172,10 @@
     <Compile Include="Controls\Window\ViewModels\Interfaces\IActionViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\ISettingsViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Data\Actions\CopyAsFileAction.cs" />
     <Compile Include="Data\Actions\CopyImageLinkAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IAction.cs" />
+    <Compile Include="Data\Actions\Interfaces\ICopyAsFileAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IPasteAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IOpenLinkAction.cs" />
     <Compile Include="Data\Actions\Interfaces\ICopyImageLinkAction.cs" />
