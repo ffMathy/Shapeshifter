@@ -8,10 +8,17 @@ namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
 {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.CompilerServices;
+    using System.Windows.Input;
 
-    public class WindowHookInterceptor: IEntryPoint
+    public class WindowHookInterceptor : IEntryPoint
     {
         readonly HookHostCommunicator _interface;
+
+        SetWindowsHookExDelegate originalSetWindowsHookExW;
+        UnhookWindowsHookExDelegate originalUnhookWindowsHookEx;
+
+        bool ctrlIsDown;
 
         [SuppressMessage("ReSharper", "UnusedParameter.Local")]
         public WindowHookInterceptor(
@@ -20,15 +27,58 @@ namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
         {
             _interface = RemoteHooking.IpcConnectClient<HookHostCommunicator>(InChannelName);
         }
-        
-        public IntPtr SetWindowsHookEx(int idHook, KeyboardHookDelegate lpfn, IntPtr hMod, uint dwThreadId)
+
+        public IntPtr SetWindowsHookExOverride(int idHook, KeyboardHookDelegate lpfn, IntPtr hMod, uint dwThreadId)
         {
-            return new IntPtr(1337);
+            var result = originalSetWindowsHookExW(
+                idHook,
+                (nCode, wParam, lParam) =>
+                {
+                    var vkCode = Marshal.ReadInt32(lParam);
+                    var currentKey = KeyInterop.KeyFromVirtualKey(vkCode);
+
+                    var keyEvent = (KeyEvent)wParam.ToUInt32();
+
+                    var isCurrentKeyDown = keyEvent == KeyEvent.WM_KEYDOWN;
+
+                    var shouldOverride = ctrlIsDown && (currentKey == Key.V);
+
+                    var fetchOriginalResult = new Lazy<IntPtr>(() => lpfn(nCode, wParam, lParam));
+                    if (!shouldOverride)
+                    {
+                        if (fetchOriginalResult.Value.ToInt64() != 4294967295) return fetchOriginalResult.Value;
+                    }
+
+                    switch (currentKey)
+                    {
+                        case Key.LeftCtrl:
+                        case Key.RightCtrl:
+                            ctrlIsDown = isCurrentKeyDown;
+                            shouldOverride = true;
+                            break;
+
+                        case Key.V:
+                            shouldOverride = ctrlIsDown;
+                            break;
+                    }
+
+                    if (shouldOverride)
+                    {
+                        return CallNextHookEx(
+                            new IntPtr(idHook), nCode, wParam, lParam);
+                    }
+
+                    return fetchOriginalResult.Value;
+                },
+                hMod,
+                dwThreadId);
+            return result;
         }
 
-        public bool UnhookWindowsHookEx(IntPtr hhk)
+        public bool UnhookWindowsHookExOverride(IntPtr hhk)
         {
-            return true;
+            var result = originalUnhookWindowsHookEx(hhk);
+            return result;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
@@ -43,19 +93,22 @@ namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
         {
             try
             {
+                originalSetWindowsHookExW = InterceptUser32Method(
+                    $"{nameof(SetWindowsHookEx)}W",
+                    new SetWindowsHookExDelegate(SetWindowsHookExOverride));
                 InterceptUser32Method(
-                    nameof(SetWindowsHookEx),
-                    new SetWindowsHookExDelegate(SetWindowsHookEx));
-                InterceptUser32Method(
-                    nameof(UnhookWindowsHookEx),
-                    new UnhookWindowsHookExDelegate(UnhookWindowsHookEx));
+                    $"{nameof(SetWindowsHookEx)}A",
+                    new SetWindowsHookExDelegate(SetWindowsHookExOverride));
+                originalUnhookWindowsHookEx = InterceptUser32Method(
+                    $"{nameof(UnhookWindowsHookEx)}",
+                    new UnhookWindowsHookExDelegate(UnhookWindowsHookExOverride));
             }
             catch (Exception exception)
             {
                 _interface.ReportException(exception);
                 return;
             }
-            
+
             try
             {
                 while (true)
@@ -70,15 +123,23 @@ namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
             }
         }
 
-        void InterceptUser32Method(string methodName, Delegate callback)
+        TOriginalDelegate InterceptUser32Method<TOriginalDelegate>(string methodName, TOriginalDelegate callback)
         {
             _interface.DebugWriteLine("Intercepting " + methodName + ".");
 
+            const string library = "user32.dll";
+
+            var originalDelegate = LocalHook.GetProcDelegate<TOriginalDelegate>(
+                library,
+                methodName);
+
             var hook = LocalHook.Create(
-                LocalHook.GetProcAddress("user32.dll", methodName),
-                callback,
+                LocalHook.GetProcAddress(library, methodName),
+                (Delegate)(object)callback,
                 null);
             hook.ThreadACL.SetExclusiveACL(new int[] { });
+
+            return originalDelegate;
         }
     }
 }

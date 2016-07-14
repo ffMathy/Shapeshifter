@@ -22,8 +22,9 @@
     public class KeyboardDominanceWatcher : IKeyboardDominanceWatcher
     {
         readonly IProcessWatcher processWatcher;
-
         readonly IProcessManager processManager;
+
+        readonly HookHostCommunicator communicator;
 
         string channelName;
 
@@ -39,6 +40,8 @@
         {
             this.processWatcher = processWatcher;
             this.processManager = processManager;
+
+            communicator = new HookHostCommunicator();
 
             SetUpProcessWatcher();
         }
@@ -62,8 +65,10 @@
                 $"{processManager.GetCurrentProcessName()}.exe",
                 injectedLibraryName);
 
-            RemoteHooking.IpcCreateServer<HookHostCommunicator>(
-                ref channelName, WellKnownObjectMode.SingleCall);
+            RemoteHooking.IpcCreateServer(
+                ref channelName, 
+                WellKnownObjectMode.SingleCall,
+                communicator);
             
             RemoteHooking.Inject(
                 e.ProcessId,
@@ -71,9 +76,6 @@
                 injectedLibraryName,
                 channelName);
         }
-
-        public event EventHandler KeyboardAccessOverruled;
-        public event EventHandler KeyboardAccessRestored;
 
         public void Start()
         {
@@ -83,16 +85,6 @@
         public void Stop()
         {
             processWatcher.Disconnect();
-        }
-
-        protected virtual void OnKeyboardAccessOverruled()
-        {
-            KeyboardAccessOverruled?.Invoke(this, EventArgs.Empty);
-        }
-
-        protected virtual void OnKeyboardAccessRestored()
-        {
-            KeyboardAccessRestored?.Invoke(this, EventArgs.Empty);
         }
     }
 }
