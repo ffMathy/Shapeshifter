@@ -59,11 +59,7 @@
         {
             if (!SuspiciousProcesses.Contains(e.ProcessName)) return;
 
-            var injectedLibraryName = $"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(KeyboardHookInterception)}.dll";
-            Config.Register(
-                nameof(Shapeshifter),
-                $"{processManager.GetCurrentProcessName()}.exe",
-                injectedLibraryName);
+            var injectedLibraryName = GetInjectedLibraryName();
 
             RemoteHooking.IpcCreateServer(
                 ref channelName, 
@@ -77,6 +73,11 @@
                 channelName);
         }
 
+        static string GetInjectedLibraryName()
+        {
+            return $"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(KeyboardHookInterception)}.dll";
+        }
+
         public void Start()
         {
             processWatcher.Connect();
@@ -85,6 +86,14 @@
         public void Stop()
         {
             processWatcher.Disconnect();
+        }
+
+        public void Install()
+        {
+            Config.Register(
+                nameof(Shapeshifter),
+                $"{processManager.GetCurrentProcessName()}.exe",
+                GetInjectedLibraryName());
         }
     }
 }
