@@ -227,6 +227,8 @@
     <Compile Include="Services\Keyboard\KeyboardHook.cs" />
     <Compile Include="Services\Keyboard\KeyboardPasteCombinationStateService.cs" />
     <Compile Include="Services\Keyboard\PasteDetectionHandler.cs" />
+    <Compile Include="Services\Messages\Interceptors\AeroColorChangeInterceptor.cs" />
+    <Compile Include="Services\Messages\Interceptors\Interfaces\IAeroColorChangeInterceptor.cs" />
     <Compile Include="Services\MouseWheelHook.cs" />
     <Compile Include="Services\PixelConversionService.cs" />
     <Compile Include="Services\Processes\Interfaces\IProcessWatcher.cs" />

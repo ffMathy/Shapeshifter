@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Native.Interfaces
 {
     using System;
+    using System.Runtime.InteropServices;
 
     public interface IGeneralNativeApi
     {
@@ -19,5 +20,7 @@
         bool GlobalUnlock(IntPtr hMem);
 
         byte[] StructureToByteArray<T>(T structure);
+
+        void DwmGetColorizationColor(out uint ColorizationColor, [MarshalAs(UnmanagedType.Bool)] out bool ColorizationOpaqueBlend);
     }
 }
