@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services.Tray
+﻿namespace Shapeshifter.WindowsDesktop.Services
 {
     using System;
     using System.Collections.Generic;
@@ -11,7 +11,7 @@
 
     using Properties;
 
-    using Updates.Interfaces;
+    using Web.Updates.Interfaces;
 
     public class TrayIconManager: ITrayIconManager
     {

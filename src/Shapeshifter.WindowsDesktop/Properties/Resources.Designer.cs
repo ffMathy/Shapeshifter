@@ -39,7 +39,7 @@ namespace Shapeshifter.WindowsDesktop.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Shapeshifter.WindowsDesktop.Properties.Resources", typeof(Resources).Assembly);
+                    var temp = new global::System.Resources.ResourceManager("Shapeshifter.WindowsDesktop.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -65,7 +65,7 @@ namespace Shapeshifter.WindowsDesktop.Properties {
         /// </summary>
         internal static byte[] App {
             get {
-                object obj = ResourceManager.GetObject("App", resourceCulture);
+                var obj = ResourceManager.GetObject("App", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -75,7 +75,7 @@ namespace Shapeshifter.WindowsDesktop.Properties {
         /// </summary>
         internal static byte[] FileDataFileIcon {
             get {
-                object obj = ResourceManager.GetObject("FileDataFileIcon", resourceCulture);
+                var obj = ResourceManager.GetObject("FileDataFileIcon", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -85,7 +85,7 @@ namespace Shapeshifter.WindowsDesktop.Properties {
         /// </summary>
         internal static byte[] FileDataSourceIcon {
             get {
-                object obj = ResourceManager.GetObject("FileDataSourceIcon", resourceCulture);
+                var obj = ResourceManager.GetObject("FileDataSourceIcon", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -95,7 +95,7 @@ namespace Shapeshifter.WindowsDesktop.Properties {
         /// </summary>
         internal static byte[] FileImageSample {
             get {
-                object obj = ResourceManager.GetObject("FileImageSample", resourceCulture);
+                var obj = ResourceManager.GetObject("FileImageSample", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -105,7 +105,7 @@ namespace Shapeshifter.WindowsDesktop.Properties {
         /// </summary>
         internal static System.Drawing.Icon ShapeshifterIcon {
             get {
-                object obj = ResourceManager.GetObject("ShapeshifterIcon", resourceCulture);
+                var obj = ResourceManager.GetObject("ShapeshifterIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -115,7 +115,7 @@ namespace Shapeshifter.WindowsDesktop.Properties {
         /// </summary>
         internal static byte[] TextDataSourceIcon {
             get {
-                object obj = ResourceManager.GetObject("TextDataSourceIcon", resourceCulture);
+                var obj = ResourceManager.GetObject("TextDataSourceIcon", resourceCulture);
                 return ((byte[])(obj));
             }
         }

@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services.Updates
+﻿namespace Shapeshifter.WindowsDesktop.Services.Web.Updates
 {
     using System;
     using System.Collections.Generic;
@@ -16,7 +16,7 @@
 
     using Octokit;
 
-    using Services.Interfaces;
+    using Processes.Interfaces;
 
     using Web.Interfaces;
 
@@ -30,6 +30,7 @@
             var fakeGitHubClient = Substitute.For<IGitHubClient>();
 
             fakeGitHubClient
+                .Repository
                 .Release
                 .Returns(fakeReleasesClient);
 
@@ -68,6 +69,7 @@
             var fakeGitHubClient = Substitute.For<IGitHubClient>();
 
             fakeGitHubClient
+                .Repository
                 .Release
                 .Returns(fakeReleasesClient);
 
@@ -106,6 +108,7 @@
             var fakeGitHubClient = Substitute.For<IGitHubClient>();
 
             fakeGitHubClient
+                .Repository
                 .Release
                 .Returns(fakeReleasesClient);
 
@@ -145,6 +148,7 @@
                 .CreateClient();
 
             fakeGitHubClient
+                .Repository
                 .Release
                 .GetAll("ffMathy", "Shapeshifter")
                 .Returns(
@@ -159,6 +163,7 @@
                         }));
 
             fakeGitHubClient
+                .Repository
                 .Release
                 .GetAllAssets("ffMathy", "Shapeshifter", 1337)
                 .Returns(
@@ -201,7 +206,8 @@
                 3,
                 DateTimeOffset.Now,
                 DateTimeOffset.Now,
-                "browserDownloadUrl");
+                "browserDownloadUrl",
+                new Author());
         }
 
         static Release CreateRelease(
@@ -223,7 +229,11 @@
                 isDraft,
                 isPrerelease,
                 DateTimeOffset.Now,
-                DateTimeOffset.Now);
+                DateTimeOffset.Now,
+                new Author(), 
+                "foo",
+                "bar",
+                null);
         }
     }
 }

@@ -43,11 +43,10 @@
     <ApplicationIcon>Resources\Shapeshifter.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>StrongName.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
@@ -61,24 +60,25 @@
       <Private>True</Private>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
-      <HintPath>..\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
-      <Private>True</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="JetBrains.Annotations, Version=10.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
-      <Private>True</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Octokit, Version=0.17.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Octokit.0.17.0\lib\net45\Octokit.dll</HintPath>
+    <Reference Include="EasyHook, Version=2.7.6035.0, Culture=neutral, PublicKeyToken=4b580fca19d0b0c5, processorArchitecture=MSIL">
+      <HintPath>..\packages\EasyHook.2.7.6035\lib\net40\EasyHook.dll</HintPath>
       <Private>True</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="JetBrains.Annotations, Version=10.1.5.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.1.5\lib\net\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Octokit, Version=0.20.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Octokit.0.20.0\lib\net45\Octokit.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System">
       <Private>True</Private>
@@ -96,9 +96,15 @@
       <Private>True</Private>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
+    <Reference Include="System.Management">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http">
       <Private>True</Private>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System.Runtime.Remoting">
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Forms">
       <Private>True</Private>
@@ -184,6 +190,8 @@
     <Compile Include="Infrastructure\Dependencies\AssemblyRegistrationHelper.cs" />
     <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
     <Compile Include="Infrastructure\Dependencies\PublicConstructorFinder.cs" />
+    <Compile Include="Infrastructure\Events\ProcessStartedEventArgument.cs" />
+    <Compile Include="Infrastructure\Events\KeyDetectedArgument.cs" />
     <Compile Include="Infrastructure\Events\PastePerformedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\TrayIconClickedEventArgument.cs" />
     <Compile Include="Infrastructure\Handles\IndentationHandle.cs" />
@@ -201,15 +209,26 @@
     <Compile Include="Services\Interfaces\IPixelConversionService.cs" />
     <Compile Include="Services\Interfaces\IRegistryManager.cs" />
     <Compile Include="Services\Interfaces\ISettingsManager.cs" />
+    <Compile Include="Services\Interfaces\IWindowManager.cs" />
+    <Compile Include="Services\Keyboard\Interfaces\IKeyboardHook.cs" />
+    <Compile Include="Services\Keyboard\Interfaces\IPasteDetectionHandler.cs" />
+    <Compile Include="Services\Keyboard\Interfaces\IKeyboardPasteCombinationStateService.cs" />
+    <Compile Include="Services\Keyboard\Interfaces\IPasteDetector.cs" />
+    <Compile Include="Services\Keyboard\KeyboardDominanceWatcher.cs" />
+    <Compile Include="Services\Keyboard\KeyboardHook.cs" />
+    <Compile Include="Services\Keyboard\KeyboardPasteCombinationStateService.cs" />
+    <Compile Include="Services\Keyboard\PasteDetectionHandler.cs" />
     <Compile Include="Services\MouseWheelHook.cs" />
     <Compile Include="Services\PixelConversionService.cs" />
+    <Compile Include="Services\Processes\Interfaces\IProcessWatcher.cs" />
+    <Compile Include="Services\Processes\ProcessWatcher.cs" />
     <Compile Include="Services\RegistryManager.cs" />
     <Compile Include="Services\Screen\ScreenInformation.cs" />
     <Compile Include="Services\Screen\Interfaces\IScreenManager.cs" />
     <Compile Include="Services\Screen\ScreenManager.cs" />
     <Compile Include="Services\SettingsManager.cs" />
-    <Compile Include="Services\Tray\Interfaces\ITrayContextMenuItem.cs" />
-    <Compile Include="Services\Tray\Interfaces\ITrayIconManager.cs" />
+    <Compile Include="Services\Keyboard\Interfaces\IKeyboardDominanceWatcher.cs" />
+    <Compile Include="Services\Interfaces\ITrayIconManager.cs" />
     <Compile Include="Services\Messages\Message.cs" />
     <Compile Include="Controls\Clipboard\ClipboardImageDataControl.xaml.cs">
       <DependentUpon>ClipboardImageDataControl.xaml</DependentUpon>
@@ -320,10 +339,10 @@
     <Compile Include="Services\Files\Interfaces\IFileManager.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IDataSourceService.cs" />
     <Compile Include="Services\Interfaces\ICertificateManager.cs" />
-    <Compile Include="Services\Interfaces\IProcessManager.cs" />
-    <Compile Include="Services\Updates\GitHubClientFactory.cs" />
-    <Compile Include="Services\Updates\Interfaces\IGitHubClientFactory.cs" />
-    <Compile Include="Services\Updates\Interfaces\IUpdateService.cs" />
+    <Compile Include="Services\Processes\Interfaces\IProcessManager.cs" />
+    <Compile Include="Services\Web\Updates\GitHubClientFactory.cs" />
+    <Compile Include="Services\Web\Updates\Interfaces\IGitHubClientFactory.cs" />
+    <Compile Include="Services\Web\Updates\Interfaces\IUpdateService.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardManager.cs" />
     <Compile Include="Services\Keyboard\KeyboardManager.cs" />
     <Compile Include="Services\Keyboard\KeyDirection.cs" />
@@ -347,9 +366,9 @@
     <Compile Include="Services\Messages\Interceptors\Hotkeys\KeyInterceptor.cs" />
     <Compile Include="Services\Messages\Interfaces\IWindowMessageInterceptor.cs" />
     <Compile Include="Services\Messages\Interfaces\IWindowMessageHook.cs" />
-    <Compile Include="Services\ProcessManager.cs" />
-    <Compile Include="Services\Tray\TrayIconManager.cs" />
-    <Compile Include="Services\Updates\UpdateService.cs" />
+    <Compile Include="Services\Processes\ProcessManager.cs" />
+    <Compile Include="Services\TrayIconManager.cs" />
+    <Compile Include="Services\Web\Updates\UpdateService.cs" />
     <Compile Include="Services\Web\DomainNameResolver.cs" />
     <Compile Include="Services\Files\FileType.cs" />
     <Compile Include="Services\Files\FileTypeInterpreter.cs" />
@@ -383,6 +402,7 @@
     <Compile Include="Operations\Startup\PostPreparationOperation.cs" />
     <Compile Include="Operations\Startup\StartupPreparationOperation.cs" />
     <Compile Include="Operations\Startup\TrayPreparationOperation.cs" />
+    <Compile Include="Services\WindowManager.cs" />
     <Compile Include="Structures\FormatDataPair.cs" />
     <Compile Include="Controls\Window\Binders\PackageToActionBinder.cs" />
     <Compile Include="Controls\Window\ClipboardListWindow.xaml.cs">
@@ -487,6 +507,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="StrongName.snk" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -495,6 +516,10 @@
     <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileImageSample.dat" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Shapeshifter.WindowsDesktop.KeyboardHookInterception\Shapeshifter.WindowsDesktop.KeyboardHookInterception.csproj">
+      <Project>{9A7B5B69-AB84-4906-B65A-EE5581568C5E}</Project>
+      <Name>Shapeshifter.WindowsDesktop.KeyboardHookInterception</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Shapeshifter.WindowsDesktop.Native\Shapeshifter.WindowsDesktop.Native.csproj">
       <Project>{25acb6f2-f5e2-4c38-ab51-697eaa995cc4}</Project>
       <Name>Shapeshifter.WindowsDesktop.Native</Name>
@@ -508,6 +533,14 @@
   <ItemGroup>
     <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="EasyHook32.dll" />
+    <Content Include="EasyHook32Svc.exe" />
+    <Content Include="EasyHook64.dll" />
+    <Content Include="EasyHook64Svc.exe" />
+    <Content Include="EasyLoad32.dll" />
+    <Content Include="EasyLoad64.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -516,4 +549,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.29.4\build\dotnet\Fody.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PreBuildEvent>"$(SolutionDir)packages\Brutal.Dev.StrongNameSigner.1.8.0\tools\StrongNameSigner.Console.exe" -a "$(SolutionDir)packages\Octokit.0.20.0\lib\net45\Octokit.dll"</PreBuildEvent>
+  </PropertyGroup>
 </Project>

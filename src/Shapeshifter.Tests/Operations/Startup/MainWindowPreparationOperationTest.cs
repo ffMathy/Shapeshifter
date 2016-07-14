@@ -1,18 +1,16 @@
-﻿namespace Shapeshifter.WindowsDesktop
+﻿namespace Shapeshifter.WindowsDesktop.Operations.Startup
 {
     using System.Threading.Tasks;
 
     using Autofac;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    
-    using NSubstitute;
-
-    using WindowsDesktop;
-
     using Controls.Window.Interfaces;
 
     using Mediators.Interfaces;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using NSubstitute;
 
     using Operations.Startup.Interfaces;
 
@@ -34,12 +32,12 @@
         {
             await SystemUnderTest.RunAsync();
 
-            var fakeWindow = Container.Resolve<IClipboardListWindow>();
-            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
+            Container.Resolve<IClipboardListWindow>()
+                     .SourceInitialized += Raise.Event();
 
-            fakeWindow.SourceInitialized += Raise.Event();
-            fakeMediator.Received()
-                        .Connect(fakeWindow);
+            Container.Resolve<IClipboardUserInterfaceInteractionMediator>()
+                .Received()
+                .Connect();
         }
     }
 }

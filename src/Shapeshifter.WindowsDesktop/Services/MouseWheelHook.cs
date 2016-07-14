@@ -4,6 +4,7 @@
     using System.Windows.Input;
 
     using Infrastructure.Events;
+    using Infrastructure.Logging.Interfaces;
 
     using Interfaces;
 
@@ -11,17 +12,23 @@
 
     public class MouseWheelHook: IMouseWheelHook
     {
+        readonly ILogger logger;
+
         int currentDelta;
 
         Message currentScrollTypeMessage;
 
         public event EventHandler WheelScrolledDown;
-
         public event EventHandler WheelScrolledUp;
-
         public event EventHandler WheelTilted;
 
         public bool IsConnected { get; private set; }
+
+        public MouseWheelHook(
+            ILogger logger)
+        {
+            this.logger = logger;
+        }
 
         public void ResetAccumulatedWheelDelta()
         {
@@ -30,13 +37,11 @@
 
         void TriggerScrollEventsIfNeeded()
         {
-            if ((currentDelta < Mouse.MouseWheelDeltaForOneLine) || 
+            if ((currentDelta < Mouse.MouseWheelDeltaForOneLine) && 
                 (currentDelta > -Mouse.MouseWheelDeltaForOneLine))
             {
                 return;
             }
-
-            ResetAccumulatedWheelDelta();
 
             switch (currentScrollTypeMessage) {
 
@@ -48,6 +53,8 @@
                     TriggerNeededEventsForCurrentDelta();
                     break;
             }
+
+            ResetAccumulatedWheelDelta();
         }
 
         void TriggerNeededEventsForCurrentDelta()
@@ -144,6 +151,8 @@
 
             currentDelta += delta;
             currentScrollTypeMessage = e.Message;
+
+            logger.Information("Current mouse wheel delta is " + currentDelta + ".");
 
             TriggerScrollEventsIfNeeded();
         }

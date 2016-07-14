@@ -13,6 +13,8 @@
 
     using Native.Helpers.Interfaces;
 
+    using Processes.Interfaces;
+
     using Properties;
 
     using Services.Interfaces;

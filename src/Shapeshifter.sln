@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.25428.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.WindowsDesktop", "Shapeshifter.WindowsDesktop\Shapeshifter.WindowsDesktop.csproj", "{C8AFEB5B-5197-4F7D-90F1-DC1DCD795BE1}"
 EndProject
@@ -9,17 +9,30 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.Tests", "Shape
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.WindowsDesktop.Native", "Shapeshifter.WindowsDesktop.Native\Shapeshifter.WindowsDesktop.Native.csproj", "{25ACB6F2-F5E2-4C38-AB51-697EAA995CC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.WindowsDesktop.KeyboardHookInterception", "Shapeshifter.WindowsDesktop.KeyboardHookInterception\Shapeshifter.WindowsDesktop.KeyboardHookInterception.csproj", "{9A7B5B69-AB84-4906-B65A-EE5581568C5E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C8AFEB5B-5197-4F7D-90F1-DC1DCD795BE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C8AFEB5B-5197-4F7D-90F1-DC1DCD795BE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8AFEB5B-5197-4F7D-90F1-DC1DCD795BE1}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8AFEB5B-5197-4F7D-90F1-DC1DCD795BE1}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{66E94495-F590-41F6-B488-52B0FDCAB03C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{66E94495-F590-41F6-B488-52B0FDCAB03C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66E94495-F590-41F6-B488-52B0FDCAB03C}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{66E94495-F590-41F6-B488-52B0FDCAB03C}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{25ACB6F2-F5E2-4C38-AB51-697EAA995CC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{25ACB6F2-F5E2-4C38-AB51-697EAA995CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25ACB6F2-F5E2-4C38-AB51-697EAA995CC4}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{25ACB6F2-F5E2-4C38-AB51-697EAA995CC4}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{9A7B5B69-AB84-4906-B65A-EE5581568C5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A7B5B69-AB84-4906-B65A-EE5581568C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A7B5B69-AB84-4906-B65A-EE5581568C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A7B5B69-AB84-4906-B65A-EE5581568C5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

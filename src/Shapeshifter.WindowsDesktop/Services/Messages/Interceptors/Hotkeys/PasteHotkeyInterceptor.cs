@@ -13,7 +13,6 @@
     class PasteHotkeyInterceptor: IPasteHotkeyInterceptor
     {
         readonly ILogger logger;
-
         readonly IHotkeyInterception hotkeyInterception;
 
         IntPtr mainWindowHandle;
@@ -21,7 +20,9 @@
         bool isInstalled;
         bool shouldSkipNext;
 
-        public event EventHandler<HotkeyFiredArgument> HotkeyFired;
+        public event EventHandler PasteDetected;
+
+        public bool IsEnabled { get; set; }
 
         public PasteHotkeyInterceptor(
             ILogger logger,
@@ -88,11 +89,7 @@
 
             logger.Information("Paste hotkey message received.", 1);
 
-            HotkeyFired?.Invoke(
-                this,
-                new HotkeyFiredArgument(
-                    hotkeyInterception.Key,
-                    hotkeyInterception.ControlNeeded));
+            OnPasteDetected();
         }
 
         public void SkipNext()
@@ -100,6 +97,9 @@
             shouldSkipNext = true;
         }
 
-        public bool IsEnabled { get; set; }
+        protected virtual void OnPasteDetected()
+        {
+            PasteDetected?.Invoke(this, new EventArgs());
+        }
     }
 }

@@ -24,5 +24,11 @@
         IntPtr LoadIcon(IntPtr hInstance, IntPtr lpIconName);
 
         IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+
+        IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WindowNativeApi.WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
+
+        bool UnhookWinEvent(IntPtr hWinEventHook);
+
+        IntPtr GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
     }
 }

@@ -41,7 +41,7 @@
                 foreach (XmlNode reference in references)
                 {
                     var privateNode = reference.SelectSingleNode("./default:Private", namespaceManager);
-                    Assert.IsNotNull(privateNode);
+                    Assert.IsNotNull(privateNode, "A specific project reference was not set to copy local.");
                     Assert.AreEqual("True", privateNode.InnerText);
                 }
             }

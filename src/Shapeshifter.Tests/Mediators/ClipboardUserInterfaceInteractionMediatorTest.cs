@@ -2,13 +2,11 @@
 {
     using System;
     using System.Linq;
-    using System.Windows.Input;
 
     using Autofac;
 
     using Controls.Clipboard.Factories.Interfaces;
     using Controls.Clipboard.Interfaces;
-    using Controls.Window.Interfaces;
 
     using Data.Interfaces;
 
@@ -20,7 +18,6 @@
 
     using NSubstitute;
 
-    using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interceptors.Interfaces;
 
     [TestClass]
@@ -54,9 +51,8 @@
             Container.Resolve<IPasteCombinationDurationMediator>()
                      .IsConnected
                      .Returns(true);
-
-            var fakeWindow = Substitute.For<IHookableWindow>();
-            SystemUnderTest.Connect(fakeWindow);
+            
+            SystemUnderTest.Connect();
         }
 
         [TestMethod]
@@ -97,7 +93,7 @@
                      .Returns(fakePackage);
 
             var mediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
-            mediator.Connect(null);
+            mediator.Connect();
 
             var addedPackage = mediator.ClipboardElements.Single();
             var content = addedPackage.Data.Contents.Single();
@@ -115,7 +111,7 @@
                 eventArgument = e;
             };
 
-            SystemUnderTest.Connect(null);
+            SystemUnderTest.Connect();
 
             var addedPackage = SystemUnderTest.ClipboardElements.Single();
             Assert.IsNotNull(addedPackage);
@@ -126,11 +122,11 @@
         [TestMethod]
         public void ConnectConnectsHotkeyHook()
         {
-            SystemUnderTest.Connect(null);
+            SystemUnderTest.Connect();
 
             var fakeHotkeyHookService = Container.Resolve<IPasteCombinationDurationMediator>();
             fakeHotkeyHookService.Received()
-                                 .Connect(null);
+                                 .Connect();
         }
 
         [TestMethod]
@@ -165,7 +161,7 @@
              .CreateFromCurrentClipboardData()
              .Returns(fakePackage);
             
-            SystemUnderTest.Connect(null);
+            SystemUnderTest.Connect();
 
             var numberOfPackagesBeforeDataCopied = SystemUnderTest.ClipboardElements.Count();
             var fakeClipboardHookService = Container.Resolve<IClipboardCopyInterceptor>();
@@ -196,7 +192,7 @@
              .CreateFromCurrentClipboardData()
              .Returns(fakePackage);
             
-            SystemUnderTest.Connect(null);
+            SystemUnderTest.Connect();
 
             var fakeClipboardHookService = Container.Resolve<IClipboardCopyInterceptor>();
             fakeClipboardHookService.DataCopied +=
@@ -213,7 +209,7 @@
         [TestMethod]
         public void DataCopiedTriggersEvent()
         {
-            SystemUnderTest.Connect(null);
+            SystemUnderTest.Connect();
 
             object eventSender = null;
             PackageEventArgument eventArgument = null;

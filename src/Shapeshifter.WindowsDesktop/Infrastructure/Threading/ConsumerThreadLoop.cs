@@ -12,10 +12,12 @@
     class ConsumerThreadLoop: IConsumerThreadLoop
     {
         readonly IThreadLoop internalLoop;
-
         readonly ILogger logger;
 
         int countAvailable;
+
+        public bool IsRunning 
+            => internalLoop.IsRunning;
 
         public ConsumerThreadLoop(
             IThreadLoop internalLoop,
@@ -24,8 +26,6 @@
             this.internalLoop = internalLoop;
             this.logger = logger;
         }
-
-        public bool IsRunning => internalLoop.IsRunning;
 
         public void Stop()
         {

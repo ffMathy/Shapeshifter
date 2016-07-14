@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services.Updates
+﻿namespace Shapeshifter.WindowsDesktop.Services.Web.Updates
 {
     using System;
     using System.Collections.Generic;
@@ -16,7 +16,7 @@
 
     using Octokit;
 
-    using Services.Interfaces;
+    using Processes.Interfaces;
 
     using Web.Interfaces;
 
@@ -75,10 +75,13 @@
         async Task UpdateFromReleaseAsync(Release pendingUpdateRelease)
         {
             var assets =
-                await client.Release.GetAllAssets(
-                    RepositoryOwner,
-                    RepositoryName,
-                    pendingUpdateRelease.Id);
+                await client
+                    .Repository
+                    .Release
+                    .GetAllAssets(
+                        RepositoryOwner,
+                        RepositoryName,
+                        pendingUpdateRelease.Id);
             await UpdateFromAssetsAsync(assets);
         }
 
@@ -157,7 +160,7 @@
 
         async Task<IEnumerable<Release>> GetReleasesWithUpdatesAsync()
         {
-            var allReleases = await client.Release.GetAll(
+            var allReleases = await client.Repository.Release.GetAll(
                 RepositoryOwner,
                 RepositoryName);
             return allReleases.Where(IsUpdateToReleaseNeeded);

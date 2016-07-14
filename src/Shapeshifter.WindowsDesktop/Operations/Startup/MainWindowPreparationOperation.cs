@@ -33,6 +33,13 @@
             this.handleContainer = handleContainer;
             this.keyInterceptor = keyInterceptor;
             this.windowMessageHook = windowMessageHook;
+
+            SetupWindowMessageHook();
+        }
+
+        void SetupWindowMessageHook()
+        {
+            windowMessageHook.TargetWindow = mainWindow;
         }
 
         public async Task RunAsync()
@@ -45,8 +52,8 @@
         void OnMainWindowOnSourceInitialized(object sender, EventArgs e)
         {
             SetupKeyInterception();
-            windowMessageHook.Connect(mainWindow);
-            clipboardUserInterfaceInteractionMediator.Connect(mainWindow);
+            windowMessageHook.Connect();
+            clipboardUserInterfaceInteractionMediator.Connect();
         }
 
         void SetupKeyInterception()

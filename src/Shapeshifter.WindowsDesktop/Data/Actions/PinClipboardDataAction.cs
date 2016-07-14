@@ -12,19 +12,14 @@
 
     class PinClipboardDataAction: IPinClipboardDataAction
     {
-        readonly IClipboardPersistanceService clipboardPersistanceService;
-
         public string Title => "Pin to clipboard";
 
         public string Description => "Pins this item so that it always stays in the top, and gets saved to your harddrive.";
 
         public byte Order => byte.MaxValue;
 
-        public PinClipboardDataAction(
-            IClipboardPersistanceService clipboardPersistanceService)
-        {
-            this.clipboardPersistanceService = clipboardPersistanceService;
-        }
+        public PinClipboardDataAction()
+        { }
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
         {

@@ -37,10 +37,8 @@
         [ExpectedException(typeof (InvalidOperationException))]
         public void ConnectWhenAlreadyConnectedThrowsException()
         {
-            var fakeWindow = Substitute.For<IHookableWindow>();
-            
-            SystemUnderTest.Connect(fakeWindow);
-            SystemUnderTest.Connect(fakeWindow);
+            SystemUnderTest.Connect();
+            SystemUnderTest.Connect();
         }
 
         [TestMethod]
@@ -56,7 +54,8 @@
                                 h => windowHookCallback = h));
                     });
 
-            SystemUnderTest.Connect(fakeWindow);
+            SystemUnderTest.TargetWindow = fakeWindow;
+            SystemUnderTest.Connect();
 
             Assert.IsNotNull(windowHookCallback);
 
@@ -90,7 +89,8 @@
                                                        h => windowHookCallback = h));
                                            });
 
-            SystemUnderTest.Connect(fakeWindow);
+            SystemUnderTest.TargetWindow = fakeWindow;
+            SystemUnderTest.Connect();
 
             Assert.IsNotNull(windowHookCallback);
 

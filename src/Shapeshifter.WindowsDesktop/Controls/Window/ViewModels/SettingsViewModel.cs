@@ -8,20 +8,30 @@
     using JetBrains.Annotations;
 
     using Services.Interfaces;
+    using Services.Processes.Interfaces;
 
     class SettingsViewModel: ISettingsViewModel
     {
         readonly IRegistryManager registryManager;
         readonly IProcessManager processManager;
+        readonly ISettingsManager settingsManager;
+
+        int pasteDurationBeforeUserInterfaceShowsInMilliseconds;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public SettingsViewModel(
             IRegistryManager registryManager,
-            IProcessManager processManager)
+            IProcessManager processManager,
+            ISettingsManager settingsManager)
         {
             this.registryManager = registryManager;
             this.processManager = processManager;
+            this.settingsManager = settingsManager;
+
+            pasteDurationBeforeUserInterfaceShowsInMilliseconds = settingsManager.LoadSetting(
+                nameof(PasteDurationBeforeUserInterfaceShowsInMilliseconds),
+                300);
         }
 
         [NotifyPropertyChangedInvocator]
@@ -62,6 +72,24 @@
                         nameof(Shapeshifter));
                 }
 
+                OnPropertyChanged();
+            }
+        }
+
+        public int PasteDurationBeforeUserInterfaceShowsInMilliseconds
+        {
+            get
+            {
+                return pasteDurationBeforeUserInterfaceShowsInMilliseconds;
+            }
+            set
+            {
+                if (value == PasteDurationBeforeUserInterfaceShowsInMilliseconds) return;
+
+                settingsManager.SaveSetting(
+                    nameof(PasteDurationBeforeUserInterfaceShowsInMilliseconds),
+                    pasteDurationBeforeUserInterfaceShowsInMilliseconds = value);
+                
                 OnPropertyChanged();
             }
         }

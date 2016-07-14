@@ -3,9 +3,8 @@
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Windows.Input;
 
-    using Controls.Window.Interfaces;
+    using Controls.Window.ViewModels.Interfaces;
 
     using Infrastructure.Events;
     using Infrastructure.Logging.Interfaces;
@@ -14,41 +13,42 @@
     using Interfaces;
 
     using Services.Keyboard.Interfaces;
-    using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
     class PasteCombinationDurationMediator: IPasteCombinationDurationMediator
     {
-        readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
+        readonly IPasteDetectionHandler pasteDetectionHandler;
         readonly IConsumerThreadLoop consumerLoop;
+        readonly ISettingsViewModel settingsViewModel;
         readonly IThreadDelay threadDelay;
         readonly ILogger logger;
-        readonly IKeyboardManager keyboardManager;
+        readonly IKeyboardPasteCombinationStateService keyboardPasteState;
         readonly IMainThreadInvoker mainThreadInvoker;
-
+        
         readonly CancellationTokenSource threadCancellationTokenSource;
 
-        bool combinationCancellationRequested;
+        bool shouldCancel;
 
         public event EventHandler<PasteCombinationDurationPassedEventArgument> PasteCombinationDurationPassed;
-
         public event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleased;
-
         public event EventHandler<PasteCombinationReleasedEventArgument> AfterPasteCombinationReleased;
+        public event EventHandler PasteCombinationHeldDown;
 
         public PasteCombinationDurationMediator(
-            IPasteHotkeyInterceptor pasteHotkeyInterceptor,
+            IPasteDetectionHandler pasteDetectionHandler,
             IConsumerThreadLoop consumerLoop,
+            ISettingsViewModel settingsViewModel,
             IThreadDelay threadDelay,
             IMainThreadInvoker mainThreadInvoker,
             ILogger logger,
-            IKeyboardManager keyboardManager)
+            IKeyboardPasteCombinationStateService keyboardPasteState)
         {
-            this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
+            this.pasteDetectionHandler = pasteDetectionHandler;
             this.consumerLoop = consumerLoop;
+            this.settingsViewModel = settingsViewModel;
             this.threadDelay = threadDelay;
             this.mainThreadInvoker = mainThreadInvoker;
             this.logger = logger;
-            this.keyboardManager = keyboardManager;
+            this.keyboardPasteState = keyboardPasteState;
 
             threadCancellationTokenSource = new CancellationTokenSource();
         }
@@ -59,23 +59,16 @@
         bool IsCancellationRequested
             => threadCancellationTokenSource.Token.IsCancellationRequested;
 
-        public bool IsCombinationFullyHeldDown
-            => keyboardManager.IsKeyDown(Key.LeftCtrl) && keyboardManager.IsKeyDown(Key.V);
-
         public void CancelCombinationRegistration()
         {
             logger.Information("Cancelling duration mediator combination registration.");
-            combinationCancellationRequested = true;
+            shouldCancel = true;
         }
 
-        public bool IsCombinationPartiallyHeldDown
-            => keyboardManager.IsKeyDown(Key.LeftCtrl) || keyboardManager.IsKeyDown(Key.V);
-
         public int DurationInDeciseconds
-            => 5;
+            => settingsViewModel.PasteDurationBeforeUserInterfaceShowsInMilliseconds / 100;
 
-        public void Connect(
-            IHookableWindow targetWindow)
+        public void Connect()
         {
             if (IsConnected)
             {
@@ -83,6 +76,7 @@
                     "The clipboard combination mediator is already connected.");
             }
 
+            pasteDetectionHandler.Connect();
             InstallPasteHotkeyInterceptor();
         }
 
@@ -90,7 +84,7 @@
         {
             logger.Information("Paste combination duration loop has ticked.");
 
-            combinationCancellationRequested = false;
+            shouldCancel = false;
 
             await WaitForCombinationReleaseOrDurationPass();
             if (IsCancellationRequested)
@@ -99,7 +93,7 @@
             }
 
             RegisterCombinationReleased();
-            if (combinationCancellationRequested)
+            if (shouldCancel)
             {
                 return;
             }
@@ -142,7 +136,10 @@
         async Task WaitForCombinationReleaseOrDurationPass()
         {
             var decisecondsPassed = 0;
-            while (!IsCancellationRequested && IsCombinationFullyHeldDown && !combinationCancellationRequested)
+            while (
+                !IsCancellationRequested &&
+                keyboardPasteState.IsCombinationFullyHeldDown && 
+                !shouldCancel)
             {
                 await threadDelay.ExecuteAsync(100);
                 decisecondsPassed++;
@@ -155,14 +152,14 @@
 
         void RaiseDurationPassedEventIfNeeded(int decisecondsPassed)
         {
-            if ((decisecondsPassed != DurationInDeciseconds) || (PasteCombinationDurationPassed == null))
+            if ((DurationInDeciseconds != 0) && ((decisecondsPassed != DurationInDeciseconds) || (PasteCombinationDurationPassed == null)))
             {
                 return;
             }
 
             mainThreadInvoker.Invoke(
                 () => {
-                    PasteCombinationDurationPassed(
+                    PasteCombinationDurationPassed?.Invoke(
                         this,
                         new PasteCombinationDurationPassedEventArgument
                             ());
@@ -172,19 +169,20 @@
 
         void InstallPasteHotkeyInterceptor()
         {
-            pasteHotkeyInterceptor.HotkeyFired += PasteHotkeyInterceptor_PasteHotkeyFired;
+            pasteDetectionHandler.PasteDetected += PasteHotkeyInterceptor_PasteDetected;
         }
 
         void UninstallPasteHotkeyInterceptor()
         {
-            pasteHotkeyInterceptor.HotkeyFired -= PasteHotkeyInterceptor_PasteHotkeyFired;
+            pasteDetectionHandler.PasteDetected -= PasteHotkeyInterceptor_PasteDetected;
         }
 
-        void PasteHotkeyInterceptor_PasteHotkeyFired(object sender, HotkeyFiredArgument e)
+        void PasteHotkeyInterceptor_PasteDetected(object sender, EventArgs e)
         {
             logger.Information(
-                "Paste combination duration mediator reacted to paste hotkey.",
-                1);
+                "Paste combination duration mediator reacted to paste hotkey.", 1);
+
+            OnPasteCombinationHeldDown();
 
             consumerLoop.Notify(
                 MonitorClipboardCombinationStateAsync,
@@ -199,8 +197,14 @@
                     "The clipboard combination mediator is already disconnected.");
             }
 
+            pasteDetectionHandler.Disconnect();
             threadCancellationTokenSource.Cancel();
             UninstallPasteHotkeyInterceptor();
+        }
+
+        protected virtual void OnPasteCombinationHeldDown()
+        {
+            PasteCombinationHeldDown?.Invoke(this, EventArgs.Empty);
         }
     }
 }

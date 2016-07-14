@@ -36,7 +36,6 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
             IClipboardHandleFactory clipboardHandleFactory,
             IMemoryHandleFactory memoryHandleFactory,
             ILogger logger,
-            IClipboardNativeApi clipboardNativeApi,
             IGeneralNativeApi generalNativeApi)
         {
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;

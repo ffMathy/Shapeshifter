@@ -2,7 +2,6 @@
 {
     using System;
     using System.Linq;
-    using System.Windows.Input;
 
     using Autofac;
 
@@ -18,8 +17,6 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
-
-    using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
     [TestClass]
     public class ClipboardListViewModelTest: UnitTestFor<IClipboardListViewModel>
