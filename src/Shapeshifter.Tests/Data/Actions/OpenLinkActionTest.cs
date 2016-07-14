@@ -15,7 +15,6 @@
 
     using NSubstitute;
 
-    using Services.Interfaces;
     using Services.Processes.Interfaces;
     using Services.Web.Interfaces;
 

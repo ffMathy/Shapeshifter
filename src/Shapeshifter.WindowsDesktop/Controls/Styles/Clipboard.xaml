@@ -13,8 +13,22 @@
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
                          Value="True">
-                <Setter Property="Background" Value="{StaticResource AccentBrush}" />
-                <Setter Property="BorderBrush" Value="{StaticResource AccentDarkBrush}" />
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard FillBehavior="HoldEnd">
+                            <ColorAnimation Storyboard.TargetProperty="Background.Color" To="{StaticResource AccentColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
+                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" To="{StaticResource AccentDarkColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard FillBehavior="HoldEnd">
+                            <ColorAnimation Storyboard.TargetProperty="Background.Color" To="{StaticResource WindowDarkBackgroundColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
+                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" To="{StaticResource ControlBorderColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -79,7 +93,20 @@
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
                          Value="True">
-                <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard FillBehavior="HoldEnd">
+                            <ColorAnimation Storyboard.TargetProperty="Background.Color" To="{StaticResource AccentColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard FillBehavior="HoldEnd">
+                            <ColorAnimation Storyboard.TargetProperty="Background.Color" To="{StaticResource WindowBackgroundColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -149,7 +176,20 @@
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
                          Value="True">
-                <Setter Property="Fill" Value="White" />
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard FillBehavior="HoldEnd">
+                            <ColorAnimation Storyboard.TargetProperty="Fill.Color" To="White" Duration="{StaticResource SelectionTransitionDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard FillBehavior="HoldEnd">
+                            <ColorAnimation Storyboard.TargetProperty="Fill.Color" To="{StaticResource AccentColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -169,14 +209,27 @@
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
                          Value="True">
-                <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard FillBehavior="HoldEnd">
+                            <ColorAnimation Storyboard.TargetProperty="Background.Color" To="{StaticResource AccentDarkColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard FillBehavior="HoldEnd">
+                            <ColorAnimation Storyboard.TargetProperty="Background.Color" To="{StaticResource AccentColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
     <Style TargetType="UserControl" x:Key="ActionControlContentAreaStyle">
-        <Setter Property="Background" Value="{StaticResource AccentBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource AccentDarkBrush}" />
+        <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource AccentDarkerBrush}" />
         <Setter Property="BorderThickness" Value="0,0.5,1,0.5" />
         <Setter Property="FontWeight" Value="ExtraLight" />
         <Setter Property="Foreground" Value="White" />
@@ -185,9 +238,23 @@
 
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
-                         Value="False">
-                <Setter Property="BorderBrush" Value="{StaticResource AccentDarkerBrush}" />
-                <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
+                         Value="True">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard FillBehavior="HoldEnd">
+                            <ColorAnimation Storyboard.TargetProperty="Background.Color" To="{StaticResource AccentColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
+                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" To="{StaticResource AccentDarkColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard FillBehavior="HoldEnd">
+                            <ColorAnimation Storyboard.TargetProperty="Background.Color" To="{StaticResource AccentDarkColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
+                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" To="{StaticResource AccentDarkerColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -215,8 +282,21 @@
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
                          Value="True">
-                <Setter Property="Fill" Value="{StaticResource AccentDarkBrush}" />
                 <Setter Property="Margin" Value="0,-1" />
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard FillBehavior="HoldEnd">
+                            <ColorAnimation Storyboard.TargetProperty="Fill.Color" To="{StaticResource AccentDarkColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
+                            </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard FillBehavior="HoldEnd">
+                            <ColorAnimation Storyboard.TargetProperty="Fill.Color" To="{StaticResource ControlBorderColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
             </DataTrigger>
         </Style.Triggers>
     </Style>

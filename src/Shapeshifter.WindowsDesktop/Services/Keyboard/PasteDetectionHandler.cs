@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Keyboard
 {
     using System;
-    using System.Windows.Input;
 
     using Interfaces;
 

@@ -10,10 +10,10 @@
     using System.Runtime.CompilerServices;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Windows;
 
     using Binders.Interfaces;
 
-    using Data.Actions.Interfaces;
     using Data.Interfaces;
 
     using Infrastructure.Events;
@@ -24,7 +24,6 @@
 
     using Mediators.Interfaces;
 
-    using Services.Clipboard.Interfaces;
     using Services.Screen;
     using Services.Screen.Interfaces;
 
@@ -45,8 +44,8 @@
         ScreenInformation activeScreen;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
-
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
+        public event EventHandler<UserInterfacePaneSwappedEventArgument> UserInterfacePaneSwapped;
 
         public ObservableCollection<IClipboardDataControlPackage> Elements { get; }
 
@@ -142,6 +141,8 @@
         {
             clipboardUserInterfaceInteractionMediator.PackageAdded += MediatorPackageAdded;
 
+            clipboardUserInterfaceInteractionMediator.PaneSwapped += ClipboardUserInterfaceInteractionMediator_PaneSwapped;
+
             clipboardUserInterfaceInteractionMediator.UserInterfaceHidden += Mediator_UserInterfaceHidden;
             clipboardUserInterfaceInteractionMediator.UserInterfaceShown += Mediator_UserInterfaceShown;
 
@@ -149,6 +150,12 @@
 
             clipboardUserInterfaceInteractionMediator.SelectedNextItem += ClipboardUserInterfaceInteractionMediator_SelectedNextItem;
             clipboardUserInterfaceInteractionMediator.SelectedPreviousItem += ClipboardUserInterfaceInteractionMediator_SelectedPreviousItem;
+        }
+
+        void ClipboardUserInterfaceInteractionMediator_PaneSwapped(object sender, EventArgs e)
+        {
+            var pane = clipboardUserInterfaceInteractionMediator.CurrentPane;
+            OnUserInterfacePaneSwapped(new UserInterfacePaneSwappedEventArgument(pane));
         }
 
         void ClipboardUserInterfaceInteractionMediator_SelectedPreviousItem(
@@ -286,6 +293,8 @@
         {
             clipboardUserInterfaceInteractionMediator.PackageAdded -= MediatorPackageAdded;
 
+            clipboardUserInterfaceInteractionMediator.PaneSwapped -= ClipboardUserInterfaceInteractionMediator_PaneSwapped;
+
             clipboardUserInterfaceInteractionMediator.UserInterfaceHidden -= Mediator_UserInterfaceHidden;
             clipboardUserInterfaceInteractionMediator.UserInterfaceShown -= Mediator_UserInterfaceShown;
 
@@ -293,6 +302,11 @@
 
             clipboardUserInterfaceInteractionMediator.SelectedNextItem -= ClipboardUserInterfaceInteractionMediator_SelectedNextItem;
             clipboardUserInterfaceInteractionMediator.SelectedPreviousItem -= ClipboardUserInterfaceInteractionMediator_SelectedPreviousItem;
+        }
+
+        protected virtual void OnUserInterfacePaneSwapped(UserInterfacePaneSwappedEventArgument e)
+        {
+            UserInterfacePaneSwapped?.Invoke(this, e);
         }
     }
 }

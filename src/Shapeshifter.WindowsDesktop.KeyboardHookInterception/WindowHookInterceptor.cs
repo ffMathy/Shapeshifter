@@ -6,9 +6,7 @@ using static Shapeshifter.WindowsDesktop.Native.KeyboardNativeApi;
 
 namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
 {
-    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.CompilerServices;
     using System.Windows.Input;
 
     public class WindowHookInterceptor : IEntryPoint

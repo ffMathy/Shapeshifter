@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Window
 {
     using System;
-    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Interop;
 
@@ -9,8 +8,13 @@
 
     using Interfaces;
 
+    using Mediators.Interfaces;
+
     using ViewModels.Interfaces;
 
+    [TemplatePart(Name = "Core", Type = typeof(FrameworkElement))]
+    [TemplateVisualState(Name= "InPackagesList", GroupName= "TargetList")]
+    [TemplateVisualState(Name= "InActionList", GroupName= "TargetList")]
     public partial class ClipboardListWindow
         : Window,
           IClipboardListWindow
@@ -49,8 +53,25 @@
         {
             viewModel.UserInterfaceShown += ViewModel_UserInterfaceShown;
             viewModel.UserInterfaceHidden += ViewModel_UserInterfaceHidden;
+            viewModel.UserInterfacePaneSwapped += ViewModel_UserInterfacePaneSwapped;
 
             DataContext = viewModel;
+        }
+
+        void ViewModel_UserInterfacePaneSwapped(object sender, UserInterfacePaneSwappedEventArgument e)
+        {
+            switch (e.Pane)
+            {
+                case ClipboardUserInterfacePane.Actions:
+                    VisualStateManager.GoToElementState(this, "InActionList", true);
+                    //VisualStateManager.GoToElementState(this, "InActionList", true);
+                    break;
+
+                case ClipboardUserInterfacePane.ClipboardPackages:
+                    VisualStateManager.GoToElementState(this, "InPackagesList", true);
+                    //VisualStateManager.GoToElementState(this, "InPackagesList", true);
+                    break;
+            }
         }
 
         void ViewModel_UserInterfaceHidden(
@@ -81,6 +102,7 @@
         {
             viewModel.UserInterfaceShown -= ViewModel_UserInterfaceShown;
             viewModel.UserInterfaceHidden -= ViewModel_UserInterfaceHidden;
+            viewModel.UserInterfacePaneSwapped -= ViewModel_UserInterfacePaneSwapped;
         }
     }
 }

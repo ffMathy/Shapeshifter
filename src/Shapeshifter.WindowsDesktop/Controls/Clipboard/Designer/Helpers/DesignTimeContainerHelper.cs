@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Designer.Helpers
 {
     using WindowsDesktop.Services.Files.Interfaces;
-    using WindowsDesktop.Services.Interfaces;
     using WindowsDesktop.Services.Processes.Interfaces;
     using WindowsDesktop.Services.Web.Interfaces;
 

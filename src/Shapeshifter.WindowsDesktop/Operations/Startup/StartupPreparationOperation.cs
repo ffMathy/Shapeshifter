@@ -6,7 +6,6 @@
     using Interfaces;
 
     using Services.Arguments.Interfaces;
-    using Services.Interfaces;
     using Services.Processes.Interfaces;
 
     class StartupPreparationOperation: IStartupPreparationOperation

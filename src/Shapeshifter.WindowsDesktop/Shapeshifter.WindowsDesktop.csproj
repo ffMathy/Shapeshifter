@@ -157,6 +157,7 @@
     <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardImageDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardTextDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\Interfaces\IClipboardTextDataViewModel.cs" />
+    <Compile Include="Controls\Converters\BrushCloneConverter.cs" />
     <Compile Include="Controls\Designer\Services\IDesignerService.cs" />
     <Compile Include="Controls\Window\Binders\Interfaces\IPackageToActionSwitch.cs" />
     <Compile Include="Controls\Window\Binders\SelectedElementToActionsSwitchMechanism.cs" />
@@ -198,6 +199,7 @@
     <Compile Include="Infrastructure\Events\KeyDetectedArgument.cs" />
     <Compile Include="Infrastructure\Events\PastePerformedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\TrayIconClickedEventArgument.cs" />
+    <Compile Include="Infrastructure\Events\UserInterfacePaneSwappedEventArgument.cs" />
     <Compile Include="Infrastructure\Handles\IndentationHandle.cs" />
     <Compile Include="Infrastructure\Handles\Interfaces\IHandle.cs" />
     <Compile Include="Infrastructure\Handles\Interfaces\IIndentationHandle.cs" />

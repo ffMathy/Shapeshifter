@@ -3,8 +3,6 @@
     using System.ComponentModel;
     using System.Diagnostics;
 
-    using Interfaces;
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Processes.Interfaces;

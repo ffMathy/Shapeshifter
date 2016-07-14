@@ -1,10 +1,14 @@
 ﻿<Application x:Class="Shapeshifter.WindowsDesktop.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
+             xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+             xmlns:converters="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Converters">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <converters:BrushCloneConverter x:Key="BrushCloneConverter" />
+                </ResourceDictionary>
                 <ResourceDictionary x:Name="Aero">
                     <Color x:Key="AccentColor">#3399ff</Color>
                     <SolidColorBrush p:Freeze="True" x:Key="AccentBrush" Color="{StaticResource AccentColor}" />
@@ -15,6 +19,8 @@
                     <Color x:Key="AccentDarkerColor">#1e5b99</Color>
                     <SolidColorBrush p:Freeze="True" x:Key="AccentDarkerBrush"
                                      Color="{StaticResource AccentDarkerColor}" />
+
+                    <Duration x:Key="SelectionTransitionDuration">0:0:0.1</Duration>
                 </ResourceDictionary>
                 <ResourceDictionary Source="Controls/Styles/Light.xaml" />
                 <ResourceDictionary Source="Controls/Styles/Clipboard.xaml" />

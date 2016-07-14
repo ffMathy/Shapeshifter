@@ -5,7 +5,6 @@
     using System.Windows.Input;
 
     using Controls.Clipboard.Factories.Interfaces;
-    using Controls.Window.ViewModels.Interfaces;
 
     using Data.Interfaces;
 
@@ -31,14 +30,29 @@
 
         readonly IList<IClipboardDataControlPackage> clipboardPackages;
 
+        ClipboardUserInterfacePane currentPane;
+
         public event EventHandler<PackageEventArgument> PackageAdded;
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
         public event EventHandler<PastePerformedEventArgument> PastePerformed;
+
         public event EventHandler SelectedNextItem;
         public event EventHandler SelectedPreviousItem;
+        public event EventHandler PaneSwapped;
 
-        public ClipboardUserInterfacePane CurrentPane { get; set; }
+        public ClipboardUserInterfacePane CurrentPane
+        {
+            get
+            {
+                return currentPane;
+            }
+            set
+            {
+                currentPane = value;
+                OnPaneSwapped();
+            }
+        }
 
         public bool IsConnected
             => pasteCombinationDurationMediator.IsConnected;
@@ -334,6 +348,11 @@
         protected virtual void OnSelectedPreviousItem()
         {
             SelectedPreviousItem?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnPaneSwapped()
+        {
+            PaneSwapped?.Invoke(this, EventArgs.Empty);
         }
     }
 }

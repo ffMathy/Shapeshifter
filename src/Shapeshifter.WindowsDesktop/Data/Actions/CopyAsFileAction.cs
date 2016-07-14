@@ -7,8 +7,6 @@
 
     using Data.Interfaces;
 
-    using Infrastructure.Threading.Interfaces;
-
     using Interfaces;
 
     using Services.Clipboard.Interfaces;

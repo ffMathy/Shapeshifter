@@ -5,7 +5,6 @@
 
     using Autofac;
 
-    using Data.Actions.Interfaces;
     using Data.Interfaces;
 
     using Infrastructure.Events;

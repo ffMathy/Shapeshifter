@@ -1,11 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Keyboard
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using System.Runtime.Remoting;
-    using System.Threading;
 
     using EasyHook;
 
@@ -16,8 +12,6 @@
     using KeyboardHookInterception;
 
     using Processes.Interfaces;
-
-    using Services.Interfaces;
 
     public class KeyboardDominanceWatcher : IKeyboardDominanceWatcher
     {

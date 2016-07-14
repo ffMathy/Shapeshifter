@@ -7,7 +7,6 @@ using Shapeshifter.WindowsDesktop.Infrastructure.Events;
 
 namespace Shapeshifter.WindowsDesktop.Services.Processes
 {
-    using System.Diagnostics;
     using System.Management;
 
     class ProcessWatcher : IProcessWatcher
