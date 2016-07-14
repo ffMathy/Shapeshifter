@@ -31,11 +31,13 @@
         public async Task WiresUserInterfaceMediatorUpWhenWindowIsLaunched()
         {
             await SystemUnderTest.RunAsync();
-            
-            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
-            
-            fakeMediator.Received()
-                        .Connect();
+
+            Container.Resolve<IClipboardListWindow>()
+                     .SourceInitialized += Raise.Event();
+
+            Container.Resolve<IClipboardUserInterfaceInteractionMediator>()
+                .Received()
+                .Connect();
         }
     }
 }

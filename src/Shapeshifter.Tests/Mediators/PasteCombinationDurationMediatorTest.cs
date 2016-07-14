@@ -64,21 +64,5 @@
 
             SystemUnderTest.Connect();
         }
-
-        [TestMethod]
-        public void WhenCtrlVIsDownMonitoringLoopRuns()
-        {
-            SystemUnderTest.Connect();
-
-            var fakePasteHotkeyInterceptor = Container.Resolve<IPasteHotkeyInterceptor>();
-            RaiseHotkeyFired(fakePasteHotkeyInterceptor);
-
-            var fakeConsumerThreadLoop = Container.Resolve<IConsumerThreadLoop>();
-            fakeConsumerThreadLoop
-                .Received()
-                .Notify(
-                    Arg.Any<Func<Task>>(),
-                    Arg.Any<CancellationToken>());
-        }
     }
 }
