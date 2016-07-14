@@ -5,6 +5,7 @@
     using System.Windows.Input;
 
     using Controls.Clipboard.Factories.Interfaces;
+    using Controls.Window.ViewModels.Interfaces;
 
     using Data.Interfaces;
 
@@ -333,29 +334,6 @@
         protected virtual void OnSelectedPreviousItem()
         {
             SelectedPreviousItem?.Invoke(this, EventArgs.Empty);
-        }
-
-        protected virtual void OnPackageAdded(PackageEventArgument e)
-        {
-            PackageAdded?.Invoke(this, e);
-        }
-
-        protected virtual void OnUserInterfaceShown(
-            UserInterfaceShownEventArgument e)
-        {
-            UserInterfaceShown?.Invoke(this, e);
-        }
-
-        protected virtual void OnUserInterfaceHidden(
-            UserInterfaceHiddenEventArgument e)
-        {
-            UserInterfaceHidden?.Invoke(this, e);
-        }
-
-        protected virtual void OnPastePerformed(
-            PastePerformedEventArgument e)
-        {
-            PastePerformed?.Invoke(this, e);
         }
     }
 }

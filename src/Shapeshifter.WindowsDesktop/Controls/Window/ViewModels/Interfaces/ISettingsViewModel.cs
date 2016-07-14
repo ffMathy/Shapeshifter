@@ -9,5 +9,7 @@
         bool StartWithWindows { get; set; }
 
         int PasteDurationBeforeUserInterfaceShowsInMilliseconds { get; set; }
+
+        int MaximumAmountOfItemsInClipboard { get; set; }
     }
 }

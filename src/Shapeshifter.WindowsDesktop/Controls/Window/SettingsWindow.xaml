@@ -6,17 +6,23 @@
         xmlns:viewModels="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Window.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewModels:SettingsViewModel}"
         mc:Ignorable="d"
-        Title="Settings" Height="274.603" Width="390.242" ResizeMode="NoResize">
+        Title="Settings" Height="Auto" Width="390.242" SizeToContent="Height" ResizeMode="NoResize">
     <Grid Margin="20">
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <CheckBox IsChecked="{Binding StartWithWindows}" Content="Start with Windows" />
-        <StackPanel Grid.Row="1">
+        <CheckBox Margin="0,5" IsChecked="{Binding StartWithWindows}" Content="Start with Windows" />
+        <StackPanel Margin="0,5" Grid.Row="1">
             <Label>Paste duration before user interface shows up (milliseconds)</Label>
             <Slider TickFrequency="100" Minimum="0" Maximum="3000" SmallChange="100" Value="{Binding PasteDurationBeforeUserInterfaceShowsInMilliseconds}" TickPlacement="Both" IsSnapToTickEnabled="True" AutoToolTipPlacement="TopLeft" />
             <TextBlock HorizontalAlignment="Center" Text="{Binding PasteDurationBeforeUserInterfaceShowsInMilliseconds}" FontWeight="Bold" />
+        </StackPanel>
+        <StackPanel Margin="0,5" Grid.Row="2">
+            <Label>Maximum amount of items in the clipboard deck</Label>
+            <Slider TickFrequency="1" Minimum="3" Maximum="100" SmallChange="1" Value="{Binding MaximumAmountOfItemsInClipboard}" TickPlacement="Both" IsSnapToTickEnabled="True" AutoToolTipPlacement="TopLeft" />
+            <TextBlock HorizontalAlignment="Center" Text="{Binding MaximumAmountOfItemsInClipboard}" FontWeight="Bold" />
         </StackPanel>
     </Grid>
 </Window>

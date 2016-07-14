@@ -40,6 +40,7 @@
 
         readonly IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator;
         readonly IScreenManager screenManager;
+        readonly ISettingsViewModel settingsViewModel;
 
         ScreenInformation activeScreen;
 
@@ -110,7 +111,8 @@
         public ClipboardListViewModel(
             IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator,
             IScreenManager screenManager,
-            IPackageToActionSwitch packageToActionSwitch)
+            IPackageToActionSwitch packageToActionSwitch,
+            ISettingsViewModel settingsViewModel)
         {
             Elements = new ObservableCollection<IClipboardDataControlPackage>();
             Actions = new ObservableCollection<IActionViewModel>();
@@ -121,6 +123,7 @@
 
             this.clipboardUserInterfaceInteractionMediator = clipboardUserInterfaceInteractionMediator;
             this.screenManager = screenManager;
+            this.settingsViewModel = settingsViewModel;
 
             SetUpClipboardUserInterfaceInteractionMediator();
 
@@ -258,6 +261,11 @@
             {
                 Elements.Insert(0, e.Package);
                 SelectedElement = e.Package;
+
+                while (Elements.Count > settingsViewModel.MaximumAmountOfItemsInClipboard)
+                {
+                    Elements.RemoveAt(Elements.Count - 1);
+                }
             }
         }
 
