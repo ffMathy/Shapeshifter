@@ -11,11 +11,17 @@
         <Setter Property="Margin" Value="0,0,0,0" />
 
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
-                         Value="True">
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
                 <DataTrigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard FillBehavior="HoldEnd">
+                            
+                            
+                            <ColorAnimation foobar this it! Storyboard.Target="{Binding ElementName=ClipboardDataControlContentBackground}" Storyboard.TargetProperty="Opacity" Duration="{StaticResource SelectionTransitionDuration}"/>
+                            
+                            
+                            
+                            
                             <ColorAnimation Storyboard.TargetProperty="Background.Color" To="{StaticResource AccentColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
                             <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" To="{StaticResource AccentDarkColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
                         </Storyboard>
