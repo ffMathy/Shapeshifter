@@ -34,9 +34,9 @@
         }
 
         [TestMethod]
-        public void CanGetDescription()
+        public async Task CanReadDescription()
         {
-            Assert.IsNotNull(SystemUnderTest.Description);
+            Assert.IsNotNull(await SystemUnderTest.GetDescriptionAsync(Substitute.For<IClipboardDataPackage>()));
         }
 
         [TestMethod]
@@ -63,7 +63,8 @@
 
             var fakeClipboardInjectionService = Container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService.Received(1)
-                                         .InjectText("foobar hello");
+                                         .InjectTextAsync("foobar hello")
+                                         .IgnoreAwait();
         }
     }
 }

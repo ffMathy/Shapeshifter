@@ -18,6 +18,7 @@
         event EventHandler<PastePerformedEventArgument> PastePerformed;
         event EventHandler SelectedNextItem;
         event EventHandler SelectedPreviousItem;
+        event EventHandler PaneSwapped;
 
         ClipboardUserInterfacePane CurrentPane { get; set; }
 

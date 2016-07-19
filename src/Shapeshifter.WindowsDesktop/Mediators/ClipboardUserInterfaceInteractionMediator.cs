@@ -12,6 +12,7 @@
 
     using Interfaces;
 
+    using Services.Clipboard.Interfaces;
     using Services.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interceptors.Interfaces;
@@ -22,20 +23,36 @@
         readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
         readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
+        readonly IClipboardPersistanceService clipboardPersistanceService;
         readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
         readonly IKeyInterceptor hotkeyInterceptor;
         readonly IMouseWheelHook mouseWheelHook;
 
         readonly IList<IClipboardDataControlPackage> clipboardPackages;
 
+        ClipboardUserInterfacePane currentPane;
+
         public event EventHandler<PackageEventArgument> PackageAdded;
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
         public event EventHandler<PastePerformedEventArgument> PastePerformed;
+
         public event EventHandler SelectedNextItem;
         public event EventHandler SelectedPreviousItem;
+        public event EventHandler PaneSwapped;
 
-        public ClipboardUserInterfacePane CurrentPane { get; set; }
+        public ClipboardUserInterfacePane CurrentPane
+        {
+            get
+            {
+                return currentPane;
+            }
+            set
+            {
+                currentPane = value;
+                OnPaneSwapped();
+            }
+        }
 
         public bool IsConnected
             => pasteCombinationDurationMediator.IsConnected;
@@ -52,6 +69,7 @@
             IClipboardCopyInterceptor clipboardCopyInterceptor,
             IPasteCombinationDurationMediator pasteCombinationDurationMediator,
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
+            IClipboardPersistanceService clipboardPersistanceService,
             IClipboardDataControlPackageFactory clipboardDataControlPackageFactory,
             IKeyInterceptor hotkeyInterceptor,
             IMouseWheelHook mouseWheelHook)
@@ -59,6 +77,7 @@
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;
             this.pasteCombinationDurationMediator = pasteCombinationDurationMediator;
             this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
+            this.clipboardPersistanceService = clipboardPersistanceService;
             this.clipboardDataControlPackageFactory = clipboardDataControlPackageFactory;
             this.hotkeyInterceptor = hotkeyInterceptor;
             this.mouseWheelHook = mouseWheelHook;
@@ -67,6 +86,16 @@
 
             SetupHotkeyInterceptor();
             SetupMouseHook();
+        }
+
+        async void LoadPersistedPackagesAsync()
+        {
+            var packages = await clipboardPersistanceService.GetPersistedPackagesAsync();
+            foreach (var package in packages)
+            {
+                var controlPackage = clipboardDataControlPackageFactory.CreateFromDataPackage(package);
+                AddControlPackage(controlPackage);
+            }
         }
 
         public void SetupHotkeyInterceptor()
@@ -149,15 +178,20 @@
 
         void AppendPackagesWithDataFromClipboard()
         {
-            var package = clipboardDataControlPackageFactory.CreateFromCurrentClipboardData();
-            if (package == null)
+            var controlPackage = clipboardDataControlPackageFactory.CreateFromCurrentClipboardData();
+            if (controlPackage == null)
             {
                 return;
             }
 
-            clipboardPackages.Add(package);
+            AddControlPackage(controlPackage);
+        }
 
-            FireControlAddedEvent(package);
+        void AddControlPackage(IClipboardDataControlPackage controlPackage)
+        {
+            clipboardPackages.Add(controlPackage);
+
+            FireControlAddedEvent(controlPackage);
         }
 
         void FireControlAddedEvent(IClipboardDataControlPackage package)
@@ -229,6 +263,7 @@
 
         void LoadInitialClipboardData()
         {
+            LoadPersistedPackagesAsync();
             AppendPackagesWithDataFromClipboard();
         }
 
@@ -315,27 +350,9 @@
             SelectedPreviousItem?.Invoke(this, EventArgs.Empty);
         }
 
-        protected virtual void OnPackageAdded(PackageEventArgument e)
+        protected virtual void OnPaneSwapped()
         {
-            PackageAdded?.Invoke(this, e);
-        }
-
-        protected virtual void OnUserInterfaceShown(
-            UserInterfaceShownEventArgument e)
-        {
-            UserInterfaceShown?.Invoke(this, e);
-        }
-
-        protected virtual void OnUserInterfaceHidden(
-            UserInterfaceHiddenEventArgument e)
-        {
-            UserInterfaceHidden?.Invoke(this, e);
-        }
-
-        protected virtual void OnPastePerformed(
-            PastePerformedEventArgument e)
-        {
-            PastePerformed?.Invoke(this, e);
+            PaneSwapped?.Invoke(this, EventArgs.Empty);
         }
     }
 }

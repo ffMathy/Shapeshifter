@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d" Style="{StaticResource ActionControlContentAreaStyle}">
+             xmlns:interfaces="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Window.ViewModels.Interfaces"
+             mc:Ignorable="d" Style="{StaticResource ActionControlContentAreaStyle}"
+             d:DataContext="{d:DesignInstance interfaces:IActionViewModel}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -12,4 +14,33 @@
         <TextBlock Style="{StaticResource ActionControlHeaderStyle}" Text="{Binding Title}" />
         <TextBlock Grid.Row="1" Style="{StaticResource ActionControlContentStyle}" Text="{Binding Description}" />
     </Grid>
+    <UserControl.Template>
+        <ControlTemplate TargetType="UserControl">
+            <Border Margin="{TemplateBinding Margin}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding Padding}">
+                <Grid>
+                    <Rectangle Margin="-1" Name="BackgroundNotSelected" Fill="{DynamicResource AccentDarkBrush}" Stroke="{DynamicResource AccentDarkerBrush}" Opacity="1" />
+                    <Rectangle Margin="-1" Name="BackgroundSelected" Fill="{DynamicResource AccentBrush}" Stroke="{DynamicResource AccentDarkBrush}" Opacity="0" />
+                    <ContentPresenter Margin="{TemplateBinding Padding}" />
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation To="1" Storyboard.TargetName="BackgroundSelected" Storyboard.TargetProperty="Opacity" Duration="{StaticResource SelectionTransitionDuration}"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation To="0" Storyboard.TargetName="BackgroundSelected" Storyboard.TargetProperty="Opacity" Duration="{StaticResource SelectionTransitionDuration}"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </UserControl.Template>
 </UserControl>

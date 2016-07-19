@@ -74,8 +74,6 @@
   <ItemGroup>
     <Compile Include="ClipboardNativeApi.cs" />
     <Compile Include="GeneralNativeApi.cs" />
-    <Compile Include="Helpers\Interfaces\ISignHelper.cs" />
-    <Compile Include="Helpers\SignHelper.cs" />
     <Compile Include="Interfaces\IClipboardNativeApi.cs" />
     <Compile Include="IconNativeApi.cs" />
     <Compile Include="Interfaces\IGeneralNativeApi.cs" />
@@ -84,15 +82,18 @@
     <Compile Include="Interfaces\IKeyboardNativeApi.cs" />
     <Compile Include="Interfaces\ImageNativeApi.cs" />
     <Compile Include="Interfaces\IWindowNativeApi.cs" />
+    <Compile Include="Interfaces\ISigningNativeApi.cs" />
     <Compile Include="KeyboardNativeApi.cs" />
     <Compile Include="NativeAssemblyHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SigningNativeApi.cs" />
     <Compile Include="WindowNativeApi.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="StrongName.snk" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

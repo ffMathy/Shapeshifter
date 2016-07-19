@@ -10,10 +10,10 @@
     using System.Runtime.CompilerServices;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Windows;
 
     using Binders.Interfaces;
 
-    using Data.Actions.Interfaces;
     using Data.Interfaces;
 
     using Infrastructure.Events;
@@ -33,22 +33,23 @@
             IDisposable
     {
         IClipboardDataControlPackage selectedElement;
-        IAction selectedAction;
+        IActionViewModel selectedAction;
 
-        SemaphoreSlim singlePasteLock;
+        readonly SemaphoreSlim singlePasteLock;
 
         readonly IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator;
         readonly IScreenManager screenManager;
+        readonly ISettingsViewModel settingsViewModel;
 
         ScreenInformation activeScreen;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
-
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
+        public event EventHandler<UserInterfacePaneSwappedEventArgument> UserInterfacePaneSwapped;
 
         public ObservableCollection<IClipboardDataControlPackage> Elements { get; }
 
-        public ObservableCollection<IAction> Actions { get; }
+        public ObservableCollection<IActionViewModel> Actions { get; }
 
         public ScreenInformation ActiveScreen
         {
@@ -69,7 +70,7 @@
             }
         }
 
-        public IAction SelectedAction
+        public IActionViewModel SelectedAction
         {
             get
             {
@@ -109,10 +110,11 @@
         public ClipboardListViewModel(
             IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator,
             IScreenManager screenManager,
-            IPackageToActionSwitch packageToActionSwitch)
+            IPackageToActionSwitch packageToActionSwitch,
+            ISettingsViewModel settingsViewModel)
         {
             Elements = new ObservableCollection<IClipboardDataControlPackage>();
-            Actions = new ObservableCollection<IAction>();
+            Actions = new ObservableCollection<IActionViewModel>();
 
             singlePasteLock = new SemaphoreSlim(1);
 
@@ -120,6 +122,7 @@
 
             this.clipboardUserInterfaceInteractionMediator = clipboardUserInterfaceInteractionMediator;
             this.screenManager = screenManager;
+            this.settingsViewModel = settingsViewModel;
 
             SetUpClipboardUserInterfaceInteractionMediator();
 
@@ -138,6 +141,8 @@
         {
             clipboardUserInterfaceInteractionMediator.PackageAdded += MediatorPackageAdded;
 
+            clipboardUserInterfaceInteractionMediator.PaneSwapped += ClipboardUserInterfaceInteractionMediator_PaneSwapped;
+
             clipboardUserInterfaceInteractionMediator.UserInterfaceHidden += Mediator_UserInterfaceHidden;
             clipboardUserInterfaceInteractionMediator.UserInterfaceShown += Mediator_UserInterfaceShown;
 
@@ -145,6 +150,12 @@
 
             clipboardUserInterfaceInteractionMediator.SelectedNextItem += ClipboardUserInterfaceInteractionMediator_SelectedNextItem;
             clipboardUserInterfaceInteractionMediator.SelectedPreviousItem += ClipboardUserInterfaceInteractionMediator_SelectedPreviousItem;
+        }
+
+        void ClipboardUserInterfaceInteractionMediator_PaneSwapped(object sender, EventArgs e)
+        {
+            var pane = clipboardUserInterfaceInteractionMediator.CurrentPane;
+            OnUserInterfacePaneSwapped(new UserInterfacePaneSwappedEventArgument(pane));
         }
 
         void ClipboardUserInterfaceInteractionMediator_SelectedPreviousItem(
@@ -201,7 +212,7 @@
             if (SelectedAction != null)
             {
                 await singlePasteLock.WaitAsync();
-                await SelectedAction.PerformAsync(SelectedElement.Data);
+                await SelectedAction.Action.PerformAsync(SelectedElement.Data);
                 singlePasteLock.Release();
             }
         }
@@ -257,6 +268,11 @@
             {
                 Elements.Insert(0, e.Package);
                 SelectedElement = e.Package;
+
+                while (Elements.Count > settingsViewModel.MaximumAmountOfItemsInClipboard)
+                {
+                    Elements.RemoveAt(Elements.Count - 1);
+                }
             }
         }
 
@@ -277,6 +293,8 @@
         {
             clipboardUserInterfaceInteractionMediator.PackageAdded -= MediatorPackageAdded;
 
+            clipboardUserInterfaceInteractionMediator.PaneSwapped -= ClipboardUserInterfaceInteractionMediator_PaneSwapped;
+
             clipboardUserInterfaceInteractionMediator.UserInterfaceHidden -= Mediator_UserInterfaceHidden;
             clipboardUserInterfaceInteractionMediator.UserInterfaceShown -= Mediator_UserInterfaceShown;
 
@@ -284,6 +302,11 @@
 
             clipboardUserInterfaceInteractionMediator.SelectedNextItem -= ClipboardUserInterfaceInteractionMediator_SelectedNextItem;
             clipboardUserInterfaceInteractionMediator.SelectedPreviousItem -= ClipboardUserInterfaceInteractionMediator_SelectedPreviousItem;
+        }
+
+        protected virtual void OnUserInterfacePaneSwapped(UserInterfacePaneSwappedEventArgument e)
+        {
+            UserInterfacePaneSwapped?.Invoke(this, e);
         }
     }
 }

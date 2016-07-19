@@ -28,8 +28,11 @@
             this.clipboardPasteService = clipboardPasteService;
             this.logger = logger;
         }
-
-        public string Description => "Pastes clipboard contents as-is.";
+        
+        public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
+        {
+            return "Pastes clipboard contents as-is.";
+        }
 
         public byte Order => 0;
 
@@ -49,7 +52,7 @@
         public async Task PerformAsync(
             IClipboardDataPackage package)
         {
-            clipboardInjectionService.InjectData(package);
+            await clipboardInjectionService.InjectDataAsync(package);
             await clipboardPasteService.PasteClipboardContentsAsync();
 
             logger.Information("Paste action performed.", 1);

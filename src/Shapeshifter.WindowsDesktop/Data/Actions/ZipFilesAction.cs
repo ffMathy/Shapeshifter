@@ -34,7 +34,10 @@
             this.clipboardInjectionService = clipboardInjectionService;
         }
 
-        public string Description => "Compress the clipboard contents into a ZIP-file and copy it.";
+        public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
+        {
+            return "Compress the clipboard contents into a ZIP-file and copy it.";
+        }
 
         public byte Order => 75;
 
@@ -69,7 +72,7 @@
             var firstSupportedData = supportedDataCollection.FirstOrDefault();
 
             var zipFilePath = await ZipDataAsync(firstSupportedData);
-            clipboardInjectionService.InjectFiles(zipFilePath);
+            await clipboardInjectionService.InjectFilesAsync(zipFilePath);
         }
 
         async Task<string> ZipFileCollectionDataAsync(params IClipboardFileData[] fileDataItems)

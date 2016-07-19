@@ -40,7 +40,7 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
-    <ApplicationIcon>Resources\Shapeshifter.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Icon\Shapeshifter.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -168,10 +168,14 @@
     <Compile Include="Controls\Window\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Window\ViewModels\ActionViewModel.cs" />
+    <Compile Include="Controls\Window\ViewModels\Interfaces\IActionViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\ISettingsViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Data\Actions\CopyAsFileAction.cs" />
     <Compile Include="Data\Actions\CopyImageLinkAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IAction.cs" />
+    <Compile Include="Data\Actions\Interfaces\ICopyAsFileAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IPasteAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IOpenLinkAction.cs" />
     <Compile Include="Data\Actions\Interfaces\ICopyImageLinkAction.cs" />
@@ -194,6 +198,7 @@
     <Compile Include="Infrastructure\Events\KeyDetectedArgument.cs" />
     <Compile Include="Infrastructure\Events\PastePerformedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\TrayIconClickedEventArgument.cs" />
+    <Compile Include="Infrastructure\Events\UserInterfacePaneSwappedEventArgument.cs" />
     <Compile Include="Infrastructure\Handles\IndentationHandle.cs" />
     <Compile Include="Infrastructure\Handles\Interfaces\IHandle.cs" />
     <Compile Include="Infrastructure\Handles\Interfaces\IIndentationHandle.cs" />
@@ -201,10 +206,19 @@
     <Compile Include="Infrastructure\Logging\Interfaces\ILogStream.cs" />
     <Compile Include="Infrastructure\Logging\Logger.cs" />
     <Compile Include="Infrastructure\Logging\LogStream.cs" />
+    <Compile Include="Infrastructure\Signing\Interfaces\ISignHelper.cs" />
+    <Compile Include="Infrastructure\Signing\SignHelper.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IRetryingThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\RetryingThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\RetryingThreadLoopJob.cs" />
     <Compile Include="Mediators\Interfaces\ClipboardUserInterfacePane.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\ColorBrightnessAdjustmentService.cs" />
+    <Compile Include="Services\Interfaces\IColorBrightnessAdjustmentService.cs" />
     <Compile Include="Services\Interfaces\IMouseWheelHook.cs" />
     <Compile Include="Services\Interfaces\IPixelConversionService.cs" />
     <Compile Include="Services\Interfaces\IRegistryManager.cs" />
@@ -218,6 +232,8 @@
     <Compile Include="Services\Keyboard\KeyboardHook.cs" />
     <Compile Include="Services\Keyboard\KeyboardPasteCombinationStateService.cs" />
     <Compile Include="Services\Keyboard\PasteDetectionHandler.cs" />
+    <Compile Include="Services\Messages\Interceptors\AeroColorChangeInterceptor.cs" />
+    <Compile Include="Services\Messages\Interceptors\Interfaces\IAeroColorChangeInterceptor.cs" />
     <Compile Include="Services\MouseWheelHook.cs" />
     <Compile Include="Services\PixelConversionService.cs" />
     <Compile Include="Services\Processes\Interfaces\IProcessWatcher.cs" />
@@ -418,6 +434,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\Dictionaries\Converters.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Dictionaries\Variables.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Dictionaries\Styles\Themes\Aero.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\Window\ActionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -445,7 +473,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Styles\Clipboard.xaml">
+    <Page Include="Resources\Dictionaries\Styles\Clipboard.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -473,7 +501,7 @@
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardFileDataViewModel.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardTextDataViewModel.cs" />
     <Compile Include="Controls\Converters\ByteArrayToImageSourceConverter.cs" />
-    <Page Include="Controls\Styles\Light.xaml">
+    <Page Include="Resources\Dictionaries\Styles\Themes\Shared.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -486,11 +514,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -498,6 +521,7 @@
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="App.manifest" />
@@ -528,7 +552,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shapeshifter.ico" />
+    <None Include="Resources\Icon\Shapeshifter.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="FodyWeavers.xml" />

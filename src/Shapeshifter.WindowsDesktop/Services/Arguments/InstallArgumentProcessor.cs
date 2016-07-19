@@ -8,10 +8,11 @@
     using Controls.Window.ViewModels.Interfaces;
 
     using Infrastructure.Environment.Interfaces;
+    using Infrastructure.Signing.Interfaces;
 
     using Interfaces;
 
-    using Native.Helpers.Interfaces;
+    using Keyboard.Interfaces;
 
     using Processes.Interfaces;
 
@@ -28,19 +29,22 @@
         readonly ISignHelper signHelper;
         readonly IEnvironmentInformation environmentInformation;
         readonly ISettingsViewModel settingsViewModel;
+        readonly IKeyboardDominanceWatcher keyboardDominanceWatcher;
 
         public InstallArgumentProcessor(
             IProcessManager processManager,
             ICertificateManager certificateManager,
             ISignHelper signHelper,
             IEnvironmentInformation environmentInformation,
-            ISettingsViewModel settingsViewModel)
+            ISettingsViewModel settingsViewModel,
+            IKeyboardDominanceWatcher keyboardDominanceWatcher)
         {
             this.processManager = processManager;
             this.certificateManager = certificateManager;
             this.signHelper = signHelper;
             this.environmentInformation = environmentInformation;
             this.settingsViewModel = settingsViewModel;
+            this.keyboardDominanceWatcher = keyboardDominanceWatcher;
         }
 
         public bool Terminates
@@ -88,6 +92,8 @@
             signHelper.SignAssemblyWithCertificate(targetExecutableFile, selfSignedCertificate);
 
             ConfigureDefaultSettings();
+
+            keyboardDominanceWatcher.Install();
 
             LaunchInstalledExecutable(targetExecutableFile, currentExecutableFile);
         }

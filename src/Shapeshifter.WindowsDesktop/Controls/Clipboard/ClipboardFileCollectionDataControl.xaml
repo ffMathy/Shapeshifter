@@ -8,58 +8,56 @@
              xmlns:converters="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Converters"
              d:DataContext="{d:DesignInstance Type=fileCollection:ClipboardFileCollectionDataViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d">
-    <Border Style="{StaticResource ClipboardDataControlContentStyle}">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
 
-            <Border Style="{StaticResource ClipboardDataControlImageAreaStyle}">
-                <ContentControl Width="64" Height="64" Margin="12,7,11,10">
-                    <TextBlock FontSize="60" FontWeight="ExtraLight" VerticalAlignment="Center"
+        <Border Style="{StaticResource ClipboardDataControlImageAreaStyle}">
+            <ContentControl Width="64" Height="64" Margin="12,7,11,10">
+                <TextBlock FontSize="60" FontWeight="ExtraLight" VerticalAlignment="Center"
                                HorizontalAlignment="Center"
                                Style="{StaticResource ClipboardFileCollectionControlCountForeground}"
                                Text="{Binding FileCount}" />
-                </ContentControl>
-            </Border>
+            </ContentControl>
+        </Border>
 
-            <Rectangle Grid.Column="1" Style="{StaticResource ClipboardDataControlIconContentSplitterStyle}" />
+        <UserControl Grid.Column="1" Style="{StaticResource ClipboardDataControlIconContentSplitterStyle}" />
 
-            <Grid Grid.Column="2" Style="{StaticResource ClipboardDataControlContentAreaStyle}">
-                <Grid Style="{StaticResource ClipboardDataControlContentAreaInnerStyle}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+        <UserControl Grid.Column="2" Style="{StaticResource ClipboardDataControlContentAreaStyle}">
+            <Grid Style="{StaticResource ClipboardDataControlContentAreaInnerStyle}">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                    <ItemsControl ItemsSource="{Binding FileTypeGroups}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="0,0,10,0">
-                                    <Image
+                <ItemsControl ItemsSource="{Binding FileTypeGroups}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,10,0">
+                                <Image
                                         Source="{Binding Icon, Converter={converters:ByteArrayToImageSourceConverter}}"
                                         RenderOptions.BitmapScalingMode="HighQuality" />
-                                    <Border VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                                <Border VerticalAlignment="Bottom" HorizontalAlignment="Right"
                                             Style="{StaticResource ClipboardFileCollectionControlCountBackground}">
-                                        <TextBlock FontWeight="Light" Padding="6,1" Foreground="#CCFFFFFF"
+                                    <TextBlock FontWeight="Light" Padding="6,1" Foreground="#CCFFFFFF"
                                                    Text="{Binding Count}" />
-                                    </Border>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-                    <local:DataSourceControl Margin="0,7,0,0" VerticalAlignment="Bottom"
+                <local:DataSourceControl Margin="0,7,0,0" VerticalAlignment="Bottom"
                                              DataContext="{Binding Data.Source}" Grid.Row="1" />
-                </Grid>
             </Grid>
-        </Grid>
-    </Border>
+        </UserControl>
+    </Grid>
 </UserControl>

@@ -1,0 +1,6 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush x:Shared="False" x:Key="AccentBrush" Color="#3399ff" />
+    <SolidColorBrush x:Shared="False" x:Key="AccentDarkBrush" Color="#236bb2" />
+    <SolidColorBrush x:Shared="False" x:Key="AccentDarkerBrush" Color="#1e5b99" />
+</ResourceDictionary>

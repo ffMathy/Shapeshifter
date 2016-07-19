@@ -27,7 +27,10 @@
             this.asyncFilter = asyncFilter;
         }
 
-        public string Description => "Pastes clipboard contents as plain text.";
+        public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
+        {
+            return "Pastes clipboard contents as plain text with no formatting.";
+        }
 
         public byte Order => 25;
 
@@ -55,7 +58,7 @@
             IClipboardDataPackage package)
         {
             var textData = (IClipboardTextData) await GetFirstSupportedItem(package);
-            clipboardInjectionService.InjectText(textData.Text);
+            await clipboardInjectionService.InjectTextAsync(textData.Text);
 
             await clipboardPasteService.PasteClipboardContentsAsync();
         }

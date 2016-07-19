@@ -27,7 +27,10 @@
             this.asyncFilter = asyncFilter;
         }
 
-        public string Description => "Uploads the given image to Imgur and copies a link to it.";
+        public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
+        {
+            return "Uploads the given image to Imgur and copies a link to it.";
+        }
 
         public string Title => "Upload image";
 

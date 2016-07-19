@@ -6,32 +6,33 @@
     using System.Collections.Specialized;
     using System.Threading.Tasks;
 
-    using Data.Actions.Interfaces;
     using Data.Interfaces;
 
     using Interfaces;
 
-    class PackageToActionBinder: IAsyncListDictionaryBinder<IClipboardDataControlPackage, IAction>
+    using ViewModels.Interfaces;
+
+    class PackageToActionBinder: IAsyncListDictionaryBinder<IClipboardDataControlPackage, IActionViewModel>
     {
-        readonly IDictionary<IClipboardDataControlPackage, ICollection<IAction>> dictionaryStates;
+        readonly IDictionary<IClipboardDataControlPackage, ICollection<IActionViewModel>> dictionaryStates;
 
         IClipboardDataControlPackage currentKey;
 
-        ObservableCollection<IAction> boundDestinationCollection;
+        ObservableCollection<IActionViewModel> boundDestinationCollection;
 
-        Func<IClipboardDataControlPackage, Task<IEnumerable<IAction>>> currentMappingFunction;
+        Func<IClipboardDataControlPackage, Task<IEnumerable<IActionViewModel>>> currentMappingFunction;
 
-        public IAction Default { get; set; }
+        public IActionViewModel Default { get; set; }
 
         public PackageToActionBinder()
         {
-            dictionaryStates = new Dictionary<IClipboardDataControlPackage, ICollection<IAction>>();
+            dictionaryStates = new Dictionary<IClipboardDataControlPackage, ICollection<IActionViewModel>>();
         }
 
         public void Bind(
             ObservableCollection<IClipboardDataControlPackage> sourceCollection,
-            ObservableCollection<IAction> destinationCollection,
-            Func<IClipboardDataControlPackage, Task<IEnumerable<IAction>>> mappingFunction)
+            ObservableCollection<IActionViewModel> destinationCollection,
+            Func<IClipboardDataControlPackage, Task<IEnumerable<IActionViewModel>>> mappingFunction)
         {
             this.boundDestinationCollection = destinationCollection;
             this.currentMappingFunction = mappingFunction;
@@ -85,7 +86,7 @@
         {
             if (!dictionaryStates.ContainsKey(item))
             {
-                dictionaryStates.Add(item, new HashSet<IAction>());
+                dictionaryStates.Add(item, new HashSet<IActionViewModel>());
             }
         }
     }

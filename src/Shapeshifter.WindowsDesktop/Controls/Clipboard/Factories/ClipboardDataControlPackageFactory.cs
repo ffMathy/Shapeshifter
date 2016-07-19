@@ -39,17 +39,26 @@
                 return null;
             }
 
+            return CreateFromDataPackage(dataPackage);
+        }
+
+        ClipboardDataControlPackage CreateDataControlPackageFromDataPackage(IClipboardDataPackage dataPackage)
+        {
+            var control = CreateControlFromDataPackage(dataPackage);
+            if (control == null)
+            {
+                return null;
+            }
+
+            var package = new ClipboardDataControlPackage(dataPackage, control);
+            return package;
+        }
+
+        public IClipboardDataControlPackage CreateFromDataPackage(IClipboardDataPackage dataPackage)
+        {
             ClipboardDataControlPackage package = null;
             mainThreadInvoker.Invoke(
-                () => {
-                    var control = CreateControlFromDataPackage(dataPackage);
-                    if (control == null)
-                    {
-                        return;
-                    }
-
-                    package = new ClipboardDataControlPackage(dataPackage, control);
-                });
+                () => package = CreateDataControlPackageFromDataPackage(dataPackage));
 
             return package;
         }

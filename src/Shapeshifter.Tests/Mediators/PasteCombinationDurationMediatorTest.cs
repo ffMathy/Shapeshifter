@@ -1,8 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Mediators
 {
     using System;
-    using System.Threading;
-    using System.Threading.Tasks;
 
     using Autofac;
 
@@ -13,16 +11,10 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
-    using Services.Messages.Interceptors.Hotkeys.Interfaces;
 
     [TestClass]
     public class PasteCombinationDurationMediatorTest: UnitTestFor<IPasteCombinationDurationMediator>
     {
-        static void RaiseHotkeyFired(IPasteHotkeyInterceptor fakePasteHotkeyInterceptor)
-        {
-            fakePasteHotkeyInterceptor.PasteDetected += Raise.Event();
-        }
-
         [TestMethod]
         public void IsConnectedIsFalseIfConsumerThreadIsNotRunning()
         {

@@ -2,7 +2,6 @@
 {
     using System;
 
-    using WindowsDesktop.Services.Interfaces;
     using WindowsDesktop.Services.Processes.Interfaces;
 
     using Controls.Designer.Services;

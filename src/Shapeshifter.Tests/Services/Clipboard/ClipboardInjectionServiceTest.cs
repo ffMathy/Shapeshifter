@@ -1,5 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
+    using System.Threading.Tasks;
+
     using Autofac;
 
     using Data.Interfaces;
@@ -16,9 +18,9 @@
     public class ClipboardInjectionServiceTest: UnitTestFor<IClipboardInjectionService>
     {
         [TestMethod]
-        public void InjectingDataSkipsNextCopyInterception()
+        public async Task InjectingDataSkipsNextCopyInterception()
         {
-            SystemUnderTest.InjectData(Substitute.For<IClipboardDataPackage>());
+            await SystemUnderTest.InjectDataAsync(Substitute.For<IClipboardDataPackage>());
 
             var fakeInterceptor = Container.Resolve<IClipboardCopyInterceptor>();
             fakeInterceptor.Received()

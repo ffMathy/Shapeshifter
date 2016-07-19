@@ -5,7 +5,6 @@
 
     using Autofac;
 
-    using Data.Actions.Interfaces;
     using Data.Interfaces;
 
     using Infrastructure.Events;
@@ -19,14 +18,15 @@
     using NSubstitute;
 
     [TestClass]
-    public class ClipboardListViewModelTest: UnitTestFor<IClipboardListViewModel>
+    public class ClipboardListViewModelTest : UnitTestFor<IClipboardListViewModel>
     {
         [TestMethod]
         public void SelectedElementChangedTriggersChangedEvent()
         {
             object eventSender = null;
 
-            SystemUnderTest.PropertyChanged += (sender, e) => {
+            SystemUnderTest.PropertyChanged += (sender, e) =>
+            {
                 if (e.PropertyName == nameof(SystemUnderTest.SelectedElement))
                 {
                     eventSender = sender;
@@ -154,9 +154,9 @@
         [TestMethod]
         public void SelectedActionChangesToTheSecondWhenFirstIsSelectedAndDownIsPressed()
         {
-            var fakeAction1 = Substitute.For<IAction>();
-            var fakeAction2 = Substitute.For<IAction>();
-            var fakeAction3 = Substitute.For<IAction>();
+            var fakeAction1 = Substitute.For<IActionViewModel>();
+            var fakeAction2 = Substitute.For<IActionViewModel>();
+            var fakeAction3 = Substitute.For<IActionViewModel>();
 
             SystemUnderTest.Actions.Add(fakeAction1);
             SystemUnderTest.Actions.Add(fakeAction2);
@@ -174,9 +174,9 @@
         [TestMethod]
         public void SelectedActionChangesToTheThirdWhenSecondIsSelectedAndDownIsPressed()
         {
-            var fakeAction1 = Substitute.For<IAction>();
-            var fakeAction2 = Substitute.For<IAction>();
-            var fakeAction3 = Substitute.For<IAction>();
+            var fakeAction1 = Substitute.For<IActionViewModel>();
+            var fakeAction2 = Substitute.For<IActionViewModel>();
+            var fakeAction3 = Substitute.For<IActionViewModel>();
 
             SystemUnderTest.Actions.Add(fakeAction1);
             SystemUnderTest.Actions.Add(fakeAction2);
@@ -194,7 +194,7 @@
         [TestMethod]
         public void WhenPasteIsRequestedSelectedActionIsInvoked()
         {
-            var fakeAction = Substitute.For<IAction>();
+            var fakeAction = Substitute.For<IActionViewModel>();
             SystemUnderTest.SelectedAction = fakeAction;
 
             var fakeElement = Substitute.For<IClipboardDataControlPackage>();
@@ -205,15 +205,17 @@
                 Raise.Event<EventHandler
                     <PastePerformedEventArgument>>(new object());
 
-            fakeAction.Received()
-                      .PerformAsync(Arg.Any<IClipboardDataPackage>());
+            fakeAction
+                .Received()
+                .Action
+                .PerformAsync(Arg.Any<IClipboardDataPackage>());
         }
 
         [TestMethod]
         public void UserInterfaceShownIsBubbledUpFromDurationMediator()
         {
             var showEventCount = 0;
-            
+
             SystemUnderTest.UserInterfaceShown += (sender, e) => showEventCount++;
 
             var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
@@ -226,7 +228,7 @@
         public void UserInterfaceHiddenIsBubbledUpFromDurationMediator()
         {
             var hideEventCount = 0;
-            
+
             SystemUnderTest.UserInterfaceHidden += (sender, e) => hideEventCount++;
 
             var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
@@ -238,9 +240,9 @@
         [TestMethod]
         public void SelectedActionChangesToTheFirstWhenThirdIsSelectedAndDownIsPressed()
         {
-            var fakeAction1 = Substitute.For<IAction>();
-            var fakeAction2 = Substitute.For<IAction>();
-            var fakeAction3 = Substitute.For<IAction>();
+            var fakeAction1 = Substitute.For<IActionViewModel>();
+            var fakeAction2 = Substitute.For<IActionViewModel>();
+            var fakeAction3 = Substitute.For<IActionViewModel>();
 
             SystemUnderTest.Actions.Add(fakeAction1);
             SystemUnderTest.Actions.Add(fakeAction2);
@@ -258,9 +260,9 @@
         [TestMethod]
         public void SelectedActionChangesToTheThirdWhenFirstIsSelectedAndUpIsPressed()
         {
-            var fakeAction1 = Substitute.For<IAction>();
-            var fakeAction2 = Substitute.For<IAction>();
-            var fakeAction3 = Substitute.For<IAction>();
+            var fakeAction1 = Substitute.For<IActionViewModel>();
+            var fakeAction2 = Substitute.For<IActionViewModel>();
+            var fakeAction3 = Substitute.For<IActionViewModel>();
 
             SystemUnderTest.Actions.Add(fakeAction1);
             SystemUnderTest.Actions.Add(fakeAction2);
@@ -278,9 +280,9 @@
         [TestMethod]
         public void SelectedActionChangesToTheSecondWhenThirdIsSelectedAndUpIsPressed()
         {
-            var fakeAction1 = Substitute.For<IAction>();
-            var fakeAction2 = Substitute.For<IAction>();
-            var fakeAction3 = Substitute.For<IAction>();
+            var fakeAction1 = Substitute.For<IActionViewModel>();
+            var fakeAction2 = Substitute.For<IActionViewModel>();
+            var fakeAction3 = Substitute.For<IActionViewModel>();
 
             SystemUnderTest.Actions.Add(fakeAction1);
             SystemUnderTest.Actions.Add(fakeAction2);
@@ -298,9 +300,9 @@
         [TestMethod]
         public void SelectedActionChangesToTheFirstWhenSecondIsSelectedAndUpIsPressed()
         {
-            var fakeAction1 = Substitute.For<IAction>();
-            var fakeAction2 = Substitute.For<IAction>();
-            var fakeAction3 = Substitute.For<IAction>();
+            var fakeAction1 = Substitute.For<IActionViewModel>();
+            var fakeAction2 = Substitute.For<IActionViewModel>();
+            var fakeAction3 = Substitute.For<IActionViewModel>();
 
             SystemUnderTest.Actions.Add(fakeAction1);
             SystemUnderTest.Actions.Add(fakeAction2);
@@ -321,7 +323,7 @@
             var fakeUserInterfaceMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
-            
+
             fakeUserInterfaceMediator.PackageAdded +=
                 Raise.Event<EventHandler<PackageEventArgument>>(
                     fakePackage,
@@ -334,10 +336,14 @@
         [TestMethod]
         public void ControlAddedInsertsElement()
         {
+            Container.Resolve<ISettingsViewModel>()
+                .MaximumAmountOfItemsInClipboard
+                .Returns(8);
+
             var fakeUserInterfaceMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();
-            
+
             fakeUserInterfaceMediator.PackageAdded +=
                 Raise.Event<EventHandler<PackageEventArgument>>(
                     SystemUnderTest,

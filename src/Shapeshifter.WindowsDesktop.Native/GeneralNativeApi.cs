@@ -11,6 +11,18 @@
 
         public const int GMEM_ZEROINIT = 0x0040;
 
+        [DllImport("dwmapi.dll", PreserveSig = false)]
+        public static extern void DwmGetColorizationColor(out uint ColorizationColor, [MarshalAs(UnmanagedType.Bool)]out bool ColorizationOpaqueBlend);
+
+        void IGeneralNativeApi.DwmGetColorizationColor(
+            out uint ColorizationColor,
+            [MarshalAs(UnmanagedType.Bool)] out bool ColorizationOpaqueBlend)
+        {
+            DwmGetColorizationColor(
+                out ColorizationColor,
+                out ColorizationOpaqueBlend);
+        }
+
         void IGeneralNativeApi.CopyMemory(IntPtr dest, IntPtr src, uint count)
         {
             CopyMemory(dest, src, count);

@@ -1,11 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Keyboard
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using System.Runtime.Remoting;
-    using System.Threading;
 
     using EasyHook;
 
@@ -16,8 +12,6 @@
     using KeyboardHookInterception;
 
     using Processes.Interfaces;
-
-    using Services.Interfaces;
 
     public class KeyboardDominanceWatcher : IKeyboardDominanceWatcher
     {
@@ -59,11 +53,7 @@
         {
             if (!SuspiciousProcesses.Contains(e.ProcessName)) return;
 
-            var injectedLibraryName = $"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(KeyboardHookInterception)}.dll";
-            Config.Register(
-                nameof(Shapeshifter),
-                $"{processManager.GetCurrentProcessName()}.exe",
-                injectedLibraryName);
+            var injectedLibraryName = GetInjectedLibraryName();
 
             RemoteHooking.IpcCreateServer(
                 ref channelName, 
@@ -77,6 +67,11 @@
                 channelName);
         }
 
+        static string GetInjectedLibraryName()
+        {
+            return $"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(KeyboardHookInterception)}.dll";
+        }
+
         public void Start()
         {
             processWatcher.Connect();
@@ -85,6 +80,14 @@
         public void Stop()
         {
             processWatcher.Disconnect();
+        }
+
+        public void Install()
+        {
+            Config.Register(
+                nameof(Shapeshifter),
+                $"{processManager.GetCurrentProcessName()}.exe",
+                GetInjectedLibraryName());
         }
     }
 }

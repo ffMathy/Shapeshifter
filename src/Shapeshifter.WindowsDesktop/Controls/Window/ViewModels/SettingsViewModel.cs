@@ -17,6 +17,7 @@
         readonly ISettingsManager settingsManager;
 
         int pasteDurationBeforeUserInterfaceShowsInMilliseconds;
+        int maximumAmountOfItemsInClipboard;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -32,6 +33,9 @@
             pasteDurationBeforeUserInterfaceShowsInMilliseconds = settingsManager.LoadSetting(
                 nameof(PasteDurationBeforeUserInterfaceShowsInMilliseconds),
                 300);
+            maximumAmountOfItemsInClipboard = settingsManager.LoadSetting(
+                nameof(MaximumAmountOfItemsInClipboard),
+                8);
         }
 
         [NotifyPropertyChangedInvocator]
@@ -90,6 +94,22 @@
                     nameof(PasteDurationBeforeUserInterfaceShowsInMilliseconds),
                     pasteDurationBeforeUserInterfaceShowsInMilliseconds = value);
                 
+                OnPropertyChanged();
+            }
+        }
+
+        public int MaximumAmountOfItemsInClipboard
+        {
+            get
+            {
+                return maximumAmountOfItemsInClipboard;
+            }
+            set
+            {
+                if (value == maximumAmountOfItemsInClipboard) return;
+                settingsManager.SaveSetting(
+                    nameof(MaximumAmountOfItemsInClipboard),
+                    maximumAmountOfItemsInClipboard = value);
                 OnPropertyChanged();
             }
         }

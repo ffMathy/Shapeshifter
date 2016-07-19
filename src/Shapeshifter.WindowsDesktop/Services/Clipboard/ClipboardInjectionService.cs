@@ -4,6 +4,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
     using System;
     using System.Collections.Specialized;
+    using System.Threading.Tasks;
     using System.Windows.Media.Imaging;
 
     using Data.Interfaces;
@@ -45,7 +46,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
             this.generalNativeApi = generalNativeApi;
         }
 
-        public void InjectData(IClipboardDataPackage package)
+        public async Task InjectDataAsync(IClipboardDataPackage package)
         {
             clipboardCopyInterceptor.SkipNext();
 
@@ -107,19 +108,19 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
                 (UIntPtr) clipboardData.RawData.Length);
         }
 
-        public void InjectImage(BitmapSource image)
+        public async Task InjectImageAsync(BitmapSource image)
         {
             clipboardCopyInterceptor.SkipNext();
             WindowsClipboard.SetImage(image);
         }
 
-        public void InjectText(string text)
+        public async Task InjectTextAsync(string text)
         {
             clipboardCopyInterceptor.SkipNext();
             WindowsClipboard.SetText(text);
         }
 
-        public void InjectFiles(params string[] files)
+        public async Task InjectFilesAsync(params string[] files)
         {
             clipboardCopyInterceptor.SkipNext();
 

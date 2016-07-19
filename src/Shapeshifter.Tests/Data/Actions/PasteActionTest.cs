@@ -16,7 +16,7 @@
     using Services.Clipboard.Interfaces;
 
     [TestClass]
-    public class PasteActionTest: ActionTestBase<IPasteAction>
+    public class PasteActionTest : ActionTestBase<IPasteAction>
     {
         [TestMethod]
         public async Task CanAlwaysPerformIfDataIsGiven()
@@ -39,9 +39,9 @@
         }
 
         [TestMethod]
-        public void CanGetDescription()
+        public async Task CanReadDescription()
         {
-            Assert.IsNotNull(SystemUnderTest.Description);
+            Assert.IsNotNull(await SystemUnderTest.GetDescriptionAsync(Substitute.For<IClipboardDataPackage>()));
         }
 
         [TestMethod]
@@ -53,11 +53,12 @@
             var fakeClipboardInjectionService = Container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService
                 .Received()
-                .InjectData(fakeData);
+                .InjectDataAsync(fakeData)
+                .IgnoreAwait();
         }
 
         [TestMethod]
-        [ExpectedException(typeof (ArgumentNullException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public async Task ThrowsExceptionIfNoDataGiven()
         {
             await SystemUnderTest.CanPerformAsync(null);

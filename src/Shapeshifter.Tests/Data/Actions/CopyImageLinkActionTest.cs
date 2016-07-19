@@ -43,9 +43,16 @@
         }
 
         [TestMethod]
-        public void CanReadDescription()
+        public async Task CanReadDescription()
         {
-            Assert.IsNotNull(SystemUnderTest.Description);
+            FakeHasImageLinks(
+                new[]
+                {
+                    "foobar.com",
+                    "example.com"
+                });
+
+            Assert.IsNotNull(await SystemUnderTest.GetDescriptionAsync(GetPackageContaining<IClipboardTextData>()));
         }
 
         [TestMethod]
@@ -93,29 +100,19 @@
                  Task.FromResult(
                      secondFakeDownloadedImageBytes));
 
-            Container.Resolve<ILinkParser>()
-             .HasLinkOfTypeAsync(
-                 Arg.Any<string>(),
-                 LinkType.ImageFile)
-             .Returns(Task.FromResult(true));
+            FakeHasImageLinks(
+                new[]
+                {
+                    "foobar.com",
+                    "example.com"
+                });
 
-            Container.Resolve<ILinkParser>()
-             .ExtractLinksFromTextAsync(Arg.Any<string>())
-             .Returns(
-                 Task
-                     .FromResult
-                     <IReadOnlyCollection<string>>(
-                         new[]
-                         {
-                                     "foobar.com",
-                                     "example.com"
-                         }));
-            
             await SystemUnderTest.PerformAsync(GetPackageContaining<IClipboardTextData>());
 
             var fakeClipboardInjectionService = Container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService.Received(2)
-                                         .InjectImage(Arg.Any<BitmapSource>());
+                                         .InjectImageAsync(Arg.Any<BitmapSource>())
+                                         .IgnoreAwait();
 
             var fakeImageFileInterpreter = Container.Resolve<IImageFileInterpreter>();
             fakeImageFileInterpreter.Received(1)
@@ -130,6 +127,23 @@
             fakeDownloader.Received(1)
                           .DownloadBytesAsync("example.com")
                           .IgnoreAwait();
+        }
+
+        void FakeHasImageLinks(string[] linkUrls)
+        {
+            Container.Resolve<ILinkParser>()
+                     .HasLinkOfTypeAsync(
+                         Arg.Any<string>(),
+                         LinkType.ImageFile)
+                     .Returns(Task.FromResult(true));
+
+            Container.Resolve<ILinkParser>()
+                     .ExtractLinksFromTextAsync(Arg.Any<string>())
+                     .Returns(
+                         Task
+                             .FromResult
+                             <IReadOnlyCollection<string>>(
+                                 linkUrls));
         }
     }
 }

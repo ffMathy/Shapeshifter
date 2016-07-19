@@ -12,5 +12,7 @@
         Task<IEnumerable<IClipboardDataPackage>> GetPersistedPackagesAsync();
 
         Task DeletePackageAsync(IClipboardDataPackage package);
+
+        Task IsPinnedAsync(IClipboardDataPackage package);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Shapeshifter.WindowsDesktop.Services.Keyboard.Interfaces;
 using System;
-using System.Collections.Generic;
+
 using Shapeshifter.WindowsDesktop.Infrastructure.Events;
 using System.Windows.Input;
 using static Shapeshifter.WindowsDesktop.Native.KeyboardNativeApi;
