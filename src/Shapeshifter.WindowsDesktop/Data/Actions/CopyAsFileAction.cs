@@ -65,7 +65,7 @@
                 $"{randomFileName}.txt", 
                 Encoding.UTF8.GetBytes(supportedItem.Text));
 
-            clipboardInjectionService.InjectFiles(
+            await clipboardInjectionService.InjectFilesAsync(
                 randomFilePath);
         }
     }

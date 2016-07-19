@@ -44,7 +44,7 @@
         }
 
         public async Task SendKeysAsync(params KeyOperation[] keyOperations)
-        {
+        { 
             var logString = keyOperations
                 .Select(x => $"[{x.Key}: {x.Direction}]")
                 .Aggregate((a, b) => $"{a}, {b}");
@@ -56,18 +56,7 @@
                         MapKeyToVirtualKey(x.Key),
                         x.Direction == KeyDirection.Down ? 0 : KEYEVENTF.KEYUP))
                 .ToArray();
-            foreach (var input in inputs)
-            {
-                await Task.Delay(10);
-                nativeApi.SendInput(
-                    (uint)1,
-                    new[]
-                    {
-                        input
-                    },
-                    INPUT.Size);
-                await Task.Delay(10);
-            }
+            nativeApi.SendInput((uint)inputs.Length, inputs, INPUT.Size);
         }
 
         static VirtualKeyShort MapKeyToVirtualKey(Key key)

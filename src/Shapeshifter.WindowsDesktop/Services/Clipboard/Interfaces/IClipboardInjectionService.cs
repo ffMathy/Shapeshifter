@@ -1,17 +1,18 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard.Interfaces
 {
+    using System.Threading.Tasks;
     using System.Windows.Media.Imaging;
 
     using Data.Interfaces;
 
     public interface IClipboardInjectionService
     {
-        void InjectData(IClipboardDataPackage package);
+        Task InjectDataAsync(IClipboardDataPackage package);
 
-        void InjectImage(BitmapSource image);
+        Task InjectImageAsync(BitmapSource image);
 
-        void InjectText(string text);
+        Task InjectTextAsync(string text);
 
-        void InjectFiles(params string[] files);
+        Task InjectFilesAsync(params string[] files);
     }
 }

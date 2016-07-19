@@ -52,7 +52,7 @@
         public async Task PerformAsync(
             IClipboardDataPackage package)
         {
-            clipboardInjectionService.InjectData(package);
+            await clipboardInjectionService.InjectDataAsync(package);
             await clipboardPasteService.PasteClipboardContentsAsync();
 
             logger.Information("Paste action performed.", 1);

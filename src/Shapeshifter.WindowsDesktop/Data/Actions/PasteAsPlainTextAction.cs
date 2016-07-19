@@ -58,7 +58,7 @@
             IClipboardDataPackage package)
         {
             var textData = (IClipboardTextData) await GetFirstSupportedItem(package);
-            clipboardInjectionService.InjectText(textData.Text);
+            await clipboardInjectionService.InjectTextAsync(textData.Text);
 
             await clipboardPasteService.PasteClipboardContentsAsync();
         }

@@ -72,7 +72,7 @@
             var firstSupportedData = supportedDataCollection.FirstOrDefault();
 
             var zipFilePath = await ZipDataAsync(firstSupportedData);
-            clipboardInjectionService.InjectFiles(zipFilePath);
+            await clipboardInjectionService.InjectFilesAsync(zipFilePath);
         }
 
         async Task<string> ZipFileCollectionDataAsync(params IClipboardFileData[] fileDataItems)

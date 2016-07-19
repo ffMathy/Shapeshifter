@@ -110,7 +110,7 @@
                                         .ConfigureAwait(false);
 
             var images = InterpretImages(imagesBytes);
-            InjectImages(images);
+            await InjectImagesAsync(images);
         }
 
         async Task<IReadOnlyList<string>> ExtractLinksFromPackageAsync(IClipboardDataPackage package)
@@ -127,11 +127,11 @@
             return imagesBytes.Select(imageFileInterpreter.Interpret);
         }
 
-        void InjectImages(IEnumerable<BitmapSource> images)
+        async Task InjectImagesAsync(IEnumerable<BitmapSource> images)
         {
             foreach (var image in images)
             {
-                clipboardInjectionService.InjectImage(image);
+                await clipboardInjectionService.InjectImageAsync(image);
             }
         }
 
