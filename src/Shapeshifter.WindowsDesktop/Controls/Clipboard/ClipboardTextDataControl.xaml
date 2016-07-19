@@ -7,41 +7,34 @@
              xmlns:viewModels="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Clipboard.ViewModels"
              d:DataContext="{d:DesignInstance Type=viewModels:ClipboardTextDataViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d">
-    <Border Style="{StaticResource ClipboardDataControlContentStyle}">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
 
-            <Border Style="{StaticResource ClipboardDataControlImageAreaStyle}">
-                <Canvas x:Name="appbar_page_text" Style="{StaticResource ClipboardDataCanvasStyle}"
-                        Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">
-                    <Path Style="{StaticResource ClipboardDataControlPathStyle}" Width="50" Height="60" Canvas.Left="7"
-                          Canvas.Top="2" Stretch="Fill"
-                          Data="F1 M 20,17L 44.25,17L 56,28.75L 56,59L 20,59L 20,17 Z M 24,21L 24,55L 52,55L 52,33L 40,33L 40,21L 24,21 Z M 44,22.25L 44,29L 50.75,29L 44,22.25 Z M 26,23L 38,23L 38,28L 26,28L 26,23 Z M 26,30L 38,30L 38,33L 26,33L 26,30 Z M 26,35L 50,35L 50,38L 26,38L 26,35 Z M 26,40L 50,40L 50,43L 26,43L 26,40 Z M 26,45L 50,45L 50,48L 26,48L 26,45 Z M 26,50L 50,50L 50,53L 26,53L 26,50 Z " />
-                </Canvas>
-            </Border>
+        <Border Style="{StaticResource ClipboardDataControlImageAreaStyle}">
+            <UserControl Style="{StaticResource ClipboardTextDataIconStyle}" />
+        </Border>
 
-            <Rectangle Grid.Column="1" Style="{StaticResource ClipboardDataControlIconContentSplitterStyle}" />
+        <UserControl Grid.Column="1" Style="{StaticResource ClipboardDataControlIconContentSplitterStyle}" />
 
-            <Grid Grid.Column="2" Style="{StaticResource ClipboardDataControlContentAreaStyle}">
-                <Grid Style="{StaticResource ClipboardDataControlContentAreaInnerStyle}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+        <UserControl Grid.Column="2" Style="{StaticResource ClipboardDataControlContentAreaStyle}">
+            <Grid Style="{StaticResource ClipboardDataControlContentAreaInnerStyle}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                    <TextBlock TextTrimming="CharacterEllipsis" MaxHeight="40" TextWrapping="Wrap"
+                <TextBlock TextTrimming="CharacterEllipsis" MaxHeight="40" TextWrapping="Wrap"
                                VerticalAlignment="Bottom" FontWeight="Normal" FontSize="14"
                                Text="{Binding FriendlyText}"
                                Style="{StaticResource ClipboardDataControlHeaderTextStyle}" />
 
-                    <local:DataSourceControl VerticalAlignment="Top" Margin="0,10,0,1"
+                <local:DataSourceControl VerticalAlignment="Top" Margin="0,10,0,1"
                                              DataContext="{Binding Data.Source}" Grid.Row="1" />
-                </Grid>
             </Grid>
-        </Grid>
-    </Border>
+        </UserControl>
+    </Grid>
 </UserControl>

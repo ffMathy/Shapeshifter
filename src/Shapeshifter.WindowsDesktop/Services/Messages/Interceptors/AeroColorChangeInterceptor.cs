@@ -7,20 +7,31 @@
     using System.Windows.Media.Animation;
 
     using Infrastructure.Events;
+    using Infrastructure.Logging.Interfaces;
 
     using Interfaces;
 
     using Native.Interfaces;
 
+    using Services.Interfaces;
+
     public class AeroColorChangeInterceptor : IAeroColorChangeInterceptor
     {
-        public AeroColorChangeInterceptor()
+        readonly ILogger logger;
+        readonly IColorBrightnessAdjustmentService colorBrightnessAdjustmentService;
+
+        public AeroColorChangeInterceptor(
+            ILogger logger,
+            IColorBrightnessAdjustmentService colorBrightnessAdjustmentService)
         {
+            this.logger = logger;
+            this.colorBrightnessAdjustmentService = colorBrightnessAdjustmentService;
+
+            UpdateAeroColor();
         }
 
         public void Install(IntPtr windowHandle)
         {
-            UpdateAeroColor();
         }
 
         public void Uninstall()
@@ -34,78 +45,22 @@
             UpdateAeroColor();
         }
 
-        void UpdateStoryboardColor(
-            string storyboardKey,
-            string targetPropertyPath,
-            Color color)
-        {
-            var storyboardOriginal = (Storyboard)Application.Current.Resources[storyboardKey];
-            var storyboard = storyboardOriginal.Clone();
-
-            var animations = storyboard.Children.OfType<ColorAnimation>();
-            foreach (var animation in animations)
-            {
-                var targetProperty = Storyboard.GetTargetProperty(animation);
-                if (targetProperty.Path == targetPropertyPath + ".Color")
-                {
-                    animation.To = color;
-                }
-            }
-
-            Application.Current.Resources[storyboardKey] = storyboard;
-        }
-
         void UpdateAeroColor()
         {
             var aeroBrush = (SolidColorBrush)SystemParameters.WindowGlassBrush;
             var aeroColor = aeroBrush.Color;
 
-            Application.Current.Resources["AccentColor"] = aeroColor;
-            Application.Current.Resources["AccentDarkColor"] = aeroColor;
-            Application.Current.Resources["AccentDarkerColor"] = aeroColor;
+            SetColor("Accent", aeroColor);
+            SetColor("AccentDark", colorBrightnessAdjustmentService.AdjustBrightness(aeroColor, -40));
+            SetColor("AccentDarker", colorBrightnessAdjustmentService.AdjustBrightness(aeroColor, -80));
 
-            UpdateStoryboards(aeroColor);
+            logger.Information("Aero color was changed to " + aeroColor + ".");
         }
 
-        void UpdateStoryboards(Color aeroColor)
+        static void SetColor(string key, Color color)
         {
-            UpdateStoryboardColor(
-                "BackgroundToAccentDarkTransitionStoryboard",
-                "Background",
-                aeroColor);
-
-            UpdateStoryboardColor(
-                "BackgroundToAccentTransitionStoryboard",
-                "Background",
-                aeroColor);
-
-            UpdateStoryboardColor(
-                "FillToAccentTransitionStoryboard",
-                "Fill",
-                aeroColor);
-
-            UpdateStoryboardColor(
-                "FillToAccentDarkTransitionStoryboard",
-                "Fill",
-                aeroColor);
-
-            UpdateStoryboardColor(
-                "BackgroundToAccentBorderToAccentDarkTransitionStoryboard",
-                "Background",
-                aeroColor);
-            UpdateStoryboardColor(
-                "BackgroundToAccentBorderToAccentDarkTransitionStoryboard",
-                "BorderBrush",
-                aeroColor);
-
-            UpdateStoryboardColor(
-                "BackgroundToAccentDarkBorderToAccentDarkerTransitionStoryboard",
-                "Background",
-                aeroColor);
-            UpdateStoryboardColor(
-                "BackgroundToAccentDarkBorderToAccentDarkerTransitionStoryboard",
-                "BorderBrush",
-                aeroColor);
+            var resources = Application.Current.Resources;
+            resources[key + "Brush"] = new SolidColorBrush(color);
         }
     }
 }

@@ -34,6 +34,8 @@
 
             InitializeComponent();
             SetupViewModel();
+
+            VisualStateManager.GoToElementState(this, "InPackagesList", true);
         }
 
         void ClipboardListWindow_SourceInitialized(object sender, EventArgs e)
@@ -64,12 +66,10 @@
             {
                 case ClipboardUserInterfacePane.Actions:
                     VisualStateManager.GoToElementState(this, "InActionList", true);
-                    //VisualStateManager.GoToElementState(this, "InActionList", true);
                     break;
 
                 case ClipboardUserInterfacePane.ClipboardPackages:
                     VisualStateManager.GoToElementState(this, "InPackagesList", true);
-                    //VisualStateManager.GoToElementState(this, "InPackagesList", true);
                     break;
             }
         }

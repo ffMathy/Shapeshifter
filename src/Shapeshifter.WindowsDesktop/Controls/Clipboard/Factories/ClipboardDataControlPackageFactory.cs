@@ -39,11 +39,7 @@
                 return null;
             }
 
-            ClipboardDataControlPackage package = null;
-            mainThreadInvoker.Invoke(
-                () => package = CreateDataControlPackageFromDataPackage(dataPackage));
-
-            return package;
+            return CreateFromDataPackage(dataPackage);
         }
 
         ClipboardDataControlPackage CreateDataControlPackageFromDataPackage(IClipboardDataPackage dataPackage)

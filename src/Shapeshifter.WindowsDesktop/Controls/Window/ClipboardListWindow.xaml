@@ -23,15 +23,15 @@
     <VisualStateManager.VisualStateGroups>
         <VisualStateGroup x:Name="TargetList">
             <VisualState Name="InPackagesList">
-                <Storyboard FillBehavior="HoldEnd" Duration="0:0:.25">
-                    <DoubleAnimation FillBehavior="HoldEnd" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ActionListVeil" To="1" Duration="0:0:.25" />
-                    <DoubleAnimation FillBehavior="HoldEnd" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PackageListVeil" To="0" Duration="0:0:.25" />
+                <Storyboard Duration="0:0:.25">
+                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ActionListVeil" To="1" Duration="0:0:.25" />
+                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PackageListVeil" To="0" Duration="0:0:.25" />
                 </Storyboard>
             </VisualState>
             <VisualState Name="InActionList">
-                <Storyboard FillBehavior="HoldEnd" Duration="0:0:.25">
-                    <DoubleAnimation FillBehavior="HoldEnd" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ActionListVeil" To="0" Duration="0:0:.25" />
-                    <DoubleAnimation FillBehavior="HoldEnd" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PackageListVeil" To="1" Duration="0:0:.25" />
+                <Storyboard Duration="0:0:.25">
+                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ActionListVeil" To="0" Duration="0:0:.25" />
+                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PackageListVeil" To="1" Duration="0:0:.25" />
                 </Storyboard>
             </VisualState>
         </VisualStateGroup>
@@ -43,8 +43,11 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid VerticalAlignment="Top">
-            <ListBox SelectedItem="{Binding SelectedElement, Mode=TwoWay}"
+            <ListBox Style="{StaticResource DefaultListBoxStyle}" SelectedItem="{Binding SelectedElement, Mode=TwoWay}"
                      ItemsSource="{Binding Elements}">
+                <ListBox.Resources>
+                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource ClipboardDataControlStyle}" />
+                </ListBox.Resources>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <ContentPresenter Content="{Binding Control}" />
@@ -60,9 +63,9 @@
                 </Rectangle.Fill>
             </Rectangle>
         </Grid>
-        <Rectangle Grid.Column="1" Fill="{StaticResource AccentBrush}" />
+        <Rectangle Grid.Column="1" Fill="{DynamicResource AccentBrush}" />
         <Grid Grid.Column="2" VerticalAlignment="Top">
-            <ListBox SelectedItem="{Binding SelectedAction, Mode=TwoWay}" ItemsSource="{Binding Actions}">
+            <ListBox Style="{StaticResource DefaultListBoxStyle}" SelectedItem="{Binding SelectedAction, Mode=TwoWay}" ItemsSource="{Binding Actions}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <window:ActionControl Margin="-1,-1,0,0" />

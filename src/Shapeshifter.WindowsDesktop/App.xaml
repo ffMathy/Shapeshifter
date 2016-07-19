@@ -1,48 +1,16 @@
 ﻿<Application x:Class="Shapeshifter.WindowsDesktop.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:converters="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Converters">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary>
-                    <converters:BrushCloneConverter x:Key="BrushCloneConverter" />
-                </ResourceDictionary>
-                <ResourceDictionary x:Name="Aero">
-                    <Color x:Key="AccentColor">#3399ff</Color>
-                    <Color x:Key="AccentDarkColor">#236bb2</Color>
-                    <Color x:Key="AccentDarkerColor">#1e5b99</Color>
-
-                    <SolidColorBrush x:Key="AccentBrush" Color="{DynamicResource AccentColor}" />
-                    <SolidColorBrush x:Key="AccentDarkBrush" Color="{DynamicResource AccentDarkColor}" />
-                    <SolidColorBrush x:Key="AccentDarkerBrush" Color="{DynamicResource AccentDarkerColor}" />
-
-                    <Duration x:Key="SelectionTransitionDuration">0:0:0.1</Duration>
-
-                    <Storyboard x:Key="BackgroundToAccentDarkTransitionStoryboard" FillBehavior="HoldEnd">
-                        <ColorAnimation Storyboard.TargetProperty="Background.Color" To="{StaticResource AccentDarkColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
-                    </Storyboard>
-                    <Storyboard x:Key="BackgroundToAccentTransitionStoryboard" FillBehavior="HoldEnd">
-                        <ColorAnimation Storyboard.TargetProperty="Background.Color" To="{StaticResource AccentColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
-                    </Storyboard>
-                    <Storyboard x:Key="FillToAccentTransitionStoryboard" FillBehavior="HoldEnd">
-                        <ColorAnimation Storyboard.TargetProperty="Fill.Color" To="{StaticResource AccentColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
-                    </Storyboard>
-                    <Storyboard x:Key="FillToAccentDarkTransitionStoryboard" FillBehavior="HoldEnd">
-                        <ColorAnimation Storyboard.TargetProperty="Fill.Color" To="{StaticResource AccentDarkColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
-                    </Storyboard>
-                    <Storyboard x:Key="BackgroundToAccentBorderToAccentDarkTransitionStoryboard" FillBehavior="HoldEnd">
-                        <ColorAnimation Storyboard.TargetProperty="Background.Color" To="{StaticResource AccentColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
-                        <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" To="{StaticResource AccentDarkColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
-                    </Storyboard>
-                    <Storyboard x:Key="BackgroundToAccentDarkBorderToAccentDarkerTransitionStoryboard" FillBehavior="HoldEnd">
-                        <ColorAnimation Storyboard.TargetProperty="Background.Color" To="{StaticResource AccentDarkColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
-                        <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" To="{StaticResource AccentDarkerColor}" Duration="{StaticResource SelectionTransitionDuration}"/>
-                    </Storyboard>
-                </ResourceDictionary>
-                <ResourceDictionary Source="Controls/Styles/Light.xaml" />
-                <ResourceDictionary Source="Controls/Styles/Clipboard.xaml" />
+                <ResourceDictionary Source="Resources/Dictionaries/Converters.xaml" />
+                <ResourceDictionary Source="Resources/Dictionaries/Styles/Themes/Shared.xaml" />
+                <ResourceDictionary Source="Resources/Dictionaries/Styles/Themes/Aero.xaml" />
+                <ResourceDictionary Source="Resources/Dictionaries/Variables.xaml" />
+                <ResourceDictionary Source="Resources/Dictionaries/Styles/Clipboard.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type Control}" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
