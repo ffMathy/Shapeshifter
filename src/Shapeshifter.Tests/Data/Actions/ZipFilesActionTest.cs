@@ -122,7 +122,7 @@
 
             string zipPath = null;
             Container.Resolve<IClipboardInjectionService>()
-                .When(x => x.InjectFiles(Arg.Any<string[]>()))
+                .When(x => x.InjectFilesAsync(Arg.Any<string[]>()))
                 .Do(
                     parameters => {
                         var files = (string[]) parameters[0];
@@ -172,7 +172,7 @@
 
             string zipPath = null;
             Container.Resolve<IClipboardInjectionService>()
-                .When(x => x.InjectFiles(Arg.Any<string[]>()))
+                .When(x => x.InjectFilesAsync(Arg.Any<string[]>()))
                 .Do(
                     parameters => {
                         var files = (string[]) parameters[0];

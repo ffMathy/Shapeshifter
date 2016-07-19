@@ -63,7 +63,8 @@
 
             var fakeClipboardInjectionService = Container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService.Received(1)
-                                         .InjectText("foobar hello");
+                                         .InjectTextAsync("foobar hello")
+                                         .IgnoreAwait();
         }
     }
 }

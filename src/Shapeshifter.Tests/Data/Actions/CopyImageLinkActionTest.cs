@@ -111,7 +111,8 @@
 
             var fakeClipboardInjectionService = Container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService.Received(2)
-                                         .InjectImage(Arg.Any<BitmapSource>());
+                                         .InjectImageAsync(Arg.Any<BitmapSource>())
+                                         .IgnoreAwait();
 
             var fakeImageFileInterpreter = Container.Resolve<IImageFileInterpreter>();
             fakeImageFileInterpreter.Received(1)
