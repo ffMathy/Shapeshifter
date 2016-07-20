@@ -17,7 +17,10 @@
 
         public int InterceptionId { get; }
 
-        public bool ControlNeeded { get; set; }
+        public bool ControlKeyNeeded { get; set; }
+        public bool WinKeyNeeded { get; set; }
+        public bool ShiftKeyNeeded { get; set; }
+        public bool AltKeyNeeded { get; set; }
 
         public bool NoRepeat { get; set; }
 
@@ -35,10 +38,24 @@
             UnregisterHotkey(windowHandle);
 
             var modifier = 0;
-            if (ControlNeeded)
+
+            if (ControlKeyNeeded)
             {
                 modifier |= KeyboardNativeApi.MOD_CONTROL;
             }
+            if (AltKeyNeeded)
+            {
+                modifier |= KeyboardNativeApi.MOD_ALT;
+            }
+            if (ShiftKeyNeeded)
+            {
+                modifier |= KeyboardNativeApi.MOD_SHIFT;
+            }
+            if (WinKeyNeeded)
+            {
+                modifier |= KeyboardNativeApi.MOD_WIN;
+            }
+
             if (NoRepeat)
             {
                 modifier |= KeyboardNativeApi.MOD_NOREPEAT;
