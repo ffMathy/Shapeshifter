@@ -14,7 +14,10 @@
 
         Key Key { get; }
 
-        bool ControlNeeded { get; }
+        bool ControlKeyNeeded { get; }
+        bool WinKeyNeeded { get; }
+        bool ShiftKeyNeeded { get; }
+        bool AltKeyNeeded { get; }
 
         bool NoRepeat { get; }
     }

@@ -87,7 +87,7 @@
                     this,
                     new HotkeyFiredArgument(
                         interception.Key,
-                        interception.ControlNeeded));
+                        interception.ControlKeyNeeded));
             }
         }
 

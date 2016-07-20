@@ -17,17 +17,22 @@ namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
         UnhookWindowsHookExDelegate originalUnhookWindowsHookEx;
 
         bool ctrlIsDown;
+        bool vIsDown;
 
         [SuppressMessage("ReSharper", "UnusedParameter.Local")]
         public WindowHookInterceptor(
                RemoteHooking.IContext InContext,
                string InChannelName)
         {
-            _interface = RemoteHooking.IpcConnectClient<HookHostCommunicator>(InChannelName);
+            _interface = RemoteHooking.IpcConnectClient<HookHostCommunicator>(
+                InChannelName);
+            _interface.Ping();
         }
 
         public IntPtr SetWindowsHookExOverride(int idHook, KeyboardHookDelegate lpfn, IntPtr hMod, uint dwThreadId)
         {
+            _interface.DebugWriteLine("Hook install intercepted and overriden.");
+
             var result = originalSetWindowsHookExW(
                 idHook,
                 (nCode, wParam, lParam) =>
@@ -38,29 +43,55 @@ namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
                     var keyEvent = (KeyEvent)wParam.ToUInt32();
 
                     var isCurrentKeyDown = keyEvent == KeyEvent.WM_KEYDOWN;
-
-                    var shouldOverride = ctrlIsDown && (currentKey == Key.V);
-
-                    var fetchOriginalResult = new Lazy<IntPtr>(() => lpfn(nCode, wParam, lParam));
-                    if (!shouldOverride)
-                    {
-                        if (fetchOriginalResult.Value.ToInt64() != 4294967295) return fetchOriginalResult.Value;
-                    }
+                    var shouldIgnoreHook = _interface.GetShouldIgnoreHook();
+                    var shouldOverride = ctrlIsDown && 
+                        (currentKey == Key.V) && 
+                        !shouldIgnoreHook;
 
                     switch (currentKey)
                     {
                         case Key.LeftCtrl:
                         case Key.RightCtrl:
                             ctrlIsDown = isCurrentKeyDown;
+                            break;
+
+                        case Key.V:
+                            vIsDown = isCurrentKeyDown;
+                            break;
+                    }
+
+                    var fetchOriginalResult = new Lazy<IntPtr>(() => lpfn(nCode, wParam, lParam));
+                    if (!shouldOverride)
+                    {
+                        var value = fetchOriginalResult.Value.ToInt32();
+                        _interface.DebugWriteLine($"Original call for {currentKey} {(isCurrentKeyDown ? "down" : "up")} returned {value}.");
+
+                        if ((value != 1) && (value != -1))
+                        {
+                            return fetchOriginalResult.Value;
+                        }
+                    }
+
+                    switch (currentKey)
+                    {
+                        case Key.LeftCtrl:
+                        case Key.RightCtrl:
                             shouldOverride = true;
                             break;
 
                         case Key.V:
                             shouldOverride = ctrlIsDown;
                             break;
+
+                        case Key.Down:
+                        case Key.Up:
+                        case Key.Left:
+                        case Key.Right:
+                            shouldOverride = ctrlIsDown && vIsDown;
+                            break;
                     }
 
-                    if (shouldOverride)
+                    if (shouldOverride || shouldIgnoreHook)
                     {
                         return CallNextHookEx(
                             new IntPtr(idHook), nCode, wParam, lParam);
@@ -89,6 +120,7 @@ namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
             RemoteHooking.IContext InContext,
             string InChannelName)
         {
+            _interface.DebugWriteLine("Running keyboard hook interceptor.");
             try
             {
                 originalSetWindowsHookExW = InterceptUser32Method(
@@ -100,6 +132,7 @@ namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
                 originalUnhookWindowsHookEx = InterceptUser32Method(
                     $"{nameof(UnhookWindowsHookEx)}",
                     new UnhookWindowsHookExDelegate(UnhookWindowsHookExOverride));
+                _interface.DebugWriteLine("Intercepted successfully.");
             }
             catch (Exception exception)
             {
@@ -117,6 +150,7 @@ namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
             }
             catch
             {
+                _interface.DebugWriteLine("Keyboard hook interceptor has been disconnected.");
                 // NET Remoting will raise an exception if host is unreachable
             }
         }

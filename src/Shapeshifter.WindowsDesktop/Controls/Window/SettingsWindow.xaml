@@ -12,6 +12,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <CheckBox Margin="0,5" IsChecked="{Binding StartWithWindows}" Content="Start with Windows" />
         <StackPanel Margin="0,5" Grid.Row="1">
@@ -23,6 +24,10 @@
             <Label>Maximum amount of items in the clipboard deck</Label>
             <Slider TickFrequency="1" Minimum="3" Maximum="100" SmallChange="1" Value="{Binding MaximumAmountOfItemsInClipboard}" TickPlacement="Both" IsSnapToTickEnabled="True" AutoToolTipPlacement="TopLeft" />
             <TextBlock HorizontalAlignment="Center" Text="{Binding MaximumAmountOfItemsInClipboard}" FontWeight="Bold" />
+        </StackPanel>
+        <StackPanel Margin="0,5" Grid.Row="3">
+            <Label>Shapeshifter hotkey</Label>
+            <TextBox Text="{Binding HotkeyString, Mode=OneWay}" KeyDown="UIElement_OnKeyDown" />
         </StackPanel>
     </Grid>
 </Window>

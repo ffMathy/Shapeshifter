@@ -25,7 +25,7 @@
         {
             return new HotkeyInterception(keyboardNativeApi)
             {
-                ControlNeeded = controlNeeded,
+                ControlKeyNeeded = controlNeeded,
                 NoRepeat = noRepeat,
                 Key = hotkey
             };

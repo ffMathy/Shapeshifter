@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Window
 {
     using System.Windows;
+    using System.Windows.Input;
 
     using Interfaces;
 
@@ -13,12 +14,20 @@
         : Window,
           ISettingsWindow
     {
+        readonly ISettingsViewModel viewModel;
+
         public SettingsWindow(
             ISettingsViewModel viewModel)
         {
             InitializeComponent();
 
-            DataContext = viewModel;
+            DataContext = this.viewModel = viewModel;
+        }
+
+        void UIElement_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+            viewModel.OnReceiveKeyDown(e.Key);
         }
     }
 }
