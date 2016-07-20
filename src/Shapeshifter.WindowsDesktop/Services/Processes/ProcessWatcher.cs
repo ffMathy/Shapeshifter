@@ -7,6 +7,7 @@ using Shapeshifter.WindowsDesktop.Infrastructure.Events;
 
 namespace Shapeshifter.WindowsDesktop.Services.Processes
 {
+    using System.Diagnostics;
     using System.Management;
 
     class ProcessWatcher : IProcessWatcher
@@ -33,8 +34,18 @@ namespace Shapeshifter.WindowsDesktop.Services.Processes
             {
                 throw new InvalidOperationException("Can't add items to the list of watched processes when the watcher is connected.");
             }
+            
+            _processNamesToWatch.Add(
+                RemoveExtensionFromProcessName(processName));
+        }
 
-            _processNamesToWatch.Add(processName);
+        static string RemoveExtensionFromProcessName(string processName)
+        {
+            if (processName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+            {
+                processName = processName.Substring(0, processName.Length - 4);
+            }
+            return processName;
         }
 
         public void RemoveProcessNameFromWatchList(string processName)
@@ -44,7 +55,8 @@ namespace Shapeshifter.WindowsDesktop.Services.Processes
                 throw new InvalidOperationException("Can't remove items from the list of watched processes when the watcher is connected.");
             }
 
-            _processNamesToWatch.Remove(processName);
+            _processNamesToWatch.Remove(
+                RemoveExtensionFromProcessName(processName));
         }
 
         public bool IsConnected { get; private set; }
@@ -72,6 +84,28 @@ namespace Shapeshifter.WindowsDesktop.Services.Processes
                     "The process watcher is already connected.");
             }
 
+            SetupFutureProcessMonitoring();
+            ScanCurrentProcesses();
+
+            IsConnected = true;
+        }
+
+        void ScanCurrentProcesses()
+        {
+            foreach (var processName in _processNamesToWatch)
+            {
+                var processes = Process.GetProcessesByName(processName);
+                foreach (var process in processes)
+                {
+                    FireOnProcessStarted(
+                        $"{process.ProcessName}.exe",
+                        process.Id);
+                }
+            }
+        }
+
+        void SetupFutureProcessMonitoring()
+        {
             var querySuffix = string.Empty;
             if (_processNamesToWatch.Any())
             {
@@ -83,24 +117,22 @@ namespace Shapeshifter.WindowsDesktop.Services.Processes
                     {
                         querySuffix += " OR ";
                     }
-                    querySuffix += " TargetInstance.Name = '" + processName + "'";
+                    querySuffix += " TargetInstance.Name = '" + processName + ".exe'";
                 }
                 querySuffix += ")";
             }
-            
+
             var queryString =
-               "SELECT *" +
-               "  FROM __InstanceCreationEvent " +
-               "WITHIN " + ProcessPollingIntervalInSeconds + " " +
-               " WHERE TargetInstance ISA 'Win32_Process'" + querySuffix;
+                "SELECT *" +
+                "  FROM __InstanceCreationEvent " +
+                "WITHIN " + ProcessPollingIntervalInSeconds + " " +
+                " WHERE TargetInstance ISA 'Win32_Process'" + querySuffix;
 
             const string scope = @"\\.\root\CIMV2";
 
             _watcher = new ManagementEventWatcher(scope, queryString);
             _watcher.EventArrived += WatcherProcessStarted;
             _watcher.Start();
-
-            IsConnected = true;
         }
 
         void WatcherProcessStarted(object sender, EventArrivedEventArgs e)
@@ -110,8 +142,15 @@ namespace Shapeshifter.WindowsDesktop.Services.Processes
             var processName = targetInstance.Properties["Name"].Value.ToString();
             var processId = int.Parse(targetInstance.Properties["ProcessId"].Value.ToString());
 
-            OnProcessStarted(new ProcessStartedEventArgument(
-                processName, processId));
+            FireOnProcessStarted(processName, processId);
+        }
+
+        void FireOnProcessStarted(string processName, int processId)
+        {
+            OnProcessStarted(
+                new ProcessStartedEventArgument(
+                    processName,
+                    processId));
         }
 
         protected virtual void OnProcessStarted(ProcessStartedEventArgument e)

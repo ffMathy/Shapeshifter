@@ -13,6 +13,8 @@
     using Keyboard;
     using Keyboard.Interfaces;
 
+    using KeyboardHookInterception;
+
     using Messages.Interceptors.Hotkeys.Interfaces;
 
     class ClipboardPasteService: IClipboardPasteService
@@ -128,12 +130,16 @@
         void InstallPasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.Install(handleContainer.Handle);
+            HookHostCommunicator.SetShouldIgnoreHook(false);
+
             logger.Information("Installed paste hotkey interceptor.");
         }
 
         void UninstallPasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.Uninstall();
+            HookHostCommunicator.SetShouldIgnoreHook(true);
+
             logger.Information("Uninstalled paste hotkey interceptor.");
         }
     }

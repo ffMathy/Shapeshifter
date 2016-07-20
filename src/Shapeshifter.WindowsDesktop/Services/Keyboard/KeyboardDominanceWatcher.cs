@@ -2,10 +2,13 @@
 {
     using System.Linq;
     using System.Runtime.Remoting;
+    using System.Security.Principal;
+    using System.Threading.Tasks;
 
     using EasyHook;
 
     using Infrastructure.Events;
+    using Infrastructure.Logging.Interfaces;
 
     using Interfaces;
 
@@ -17,10 +20,9 @@
     {
         readonly IProcessWatcher processWatcher;
         readonly IProcessManager processManager;
+        readonly ILogger logger;
 
         readonly HookHostCommunicator communicator;
-
-        string channelName;
 
         static readonly string[] SuspiciousProcesses = new[]
         {
@@ -30,10 +32,12 @@
 
         public KeyboardDominanceWatcher(
             IProcessWatcher processWatcher,
-            IProcessManager processManager)
+            IProcessManager processManager,
+            ILogger logger)
         {
             this.processWatcher = processWatcher;
             this.processManager = processManager;
+            this.logger = logger;
 
             communicator = new HookHostCommunicator();
 
@@ -49,22 +53,30 @@
             }
         }
 
-        void ProcessWatcher_ProcessStarted(object sender, ProcessStartedEventArgument e)
+        async void ProcessWatcher_ProcessStarted(object sender, ProcessStartedEventArgument e)
         {
             if (!SuspiciousProcesses.Contains(e.ProcessName)) return;
 
-            var injectedLibraryName = GetInjectedLibraryName();
+            logger.Information($"Injecting keyboard override library into process {e.ProcessName}.");
 
+            var injectedLibraryName = GetInjectedLibraryName();
+            
+            string channelName = null;
             RemoteHooking.IpcCreateServer(
                 ref channelName, 
                 WellKnownObjectMode.SingleCall,
-                communicator);
+                communicator,
+                WellKnownSidType.WorldSid);
+
+            await Task.Delay(1000);
             
             RemoteHooking.Inject(
                 e.ProcessId,
                 injectedLibraryName,
                 injectedLibraryName,
                 channelName);
+
+            logger.Information($"Keyboard override library successfully injected.");
         }
 
         static string GetInjectedLibraryName()
