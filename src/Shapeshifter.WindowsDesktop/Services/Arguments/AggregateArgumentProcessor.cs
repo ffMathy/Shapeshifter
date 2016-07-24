@@ -4,11 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Infrastructure.Logging.Interfaces;
+
     using Interfaces;
 
     class AggregateArgumentProcessor: IAggregateArgumentProcessor
     {
         readonly IEnumerable<INoArgumentProcessor> noArgumentProcessors;
+        readonly ILogger logger;
         readonly IEnumerable<ISingleArgumentProcessor> singleArgumentProcessors;
 
         readonly ICollection<IArgumentProcessor> processorsUsed;
@@ -46,16 +49,20 @@
 
         public AggregateArgumentProcessor(
             IEnumerable<ISingleArgumentProcessor> singleArgumentProcessors,
-            IEnumerable<INoArgumentProcessor> noArgumentProcessors)
+            IEnumerable<INoArgumentProcessor> noArgumentProcessors,
+            ILogger logger)
         {
             this.singleArgumentProcessors = singleArgumentProcessors;
             this.noArgumentProcessors = noArgumentProcessors;
+            this.logger = logger;
 
             processorsUsed = new List<IArgumentProcessor>();
         }
 
         public void ProcessArguments(string[] arguments)
         {
+            logger.Information("Processing given command line arguments.");
+
             lock (processorsUsed)
             {
                 processorsUsed.Clear();
@@ -63,6 +70,7 @@
                 ProcessSingleArgumentProcessors(arguments);
                 if (!processorsUsed.Any())
                 {
+                    logger.Information("Running no-argument argument processors since no single argument processor was used.");
                     ProcessNoArgumentProcessors();
                 }
             }
