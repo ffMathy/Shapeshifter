@@ -8,6 +8,7 @@
     using Controls.Window.ViewModels.Interfaces;
 
     using Infrastructure.Environment.Interfaces;
+    using Infrastructure.Logging.Interfaces;
     using Infrastructure.Signing.Interfaces;
 
     using Interfaces;
@@ -30,6 +31,7 @@
         readonly IEnvironmentInformation environmentInformation;
         readonly ISettingsViewModel settingsViewModel;
         readonly IKeyboardDominanceWatcher keyboardDominanceWatcher;
+        readonly ILogger logger;
 
         public InstallArgumentProcessor(
             IProcessManager processManager,
@@ -37,7 +39,8 @@
             ISignHelper signHelper,
             IEnvironmentInformation environmentInformation,
             ISettingsViewModel settingsViewModel,
-            IKeyboardDominanceWatcher keyboardDominanceWatcher)
+            IKeyboardDominanceWatcher keyboardDominanceWatcher,
+            ILogger logger)
         {
             this.processManager = processManager;
             this.certificateManager = certificateManager;
@@ -45,6 +48,7 @@
             this.environmentInformation = environmentInformation;
             this.settingsViewModel = settingsViewModel;
             this.keyboardDominanceWatcher = keyboardDominanceWatcher;
+            this.logger = logger;
         }
 
         public bool Terminates
@@ -69,11 +73,14 @@
         {
             if (!processManager.IsCurrentProcessElevated())
             {
+                logger.Information("Current process is not elevated which is needed for installation. Starting as elevated process.");
                 processManager.LaunchFileWithAdministrativeRights(
                     processManager.GetCurrentProcessPath());
             }
             else
             {
+                logger.Information("Current process is elevated.");
+                logger.Information("Running installation procedure.");
                 Install();
             }
         }
@@ -82,20 +89,32 @@
         {
             PrepareInstallDirectory();
 
+            logger.Information("Install directory prepared.");
+
             var currentExecutableFile = processManager.GetCurrentProcessPath();
             var targetExecutableFile = Path.Combine(TargetDirectory, "Shapeshifter.exe");
 
             WriteManifest(targetExecutableFile);
             WriteExecutable(targetExecutableFile);
 
+            logger.Information("Executable and manifest written to install directory.");
+
             var selfSignedCertificate = InstallCertificateIfNotFound();
             signHelper.SignAssemblyWithCertificate(targetExecutableFile, selfSignedCertificate);
 
+            logger.Information("Executable signed with newly created self-signing certificate.");
+
             ConfigureDefaultSettings();
+
+            logger.Information("Default settings have been configured.");
 
             keyboardDominanceWatcher.Install();
 
+            logger.Information("Injection mechanism installed and configured in the Global Assembly Cache.");
+
             LaunchInstalledExecutable(targetExecutableFile, currentExecutableFile);
+
+            logger.Information("Launched installed executable.");
         }
 
         void ConfigureDefaultSettings()

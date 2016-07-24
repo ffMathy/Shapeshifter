@@ -14,7 +14,10 @@
 
         public FileLogStream()
         {
-            File.WriteAllText(logFileName, string.Empty);
+            if (!File.Exists(logFileName))
+            {
+                File.WriteAllText(logFileName, string.Empty);
+            }
         }
 
         public void WriteLine(string input)
