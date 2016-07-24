@@ -45,6 +45,16 @@
             base.OnExit(e);
         }
 
+        static void OnError(Exception exception)
+        {
+            MessageBox.Show(
+                exception?.ToString(),
+                "Shapeshifter error",
+                MessageBoxButton.OK);
+            Process.GetCurrentProcess()
+                   .Kill();
+        }
+
 #pragma warning disable 4014
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -54,16 +64,18 @@
                     return;
                 }
 
-                MessageBox.Show(
-                    exceptionEventArguments.ExceptionObject.ToString(),
-                    "Shapeshifter error",
-                    MessageBoxButton.OK);
-                Process.GetCurrentProcess()
-                       .Kill();
+                OnError((Exception)exceptionEventArguments.ExceptionObject);
             };
 
             var main = Container.Resolve<ApplicationEntrypoint>();
-            main.Start(e.Args);
+            try
+            {
+                main.Start(e.Args);
+            }
+            catch (Exception ex)
+            {
+                OnError(ex);
+            }
         }
 #pragma warning restore 4014
     }
