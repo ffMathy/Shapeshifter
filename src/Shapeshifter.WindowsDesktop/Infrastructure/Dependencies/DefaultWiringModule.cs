@@ -12,6 +12,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
     using Environment;
     using Environment.Interfaces;
 
+    using Logging;
+
     using Native;
 
     using Threading;
@@ -45,6 +47,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
             RegisterMainThread(builder);
 
             var environmentInformation = RegisterEnvironmentInformation(builder);
+            RegisterLogStream(environmentInformation, builder);
+
             if (environmentInformation.GetIsInDesignTime())
             {
                 DesignTimeContainerHelper.RegisterFakes(builder);
@@ -53,6 +57,24 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
             callback?.Invoke(builder);
 
             base.Load(builder);
+        }
+
+        static void RegisterLogStream(IEnvironmentInformation environment, ContainerBuilder builder)
+        {
+            if (!environment.GetIsDebugging())
+            {
+                builder
+                    .RegisterType<FileLogStream>()
+                    .AsImplementedInterfaces()
+                    .SingleInstance();
+            }
+            else
+            {
+                builder
+                    .RegisterType<DebugLogStream>()
+                    .AsImplementedInterfaces()
+                    .SingleInstance();
+            }
         }
 
         static void RegisterMainThread(ContainerBuilder builder)
