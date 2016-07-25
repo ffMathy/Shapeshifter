@@ -89,20 +89,11 @@
         {
             PrepareInstallDirectory();
 
-            logger.Information("Install directory prepared.");
-
             var currentExecutableFile = processManager.GetCurrentProcessPath();
             var targetExecutableFile = Path.Combine(TargetDirectory, "Shapeshifter.exe");
 
-            WriteManifest(targetExecutableFile);
-            WriteExecutable(targetExecutableFile);
-
-            logger.Information("Executable and manifest written to install directory.");
-
-            var selfSignedCertificate = InstallCertificateIfNotFound();
-            signHelper.SignAssemblyWithCertificate(targetExecutableFile, selfSignedCertificate);
-
-            logger.Information("Executable signed with newly created self-signing certificate.");
+            InstallToInstallDirectory(targetExecutableFile);
+            SignAssembly(targetExecutableFile);
 
             ConfigureDefaultSettings();
 
@@ -117,6 +108,22 @@
             logger.Information("Launched installed executable.");
         }
 
+        void SignAssembly(string targetExecutableFile)
+        {
+            var selfSignedCertificate = InstallCertificateIfNotFound();
+            signHelper.SignAssemblyWithCertificate(targetExecutableFile, selfSignedCertificate);
+
+            logger.Information("Executable signed with newly created self-signing certificate.");
+        }
+
+        void InstallToInstallDirectory(string targetExecutableFile)
+        {
+            WriteManifest(targetExecutableFile);
+            WriteExecutable(targetExecutableFile);
+
+            logger.Information("Executable and manifest written to install directory.");
+        }
+
         void ConfigureDefaultSettings()
         {
             settingsViewModel.StartWithWindows = true;
@@ -128,12 +135,26 @@
                 $"CN={CertificateName}",
                 StoreName.My,
                 StoreLocation.LocalMachine);
-            if (!existingCertificates.Any())
+            if (existingCertificates.Any())
+            {
+                try
+                {
+                    return existingCertificates.Single();
+                }
+                finally
+                {
+                    logger.Information("Using existing code signing certificate.");
+                }
+            }
+
+            try
             {
                 return InstallCodeSigningCertificate();
             }
-
-            return existingCertificates.Single();
+            finally
+            {
+                logger.Information("Installed new code signing certificate.");
+            }
         }
 
         X509Certificate2 InstallCodeSigningCertificate()
@@ -173,7 +194,7 @@
                 Resources.App);
         }
 
-        static void PrepareInstallDirectory()
+        void PrepareInstallDirectory()
         {
             if (Directory.Exists(TargetDirectory))
             {
@@ -181,6 +202,8 @@
             }
 
             Directory.CreateDirectory(TargetDirectory);
+
+            logger.Information("Install directory prepared.");
         }
     }
 }
