@@ -14,9 +14,17 @@
             string path,
             byte[] bytes);
 
+        void AppendLineToFile(
+            string path,
+            string line);
+
         string WriteBytesToTemporaryFile(
             string relativePath,
             byte[] bytes);
+
+        string AppendLineToTemporaryFile(
+            string relativePath,
+            string line);
 
         string PrepareTemporaryFolder(
             string relativePath);

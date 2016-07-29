@@ -11,7 +11,17 @@
         : IFileManager,
           IDesignerService
     {
+        public void AppendLineToFile(string path, string line)
+        {
+            
+        }
+
         public string WriteBytesToTemporaryFile(string relativePath, byte[] bytes)
+        {
+            return null;
+        }
+
+        public string AppendLineToTemporaryFile(string relativePath, string line)
         {
             return null;
         }

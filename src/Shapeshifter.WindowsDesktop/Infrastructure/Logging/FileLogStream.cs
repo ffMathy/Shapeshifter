@@ -10,19 +10,20 @@
 
     class FileLogStream: ILogStream
     {
-        const string logFileName = "Shapeshifter.log";
+        readonly IFileManager fileManager;
 
-        public FileLogStream()
+        readonly string logFileName;
+
+        public FileLogStream(
+            IFileManager fileManager)
         {
-            if (!File.Exists(logFileName))
-            {
-                File.WriteAllText(logFileName, string.Empty);
-            }
+            this.fileManager = fileManager;
+            logFileName = fileManager.WriteBytesToTemporaryFile("Shapeshifter.log", new byte[0]);
         }
 
         public void WriteLine(string input)
         {
-            File.AppendAllLines(logFileName, new [] { input });
+            fileManager.AppendLineToFile(logFileName, input);
         }
     }
 }
