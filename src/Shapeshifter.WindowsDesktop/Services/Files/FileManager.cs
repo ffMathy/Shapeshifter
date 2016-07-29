@@ -194,10 +194,28 @@
             return PrepareFolder(finalPath);
         }
 
+        public void AppendLineToFile(string path, string line)
+        {
+            File.AppendAllLines(path, new []
+            {
+                line
+            });
+        }
+
         public string WriteBytesToTemporaryFile(string relativePath, byte[] bytes)
         {
             var finalPath = GetFullPathFromTemporaryPath(relativePath);
             WriteBytesToFile(finalPath, bytes);
+
+            temporaryPaths.Add(finalPath);
+
+            return finalPath;
+        }
+
+        public string AppendLineToTemporaryFile(string relativePath, string line)
+        {
+            var finalPath = GetFullPathFromTemporaryPath(relativePath);
+            AppendLineToFile(finalPath, line);
 
             temporaryPaths.Add(finalPath);
 

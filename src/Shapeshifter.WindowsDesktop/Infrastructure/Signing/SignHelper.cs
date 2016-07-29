@@ -7,17 +7,22 @@
 
     using Interfaces;
 
+    using Logging.Interfaces;
+
     using Native;
     using Native.Interfaces;
 
     class SignHelper: ISignHelper
     {
         readonly ISigningNativeApi signingNativeApi;
+        readonly ILogger logger;
 
         public SignHelper(
-            ISigningNativeApi signingNativeApi)
+            ISigningNativeApi signingNativeApi,
+            ILogger logger)
         {
             this.signingNativeApi = signingNativeApi;
+            this.logger = logger;
         }
 
         public void SignAssemblyWithCertificate(string assemblyPath, X509Certificate2 certificate)
@@ -30,10 +35,16 @@
             try
             {
                 pSignerCert = CreateSignerCertificate(certificate);
+                logger.Information("Signer certificate for given code signing certificate created.");
+
                 pSubjectInfo = CreateSignerSubjectInfo(assemblyPath);
+                logger.Information("Signer signer subject information for given code signing certificate created.");
+
                 pSignatureInfo = CreateSignerSignatureInfo();
+                logger.Information("Signer signer signature information for given code signing certificate created.");
 
                 SignCode(pSubjectInfo, pSignerCert, pSignatureInfo, pProviderInfo);
+                logger.Information("Code has been successfully signed.");
             }
             catch (CryptographicException ce)
             {
@@ -53,6 +64,7 @@
                 {
                     Marshal.DestroyStructure(pSignatureInfo, typeof (SigningNativeApi.SIGNER_SIGNATURE_INFO));
                 }
+                logger.Information("Done signing assembly.");
             }
         }
 
