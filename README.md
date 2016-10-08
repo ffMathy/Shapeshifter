@@ -5,13 +5,10 @@
 [![codecov.io](https://codecov.io/github/ffMathy/Shapeshifter/coverage.svg?branch=master)](https://codecov.io/github/ffMathy/Shapeshifter?branch=master)
 
 # Shapeshifter
-Shapeshifter is a revolutionary clipboard manager that you might know of already. It can be downloaded [here](http://flamefusion.net/software/shapeshifter),
-although that link is for Version 5.
+Shapeshifter is a revolutionary clipboard manager that you might know of already. 
 
-Version 6 is the first version to go Open Source, on this repository. It is a complete rewrite, so expect it to take some time to get it ready.
-
-#Download beta version
-Shapeshifter 6 is still in beta stage, meaning that it can be quite rough around the edges. If you're aware of this and still want to try Shapeshifter 6, the releases can be found here: https://github.com/ffMathy/Shapeshifter/releases
+- Version 5 (current latest stable): https://github.com/ffMathy/Shapeshifter/releases/tag/shapeshifter-v5.0.107
+- Version 6 (new experimental version): https://github.com/ffMathy/Shapeshifter/releases/latest
 
 #Contributing
 Feel free to contribute to Shapeshifter 6 development! Create a pull request, and we'll look at it. *The repository has a DotSettings ReSharper file included, which comes with the conventions we want to use for this repository. These conventions also contain a few templates for creating Unit Tests.*

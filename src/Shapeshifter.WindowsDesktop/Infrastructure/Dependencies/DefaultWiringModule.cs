@@ -17,6 +17,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
     using Native;
 
     using Threading;
+    using Logging.Interfaces;
+    using Services.Files.Interfaces;
 
     public class DefaultWiringModule: AutofacModule
     {
@@ -47,7 +49,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
             RegisterMainThread(builder);
 
             var environmentInformation = RegisterEnvironmentInformation(builder);
-            RegisterLogStream(environmentInformation, builder);
+            RegisterLogging(environmentInformation, builder);
 
             if (environmentInformation.GetIsInDesignTime())
             {
@@ -59,12 +61,13 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
             base.Load(builder);
         }
 
-        static void RegisterLogStream(IEnvironmentInformation environment, ContainerBuilder builder)
+        static void RegisterLogging(IEnvironmentInformation environment, ContainerBuilder builder)
         {
             if (!environment.GetIsDebugging())
             {
                 builder
                     .RegisterType<FileLogStream>()
+                    .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
                     .AsImplementedInterfaces()
                     .SingleInstance();
             }

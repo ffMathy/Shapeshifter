@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.25428.1
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.WindowsDesktop", "Shapeshifter.WindowsDesktop\Shapeshifter.WindowsDesktop.csproj", "{C8AFEB5B-5197-4F7D-90F1-DC1DCD795BE1}"
 EndProject
@@ -10,6 +10,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.WindowsDesktop.Native", "Shapeshifter.WindowsDesktop.Native\Shapeshifter.WindowsDesktop.Native.csproj", "{25ACB6F2-F5E2-4C38-AB51-697EAA995CC4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.WindowsDesktop.KeyboardHookInterception", "Shapeshifter.WindowsDesktop.KeyboardHookInterception\Shapeshifter.WindowsDesktop.KeyboardHookInterception.csproj", "{9A7B5B69-AB84-4906-B65A-EE5581568C5E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{360BD9A8-28E9-42EF-8731-0BACCB60B8DC}"
+	ProjectSection(SolutionItems) = preProject
+		..\appveyor.yml = ..\appveyor.yml
+		..\codecov.yml = ..\codecov.yml
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

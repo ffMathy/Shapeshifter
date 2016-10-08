@@ -114,5 +114,10 @@
         {
             Log("Warning: " + text);
         }
+
+        public void Error(Exception exception)
+        {
+            Error(exception.ToString());
+        }
     }
 }

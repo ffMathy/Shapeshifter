@@ -48,6 +48,7 @@
             }
             catch (CryptographicException ce)
             {
+                logger.Error(ce);
                 throw new CryptographicException($@"An error occurred while attempting to load the signing certificate. {ce.Message}", ce);
             }
             finally
