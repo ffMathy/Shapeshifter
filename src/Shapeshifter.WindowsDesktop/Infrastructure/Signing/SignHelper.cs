@@ -15,14 +15,13 @@
     class SignHelper: ISignHelper
     {
         readonly ISigningNativeApi signingNativeApi;
-        readonly ILogger logger;
+
+        public ILogger Logger { get; set; }
 
         public SignHelper(
-            ISigningNativeApi signingNativeApi,
-            ILogger logger)
+            ISigningNativeApi signingNativeApi)
         {
             this.signingNativeApi = signingNativeApi;
-            this.logger = logger;
         }
 
         public void SignAssemblyWithCertificate(string assemblyPath, X509Certificate2 certificate)
@@ -35,25 +34,25 @@
             try
             {
                 pSignerCert = CreateSignerCertificate(certificate);
-                logger.Information("Signer certificate for given code signing certificate created.");
+                Logger.Information("Signer certificate for given code signing certificate created.");
 
                 pSubjectInfo = CreateSignerSubjectInfo(assemblyPath);
-                logger.Information("Signer signer subject information for given code signing certificate created.");
+                Logger.Information("Signer signer subject information for given code signing certificate created.");
 
                 pSignatureInfo = CreateSignerSignatureInfo();
-                logger.Information("Signer signer signature information for given code signing certificate created.");
+                Logger.Information("Signer signer signature information for given code signing certificate created.");
 
                 SignCode(pSubjectInfo, pSignerCert, pSignatureInfo, pProviderInfo);
-                logger.Information("Code has been successfully signed.");
+                Logger.Information("Code has been successfully signed.");
             }
             catch (CryptographicException ce)
             {
-                logger.Error(ce);
+                Logger.Error(ce);
                 throw new CryptographicException($@"An error occurred while attempting to load the signing certificate. {ce.Message}", ce);
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                Logger.Error(ex);
                 throw;
             }
             finally
@@ -70,7 +69,7 @@
                 {
                     Marshal.DestroyStructure(pSignatureInfo, typeof (SigningNativeApi.SIGNER_SIGNATURE_INFO));
                 }
-                logger.Information("Done signing assembly.");
+                Logger.Information("Done signing assembly.");
             }
         }
 
@@ -85,7 +84,8 @@
             const int index = 0;
             Marshal.StructureToPtr(index, info.pdwIndex, false);
 
-            info.dwSubjectChoice = 0x1; //SIGNER_SUBJECT_FILE
+            const uint SIGNER_SUBJECT_FILE = 0x1;
+            info.dwSubjectChoice = SIGNER_SUBJECT_FILE;
             var assemblyFilePtr = Marshal.StringToHGlobalUni(pathToAssembly);
 
             var fileInfo = new SigningNativeApi.SIGNER_FILE_INFO

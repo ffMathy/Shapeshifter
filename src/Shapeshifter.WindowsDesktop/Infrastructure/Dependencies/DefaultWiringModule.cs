@@ -19,6 +19,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
     using Threading;
     using Logging.Interfaces;
     using Services.Files.Interfaces;
+    using Controls.Window.ViewModels;
 
     public class DefaultWiringModule: AutofacModule
     {
@@ -63,6 +64,12 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 
         static void RegisterLogging(IEnvironmentInformation environment, ContainerBuilder builder)
         {
+            builder
+                .RegisterType<Logger>()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             if (!environment.GetIsDebugging())
             {
                 builder

@@ -31,7 +31,8 @@
         readonly IEnvironmentInformation environmentInformation;
         readonly ISettingsViewModel settingsViewModel;
         readonly IKeyboardDominanceWatcher keyboardDominanceWatcher;
-        readonly ILogger logger;
+
+        public ILogger Logger { get; set; }
 
         public InstallArgumentProcessor(
             IProcessManager processManager,
@@ -39,8 +40,7 @@
             ISignHelper signHelper,
             IEnvironmentInformation environmentInformation,
             ISettingsViewModel settingsViewModel,
-            IKeyboardDominanceWatcher keyboardDominanceWatcher,
-            ILogger logger)
+            IKeyboardDominanceWatcher keyboardDominanceWatcher)
         {
             this.processManager = processManager;
             this.certificateManager = certificateManager;
@@ -48,7 +48,6 @@
             this.environmentInformation = environmentInformation;
             this.settingsViewModel = settingsViewModel;
             this.keyboardDominanceWatcher = keyboardDominanceWatcher;
-            this.logger = logger;
         }
 
         public bool Terminates
@@ -73,14 +72,14 @@
         {
             if (!processManager.IsCurrentProcessElevated())
             {
-                logger.Information("Current process is not elevated which is needed for installation. Starting as elevated process.");
+                Logger.Information("Current process is not elevated which is needed for installation. Starting as elevated process.");
                 processManager.LaunchFileWithAdministrativeRights(
                     processManager.GetCurrentProcessPath());
             }
             else
             {
-                logger.Information("Current process is elevated.");
-                logger.Information("Running installation procedure.");
+                Logger.Information("Current process is elevated.");
+                Logger.Information("Running installation procedure.");
                 Install();
             }
         }
@@ -97,15 +96,15 @@
 
             ConfigureDefaultSettings();
 
-            logger.Information("Default settings have been configured.");
+            Logger.Information("Default settings have been configured.");
 
             keyboardDominanceWatcher.Install();
 
-            logger.Information("Injection mechanism installed and configured in the Global Assembly Cache.");
+            Logger.Information("Injection mechanism installed and configured in the Global Assembly Cache.");
 
             LaunchInstalledExecutable(targetExecutableFile, currentExecutableFile);
 
-            logger.Information("Launched installed executable.");
+            Logger.Information("Launched installed executable.");
         }
 
         void SignAssembly(string targetExecutableFile)
@@ -113,7 +112,7 @@
             var selfSignedCertificate = InstallCertificateIfNotFound();
             signHelper.SignAssemblyWithCertificate(targetExecutableFile, selfSignedCertificate);
 
-            logger.Information("Executable signed with newly created self-signing certificate.");
+            Logger.Information("Executable signed with newly created self-signing certificate.");
         }
 
         void InstallToInstallDirectory(string targetExecutableFile)
@@ -121,7 +120,7 @@
             WriteManifest(targetExecutableFile);
             WriteExecutable(targetExecutableFile);
 
-            logger.Information("Executable and manifest written to install directory.");
+            Logger.Information("Executable and manifest written to install directory.");
         }
 
         void ConfigureDefaultSettings()
@@ -143,7 +142,7 @@
                 }
                 finally
                 {
-                    logger.Information("Using existing code signing certificate.");
+                    Logger.Information("Using existing code signing certificate.");
                 }
             }
 
@@ -153,7 +152,7 @@
             }
             finally
             {
-                logger.Information("Installed new code signing certificate.");
+                Logger.Information("Installed new code signing certificate.");
             }
         }
 
@@ -203,7 +202,7 @@
 
             Directory.CreateDirectory(TargetDirectory);
 
-            logger.Information("Install directory prepared.");
+            Logger.Information("Install directory prepared.");
         }
     }
 }

@@ -55,8 +55,8 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=4.1.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.1.1\lib\net45\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
@@ -191,7 +191,9 @@
     <Compile Include="Data\Unwrappers\Interfaces\IBitmapUnwrapper.cs" />
     <Compile Include="Data\Unwrappers\Interfaces\IGeneralUnwrapper.cs" />
     <Compile Include="Infrastructure\Dependencies\AssemblyRegistrationHelper.cs" />
+    <Compile Include="Infrastructure\Dependencies\InjectAttribute.cs" />
     <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
+    <Compile Include="Infrastructure\Dependencies\PropertySelector.cs" />
     <Compile Include="Infrastructure\Dependencies\PublicConstructorFinder.cs" />
     <Compile Include="Infrastructure\Events\ProcessStartedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\KeyDetectedArgument.cs" />
