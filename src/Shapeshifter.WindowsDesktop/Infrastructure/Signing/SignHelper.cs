@@ -11,11 +11,13 @@
 
     using Native;
     using Native.Interfaces;
+    using Dependencies;
 
     class SignHelper: ISignHelper
     {
         readonly ISigningNativeApi signingNativeApi;
 
+        [Inject]
         public ILogger Logger { get; set; }
 
         public SignHelper(

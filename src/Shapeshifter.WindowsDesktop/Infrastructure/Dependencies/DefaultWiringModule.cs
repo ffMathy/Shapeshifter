@@ -66,7 +66,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
         {
             builder
                 .RegisterType<Logger>()
-                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
+                .PropertiesAutowired(new PropertySelector(), true)
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
@@ -74,7 +74,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
             {
                 builder
                     .RegisterType<FileLogStream>()
-                    .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
+                    .PropertiesAutowired(new PropertySelector(), true)
                     .AsImplementedInterfaces()
                     .SingleInstance();
             }

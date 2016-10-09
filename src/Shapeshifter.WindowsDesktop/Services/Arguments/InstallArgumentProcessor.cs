@@ -20,6 +20,7 @@
     using Properties;
 
     using Services.Interfaces;
+    using Infrastructure.Dependencies;
 
     class InstallArgumentProcessor: INoArgumentProcessor
     {
@@ -32,6 +33,7 @@
         readonly ISettingsViewModel settingsViewModel;
         readonly IKeyboardDominanceWatcher keyboardDominanceWatcher;
 
+        [Inject]
         public ILogger Logger { get; set; }
 
         public InstallArgumentProcessor(
