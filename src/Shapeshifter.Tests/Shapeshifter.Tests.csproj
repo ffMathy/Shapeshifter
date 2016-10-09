@@ -124,6 +124,7 @@
     <Compile Include="Services\SettingsManagerTest.cs" />
     <Compile Include="Services\Web\Updates\UpdateServiceTest.cs" />
     <Compile Include="Structures\FormatDataPairTest.cs" />
+    <Compile Include="TestBase.cs" />
     <Compile Include="UnitTestFor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestException.cs" />

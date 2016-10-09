@@ -17,7 +17,7 @@
 
     using Services.Files.Interfaces;
 
-    public abstract class UnitTestFor<TSystemUnderTest>
+    public abstract class UnitTestFor<TSystemUnderTest>: TestBase
         where TSystemUnderTest : class
     {
 
@@ -122,37 +122,12 @@
             Action<ContainerBuilder> setupCallback,
             params Type[] exceptTypes)
         {
-            return CreateContainerWithCallback(
+            return CreateContainer(
                 c =>
                 {
                     c.RegisterFakesForDependencies<TSystemUnderTest>(exceptTypes);
                     setupCallback(c);
                 });
-        }
-
-        static ILifetimeScope CreateContainerWithCallback(
-            Action<ContainerBuilder> setupCallback = null)
-        {
-            var builder = new ContainerBuilder();
-
-            var fakeEnvironment = builder.RegisterFake<IEnvironmentInformation>();
-
-            fakeEnvironment
-                .GetIsInDesignTime()
-                .Returns(false);
-
-            fakeEnvironment
-                .GetIsDebugging()
-                .Returns(true);
-
-            builder.RegisterModule(
-                new DefaultWiringModule(fakeEnvironment));
-
-            setupCallback?.Invoke(builder);
-
-            return builder
-                .Build()
-                .BeginLifetimeScope();
         }
     }
 }

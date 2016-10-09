@@ -202,24 +202,20 @@
         public static TInterface RegisterFake<TInterface>(this ContainerBuilder builder)
             where TInterface : class
         {
-            if (fakeCache.ContainsKey(typeof (TInterface)))
+            return (TInterface)RegisterFake(builder, typeof(TInterface));
+        }
+
+        public static object RegisterFake(this ContainerBuilder builder, Type type)
+        {
+            if (fakeCache.ContainsKey(type))
             {
-                return (TInterface) fakeCache[typeof (TInterface)];
+                return fakeCache[type];
             }
 
-            if (!typeof (TInterface).IsSealed)
+            if (!type.IsSealed)
             {
-                var fake = Substitute.For<TInterface>();
-                var collection = new ReadOnlyCollection<TInterface>(
-                    new List<TInterface>(
-                        new[]
-                        {
-                            fake
-                        }));
-
-                Register(builder, fake);
-                Register<IReadOnlyCollection<TInterface>>(builder, collection);
-                Register<IEnumerable<TInterface>>(builder, collection);
+                var fake = Substitute.For(new[] { type }, new object[0]);
+                Register(builder, type, fake);
 
                 return fake;
             }
@@ -231,14 +227,19 @@
 
         static void Register<TInterface>(ContainerBuilder builder, TInterface fake) where TInterface : class
         {
-            if (fakeCache.ContainsKey(typeof (TInterface)))
+            Register(builder, typeof(TInterface), fake);
+        }
+
+        static void Register(ContainerBuilder builder, Type type, object fake)
+        {
+            if (fakeCache.ContainsKey(type))
             {
-                fakeCache.Add(typeof(TInterface), fake);
+                fakeCache.Add(type, fake);
                 return;
             }
 
             builder.Register(c => fake)
-                   .As<TInterface>()
+                   .As(type)
                    .SingleInstance();
         }
 
