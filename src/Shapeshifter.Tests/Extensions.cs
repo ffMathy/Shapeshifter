@@ -15,6 +15,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
+    using Infrastructure.Dependencies;
 
     static class Extensions
     {
@@ -107,38 +108,53 @@
             var parameters = targetConstructor.GetParameters();
             foreach (var parameter in parameters)
             {
-                if (!exceptTypes.Contains(parameter.ParameterType))
-                {
-                    var genericMethod = typeof (Extensions)
-                        .GetMethods()
-                        .Single(
-                            x =>
-                            (x.Name == nameof(RegisterFake)) &&
-                            (x.GetParameters()
-                              .Length == 1))
-                        .MakeGenericMethod(parameter.ParameterType);
-                    genericMethod.Invoke(
-                        null,
-                        new object[]
-                        {
+                RegisterFakeForType(builder, exceptTypes, parameter.ParameterType);
+            }
+
+            var properties = classType
+                .GetProperties()
+                .Where(x => x
+                    .GetCustomAttributes(true)
+                    .Any(a => a is InjectAttribute));
+            foreach(var property in properties)
+            {
+                RegisterFakeForType(builder, exceptTypes, property.PropertyType);
+            }
+        }
+
+        private static void RegisterFakeForType(ContainerBuilder builder, Type[] exceptTypes, Type type)
+        {
+            if (!exceptTypes.Contains(type))
+            {
+                var genericMethod = typeof(Extensions)
+                    .GetMethods()
+                    .Single(
+                        x =>
+                        (x.Name == nameof(RegisterFake)) &&
+                        (x.GetParameters()
+                          .Length == 1))
+                    .MakeGenericMethod(type);
+                genericMethod.Invoke(
+                    null,
+                    new object[]
+                    {
                             builder
-                        });
-                }
-                else
-                {
-                    var genericMethod = typeof(Extensions)
-                        .GetMethods()
-                        .Single(x => 
-                            x.Name == nameof(RegisterFakesForDependencies))
-                        .MakeGenericMethod(parameter.ParameterType);
-                    genericMethod.Invoke(
-                        null,
-                        new object[]
-                        {
+                    });
+            }
+            else
+            {
+                var genericMethod = typeof(Extensions)
+                    .GetMethods()
+                    .Single(x =>
+                        x.Name == nameof(RegisterFakesForDependencies))
+                    .MakeGenericMethod(type);
+                genericMethod.Invoke(
+                    null,
+                    new object[]
+                    {
                             builder,
                             exceptTypes
-                        });
-                }
+                    });
             }
         }
 
