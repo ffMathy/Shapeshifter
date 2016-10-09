@@ -7,11 +7,13 @@
     using Interfaces;
 
     using Services.Files.Interfaces;
+    using Dependencies;
 
     class FileLogStream: ILogStream
     {
         string logFileName;
 
+        [Inject]
         public IFileManager FileManager { get; set; }
 
         public void WriteLine(string input)

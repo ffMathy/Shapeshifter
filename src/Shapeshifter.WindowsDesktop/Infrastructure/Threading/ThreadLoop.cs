@@ -7,9 +7,11 @@
     using Interfaces;
 
     using Logging.Interfaces;
+    using Dependencies;
 
     class ThreadLoop: IThreadLoop
     {
+        [Inject]
         public ILogger Logger { get; set; }
 
         public bool IsRunning { get; private set; }

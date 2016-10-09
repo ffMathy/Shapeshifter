@@ -10,12 +10,14 @@
     using Handles.Interfaces;
 
     using Interfaces;
+    using Dependencies;
 
     class Logger: ILogger
     {
         const int MinimumImportanceFactor = 0;
         const int IndentationSize = 2;
 
+        [Inject]
         public ILogStream LogStream { get; set; }
 
         readonly IDictionary<int, int> threadIndentationCache;
