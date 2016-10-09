@@ -1,3 +1,6 @@
+# We are looking for contributors
+Just because there isn't a lot of stuff happening to Shapeshifter lately, doesn't mean the project is not being monitored. If somebody creates pull requests, they will be looked at. Feel free to fix some of the issues that are present on the issues page.
+
 [![Join the chat at https://gitter.im/ffMathy/Shapeshifter](https://badges.gitter.im/ffMathy/Shapeshifter.svg)](https://gitter.im/ffMathy/Shapeshifter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![GitHub release](https://img.shieldsio/github/release/ffMathy/Shapeshifter.svg)](https://github.com/ffMathy/Shapeshifter/releases/latest)
 [![Github All Releases](https://img.shields.io/github/downloads/ffMathy/Shapeshifter/total.svg)](https://github.com/ffMathy/Shapeshifter/releases)
