@@ -51,6 +51,11 @@
                 logger.Error(ce);
                 throw new CryptographicException($@"An error occurred while attempting to load the signing certificate. {ce.Message}", ce);
             }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                throw;
+            }
             finally
             {
                 if (pSignerCert != IntPtr.Zero)

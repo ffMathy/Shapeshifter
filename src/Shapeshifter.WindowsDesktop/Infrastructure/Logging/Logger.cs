@@ -16,24 +16,21 @@
         const int MinimumImportanceFactor = 0;
         const int IndentationSize = 2;
 
-        readonly ILogStream stream;
+        public ILogStream LogStream { get; set; }
 
         readonly IDictionary<int, int> threadIndentationCache;
 
         static int ManagedThreadId => Thread.CurrentThread.ManagedThreadId;
 
-        public Logger(
-            ILogStream stream)
+        public Logger()
         {
-            this.stream = stream;
-
             threadIndentationCache = new Dictionary<int, int>();
         }
 
         void Log(string text)
         {
             var indentationString = GenerateIndentationString();
-            stream.WriteLine($"{indentationString}{text}");
+            LogStream.WriteLine($"{indentationString}{text}");
         }
 
         string GenerateIndentationString()
