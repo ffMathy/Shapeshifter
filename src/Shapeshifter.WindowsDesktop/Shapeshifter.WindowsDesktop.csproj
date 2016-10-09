@@ -577,8 +577,5 @@
     <Error Condition="!Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.29.4\build\dotnet\Fody.targets'))" />
     <Error Condition="!Exists('..\packages\Brutal.Dev.StrongNameSigner.2.1.0\build\Brutal.Dev.StrongNameSigner.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Brutal.Dev.StrongNameSigner.2.1.0\build\Brutal.Dev.StrongNameSigner.targets'))" />
   </Target>
-  <PropertyGroup>
-    <PreBuildEvent>"$(SolutionDir)packages\Brutal.Dev.StrongNameSigner.1.8.0\tools\StrongNameSigner.Console.exe" -a "$(SolutionDir)packages\Octokit.0.20.0\lib\net45\Octokit.dll"</PreBuildEvent>
-  </PropertyGroup>
   <Import Project="..\packages\Brutal.Dev.StrongNameSigner.2.1.0\build\Brutal.Dev.StrongNameSigner.targets" Condition="Exists('..\packages\Brutal.Dev.StrongNameSigner.2.1.0\build\Brutal.Dev.StrongNameSigner.targets')" />
 </Project>
