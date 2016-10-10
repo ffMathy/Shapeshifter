@@ -79,16 +79,7 @@
                 (c) => {
                     foreach (var fake in fakeInclusions)
                     {
-                        var method = typeof (Extensions)
-                            .GetMethod(
-                                nameof(Extensions.RegisterFake))
-                            .MakeGenericMethod(fake);
-                        method.Invoke(
-                            null,
-                            new object[]
-                            {
-                                c
-                            });
+                        Extensions.RegisterFake(c, fake);
                     }
                 },
                 fakeExceptions.ToArray());
