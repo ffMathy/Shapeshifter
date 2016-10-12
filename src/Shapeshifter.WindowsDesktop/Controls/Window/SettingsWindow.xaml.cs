@@ -6,10 +6,12 @@
     using Interfaces;
 
     using ViewModels.Interfaces;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     ///     Interaction logic for SettingsWindow.xaml
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public partial class SettingsWindow
         : Window,
           ISettingsWindow

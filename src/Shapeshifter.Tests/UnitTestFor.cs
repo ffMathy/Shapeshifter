@@ -16,7 +16,9 @@
     using NSubstitute;
 
     using Services.Files.Interfaces;
+    using NCrunch.Framework;
 
+    [Serial]
     public abstract class UnitTestFor<TSystemUnderTest>: TestBase
         where TSystemUnderTest : class
     {
