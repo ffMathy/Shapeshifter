@@ -6,6 +6,7 @@
 
     using Interfaces;
 
+    [ExcludeFromCodeCoverage]
     public class SigningNativeApi : ISigningNativeApi
     {
         [StructLayout(LayoutKind.Sequential)]

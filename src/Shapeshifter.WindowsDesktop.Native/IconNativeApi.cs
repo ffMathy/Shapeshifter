@@ -4,7 +4,9 @@
     using System.Runtime.InteropServices;
 
     using Interfaces;
+    using System.Diagnostics.CodeAnalysis;
 
+    [ExcludeFromCodeCoverage]
     public class IconNativeApi: IIconNativeApi
     {
         public const uint SHGFI_ICON = 0x100;

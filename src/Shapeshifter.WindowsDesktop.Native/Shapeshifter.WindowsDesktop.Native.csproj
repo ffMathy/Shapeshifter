@@ -84,7 +84,7 @@
     <Compile Include="Interfaces\IIconNativeApi.cs" />
     <Compile Include="Interfaces\IImageNativeApi.cs" />
     <Compile Include="Interfaces\IKeyboardNativeApi.cs" />
-    <Compile Include="Interfaces\ImageNativeApi.cs" />
+    <Compile Include="ImageNativeApi.cs" />
     <Compile Include="Interfaces\IWindowNativeApi.cs" />
     <Compile Include="Interfaces\ISigningNativeApi.cs" />
     <Compile Include="KeyboardNativeApi.cs" />

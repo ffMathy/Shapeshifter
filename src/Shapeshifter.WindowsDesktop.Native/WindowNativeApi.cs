@@ -5,7 +5,9 @@
     using System.Text;
 
     using Interfaces;
+    using System.Diagnostics.CodeAnalysis;
 
+    [ExcludeFromCodeCoverage]
     public class WindowNativeApi: IWindowNativeApi
     {
         IntPtr IWindowNativeApi.GetClassLongPtr(IntPtr hWnd, int nIndex)

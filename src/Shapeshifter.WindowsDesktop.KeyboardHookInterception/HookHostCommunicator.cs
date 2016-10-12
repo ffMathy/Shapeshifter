@@ -3,7 +3,9 @@
 namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
 {
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
 
+    [ExcludeFromCodeCoverage]
     public class HookHostCommunicator: MarshalByRefObject
     {
         static bool ignore;

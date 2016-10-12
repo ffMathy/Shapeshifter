@@ -4,7 +4,9 @@
     using System.Runtime.InteropServices;
 
     using Interfaces;
+    using System.Diagnostics.CodeAnalysis;
 
+    [ExcludeFromCodeCoverage]
     public class KeyboardNativeApi: IKeyboardNativeApi
     {
         public delegate IntPtr KeyboardHookDelegate(int nCode, UIntPtr wParam, IntPtr lParam);

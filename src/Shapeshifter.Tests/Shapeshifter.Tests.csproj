@@ -116,6 +116,7 @@
     <Compile Include="Mediators\PasteCombinationDurationMediatorTest.cs" />
     <Compile Include="Mediators\ClipboardUserInterfaceInteractionMediatorTest.cs" />
     <Compile Include="Services\Clipboard\ClipboardPersistanceServiceTest.cs" />
+    <Compile Include="Services\ColorBrightnessAdjustmentServiceTest.cs" />
     <Compile Include="Services\Files\FileManagerTest.cs" />
     <Compile Include="Services\Files\FileTypeInterpreterTest.cs" />
     <Compile Include="Services\Keyboard\PasteCombinationStateServiceTest.cs" />
