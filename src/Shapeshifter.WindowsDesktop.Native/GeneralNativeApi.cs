@@ -4,7 +4,9 @@
     using System.Runtime.InteropServices;
 
     using Interfaces;
+    using System.Diagnostics.CodeAnalysis;
 
+    [ExcludeFromCodeCoverage]
     public class GeneralNativeApi: IGeneralNativeApi
     {
         public const int GMEM_MOVABLE = 0x0002;

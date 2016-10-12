@@ -7,23 +7,22 @@
     using Interfaces;
 
     using Services.Files.Interfaces;
+    using Dependencies;
 
     class FileLogStream: ILogStream
     {
-        readonly IFileManager fileManager;
+        string logFileName;
 
-        readonly string logFileName;
-
-        public FileLogStream(
-            IFileManager fileManager)
-        {
-            this.fileManager = fileManager;
-            logFileName = fileManager.WriteBytesToTemporaryFile("Shapeshifter.log", new byte[0]);
-        }
+        [Inject]
+        public IFileManager FileManager { get; set; }
 
         public void WriteLine(string input)
         {
-            fileManager.AppendLineToFile(logFileName, input);
+            if (logFileName == null)
+            {
+                logFileName = FileManager.WriteBytesToTemporaryFile("Shapeshifter.log", new byte[0]);
+            }
+            FileManager.AppendLineToFile(logFileName, input);
         }
     }
 }

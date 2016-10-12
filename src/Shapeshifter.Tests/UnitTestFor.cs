@@ -16,8 +16,10 @@
     using NSubstitute;
 
     using Services.Files.Interfaces;
+    using NCrunch.Framework;
 
-    public abstract class UnitTestFor<TSystemUnderTest>
+    [Serial]
+    public abstract class UnitTestFor<TSystemUnderTest>: TestBase
         where TSystemUnderTest : class
     {
 
@@ -79,16 +81,7 @@
                 (c) => {
                     foreach (var fake in fakeInclusions)
                     {
-                        var method = typeof (Extensions)
-                            .GetMethod(
-                                nameof(Extensions.RegisterFake))
-                            .MakeGenericMethod(fake);
-                        method.Invoke(
-                            null,
-                            new object[]
-                            {
-                                c
-                            });
+                        Extensions.RegisterFake(c, fake);
                     }
                 },
                 fakeExceptions.ToArray());
@@ -103,6 +96,13 @@
             if (!string.IsNullOrEmpty(folder))
             {
                 Directory.Delete(folder, true);
+            }
+
+            var temporaryPath = Path.Combine(
+                Path.GetTempPath(),
+                "Shapeshifter");
+            if (Directory.Exists(temporaryPath)) {
+                Directory.Delete(temporaryPath, true);
             }
 
             fakeExceptions.Clear();
@@ -122,37 +122,12 @@
             Action<ContainerBuilder> setupCallback,
             params Type[] exceptTypes)
         {
-            return CreateContainerWithCallback(
+            return CreateContainer(
                 c =>
                 {
                     c.RegisterFakesForDependencies<TSystemUnderTest>(exceptTypes);
                     setupCallback(c);
                 });
-        }
-
-        static ILifetimeScope CreateContainerWithCallback(
-            Action<ContainerBuilder> setupCallback = null)
-        {
-            var builder = new ContainerBuilder();
-
-            var fakeEnvironment = builder.RegisterFake<IEnvironmentInformation>();
-
-            fakeEnvironment
-                .GetIsInDesignTime()
-                .Returns(false);
-
-            fakeEnvironment
-                .GetIsDebugging()
-                .Returns(true);
-
-            builder.RegisterModule(
-                new DefaultWiringModule(fakeEnvironment));
-
-            setupCallback?.Invoke(builder);
-
-            return builder
-                .Build()
-                .BeginLifetimeScope();
         }
     }
 }

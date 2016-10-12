@@ -7,7 +7,9 @@
     using System.Text;
 
     using Interfaces;
+    using System.Diagnostics.CodeAnalysis;
 
+    [ExcludeFromCodeCoverage]
     public class ClipboardNativeApi: IClipboardNativeApi
     {
         public const int CF_BITMAP = 2;

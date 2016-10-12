@@ -2,5 +2,5 @@
 {
     using System;
 
-    public interface IPerformanceHandle: IDisposable { }
+    public interface IPerformanceHandle: IHandle { }
 }

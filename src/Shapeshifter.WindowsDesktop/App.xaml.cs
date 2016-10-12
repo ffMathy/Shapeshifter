@@ -9,6 +9,7 @@
     using Infrastructure.Dependencies;
 
     using Operations.Startup;
+    using Infrastructure.Logging.Interfaces;
 
     /// <summary>
     ///     Interaction logic for App.xaml
@@ -58,14 +59,16 @@
 #pragma warning disable 4014
         protected override void OnStartup(StartupEventArgs e)
         {
-            AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) => {
-                if (Debugger.IsAttached)
-                {
-                    return;
-                }
+            DispatcherUnhandledException += (sender, exceptionEventArguments) =>
+            {
+                OnError(exceptionEventArguments.Exception);
+            };
 
+            AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) => {
                 OnError((Exception)exceptionEventArguments.ExceptionObject);
             };
+
+            Container.Resolve<ILogger>();
 
             var main = Container.Resolve<ApplicationEntrypoint>();
             try

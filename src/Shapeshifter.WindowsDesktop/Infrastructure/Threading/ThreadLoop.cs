@@ -7,15 +7,12 @@
     using Interfaces;
 
     using Logging.Interfaces;
+    using Dependencies;
 
     class ThreadLoop: IThreadLoop
     {
-        readonly ILogger logger;
-
-        public ThreadLoop(ILogger logger)
-        {
-            this.logger = logger;
-        }
+        [Inject]
+        public ILogger Logger { get; set; }
 
         public bool IsRunning { get; private set; }
 
@@ -31,7 +28,7 @@
                 IsRunning = true;
             }
 
-            using (logger.Indent())
+            using (Logger.Indent())
                 await RunAsync(action, token);
         }
 
@@ -45,7 +42,7 @@
                 }
                 catch (Exception ex)
                 {
-                    logger.Error("An error occured in the thread loop: " + ex);
+                    Logger.Error("An error occured in the thread loop: " + ex);
                     Stop();
                     throw;
                 }

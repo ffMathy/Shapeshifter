@@ -10,30 +10,29 @@
     using Handles.Interfaces;
 
     using Interfaces;
+    using Dependencies;
 
     class Logger: ILogger
     {
         const int MinimumImportanceFactor = 0;
         const int IndentationSize = 2;
 
-        readonly ILogStream stream;
+        [Inject]
+        public ILogStream LogStream { get; set; }
 
         readonly IDictionary<int, int> threadIndentationCache;
 
         static int ManagedThreadId => Thread.CurrentThread.ManagedThreadId;
 
-        public Logger(
-            ILogStream stream)
+        public Logger()
         {
-            this.stream = stream;
-
             threadIndentationCache = new Dictionary<int, int>();
         }
 
         void Log(string text)
         {
             var indentationString = GenerateIndentationString();
-            stream.WriteLine($"{indentationString}{text}");
+            LogStream.WriteLine($"{indentationString}{text}");
         }
 
         string GenerateIndentationString()
@@ -113,6 +112,11 @@
         public void Warning(string text)
         {
             Log("Warning: " + text);
+        }
+
+        public void Error(Exception exception)
+        {
+            Error(exception.ToString());
         }
     }
 }

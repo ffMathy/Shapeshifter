@@ -9,6 +9,7 @@ namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
     using System.Diagnostics.CodeAnalysis;
     using System.Windows.Input;
 
+    [ExcludeFromCodeCoverage]
     public class WindowHookInterceptor : IEntryPoint
     {
         readonly HookHostCommunicator _interface;
@@ -151,7 +152,6 @@ namespace Shapeshifter.WindowsDesktop.KeyboardHookInterception
             catch
             {
                 _interface.DebugWriteLine("Keyboard hook interceptor has been disconnected.");
-                // NET Remoting will raise an exception if host is unreachable
             }
         }
 

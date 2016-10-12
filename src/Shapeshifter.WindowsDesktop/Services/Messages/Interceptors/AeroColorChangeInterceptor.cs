@@ -26,12 +26,11 @@
         {
             this.logger = logger;
             this.colorBrightnessAdjustmentService = colorBrightnessAdjustmentService;
-
-            UpdateAeroColor();
         }
 
         public void Install(IntPtr windowHandle)
         {
+            UpdateAeroColor();
         }
 
         public void Uninstall()

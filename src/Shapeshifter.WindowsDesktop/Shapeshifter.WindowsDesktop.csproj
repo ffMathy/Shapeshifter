@@ -55,10 +55,9 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=4.1.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.1.1\lib\net45\Autofac.dll</HintPath>
       <Private>True</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
@@ -68,21 +67,24 @@
       <HintPath>..\packages\EasyHook.2.7.6035\lib\net40\EasyHook.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JetBrains.Annotations, Version=10.1.5.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.10.1.5\lib\net\JetBrains.Annotations.dll</HintPath>
+    <Reference Include="JetBrains.Annotations, Version=10.2.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.2.0\lib\net\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Octokit, Version=0.20.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Octokit.0.20.0\lib\net45\Octokit.dll</HintPath>
+    <Reference Include="Octokit, Version=0.23.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Octokit.0.23.0\lib\net45\Octokit.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System">
       <Private>True</Private>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition">
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Data">
       <Private>True</Private>
@@ -192,7 +194,9 @@
     <Compile Include="Data\Unwrappers\Interfaces\IBitmapUnwrapper.cs" />
     <Compile Include="Data\Unwrappers\Interfaces\IGeneralUnwrapper.cs" />
     <Compile Include="Infrastructure\Dependencies\AssemblyRegistrationHelper.cs" />
+    <Compile Include="Infrastructure\Dependencies\InjectAttribute.cs" />
     <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
+    <Compile Include="Infrastructure\Dependencies\PropertySelector.cs" />
     <Compile Include="Infrastructure\Dependencies\PublicConstructorFinder.cs" />
     <Compile Include="Infrastructure\Events\ProcessStartedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\KeyDetectedArgument.cs" />
@@ -573,8 +577,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.29.4\build\dotnet\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Brutal.Dev.StrongNameSigner.2.1.0\build\Brutal.Dev.StrongNameSigner.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Brutal.Dev.StrongNameSigner.2.1.0\build\Brutal.Dev.StrongNameSigner.targets'))" />
   </Target>
-  <PropertyGroup>
-    <PreBuildEvent>"$(SolutionDir)packages\Brutal.Dev.StrongNameSigner.1.8.0\tools\StrongNameSigner.Console.exe" -a "$(SolutionDir)packages\Octokit.0.20.0\lib\net45\Octokit.dll"</PreBuildEvent>
-  </PropertyGroup>
+  <Import Project="..\packages\Brutal.Dev.StrongNameSigner.2.1.0\build\Brutal.Dev.StrongNameSigner.targets" Condition="Exists('..\packages\Brutal.Dev.StrongNameSigner.2.1.0\build\Brutal.Dev.StrongNameSigner.targets')" />
 </Project>

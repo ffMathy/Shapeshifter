@@ -58,6 +58,10 @@
                 {
                     registration.SingleInstance();
                 }
+
+                registration = registration.PropertiesAutowired(
+                    new PropertySelector(),
+                    true);
             }
         }
     }

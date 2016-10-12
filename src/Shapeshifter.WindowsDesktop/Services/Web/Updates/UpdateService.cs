@@ -19,6 +19,7 @@
     using Processes.Interfaces;
 
     using Web.Interfaces;
+    using System.Diagnostics;
 
     class UpdateService
         : IUpdateService

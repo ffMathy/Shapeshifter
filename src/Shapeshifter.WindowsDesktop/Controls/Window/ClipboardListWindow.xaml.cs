@@ -11,10 +11,12 @@
     using Mediators.Interfaces;
 
     using ViewModels.Interfaces;
+    using System.Diagnostics.CodeAnalysis;
 
     [TemplatePart(Name = "Core", Type = typeof(FrameworkElement))]
     [TemplateVisualState(Name= "InPackagesList", GroupName= "TargetList")]
     [TemplateVisualState(Name= "InActionList", GroupName= "TargetList")]
+    [ExcludeFromCodeCoverage]
     public partial class ClipboardListWindow
         : Window,
           IClipboardListWindow
