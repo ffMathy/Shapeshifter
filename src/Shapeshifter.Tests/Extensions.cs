@@ -214,8 +214,20 @@
 
             if (!type.IsSealed)
             {
-                var fake = Substitute.For(new[] { type }, new object[0]);
+                var fake = GenerateFakeForType(type);
                 Register(builder, type, fake);
+
+                var listType = typeof(List<>).MakeGenericType(type);
+                var list = Activator.CreateInstance(listType);
+
+                var addMethod = listType.GetMethod(nameof(List<object>.Add));
+                addMethod.Invoke(list, new object[] { fake });
+                addMethod.Invoke(list, new object[] { fake });
+
+                Register(builder, typeof(IEnumerable<>).MakeGenericType(type), list);
+                Register(builder, typeof(IReadOnlyCollection<>).MakeGenericType(type), list);
+                Register(builder, typeof(IReadOnlyList<>).MakeGenericType(type), list);
+                Register(builder, typeof(IList<>).MakeGenericType(type), list);
 
                 return fake;
             }
@@ -223,6 +235,11 @@
             {
                 return null;
             }
+        }
+
+        private static object GenerateFakeForType(Type type)
+        {
+            return Substitute.For(new[] { type }, new object[0]);
         }
 
         static void Register<TInterface>(ContainerBuilder builder, TInterface fake) where TInterface : class
