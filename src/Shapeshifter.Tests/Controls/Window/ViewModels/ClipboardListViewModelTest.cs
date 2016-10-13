@@ -216,6 +216,7 @@
         {
             var showEventCount = 0;
 
+            SystemUnderTest.Elements.Add(Substitute.For<IClipboardDataControlPackage>());
             SystemUnderTest.UserInterfaceShown += (sender, e) => showEventCount++;
 
             var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
