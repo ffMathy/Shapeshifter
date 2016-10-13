@@ -13,7 +13,7 @@
     class ClipboardImageDataViewModel: ClipboardDataViewModel<IClipboardImageData>
     {
         public ClipboardImageDataViewModel()
-            : this(new EnvironmentInformation(true)) { }
+            : this(new Infrastructure.Environment.EnvironmentInformation(true)) { }
 
         public ClipboardImageDataViewModel(
             IEnvironmentInformation environmentInformation)

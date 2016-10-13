@@ -17,9 +17,6 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
     using Native;
 
     using Threading;
-    using Logging.Interfaces;
-    using Services.Files.Interfaces;
-    using Controls.Window.ViewModels;
 
     public class DefaultWiringModule: AutofacModule
     {
@@ -34,7 +31,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
         }
 
         public DefaultWiringModule(Action<ContainerBuilder> callback = null)
-            : this(new EnvironmentInformation())
+            : this(new Infrastructure.Environment.EnvironmentInformation())
         {
             this.callback = callback;
         }

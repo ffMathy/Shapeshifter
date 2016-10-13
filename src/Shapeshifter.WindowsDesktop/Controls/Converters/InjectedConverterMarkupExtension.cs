@@ -32,7 +32,7 @@
                 return;
             }
 
-            var environmentInformation = new EnvironmentInformation();
+            var environmentInformation = new Infrastructure.Environment.EnvironmentInformation();
             if (environmentInformation.GetIsInDesignTime())
             {
                 container = DesignTimeContainerHelper.CreateDesignTimeContainer();
@@ -42,7 +42,7 @@
                 var builder = new ContainerBuilder();
                 builder.RegisterModule(new DefaultWiringModule());
                 builder.RegisterInstance(environmentInformation)
-                       .As<IEnvironmentInformation>();
+                       .As<EnvironmentInformation>();
 
                 container = builder.Build();
             }

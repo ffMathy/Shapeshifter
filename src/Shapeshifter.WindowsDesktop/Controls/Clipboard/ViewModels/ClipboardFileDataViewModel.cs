@@ -14,7 +14,7 @@
         ClipboardDataViewModel<IClipboardFileData>
     {
         public ClipboardFileDataViewModel()
-            : this(new EnvironmentInformation(true)) { }
+            : this(new Infrastructure.Environment.EnvironmentInformation(true)) { }
 
         public ClipboardFileDataViewModel(
             IEnvironmentInformation environmentInformation)

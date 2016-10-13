@@ -1,17 +1,13 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Messages.Interceptors
 {
     using System;
-    using System.Linq;
     using System.Windows;
     using System.Windows.Media;
-    using System.Windows.Media.Animation;
 
     using Infrastructure.Events;
     using Infrastructure.Logging.Interfaces;
 
     using Interfaces;
-
-    using Native.Interfaces;
 
     using Services.Interfaces;
 

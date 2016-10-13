@@ -6,14 +6,7 @@
 
     using Autofac;
 
-    using Controls.Window.ViewModels.Interfaces;
-
-    using Infrastructure.Dependencies;
-    using Infrastructure.Environment.Interfaces;
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    using NSubstitute;
 
     using Services.Files.Interfaces;
     using NCrunch.Framework;

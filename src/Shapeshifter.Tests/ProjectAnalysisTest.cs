@@ -5,13 +5,6 @@
     using System.Xml;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Autofac;
-    using System.Linq;
-    using System.Windows;
-    using System;
-    using Infrastructure.Handles.Interfaces;
-    using System.Windows.Controls;
-    using Controls.Window.ViewModels.Interfaces;
 
     [TestClass]
     public class ProjectAnalysisTest : TestBase

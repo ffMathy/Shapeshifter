@@ -19,6 +19,7 @@
     using Processes.Interfaces;
 
     using Web.Interfaces;
+    using Infrastructure.Environment.Interfaces;
 
     [TestClass]
     public class UpdateServiceTest: UnitTestFor<IUpdateService>
@@ -146,6 +147,11 @@
             var fakeGitHubClient = Container
                 .Resolve<IGitHubClientFactory>()
                 .CreateClient();
+
+            var fakeEnvironmentInformation = Container
+                .Resolve<IEnvironmentInformation>();
+            fakeEnvironmentInformation.GetHasInternetAccess().Returns(true);
+            fakeEnvironmentInformation.GetShouldUpdate().Returns(true);
 
             fakeGitHubClient
                 .Repository

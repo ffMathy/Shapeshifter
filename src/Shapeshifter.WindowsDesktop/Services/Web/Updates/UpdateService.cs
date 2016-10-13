@@ -19,7 +19,7 @@
     using Processes.Interfaces;
 
     using Web.Interfaces;
-    using System.Diagnostics;
+    using Infrastructure.Environment.Interfaces;
 
     class UpdateService
         : IUpdateService
@@ -33,13 +33,15 @@
         readonly IFileManager fileManager;
         readonly IProcessManager processManager;
         readonly ILogger logger;
+        private readonly IEnvironmentInformation environmentInformation;
 
         public UpdateService(
             IDownloader fileDownloader,
             IFileManager fileManager,
             IProcessManager processManager,
             ILogger logger,
-            IGitHubClientFactory clientFactory)
+            IGitHubClientFactory clientFactory,
+            IEnvironmentInformation environmentInformation)
         {
             client = clientFactory.CreateClient();
 
@@ -47,10 +49,14 @@
             this.fileManager = fileManager;
             this.processManager = processManager;
             this.logger = logger;
+            this.environmentInformation = environmentInformation;
         }
 
         public async Task UpdateAsync()
         {
+            if (!environmentInformation.GetHasInternetAccess()) return;
+            if (!environmentInformation.GetShouldUpdate()) return;
+
             try
             {
                 var pendingUpdateRelease = await GetAvailableUpdateAsync();
@@ -69,7 +75,7 @@
             catch (HttpRequestException)
             {
                 logger.Warning(
-                    "Did not search for updates since there was no Internet connection.");
+                    "Could not search for updates due to a connection issue.");
             }
         }
 

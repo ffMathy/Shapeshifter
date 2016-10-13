@@ -1,12 +1,13 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Environment
 {
+    using System;
     using System.Diagnostics;
     using System.Net.NetworkInformation;
     using System.Windows;
 
     using Interfaces;
 
-    class EnvironmentInformation: IEnvironmentInformation
+    public class EnvironmentInformation: IEnvironmentInformation
     {
         readonly bool isInDesignTime;
 
@@ -21,7 +22,24 @@
             this.isInDesignTime = isInDesignTime;
         }
 
-        public bool GetIsDebugging() => Debugger.IsAttached;
+        public bool GetIsDebugging()
+        {
+            return GetShouldUpdate() && Debugger.IsAttached;
+        }
+
+        private bool IsRunningDeveloperVersion()
+        {
+            var assemblyVersion = typeof(IEnvironmentInformation)
+                .Assembly
+                .GetName()
+                .Version;
+            return assemblyVersion == new Version(1, 0, 0, 0);
+        }
+
+        public bool GetShouldUpdate()
+        {
+            return !IsRunningDeveloperVersion();
+        }
 
         public bool GetHasInternetAccess()
         {
