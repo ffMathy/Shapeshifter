@@ -49,7 +49,7 @@
         static void OnError(Exception exception)
         {
             MessageBox.Show(
-                exception?.ToString(),
+                exception + "",
                 "Shapeshifter error",
                 MessageBoxButton.OK);
             Process.GetCurrentProcess()

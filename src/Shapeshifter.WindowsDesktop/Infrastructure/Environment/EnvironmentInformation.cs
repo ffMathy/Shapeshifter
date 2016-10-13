@@ -1,5 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Environment
 {
+    using System;
     using System.Diagnostics;
     using System.Net.NetworkInformation;
     using System.Windows;
@@ -23,11 +24,21 @@
 
         public bool GetIsDebugging()
         {
-#if DEBUG
-            return Debugger.IsAttached;
-#else
-            return false;
-#endif
+            return GetShouldUpdate() && Debugger.IsAttached;
+        }
+
+        private bool IsRunningDeveloperVersion()
+        {
+            var assemblyVersion = typeof(IEnvironmentInformation)
+                .Assembly
+                .GetName()
+                .Version;
+            return assemblyVersion == new Version(1, 0, 0, 0);
+        }
+
+        public bool GetShouldUpdate()
+        {
+            return !IsRunningDeveloperVersion();
         }
 
         public bool GetHasInternetAccess()

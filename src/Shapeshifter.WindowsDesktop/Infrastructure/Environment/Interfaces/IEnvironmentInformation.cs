@@ -5,6 +5,7 @@
         bool GetIsInDesignTime();
 
         bool GetIsDebugging();
+        bool GetShouldUpdate();
 
         bool GetHasInternetAccess();
     }

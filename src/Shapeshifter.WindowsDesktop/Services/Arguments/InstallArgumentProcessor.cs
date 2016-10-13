@@ -120,7 +120,7 @@
             var selfSignedCertificate = InstallCertificateIfNotFound();
             signHelper.SignAssemblyWithCertificate(targetExecutableFile, selfSignedCertificate);
 
-            threadDelay.Execute(100);
+            threadDelay.Execute(1000);
 
             Logger.Information("Executable signed with newly created self-signing certificate.");
         }
@@ -130,7 +130,7 @@
             WriteManifest(targetExecutableFile);
             WriteExecutable(targetExecutableFile);
 
-            threadDelay.Execute(100);
+            threadDelay.Execute(1000);
 
             Logger.Information("Executable and manifest written to install directory.");
         }
@@ -207,6 +207,8 @@
 
         void PrepareInstallDirectory()
         {
+            Logger.Information("Target install directory is " + TargetDirectory + ".");
+
             if (Directory.Exists(TargetDirectory))
             {
                 Directory.Delete(TargetDirectory, true);
