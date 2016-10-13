@@ -9,18 +9,20 @@ using System.Threading.Tasks;
 namespace Shapeshifter.WindowsDesktop.Infrastructure.Environment
 {
     [TestClass]
-    public class EnvironmentInformationTest: UnitTestFor<IEnvironmentInformation>
+    public class EnvironmentInformationTest
     {
         [TestMethod]
         public void EnvironmentShouldAlwaysUpdate()
         {
-            Assert.IsTrue(SystemUnderTest.GetShouldUpdate());
+            var systemUnderTest = new EnvironmentInformation(false);
+            Assert.IsTrue(systemUnderTest.GetShouldUpdate());
         }
 
         [TestMethod]
         public void EnvironmentShouldNeverBeInDebuggingModePerDefault()
         {
-            Assert.IsFalse(SystemUnderTest.GetIsDebugging());
+            var systemUnderTest = new EnvironmentInformation(false);
+            Assert.IsFalse(systemUnderTest.GetIsDebugging());
         }
     }
 }

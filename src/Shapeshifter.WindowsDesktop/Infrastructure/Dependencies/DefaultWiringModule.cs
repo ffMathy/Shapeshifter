@@ -31,7 +31,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
         }
 
         public DefaultWiringModule(Action<ContainerBuilder> callback = null)
-            : this(new EnvironmentInformation())
+            : this(new Infrastructure.Environment.EnvironmentInformation())
         {
             this.callback = callback;
         }

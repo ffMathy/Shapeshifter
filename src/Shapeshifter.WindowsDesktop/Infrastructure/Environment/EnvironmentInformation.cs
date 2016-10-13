@@ -7,7 +7,7 @@
 
     using Interfaces;
 
-    class EnvironmentInformation: IEnvironmentInformation
+    public class EnvironmentInformation: IEnvironmentInformation
     {
         readonly bool isInDesignTime;
 

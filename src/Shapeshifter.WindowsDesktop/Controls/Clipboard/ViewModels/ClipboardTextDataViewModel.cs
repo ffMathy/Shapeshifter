@@ -27,7 +27,7 @@
         }
 
         public ClipboardTextDataViewModel()
-            : this(new EnvironmentInformation(true)) { }
+            : this(new Infrastructure.Environment.EnvironmentInformation(true)) { }
 
         public ClipboardTextDataViewModel(
             IEnvironmentInformation environmentInformation)
