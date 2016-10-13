@@ -2,7 +2,6 @@
 {
     using System;
     using System.Threading.Tasks;
-    using System.Windows;
     using System.Windows.Input;
 
     using Controls.Window.Interfaces;
@@ -12,7 +11,6 @@
     using Mediators.Interfaces;
 
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
-    using Services.Messages.Interceptors.Interfaces;
     using Services.Messages.Interfaces;
 
     public class MainWindowPreparationOperation: IMainWindowPreparationOperation

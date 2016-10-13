@@ -17,9 +17,6 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
     using Native;
 
     using Threading;
-    using Logging.Interfaces;
-    using Services.Files.Interfaces;
-    using Controls.Window.ViewModels;
 
     public class DefaultWiringModule: AutofacModule
     {

@@ -120,6 +120,7 @@
     <Compile Include="Services\Files\FileManagerTest.cs" />
     <Compile Include="Services\Files\FileTypeInterpreterTest.cs" />
     <Compile Include="Services\Keyboard\PasteCombinationStateServiceTest.cs" />
+    <Compile Include="Services\Messages\Interceptors\AeroColorChangeInterceptorTest.cs" />
     <Compile Include="Services\Messages\Interceptors\ClipboardCopyInterceptorTest.cs" />
     <Compile Include="Services\Messages\Interceptors\Hotkeys\KeyInterceptorTest.cs" />
     <Compile Include="Services\Messages\Interceptors\Hotkeys\PasteHotkeyInterceptorTest.cs" />

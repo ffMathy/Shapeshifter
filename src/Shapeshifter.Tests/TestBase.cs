@@ -4,10 +4,6 @@ using Shapeshifter.WindowsDesktop.Infrastructure.Dependencies;
 using Shapeshifter.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using Shapeshifter.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shapeshifter.WindowsDesktop
 {

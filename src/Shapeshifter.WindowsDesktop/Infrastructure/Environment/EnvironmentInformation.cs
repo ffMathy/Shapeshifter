@@ -21,7 +21,14 @@
             this.isInDesignTime = isInDesignTime;
         }
 
-        public bool GetIsDebugging() => Debugger.IsAttached;
+        public bool GetIsDebugging()
+        {
+#if DEBUG
+            return Debugger.IsAttached;
+#else
+            return false;
+#endif
+        }
 
         public bool GetHasInternetAccess()
         {

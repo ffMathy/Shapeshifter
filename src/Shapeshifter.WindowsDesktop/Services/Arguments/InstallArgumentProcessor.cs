@@ -21,6 +21,8 @@
 
     using Services.Interfaces;
     using Infrastructure.Dependencies;
+    using System.Threading;
+    using Infrastructure.Threading.Interfaces;
 
     class InstallArgumentProcessor: INoArgumentProcessor
     {
@@ -32,6 +34,7 @@
         readonly IEnvironmentInformation environmentInformation;
         readonly ISettingsViewModel settingsViewModel;
         readonly IKeyboardDominanceWatcher keyboardDominanceWatcher;
+        readonly IThreadDelay threadDelay;
 
         [Inject]
         public ILogger Logger { get; set; }
@@ -42,7 +45,8 @@
             ISignHelper signHelper,
             IEnvironmentInformation environmentInformation,
             ISettingsViewModel settingsViewModel,
-            IKeyboardDominanceWatcher keyboardDominanceWatcher)
+            IKeyboardDominanceWatcher keyboardDominanceWatcher,
+            IThreadDelay threadDelay)
         {
             this.processManager = processManager;
             this.certificateManager = certificateManager;
@@ -50,6 +54,7 @@
             this.environmentInformation = environmentInformation;
             this.settingsViewModel = settingsViewModel;
             this.keyboardDominanceWatcher = keyboardDominanceWatcher;
+            this.threadDelay = threadDelay;
         }
 
         public bool Terminates
@@ -99,6 +104,7 @@
             ConfigureDefaultSettings();
 
             Logger.Information("Default settings have been configured.");
+            Logger.Information("Configuring keyboard dominance watcher injection mechanism.");
 
             keyboardDominanceWatcher.Install();
 
@@ -114,6 +120,8 @@
             var selfSignedCertificate = InstallCertificateIfNotFound();
             signHelper.SignAssemblyWithCertificate(targetExecutableFile, selfSignedCertificate);
 
+            threadDelay.Execute(100);
+
             Logger.Information("Executable signed with newly created self-signing certificate.");
         }
 
@@ -121,6 +129,8 @@
         {
             WriteManifest(targetExecutableFile);
             WriteExecutable(targetExecutableFile);
+
+            threadDelay.Execute(100);
 
             Logger.Information("Executable and manifest written to install directory.");
         }

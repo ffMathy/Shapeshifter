@@ -1,8 +1,5 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 {
-    using System;
-    using System.Diagnostics;
-    using System.IO;
 
     using Interfaces;
 
