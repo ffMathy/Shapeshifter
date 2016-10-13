@@ -47,6 +47,13 @@
 
         async Task OnSelectedItemChangedAsync()
         {
+            if (viewModel.SelectedElement == null)
+            {
+                viewModel.SelectedAction = null;
+                viewModel.Actions.Clear();
+                return;
+            }
+
             packageActionBinder.Default = await GetActionViewModelFromActionAndPackageAsync(
                 viewModel.SelectedElement,
                 pasteAction);

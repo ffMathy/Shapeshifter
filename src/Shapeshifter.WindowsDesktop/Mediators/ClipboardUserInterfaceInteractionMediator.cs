@@ -16,8 +16,9 @@
     using Services.Interfaces;
     using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interceptors.Interfaces;
+    using Exceptions;
 
-    class ClipboardUserInterfaceInteractionMediator:
+    class ClipboardUserInterfaceInteractionMediator :
         IClipboardUserInterfaceInteractionMediator
     {
         readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
@@ -27,6 +28,7 @@
         readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
         readonly IKeyInterceptor hotkeyInterceptor;
         readonly IMouseWheelHook mouseWheelHook;
+        readonly IClipboardInjectionService clipboardInjectionService;
 
         readonly IList<IClipboardDataControlPackage> clipboardPackages;
 
@@ -39,6 +41,7 @@
 
         public event EventHandler SelectedNextItem;
         public event EventHandler SelectedPreviousItem;
+        public event EventHandler RemovedCurrentItem;
         public event EventHandler PaneSwapped;
 
         public ClipboardUserInterfacePane CurrentPane
@@ -72,7 +75,8 @@
             IClipboardPersistanceService clipboardPersistanceService,
             IClipboardDataControlPackageFactory clipboardDataControlPackageFactory,
             IKeyInterceptor hotkeyInterceptor,
-            IMouseWheelHook mouseWheelHook)
+            IMouseWheelHook mouseWheelHook,
+            IClipboardInjectionService clipboardInjectionService)
         {
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;
             this.pasteCombinationDurationMediator = pasteCombinationDurationMediator;
@@ -81,6 +85,7 @@
             this.clipboardDataControlPackageFactory = clipboardDataControlPackageFactory;
             this.hotkeyInterceptor = hotkeyInterceptor;
             this.mouseWheelHook = mouseWheelHook;
+            this.clipboardInjectionService = clipboardInjectionService;
 
             clipboardPackages = new List<IClipboardDataControlPackage>();
 
@@ -124,7 +129,19 @@
                 case Key.Right:
                     HandleRightPressed();
                     break;
+
+                case Key.Delete:
+                    HandleDeletePressed();
+                    break;
             }
+        }
+
+        private void HandleDeletePressed()
+        {
+            clipboardCopyInterceptor.SkipNext();
+            clipboardInjectionService.ClearClipboard();
+
+            FireRemovedCurrentItem();
         }
 
         void SwapActivePane()
@@ -178,13 +195,22 @@
 
         void AppendPackagesWithDataFromClipboard()
         {
-            var controlPackage = clipboardDataControlPackageFactory.CreateFromCurrentClipboardData();
-            if (controlPackage == null)
+            try
             {
-                return;
-            }
+                var controlPackage = clipboardDataControlPackageFactory.CreateFromCurrentClipboardData();
+                if (controlPackage == null) return;
 
-            AddControlPackage(controlPackage);
+                AddControlPackage(controlPackage);
+            }
+            catch (NoDataInClipboardException)
+            {
+                FireRemovedCurrentItem();
+            }
+        }
+
+        private void FireRemovedCurrentItem()
+        {
+            RemovedCurrentItem?.Invoke(this, new EventArgs());
         }
 
         void AddControlPackage(IClipboardDataControlPackage controlPackage)

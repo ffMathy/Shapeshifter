@@ -142,6 +142,8 @@
 
             clipboardUserInterfaceInteractionMediator.PaneSwapped += ClipboardUserInterfaceInteractionMediator_PaneSwapped;
 
+            clipboardUserInterfaceInteractionMediator.RemovedCurrentItem += ClipboardUserInterfaceInteractionMediator_RemovedCurrentItem;
+
             clipboardUserInterfaceInteractionMediator.UserInterfaceHidden += Mediator_UserInterfaceHidden;
             clipboardUserInterfaceInteractionMediator.UserInterfaceShown += Mediator_UserInterfaceShown;
 
@@ -149,6 +151,19 @@
 
             clipboardUserInterfaceInteractionMediator.SelectedNextItem += ClipboardUserInterfaceInteractionMediator_SelectedNextItem;
             clipboardUserInterfaceInteractionMediator.SelectedPreviousItem += ClipboardUserInterfaceInteractionMediator_SelectedPreviousItem;
+        }
+
+        private void ClipboardUserInterfaceInteractionMediator_RemovedCurrentItem(object sender, EventArgs e)
+        {
+            var currentElement = SelectedElement;
+            SelectedElement = Elements
+                .Skip(1)
+                .FirstOrDefault();
+            Elements.Remove(currentElement);
+            if(Elements.Count == 0)
+            {
+                HideInterface();
+            }
         }
 
         void ClipboardUserInterfaceInteractionMediator_PaneSwapped(object sender, EventArgs e)
@@ -244,8 +259,9 @@
 
         async void Mediator_UserInterfaceShown(object sender, UserInterfaceShownEventArgument e)
         {
-            ActiveScreen = screenManager.GetPrimaryScreen();
+            if (Elements.Count == 0) return;
 
+            ActiveScreen = screenManager.GetPrimaryScreen();
             UserInterfaceShown?.Invoke(this, e);
         }
 
@@ -293,6 +309,8 @@
             clipboardUserInterfaceInteractionMediator.PackageAdded -= MediatorPackageAdded;
 
             clipboardUserInterfaceInteractionMediator.PaneSwapped -= ClipboardUserInterfaceInteractionMediator_PaneSwapped;
+
+            clipboardUserInterfaceInteractionMediator.RemovedCurrentItem -= ClipboardUserInterfaceInteractionMediator_RemovedCurrentItem;
 
             clipboardUserInterfaceInteractionMediator.UserInterfaceHidden -= Mediator_UserInterfaceHidden;
             clipboardUserInterfaceInteractionMediator.UserInterfaceShown -= Mediator_UserInterfaceShown;

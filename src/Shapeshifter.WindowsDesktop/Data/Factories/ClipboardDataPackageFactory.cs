@@ -12,6 +12,7 @@
     using Structures;
 
     using Unwrappers.Interfaces;
+    using Exceptions;
 
     class ClipboardDataPackageFactory: IClipboardDataPackageFactory
     {
@@ -43,9 +44,17 @@
             using (var session = clipboardSessionFactory.StartNewSession())
             {
                 var formats = session.GetClipboardFormats();
-                return IsAnyFormatSupported(formats)
-                           ? ConstructPackageFromFormats(formats)
-                           : null;
+                if(formats.Count == 0)
+                {
+                    throw new NoDataInClipboardException();
+                }
+
+                if(!IsAnyFormatSupported(formats))
+                {
+                    throw new ClipboardFormatNotUnderstoodException();
+                }
+
+                return ConstructPackageFromFormats(formats);
             }
         }
 

@@ -61,7 +61,7 @@
 
         public void Install(IntPtr windowHandle)
         {
-            this.mainWindowHandle = windowHandle;
+            mainWindowHandle = windowHandle;
             if (!clipboardNativeApi.AddClipboardFormatListener(windowHandle))
             {
                 throw GenerateInstallFailureException();
