@@ -8,5 +8,6 @@
         event EventHandler Closed;
 
         void Show();
+        void Hide();
     }
 }

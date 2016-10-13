@@ -19,6 +19,7 @@
         event EventHandler SelectedNextItem;
         event EventHandler SelectedPreviousItem;
         event EventHandler PaneSwapped;
+        event EventHandler RemovedCurrentItem;
 
         ClipboardUserInterfacePane CurrentPane { get; set; }
 

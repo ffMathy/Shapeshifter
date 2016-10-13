@@ -24,7 +24,7 @@
 
         public bool GetIsDebugging()
         {
-            return GetShouldUpdate() && Debugger.IsAttached;
+            return !GetShouldUpdate() || Debugger.IsAttached;
         }
 
         private bool IsRunningDeveloperVersion()

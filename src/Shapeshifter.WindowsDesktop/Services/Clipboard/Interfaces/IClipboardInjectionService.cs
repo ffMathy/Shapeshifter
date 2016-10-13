@@ -7,6 +7,8 @@
 
     public interface IClipboardInjectionService
     {
+        void ClearClipboard();
+
         Task InjectDataAsync(IClipboardDataPackage package);
 
         Task InjectImageAsync(BitmapSource image);

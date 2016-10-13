@@ -10,11 +10,13 @@
 
     using Operations.Startup;
     using Infrastructure.Logging.Interfaces;
+    using Infrastructure.Environment.Interfaces;
+    using Controls.Window.Interfaces;
 
     /// <summary>
     ///     Interaction logic for App.xaml
     /// </summary>
-    public partial class App: Application
+    public partial class App : Application
     {
         static ILifetimeScope container;
 
@@ -32,7 +34,7 @@
 
         public static void CreateContainer(Action<ContainerBuilder> callback = null)
         {
-            lock (typeof (App))
+            lock (typeof(App))
             {
                 var builder = new ContainerBuilder();
                 builder.RegisterModule(new DefaultWiringModule());
@@ -48,12 +50,23 @@
 
         static void OnError(Exception exception)
         {
-            MessageBox.Show(
+            var environmentInformation = Container.Resolve<IEnvironmentInformation>();
+            if (environmentInformation.GetIsDebugging())
+            {
+                var window = Container.Resolve<IClipboardListWindow>();
+                window.Hide();
+
+                Debugger.Break();
+            }
+            else
+            {
+                MessageBox.Show(
                 exception + "",
                 "Shapeshifter error",
                 MessageBoxButton.OK);
-            Process.GetCurrentProcess()
-                   .Kill();
+                Process.GetCurrentProcess()
+                       .Kill();
+            }
         }
 
 #pragma warning disable 4014
@@ -64,7 +77,8 @@
                 OnError(exceptionEventArguments.Exception);
             };
 
-            AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) => {
+            AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) =>
+            {
                 OnError((Exception)exceptionEventArguments.ExceptionObject);
             };
 

@@ -12,8 +12,9 @@
     using Infrastructure.Threading.Interfaces;
 
     using Interfaces;
+    using Exceptions;
 
-    class ClipboardDataControlPackageFactory: IClipboardDataControlPackageFactory
+    class ClipboardDataControlPackageFactory : IClipboardDataControlPackageFactory
     {
         readonly IClipboardDataPackageFactory dataPackageFactory;
 
@@ -33,13 +34,16 @@
 
         public IClipboardDataControlPackage CreateFromCurrentClipboardData()
         {
-            var dataPackage = dataPackageFactory.CreateFromCurrentClipboardData();
-            if (dataPackage == null)
+            try
             {
+                var dataPackage = dataPackageFactory.CreateFromCurrentClipboardData();
+                return CreateFromDataPackage(dataPackage);
+            }
+            catch (ClipboardFormatNotUnderstoodException)
+            {
+                //TODO: #20 - adding support for custom data
                 return null;
             }
-
-            return CreateFromDataPackage(dataPackage);
         }
 
         ClipboardDataControlPackage CreateDataControlPackageFromDataPackage(IClipboardDataPackage dataPackage)

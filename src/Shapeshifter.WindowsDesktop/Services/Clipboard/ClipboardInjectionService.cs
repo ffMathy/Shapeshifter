@@ -129,5 +129,10 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 
             WindowsClipboard.SetFileDropList(collection);
         }
+
+        public void ClearClipboard()
+        {
+            WindowsClipboard.Clear();
+        }
     }
 }

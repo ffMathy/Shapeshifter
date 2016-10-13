@@ -207,6 +207,8 @@
     <Compile Include="Data\Actions\ZipFilesAction.cs" />
     <Compile Include="Data\Unwrappers\Interfaces\IBitmapUnwrapper.cs" />
     <Compile Include="Data\Unwrappers\Interfaces\IGeneralUnwrapper.cs" />
+    <Compile Include="Exceptions\ClipboardFormatNotUnderstoodException.cs" />
+    <Compile Include="Exceptions\NoDataInClipboardException.cs" />
     <Compile Include="Infrastructure\Dependencies\AssemblyRegistrationHelper.cs" />
     <Compile Include="Infrastructure\Dependencies\InjectAttribute.cs" />
     <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
