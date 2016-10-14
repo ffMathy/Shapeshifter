@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shapeshifter.WindowsDesktop.Controls.Window.ViewModels.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace Shapeshifter.WindowsDesktop.Controls.Setup.ViewModels.Interfaces
 {
     public interface IColorPickerViewModel
     {
+        IUserInterfaceViewModel UserInterfaceViewModel { get; }
     }
 }
