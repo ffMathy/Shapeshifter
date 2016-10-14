@@ -20,4 +20,5 @@
         WindowStyle="None"
         Background="#60000000"
         AllowsTransparency="True">
+    <window:UserInterfaceControl DataContext="{Binding UserInterfaceViewModel}" />
 </Window>
