@@ -5,6 +5,6 @@
     public interface IPackageToActionSwitch
     {
         void PrepareBinder(
-            IClipboardListViewModel clipboardListViewModel);
+            IUserInterfaceViewModel UserInterfaceViewModel);
     }
 }

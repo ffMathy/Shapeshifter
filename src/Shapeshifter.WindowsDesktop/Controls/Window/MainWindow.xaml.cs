@@ -22,10 +22,10 @@
           IMainWindow
     {
         readonly IMainWindowHandleContainer handleContainer;
-        readonly IClipboardListViewModel viewModel;
+        readonly IUserInterfaceViewModel viewModel;
 
         public MainWindow(
-            IClipboardListViewModel viewModel,
+            IUserInterfaceViewModel viewModel,
             IMainWindowHandleContainer handleContainer)
         {
             this.handleContainer = handleContainer;

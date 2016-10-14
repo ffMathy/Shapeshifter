@@ -453,8 +453,8 @@
     <Compile Include="Controls\Window\Interfaces\IMainWindow.cs" />
     <Compile Include="Controls\Window\Interfaces\IMainWindowHandleContainer.cs" />
     <Compile Include="Controls\Window\MainWindowHandleContainer.cs" />
-    <Compile Include="Controls\Window\ViewModels\ClipboardListViewModel.cs" />
-    <Compile Include="Controls\Window\ViewModels\Interfaces\IClipboardListViewModel.cs" />
+    <Compile Include="Controls\Window\ViewModels\UserInterfaceViewModel.cs" />
+    <Compile Include="Controls\Window\ViewModels\Interfaces\IUserInterfaceViewModel.cs" />
     <Page Include="Controls\Clipboard\ClipboardImageDataControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

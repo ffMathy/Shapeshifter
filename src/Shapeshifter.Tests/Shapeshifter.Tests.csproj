@@ -138,7 +138,7 @@
     <Compile Include="TestException.cs" />
     <Compile Include="Services\Web\DownloaderTest.cs" />
     <Compile Include="Services\Web\DomainNameResolverTest.cs" />
-    <Compile Include="Controls\Window\ViewModels\ClipboardListViewModelTest.cs" />
+    <Compile Include="Controls\Window\ViewModels\UserInterfaceViewModelTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shapeshifter.WindowsDesktop.Native\Shapeshifter.WindowsDesktop.Native.csproj">
