@@ -11,8 +11,8 @@ If you want to see more frequent releases, fixes and new features, [support us o
 # Shapeshifter
 Shapeshifter is a revolutionary clipboard manager that you might know of already. 
 
-- Version 5 (current latest stable): https://github.com/ffMathy/Shapeshifter/releases/tag/shapeshifter-v5.0.107
 - Version 6 (new experimental version): https://github.com/ffMathy/Shapeshifter/releases/latest
+- Version 5 (current latest stable, not supported anymore in favor of Version 6): https://github.com/ffMathy/Shapeshifter/releases/tag/shapeshifter-v5.0.107
 
 # Contributing
 Feel free to contribute to Shapeshifter 6 development! Create a pull request, and we'll look at it. *The repository has a DotSettings ReSharper file included, which comes with the conventions we want to use for this repository. These conventions also contain a few templates for creating Unit Tests.*
