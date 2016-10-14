@@ -21,10 +21,9 @@
 
     using Services.Interfaces;
     using Infrastructure.Dependencies;
-    using System.Threading;
     using Infrastructure.Threading.Interfaces;
 
-    class InstallArgumentProcessor: INoArgumentProcessor
+    class InstallArgumentProcessor : INoArgumentProcessor, IInstallArgumentProcessor
     {
         const string CertificateName = "Shapeshifter";
 
@@ -72,7 +71,7 @@
         public bool CanProcess()
         {
             return !environmentInformation.GetIsDebugging() &&
-                   (Environment.CurrentDirectory != TargetDirectory);
+                   (processManager.GetCurrentProcessDirectory() != TargetDirectory);
         }
 
         public void Process()
@@ -81,7 +80,7 @@
             {
                 Logger.Information("Current process is not elevated which is needed for installation. Starting as elevated process.");
                 processManager.LaunchFileWithAdministrativeRights(
-                    processManager.GetCurrentProcessPath());
+                    processManager.GetCurrentProcessFilePath());
             }
             else
             {
@@ -95,7 +94,7 @@
         {
             PrepareInstallDirectory();
 
-            var currentExecutableFile = processManager.GetCurrentProcessPath();
+            var currentExecutableFile = processManager.GetCurrentProcessFilePath();
             var targetExecutableFile = Path.Combine(TargetDirectory, "Shapeshifter.exe");
 
             InstallToInstallDirectory(targetExecutableFile);
@@ -192,7 +191,7 @@
         void WriteExecutable(string targetExecutableFile)
         {
             File.Copy(
-                processManager.GetCurrentProcessPath(),
+                processManager.GetCurrentProcessFilePath(),
                 targetExecutableFile,
                 true);
         }

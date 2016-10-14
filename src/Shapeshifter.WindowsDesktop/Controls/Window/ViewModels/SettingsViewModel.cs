@@ -69,7 +69,7 @@
                 var runRegistryPath = GetRunRegistryPath();
                 if (value)
                 {
-                    var currentExecutablePath = processManager.GetCurrentProcessPath();
+                    var currentExecutablePath = processManager.GetCurrentProcessFilePath();
                     registryManager.AddValue(
                         runRegistryPath,
                         nameof(Shapeshifter),

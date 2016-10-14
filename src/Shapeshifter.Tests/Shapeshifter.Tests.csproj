@@ -97,6 +97,7 @@
     <Compile Include="Infrastructure\Logging\LoggerTest.cs" />
     <Compile Include="Operations\Startup\MainWindowPreparationOperationTest.cs" />
     <Compile Include="ProjectAnalysisTest.cs" />
+    <Compile Include="Services\Arguments\InstallArgumentProcessorTest.cs" />
     <Compile Include="Services\Clipboard\ClipboardPasteServiceTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardImageDataControlFactoryTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardTextDataControlFactoryTest.cs" />

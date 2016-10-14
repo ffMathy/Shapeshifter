@@ -10,7 +10,7 @@
         : IProcessManager,
           IDesignerService
     {
-        public string GetCurrentProcessPath()
+        public string GetCurrentProcessFilePath()
         {
             throw new NotImplementedException();
         }
@@ -34,5 +34,10 @@
         }
 
         public void Dispose() { }
+
+        public string GetCurrentProcessDirectory()
+        {
+            return null;
+        }
     }
 }

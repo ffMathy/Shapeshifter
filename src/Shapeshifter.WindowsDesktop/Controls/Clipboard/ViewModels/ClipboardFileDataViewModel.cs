@@ -6,8 +6,6 @@
 
     using Designer.Facades;
     using Designer.Helpers;
-
-    using Infrastructure.Environment;
     using Infrastructure.Environment.Interfaces;
 
     class ClipboardFileDataViewModel: 

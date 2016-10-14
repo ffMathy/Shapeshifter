@@ -12,7 +12,9 @@
     using Native;
     using Native.Interfaces;
     using Dependencies;
+    using System.Diagnostics.CodeAnalysis;
 
+    [ExcludeFromCodeCoverage]
     class SignHelper: ISignHelper
     {
         readonly ISigningNativeApi signingNativeApi;

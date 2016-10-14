@@ -16,6 +16,7 @@
 
     using Processes.Interfaces;
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
     public class KeyboardDominanceWatcher : IKeyboardDominanceWatcher
     {
@@ -95,6 +96,7 @@
             processWatcher.Disconnect();
         }
 
+        [ExcludeFromCodeCoverage]
         public void Install()
         {
             try

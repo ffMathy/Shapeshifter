@@ -57,7 +57,7 @@
 
             Container
                 .Resolve<IProcessManager>()
-                .GetCurrentProcessPath()
+                .GetCurrentProcessFilePath()
                 .Returns("executablePath");
             
             SystemUnderTest.StartWithWindows = true;

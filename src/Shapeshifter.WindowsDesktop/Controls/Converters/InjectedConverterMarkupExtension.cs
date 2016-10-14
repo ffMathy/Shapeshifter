@@ -9,7 +9,6 @@
 
     using Infrastructure.Dependencies;
     using Infrastructure.Environment;
-    using Infrastructure.Environment.Interfaces;
 
     public class InjectedConverterMarkupExtension: MarkupExtension
     {

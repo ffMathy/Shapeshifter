@@ -10,7 +10,9 @@
 
         bool IsCurrentProcessElevated();
 
-        string GetCurrentProcessPath();
+        string GetCurrentProcessFilePath();
+
+        string GetCurrentProcessDirectory();
 
         string GetCurrentProcessName();
 
