@@ -184,6 +184,9 @@
     <Compile Include="Controls\Window\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Window\UserInterfaceControl.xaml.cs">
+      <DependentUpon>UserInterfaceControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Window\ViewModels\ActionViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\IActionViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\ISettingsViewModel.cs" />
@@ -453,6 +456,10 @@
     <Compile Include="Controls\Window\ViewModels\ClipboardListViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\IClipboardListViewModel.cs" />
     <Page Include="Controls\Clipboard\ClipboardImageDataControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Window\UserInterfaceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
