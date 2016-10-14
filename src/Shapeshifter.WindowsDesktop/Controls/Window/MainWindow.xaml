@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:window="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Window"
         xmlns:viewModels="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Window.ViewModels"
-        d:DataContext="{d:DesignInstance Type=viewModels:UserInterfaceViewModel}"
+        d:DataContext="{d:DesignInstance Type=viewModels:MainViewModel}"
         Top="{Binding ActiveScreen.Y, Mode=TwoWay}"
         Left="{Binding ActiveScreen.X, Mode=TwoWay}"
         Width="{Binding ActiveScreen.Width, Mode=TwoWay}"

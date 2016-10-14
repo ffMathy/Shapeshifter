@@ -22,10 +22,10 @@
           IMainWindow
     {
         readonly IMainWindowHandleContainer handleContainer;
-        readonly IUserInterfaceViewModel viewModel;
+        readonly IMainViewModel viewModel;
 
         public MainWindow(
-            IUserInterfaceViewModel viewModel,
+            IMainViewModel viewModel,
             IMainWindowHandleContainer handleContainer)
         {
             this.handleContainer = handleContainer;
@@ -55,9 +55,9 @@
 
         void SetupViewModel()
         {
-            viewModel.UserInterfaceShown += ViewModel_UserInterfaceShown;
-            viewModel.UserInterfaceHidden += ViewModel_UserInterfaceHidden;
-            viewModel.UserInterfacePaneSwapped += ViewModel_UserInterfacePaneSwapped;
+            viewModel.UserInterfaceViewModel.UserInterfaceShown += ViewModel_UserInterfaceShown;
+            viewModel.UserInterfaceViewModel.UserInterfaceHidden += ViewModel_UserInterfaceHidden;
+            viewModel.UserInterfaceViewModel.UserInterfacePaneSwapped += ViewModel_UserInterfacePaneSwapped;
 
             DataContext = viewModel;
         }
@@ -102,9 +102,9 @@
 
         public void Dispose()
         {
-            viewModel.UserInterfaceShown -= ViewModel_UserInterfaceShown;
-            viewModel.UserInterfaceHidden -= ViewModel_UserInterfaceHidden;
-            viewModel.UserInterfacePaneSwapped -= ViewModel_UserInterfacePaneSwapped;
+            viewModel.UserInterfaceViewModel.UserInterfaceShown -= ViewModel_UserInterfaceShown;
+            viewModel.UserInterfaceViewModel.UserInterfaceHidden -= ViewModel_UserInterfaceHidden;
+            viewModel.UserInterfaceViewModel.UserInterfacePaneSwapped -= ViewModel_UserInterfacePaneSwapped;
         }
     }
 }

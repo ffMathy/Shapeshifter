@@ -37,10 +37,7 @@
         readonly SemaphoreSlim singlePasteLock;
 
         readonly IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator;
-        readonly IScreenManager screenManager;
         readonly ISettingsViewModel settingsViewModel;
-
-        ScreenInformation activeScreen;
 
         public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
         public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
@@ -49,25 +46,6 @@
         public ObservableCollection<IClipboardDataControlPackage> Elements { get; }
 
         public ObservableCollection<IActionViewModel> Actions { get; }
-
-        public ScreenInformation ActiveScreen
-        {
-            get
-            {
-                return activeScreen;
-            }
-            set
-            {
-                if (Equals(value, activeScreen))
-                {
-                    return;
-                }
-
-                activeScreen = value;
-
-                OnPropertyChanged();
-            }
-        }
 
         public IActionViewModel SelectedAction
         {
@@ -108,7 +86,6 @@
         [SuppressMessage("ReSharper", "SuggestBaseTypeForParameter")]
         public UserInterfaceViewModel(
             IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator,
-            IScreenManager screenManager,
             IPackageToActionSwitch packageToActionSwitch,
             ISettingsViewModel settingsViewModel)
         {
@@ -120,7 +97,6 @@
             Actions.CollectionChanged += Actions_CollectionChanged;
 
             this.clipboardUserInterfaceInteractionMediator = clipboardUserInterfaceInteractionMediator;
-            this.screenManager = screenManager;
             this.settingsViewModel = settingsViewModel;
 
             SetUpClipboardUserInterfaceInteractionMediator();
@@ -261,7 +237,6 @@
         {
             if (Elements.Count == 0) return;
 
-            ActiveScreen = screenManager.GetPrimaryScreen();
             UserInterfaceShown?.Invoke(this, e);
         }
 
