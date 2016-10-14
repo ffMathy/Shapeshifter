@@ -46,7 +46,7 @@
 
         protected TSystem Get<TSystem>()
         {
-            return container.Resolve<TSystem>();
+            return Container.Resolve<TSystem>();
         }
 
         readonly List<Type> fakeExceptions;
