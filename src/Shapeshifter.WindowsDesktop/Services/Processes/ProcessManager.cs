@@ -33,11 +33,16 @@
                     $"{currentProcess.ProcessName}";
         }
 
-        public string GetCurrentProcessPath()
+        public string GetCurrentProcessFilePath()
         {
             return Path.Combine(
-                Environment.CurrentDirectory,
+                GetCurrentProcessDirectory(),
                 $"{GetCurrentProcessName()}.exe");
+        }
+
+        public string GetCurrentProcessDirectory()
+        {
+            return Environment.CurrentDirectory;
         }
 
         public void LaunchCommand(string command, string arguments = null)

@@ -15,6 +15,8 @@
     using KeyboardHookInterception;
 
     using Processes.Interfaces;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
 
     public class KeyboardDominanceWatcher : IKeyboardDominanceWatcher
     {
@@ -94,12 +96,22 @@
             processWatcher.Disconnect();
         }
 
+        [ExcludeFromCodeCoverage]
         public void Install()
         {
-            Config.Register(
-                nameof(Shapeshifter),
-                $"{processManager.GetCurrentProcessName()}.exe",
-                GetInjectedLibraryName());
+            try
+            {
+                Config.Register(
+                    nameof(Shapeshifter),
+                    $"{processManager.GetCurrentProcessName()}.exe",
+                    GetInjectedLibraryName());
+            } catch(Exception ex)
+            {
+                logger.Error(
+                    new Exception(
+                        "Could not install the keyboard dominance watcher injection mechanism into the Global Assembly Cache.", 
+                        ex));
+            }
         }
     }
 }

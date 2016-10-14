@@ -44,6 +44,11 @@
             }
         }
 
+        protected TSystem Get<TSystem>()
+        {
+            return Container.Resolve<TSystem>();
+        }
+
         readonly List<Type> fakeExceptions;
         readonly List<Type> fakeInclusions;
 
