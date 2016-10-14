@@ -22,7 +22,7 @@
         {
             await SystemUnderTest.RunAsync();
 
-            Container.Resolve<IClipboardListWindow>()
+            Container.Resolve<IMainWindow>()
                 .Received()
                 .Show();
         }
@@ -32,7 +32,7 @@
         {
             await SystemUnderTest.RunAsync();
 
-            Container.Resolve<IClipboardListWindow>()
+            Container.Resolve<IMainWindow>()
                      .SourceInitialized += Raise.Event();
 
             Container.Resolve<IClipboardUserInterfaceInteractionMediator>()

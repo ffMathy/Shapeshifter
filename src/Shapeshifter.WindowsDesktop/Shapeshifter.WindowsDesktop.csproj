@@ -443,11 +443,11 @@
     <Compile Include="Services\WindowManager.cs" />
     <Compile Include="Structures\FormatDataPair.cs" />
     <Compile Include="Controls\Window\Binders\PackageToActionBinder.cs" />
-    <Compile Include="Controls\Window\ClipboardListWindow.xaml.cs">
-      <DependentUpon>ClipboardListWindow.xaml</DependentUpon>
+    <Compile Include="Controls\Window\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Window\Binders\Interfaces\IAsyncListDictionaryBinder.cs" />
-    <Compile Include="Controls\Window\Interfaces\IClipboardListWindow.cs" />
+    <Compile Include="Controls\Window\Interfaces\IMainWindow.cs" />
     <Compile Include="Controls\Window\Interfaces\IMainWindowHandleContainer.cs" />
     <Compile Include="Controls\Window\MainWindowHandleContainer.cs" />
     <Compile Include="Controls\Window\ViewModels\ClipboardListViewModel.cs" />
@@ -491,7 +491,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Window\ClipboardListWindow.xaml">
+    <Page Include="Controls\Window\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -53,7 +53,7 @@
             var environmentInformation = Container.Resolve<IEnvironmentInformation>();
             if (environmentInformation.GetIsDebugging())
             {
-                var window = Container.Resolve<IClipboardListWindow>();
+                var window = Container.Resolve<IMainWindow>();
                 window.Hide();
 
                 Debugger.Break();

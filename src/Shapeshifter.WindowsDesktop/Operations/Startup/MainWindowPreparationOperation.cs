@@ -15,14 +15,14 @@
 
     public class MainWindowPreparationOperation: IMainWindowPreparationOperation
     {
-        readonly IClipboardListWindow mainWindow;
+        readonly IMainWindow mainWindow;
         readonly IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator;
         readonly IMainWindowHandleContainer handleContainer;
         readonly IKeyInterceptor keyInterceptor;
         readonly IWindowMessageHook windowMessageHook;
 
         public MainWindowPreparationOperation(
-            IClipboardListWindow mainWindow,
+            IMainWindow mainWindow,
             IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator,
             IMainWindowHandleContainer handleContainer,
             IKeyInterceptor keyInterceptor,
