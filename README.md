@@ -8,6 +8,12 @@ Developing Shapeshifter is something we do for free, so that you can enjoy it wi
 
 If you want to see more frequent releases, fixes and new features, [support us on Patreon](https://www.patreon.com/user?u=4197032).
 
+## Thanks to
+Patreon is what keeps further development of Shapeshifter possible. Thanks to the following people who do their part.
+
+- [Reihan Parvizian](https://www.patreon.com/user/creators?u=5595214) ($10 per Shapeshifter release)
+- [Aart](https://www.patreon.com/user/creators?u=4787521) ($3 per Shapeshifter release)
+
 # Shapeshifter
 Shapeshifter is a revolutionary clipboard manager that you might know of already. 
 
