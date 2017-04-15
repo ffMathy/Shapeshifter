@@ -11,6 +11,7 @@ If you want to see more frequent releases, fixes and new features, [support us o
 ## Thanks to
 Patreon is what keeps further development of Shapeshifter possible. Thanks to the following people who do their part.
 
+- [Dave Taylor](https://www.patreon.com/user/creators?u=5720222) ($10 per Shapeshifter release)
 - [Reihan Parvizian](https://www.patreon.com/user/creators?u=5595214) ($10 per Shapeshifter release)
 - [Aart](https://www.patreon.com/user/creators?u=4787521) ($3 per Shapeshifter release)
 
