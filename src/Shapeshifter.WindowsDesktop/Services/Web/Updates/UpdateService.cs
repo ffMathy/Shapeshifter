@@ -33,7 +33,7 @@
         readonly IFileManager fileManager;
         readonly IProcessManager processManager;
         readonly ILogger logger;
-        private readonly IEnvironmentInformation environmentInformation;
+        readonly IEnvironmentInformation environmentInformation;
 
         public UpdateService(
             IDownloader fileDownloader,

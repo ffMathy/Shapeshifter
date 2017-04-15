@@ -19,12 +19,7 @@
 
     using Interfaces;
 
-    using JetBrains.Annotations;
-
     using Mediators.Interfaces;
-
-    using Services.Screen;
-    using Services.Screen.Interfaces;
 
     class UserInterfaceViewModel
         :
@@ -129,7 +124,7 @@
             clipboardUserInterfaceInteractionMediator.SelectedPreviousItem += ClipboardUserInterfaceInteractionMediator_SelectedPreviousItem;
         }
 
-        private void ClipboardUserInterfaceInteractionMediator_RemovedCurrentItem(object sender, EventArgs e)
+        void ClipboardUserInterfaceInteractionMediator_RemovedCurrentItem(object sender, EventArgs e)
         {
             var currentElement = SelectedElement;
             SelectedElement = Elements
@@ -267,8 +262,7 @@
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
+        
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

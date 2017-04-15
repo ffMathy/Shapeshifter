@@ -6,8 +6,6 @@
 
     using Interfaces;
 
-    using JetBrains.Annotations;
-
     using Services.Interfaces;
     using Services.Keyboard.Interfaces;
     using Services.Processes.Interfaces;
@@ -43,8 +41,7 @@
                 nameof(MaximumAmountOfItemsInClipboard),
                 8);
         }
-
-        [NotifyPropertyChangedInvocator]
+        
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

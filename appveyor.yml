@@ -28,8 +28,8 @@ build:
 artifacts:
 - path: build\application\Shapeshifter.exe
   name: Application
-- path: foobar
-  name: Foo
+- path: src\Shapeshifter.Website\bin
+  name: Website
   type: WebDeployPackage
 deploy:
 - provider: GitHub

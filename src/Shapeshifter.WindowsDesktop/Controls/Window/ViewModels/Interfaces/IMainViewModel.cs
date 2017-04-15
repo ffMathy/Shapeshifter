@@ -1,5 +1,4 @@
-﻿using Shapeshifter.WindowsDesktop.Controls.Window.ViewModels.Interfaces;
-using Shapeshifter.WindowsDesktop.Services.Screen;
+﻿using Shapeshifter.WindowsDesktop.Services.Screen;
 using System;
 using System.ComponentModel;
 

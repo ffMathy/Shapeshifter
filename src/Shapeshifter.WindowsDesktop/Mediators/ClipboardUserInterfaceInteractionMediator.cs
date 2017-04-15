@@ -136,7 +136,7 @@
             }
         }
 
-        private void HandleDeletePressed()
+        void HandleDeletePressed()
         {
             clipboardCopyInterceptor.SkipNext();
             clipboardInjectionService.ClearClipboard();
@@ -208,7 +208,7 @@
             }
         }
 
-        private void FireRemovedCurrentItem()
+        void FireRemovedCurrentItem()
         {
             RemovedCurrentItem?.Invoke(this, new EventArgs());
         }

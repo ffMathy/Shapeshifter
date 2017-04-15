@@ -27,7 +27,7 @@
             return !GetShouldUpdate() || Debugger.IsAttached;
         }
 
-        private bool IsRunningDeveloperVersion()
+        bool IsRunningDeveloperVersion()
         {
             var assemblyVersion = typeof(IEnvironmentInformation)
                 .Assembly
