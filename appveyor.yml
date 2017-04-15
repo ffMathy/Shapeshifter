@@ -40,7 +40,7 @@ deploy:
   on:
     branch: master
 - provider: WebDeploy
-  server: shapeshifter.scm.azurewebsites.net:443
+  server: https://shapeshifter.scm.azurewebsites.net
   website: shapeshifter
   username: $shapeshifter
   password:
