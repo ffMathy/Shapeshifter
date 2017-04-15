@@ -1,4 +1,13 @@
 version: 6.1.{build}
+environment:
+  patreon_client_id:
+    secure: PLU/ujLWtFY+Tw/UN6vbHoUSgxeykAIa7dJfLeuHyAyLtnhMqJCARZjN7G6zhO3m9yjr2pClq+VRScJEL+4vSTcJSndZWCqBA5YLFhM6xeE=
+  patreon_client_secret:
+    secure: tHr/9QE88kYtxaqdLM332mB3xD+4QRNg8y06DY5qAWf155NtSqi7G4zNpjeFCiTPa86f0LDdPAAjyrWZsLEXoCKZmA7PDBxU5kcllrub2cE=
+  patreon_creators_access_token:
+    secure: viBR0QyoO8HxK9X/n93AHhF0SNPs9hG0BEqoQKWV688=
+  patreon_creators_refresh_token:
+    secure: qJzAlyrpLkpWxEb7zL17uYnC0HLAwU8M3xcxzI7vkGc=
 pull_requests:
   do_not_increment_build_number: true
 skip_tags: true
@@ -18,12 +27,29 @@ build:
   verbosity: normal
 artifacts:
 - path: build\application\Shapeshifter.exe
-  name: Deployment
+  name: Application
+- path: foobar
+  name: Foo
+  type: WebDeployPackage
 deploy:
 - provider: GitHub
   release: shapeshifter-v$(appveyor_build_version)
+  artifact: Application
   auth_token:
     secure: bEEQPxNCa8Kb1CYtJddx0wPImmY2T/ZCrXVFf+RVtEC0Lvb0pVDE2D6sjfy9NxdV
+  on:
+    branch: master
+- provider: WebDeploy
+  server: shapeshifter.scm.azurewebsites.net:443
+  website: shapeshifter
+  username: $shapeshifter
+  password:
+    secure: 5Urzbp6Aj24/wHED9+Q/CtH4EjN7nv9PGdCdBDr5XECq8wnDxQcHK5YoS246hOqcEBNCU2OZ4rq26LVWCRbfbw==
+  artifact: Website
+  aspnet_core: true
+  remove_files: true
+  app_offline: false
+  aspnet_core_force_restart: true
   on:
     branch: master
 test_script:
