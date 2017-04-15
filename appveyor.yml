@@ -28,7 +28,7 @@ build:
 artifacts:
 - path: build\application\Shapeshifter.exe
   name: Application
-- path: src\Shapeshifter.Website\bin
+- path: src\Shapeshifter.Website
   name: Website
   type: WebDeployPackage
 deploy:
