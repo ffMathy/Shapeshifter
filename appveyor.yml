@@ -50,8 +50,6 @@ deploy:
   remove_files: true
   app_offline: false
   aspnet_core_force_restart: true
-  on:
-    branch: master
 test_script:
   - nuget install opencover -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
 
