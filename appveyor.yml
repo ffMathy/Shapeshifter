@@ -20,6 +20,14 @@ assembly_info:
   assembly_version: '{version}'
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
+after_build:
+- cmd: >-
+  mkdir build\website
+  cd src\Shapeshifter.Website
+  dotnet publish --output "..\..\build\website"
+  cd ..\..\
+  cd build\website
+  7z a Package.zip *
 before_build:
 - cmd: nuget restore src\Shapeshifter.sln
 build:
@@ -28,7 +36,7 @@ build:
 artifacts:
 - path: build\application\Shapeshifter.exe
   name: Application
-- path: src\Shapeshifter.Website
+- path: build\website\Package.zip
   name: Website
   type: WebDeployPackage
 deploy:
