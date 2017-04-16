@@ -23,11 +23,17 @@ assembly_info:
 after_build:
 - cmd: >-
   mkdir build\website
+
   cd src\Shapeshifter.Website
+
   dotnet publish --output "..\..\build\website"
+
   cd ..\..\
+
   cd build\website
+
   7z a Package.zip *
+
 before_build:
 - cmd: nuget restore src\Shapeshifter.sln
 build:
