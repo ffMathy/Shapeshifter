@@ -21,7 +21,7 @@ assembly_info:
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
 after_build:
-- cmd: >-
+- cmd: 
   mkdir build\website
 
   cd src\Shapeshifter.Website
