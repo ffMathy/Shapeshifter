@@ -22,17 +22,12 @@ assembly_info:
   assembly_informational_version: '{version}'
 after_build:
 - cmd: 
-  mkdir build\website
-
-  cd src\Shapeshifter.Website
-
-  dotnet publish --output "..\..\build\website"
-
-  cd ..\..\
-
-  cd build\website
-
-  7z a Package.zip *
+  - mkdir build\website 
+    cd src\Shapeshifter.Website
+    dotnet publish --output "..\..\build\website"
+    cd ..\..\
+    cd build\website
+    7z a Package.zip *
 
 before_build:
 - cmd: nuget restore src\Shapeshifter.sln
@@ -66,9 +61,6 @@ deploy:
   aspnet_core_force_restart: true
 test_script:
   - nuget install opencover -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
-
     %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -output:"coverage.xml" -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\build\tests\Shapeshifter.Tests.dll\"" -excludebyattribute:*ExcludeFromCodeCoverage* -register:user -skipautoprops -returntargetcode
-
     C:\Python35-x64\python.exe -m pip install codecov
-
     C:\Python35-x64\Scripts\codecov -f coverage.xml
