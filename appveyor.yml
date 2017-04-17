@@ -50,11 +50,9 @@ deploy:
     branch: master
 after_deploy:
 - cmd: >
-  cd build\website
-
-  7z a Website.zip *
-
-  msdeploy.exe -verb=sync -source:package="Website.zip" -dest:auto,computerName=https://shapeshifter.scm.azurewebsites.net:443/msdeploy.axd?site=shapeshifter,userName=$shapeshifter,password=%webdeploy_password%,authType=basic -setParam:"IIS Web Application Name"="shapeshifter" -allowUntrusted=true -skip:Directory="App_Data"
+    cd build\website
+    7z a Website.zip *
+    msdeploy.exe -verb=sync -source:package="Website.zip" -dest:auto,computerName=https://shapeshifter.scm.azurewebsites.net:443/msdeploy.axd?site=shapeshifter,userName=$shapeshifter,password=%webdeploy_password%,authType=basic -setParam:"IIS Web Application Name"="shapeshifter" -allowUntrusted=true -skip:Directory="App_Data"
 
 test_script:
   - nuget install opencover -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
