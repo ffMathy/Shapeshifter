@@ -14,25 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="wwwroot\Client\app\app.component.css" />
-    <Content Include="wwwroot\Client\app\app.component.html" />
-    <Content Include="wwwroot\Client\app\app.component.spec.ts" />
-    <Content Include="wwwroot\Client\app\app.component.ts" />
-    <Content Include="wwwroot\Client\app\app.module.ts" />
-    <Content Include="wwwroot\Client\assets\.gitkeep" />
-    <Content Include="wwwroot\Client\environments\environment.prod.ts" />
-    <Content Include="wwwroot\Client\environments\environment.ts" />
-    <Content Include="wwwroot\Client\favicon.ico" />
-    <Content Include="wwwroot\Client\index.html" />
-    <Content Include="wwwroot\Client\main.ts" />
-    <Content Include="wwwroot\Client\polyfills.ts" />
-    <Content Include="wwwroot\Client\styles.css" />
-    <Content Include="wwwroot\Client\test.ts" />
-    <Content Include="wwwroot\Client\tsconfig.json" />
-    <Content Include="wwwroot\index.html" />
-    <Content Include="wwwroot\sample\index.html" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
