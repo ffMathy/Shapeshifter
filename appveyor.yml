@@ -54,7 +54,7 @@ on_success:
 
     7z a Website.zip *
 
-    "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb=sync -source:package="Website.zip" -dest:auto,computerName=https://shapeshifter.scm.azurewebsites.net:443/msdeploy.axd?site=shapeshifter,userName=$shapeshifter,password=%webdeploy_password%,authType=basic -setParam:"IIS Web Application Name"="shapeshifter" -allowUntrusted=true -skip:Directory="App_Data"
+    "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb=sync -source:package="Website.zip" -dest:auto,computerName=https://shapeshifter.scm.azurewebsites.net:443/msdeploy.axd?site=shapeshifter,userName=$shapeshifter,password=%webdeploy_password%,authType=basic -allowUntrusted=true -skip:Directory="App_Data"
 
 test_script:
   - nuget install opencover -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
