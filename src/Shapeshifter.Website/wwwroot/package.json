@@ -4,8 +4,10 @@
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve"
+    "start": "tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",
+    "lite": "lite-server",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w"
   },
   "private": true,
   "dependencies": {
@@ -29,6 +31,8 @@
     "angular-cli": "1.0.0-beta.28.3",
     "codelyzer": "~2.0.0-beta.1",
     "ts-node": "1.2.1",
-    "typescript": "~2.0.3"
+    "typescript": "~2.0.3",
+    "concurrently": "^2.2.0",
+    "lite-server": "^2.2.2"
   }
 }
