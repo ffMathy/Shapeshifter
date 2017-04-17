@@ -32,7 +32,7 @@ after_build:
 
     cd build\website
 
-    7z a Package.zip *
+    7z a Website.zip *
 
 before_build:
 - cmd: nuget restore src\Shapeshifter.sln
@@ -42,7 +42,7 @@ build:
 artifacts:
 - path: build\application\Shapeshifter.exe
   name: Application
-- path: build\website\Package.zip
+- path: build\website
   name: Website
   type: WebDeployPackage
 deploy:
@@ -62,7 +62,7 @@ deploy:
   artifact: Website
   aspnet_core: true
   remove_files: true
-  app_offline: false
+  app_offline: true
   aspnet_core_force_restart: true
 test_script:
   - nuget install opencover -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
