@@ -42,7 +42,7 @@ build:
 artifacts:
 - path: build\application\Shapeshifter.exe
   name: Application
-- path: build\website
+- path: build\website\Website.zip
   name: Website
   type: WebDeployPackage
 deploy:
