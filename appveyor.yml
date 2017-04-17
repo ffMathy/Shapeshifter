@@ -1,5 +1,7 @@
 version: 6.1.{build}
 environment:
+  webdeploy_password:
+    secure: 5Urzbp6Aj24/wHED9+Q/CtH4EjN7nv9PGdCdBDr5XECq8wnDxQcHK5YoS246hOqcEBNCU2OZ4rq26LVWCRbfbw==
   patreon_client_id:
     secure: PLU/ujLWtFY+Tw/UN6vbHoUSgxeykAIa7dJfLeuHyAyLtnhMqJCARZjN7G6zhO3m9yjr2pClq+VRScJEL+4vSTcJSndZWCqBA5YLFhM6xeE=
   patreon_client_secret:
@@ -30,10 +32,6 @@ after_build:
 
     cd ..\..\
 
-    cd build\website
-
-    7z a Website.zip *
-
 before_build:
 - cmd: nuget restore src\Shapeshifter.sln
 build:
@@ -42,9 +40,6 @@ build:
 artifacts:
 - path: build\application\Shapeshifter.exe
   name: Application
-- path: build\website\Website.zip
-  name: Website
-  type: WebDeployPackage
 deploy:
 - provider: GitHub
   release: shapeshifter-v$(appveyor_build_version)
@@ -53,17 +48,14 @@ deploy:
     secure: bEEQPxNCa8Kb1CYtJddx0wPImmY2T/ZCrXVFf+RVtEC0Lvb0pVDE2D6sjfy9NxdV
   on:
     branch: master
-- provider: WebDeploy
-  server: https://shapeshifter.scm.azurewebsites.net:443/msdeploy.axd?site=shapeshifter
-  website: shapeshifter
-  username: $shapeshifter
-  password:
-    secure: 5Urzbp6Aj24/wHED9+Q/CtH4EjN7nv9PGdCdBDr5XECq8wnDxQcHK5YoS246hOqcEBNCU2OZ4rq26LVWCRbfbw==
-  artifact: Website
-  aspnet_core: true
-  remove_files: true
-  app_offline: true
-  aspnet_core_force_restart: true
+after_deploy:
+- cmd: >
+  cd build\website
+
+  7z a Website.zip *
+
+  msdeploy.exe -verb=sync -source:package="Website.zip" -dest:auto,computerName=https://shapeshifter.scm.azurewebsites.net:443/msdeploy.axd?site=shapeshifter,userName=$shapeshifter,password=%webdeploy_password%,authType=basic -setParam:"IIS Web Application Name"="shapeshifter" -allowUntrusted=true -skip:Directory="App_Data"
+
 test_script:
   - nuget install opencover -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
 
