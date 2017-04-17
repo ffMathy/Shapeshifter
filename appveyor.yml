@@ -48,7 +48,7 @@ deploy:
     secure: bEEQPxNCa8Kb1CYtJddx0wPImmY2T/ZCrXVFf+RVtEC0Lvb0pVDE2D6sjfy9NxdV
   on:
     branch: master
-after_deploy:
+on_success:
 - cmd: >
     cd build\website
 
