@@ -171,6 +171,9 @@
     <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardTextDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\Interfaces\IClipboardTextDataViewModel.cs" />
     <Compile Include="Controls\Designer\Services\IDesignerService.cs" />
+    <Compile Include="Controls\Patreon\PatreonDonateControl.xaml.cs">
+      <DependentUpon>PatreonDonateControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Setup\ColorPickerControl.xaml.cs">
       <DependentUpon>ColorPickerControl.xaml</DependentUpon>
     </Compile>
@@ -183,6 +186,9 @@
     <Compile Include="Controls\Window\Interfaces\IHookableWindow.cs" />
     <Compile Include="Controls\Window\Interfaces\ISettingsWindow.cs" />
     <Compile Include="Controls\Window\Interfaces\IWindow.cs" />
+    <Compile Include="Controls\Window\PatreonWindow.xaml.cs">
+      <DependentUpon>PatreonWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Window\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -463,7 +469,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\Patreon\PatreonDonateControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Setup\ColorPickerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Window\PatreonWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

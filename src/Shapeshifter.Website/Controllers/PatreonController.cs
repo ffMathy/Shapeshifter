@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Shapeshifter.Website.Controllers
@@ -41,7 +41,7 @@ namespace Shapeshifter.Website.Controllers
                 var jsonObject = JsonConvert.DeserializeObject<dynamic>(json);
                 var accessToken = jsonObject.access_token;
 
-                return Redirect;
+                return accessToken;
             }
         }
     }

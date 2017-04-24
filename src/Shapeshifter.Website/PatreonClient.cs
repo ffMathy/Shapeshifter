@@ -5,8 +5,20 @@ using System.Threading.Tasks;
 
 namespace Shapeshifter.Website
 {
-    public class PatreonClient
-    { 
-        
-    }
+  using Models;
+
+  public class PatreonClient
+  {
+    //readonly string accessToken;
+
+    //public PatreonClient(string accessToken)
+    //{
+    //  this.accessToken = accessToken;
+    //}
+
+    //public User GetCurrentUser()
+    //{
+
+    //}
+  }
 }
