@@ -3,10 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-  <Grid>
-    <Viewbox Stretch="Uniform">
+             mc:Ignorable="d" Background="White">
+  <Grid Margin="20">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition/>
+    </Grid.ColumnDefinitions>
+    <Grid Margin="20,0,0,0" Grid.Column="1">
+      <Grid.RowDefinitions>
+        <RowDefinition/>
+        <RowDefinition/>
+      </Grid.RowDefinitions>
+      <Label Padding="0" Margin="0" Foreground="{StaticResource AccentBrush}" FontSize="30" FontWeight="ExtraLight">Shapeshifter is free for you</Label>
+      <TextBlock Grid.Row="1" TextWrapping="Wrap" Width="500">But it isn't free for me to maintain. My name is Mathias Lorenzen (LinkedIn profile). I am the developer of Shapeshifter and worked on the first version of the software when I was very young.</TextBlock>
+    </Grid>
+    <Viewbox Width="100" Height="100" Stretch="Uniform">
       <Canvas Name="svg3682" Width="47.363" Height="47.34">
         <Canvas.RenderTransform>
           <TranslateTransform X="-7.8" Y="-7.8"/>
