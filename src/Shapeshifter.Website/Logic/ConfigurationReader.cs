@@ -9,8 +9,8 @@ namespace Shapeshifter.Website
 
     using Microsoft.Extensions.Configuration;
 
-    public class ConfigurationReader
-    {
+    public class ConfigurationReader : IConfigurationReader
+  {
         readonly IConfigurationRoot _configuration;
 
         public ConfigurationReader(string path)

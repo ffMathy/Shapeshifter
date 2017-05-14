@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +8,14 @@ namespace Shapeshifter.Website.Controllers
     [Route("api/patreon")]
     public class PatreonApiController : Controller
     {
+    public PatreonApiController()
+    {
+      _client = new PatreonClient();
+    }
+
         // GET: api/Patreon
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<string> GetSupporters()
         {
             return new string[] { "value1", "value2" };
         }

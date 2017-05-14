@@ -5,30 +5,43 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Background="White">
   <Grid Margin="20">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition/>
-      <ColumnDefinition/>
-    </Grid.ColumnDefinitions>
-    <Grid Margin="20,0,0,0" Grid.Column="1">
+    <Grid.RowDefinitions>
+      <RowDefinition/>
+      <RowDefinition/>
+    </Grid.RowDefinitions>
+    <Grid Grid.Column="1">
       <Grid.RowDefinitions>
+        <RowDefinition/>
         <RowDefinition/>
         <RowDefinition/>
       </Grid.RowDefinitions>
       <Label Padding="0" Margin="0" Foreground="{StaticResource AccentBrush}" FontSize="30" FontWeight="ExtraLight">Shapeshifter is free for you</Label>
-      <TextBlock Grid.Row="1" TextWrapping="Wrap" Width="500">But it isn't free for me to maintain. My name is Mathias Lorenzen (LinkedIn profile). I am the developer of Shapeshifter and worked on the first version of the software when I was very young.</TextBlock>
+      <TextBlock Grid.Row="1" TextWrapping="Wrap" Width="400">But it isn't free to maintain. Help us keep Shapeshifter alive and speed up future development - donate on Patreon!</TextBlock>
+      <Button Margin="0,20,0,0" HorizontalAlignment="Right" Grid.Row="2">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+          <Viewbox Margin="10" Width="25" Height="25" Stretch="Uniform">
+            <Canvas Name="svg3682" Width="47.363" Height="47.34">
+              <Canvas.RenderTransform>
+                <TranslateTransform X="-7.8" Y="-7.8"/>
+              </Canvas.RenderTransform>
+              <Canvas.Resources/>
+              <Path Name="path3680" Fill="#FFFF5900">
+                <Path.Data>
+                  <PathGeometry Figures="M7.846 30.818c0-11.027 8.96-21.366 20.775-22.843 8.468-.985 14.868 2.265 19.298 6.498 4.135 3.938 6.598 8.96 7.188 14.868.492 5.907-.787 11.027-4.233 15.852-3.446 4.727-10.24 9.945-18.708 9.945h-11.52V32.394c.099-5.022 1.772-9.354 7.877-11.422 5.317-1.575 11.52 1.378 13.391 6.991 1.969 6.006-.887 10.043-4.234 12.505s-8.566 2.462-12.012.099v7.778c2.265 1.083 5.12 1.378 7.188 1.28 7.482-1.084 13.292-5.317 15.754-11.717 2.561-6.794.787-14.671-4.529-19.594-6.4-5.219-13.391-6.499-20.874-2.855-5.218 2.659-8.861 8.074-9.748 13.981v25.699H7.945l-.099-24.321z" FillRule="NonZero"/>
+                </Path.Data>
+              </Path>
+            </Canvas>
+          </Viewbox>
+          <StackPanel Margin="0,0,10,0" VerticalAlignment="Center" Grid.Column="1">
+            <TextBlock FontWeight="Bold">I am already a donor</TextBlock>
+            <TextBlock FontSize="9" FontWeight="ExtraLight">Remove these notifications</TextBlock>
+          </StackPanel>
+        </Grid>
+      </Button>
     </Grid>
-    <Viewbox Width="100" Height="100" Stretch="Uniform">
-      <Canvas Name="svg3682" Width="47.363" Height="47.34">
-        <Canvas.RenderTransform>
-          <TranslateTransform X="-7.8" Y="-7.8"/>
-        </Canvas.RenderTransform>
-        <Canvas.Resources/>
-        <Path Name="path3680" Fill="#FFFF5900">
-          <Path.Data>
-            <PathGeometry Figures="M7.846 30.818c0-11.027 8.96-21.366 20.775-22.843 8.468-.985 14.868 2.265 19.298 6.498 4.135 3.938 6.598 8.96 7.188 14.868.492 5.907-.787 11.027-4.233 15.852-3.446 4.727-10.24 9.945-18.708 9.945h-11.52V32.394c.099-5.022 1.772-9.354 7.877-11.422 5.317-1.575 11.52 1.378 13.391 6.991 1.969 6.006-.887 10.043-4.234 12.505s-8.566 2.462-12.012.099v7.778c2.265 1.083 5.12 1.378 7.188 1.28 7.482-1.084 13.292-5.317 15.754-11.717 2.561-6.794.787-14.671-4.529-19.594-6.4-5.219-13.391-6.499-20.874-2.855-5.218 2.659-8.861 8.074-9.748 13.981v25.699H7.945l-.099-24.321z" FillRule="NonZero"/>
-          </Path.Data>
-        </Path>
-      </Canvas>
-    </Viewbox>
   </Grid>
 </UserControl>
