@@ -7,6 +7,7 @@ namespace Shapeshifter.Website
 {
 	using FluffySpoon.Http;
 	using Models;
+	using System.Net;
 	using System.Net.Http;
 
 	public class PatreonClient : IPatreonClient
@@ -25,11 +26,24 @@ namespace Shapeshifter.Website
 			_restClient = new RestClient();
 		}
 
-		public async Task<IEnumerable<Pledge>> GetPledges()
+		public async Task<Pledge[]> GetPledgesAsync()
 		{
 			var pledges = await _restClient.GetAsync<DataWrapper<Pledge[]>>(
-				new Uri("https://www.patreon.com/api/oauth2/api/campaigns/" + campaignId + "/pledges?include=patron"));
+				new Uri("https://www.patreon.com/api/oauth2/api/campaigns/" + campaignId + "/pledges?include=patron.full_name"),
+				new Dictionary<HttpRequestHeader, string>{
+					{ HttpRequestHeader.Authorization, "Bearer " + accessToken }
+				});
 			return pledges.Data;
+		}
+
+		public async Task<User> GetUserById(string id)
+		{
+			var user = await _restClient.GetAsync<DataWrapper<User>>(
+				new Uri("https://www.patreon.com/api/oauth2/api/users/" + id),
+				new Dictionary<HttpRequestHeader, string>{
+					{ HttpRequestHeader.Authorization, "Bearer " + accessToken }
+				});
+			return user.Data;
 		}
 	}
 }

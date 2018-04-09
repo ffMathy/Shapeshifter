@@ -4,8 +4,9 @@ using Shapeshifter.Website.Models;
 
 namespace Shapeshifter.Website
 {
-  public interface IPatreonClient
-  {
-    Task<IEnumerable<Pledge>> GetPledges();
-  }
+	public interface IPatreonClient
+	{
+		Task<Pledge[]> GetPledgesAsync();
+		Task<User> GetUserById(string id);
+	}
 }

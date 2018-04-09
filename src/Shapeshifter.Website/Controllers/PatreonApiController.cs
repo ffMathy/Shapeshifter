@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Shapeshifter.Website.Controllers
@@ -16,11 +17,17 @@ namespace Shapeshifter.Website.Controllers
       _client = new PatreonClient(configurationReader.Read("patreon.creatorsAccessToken"));
     }
 
-    // GET: api/Patreon
-    [HttpGet]
-    public IEnumerable<string> GetSupporters()
+    // GET: api/patreon/pledges
+    [HttpGet("supporters")]
+    public async Task<IEnumerable<string>> GetSupporters()
     {
-      return new string[] { "value1", "value2" };
+		var pledges = await _client.GetPledgesAsync();
+		foreach(var pledge in pledges) {
+			var user = await _client.GetUserById(pledge.Relationships.Patron.Data.Id);
+			user = null;
+		}
+
+		return new [] { "foo", "bar"};
     }
   }
 }

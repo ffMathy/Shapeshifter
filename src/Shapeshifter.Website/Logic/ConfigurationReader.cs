@@ -8,24 +8,33 @@ namespace Shapeshifter.Website
     using System.IO;
 
     using Microsoft.Extensions.Configuration;
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
 
-    public class ConfigurationReader : IConfigurationReader
+	public class ConfigurationReader : IConfigurationReader
   {
-        readonly IConfigurationRoot _configuration;
+        readonly JObject _configuration;
 
         public ConfigurationReader(string path)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile(path)
-                .AddEnvironmentVariables("shapeshifter:");
-
-            _configuration = builder.Build();
+			_configuration = JsonConvert.DeserializeObject<JObject>(
+				File.ReadAllText(path));
         }
 
         public string Read(string key)
         {
-            return _configuration[key];
+			var target = _configuration;
+
+			var split = key.Split(".");
+			for(var i=0;i<split.Length;i++) {
+				var property = split[i];
+				if(i == split.Length - 1)
+					return target.GetValue(property).Value<string>();
+
+				target = target.GetValue(property).Value<JObject>();
+			}
+
+			return null;
         }
     }
 }

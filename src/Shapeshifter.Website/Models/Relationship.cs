@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace Shapeshifter.Website.Models
 {
-    public class DataWrapper<T>
-    {
-		[JsonProperty("data")]
-		public T Data { get; set; }
-    }
+	public class Relationship
+	{
+		[JsonProperty("id")]
+		public string Id { get; set; }
+
+		[JsonProperty("type")]
+		public string Type { get; set; }
+	}
 }

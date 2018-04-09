@@ -14,7 +14,7 @@
     public DateTime CreatedAt { get; set; }
 
     [JsonProperty("pledge_cap_cents")]
-    public int PledgeCapCents { get; set; }
+    public int? PledgeCapCents { get; set; }
 
     [JsonProperty("patron_pays_fees")]
     public bool PatronPaysFees { get; set; }

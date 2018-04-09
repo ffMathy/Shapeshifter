@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluffySpoon.Extensions.MicrosoftDependencyInjection" Version="1.0.5" />
-    <PackageReference Include="FluffySpoon.Http" Version="1.0.9" />
+    <PackageReference Include="FluffySpoon.Http" Version="1.0.10" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.3" />
@@ -37,6 +37,11 @@
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="secrets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

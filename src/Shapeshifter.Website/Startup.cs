@@ -14,8 +14,7 @@ namespace Shapeshifter.Website
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddAssemblyTypesAsImplementedInterfaces(
-				typeof(Startup).Assembly,
-				typeof(IRestClient).Assembly);
+				typeof(Startup).Assembly);
 
 			services.AddMvc();
 
