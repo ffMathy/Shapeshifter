@@ -28,6 +28,8 @@ after_build:
 
     cd src\Shapeshifter.Website
 
+    dotnet restore
+
     dotnet publish --output "..\..\build\website"
 
     cd ..\..\

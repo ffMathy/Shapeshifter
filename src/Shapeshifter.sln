@@ -14,11 +14,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{360BD9A8-28E9-42EF-8731-0BACCB60B8DC}"
 	ProjectSection(SolutionItems) = preProject
 		..\appveyor.yml = ..\appveyor.yml
-		..\codecov.yml = ..\codecov.yml
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.Website", "Shapeshifter.Website\Shapeshifter.Website.csproj", "{E2A47969-CF84-470E-9C89-B24508607957}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shapeshifter.Website", "Shapeshifter.Website\Shapeshifter.Website.csproj", "{E2A47969-CF84-470E-9C89-B24508607957}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,5 +48,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {393FBA7D-43EE-46A3-B8B1-9B601D15F6D0}
 	EndGlobalSection
 EndGlobal
