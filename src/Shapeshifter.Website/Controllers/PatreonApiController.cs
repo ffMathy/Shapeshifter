@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Shapeshifter.Website.Models;
 
 namespace Shapeshifter.Website.Controllers
 {
@@ -19,15 +20,22 @@ namespace Shapeshifter.Website.Controllers
 
     // GET: api/patreon/pledges
     [HttpGet("supporters")]
-    public async Task<IEnumerable<string>> GetSupporters()
+    public async Task<IEnumerable<dynamic>> GetSupporters()
     {
+		var supporters = new List<dynamic>();
+
 		var pledges = await _client.GetPledgesAsync();
-		foreach(var pledge in pledges) {
-			var user = await _client.GetUserById(pledge.Relationships.Patron.Data.Id);
-			user = null;
+		var users = pledges.Included.ToObject<User[]>();
+		foreach (var pledge in pledges.Data) {
+			var user = users.Single(x => x.Id == pledge.Relationships.Patron.Data.Id);
+			supporters.Add(new {
+				user.Id,
+				user.Attributes.FullName,
+				Amount = pledge.Attributes.AmountCents / 100.0
+			});
 		}
 
-		return new [] { "foo", "bar"};
+		return supporters;
     }
   }
 }

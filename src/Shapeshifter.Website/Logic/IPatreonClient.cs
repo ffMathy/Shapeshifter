@@ -6,7 +6,6 @@ namespace Shapeshifter.Website
 {
 	public interface IPatreonClient
 	{
-		Task<Pledge[]> GetPledgesAsync();
-		Task<User> GetUserById(string id);
+		Task<DataWrapper<Pledge[]>> GetPledgesAsync();
 	}
 }

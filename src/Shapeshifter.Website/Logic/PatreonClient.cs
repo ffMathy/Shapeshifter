@@ -26,24 +26,14 @@ namespace Shapeshifter.Website
 			_restClient = new RestClient();
 		}
 
-		public async Task<Pledge[]> GetPledgesAsync()
+		public async Task<DataWrapper<Pledge[]>> GetPledgesAsync()
 		{
 			var pledges = await _restClient.GetAsync<DataWrapper<Pledge[]>>(
-				new Uri("https://www.patreon.com/api/oauth2/api/campaigns/" + campaignId + "/pledges?include=patron.full_name"),
+				new Uri("https://www.patreon.com/api/oauth2/api/campaigns/" + campaignId + "/pledges"),
 				new Dictionary<HttpRequestHeader, string>{
 					{ HttpRequestHeader.Authorization, "Bearer " + accessToken }
 				});
-			return pledges.Data;
-		}
-
-		public async Task<User> GetUserById(string id)
-		{
-			var user = await _restClient.GetAsync<DataWrapper<User>>(
-				new Uri("https://www.patreon.com/api/oauth2/api/users/" + id),
-				new Dictionary<HttpRequestHeader, string>{
-					{ HttpRequestHeader.Authorization, "Bearer " + accessToken }
-				});
-			return user.Data;
+			return pledges;
 		}
 	}
 }
