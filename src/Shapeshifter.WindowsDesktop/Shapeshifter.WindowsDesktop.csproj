@@ -642,7 +642,7 @@
   <Import Project="..\packages\Costura.Fody.2.0.0\build\Costura.Fody.targets" Condition="Exists('..\packages\Costura.Fody.2.0.0\build\Costura.Fody.targets')" />
   <Import Project="..\packages\Brutal.Dev.StrongNameSigner.2.1.4\build\Brutal.Dev.StrongNameSigner.targets" Condition="Exists('..\packages\Brutal.Dev.StrongNameSigner.2.1.4\build\Brutal.Dev.StrongNameSigner.targets')" />
   <Target Name="BeforeBuild">
-    <Exec ContinueOnError="false" Command="&quot;$(StrongNameSignerDirectory)StrongNameSigner.Console.exe&quot; -in &quot;..\packages\Octokit.*&quot;" />
+    <Exec ContinueOnError="false" Command="&quot;..\packages\Brutal.Dev.StrongNameSigner.2.1.4\build\StrongNameSigner.Console.exe&quot; -in &quot;..\packages\Octokit.*&quot;" />
   </Target>
   <Import Project="..\packages\Fody.3.0.3\build\Fody.targets" Condition="Exists('..\packages\Fody.3.0.3\build\Fody.targets')" />
 </Project>
