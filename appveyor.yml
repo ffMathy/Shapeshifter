@@ -33,7 +33,11 @@ after_build:
     cd ..\..\
 
 before_build:
-- cmd: dotnet restore src\Shapeshifter.sln
+- cmd: >
+    dotnet restore src\Shapeshifter.sln
+
+    dotnet build src\Shapeshifter.sln
+
 build:
   project: src\Shapeshifter.sln
   verbosity: normal
