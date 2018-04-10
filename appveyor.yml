@@ -3,13 +3,13 @@ environment:
   webdeploy_password:
     secure: 5Urzbp6Aj24/wHED9+Q/CtH4EjN7nv9PGdCdBDr5XECq8wnDxQcHK5YoS246hOqcEBNCU2OZ4rq26LVWCRbfbw==
   patreon_client_id:
-    secure: PLU/ujLWtFY+Tw/UN6vbHoUSgxeykAIa7dJfLeuHyAyLtnhMqJCARZjN7G6zhO3m9yjr2pClq+VRScJEL+4vSTcJSndZWCqBA5YLFhM6xeE=
+    secure: XbNZa+N6W6ODv7Y2Tkf6ZR9nNpBkqlB7k5aLTtBRF0YcsFy/49pIVYQpKCK+HRhniF+DEmyMsGPwTUry9qrenI3c93dLnSQvAolKBH0YIeE=
   patreon_client_secret:
-    secure: tHr/9QE88kYtxaqdLM332mB3xD+4QRNg8y06DY5qAWf155NtSqi7G4zNpjeFCiTPa86f0LDdPAAjyrWZsLEXoCKZmA7PDBxU5kcllrub2cE=
+    secure: 7j+7Tcf0cjqkaY/WX1TqP4y65RI9n8oWu98LyI4y98ShrJ02GMGoVUemhyw35xTVp9jfVizPphnLYB49OMShmcuO+5mDYSkZD5M+typnB40=
   patreon_creators_access_token:
-    secure: viBR0QyoO8HxK9X/n93AHhF0SNPs9hG0BEqoQKWV688=
+    secure: yx1+zw2XQkMLfRuZ5S3M+5Lqs5dGuDmUbgjvISta5A8atFQctDHVb7UqtZnNcB2I
   patreon_creators_refresh_token:
-    secure: qJzAlyrpLkpWxEb7zL17uYnC0HLAwU8M3xcxzI7vkGc=
+    secure: c3EVYJ14R2JBDQgk6quSdHkcFMjtN2msgn2F4SRFjqdKVvRI4qkrU58ftCsZMB0g
 pull_requests:
   do_not_increment_build_number: true
 skip_tags: true
