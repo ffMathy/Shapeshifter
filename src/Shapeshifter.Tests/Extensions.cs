@@ -121,7 +121,7 @@
             }
         }
 
-        private static void RegisterFakeForType(ContainerBuilder builder, Type[] exceptTypes, Type type)
+        static void RegisterFakeForType(ContainerBuilder builder, Type[] exceptTypes, Type type)
         {
             if (!exceptTypes.Contains(type))
             {
@@ -236,7 +236,7 @@
             }
         }
 
-        private static object GenerateFakeForType(Type type)
+        static object GenerateFakeForType(Type type)
         {
             return Substitute.For(new[] { type }, new object[0]);
         }

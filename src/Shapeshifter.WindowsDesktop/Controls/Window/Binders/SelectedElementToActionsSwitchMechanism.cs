@@ -20,7 +20,7 @@
     {
         IAction[] allActions;
         IPasteAction pasteAction;
-        IClipboardListViewModel viewModel;
+        IUserInterfaceViewModel viewModel;
 
         readonly IAsyncListDictionaryBinder<IClipboardDataControlPackage, IActionViewModel> packageActionBinder;
 
@@ -82,9 +82,9 @@
 
         [SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
         public void PrepareBinder(
-            IClipboardListViewModel clipboardListViewModel)
+            IUserInterfaceViewModel UserInterfaceViewModel)
         {
-            viewModel = clipboardListViewModel;
+            viewModel = UserInterfaceViewModel;
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
 
             packageActionBinder.Bind(
