@@ -28,6 +28,10 @@ after_build:
 
     cd src\Shapeshifter.Website
 
+    dotnet restore Shapeshifter.Website.csproj
+
+    dotnet build Shapeshifter.Website.csproj
+
     dotnet publish --output "..\..\build\website"
 
     cd ..\..\
@@ -37,10 +41,6 @@ before_build:
     cd src
 
     nuget restore Shapeshifter.sln
-
-    dotnet restore Shapeshifter.sln
-
-    dotnet build Shapeshifter.sln
 
     cd ..\
 
