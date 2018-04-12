@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Window"
         mc:Ignorable="d"
         Title="PatreonWindow" Height="300" Width="300">
-    <Grid>
-        
-    </Grid>
+	<Grid>
+		<Label>Consider donating</Label>
+	</Grid>
 </Window>
