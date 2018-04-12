@@ -36,6 +36,8 @@ before_build:
 - cmd: >
     cd src
 
+    nuget restore Shapeshifter.sln
+
     dotnet restore Shapeshifter.sln
 
     dotnet build Shapeshifter.sln
