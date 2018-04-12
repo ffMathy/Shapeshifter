@@ -1,8 +1,19 @@
 version: 6.1.{build}
+environment:
+  webdeploy_password:
+    secure: 5Urzbp6Aj24/wHED9+Q/CtH4EjN7nv9PGdCdBDr5XECq8wnDxQcHK5YoS246hOqcEBNCU2OZ4rq26LVWCRbfbw==
+  patreon_client_id:
+    secure: XbNZa+N6W6ODv7Y2Tkf6ZR9nNpBkqlB7k5aLTtBRF0YcsFy/49pIVYQpKCK+HRhniF+DEmyMsGPwTUry9qrenI3c93dLnSQvAolKBH0YIeE=
+  patreon_client_secret:
+    secure: 7j+7Tcf0cjqkaY/WX1TqP4y65RI9n8oWu98LyI4y98ShrJ02GMGoVUemhyw35xTVp9jfVizPphnLYB49OMShmcuO+5mDYSkZD5M+typnB40=
+  patreon_creators_access_token:
+    secure: yx1+zw2XQkMLfRuZ5S3M+5Lqs5dGuDmUbgjvISta5A8atFQctDHVb7UqtZnNcB2I
+  patreon_creators_refresh_token:
+    secure: c3EVYJ14R2JBDQgk6quSdHkcFMjtN2msgn2F4SRFjqdKVvRI4qkrU58ftCsZMB0g
 pull_requests:
   do_not_increment_build_number: true
 skip_tags: true
-os: Visual Studio 2015
+image: Visual Studio 2017
 configuration: Debug
 platform: Any CPU
 assembly_info:
@@ -11,26 +22,54 @@ assembly_info:
   assembly_version: '{version}'
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
+after_build:
+- cmd: >
+    mkdir build\website
+
+    cd src\Shapeshifter.Website
+
+    dotnet restore Shapeshifter.Website.csproj
+
+    dotnet build Shapeshifter.Website.csproj
+
+    dotnet publish --output "..\..\build\website"
+
+    cd ..\..\
+
 before_build:
-- cmd: nuget restore src\Shapeshifter.sln
+- cmd: >
+    cd src
+
+    nuget restore Shapeshifter.sln
+
+    cd ..\
+
 build:
   project: src\Shapeshifter.sln
   verbosity: normal
 artifacts:
 - path: build\application\Shapeshifter.exe
-  name: Deployment
+  name: Application
 deploy:
 - provider: GitHub
   release: shapeshifter-v$(appveyor_build_version)
+  artifact: Application
   auth_token:
     secure: bEEQPxNCa8Kb1CYtJddx0wPImmY2T/ZCrXVFf+RVtEC0Lvb0pVDE2D6sjfy9NxdV
   on:
     branch: master
+#after_deploy:
+on_success:
+- cmd: >
+    cd build\website
+
+    echo { "patreon": { "clientId": "%patreon_client_id%", "clientSecret": "%patreon_client_secret%", "creatorsAccessToken": "%patreon_creators_access_token%", "creatorsRefreshToken": "%patreon_creators_refresh_token%" } }>> secrets.json
+
+    7z a Website.zip *
+
+    "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb=sync -source:package="Website.zip" -dest:auto,computerName=https://shapeshifter.scm.azurewebsites.net:443/msdeploy.axd?site=shapeshifter,userName=$shapeshifter,password=%webdeploy_password%,authType=basic -allowUntrusted=true -skip:Directory="App_Data"
+
 test_script:
   - nuget install opencover -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
 
     %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -output:"coverage.xml" -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\build\tests\Shapeshifter.Tests.dll\"" -excludebyattribute:*ExcludeFromCodeCoverage* -register:user -skipautoprops -returntargetcode
-
-    C:\Python35-x64\python.exe -m pip install codecov
-
-    C:\Python35-x64\Scripts\codecov -f coverage.xml

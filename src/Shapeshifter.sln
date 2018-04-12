@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.WindowsDesktop", "Shapeshifter.WindowsDesktop\Shapeshifter.WindowsDesktop.csproj", "{C8AFEB5B-5197-4F7D-90F1-DC1DCD795BE1}"
 EndProject
@@ -14,9 +14,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{360BD9A8-28E9-42EF-8731-0BACCB60B8DC}"
 	ProjectSection(SolutionItems) = preProject
 		..\appveyor.yml = ..\appveyor.yml
-		..\codecov.yml = ..\codecov.yml
 		..\README.md = ..\README.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shapeshifter.Website", "Shapeshifter.Website\Shapeshifter.Website.csproj", "{E2A47969-CF84-470E-9C89-B24508607957}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,8 +41,15 @@ Global
 		{9A7B5B69-AB84-4906-B65A-EE5581568C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A7B5B69-AB84-4906-B65A-EE5581568C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A7B5B69-AB84-4906-B65A-EE5581568C5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2A47969-CF84-470E-9C89-B24508607957}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2A47969-CF84-470E-9C89-B24508607957}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2A47969-CF84-470E-9C89-B24508607957}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2A47969-CF84-470E-9C89-B24508607957}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {393FBA7D-43EE-46A3-B8B1-9B601D15F6D0}
 	EndGlobalSection
 EndGlobal
