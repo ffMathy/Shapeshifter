@@ -55,7 +55,7 @@ deploy:
   release: shapeshifter-v$(appveyor_build_version)
   artifact: Application
   auth_token:
-    secure: bEEQPxNCa8Kb1CYtJddx0wPImmY2T/ZCrXVFf+RVtEC0Lvb0pVDE2D6sjfy9NxdV
+    secure: ayEVarC+QEZFXazImnX3hY26ZG4O5xIqH1QPzn9eYbHmglTppws2bsqK8x8mrzEH
   on:
     branch: master
 #after_deploy:
