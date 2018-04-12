@@ -34,9 +34,13 @@ after_build:
 
 before_build:
 - cmd: >
-    dotnet restore src\Shapeshifter.sln
+    cd src
 
-    dotnet build src\Shapeshifter.sln
+    dotnet restore Shapeshifter.sln
+
+    dotnet build Shapeshifter.sln
+
+    cd ..\
 
 build:
   project: src\Shapeshifter.sln
