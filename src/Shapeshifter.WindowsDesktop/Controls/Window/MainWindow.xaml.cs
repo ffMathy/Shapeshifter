@@ -13,9 +13,6 @@
     using ViewModels.Interfaces;
     using System.Diagnostics.CodeAnalysis;
 
-    [TemplatePart(Name = "Core", Type = typeof(FrameworkElement))]
-    [TemplateVisualState(Name= "InPackagesList", GroupName= "TargetList")]
-    [TemplateVisualState(Name= "InActionList", GroupName= "TargetList")]
     [ExcludeFromCodeCoverage]
     public partial class MainWindow
         : Window,
@@ -36,20 +33,18 @@
 
             InitializeComponent();
             SetupViewModel();
-
-            VisualStateManager.GoToElementState(this, "InPackagesList", true);
         }
 
         void MainWindow_SourceInitialized(object sender, EventArgs e)
         {
             handleContainer.Handle = HandleSource.Handle;
-        }
+		}
 
         public HwndSource HandleSource => PresentationSource.FromVisual(this) as HwndSource;
 
         void MainWindow_Activated(object sender, EventArgs e)
-        {
-            Activated -= MainWindow_Activated;
+		{
+			Activated -= MainWindow_Activated;
             Hide();
         }
 
@@ -57,23 +52,10 @@
         {
             viewModel.UserInterfaceViewModel.UserInterfaceShown += ViewModel_UserInterfaceShown;
             viewModel.UserInterfaceViewModel.UserInterfaceHidden += ViewModel_UserInterfaceHidden;
-            viewModel.UserInterfaceViewModel.UserInterfacePaneSwapped += ViewModel_UserInterfacePaneSwapped;
 
             DataContext = viewModel;
-        }
 
-        void ViewModel_UserInterfacePaneSwapped(object sender, UserInterfacePaneSwappedEventArgument e)
-        {
-            switch (e.Pane)
-            {
-                case ClipboardUserInterfacePane.Actions:
-                    VisualStateManager.GoToElementState(this, "InActionList", true);
-                    break;
-
-                case ClipboardUserInterfacePane.ClipboardPackages:
-                    VisualStateManager.GoToElementState(this, "InPackagesList", true);
-                    break;
-            }
+			UserInterfaceControl.Initialize(viewModel.UserInterfaceViewModel);
         }
 
         void ViewModel_UserInterfaceHidden(
@@ -104,7 +86,8 @@
         {
             viewModel.UserInterfaceViewModel.UserInterfaceShown -= ViewModel_UserInterfaceShown;
             viewModel.UserInterfaceViewModel.UserInterfaceHidden -= ViewModel_UserInterfaceHidden;
-            viewModel.UserInterfaceViewModel.UserInterfacePaneSwapped -= ViewModel_UserInterfacePaneSwapped;
+
+			UserInterfaceControl.Dispose();
         }
     }
 }
