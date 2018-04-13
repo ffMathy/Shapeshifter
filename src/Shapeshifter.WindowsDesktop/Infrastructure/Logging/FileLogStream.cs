@@ -6,8 +6,8 @@
     using Services.Files.Interfaces;
     using Dependencies;
 
-    class FileLogStream: ILogStream
-    {
+    class FileLogStream : IFileLogStream
+	{
         string logFileName;
 
         [Inject]
