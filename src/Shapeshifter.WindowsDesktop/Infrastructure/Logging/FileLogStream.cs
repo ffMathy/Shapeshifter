@@ -5,21 +5,21 @@
 
     using Services.Files.Interfaces;
     using Dependencies;
+	using System.Threading.Tasks;
 
-    class FileLogStream : IFileLogStream
+	class FileLogStream : IFileLogStream
 	{
         string logFileName;
 
         [Inject]
         public IFileManager FileManager { get; set; }
 
-        public void WriteLine(string input)
+        public async Task WriteLineAsync(string input)
         {
             if (logFileName == null)
-            {
-                logFileName = FileManager.WriteBytesToTemporaryFile("Shapeshifter.log", new byte[0]);
-            }
-            FileManager.AppendLineToFile(logFileName, input);
+                logFileName = await FileManager.WriteBytesToTemporaryFileAsync("Shapeshifter.log", new byte[0]);
+
+            await FileManager.AppendLineToFileAsync(logFileName, input);
         }
     }
 }

@@ -61,7 +61,7 @@
             var supportedItem = GetFirstSupportedItem(package);
 
             var randomFileName = DateTime.Now.Ticks;
-            var randomFilePath = fileManager.WriteBytesToTemporaryFile(
+            var randomFilePath = await fileManager.WriteBytesToTemporaryFileAsync(
                 $"{randomFileName}.txt", 
                 Encoding.UTF8.GetBytes(supportedItem.Text));
 

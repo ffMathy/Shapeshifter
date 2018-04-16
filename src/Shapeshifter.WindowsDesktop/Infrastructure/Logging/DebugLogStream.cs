@@ -1,8 +1,8 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 {
     using System.Diagnostics;
-
-    using Interfaces;
+	using System.Threading.Tasks;
+	using Interfaces;
 
     class DebugLogStream: ILogStream
     {
@@ -13,10 +13,10 @@
 			this.fileLogStream = fileLogStream;
 		}
 
-        public void WriteLine(string input)
+        public async Task WriteLineAsync(string input)
         {
             Debug.WriteLine(input);
-			fileLogStream.WriteLine(input);
+			await fileLogStream.WriteLineAsync(input);
         }
     }
 }

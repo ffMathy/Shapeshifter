@@ -70,14 +70,16 @@
             var fakeFileManager = Container.Resolve<IFileManager>();
             fakeFileManager
                 .Received()
-                .WriteBytesToFile(
+                .WriteBytesToFileAsync(
                     @"preparedFolder\1.1337",
-                    fakeData1.RawData);
+                    fakeData1.RawData)
+				.IgnoreAwait();
             fakeFileManager
                 .Received()
-                .WriteBytesToFile(
+                .WriteBytesToFileAsync(
                     @"preparedFolder\2.1338",
-                    fakeData2.RawData);
+                    fakeData2.RawData)
+				.IgnoreAwait();
         }
 
         [TestCategory("Integration")]
