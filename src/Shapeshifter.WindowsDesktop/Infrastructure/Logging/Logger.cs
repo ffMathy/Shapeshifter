@@ -1,124 +1,128 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Threading;
+	using System;
+	using System.Collections.Generic;
+	using System.Diagnostics;
+	using System.Linq;
+	using System.Threading;
 
-    using Handles;
-    using Handles.Interfaces;
+	using Handles;
+	using Handles.Interfaces;
 
-    using Interfaces;
-    using Dependencies;
+	using Interfaces;
+	using Dependencies;
 
-    class Logger: ILogger
-    {
-        const int MinimumImportanceFactor = 0;
-        const int IndentationSize = 2;
+	class Logger : ILogger
+	{
+		const int MinimumImportanceFactor = 0;
+		const int IndentationSize = 2;
 
-        [Inject]
-        public ILogStream LogStream { get; set; }
+		[Inject]
+		public ILogStream LogStream { get; set; }
 
-        readonly IDictionary<int, int> threadIndentationCache;
+		readonly IDictionary<int, int> threadIndentationCache;
+		readonly SemaphoreSlim semaphore;
 
-        static int ManagedThreadId => Thread.CurrentThread.ManagedThreadId;
+		static int ManagedThreadId => Thread.CurrentThread.ManagedThreadId;
 
-        public Logger()
-        {
-            threadIndentationCache = new Dictionary<int, int>();
-        }
+		public Logger()
+		{
+			threadIndentationCache = new Dictionary<int, int>();
+			semaphore = new SemaphoreSlim(1);
+		}
 
-        async void Log(string text)
-        {
-            var indentationString = GenerateIndentationString();
-            try {
-                await LogStream.WriteLineAsync($"{indentationString}{text}");
-           } catch {} 
-        }
+		async void Log(string text)
+		{
+			await semaphore.WaitAsync();
 
-        string GenerateIndentationString()
-        {
-            var indentationString = string.Empty;
-            if (threadIndentationCache.ContainsKey(ManagedThreadId))
-            {
-                indentationString = new string(' ', threadIndentationCache[ManagedThreadId]*IndentationSize);
-            }
-            return indentationString;
-        }
+			var indentationString = GenerateIndentationString();
+			await LogStream.WriteLineAsync($"{indentationString}{text}");
 
-        public void Error(string text)
-        {
-            Log("Error: " + text);
-        }
+			semaphore.Release();
+		}
 
-        public void Performance(string text)
-        {
-            Log("Performance information: " + text);
-        }
+		string GenerateIndentationString()
+		{
+			var indentationString = string.Empty;
+			if (threadIndentationCache.ContainsKey(ManagedThreadId))
+			{
+				indentationString = new string(' ', threadIndentationCache[ManagedThreadId] * IndentationSize);
+			}
+			return indentationString;
+		}
 
-        public void PrintStackTrace()
-        {
-            var stackTrace = new StackTrace();
-            Log(
-                "Stack trace: " + stackTrace
-                                      .GetFrames()
-                                      .Reverse()
-                                      .Select(x => x.GetMethod())
-                                      .Select(x => x.Name)
-                                      .TakeWhile(x => x != nameof(PrintStackTrace))
-                                      .Aggregate((a, b) => $"{a} -> {b}"));
-        }
+		public void Error(string text)
+		{
+			Log("Error: " + text);
+		}
 
-        public IIndentationHandle Indent()
-        {
-            return new IndentationHandle(this);
-        }
+		public void Performance(string text)
+		{
+			Log("Performance information: " + text);
+		}
 
-        internal void IncreaseIndentation()
-        {
-            if (threadIndentationCache.ContainsKey(ManagedThreadId))
-            {
-                threadIndentationCache[ManagedThreadId]++;
-            }
-            else
-            {
-                threadIndentationCache.Add(ManagedThreadId, 1);
-            }
-        }
+		public void PrintStackTrace()
+		{
+			var stackTrace = new StackTrace();
+			Log(
+				"Stack trace: " + stackTrace
+									  .GetFrames()
+									  .Reverse()
+									  .Select(x => x.GetMethod())
+									  .Select(x => x.Name)
+									  .TakeWhile(x => x != nameof(PrintStackTrace))
+									  .Aggregate((a, b) => $"{a} -> {b}"));
+		}
 
-        internal void DecreaseIndentation()
-        {
-            if (!threadIndentationCache.ContainsKey(ManagedThreadId))
-            {
-                throw new InvalidOperationException("The indentation has not been increased on this thread.");
-            }
+		public IIndentationHandle Indent()
+		{
+			return new IndentationHandle(this);
+		}
 
-            var newIndentation = threadIndentationCache[ManagedThreadId]--;
-            if (newIndentation == 0)
-            {
-                threadIndentationCache.Remove(ManagedThreadId);
-            }
-        }
+		internal void IncreaseIndentation()
+		{
+			if (threadIndentationCache.ContainsKey(ManagedThreadId))
+			{
+				threadIndentationCache[ManagedThreadId]++;
+			}
+			else
+			{
+				threadIndentationCache.Add(ManagedThreadId, 1);
+			}
+		}
 
-        public void Information(
-            string text,
-            int importanceFactor = 0)
-        {
-            if (importanceFactor >= MinimumImportanceFactor)
-            {
-                Log("Information: " + text);
-            }
-        }
+		internal void DecreaseIndentation()
+		{
+			if (!threadIndentationCache.ContainsKey(ManagedThreadId))
+			{
+				throw new InvalidOperationException("The indentation has not been increased on this thread.");
+			}
 
-        public void Warning(string text)
-        {
-            Log("Warning: " + text);
-        }
+			var newIndentation = threadIndentationCache[ManagedThreadId]--;
+			if (newIndentation == 0)
+			{
+				threadIndentationCache.Remove(ManagedThreadId);
+			}
+		}
 
-        public void Error(Exception exception)
-        {
-            Error(exception.ToString());
-        }
-    }
+		public void Information(
+			string text,
+			int importanceFactor = 0)
+		{
+			if (importanceFactor >= MinimumImportanceFactor)
+			{
+				Log("Information: " + text);
+			}
+		}
+
+		public void Warning(string text)
+		{
+			Log("Warning: " + text);
+		}
+
+		public void Error(Exception exception)
+		{
+			Error(exception.ToString());
+		}
+	}
 }
