@@ -53,7 +53,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 
         void UserInterfaceViewModel_UserInterfaceShown(Object sender, Infrastructure.Events.UserInterfaceShownEventArgument e)
         {
-            ActiveScreen = screenManager.GetPrimaryScreen();
+            ActiveScreen = screenManager.GetActiveScreen();
         }
         
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

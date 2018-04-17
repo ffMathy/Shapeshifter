@@ -1,9 +1,10 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Screen
 {
-    using System.Windows;
+	using System.Linq;
+	using System.Windows;
     using System.Windows.Forms;
-
-    using Interfaces;
+	using System.Windows.Input;
+	using Interfaces;
 
     using Services.Interfaces;
 
@@ -18,26 +19,44 @@
         }
 
         public ScreenInformation GetPrimaryScreen()
-        {
-            var screen = Screen.PrimaryScreen;
+		{
+			var screen = Screen.PrimaryScreen;
+			return GetScreenInformationFromScreen(screen);
+		}
 
-            var devicePosition = new Vector(
-                screen.WorkingArea.X,
-                screen.WorkingArea.Y);
+		public ScreenInformation GetActiveScreen()
+		{
+			var screens = Screen
+				.AllScreens
+				.Select(GetScreenInformationFromScreen)
+				.ToArray();
+			var mousePosition = Control.MousePosition;
+			return screens.Single(screen => 
+				screen.X <= mousePosition.X &&
+				screen.Y <= mousePosition.Y &&
+				screen.X + screen.Width >= mousePosition.X &&
+				screen.Y + screen.Height >= mousePosition.Y);
+		}
 
-            var deviceSize = new Vector(
-                screen.WorkingArea.Width,
-                screen.WorkingArea.Height);
+		private ScreenInformation GetScreenInformationFromScreen(Screen screen)
+		{
+			var devicePosition = new Vector(
+							screen.WorkingArea.X,
+							screen.WorkingArea.Y);
 
-            var deviceIndependentPosition = pixelConversionService
-                .ConvertDeviceToDeviceIndependentPixels(devicePosition);
+			var deviceSize = new Vector(
+				screen.WorkingArea.Width,
+				screen.WorkingArea.Height);
 
-            var deviceIndependentSize = pixelConversionService
-                .ConvertDeviceToDeviceIndependentPixels(deviceSize);
+			var deviceIndependentPosition = pixelConversionService
+				.ConvertDeviceToDeviceIndependentPixels(devicePosition);
 
-            return new ScreenInformation(
-                deviceIndependentPosition,
-                deviceIndependentSize);
-        }
-    }
+			var deviceIndependentSize = pixelConversionService
+				.ConvertDeviceToDeviceIndependentPixels(deviceSize);
+
+			return new ScreenInformation(
+				deviceIndependentPosition,
+				deviceIndependentSize);
+		}
+	}
 }
