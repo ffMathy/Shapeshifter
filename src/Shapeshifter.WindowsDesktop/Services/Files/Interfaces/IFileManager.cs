@@ -10,19 +10,19 @@
         : ISingleInstance,
           IDisposable
     {
-        void WriteBytesToFile(
+        Task WriteBytesToFileAsync(
             string path,
             byte[] bytes);
 
-        void AppendLineToFile(
+        Task AppendLineToFileAsync(
             string path,
             string line);
 
-        string WriteBytesToTemporaryFile(
+        Task<string> WriteBytesToTemporaryFileAsync(
             string relativePath,
             byte[] bytes);
 
-        string AppendLineToTemporaryFile(
+        Task<string> AppendLineToTemporaryFileAsync(
             string relativePath,
             string line);
 

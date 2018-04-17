@@ -194,28 +194,27 @@
             return PrepareFolder(finalPath);
         }
 
-        public void AppendLineToFile(string path, string line)
+        public async Task AppendLineToFileAsync(string path, string line)
         {
-            File.AppendAllLines(path, new []
-            {
-                line
-            });
+			using(var writer = new StreamWriter(File.Open(path, FileMode.Append))) {
+				await writer.WriteLineAsync(line);
+			}
         }
 
-        public string WriteBytesToTemporaryFile(string relativePath, byte[] bytes)
+        public async Task<string> WriteBytesToTemporaryFileAsync(string relativePath, byte[] bytes)
         {
             var finalPath = GetFullPathFromTemporaryPath(relativePath);
-            WriteBytesToFile(finalPath, bytes);
+            await WriteBytesToFileAsync(finalPath, bytes);
 
             temporaryPaths.Add(finalPath);
 
             return finalPath;
         }
 
-        public string AppendLineToTemporaryFile(string relativePath, string line)
+        public async Task<string> AppendLineToTemporaryFileAsync(string relativePath, string line)
         {
             var finalPath = GetFullPathFromTemporaryPath(relativePath);
-            AppendLineToFile(finalPath, line);
+            await AppendLineToFileAsync(finalPath, line);
 
             temporaryPaths.Add(finalPath);
 
@@ -262,9 +261,12 @@
             return finalPath;
         }
 
-        public void WriteBytesToFile(string relativePath, byte[] bytes)
-        {
-            File.WriteAllBytes(relativePath, bytes);
-        }
+        public async Task WriteBytesToFileAsync(string relativePath, byte[] bytes)
+		{
+			using (var file = File.Open(relativePath, FileMode.Create))
+			{
+				await file.WriteAsync(bytes, 0, bytes.Length);
+			}
+		}
     }
 }

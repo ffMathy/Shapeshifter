@@ -180,7 +180,7 @@
                         }));
             
             Container.Resolve<IFileManager>()
-             .WriteBytesToTemporaryFile(
+             .WriteBytesToTemporaryFileAsync(
                  "Shapeshifter.exe",
                  Arg.Any<byte[]>())
              .Returns("temporaryInstallPath");

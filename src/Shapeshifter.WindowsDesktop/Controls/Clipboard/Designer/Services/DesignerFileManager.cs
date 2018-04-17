@@ -7,79 +7,78 @@
 
     using Controls.Designer.Services;
 
-    class DesignerFileManager
-        : IFileManager,
-          IDesignerService
-    {
-        public void AppendLineToFile(string path, string line)
-        {
-            
-        }
+	class DesignerFileManager
+		: IFileManager,
+		  IDesignerService
+	{
+		public Task AppendLineToFileAsync(string path, string line)
+		{
+			return Task.CompletedTask;
+		}
 
-        public string WriteBytesToTemporaryFile(string relativePath, byte[] bytes)
-        {
-            return null;
-        }
+		public Task<string> AppendLineToTemporaryFileAsync(string relativePath, string line)
+		{
+			return Task.FromResult<string>(null);
+		}
 
-        public string AppendLineToTemporaryFile(string relativePath, string line)
-        {
-            return null;
-        }
+		public Task DeleteDirectoryIfExistsAsync(string path)
+		{
+			return Task.CompletedTask;
+		}
 
-        public string PrepareTemporaryFolder(string path)
-        {
-            return null;
-        }
+		public Task DeleteFileIfExistsAsync(string path)
+		{
+			return Task.CompletedTask;
+		}
 
-        public string PrepareIsolatedFolder(string relativePath = null)
-        {
-            return null;
-        }
+		public Task DeleteIsolatedDirectoryIfExistsAsync(string relativePath)
+		{
+			return Task.CompletedTask;
+		}
 
-        public string GetIsolatedPathRoot(string relativePath)
-        {
-            return null;
-        }
+		public Task DeleteIsolatedFileIfExistsAsync(string relativePath)
+		{
+			return Task.CompletedTask;
+		}
 
-        public string PrepareNewIsolatedFolder(string relativePath)
-        {
-            return null;
-        }
+		public void Dispose()
+		{
+			
+		}
 
-        public string PrepareFolder(string path)
-        {
-            return null;
-        }
+		public string FindCommonFolderFromPaths(IReadOnlyCollection<string> paths)
+		{
+			return null;
+		}
 
-        public Task DeleteDirectoryIfExistsAsync(string relativePath)
-        {
-            return null;
-        }
+		public string PrepareFolder(string path)
+		{
+			return null;
+		}
 
-        public Task DeleteFileIfExistsAsync(string relativePath)
-        {
-            return null;
-        }
+		public string PrepareIsolatedFolder(string relativePath = null)
+		{
+			return null;
+		}
 
-        public Task DeleteIsolatedFileIfExistsAsync(string path)
-        {
-            return null;
-        }
+		public string PrepareNewIsolatedFolder(string relativePath)
+		{
+			return null;
+		}
 
-        public Task DeleteIsolatedDirectoryIfExistsAsync(string path)
-        {
-            return null;
-        }
+		public string PrepareTemporaryFolder(string relativePath)
+		{
+			return null;
+		}
 
-        public string FindCommonFolderFromPaths(IReadOnlyCollection<string> paths)
-        {
-            return null;
-        }
+		public Task WriteBytesToFileAsync(string path, byte[] bytes)
+		{
+			return Task.CompletedTask;
+		}
 
-        public void WriteBytesToFile(string relativePath, byte[] bytes)
-        {
-        }
-
-        public void Dispose() { }
-    }
+		public Task<string> WriteBytesToTemporaryFileAsync(string relativePath, byte[] bytes)
+		{
+			return Task.FromResult<string>(null);
+		}
+	}
 }

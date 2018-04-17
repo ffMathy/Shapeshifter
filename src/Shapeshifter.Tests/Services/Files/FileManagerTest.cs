@@ -2,8 +2,8 @@
 {
     using System.IO;
     using System.Text;
-
-    using Interfaces;
+	using System.Threading.Tasks;
+	using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -37,14 +37,15 @@
 
         [TestMethod]
         [TestCategory("Integration")]
-        public void CanCreateFilesAndDisposeThemAgain()
+        public async Task CanCreateFilesAndDisposeThemAgain()
         {
             string temporaryPath;
             using (SystemUnderTest)
             {
-                temporaryPath = SystemUnderTest.WriteBytesToTemporaryFile(
-                    "Temporary.txt", 
-                    Encoding.Default.GetBytes("hello world"));
+                temporaryPath = await SystemUnderTest
+					.WriteBytesToTemporaryFileAsync(
+						"Temporary.txt", 
+						Encoding.Default.GetBytes("hello world"));
                 Assert.IsTrue(File.Exists(temporaryPath));
             }
 

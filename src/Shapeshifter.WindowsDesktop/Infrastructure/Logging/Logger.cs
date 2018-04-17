@@ -29,10 +29,10 @@
             threadIndentationCache = new Dictionary<int, int>();
         }
 
-        void Log(string text)
+        async void Log(string text)
         {
             var indentationString = GenerateIndentationString();
-            LogStream.WriteLine($"{indentationString}{text}");
+            await LogStream.WriteLineAsync($"{indentationString}{text}");
         }
 
         string GenerateIndentationString()

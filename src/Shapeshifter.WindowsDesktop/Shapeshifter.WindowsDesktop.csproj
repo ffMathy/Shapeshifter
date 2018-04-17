@@ -246,6 +246,7 @@
     <Compile Include="Infrastructure\Handles\Interfaces\IHandle.cs" />
     <Compile Include="Infrastructure\Handles\Interfaces\IIndentationHandle.cs" />
     <Compile Include="Infrastructure\Logging\FileLogStream.cs" />
+    <Compile Include="Infrastructure\Logging\Interfaces\IFileLogStream.cs" />
     <Compile Include="Infrastructure\Logging\Interfaces\ILogger.cs" />
     <Compile Include="Infrastructure\Logging\Interfaces\ILogStream.cs" />
     <Compile Include="Infrastructure\Logging\Logger.cs" />

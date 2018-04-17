@@ -19,7 +19,7 @@
             var fakeStream = Container.Resolve<ILogStream>();
             fakeStream
                 .Received()
-                .WriteLine("Information: hello world");
+                .WriteLineAsync("Information: hello world");
         }
 
         [TestMethod]
@@ -37,13 +37,13 @@
             var fakeStream = Container.Resolve<ILogStream>();
             fakeStream
                 .Received()
-                .WriteLine("    Information: deep inside indentation");
+                .WriteLineAsync("    Information: deep inside indentation");
             fakeStream
                 .Received()
-                .WriteLine("  Information: inside indentation");
+                .WriteLineAsync("  Information: inside indentation");
             fakeStream
                 .Received()
-                .WriteLine("Information: outside indentation");
+                .WriteLineAsync("Information: outside indentation");
         }
     }
 }

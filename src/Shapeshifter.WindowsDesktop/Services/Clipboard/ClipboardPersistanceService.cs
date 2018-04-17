@@ -39,7 +39,7 @@
                 var filePath = Path.Combine(
                     packageFolder,
                     i + 1 + "." + content.RawFormat);
-                fileManager.WriteBytesToFile(
+                await fileManager.WriteBytesToFileAsync(
                     filePath,
                     content.RawData);
             }
