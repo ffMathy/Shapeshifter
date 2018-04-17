@@ -32,7 +32,9 @@
         async void Log(string text)
         {
             var indentationString = GenerateIndentationString();
-            await LogStream.WriteLineAsync($"{indentationString}{text}");
+            try {
+                await LogStream.WriteLineAsync($"{indentationString}{text}");
+           } catch {} 
         }
 
         string GenerateIndentationString()
