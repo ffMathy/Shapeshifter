@@ -3,5 +3,6 @@
     public interface IScreenManager
     {
         ScreenInformation GetPrimaryScreen();
-    }
+		ScreenInformation GetActiveScreen();
+	}
 }
