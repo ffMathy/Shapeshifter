@@ -47,11 +47,6 @@
             public IntPtr Bits;
         }
 
-        bool IIconNativeApi.DeleteObject(IntPtr hObject)
-        {
-            return DeleteObject(hObject);
-        }
-
         int IIconNativeApi.GetObject(IntPtr hgdiobj, int cbBuffer, out BITMAP lpvObject)
         {
             return GetObject(hgdiobj, cbBuffer, out lpvObject);
@@ -81,9 +76,6 @@
             ref SHFILEINFO psfi,
             uint cbSizeFileInfo,
             uint uFlags);
-
-        [DllImport("gdi32.dll", SetLastError = true)]
-        internal static extern bool DeleteObject(IntPtr hObject);
 
         [DllImport("shell32.dll", CharSet = CharSet.Unicode, PreserveSig = false,
             SetLastError = true)]

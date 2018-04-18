@@ -18,13 +18,16 @@
         readonly IImagePersistenceService imagePersistenceService;
 
         readonly IIconNativeApi iconNativeApi;
+		readonly IImageNativeApi imageNativeApi;
 
         public FileIconService(
             IImagePersistenceService imagePersistenceService,
-            IIconNativeApi iconNativeApi)
+            IIconNativeApi iconNativeApi,
+			IImageNativeApi imageNativeApi)
         {
             this.imagePersistenceService = imagePersistenceService;
             this.iconNativeApi = iconNativeApi;
+			this.imageNativeApi = imageNativeApi;
         }
 
         public byte[] GetIcon(string path, bool allowThumbnails, int dimensions = 256)
@@ -51,7 +54,7 @@
             }
             finally
             {
-                iconNativeApi.DeleteObject(bitmapHandle);
+                imageNativeApi.DeleteObject(bitmapHandle);
             }
         }
 
