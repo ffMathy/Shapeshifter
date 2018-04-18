@@ -3,8 +3,10 @@
 namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
     using System;
-    using System.Collections.Specialized;
-    using System.Threading.Tasks;
+	using System.Collections.Generic;
+	using System.Collections.Specialized;
+	using System.Linq;
+	using System.Threading.Tasks;
     using System.Windows.Media.Imaging;
 
     using Data.Interfaces;
@@ -19,31 +21,31 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 
     using Native;
     using Native.Interfaces;
+	using Shapeshifter.WindowsDesktop.Data.Wrappers;
 
-    class ClipboardInjectionService: IClipboardInjectionService
+	class ClipboardInjectionService: IClipboardInjectionService
     {
         readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
-
         readonly IClipboardHandleFactory clipboardHandleFactory;
-
         readonly IMemoryHandleFactory memoryHandleFactory;
-
         readonly ILogger logger;
-
         readonly IGeneralNativeApi generalNativeApi;
+		readonly IEnumerable<IMemoryWrapper> memoryWrappers;
 
-        public ClipboardInjectionService(
+		public ClipboardInjectionService(
             IClipboardCopyInterceptor clipboardCopyInterceptor,
             IClipboardHandleFactory clipboardHandleFactory,
             IMemoryHandleFactory memoryHandleFactory,
             ILogger logger,
-            IGeneralNativeApi generalNativeApi)
+            IGeneralNativeApi generalNativeApi,
+			IEnumerable<IMemoryWrapper> memoryWrappers)
         {
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;
             this.clipboardHandleFactory = clipboardHandleFactory;
             this.memoryHandleFactory = memoryHandleFactory;
             this.logger = logger;
             this.generalNativeApi = generalNativeApi;
+			this.memoryWrappers = memoryWrappers;
         }
 
         public async Task InjectDataAsync(IClipboardDataPackage package)
@@ -73,39 +75,15 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
             IClipboardHandle session,
             IClipboardData clipboardData)
         {
-            using (var memoryHandle = memoryHandleFactory.AllocateInMemory(clipboardData.RawData))
-            {
-                var globalPointer = AllocateInMemory(clipboardData);
-
-                var target = generalNativeApi.GlobalLock(globalPointer);
-                if (target == IntPtr.Zero)
-                {
-                    throw new InvalidOperationException("Could not allocate memory.");
-                }
-
-                generalNativeApi.CopyMemory(
-                    target,
-                    memoryHandle.Pointer,
-                    (uint) clipboardData.RawData.Length);
-
-                generalNativeApi.GlobalUnlock(target);
-
-                if (session.SetClipboardData(clipboardData.RawFormat, globalPointer) !=
-                    IntPtr.Zero)
-                {
-                    return;
-                }
-
-                generalNativeApi.GlobalFree(globalPointer);
-                throw new Exception("Could not set clipboard data.");
-            }
-        }
-
-        IntPtr AllocateInMemory(IClipboardData clipboardData)
-        {
-            return generalNativeApi.GlobalAlloc(
-                GeneralNativeApi.GMEM_ZEROINIT | GeneralNativeApi.GMEM_MOVABLE,
-                (UIntPtr) clipboardData.RawData.Length);
+			var wrappers = memoryWrappers.Where(x => x.CanWrap(clipboardData));
+			foreach(var wrapper in wrappers) {
+				var success = session.SetClipboardData(
+					clipboardData.RawFormat, 
+					wrapper.GetDataPointer(
+						clipboardData));
+				if(success == IntPtr.Zero)
+					throw new Exception("Could not set clipboard data.");
+			}
         }
 
         public async Task InjectImageAsync(BitmapSource image)
