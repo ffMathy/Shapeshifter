@@ -5,8 +5,6 @@
 
     public interface IIconNativeApi
     {
-        bool DeleteObject(IntPtr hObject);
-
         int GetObject(IntPtr hgdiobj, int cbBuffer, out IconNativeApi.BITMAP lpvObject);
 
         void SHCreateItemFromParsingName(
