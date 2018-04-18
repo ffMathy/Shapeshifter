@@ -35,29 +35,29 @@ namespace Shapeshifter.WindowsDesktop.Data.Wrappers
 				   (format == ClipboardNativeApi.CF_DIF);
 		}
 
-		[StructLayout(LayoutKind.Sequential)]
-		public struct BITMAPINFOHEADER
-		{
-			public uint biSize;
-			public int biWidth;
-			public int biHeight;
-			public ushort biPlanes;
-			public ushort biBitCount;
-			public BitmapCompressionMode biCompression;
-			public uint biSizeImage;
-			public int biXPelsPerMeter;
-			public int biYPelsPerMeter;
-			public uint biClrUsed;
-			public uint biClrImportant;
+		//[StructLayout(LayoutKind.Sequential)]
+		//public struct BITMAPINFOHEADER
+		//{
+		//	public uint biSize;
+		//	public int biWidth;
+		//	public int biHeight;
+		//	public ushort biPlanes;
+		//	public ushort biBitCount;
+		//	public BitmapCompressionMode biCompression;
+		//	public uint biSizeImage;
+		//	public int biXPelsPerMeter;
+		//	public int biYPelsPerMeter;
+		//	public uint biClrUsed;
+		//	public uint biClrImportant;
 
-			public void Init()
-			{
-				biSize = (uint)Marshal.SizeOf(this);
-			}
-		}
+		//	public void Init()
+		//	{
+		//		biSize = (uint)Marshal.SizeOf(this);
+		//	}
+		//}
 
-		[DllImport("gdi32.dll")]
-		static extern IntPtr CreateDIBSection(IntPtr hdc, [In] ref BITMAPINFO pbmi, uint pila, out IntPtr ppvBits, IntPtr hSection, uint dwOffset);
+		//[DllImport("gdi32.dll")]
+		//static extern IntPtr CreateDIBSection(IntPtr hdc, [In] ref BITMAPINFO pbmi, uint pila, out IntPtr ppvBits, IntPtr hSection, uint dwOffset);
 
 		public IntPtr GetDataPointer(IClipboardData clipboardData)
 		{
