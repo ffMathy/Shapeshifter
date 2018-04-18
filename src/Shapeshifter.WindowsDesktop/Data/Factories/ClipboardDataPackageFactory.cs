@@ -17,9 +17,7 @@
     class ClipboardDataPackageFactory: IClipboardDataPackageFactory
     {
         readonly IClipboardHandleFactory clipboardSessionFactory;
-
         readonly IEnumerable<IMemoryUnwrapper> memoryUnwrappers;
-
         readonly IEnumerable<IClipboardDataFactory> dataFactories;
 
         public ClipboardDataPackageFactory(
