@@ -1,16 +1,16 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services
 {
-    using System;
-    using System.Windows.Input;
+	using System;
+	using System.Windows.Input;
 
-    using Infrastructure.Events;
-    using Infrastructure.Logging.Interfaces;
+	using Infrastructure.Events;
 
-    using Interfaces;
+	using Interfaces;
 
-    using Messages;
+	using Messages;
+	using Serilog;
 
-    public class MouseWheelHook: IMouseWheelHook
+	public class MouseWheelHook: IMouseWheelHook
     {
         readonly ILogger logger;
 

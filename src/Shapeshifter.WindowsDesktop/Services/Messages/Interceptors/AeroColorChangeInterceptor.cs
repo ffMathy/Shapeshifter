@@ -1,17 +1,16 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Messages.Interceptors
 {
-    using System;
-    using System.Windows;
-    using System.Windows.Media;
+	using System;
+	using System.Windows;
+	using System.Windows.Media;
 
-    using Infrastructure.Events;
-    using Infrastructure.Logging.Interfaces;
+	using Infrastructure.Events;
 
-    using Interfaces;
+	using Interfaces;
+	using Serilog;
+	using Services.Interfaces;
 
-    using Services.Interfaces;
-
-    public class AeroColorChangeInterceptor : IAeroColorChangeInterceptor
+	public class AeroColorChangeInterceptor : IAeroColorChangeInterceptor
     {
         readonly ILogger logger;
         readonly IColorBrightnessAdjustmentService colorBrightnessAdjustmentService;

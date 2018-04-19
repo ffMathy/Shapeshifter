@@ -2,12 +2,11 @@
 using NSubstitute;
 using Shapeshifter.WindowsDesktop.Infrastructure.Dependencies;
 using Shapeshifter.WindowsDesktop.Infrastructure.Environment.Interfaces;
-using Shapeshifter.WindowsDesktop.Infrastructure.Logging.Interfaces;
 using System;
 
 namespace Shapeshifter.WindowsDesktop
 {
-    public abstract class TestBase
+	public abstract class TestBase
     {
 
         protected static ILifetimeScope CreateContainer(

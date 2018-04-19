@@ -1,27 +1,26 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Web.Updates
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net.Http;
-    using System.Reflection;
-    using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Net.Http;
+	using System.Reflection;
+	using System.Text.RegularExpressions;
+	using System.Threading.Tasks;
 
-    using Files.Interfaces;
+	using Files.Interfaces;
 
-    using Infrastructure.Logging.Interfaces;
+	using Interfaces;
 
-    using Interfaces;
+	using Octokit;
 
-    using Octokit;
+	using Processes.Interfaces;
 
-    using Processes.Interfaces;
+	using Web.Interfaces;
+	using Infrastructure.Environment.Interfaces;
+	using Serilog;
 
-    using Web.Interfaces;
-    using Infrastructure.Environment.Interfaces;
-
-    class UpdateService
+	class UpdateService
         : IUpdateService
     {
         const string RepositoryOwner = "ffMathy";

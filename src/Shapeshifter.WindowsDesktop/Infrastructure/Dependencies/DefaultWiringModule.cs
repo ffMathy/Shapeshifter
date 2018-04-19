@@ -2,102 +2,98 @@
 
 namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 {
-    using System;
-    using System.Windows.Threading;
+	using System;
+	using System.IO;
+	using System.Windows.Threading;
 
-    using Autofac;
+	using Autofac;
+	using AutofacSerilogIntegration;
+	using Controls.Clipboard.Designer.Helpers;
 
-    using Controls.Clipboard.Designer.Helpers;
+	using Environment;
+	using Environment.Interfaces;
 
-    using Environment;
-    using Environment.Interfaces;
+	using Native;
+	using Serilog;
+	using Serilog.Events;
+	using Serilog.Formatting;
+	using Serilog.Formatting.Compact;
+	using Shapeshifter.WindowsDesktop.Services.Files;
+	using Threading;
 
-    using Logging;
+	public class DefaultWiringModule : AutofacModule
+	{
+		readonly IEnvironmentInformation environmentInformation;
 
-    using Native;
+		readonly Action<ContainerBuilder> callback;
 
-    using Threading;
+		public DefaultWiringModule(
+			IEnvironmentInformation environmentInformation)
+		{
+			this.environmentInformation = environmentInformation;
+		}
 
-    public class DefaultWiringModule: AutofacModule
-    {
-        readonly IEnvironmentInformation environmentInformation;
+		public DefaultWiringModule(Action<ContainerBuilder> callback = null)
+			: this(new Infrastructure.Environment.EnvironmentInformation())
+		{
+			this.callback = callback;
+		}
 
-        readonly Action<ContainerBuilder> callback;
+		protected override void Load(ContainerBuilder builder)
+		{
+			AssemblyRegistrationHelper
+				.RegisterAssemblyTypes(builder, typeof(DefaultWiringModule).Assembly, this.environmentInformation.GetIsInDesignTime());
 
-        public DefaultWiringModule(
-            IEnvironmentInformation environmentInformation)
-        {
-            this.environmentInformation = environmentInformation;
-        }
+			AssemblyRegistrationHelper
+				.RegisterAssemblyTypes(builder, NativeAssemblyHelper.Assembly, this.environmentInformation.GetIsInDesignTime());
 
-        public DefaultWiringModule(Action<ContainerBuilder> callback = null)
-            : this(new Infrastructure.Environment.EnvironmentInformation())
-        {
-            this.callback = callback;
-        }
+			RegisterMainThread(builder);
 
-        protected override void Load(ContainerBuilder builder)
-        {
-            AssemblyRegistrationHelper
-                .RegisterAssemblyTypes(builder, typeof (DefaultWiringModule).Assembly, this.environmentInformation.GetIsInDesignTime());
+			var environmentInformation = RegisterEnvironmentInformation(builder);
+			RegisterLogging(environmentInformation, builder);
 
-            AssemblyRegistrationHelper
-                .RegisterAssemblyTypes(builder, NativeAssemblyHelper.Assembly, this.environmentInformation.GetIsInDesignTime());
+			if (environmentInformation.GetIsInDesignTime())
+			{
+				DesignTimeContainerHelper.RegisterFakes(builder);
+			}
 
-            RegisterMainThread(builder);
+			callback?.Invoke(builder);
 
-            var environmentInformation = RegisterEnvironmentInformation(builder);
-            RegisterLogging(environmentInformation, builder);
+			base.Load(builder);
+		}
 
-            if (environmentInformation.GetIsInDesignTime())
-            {
-                DesignTimeContainerHelper.RegisterFakes(builder);
-            }
+		static void RegisterLogging(IEnvironmentInformation environment, ContainerBuilder builder)
+		{
+			var formatter = new RenderedCompactJsonFormatter();
 
-            callback?.Invoke(builder);
+			Log.Logger = new LoggerConfiguration()
+				.Enrich.FromLogContext()
+				.WriteTo.ColoredConsole()
+				.WriteTo.Debug()
+				.WriteTo.File(
+					FileManager.GetFullPathFromTemporaryPath("Shapeshifter.log"),
+					fileSizeLimitBytes: 1024 * 1024,
+					restrictedToMinimumLevel: LogEventLevel.Verbose,
+					rollOnFileSizeLimit: true)
+				.CreateLogger();
 
-            base.Load(builder);
-        }
+			builder.RegisterLogger(autowireProperties: true);
+		}
 
-        static void RegisterLogging(IEnvironmentInformation environment, ContainerBuilder builder)
-        {
-            builder
-                .RegisterType<Logger>()
-                .PropertiesAutowired(new PropertySelector(), true)
-                .AsImplementedInterfaces()
-                .SingleInstance();
+		static void RegisterMainThread(ContainerBuilder builder)
+		{
+			builder.RegisterInstance(new UserInterfaceThread(Dispatcher.CurrentDispatcher))
+				   .AsImplementedInterfaces();
+		}
 
-            if (!environment.GetIsDebugging())
-            {
-                builder
-                    .RegisterType<FileLogStream>()
-                    .PropertiesAutowired(new PropertySelector(), true)
-                    .AsImplementedInterfaces()
-                    .SingleInstance();
-            }
-            else
-            {
-                builder
-                    .RegisterType<DebugLogStream>()
-                    .AsImplementedInterfaces()
-                    .SingleInstance();
-            }
-        }
-
-        static void RegisterMainThread(ContainerBuilder builder)
-        {
-            builder.RegisterInstance(new UserInterfaceThread(Dispatcher.CurrentDispatcher))
-                   .AsImplementedInterfaces();
-        }
-
-        IEnvironmentInformation RegisterEnvironmentInformation(ContainerBuilder builder)
-        {
-            var environmentInformation = this.environmentInformation ?? new EnvironmentInformation();
-            builder
-                .RegisterInstance(environmentInformation)
-                .As<IEnvironmentInformation>()
-                .SingleInstance();
-            return environmentInformation;
-        }
-    }
+		IEnvironmentInformation RegisterEnvironmentInformation(ContainerBuilder builder)
+		{
+			var environmentInformation = this.environmentInformation ?? new EnvironmentInformation();
+			builder
+				.RegisterInstance(environmentInformation)
+				.As<IEnvironmentInformation>()
+				.SingleInstance();
+			return environmentInformation;
+		}
+	}
 }

@@ -1,20 +1,19 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Mediators
 {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
+	using System;
+	using System.Threading;
+	using System.Threading.Tasks;
 
-    using Controls.Window.ViewModels.Interfaces;
+	using Controls.Window.ViewModels.Interfaces;
 
-    using Infrastructure.Events;
-    using Infrastructure.Logging.Interfaces;
-    using Infrastructure.Threading.Interfaces;
+	using Infrastructure.Events;
+	using Infrastructure.Threading.Interfaces;
 
-    using Interfaces;
+	using Interfaces;
+	using Serilog;
+	using Services.Keyboard.Interfaces;
 
-    using Services.Keyboard.Interfaces;
-
-    class PasteCombinationDurationMediator: IPasteCombinationDurationMediator
+	class PasteCombinationDurationMediator: IPasteCombinationDurationMediator
     {
         readonly IPasteDetectionHandler pasteDetectionHandler;
         readonly IConsumerThreadLoop consumerLoop;
@@ -143,7 +142,7 @@
             {
                 await threadDelay.ExecuteAsync(100);
                 decisecondsPassed++;
-
+				
                 logger.Information($"Paste combination held down for {decisecondsPassed}.");
 
                 RaiseDurationPassedEventIfNeeded(decisecondsPassed);

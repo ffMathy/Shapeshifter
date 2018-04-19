@@ -1,62 +1,60 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
 {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
+	using System;
+	using System.Threading;
+	using System.Threading.Tasks;
 
-    using Interfaces;
+	using Interfaces;
+	using Dependencies;
+	using Serilog;
 
-    using Logging.Interfaces;
-    using Dependencies;
+	class ThreadLoop : IThreadLoop
+	{
+		[Inject]
+		public ILogger Logger { get; set; }
 
-    class ThreadLoop: IThreadLoop
-    {
-        [Inject]
-        public ILogger Logger { get; set; }
+		public bool IsRunning { get; private set; }
 
-        public bool IsRunning { get; private set; }
+		public async Task StartAsync(Func<Task> action, CancellationToken token)
+		{
+			lock (this)
+			{
+				if (IsRunning)
+				{
+					throw new InvalidOperationException("Can't start the thread loop twice.");
+				}
 
-        public async Task StartAsync(Func<Task> action, CancellationToken token)
-        {
-            lock (this)
-            {
-                if (IsRunning)
-                {
-                    throw new InvalidOperationException("Can't start the thread loop twice.");
-                }
+				IsRunning = true;
+			}
 
-                IsRunning = true;
-            }
+			await RunAsync(action, token);
+		}
 
-            using (Logger.Indent())
-                await RunAsync(action, token);
-        }
+		async Task RunAsync(Func<Task> action, CancellationToken token = default(CancellationToken))
+		{
+			while (!token.IsCancellationRequested && IsRunning)
+			{
+				try
+				{
+					await action();
+				}
+				catch (Exception ex)
+				{
+					Logger.Error("An error occured in the thread loop: " + ex);
+					Stop();
+					throw;
+				}
+			}
 
-        async Task RunAsync(Func<Task> action, CancellationToken token = default(CancellationToken))
-        {
-            while (!token.IsCancellationRequested && IsRunning)
-            {
-                try
-                {
-                    await action();
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error("An error occured in the thread loop: " + ex);
-                    Stop();
-                    throw;
-                }
-            }
+			Stop();
+		}
 
-            Stop();
-        }
-
-        public void Stop()
-        {
-            lock (this)
-            {
-                IsRunning = false;
-            }
-        }
-    }
+		public void Stop()
+		{
+			lock (this)
+			{
+				IsRunning = false;
+			}
+		}
+	}
 }

@@ -74,6 +74,10 @@
       <HintPath>..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="AutofacSerilogIntegration">
+      <HintPath>..\packages\AutofacSerilogIntegration.2.0.0\lib\net45\AutofacSerilogIntegration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
       <Private>True</Private>
@@ -92,6 +96,30 @@
     </Reference>
     <Reference Include="Octokit, Version=0.29.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Octokit.0.29.0\lib\net45\Octokit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog">
+      <HintPath>..\packages\Serilog.2.6.0\lib\net46\Serilog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.Formatting.Compact">
+      <HintPath>..\packages\Serilog.Formatting.Compact.1.0.0\lib\net45\Serilog.Formatting.Compact.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.Sinks.ColoredConsole">
+      <HintPath>..\packages\Serilog.Sinks.ColoredConsole.3.0.1\lib\net45\Serilog.Sinks.ColoredConsole.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.Sinks.Console">
+      <HintPath>..\packages\Serilog.Sinks.Console.3.0.1\lib\net45\Serilog.Sinks.Console.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.Sinks.Debug">
+      <HintPath>..\packages\Serilog.Sinks.Debug.1.0.1\lib\net46\Serilog.Sinks.Debug.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.Sinks.File">
+      <HintPath>..\packages\Serilog.Sinks.File.4.0.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System">
@@ -247,15 +275,8 @@
     <Compile Include="Infrastructure\Events\PastePerformedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\TrayIconClickedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\UserInterfacePaneSwappedEventArgument.cs" />
-    <Compile Include="Infrastructure\Handles\IndentationHandle.cs" />
     <Compile Include="Infrastructure\Handles\Interfaces\IHandle.cs" />
     <Compile Include="Infrastructure\Handles\Interfaces\IIndentationHandle.cs" />
-    <Compile Include="Infrastructure\Logging\FileLogStream.cs" />
-    <Compile Include="Infrastructure\Logging\Interfaces\IFileLogStream.cs" />
-    <Compile Include="Infrastructure\Logging\Interfaces\ILogger.cs" />
-    <Compile Include="Infrastructure\Logging\Interfaces\ILogStream.cs" />
-    <Compile Include="Infrastructure\Logging\Logger.cs" />
-    <Compile Include="Infrastructure\Logging\DebugLogStream.cs" />
     <Compile Include="Infrastructure\Signing\Interfaces\ISignHelper.cs" />
     <Compile Include="Infrastructure\Signing\SignHelper.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IRetryingThreadLoop.cs" />
