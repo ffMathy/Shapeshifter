@@ -1,15 +1,14 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
 {
-    using System;
-    using System.Diagnostics;
-    using System.Threading;
-    using System.Threading.Tasks;
+	using System;
+	using System.Diagnostics;
+	using System.Threading;
+	using System.Threading.Tasks;
 
-    using Interfaces;
+	using Interfaces;
+	using Serilog;
 
-    using Logging.Interfaces;
-
-    class ConsumerThreadLoop: IConsumerThreadLoop
+	class ConsumerThreadLoop: IConsumerThreadLoop
     {
         readonly IThreadLoop internalLoop;
         readonly ILogger logger;

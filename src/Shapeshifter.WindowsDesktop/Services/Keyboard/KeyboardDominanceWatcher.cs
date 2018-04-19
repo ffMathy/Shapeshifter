@@ -1,24 +1,24 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Keyboard
 {
-    using System.Linq;
-    using System.Runtime.Remoting;
-    using System.Security.Principal;
-    using System.Threading.Tasks;
+	using System.Linq;
+	using System.Runtime.Remoting;
+	using System.Security.Principal;
+	using System.Threading.Tasks;
 
-    using EasyHook;
+	using EasyHook;
 
-    using Infrastructure.Events;
-    using Infrastructure.Logging.Interfaces;
+	using Infrastructure.Events;
 
-    using Interfaces;
+	using Interfaces;
 
-    using KeyboardHookInterception;
+	using KeyboardHookInterception;
 
-    using Processes.Interfaces;
-    using System;
-    using System.Diagnostics.CodeAnalysis;
+	using Processes.Interfaces;
+	using System;
+	using System.Diagnostics.CodeAnalysis;
+	using Serilog;
 
-    public class KeyboardDominanceWatcher : IKeyboardDominanceWatcher
+	public class KeyboardDominanceWatcher : IKeyboardDominanceWatcher
     {
         readonly IProcessWatcher processWatcher;
         readonly IProcessManager processManager;
@@ -107,10 +107,7 @@
                     GetInjectedLibraryName());
             } catch(Exception ex)
             {
-                logger.Error(
-                    new Exception(
-                        "Could not install the keyboard dominance watcher injection mechanism into the Global Assembly Cache.", 
-                        ex));
+                logger.Error(ex, "Could not install the keyboard dominance watcher injection mechanism into the Global Assembly Cache.");
             }
         }
     }

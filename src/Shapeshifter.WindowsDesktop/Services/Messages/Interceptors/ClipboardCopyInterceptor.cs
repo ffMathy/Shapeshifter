@@ -1,16 +1,16 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Messages.Interceptors
 {
-    using System;
-    using System.Runtime.InteropServices;
+	using System;
+	using System.Runtime.InteropServices;
 
-    using Infrastructure.Events;
-    using Infrastructure.Logging.Interfaces;
+	using Infrastructure.Events;
 
-    using Interfaces;
+	using Interfaces;
 
-    using Native.Interfaces;
+	using Native.Interfaces;
+	using Serilog;
 
-    class ClipboardCopyInterceptor: IClipboardCopyInterceptor
+	class ClipboardCopyInterceptor: IClipboardCopyInterceptor
     {
         public event EventHandler<DataCopiedEventArgument> DataCopied;
 

@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Shapeshifter.Website
+﻿namespace Shapeshifter.Website
 {
-    using System.IO;
-
-    using Microsoft.Extensions.Configuration;
+	using System.IO;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 

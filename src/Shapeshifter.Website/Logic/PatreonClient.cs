@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Shapeshifter.Website
@@ -8,7 +7,6 @@ namespace Shapeshifter.Website
 	using FluffySpoon.Http;
 	using Models;
 	using System.Net;
-	using System.Net.Http;
 
 	public class PatreonClient : IPatreonClient
 	{

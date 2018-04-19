@@ -1,19 +1,17 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Keyboard
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using System.Windows.Input;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Threading.Tasks;
+	using System.Windows.Input;
 
-    using Infrastructure.Logging.Interfaces;
+	using Interfaces;
 
-    using Interfaces;
+	using Native.Interfaces;
+	using Serilog;
+	using static Native.KeyboardNativeApi;
 
-    using Native.Interfaces;
-
-    using static Native.KeyboardNativeApi;
-
-    class KeyboardManager: IKeyboardManager
+	class KeyboardManager: IKeyboardManager
     {
         readonly IKeyboardNativeApi nativeApi;
         readonly ILogger logger;

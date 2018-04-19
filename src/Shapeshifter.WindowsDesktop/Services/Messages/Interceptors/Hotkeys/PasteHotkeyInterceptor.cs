@@ -1,16 +1,16 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
-    using System;
-    using System.Windows.Input;
+	using System;
+	using System.Windows.Input;
 
-    using Factories.Interfaces;
+	using Factories.Interfaces;
 
-    using Infrastructure.Events;
-    using Infrastructure.Logging.Interfaces;
+	using Infrastructure.Events;
 
-    using Interfaces;
+	using Interfaces;
+	using Serilog;
 
-    class PasteHotkeyInterceptor: IPasteHotkeyInterceptor
+	class PasteHotkeyInterceptor: IPasteHotkeyInterceptor
     {
         readonly ILogger logger;
         readonly IHotkeyInterception hotkeyInterception;

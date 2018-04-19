@@ -2,25 +2,23 @@
 
 namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
-    using System;
+	using System;
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.Linq;
 	using System.Threading.Tasks;
-    using System.Windows.Media.Imaging;
+	using System.Windows.Media.Imaging;
 
-    using Data.Interfaces;
+	using Data.Interfaces;
 
-    using Infrastructure.Handles.Factories.Interfaces;
-    using Infrastructure.Handles.Interfaces;
-    using Infrastructure.Logging.Interfaces;
+	using Infrastructure.Handles.Factories.Interfaces;
+	using Infrastructure.Handles.Interfaces;
 
-    using Interfaces;
+	using Interfaces;
 
-    using Messages.Interceptors.Interfaces;
-
-    using Native;
-    using Native.Interfaces;
+	using Messages.Interceptors.Interfaces;
+	using Native.Interfaces;
+	using Serilog;
 	using Shapeshifter.WindowsDesktop.Data.Wrappers;
 
 	class ClipboardInjectionService: IClipboardInjectionService

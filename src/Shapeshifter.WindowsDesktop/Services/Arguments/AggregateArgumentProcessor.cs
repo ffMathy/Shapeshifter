@@ -1,14 +1,13 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Arguments
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 
-    using Infrastructure.Logging.Interfaces;
+	using Interfaces;
+	using Serilog;
 
-    using Interfaces;
-
-    class AggregateArgumentProcessor: IAggregateArgumentProcessor
+	class AggregateArgumentProcessor: IAggregateArgumentProcessor
     {
         readonly IEnumerable<INoArgumentProcessor> noArgumentProcessors;
         readonly ILogger logger;

@@ -1,19 +1,17 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Window
 {
-    using System;
-    using System.Windows;
-    using System.Windows.Interop;
+	using System;
+	using System.Windows;
+	using System.Windows.Interop;
 
-    using Infrastructure.Events;
+	using Infrastructure.Events;
 
-    using Interfaces;
+	using Interfaces;
 
-    using Mediators.Interfaces;
+	using ViewModels.Interfaces;
+	using System.Diagnostics.CodeAnalysis;
 
-    using ViewModels.Interfaces;
-    using System.Diagnostics.CodeAnalysis;
-
-    [ExcludeFromCodeCoverage]
+	[ExcludeFromCodeCoverage]
     public partial class MainWindow
         : Window,
           IMainWindow

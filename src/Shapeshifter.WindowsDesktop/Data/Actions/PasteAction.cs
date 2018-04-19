@@ -1,17 +1,15 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Actions
 {
-    using System;
-    using System.Threading.Tasks;
+	using System;
+	using System.Threading.Tasks;
 
-    using Data.Interfaces;
+	using Data.Interfaces;
 
-    using Infrastructure.Logging.Interfaces;
+	using Interfaces;
+	using Serilog;
+	using Services.Clipboard.Interfaces;
 
-    using Interfaces;
-
-    using Services.Clipboard.Interfaces;
-
-    class PasteAction: IPasteAction
+	class PasteAction: IPasteAction
     {
         readonly IClipboardInjectionService clipboardInjectionService;
 

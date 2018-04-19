@@ -1,23 +1,22 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using System.Windows.Input;
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
+	using System.Windows.Input;
 
-    using Controls.Window.Interfaces;
+	using Controls.Window.Interfaces;
 
-    using Infrastructure.Logging.Interfaces;
+	using Interfaces;
 
-    using Interfaces;
+	using Keyboard;
+	using Keyboard.Interfaces;
 
-    using Keyboard;
-    using Keyboard.Interfaces;
+	using KeyboardHookInterception;
 
-    using KeyboardHookInterception;
+	using Messages.Interceptors.Hotkeys.Interfaces;
+	using Serilog;
 
-    using Messages.Interceptors.Hotkeys.Interfaces;
-
-    class ClipboardPasteService: IClipboardPasteService
+	class ClipboardPasteService: IClipboardPasteService
     {
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
         readonly ILogger logger;

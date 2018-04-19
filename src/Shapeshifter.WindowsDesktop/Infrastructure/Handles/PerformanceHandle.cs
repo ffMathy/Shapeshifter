@@ -1,12 +1,11 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Handles
 {
-    using System;
+	using System;
 
-    using Interfaces;
+	using Interfaces;
+	using Serilog;
 
-    using Logging.Interfaces;
-
-    class PerformanceHandle: IPerformanceHandle
+	class PerformanceHandle: IPerformanceHandle
     {
         readonly ILogger logger;
 
@@ -21,13 +20,13 @@
 
             startTime = DateTime.UtcNow;
 
-            logger.Performance("Started executing " + methodName + ".");
+            logger.Verbose("Started executing " + methodName + ".");
         }
 
         public void Dispose()
         {
             var now = DateTime.UtcNow;
-            logger.Performance(
+            logger.Verbose(
                 "Finished executing " + methodName + " in " +
                 (now - startTime).TotalMilliseconds +
                 " milliseconds.");

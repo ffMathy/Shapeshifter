@@ -1,176 +1,173 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Messages
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
+	using System;
+	using System.Collections.Generic;
+	using System.Threading;
+	using System.Threading.Tasks;
 
-    using Controls.Window.Interfaces;
+	using Controls.Window.Interfaces;
 
-    using Infrastructure.Events;
-    using Infrastructure.Logging.Interfaces;
-    using Infrastructure.Threading.Interfaces;
+	using Infrastructure.Events;
+	using Infrastructure.Threading.Interfaces;
 
-    using Interfaces;
+	using Interfaces;
+	using Serilog;
 
-    class WindowMessageHook
-        : IWindowMessageHook,
-          IDisposable
-    {
-        IHookableWindow connectedWindow;
+	class WindowMessageHook
+		: IWindowMessageHook,
+		  IDisposable
+	{
+		IHookableWindow connectedWindow;
 
-        readonly IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors;
+		readonly IEnumerable<IWindowMessageInterceptor> windowMessageInterceptors;
 
-        readonly Queue<WindowMessageReceivedArgument> pendingMessages;
+		readonly Queue<WindowMessageReceivedArgument> pendingMessages;
 
-        readonly CancellationTokenSource cancellationTokenSource;
+		readonly CancellationTokenSource cancellationTokenSource;
 
-        readonly ILogger logger;
-        readonly IConsumerThreadLoop consumerLoop;
-        readonly IMainWindowHandleContainer mainWindowHandleContainer;
+		readonly ILogger logger;
+		readonly IConsumerThreadLoop consumerLoop;
+		readonly IMainWindowHandleContainer mainWindowHandleContainer;
 
-        public IHookableWindow TargetWindow { get; set; }
+		public IHookableWindow TargetWindow { get; set; }
 
-        public bool IsConnected { get; private set; }
+		public bool IsConnected { get; private set; }
 
-        public WindowMessageHook(
-            IReadOnlyCollection<IWindowMessageInterceptor> windowMessageInterceptors,
-            ILogger logger,
-            IConsumerThreadLoop consumerLoop,
-            IMainWindowHandleContainer mainWindowHandleContainer)
-        {
-            this.windowMessageInterceptors = windowMessageInterceptors;
-            this.logger = logger;
-            this.consumerLoop = consumerLoop;
-            this.mainWindowHandleContainer = mainWindowHandleContainer;
+		public WindowMessageHook(
+			IReadOnlyCollection<IWindowMessageInterceptor> windowMessageInterceptors,
+			ILogger logger,
+			IConsumerThreadLoop consumerLoop,
+			IMainWindowHandleContainer mainWindowHandleContainer)
+		{
+			this.windowMessageInterceptors = windowMessageInterceptors;
+			this.logger = logger;
+			this.consumerLoop = consumerLoop;
+			this.mainWindowHandleContainer = mainWindowHandleContainer;
 
-            pendingMessages = new Queue<WindowMessageReceivedArgument>();
-            cancellationTokenSource = new CancellationTokenSource();
+			pendingMessages = new Queue<WindowMessageReceivedArgument>();
+			cancellationTokenSource = new CancellationTokenSource();
 
-            logger.Information(
-                $"Window message hook was constructed using {windowMessageInterceptors.Count} interceptors.");
-        }
+			logger.Information(
+				$"Window message hook was constructed using {windowMessageInterceptors.Count} interceptors.");
+		}
 
-        public void Disconnect()
-        {
-            if (!IsConnected)
-            {
-                throw new InvalidOperationException("Can't disconnect the hook when it is already disconnected.");
-            }
+		public void Disconnect()
+		{
+			if (!IsConnected)
+			{
+				throw new InvalidOperationException("Can't disconnect the hook when it is already disconnected.");
+			}
 
-            UninstallInterceptors();
-            UninstallWindowMessageHook();
+			UninstallInterceptors();
+			UninstallWindowMessageHook();
 
-            StopMessageConsumer();
+			StopMessageConsumer();
 
-            IsConnected = false;
-        }
+			IsConnected = false;
+		}
 
-        void StopMessageConsumer()
-        {
-            cancellationTokenSource.Cancel();
-        }
+		void StopMessageConsumer()
+		{
+			cancellationTokenSource.Cancel();
+		}
 
-        void UninstallWindowMessageHook()
-        {
-            connectedWindow.RemoveHwndSourceHook(WindowHookCallback);
-        }
+		void UninstallWindowMessageHook()
+		{
+			connectedWindow.RemoveHwndSourceHook(WindowHookCallback);
+		}
 
-        void UninstallInterceptors()
-        {
-            foreach (var interceptor in windowMessageInterceptors)
-            {
-                interceptor.Uninstall();
-            }
-        }
+		void UninstallInterceptors()
+		{
+			foreach (var interceptor in windowMessageInterceptors)
+			{
+				interceptor.Uninstall();
+			}
+		}
 
-        public void Connect()
-        {
-            if (IsConnected)
-            {
-                throw new InvalidOperationException(
-                    "The window message hook has already been connected.");
-            }
+		public void Connect()
+		{
+			if (IsConnected)
+			{
+				throw new InvalidOperationException(
+					"The window message hook has already been connected.");
+			}
 
-            if (TargetWindow == null)
-            {
-                throw new InvalidOperationException($"You must first specify the {nameof(TargetWindow)} to connect to.");
-            }
+			if (TargetWindow == null)
+			{
+				throw new InvalidOperationException($"You must first specify the {nameof(TargetWindow)} to connect to.");
+			}
 
-            connectedWindow = TargetWindow;
+			connectedWindow = TargetWindow;
 
-            InstallWindowMessageHook();
-            InstallInterceptors();
+			InstallWindowMessageHook();
+			InstallInterceptors();
 
-            IsConnected = true;
-        }
+			IsConnected = true;
+		}
 
-        async Task HandleNextMessageAsync()
-        {
-            var nextMessage = pendingMessages.Dequeue();
-            using (logger.Indent())
-            {
-                foreach (var interceptor in windowMessageInterceptors)
-                {
-                    var messageName = FormatMessage(nextMessage.Message);
-                    var interceptorName = interceptor.GetType()
-                                                     .Name;
+		async Task HandleNextMessageAsync()
+		{
+			var nextMessage = pendingMessages.Dequeue();
+			foreach (var interceptor in windowMessageInterceptors)
+			{
+				var messageName = FormatMessage(nextMessage.Message);
+				var interceptorName = interceptor.GetType()
+												 .Name;
 
-                    logger.Information(
-                        $"Passing message {messageName} to interceptor {interceptorName}.");
+				logger.Information(
+					$"Passing message {messageName} to interceptor {interceptorName}.");
 
-                    interceptor.ReceiveMessageEvent(nextMessage);
-                }
-            }
-        }
+				interceptor.ReceiveMessageEvent(nextMessage);
+			}
+		}
 
-        void InstallInterceptors()
-        {
-            var mainWindowHandle = mainWindowHandleContainer.Handle;
-            foreach (var interceptor in windowMessageInterceptors)
-            {
-                interceptor.Install(mainWindowHandle);
-                logger.Information($"Installed interceptor {interceptor.GetType() .Name}.");
-            }
-        }
+		void InstallInterceptors()
+		{
+			var mainWindowHandle = mainWindowHandleContainer.Handle;
+			foreach (var interceptor in windowMessageInterceptors)
+			{
+				interceptor.Install(mainWindowHandle);
+				logger.Information($"Installed interceptor {interceptor.GetType().Name}.");
+			}
+		}
 
-        void InstallWindowMessageHook()
-        {
-            connectedWindow.AddHwndSourceHook(WindowHookCallback);
-            logger.Information("Installed message hook.");
-        }
+		void InstallWindowMessageHook()
+		{
+			connectedWindow.AddHwndSourceHook(WindowHookCallback);
+			logger.Information("Installed message hook.");
+		}
 
-        IntPtr WindowHookCallback(
-            IntPtr hwnd,
-            int msg,
-            IntPtr wParam,
-            IntPtr lParam,
-            ref bool handled)
-        {
-            if (!Enum.IsDefined(typeof (Message), msg))
-            {
-                return IntPtr.Zero;
-            }
+		IntPtr WindowHookCallback(
+			IntPtr hwnd,
+			int msg,
+			IntPtr wParam,
+			IntPtr lParam,
+			ref bool handled)
+		{
+			if (!Enum.IsDefined(typeof(Message), msg))
+			{
+				return IntPtr.Zero;
+			}
 
-            logger.Information(
-                $"Message received: [{hwnd}, {FormatMessage((Message) msg)}, {wParam}, {lParam}]");
+			logger.Information(
+				$"Message received: [{hwnd}, {FormatMessage((Message)msg)}, {wParam}, {lParam}]");
 
-            var argument = new WindowMessageReceivedArgument(hwnd, (Message) msg, wParam, lParam);
-            pendingMessages.Enqueue(argument);
+			var argument = new WindowMessageReceivedArgument(hwnd, (Message)msg, wParam, lParam);
+			pendingMessages.Enqueue(argument);
 
-            consumerLoop.Notify(HandleNextMessageAsync, cancellationTokenSource.Token);
+			consumerLoop.Notify(HandleNextMessageAsync, cancellationTokenSource.Token);
 
-            return IntPtr.Zero;
-        }
+			return IntPtr.Zero;
+		}
 
-        static string FormatMessage(Message msg)
-        {
-            return Enum.GetName(typeof (Message), msg);
-        }
+		static string FormatMessage(Message msg)
+		{
+			return Enum.GetName(typeof(Message), msg);
+		}
 
-        public void Dispose()
-        {
-            consumerLoop.Stop();
-        }
-    }
+		public void Dispose()
+		{
+			consumerLoop.Stop();
+		}
+	}
 }

@@ -1,14 +1,13 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Handles.Factories
 {
-    using System.Runtime.CompilerServices;
+	using System.Runtime.CompilerServices;
 
-    using Handles.Interfaces;
+	using Handles.Interfaces;
 
-    using Interfaces;
+	using Interfaces;
+	using Serilog;
 
-    using Logging.Interfaces;
-
-    class PerformanceHandleFactory: IPerformanceHandleFactory
+	class PerformanceHandleFactory: IPerformanceHandleFactory
     {
         readonly ILogger logger;
 

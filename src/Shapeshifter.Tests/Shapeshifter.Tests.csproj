@@ -100,7 +100,6 @@
     <Compile Include="Data\Actions\PasteActionTest.cs" />
     <Compile Include="Infrastructure\Environment\EnvironmentInformationTest.cs" />
     <Compile Include="Infrastructure\Handles\ClipboardHandleTest.cs" />
-    <Compile Include="Infrastructure\Logging\LoggerTest.cs" />
     <Compile Include="Operations\Startup\MainWindowPreparationOperationTest.cs" />
     <Compile Include="ProjectAnalysisTest.cs" />
     <Compile Include="Services\Arguments\InstallArgumentProcessorTest.cs" />

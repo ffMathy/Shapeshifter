@@ -1,20 +1,19 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Signing
 {
-    using System;
-    using System.Runtime.InteropServices;
-    using System.Security.Cryptography;
-    using System.Security.Cryptography.X509Certificates;
+	using System;
+	using System.Runtime.InteropServices;
+	using System.Security.Cryptography;
+	using System.Security.Cryptography.X509Certificates;
 
-    using Interfaces;
+	using Interfaces;
 
-    using Logging.Interfaces;
+	using Native;
+	using Native.Interfaces;
+	using Dependencies;
+	using System.Diagnostics.CodeAnalysis;
+	using Serilog;
 
-    using Native;
-    using Native.Interfaces;
-    using Dependencies;
-    using System.Diagnostics.CodeAnalysis;
-
-    [ExcludeFromCodeCoverage]
+	[ExcludeFromCodeCoverage]
     class SignHelper: ISignHelper
     {
         readonly ISigningNativeApi signingNativeApi;
@@ -51,12 +50,12 @@
             }
             catch (CryptographicException ce)
             {
-                Logger.Error(ce);
-                throw new CryptographicException($@"An error occurred while attempting to load the signing certificate. {ce.Message}", ce);
+                Logger.Error(ce, "An error occurred while attempting to load the signing certificate.");
+				throw new CryptographicException($@"An error occurred while attempting to load the signing certificate. {ce.Message}", ce);
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                Logger.Error(ex, "An error occurred while attempting to load the signing certificate.");
                 throw;
             }
             finally

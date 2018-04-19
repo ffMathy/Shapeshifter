@@ -1,29 +1,29 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Arguments
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Security.Cryptography.X509Certificates;
+	using System;
+	using System.IO;
+	using System.Linq;
+	using System.Security.Cryptography.X509Certificates;
 
-    using Controls.Window.ViewModels.Interfaces;
+	using Controls.Window.ViewModels.Interfaces;
 
-    using Infrastructure.Environment.Interfaces;
-    using Infrastructure.Logging.Interfaces;
-    using Infrastructure.Signing.Interfaces;
+	using Infrastructure.Environment.Interfaces;
+	using Infrastructure.Signing.Interfaces;
 
-    using Interfaces;
+	using Interfaces;
 
-    using Keyboard.Interfaces;
+	using Keyboard.Interfaces;
 
-    using Processes.Interfaces;
+	using Processes.Interfaces;
 
-    using Properties;
+	using Properties;
 
-    using Services.Interfaces;
-    using Infrastructure.Dependencies;
-    using Infrastructure.Threading.Interfaces;
+	using Services.Interfaces;
+	using Infrastructure.Dependencies;
+	using Infrastructure.Threading.Interfaces;
+	using Serilog;
 
-    class InstallArgumentProcessor : INoArgumentProcessor, IInstallArgumentProcessor
+	class InstallArgumentProcessor : INoArgumentProcessor, IInstallArgumentProcessor
     {
         const string CertificateName = "Shapeshifter";
 

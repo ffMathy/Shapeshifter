@@ -253,7 +253,7 @@
             return finalPath;
         }
 
-        static string GetFullPathFromTemporaryPath(string path)
+        public static string GetFullPathFromTemporaryPath(string path)
         {
             var isolatedFolderPath = PrepareTemporaryFolder();
 
