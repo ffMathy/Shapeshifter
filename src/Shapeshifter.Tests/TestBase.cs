@@ -33,8 +33,6 @@ namespace Shapeshifter.WindowsDesktop
                 .Build()
                 .BeginLifetimeScope();
 
-            result.Resolve<ILogger>();
-
             return result;
         }
     }
