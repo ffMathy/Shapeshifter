@@ -9,16 +9,25 @@ Developing Shapeshifter is something we do for free, so that you can enjoy it wi
 If you want to see more frequent releases, fixes and new features, [support us on Patreon](https://www.patreon.com/user?u=4197032).
 
 ## Thanks to
-Patreon is what keeps further development of Shapeshifter possible. Thanks to the following people who do their part.
-
-- [Reihan Parvizian](https://www.patreon.com/user/creators?u=5595214) ($10 per Shapeshifter release)
-- [Aart](https://www.patreon.com/user/creators?u=4787521) ($3 per Shapeshifter release)
+Patreon is what keeps further development of Shapeshifter possible. Thanks to all the Patreon supporters that helped. We'll soon provide a dynamic list showing all supporters.
 
 # Shapeshifter
 Shapeshifter is a revolutionary clipboard manager that you might know of already. 
 
-- Version 6 (new experimental version): https://github.com/ffMathy/Shapeshifter/releases/latest
-- Version 5 (current latest stable, not supported anymore in favor of Version 6): https://github.com/ffMathy/Shapeshifter/releases/tag/shapeshifter-v5.0.107
+- Version 6 (new version): https://github.com/ffMathy/Shapeshifter/releases/latest
+- Version 5 (current latest released version to the public, not supported anymore in favor of Version 6): https://github.com/ffMathy/Shapeshifter/releases/tag/shapeshifter-v5.0.107
+
+## Screenshots
+Shapeshifter is simple. You hold down CTRL + V, and the following UI pops up. You then navigate to the item you want to paste using your arrow keys (arrow up/down or use some of the actions with arrow right/left), and then release CTRL + V to paste.
+
+![Holding down CTRL shows this UI](/screenshots/blue.PNG)
+
+### Other colors
+The color of Shapeshifter adapts to the color you've chosen as your Windows 10 accent (theme) color. Here's one where those colors are different.
+
+![Holding down CTRL shows this UI](/screenshots/purple.PNG)
+![Holding down CTRL shows this UI](/screenshots/green.PNG)
+![Holding down CTRL shows this UI](/screenshots/red.PNG)
 
 # Contributing
 Feel free to contribute to Shapeshifter 6 development! Create a pull request, and we'll look at it. *The repository has a DotSettings ReSharper file included, which comes with the conventions we want to use for this repository. These conventions also contain a few templates for creating Unit Tests.*
