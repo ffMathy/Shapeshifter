@@ -28,8 +28,11 @@
 
         public async Task RunAsync()
         {
-            trayIconManager.IconClicked += TrayIconManager_IconClicked;
-            trayIconManager.InstallTrayIcon(
+			var assemblyName = typeof(TrayPreparationOperation).Assembly.GetName();
+
+			trayIconManager.IconClicked += TrayIconManager_IconClicked;
+			trayIconManager.UpdateHoverText("Shapeshifter version " + assemblyName.Version);
+            trayIconManager.UpdateMenuItems(
                 "Settings",
                 new[]
                 {
