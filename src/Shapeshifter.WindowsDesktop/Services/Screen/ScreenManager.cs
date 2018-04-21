@@ -29,27 +29,40 @@
 				.AllScreens
 				.Select(GetScreenInformationFromScreen)
 				.ToArray();
-			var mousePosition = Control.MousePosition;
 
-			using (CrossThreadLogContext.Add(nameof(mousePosition), mousePosition))
+			var deviceMousePosition = Control.MousePosition;
+			var deviceIndependentMousePosition = pixelConversionService
+				.ConvertDeviceToDeviceIndependentPixels(
+					new Vector(
+						deviceMousePosition.X,
+						deviceMousePosition.Y));
+
+			using (CrossThreadLogContext.Add(nameof(deviceIndependentMousePosition), deviceIndependentMousePosition))
 			using (CrossThreadLogContext.Add(nameof(screens), screens)) { 
 				return screens.Single(screen =>
-					screen.X <= mousePosition.X &&
-					screen.Y <= mousePosition.Y &&
-					screen.X + screen.Width >= mousePosition.X &&
-					screen.Y + screen.Height >= mousePosition.Y);
+					screen.Bounds.X <= deviceIndependentMousePosition.X &&
+					screen.Bounds.Y <= deviceIndependentMousePosition.Y &&
+					screen.Bounds.X + screen.Bounds.Width >= deviceIndependentMousePosition.X &&
+					screen.Bounds.Y + screen.Bounds.Height >= deviceIndependentMousePosition.Y);
 			}
 		}
 
 		private ScreenInformation GetScreenInformationFromScreen(Screen screen)
 		{
+			return new ScreenInformation(
+				GatherScreenBounds(screen.Bounds),
+				GatherScreenBounds(screen.WorkingArea));
+		}
+
+		private ScreenBounds GatherScreenBounds(System.Drawing.Rectangle inputBounds)
+		{
 			var devicePosition = new Vector(
-							screen.WorkingArea.X,
-							screen.WorkingArea.Y);
+							inputBounds.X,
+							inputBounds.Y);
 
 			var deviceSize = new Vector(
-				screen.WorkingArea.Width,
-				screen.WorkingArea.Height);
+				inputBounds.Width,
+				inputBounds.Height);
 
 			var deviceIndependentPosition = pixelConversionService
 				.ConvertDeviceToDeviceIndependentPixels(devicePosition);
@@ -57,7 +70,7 @@
 			var deviceIndependentSize = pixelConversionService
 				.ConvertDeviceToDeviceIndependentPixels(deviceSize);
 
-			return new ScreenInformation(
+			return new ScreenBounds(
 				deviceIndependentPosition,
 				deviceIndependentSize);
 		}
