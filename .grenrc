@@ -1,4 +1,5 @@
 {
+	"dataSource": "issues",
     "groupBy": {
         "Enhancements:": ["enhancement"],
         "Bug fixes:": ["bug"],
