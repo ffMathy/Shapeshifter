@@ -1,4 +1,4 @@
-version: 6.1.{build}
+version: 1.0.0
 environment:
   webdeploy_password:
     secure: 5Urzbp6Aj24/wHED9+Q/CtH4EjN7nv9PGdCdBDr5XECq8wnDxQcHK5YoS246hOqcEBNCU2OZ4rq26LVWCRbfbw==
@@ -22,6 +22,8 @@ assembly_info:
   assembly_version: '{version}'
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
+init:
+- ps: Update-AppveyorBuild -Version "6.1.$(Get-Date -format Ymd)"
 after_build:
 - cmd: >
     mkdir build\website
@@ -58,8 +60,7 @@ deploy:
     secure: ayEVarC+QEZFXazImnX3hY26ZG4O5xIqH1QPzn9eYbHmglTppws2bsqK8x8mrzEH
   on:
     branch: master
-#after_deploy:
-on_success:
+after_deploy:
 - cmd: >
     cd build\website
 
