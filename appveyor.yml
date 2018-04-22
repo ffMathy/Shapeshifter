@@ -65,6 +65,8 @@ deploy:
     branch: master
 after_deploy:
 - cmd: >
+    npm install gren -g
+
     gren release --token=%gren_token% --override
 
     cd build\website
