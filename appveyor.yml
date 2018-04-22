@@ -69,7 +69,7 @@ after_deploy:
 - cmd: >
     npm install gren -g
 
-    gren --token=%gren_token% --override
+    gren release --token=%gren_token% --override
 
     cd build\website
 
