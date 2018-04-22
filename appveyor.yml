@@ -10,6 +10,8 @@ environment:
     secure: yx1+zw2XQkMLfRuZ5S3M+5Lqs5dGuDmUbgjvISta5A8atFQctDHVb7UqtZnNcB2I
   patreon_creators_refresh_token:
     secure: c3EVYJ14R2JBDQgk6quSdHkcFMjtN2msgn2F4SRFjqdKVvRI4qkrU58ftCsZMB0g
+  gren_token:
+    secure: NdaCVjPIdd6UghkTaEJ1oNbh0ukOoPKMC4K+B4XnrGG1xEcYSIw63+25O+pTQA3T
 pull_requests:
   do_not_increment_build_number: true
 skip_tags: true
@@ -62,6 +64,8 @@ deploy:
     branch: master
 after_deploy:
 - cmd: >
+    gren release --token=%gren_token% --override
+
     cd build\website
 
     echo { "patreon": { "clientId": "%patreon_client_id%", "clientSecret": "%patreon_client_secret%", "creatorsAccessToken": "%patreon_creators_access_token%", "creatorsRefreshToken": "%patreon_creators_refresh_token%" } }>> secrets.json
