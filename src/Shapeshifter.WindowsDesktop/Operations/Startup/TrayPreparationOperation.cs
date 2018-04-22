@@ -40,7 +40,9 @@
                     "Exit",
                     (sender, e) => Application.Current.Shutdown())
                 });
-        }
+
+			trayIconManager.DisplayInformation("Shapeshifter is ready", "You can now use Shapeshifter for managing your clipboard.");
+		}
 
         void TrayIconManager_IconClicked(object sender, TrayIconClickedEventArgument e)
         {
