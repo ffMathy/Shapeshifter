@@ -8,7 +8,5 @@
     public interface IUpdateService: ISingleInstance
     {
         Task UpdateAsync();
-
-        Version GetCurrentVersion();
     }
 }

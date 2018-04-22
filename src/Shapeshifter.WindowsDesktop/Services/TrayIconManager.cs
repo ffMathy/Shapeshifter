@@ -15,20 +15,16 @@
 
     public class TrayIconManager: ITrayIconManager
     {
-        readonly IUpdateService updateService;
-
         readonly NotifyIcon trayIcon;
 
         public event EventHandler<TrayIconClickedEventArgument> IconClicked;
 
-        public TrayIconManager(
-            IUpdateService updateService)
+        public TrayIconManager()
         {
             trayIcon = new NotifyIcon();
-            this.updateService = updateService;
         }
 
-        public void InstallTrayIcon(
+        public void UpdateMenuItems(
             string boldMenuItemTitle,
             IReadOnlyCollection<MenuItem> contextMenuItems)
         {
@@ -48,7 +44,7 @@
 
             trayIcon.Icon = Resources.ShapeshifterIcon;
             trayIcon.ContextMenu = contextMenu;
-            trayIcon.Text = "Shapeshifter version " + updateService.GetCurrentVersion();
+            trayIcon.Text = "Shapeshifter version " + Program.GetCurrentVersion();
             trayIcon.Visible = true;
         }
 
@@ -61,5 +57,25 @@
         {
             trayIcon?.Dispose();
         }
-    }
+
+		public void UpdateHoverText(string text)
+		{
+			trayIcon.Text = text;
+		}
+
+		public void DisplayInformation(string title, string text)
+		{
+			trayIcon.ShowBalloonTip(int.MaxValue, title, text, ToolTipIcon.Info);
+		}
+
+		public void DisplayWarning(string title, string text)
+		{
+			trayIcon.ShowBalloonTip(int.MaxValue, title, text, ToolTipIcon.Warning);
+		}
+
+		public void DisplayError(string title, string text)
+		{
+			trayIcon.ShowBalloonTip(int.MaxValue, title, text, ToolTipIcon.Error);
+		}
+	}
 }

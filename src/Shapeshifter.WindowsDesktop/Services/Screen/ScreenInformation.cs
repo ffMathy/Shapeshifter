@@ -1,25 +1,38 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Screen
 {
-    using System.Windows;
+	using System.Windows;
 
-    public class ScreenInformation
-    {
-        public double X { get; set; }
-        public double Y { get; set; }
+	public class ScreenBounds
+	{
+		public ScreenBounds(
+			Vector position, 
+			Vector size)
+		{
+			X = position.X;
+			Y = position.Y;
 
-        public double Width { get; set; }
-        public double Height { get; set; }
+			Width = size.X;
+			Height = size.Y;
+		}
 
-        public ScreenInformation() { }
+		public double X { get; set; }
+		public double Y { get; set; }
 
-        public ScreenInformation(
-            Vector position,
-            Vector size)
-        {
-            X = position.X;
-            Y = position.Y;
-            Width = size.X;
-            Height = size.Y;
-        }
-    }
+		public double Width { get; set; }
+		public double Height { get; set; }
+	}
+
+	public class ScreenInformation
+	{
+		public ScreenBounds Bounds { get; private set; }
+		public ScreenBounds WorkingArea { get; private set; }
+
+		public ScreenInformation(
+			ScreenBounds bounds,
+			ScreenBounds workingArea)
+		{
+			Bounds = bounds;
+			WorkingArea = workingArea;
+		}
+	}
 }

@@ -10,7 +10,13 @@
     {
         event EventHandler<TrayIconClickedEventArgument> IconClicked;
 
-        void InstallTrayIcon(
+		void UpdateHoverText(string text);
+
+		void DisplayInformation(string title, string text);
+		void DisplayWarning(string title, string text);
+		void DisplayError(string title, string text);
+
+		void UpdateMenuItems(
             string boldMenuItemTitle,
             IReadOnlyCollection<MenuItem> contextMenuItems);
     }

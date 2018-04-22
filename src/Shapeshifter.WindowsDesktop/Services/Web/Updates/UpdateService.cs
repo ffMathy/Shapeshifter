@@ -19,6 +19,7 @@
 	using Web.Interfaces;
 	using Infrastructure.Environment.Interfaces;
 	using Serilog;
+	using Shapeshifter.WindowsDesktop.Services.Interfaces;
 
 	class UpdateService
         : IUpdateService
@@ -27,8 +28,8 @@
         const string RepositoryName = "Shapeshifter";
 
         readonly IGitHubClient client;
-
-        readonly IDownloader fileDownloader;
+		readonly ITrayIconManager trayIconManager;
+		readonly IDownloader fileDownloader;
         readonly IFileManager fileManager;
         readonly IProcessManager processManager;
         readonly ILogger logger;
@@ -40,10 +41,12 @@
             IProcessManager processManager,
             ILogger logger,
             IGitHubClientFactory clientFactory,
-            IEnvironmentInformation environmentInformation)
+            IEnvironmentInformation environmentInformation,
+			ITrayIconManager trayIconManager)
         {
             client = clientFactory.CreateClient();
 
+			this.trayIconManager = trayIconManager;
             this.fileDownloader = fileDownloader;
             this.fileManager = fileManager;
             this.processManager = processManager;
@@ -63,8 +66,9 @@
                 {
                     return;
                 }
-
-                await UpdateFromReleaseAsync(pendingUpdateRelease);
+				
+				trayIconManager.DisplayInformation("Downloading update", "An update is being downloaded. Shapeshifter will restart.");
+				await UpdateFromReleaseAsync(pendingUpdateRelease);
             }
             catch (RateLimitExceededException)
             {
@@ -134,17 +138,9 @@
             return IsUpdateToVersionNeeded(releaseVersion);
         }
 
-        public Version GetCurrentVersion()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            return assembly
-                .GetName()
-                .Version;
-        }
-
         bool IsUpdateToVersionNeeded(Version releaseVersion)
         {
-            return releaseVersion > GetCurrentVersion();
+            return releaseVersion > Program.GetCurrentVersion();
         }
 
         static Version GetReleaseVersion(Release release)

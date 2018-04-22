@@ -1,4 +1,4 @@
-version: 6.1.{build}
+version: 1.0.0.0
 environment:
   webdeploy_password:
     secure: 5Urzbp6Aj24/wHED9+Q/CtH4EjN7nv9PGdCdBDr5XECq8wnDxQcHK5YoS246hOqcEBNCU2OZ4rq26LVWCRbfbw==
@@ -10,18 +10,23 @@ environment:
     secure: yx1+zw2XQkMLfRuZ5S3M+5Lqs5dGuDmUbgjvISta5A8atFQctDHVb7UqtZnNcB2I
   patreon_creators_refresh_token:
     secure: c3EVYJ14R2JBDQgk6quSdHkcFMjtN2msgn2F4SRFjqdKVvRI4qkrU58ftCsZMB0g
+  gren_token:
+    secure: NdaCVjPIdd6UghkTaEJ1oNbh0ukOoPKMC4K+B4XnrGG1xEcYSIw63+25O+pTQA3T
 pull_requests:
   do_not_increment_build_number: true
 skip_tags: true
 image: Visual Studio 2017
 configuration: Debug
 platform: Any CPU
+skip_branch_with_pr: true
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
   assembly_version: '{version}'
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
+init:
+- ps: Update-AppveyorBuild -Version "6.$(Get-Date -format yyyy).$(Get-Date -format MMdd).$((Get-ChildItem Env:APPVEYOR_BUILD_NUMBER).Value)"
 after_build:
 - cmd: >
     mkdir build\website
@@ -58,9 +63,10 @@ deploy:
     secure: ayEVarC+QEZFXazImnX3hY26ZG4O5xIqH1QPzn9eYbHmglTppws2bsqK8x8mrzEH
   on:
     branch: master
-#after_deploy:
-on_success:
+after_deploy:
 - cmd: >
+    gren release --token=%gren_token% --override
+
     cd build\website
 
     echo { "patreon": { "clientId": "%patreon_client_id%", "clientSecret": "%patreon_client_secret%", "creatorsAccessToken": "%patreon_creators_access_token%", "creatorsRefreshToken": "%patreon_creators_refresh_token%" } }>> secrets.json

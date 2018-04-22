@@ -28,8 +28,11 @@
 
         public async Task RunAsync()
         {
-            trayIconManager.IconClicked += TrayIconManager_IconClicked;
-            trayIconManager.InstallTrayIcon(
+			var assemblyName = typeof(TrayPreparationOperation).Assembly.GetName();
+
+			trayIconManager.IconClicked += TrayIconManager_IconClicked;
+			trayIconManager.UpdateHoverText("Shapeshifter version " + assemblyName.Version);
+            trayIconManager.UpdateMenuItems(
                 "Settings",
                 new[]
                 {
@@ -37,7 +40,9 @@
                     "Exit",
                     (sender, e) => Application.Current.Shutdown())
                 });
-        }
+
+			trayIconManager.DisplayInformation("Shapeshifter is ready", "You can now use Shapeshifter for managing your clipboard.");
+		}
 
         void TrayIconManager_IconClicked(object sender, TrayIconClickedEventArgument e)
         {
