@@ -32,7 +32,7 @@ The color of Shapeshifter adapts to the color you've chosen as your Windows 10 a
 ![Holding down CTRL and V shows this UI](/screenshots/green.PNG)
 ![Holding down CTRL and V shows this UI](/screenshots/red.PNG)
 
-## Legacy Versions
+## Legacy versions
 
 - Version 5 (not supported anymore in favor of Version 6):
 https://github.com/ffMathy/Shapeshifter/releases/tag/shapeshifter-v5.0.107
