@@ -23,7 +23,7 @@ assembly_info:
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
 init:
-- ps: Update-AppveyorBuild -Version "6.1.$(Get-Date -format yyyyMMdd).0"
+- ps: Update-AppveyorBuild -Version "6.1.$(Get-Date -format yyyyMMdd).$([int64](([datetime]::UtcNow)-(get-date "1/1/1970")).TotalSeconds)"
 after_build:
 - cmd: >
     mkdir build\website
