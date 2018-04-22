@@ -67,7 +67,7 @@ install:
   - ps: Install-Product node ''
 after_deploy:
 - cmd: >
-    npm install gren -g
+    npm install github-release-notes -g
 
     gren release --token=%gren_token% --override
 
