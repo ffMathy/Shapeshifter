@@ -6,7 +6,7 @@
 # Shapeshifter
 Shapeshifter is a revolutionary clipboard manager that you might know of already. It allows you to copy multiple items and select which item you want to paste later without losing any of them.
 
-Download the latest release of Version 6:  
+Download the latest release of version 6:  
 
 [![Download the latest release](https://i.imgur.com/9or42mi.png)](https://github.com/ffMathy/Shapeshifter/releases/latest)
 
