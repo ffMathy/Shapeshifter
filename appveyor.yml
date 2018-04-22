@@ -1,4 +1,4 @@
-version: 1.0.0.0
+version: 1.0.0.{build}
 environment:
   webdeploy_password:
     secure: 5Urzbp6Aj24/wHED9+Q/CtH4EjN7nv9PGdCdBDr5XECq8wnDxQcHK5YoS246hOqcEBNCU2OZ4rq26LVWCRbfbw==
