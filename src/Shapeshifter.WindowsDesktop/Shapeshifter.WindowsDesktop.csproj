@@ -70,24 +70,24 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.4.8.0\lib\net45\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="AutofacSerilogIntegration">
       <HintPath>..\packages\AutofacSerilogIntegration.2.0.0\lib\net45\AutofacSerilogIntegration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
-      <HintPath>..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>..\packages\BouncyCastle.1.8.2\lib\BouncyCastle.Crypto.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Costura, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
       <HintPath>..\packages\Costura.Fody.2.0.0\lib\net452\Costura.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EasyHook, Version=2.7.6578.0, Culture=neutral, PublicKeyToken=4b580fca19d0b0c5, processorArchitecture=MSIL">
-      <HintPath>..\packages\EasyHook.2.7.6578.1\lib\net40\EasyHook.dll</HintPath>
+    <Reference Include="EasyHook">
+      <HintPath>..\packages\EasyHook.2.7.6684\lib\net40\EasyHook.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -111,7 +111,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Serilog.Sinks.Console">
-      <HintPath>..\packages\Serilog.Sinks.Console.3.0.1\lib\net45\Serilog.Sinks.Console.dll</HintPath>
+      <HintPath>..\packages\Serilog.Sinks.Console.3.1.1\lib\net45\Serilog.Sinks.Console.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Serilog.Sinks.Debug">

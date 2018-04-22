@@ -37,8 +37,8 @@
     <AssemblyOriginatorKeyFile>StrongName.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EasyHook, Version=2.7.6578.0, Culture=neutral, PublicKeyToken=4b580fca19d0b0c5, processorArchitecture=MSIL">
-      <HintPath>..\packages\EasyHook.2.7.6578.1\lib\net40\EasyHook.dll</HintPath>
+    <Reference Include="EasyHook, Version=2.7.6684.0, Culture=neutral, PublicKeyToken=4b580fca19d0b0c5, processorArchitecture=MSIL">
+      <HintPath>..\packages\EasyHook.2.7.6684\lib\net40\EasyHook.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
