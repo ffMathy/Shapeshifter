@@ -63,6 +63,8 @@ deploy:
     secure: ayEVarC+QEZFXazImnX3hY26ZG4O5xIqH1QPzn9eYbHmglTppws2bsqK8x8mrzEH
   on:
     branch: master
+install:
+  - ps: Install-Product node ''
 after_deploy:
 - cmd: >
     npm install gren -g
