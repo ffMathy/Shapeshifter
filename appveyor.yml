@@ -73,6 +73,8 @@ after_deploy:
 
     cd build\website
 
+    del secrets.json /F
+
     echo { "patreon": { "clientId": "%patreon_client_id%", "clientSecret": "%patreon_client_secret%", "creatorsAccessToken": "%patreon_creators_access_token%", "creatorsRefreshToken": "%patreon_creators_refresh_token%" } }>> secrets.json
 
     7z a Website.zip *

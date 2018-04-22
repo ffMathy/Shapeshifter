@@ -23,18 +23,18 @@ Patreon is what keeps further development of Shapeshifter possible. Thanks to al
 ## Screenshots
 Shapeshifter is simple. You hold down CTRL + V, and the following UI pops up. You then navigate to the item you want to paste using your arrow keys (arrow up/down or use some of the actions with arrow right/left), and then release CTRL + V to paste.
 
-![Holding down CTRL shows this UI](/screenshots/blue.PNG)
+![Holding down CTRL shows this UI](/assets/screenshots/blue.PNG)
 
 ### Other colors
 The color of Shapeshifter adapts to the color you've chosen as your Windows 10 accent (theme) color. Here's one where those colors are different.
 
-![Holding down CTRL and V shows this UI](/screenshots/purple.PNG)
-![Holding down CTRL and V shows this UI](/screenshots/green.PNG)
-![Holding down CTRL and V shows this UI](/screenshots/red.PNG)
+![Holding down CTRL and V shows this UI](/assets/screenshots/purple.PNG)
+![Holding down CTRL and V shows this UI](/assets/screenshots/green.PNG)
+![Holding down CTRL and V shows this UI](/assets/screenshots/red.PNG)
 
 ## Legacy versions
 
-- Version 5 (not supported anymore in favor of Version 6):
+- Version 5 (not supported anymore in favor of version 6):
 https://github.com/ffMathy/Shapeshifter/releases/tag/shapeshifter-v5.0.107
 
 # Contributing
