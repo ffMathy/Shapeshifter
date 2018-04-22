@@ -25,7 +25,7 @@ assembly_info:
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
 init:
-- ps: Update-AppveyorBuild -Version "6.1.$(Get-Date -format yyyy).$(Get-Date -format MMdd)"
+- ps: Update-AppveyorBuild -Version "6.2.$(Get-Date -format yyyy).$(Get-Date -format MMdd)"
 after_build:
 - cmd: >
     mkdir build\website
