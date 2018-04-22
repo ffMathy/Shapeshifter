@@ -1,0 +1,12 @@
+{
+    "groupBy": {
+        "Enhancements:": ["enhancement"],
+        "Bug fixes:": ["bug"],
+		"Techie stuff:": ["technical debt"]
+    },
+	"ignoreIssuesWith": [
+        "wont fix",
+        "duplicate",
+		"discussion"
+    ]
+}
