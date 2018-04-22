@@ -64,11 +64,12 @@ deploy:
   on:
     branch: master
 install:
-  - ps: Install-Product node ''
+  - ps: >
+    Install-Product node ''
+
+    npm install gren -g
 after_deploy:
 - cmd: >
-    npm install gren -g
-
     gren release --token=%gren_token% --override
 
     cd build\website
