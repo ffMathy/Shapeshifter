@@ -138,17 +138,9 @@
             return IsUpdateToVersionNeeded(releaseVersion);
         }
 
-        public Version GetCurrentVersion()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            return assembly
-                .GetName()
-                .Version;
-        }
-
         bool IsUpdateToVersionNeeded(Version releaseVersion)
         {
-            return releaseVersion > GetCurrentVersion();
+            return releaseVersion > Program.GetCurrentVersion();
         }
 
         static Version GetReleaseVersion(Release release)

@@ -14,6 +14,7 @@
 	using Serilog;
 	using System.Threading;
 	using Shapeshifter.WindowsDesktop.Services.Web.Updates.Interfaces;
+	using Serilog.Context;
 
 	/// <summary>
 	///     Interaction logic for App.xaml

@@ -15,17 +15,13 @@
 
     public class TrayIconManager: ITrayIconManager
     {
-        readonly IUpdateService updateService;
-
         readonly NotifyIcon trayIcon;
 
         public event EventHandler<TrayIconClickedEventArgument> IconClicked;
 
-        public TrayIconManager(
-            IUpdateService updateService)
+        public TrayIconManager()
         {
             trayIcon = new NotifyIcon();
-            this.updateService = updateService;
         }
 
         public void UpdateMenuItems(
@@ -48,7 +44,7 @@
 
             trayIcon.Icon = Resources.ShapeshifterIcon;
             trayIcon.ContextMenu = contextMenu;
-            trayIcon.Text = "Shapeshifter version " + updateService.GetCurrentVersion();
+            trayIcon.Text = "Shapeshifter version " + Program.GetCurrentVersion();
             trayIcon.Visible = true;
         }
 

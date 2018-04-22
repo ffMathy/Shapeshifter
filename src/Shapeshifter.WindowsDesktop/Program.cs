@@ -7,6 +7,7 @@
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Reflection;
 	using System.Threading;
 
 	public static class CrossThreadLogContext
@@ -40,6 +41,14 @@
 
 	public static class Program
 	{
+		public static Version GetCurrentVersion()
+		{
+			var assembly = Assembly.GetExecutingAssembly();
+			return assembly
+				.GetName()
+				.Version;
+		}
+
 		[STAThread]
 		public static void Main(string[] args)
 		{
