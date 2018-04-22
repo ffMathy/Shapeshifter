@@ -18,6 +18,7 @@ skip_tags: true
 image: Visual Studio 2017
 configuration: Debug
 platform: Any CPU
+skip_branch_with_pr: true
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
