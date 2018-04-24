@@ -60,6 +60,8 @@
 			{
 				var window = Container.Resolve<IMainWindow>();
 				window.Hide();
+
+				Debugger.Break();
 			}
 			else
 			{
