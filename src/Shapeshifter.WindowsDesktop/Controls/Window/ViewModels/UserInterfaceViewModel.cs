@@ -127,14 +127,17 @@
         void ClipboardUserInterfaceInteractionMediator_RemovedCurrentItem(object sender, EventArgs e)
         {
             var currentElement = SelectedElement;
-            SelectedElement = Elements
-                .Skip(1)
-                .FirstOrDefault();
+			var currentIndex = Elements.IndexOf(currentElement);
+			
             Elements.Remove(currentElement);
+
             if(Elements.Count == 0)
             {
                 HideInterface();
-            }
+            } else {
+				var targetIndex = currentIndex == 0 ? 0 : currentIndex - 1;
+				SelectedElement = Elements.ElementAt(targetIndex);
+			}
         }
 
         void ClipboardUserInterfaceInteractionMediator_PaneSwapped(object sender, EventArgs e)

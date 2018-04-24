@@ -24,198 +24,212 @@
 	using Serilog;
 
 	class InstallArgumentProcessor : INoArgumentProcessor, IInstallArgumentProcessor
-    {
-        const string CertificateName = "Shapeshifter";
+	{
+		const string CertificateName = "Shapeshifter";
 
-        readonly IProcessManager processManager;
-        readonly ICertificateManager certificateManager;
-        readonly ISignHelper signHelper;
-        readonly IEnvironmentInformation environmentInformation;
-        readonly ISettingsViewModel settingsViewModel;
-        readonly IKeyboardDominanceWatcher keyboardDominanceWatcher;
-        readonly IThreadDelay threadDelay;
+		readonly IProcessManager processManager;
+		readonly ICertificateManager certificateManager;
+		readonly ISignHelper signHelper;
+		readonly IEnvironmentInformation environmentInformation;
+		readonly ISettingsViewModel settingsViewModel;
+		readonly IKeyboardDominanceWatcher keyboardDominanceWatcher;
+		readonly IThreadDelay threadDelay;
 
-        [Inject]
-        public ILogger Logger { get; set; }
+		[Inject]
+		public ILogger Logger { get; set; }
 
-        public InstallArgumentProcessor(
-            IProcessManager processManager,
-            ICertificateManager certificateManager,
-            ISignHelper signHelper,
-            IEnvironmentInformation environmentInformation,
-            ISettingsViewModel settingsViewModel,
-            IKeyboardDominanceWatcher keyboardDominanceWatcher,
-            IThreadDelay threadDelay)
-        {
-            this.processManager = processManager;
-            this.certificateManager = certificateManager;
-            this.signHelper = signHelper;
-            this.environmentInformation = environmentInformation;
-            this.settingsViewModel = settingsViewModel;
-            this.keyboardDominanceWatcher = keyboardDominanceWatcher;
-            this.threadDelay = threadDelay;
-        }
+		public InstallArgumentProcessor(
+			IProcessManager processManager,
+			ICertificateManager certificateManager,
+			ISignHelper signHelper,
+			IEnvironmentInformation environmentInformation,
+			ISettingsViewModel settingsViewModel,
+			IKeyboardDominanceWatcher keyboardDominanceWatcher,
+			IThreadDelay threadDelay)
+		{
+			this.processManager = processManager;
+			this.certificateManager = certificateManager;
+			this.signHelper = signHelper;
+			this.environmentInformation = environmentInformation;
+			this.settingsViewModel = settingsViewModel;
+			this.keyboardDominanceWatcher = keyboardDominanceWatcher;
+			this.threadDelay = threadDelay;
+		}
 
-        public bool Terminates
-            => CanProcess();
+		public bool Terminates
+			=> CanProcess();
 
-        static string TargetDirectory
-        {
-            get
-            {
-                var programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-                return Path.Combine(programFilesPath, "Shapeshifter");
-            }
-        }
+		static string TargetDirectory
+		{
+			get
+			{
+				var programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+				return Path.Combine(programFilesPath, "Shapeshifter");
+			}
+		}
 
-        public bool CanProcess()
-        {
-            return !environmentInformation.GetIsDebugging() &&
-                   (processManager.GetCurrentProcessDirectory() != TargetDirectory);
-        }
+		static string TargetExecutableFile
+		{
+			get
+			{
+				return Path.Combine(TargetDirectory, "Shapeshifter.exe");
+			}
+		}
 
-        public void Process()
-        {
-            if (!processManager.IsCurrentProcessElevated())
-            {
-                Logger.Information("Current process is not elevated which is needed for installation. Starting as elevated process.");
-                processManager.LaunchFileWithAdministrativeRights(
-                    processManager.GetCurrentProcessFilePath());
-            }
-            else
-            {
-                Logger.Information("Current process is elevated.");
-                Logger.Information("Running installation procedure.");
-                Install();
-            }
-        }
+		public bool CanProcess()
+		{
+			return !environmentInformation.GetIsDebugging();
+		}
 
-        void Install()
-        {
-            PrepareInstallDirectory();
+		public void Process()
+		{
+			var isRunningFromInstallationFolder = processManager.GetCurrentProcessDirectory() == TargetDirectory;
+			if (!isRunningFromInstallationFolder && File.Exists(TargetExecutableFile)) {
+				processManager.LaunchFile(TargetExecutableFile);
+				return;
+			}
 
-            var currentExecutableFile = processManager.GetCurrentProcessFilePath();
-            var targetExecutableFile = Path.Combine(TargetDirectory, "Shapeshifter.exe");
+			if (!processManager.IsCurrentProcessElevated())
+			{
+				Logger.Information("Current process is not elevated which is needed for installation. Starting as elevated process.");
+				processManager.LaunchFileWithAdministrativeRights(
+					processManager.GetCurrentProcessFilePath());
+			}
+			else
+			{
+				Logger.Information("Current process is elevated.");
+				Logger.Information("Running installation procedure.");
+				Install();
+			}
+		}
 
-            InstallToInstallDirectory(targetExecutableFile);
-            SignAssembly(targetExecutableFile);
+		void Install()
+		{
+			PrepareInstallDirectory();
 
-            ConfigureDefaultSettings();
+			var currentExecutableFile = processManager.GetCurrentProcessFilePath();
 
-            Logger.Information("Default settings have been configured.");
-            Logger.Information("Configuring keyboard dominance watcher injection mechanism.");
+			InstallToInstallDirectory();
+			SignAssembly();
 
-            keyboardDominanceWatcher.Install();
+			ConfigureDefaultSettings();
 
-            Logger.Information("Injection mechanism installed and configured in the Global Assembly Cache.");
+			Logger.Information("Default settings have been configured.");
+			Logger.Information("Configuring keyboard dominance watcher injection mechanism.");
 
-            LaunchInstalledExecutable(targetExecutableFile, currentExecutableFile);
+			keyboardDominanceWatcher.Install();
 
-            Logger.Information("Launched installed executable.");
-        }
+			Logger.Information("Injection mechanism installed and configured in the Global Assembly Cache.");
 
-        void SignAssembly(string targetExecutableFile)
-        {
-            var selfSignedCertificate = InstallCertificateIfNotFound();
-            signHelper.SignAssemblyWithCertificate(targetExecutableFile, selfSignedCertificate);
+			LaunchInstalledExecutable(currentExecutableFile);
 
-            threadDelay.Execute(1000);
+			Logger.Information("Launched installed executable.");
+		}
 
-            Logger.Information("Executable signed with newly created self-signing certificate.");
-        }
+		void SignAssembly()
+		{
+			var selfSignedCertificate = InstallCertificateIfNotFound();
+			signHelper.SignAssemblyWithCertificate(
+				TargetExecutableFile,
+				selfSignedCertificate);
 
-        void InstallToInstallDirectory(string targetExecutableFile)
-        {
-            WriteManifest(targetExecutableFile);
-            WriteExecutable(targetExecutableFile);
+			threadDelay.Execute(1000);
 
-            threadDelay.Execute(1000);
+			Logger.Information("Executable signed with newly created self-signing certificate.");
+		}
 
-            Logger.Information("Executable and manifest written to install directory.");
-        }
+		void InstallToInstallDirectory()
+		{
+			WriteManifest();
+			WriteExecutable();
 
-        void ConfigureDefaultSettings()
-        {
-            settingsViewModel.StartWithWindows = true;
-        }
+			threadDelay.Execute(1000);
 
-        X509Certificate2 InstallCertificateIfNotFound()
-        {
-            var existingCertificates = certificateManager.GetCertificatesByIssuerFromStore(
-                $"CN={CertificateName}",
-                StoreName.My,
-                StoreLocation.LocalMachine);
-            if (existingCertificates.Any())
-            {
-                try
-                {
-                    return existingCertificates.Single();
-                }
-                finally
-                {
-                    Logger.Information("Using existing code signing certificate.");
-                }
-            }
+			Logger.Information("Executable and manifest written to install directory.");
+		}
 
-            try
-            {
-                return InstallCodeSigningCertificate();
-            }
-            finally
-            {
-                Logger.Information("Installed new code signing certificate.");
-            }
-        }
+		void ConfigureDefaultSettings()
+		{
+			settingsViewModel.StartWithWindows = true;
+		}
 
-        X509Certificate2 InstallCodeSigningCertificate()
-        {
-            var certificate = certificateManager.GenerateSelfSignedCertificate(
-                $"CN={CertificateName}");
-            certificateManager.InstallCertificateToStore(
-                certificate,
-                StoreName.My,
-                StoreLocation.LocalMachine);
-            certificateManager.InstallCertificateToStore(
-                certificate,
-                StoreName.Root,
-                StoreLocation.LocalMachine);
+		X509Certificate2 InstallCertificateIfNotFound()
+		{
+			var existingCertificates = certificateManager.GetCertificatesByIssuerFromStore(
+				$"CN={CertificateName}",
+				StoreName.My,
+				StoreLocation.LocalMachine);
+			if (existingCertificates.Any())
+			{
+				try
+				{
+					return existingCertificates.Single();
+				}
+				finally
+				{
+					Logger.Information("Using existing code signing certificate.");
+				}
+			}
 
-            return certificate;
-        }
+			try
+			{
+				return InstallCodeSigningCertificate();
+			}
+			finally
+			{
+				Logger.Information("Installed new code signing certificate.");
+			}
+		}
 
-        void LaunchInstalledExecutable(string targetExecutableFile, string currentExecutableFile)
-        {
-            processManager.LaunchFileWithAdministrativeRights(targetExecutableFile, $"cleanup \"{currentExecutableFile}\"");
-        }
+		X509Certificate2 InstallCodeSigningCertificate()
+		{
+			var certificate = certificateManager.GenerateSelfSignedCertificate(
+				$"CN={CertificateName}");
+			certificateManager.InstallCertificateToStore(
+				certificate,
+				StoreName.My,
+				StoreLocation.LocalMachine);
+			certificateManager.InstallCertificateToStore(
+				certificate,
+				StoreName.Root,
+				StoreLocation.LocalMachine);
 
-        void WriteExecutable(string targetExecutableFile)
-        {
-            File.Copy(
-                processManager.GetCurrentProcessFilePath(),
-                targetExecutableFile,
-                true);
-        }
+			return certificate;
+		}
 
-        static void WriteManifest(string targetExecutableFile)
-        {
-            var targetManifestFile = $"{targetExecutableFile}.manifest";
-            File.WriteAllBytes(
-                targetManifestFile,
-                Resources.App);
-        }
+		void LaunchInstalledExecutable(string currentExecutableFile)
+		{
+			processManager.LaunchFileWithAdministrativeRights(TargetExecutableFile, $"cleanup \"{currentExecutableFile}\"");
+		}
 
-        void PrepareInstallDirectory()
-        {
-            Logger.Information("Target install directory is " + TargetDirectory + ".");
+		void WriteExecutable()
+		{
+			File.Copy(
+				processManager.GetCurrentProcessFilePath(),
+				TargetExecutableFile,
+				true);
+		}
 
-            if (Directory.Exists(TargetDirectory))
-            {
-                Directory.Delete(TargetDirectory, true);
-            }
+		static void WriteManifest()
+		{
+			var targetManifestFile = $"{TargetExecutableFile}.manifest";
+			File.WriteAllBytes(
+				targetManifestFile,
+				Resources.App);
+		}
 
-            Directory.CreateDirectory(TargetDirectory);
+		void PrepareInstallDirectory()
+		{
+			Logger.Information("Target install directory is " + TargetDirectory + ".");
 
-            Logger.Information("Install directory prepared.");
-        }
-    }
+			if (Directory.Exists(TargetDirectory))
+			{
+				Directory.Delete(TargetDirectory, true);
+			}
+
+			Directory.CreateDirectory(TargetDirectory);
+
+			Logger.Information("Install directory prepared.");
+		}
+	}
 }

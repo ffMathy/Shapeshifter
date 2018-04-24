@@ -2,8 +2,10 @@
 {
 	using System;
 	using System.Drawing;
+	using System.Runtime.InteropServices;
 	using System.Windows.Forms;
 	using System.Windows.Interop;
+	using System.Windows.Media;
 	using System.Windows.Media.Imaging;
 	using Controls.Window.Interfaces;
 
@@ -13,24 +15,31 @@
 	using Native.Interfaces;
 
 	using Services.Images.Interfaces;
+	using static Shapeshifter.WindowsDesktop.Native.ImageNativeApi;
 
 	class BitmapUnwrapper : IBitmapUnwrapper
 	{
 		readonly IImagePersistenceService imagePersistenceService;
 		readonly IClipboardNativeApi clipboardNativeApi;
 		readonly IImageNativeApi imageNativeApi;
+		readonly IGeneralNativeApi generalNativeApi;
 		readonly IMainWindowHandleContainer mainWindowHandleContainer;
+		readonly IMemoryUnwrapper memoryUnwrapper;
 
 		public BitmapUnwrapper(
 			IImagePersistenceService imagePersistenceService,
 			IClipboardNativeApi clipboardNativeApi,
 			IImageNativeApi imageNativeApi,
-			IMainWindowHandleContainer mainWindowHandleContainer)
+			IGeneralNativeApi generalNativeApi,
+			IMainWindowHandleContainer mainWindowHandleContainer,
+			IMemoryUnwrapper memoryUnwrapper)
 		{
 			this.imagePersistenceService = imagePersistenceService;
 			this.clipboardNativeApi = clipboardNativeApi;
 			this.imageNativeApi = imageNativeApi;
+			this.generalNativeApi = generalNativeApi;
 			this.mainWindowHandleContainer = mainWindowHandleContainer;
+			this.memoryUnwrapper = memoryUnwrapper;
 		}
 
 		public bool CanUnwrap(uint format)
@@ -43,36 +52,68 @@
 
 		public byte[] UnwrapStructure(uint format)
 		{
-			//HACK: we close the clipboard here to avoid it being already open. should definitely be fixed for final release.
-			try
+			var hBitmap = clipboardNativeApi.GetClipboardData(ClipboardNativeApi.CF_DIBV5);
+			var ptr = generalNativeApi.GlobalLock(hBitmap);
+
+			var bitmapSource = DIBV5ToBitmapSource(hBitmap);
+			return imagePersistenceService.ConvertBitmapSourceToByteArray(bitmapSource);
+		}
+
+		PixelFormat GetPixelFormatFromBitsPerPixel(ushort bitsPerPixel)
+		{
+			using (CrossThreadLogContext.Add(nameof(bitsPerPixel), bitsPerPixel))
 			{
-				clipboardNativeApi.CloseClipboard();
-
-				//HACK: we are using Windows Forms here to fetch image data. Ugly, but it works.
-				var clipboardData = Clipboard.GetDataObject();
-				using (var bitmap = (Bitmap)clipboardData.GetData(DataFormats.Bitmap))
+				switch (bitsPerPixel)
 				{
-					var hBitmap = bitmap.GetHbitmap();
-					try
-					{
-						var image = Imaging.CreateBitmapSourceFromHBitmap(
-							hBitmap,
-							IntPtr.Zero,
-							System.Windows.Int32Rect.Empty,
-							BitmapSizeOptions.FromEmptyOptions());
+					case 2:
+						return PixelFormats.BlackWhite;
 
-						return imagePersistenceService.ConvertBitmapSourceToByteArray(image);
-					}
-					finally
-					{
-						imageNativeApi.DeleteObject(hBitmap);
-					}
+					case 8:
+						return PixelFormats.Gray8;
+
+					case 16:
+						return PixelFormats.Gray16;
+			
+					case 24:
+						return PixelFormats.Bgr24;
+
+					case 32:
+						return PixelFormats.Bgra32;
+
+					default:
+						throw new InvalidOperationException("Could not recognize the pixel format.");
 				}
 			}
-			finally
-			{
-				clipboardNativeApi
-					.OpenClipboard(mainWindowHandleContainer.Handle);
+		}
+
+		BitmapSource DIBV5ToBitmapSource(IntPtr hBitmap)
+		{
+			var bmi = (BITMAPV5HEADER)Marshal.PtrToStructure(hBitmap, typeof(BITMAPV5HEADER));
+			using(CrossThreadLogContext.Add(nameof(bmi), bmi)) { 
+				var stride = (int)(bmi.bV5SizeImage / bmi.bV5Height);
+				var rgbQuadSize = Marshal.SizeOf<RGBQUAD>();
+				var offset = bmi.bV5Size + bmi.bV5ClrUsed * rgbQuadSize;
+				if (bmi.bV5Compression == (uint)BitmapCompressionMode.BI_BITFIELDS)
+				{
+					offset += 12;
+				}
+
+				var scan0 = new IntPtr(hBitmap.ToInt64() + offset);
+
+				var imageBytes = new byte[bmi.bV5SizeImage];
+				Marshal.Copy(scan0, imageBytes, 0, imageBytes.Length);
+
+				var reversedImageBytes = new byte[imageBytes.Length];
+				for (int pBuf = imageBytes.Length, pMap = 0; pBuf > 0; pMap += stride, pBuf -= stride)
+					Array.Copy(imageBytes, pMap, reversedImageBytes, pBuf - stride, stride);
+
+				var bmpSource = BitmapSource.Create(
+					bmi.bV5Width, bmi.bV5Height,
+					bmi.bV5XPelsPerMeter, bmi.bV5YPelsPerMeter,
+					GetPixelFormatFromBitsPerPixel(bmi.bV5BitCount), null,
+					reversedImageBytes, stride);
+
+				return bmpSource;
 			}
 		}
 	}

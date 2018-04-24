@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services
 {
 	using System;
+	using System.Threading.Tasks;
 	using System.Windows.Input;
 
 	using Infrastructure.Events;
@@ -114,7 +115,7 @@
             IsConnected = false;
         }
 
-        public void ReceiveMessageEvent(
+        public Task ReceiveMessageEventAsync(
             WindowMessageReceivedArgument e)
         {
             switch (e.Message)
@@ -128,6 +129,8 @@
                     HandleExtraButtonMessage(e);
                     break;
             }
+
+			return Task.CompletedTask;
         }
 
         void HandleExtraButtonMessage(

@@ -117,7 +117,7 @@
 				logger.Information(
 					$"Passing message {messageName} to interceptor {interceptorName}.");
 
-				interceptor.ReceiveMessageEvent(nextMessage);
+				await interceptor.ReceiveMessageEventAsync(nextMessage);
 			}
 		}
 

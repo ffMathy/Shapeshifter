@@ -39,9 +39,9 @@
         public async Task<bool> CanPerformAsync(
             IClipboardDataPackage package)
         {
-            var supportedData = await asyncFilter.FilterAsync(package.Contents, CanPerformAsync);
-            return supportedData.Any();
-        }
+			var supportedData = await asyncFilter.FilterAsync(package.Contents, CanPerformAsync);
+			return supportedData.Any();
+		}
 
         async Task<bool> CanPerformAsync(
             IClipboardData clipboardData)

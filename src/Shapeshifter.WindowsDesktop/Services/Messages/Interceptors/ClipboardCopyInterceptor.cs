@@ -2,13 +2,14 @@
 {
 	using System;
 	using System.Runtime.InteropServices;
-
+	using System.Threading.Tasks;
 	using Infrastructure.Events;
 
 	using Interfaces;
 
 	using Native.Interfaces;
 	using Serilog;
+	using Shapeshifter.WindowsDesktop.Infrastructure.Threading.Interfaces;
 
 	class ClipboardCopyInterceptor: IClipboardCopyInterceptor
     {
@@ -21,37 +22,41 @@
         IntPtr mainWindowHandle;
 
         readonly ILogger logger;
-
         readonly IClipboardNativeApi clipboardNativeApi;
-
         readonly IWindowNativeApi windowNativeApi;
+		readonly IThreadDeferrer threadDeferrer;
 
-        public ClipboardCopyInterceptor(
+		public ClipboardCopyInterceptor(
             ILogger logger,
             IClipboardNativeApi clipboardNativeApi,
-            IWindowNativeApi windowNativeApi)
+            IWindowNativeApi windowNativeApi,
+			IThreadDeferrer threadDeferrer)
         {
             this.logger = logger;
             this.clipboardNativeApi = clipboardNativeApi;
             this.windowNativeApi = windowNativeApi;
-        }
+			this.threadDeferrer = threadDeferrer;
+		}
 
-        void HandleClipboardUpdateWindowMessage()
+        async Task HandleClipboardUpdateWindowMessage()
         {
-            var clipboardItemIdentifier = clipboardNativeApi.GetClipboardSequenceNumber();
+			await threadDeferrer.DeferAsync(100, () => {
+				var clipboardItemIdentifier = clipboardNativeApi.GetClipboardSequenceNumber();
 
-            logger.Information(
-                $"Clipboard update message received with sequence #{clipboardItemIdentifier}.",
-                1);
+				logger.Information(
+					$"Clipboard update message received with sequence #{clipboardItemIdentifier}.",
+					1);
 
-            if (clipboardItemIdentifier == lastClipboardItemIdentifier)
-            {
-                return;
-            }
+				if (clipboardItemIdentifier == lastClipboardItemIdentifier)
+				{
+					logger.Verbose("Skipping clipboard update message because the sequence ID has not changed.");
+					return;
+				}
 
-            lastClipboardItemIdentifier = clipboardItemIdentifier;
+				lastClipboardItemIdentifier = clipboardItemIdentifier;
 
-            TriggerDataCopiedEvent();
+				TriggerDataCopiedEvent();
+			});
         }
 
         void TriggerDataCopiedEvent()
@@ -89,7 +94,7 @@
             }
         }
 
-        public void ReceiveMessageEvent(WindowMessageReceivedArgument eventArgument)
+        public async Task ReceiveMessageEventAsync(WindowMessageReceivedArgument eventArgument)
         {
             if (eventArgument.Message != Message.WM_CLIPBOARDUPDATE)
             {
@@ -104,7 +109,7 @@
                 return;
             }
 
-            HandleClipboardUpdateWindowMessage();
+            await HandleClipboardUpdateWindowMessage();
         }
 
         public void SkipNext()
