@@ -80,7 +80,7 @@
 				Process.GetCurrentProcess().Kill();
 			}
 
-			return true;
+			return false;
 		}
 	}
 }
