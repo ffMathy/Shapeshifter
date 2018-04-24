@@ -157,7 +157,7 @@
 			using (CrossThreadLogContext.Add("verb", verb))
 			using (CrossThreadLogContext.Add("arguments", arguments))
 			{
-				logger.Verbose("Launching {verb} {fileName} in {workingDirectory} with arguments {arguments}.");
+				logger.Verbose("Launching {fileName} under verb {verb} in {workingDirectory} with arguments {arguments}.");
 
 				var process = Process.Start(
 					new ProcessStartInfo {
