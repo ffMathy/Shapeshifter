@@ -12,7 +12,7 @@
     {
         [TestMethod]
         [TestCategory("Integration")]
-        public void CanCreateFoldersAndDisposeThemAgain()
+        public async Task CanCreateFoldersAndDisposeThemAgain()
         {
             string permanentPath;
             string temporaryPath;
@@ -20,7 +20,7 @@
             {
                 permanentPath = SystemUnderTest.PrepareIsolatedFolder(
                     "Permanent");
-                temporaryPath = SystemUnderTest.PrepareTemporaryFolder(
+                temporaryPath = await SystemUnderTest.PrepareTemporaryFolderAsync(
                     "Temporary");
 
                 Assert.IsTrue(Directory.Exists(permanentPath));

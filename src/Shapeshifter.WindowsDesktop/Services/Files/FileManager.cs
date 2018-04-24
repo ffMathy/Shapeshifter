@@ -4,7 +4,8 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Threading.Tasks;
+	using System.Threading;
+	using System.Threading.Tasks;
 
     using Infrastructure.Threading;
     using Infrastructure.Threading.Interfaces;
@@ -15,15 +16,17 @@
         : IFileManager
     {
         readonly IRetryingThreadLoop retryingThreadLoop;
+		readonly IThreadDelay threadDelay;
 
-        readonly ICollection<string> temporaryPaths;
+		readonly ICollection<string> temporaryPaths;
 
         public FileManager(
-            IRetryingThreadLoop retryingThreadLoop)
+            IRetryingThreadLoop retryingThreadLoop,
+			IThreadDelay threadDelay)
         {
             this.retryingThreadLoop = retryingThreadLoop;
-
-            temporaryPaths = new HashSet<string>();
+			this.threadDelay = threadDelay;
+			temporaryPaths = new HashSet<string>();
 
             PurgeTemporaryDirectory();
         }
@@ -221,10 +224,12 @@
             return finalPath;
         }
 
-        public string PrepareTemporaryFolder(string relativePath)
+        public async Task<string> PrepareTemporaryFolderAsync(string relativePath)
         {
             var finalPath = GetFullPathFromTemporaryPath(relativePath);
             WatchDirectory(finalPath);
+
+			await threadDelay.ExecuteAsync(1000);
 
             return finalPath;
         }

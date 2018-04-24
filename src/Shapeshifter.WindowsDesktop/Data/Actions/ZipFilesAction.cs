@@ -89,7 +89,7 @@
                 .ToArray();
             var commonPath = fileManager.FindCommonFolderFromPaths(filePaths);
             var directoryName = Path.GetFileName(commonPath);
-            var directoryPath = fileManager.PrepareTemporaryFolder(directoryName);
+            var directoryPath = await fileManager.PrepareTemporaryFolderAsync(directoryName);
             await CopyFilesToTemporaryFolderAsync(
                 fileDataItems,
                 directoryPath);
@@ -120,7 +120,7 @@
         async Task<string> ZipDirectoryAsync(string directory)
         {
             var directoryName = Path.GetFileName(directory);
-            var compressedFolderDirectory = fileManager.PrepareTemporaryFolder($"Compressed folders");
+            var compressedFolderDirectory = await fileManager.PrepareTemporaryFolderAsync($"Compressed folders");
             var zipFile = Path.Combine(compressedFolderDirectory, $"{directoryName}.zip");
 
             await fileManager.DeleteFileIfExistsAsync(zipFile);
