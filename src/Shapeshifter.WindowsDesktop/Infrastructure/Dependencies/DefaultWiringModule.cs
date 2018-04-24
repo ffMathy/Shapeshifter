@@ -81,8 +81,6 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 					outputTemplate: "[{ProcessId}] {Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
 				.CreateLogger();
 
-			Log.Logger.Verbose("Logger has started.");
-
 			builder.RegisterLogger(autowireProperties: true);
 		}
 
