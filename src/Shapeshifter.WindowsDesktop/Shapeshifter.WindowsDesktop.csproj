@@ -209,6 +209,9 @@
     <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardTextDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\Interfaces\IClipboardTextDataViewModel.cs" />
     <Compile Include="Controls\Designer\Services\IDesignerService.cs" />
+    <Compile Include="Controls\NumberTextBox.xaml.cs">
+      <DependentUpon>NumberTextBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Patreon\PatreonDonateControl.xaml.cs">
       <DependentUpon>PatreonDonateControl.xaml</DependentUpon>
     </Compile>
@@ -503,6 +506,10 @@
     <Compile Include="Controls\Window\ViewModels\UserInterfaceViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\IUserInterfaceViewModel.cs" />
     <Page Include="Controls\Clipboard\ClipboardImageDataControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NumberTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
