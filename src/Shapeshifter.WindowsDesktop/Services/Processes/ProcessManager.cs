@@ -60,22 +60,40 @@
 		{
 			logger.Verbose("Closing all duplicate processes.");
 
-			var processes = Process.GetProcessesByName(currentProcess.ProcessName);
-			CloseProcessesExceptProcessWithId(currentProcess.Id, processes);
+			var currentProcessProductName = GetProcessProductName(currentProcess);
+			if(currentProcessProductName == null)
+				throw new Exception("Could not detect the current process product name.");
+
+			foreach (var process in Process.GetProcesses())
+			{
+				try
+				{
+					if (GetProcessProductName(process) != currentProcessProductName)
+						continue;
+
+					if (process.Id != currentProcess.Id)
+						CloseProcess(process);
+				}
+				catch (Win32Exception)
+				{
+					//access denied due to non-elevated process trying to kill elevated one.
+				}
+				finally
+				{
+					process.Dispose();
+				}
+			}
 		}
 
-		static void CloseProcessesExceptProcessWithId(
-			int processId,
-			params Process[] targetProcesses)
+		static string GetProcessProductName(Process process)
 		{
-			foreach (var process in targetProcesses)
+			try
 			{
-				if (process.Id == processId)
-				{
-					continue;
-				}
-
-				CloseProcess(process);
+				return process.MainModule.FileVersionInfo.ProductName;
+			}
+			catch (FileNotFoundException)
+			{
+				return null;
 			}
 		}
 
@@ -94,10 +112,6 @@
 				}
 
 				process.Kill();
-			}
-			catch (Win32Exception)
-			{
-				//trying to kill an elevated process.
 			}
 			finally
 			{
