@@ -283,8 +283,10 @@
     <Compile Include="Infrastructure\Signing\Interfaces\ISignHelper.cs" />
     <Compile Include="Infrastructure\Signing\SignHelper.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IRetryingThreadLoop.cs" />
+    <Compile Include="Infrastructure\Threading\Interfaces\IThreadDeferrer.cs" />
     <Compile Include="Infrastructure\Threading\RetryingThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\RetryingThreadLoopJob.cs" />
+    <Compile Include="Infrastructure\Threading\ThreadDeferrer.cs" />
     <Compile Include="Mediators\Interfaces\ClipboardUserInterfacePane.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
