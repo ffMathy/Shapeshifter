@@ -78,13 +78,26 @@
 
 		public bool CanProcess()
 		{
-			return !environmentInformation.GetIsDebugging();
+			var isDebugging = environmentInformation.GetIsDebugging();
+			if (isDebugging)
+				return false;
+
+			return !GetIsCurrentlyRunningFromInstallationFolder() || DoesTargetExecutableExist();
+		}
+
+		private bool GetIsCurrentlyRunningFromInstallationFolder()
+		{
+			return processManager.GetCurrentProcessDirectory() == TargetDirectory;
+		}
+
+		private static bool DoesTargetExecutableExist()
+		{
+			return File.Exists(TargetExecutableFile);
 		}
 
 		public void Process()
 		{
-			var isRunningFromInstallationFolder = processManager.GetCurrentProcessDirectory() == TargetDirectory;
-			if (!isRunningFromInstallationFolder && File.Exists(TargetExecutableFile)) {
+			if (!GetIsCurrentlyRunningFromInstallationFolder() && DoesTargetExecutableExist()) {
 				processManager.LaunchFile(TargetExecutableFile);
 				return;
 			}
@@ -106,9 +119,7 @@
 		void Install()
 		{
 			PrepareInstallDirectory();
-
-			var currentExecutableFile = processManager.GetCurrentProcessFilePath();
-
+			
 			InstallToInstallDirectory();
 			SignAssembly();
 
@@ -121,7 +132,8 @@
 
 			Logger.Information("Injection mechanism installed and configured in the Global Assembly Cache.");
 
-			LaunchInstalledExecutable(currentExecutableFile);
+			LaunchInstalledExecutable(
+				processManager.GetCurrentProcessFilePath());
 
 			Logger.Information("Launched installed executable.");
 		}

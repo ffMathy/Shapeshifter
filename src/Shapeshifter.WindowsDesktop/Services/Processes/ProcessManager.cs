@@ -1,142 +1,154 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Processes
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Security.Principal;
+	using System;
+	using System.Collections.Generic;
+	using System.Diagnostics;
+	using System.IO;
+	using System.Security.Principal;
 
-    using Interfaces;
+	using Interfaces;
+	using Serilog;
 
-    class ProcessManager
-        : IProcessManager
-    {
-        readonly ICollection<Process> processes;
+	class ProcessManager
+		: IProcessManager
+	{
+		readonly ILogger logger;
 
-        public ProcessManager()
-        {
-            processes = new HashSet<Process>();
-        }
+		readonly ICollection<Process> processes;
+		readonly Process currentProcess;
 
-        public void Dispose()
-        {
-            foreach (var process in processes)
-            {
-                CloseProcess(process);
-            }
-        }
+		public ProcessManager(
+			ILogger logger)
+		{
+			processes = new HashSet<Process>();
+			currentProcess = Process.GetCurrentProcess();
 
-        public string GetCurrentProcessName()
-        {
-            using (var currentProcess = Process.GetCurrentProcess())
-                return
-                    $"{currentProcess.ProcessName}";
-        }
+			this.logger = logger;
+		}
 
-        public string GetCurrentProcessFilePath()
-        {
-            return Path.Combine(
-                GetCurrentProcessDirectory(),
-                $"{GetCurrentProcessName()}.exe");
-        }
+		public void Dispose()
+		{
+			foreach (var process in processes)
+			{
+				CloseProcess(process);
+			}
+		}
 
-        public string GetCurrentProcessDirectory()
-        {
-            return Environment.CurrentDirectory;
-        }
+		public int CurrentProcessId => currentProcess.Id;
 
-        public void LaunchCommand(string command, string arguments = null)
-        {
-            SpawnProcess(command, Environment.CurrentDirectory);
-        }
+		public string CurrentProcessName => $"{currentProcess.ProcessName}";
 
-        public void CloseAllDuplicateProcessesExceptCurrent()
-        {
-            using (var currentProcess = Process.GetCurrentProcess())
-            {
-                var processes = Process.GetProcessesByName(currentProcess.ProcessName);
-                CloseProcessesExceptProcessWithId(currentProcess.Id, processes);
-            }
-        }
+		public string GetCurrentProcessFilePath()
+		{
+			return Path.Combine(
+				GetCurrentProcessDirectory(),
+				$"{CurrentProcessName}.exe");
+		}
 
-        static void CloseProcessesExceptProcessWithId(
-            int processId,
-            params Process[] targetProcesses)
-        {
-            foreach (var process in targetProcesses)
-            {
-                if (process.Id == processId)
-                {
-                    continue;
-                }
+		public string GetCurrentProcessDirectory()
+		{
+			return Environment.CurrentDirectory;
+		}
 
-                CloseProcess(process);
-            }
-        }
+		public void LaunchCommand(string command, string arguments = null)
+		{
+			SpawnProcess(command, Environment.CurrentDirectory);
+		}
 
-        static void CloseProcess(Process process)
-        {
-            try
-            {
-                if (process.HasExited)
-                {
-                    return;
-                }
+		public void CloseAllDuplicateProcessesExceptCurrent()
+		{
+			logger.Verbose("Closing all duplicate processes.");
 
-                if (CloseMainWindow(process))
-                {
-                    return;
-                }
+			var processes = Process.GetProcessesByName(currentProcess.ProcessName);
+			CloseProcessesExceptProcessWithId(currentProcess.Id, processes);
+		}
 
-                process.Kill();
-            }
-            finally
-            {
-                process.Dispose();
-            }
-        }
+		static void CloseProcessesExceptProcessWithId(
+			int processId,
+			params Process[] targetProcesses)
+		{
+			foreach (var process in targetProcesses)
+			{
+				if (process.Id == processId)
+				{
+					continue;
+				}
 
-        static bool CloseMainWindow(Process process)
-        {
-            process.CloseMainWindow();
-            if (process.WaitForExit(3000))
-            {
-                return true;
-            }
-            return false;
-        }
+				CloseProcess(process);
+			}
+		}
 
-        public void LaunchFile(string fileName, string arguments = null)
-        {
-            var workingDirectory = Path.GetDirectoryName(fileName);
-            SpawnProcess(fileName, workingDirectory);
-        }
+		static void CloseProcess(Process process)
+		{
+			try
+			{
+				if (process.HasExited)
+				{
+					return;
+				}
 
-        public void LaunchFileWithAdministrativeRights(string fileName, string arguments = null)
-        {
-            var workingDirectory = Path.GetDirectoryName(fileName);
-            SpawnProcess(fileName, workingDirectory, "runas");
-        }
+				if (CloseMainWindow(process))
+				{
+					return;
+				}
 
-        public bool IsCurrentProcessElevated()
-        {
-            using (var identity = WindowsIdentity.GetCurrent())
-            {
-                var principal = new WindowsPrincipal(identity);
-                return principal.IsInRole(WindowsBuiltInRole.Administrator);
-            }
-        }
+				process.Kill();
+			}
+			finally
+			{
+				process.Dispose();
+			}
+		}
 
-        void SpawnProcess(string uri, string workingDirectory, string verb = null)
-        {
-            var process = Process.Start(
-                new ProcessStartInfo
-                {
-                    FileName = uri,
-                    WorkingDirectory = workingDirectory,
-                    Verb = verb
-                });
-            processes.Add(process);
-        }
-    }
+		static bool CloseMainWindow(Process process)
+		{
+			process.CloseMainWindow();
+			if (process.WaitForExit(3000))
+			{
+				return true;
+			}
+			return false;
+		}
+
+		public void LaunchFile(string fileName, string arguments = null)
+		{
+			var workingDirectory = Path.GetDirectoryName(fileName);
+			SpawnProcess(fileName, workingDirectory, arguments);
+		}
+
+		public void LaunchFileWithAdministrativeRights(string fileName, string arguments = null)
+		{
+			var workingDirectory = Path.GetDirectoryName(fileName);
+			SpawnProcess(fileName, workingDirectory, arguments, "runas");
+		}
+
+		public bool IsCurrentProcessElevated()
+		{
+			using (var identity = WindowsIdentity.GetCurrent())
+			{
+				var principal = new WindowsPrincipal(identity);
+				return principal.IsInRole(WindowsBuiltInRole.Administrator);
+			}
+		}
+
+		void SpawnProcess(string uri, string workingDirectory, string arguments = null, string verb = null)
+		{
+			using (CrossThreadLogContext.Add("fileName", uri))
+			using (CrossThreadLogContext.Add("workingDirectory", workingDirectory))
+			using (CrossThreadLogContext.Add("verb", verb))
+			using (CrossThreadLogContext.Add("arguments", arguments))
+			{
+				logger.Verbose("Launching {verb} {fileName} in {workingDirectory} with arguments {arguments}.");
+
+				var process = Process.Start(
+				new ProcessStartInfo {
+					FileName = uri,
+					WorkingDirectory = workingDirectory,
+					Verb = verb,
+					Arguments = arguments
+				});
+				processes.Add(process);
+			}
+		}
+	}
 }

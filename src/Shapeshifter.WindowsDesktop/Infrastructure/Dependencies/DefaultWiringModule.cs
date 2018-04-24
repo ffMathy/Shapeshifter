@@ -3,6 +3,7 @@
 namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 {
 	using System;
+	using System.Diagnostics;
 	using System.IO;
 	using System.Windows.Threading;
 
@@ -19,6 +20,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 	using Serilog.Formatting;
 	using Serilog.Formatting.Compact;
 	using Shapeshifter.WindowsDesktop.Services.Files;
+	using Shapeshifter.WindowsDesktop.Services.Processes;
 	using Threading;
 
 	public class DefaultWiringModule : AutofacModule
@@ -64,9 +66,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 
 		static void RegisterLogging(IEnvironmentInformation environment, ContainerBuilder builder)
 		{
-			var formatter = new RenderedCompactJsonFormatter();
-
 			Log.Logger = new LoggerConfiguration()
+				.Enrich.WithProperty("ProcessId", Process.GetCurrentProcess().Id)
 				.Enrich.FromLogContext()
 				.WriteTo.ColoredConsole()
 				.WriteTo.Debug()
@@ -74,7 +75,9 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 					FileManager.GetFullPathFromTemporaryPath("Shapeshifter.log"),
 					fileSizeLimitBytes: 1024 * 1024,
 					restrictedToMinimumLevel: LogEventLevel.Verbose,
-					rollOnFileSizeLimit: true)
+					rollOnFileSizeLimit: true,
+					shared: true,
+					outputTemplate: "[{ProcessId}] {Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
 				.CreateLogger();
 
 			builder.RegisterLogger(autowireProperties: true);
