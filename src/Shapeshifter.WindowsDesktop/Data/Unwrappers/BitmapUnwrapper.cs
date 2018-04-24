@@ -57,58 +57,13 @@
 			var hBitmap = clipboardNativeApi.GetClipboardData(ClipboardNativeApi.CF_DIBV5);
 			var ptr = generalNativeApi.GlobalLock(hBitmap);
 
-			return GetAllBytesFromBitmapHeader(hBitmap, GetBitmapHeader(hBitmap));
+			return GetAllBytesFromBitmapHeader(hBitmap);
 		}
 
-		PixelFormat GetPixelFormatFromBitsPerPixel(ushort bitsPerPixel)
+		static byte[] GetAllBytesFromBitmapHeader(IntPtr hBitmap)
 		{
-			using (CrossThreadLogContext.Add(nameof(bitsPerPixel), bitsPerPixel))
-			{
-				switch (bitsPerPixel)
-				{
-					case 2:
-						return PixelFormats.BlackWhite;
+			var bmi = (BITMAPV5HEADER)Marshal.PtrToStructure(hBitmap, typeof(BITMAPV5HEADER));
 
-					case 8:
-						return PixelFormats.Gray8;
-
-					case 16:
-						return PixelFormats.Gray16;
-
-					case 24:
-						return PixelFormats.Bgr24;
-
-					case 32:
-						return PixelFormats.Bgra32;
-
-					default:
-						throw new InvalidOperationException("Could not recognize the pixel format.");
-				}
-			}
-		}
-
-		BitmapSource DIBV5ToBitmapSource(IntPtr hBitmap)
-		{
-			var bmi = GetBitmapHeader(hBitmap);
-			var allBytes = GetAllBytesFromBitmapHeader(hBitmap, bmi);
-			var imageBytes = GetImageBytesFromAllBytes(allBytes, bmi);
-			var stride = GetStrideFromBitmapHeader(bmi);
-			
-			var reversedImageBytes = new byte[imageBytes.Length];
-			for (int pBuf = imageBytes.Length, pMap = 0; pBuf > 0; pMap += stride, pBuf -= stride)
-				Array.Copy(imageBytes, pMap, reversedImageBytes, pBuf - stride, stride);
-
-			var bmpSource = BitmapSource.Create(
-				bmi.bV5Width, bmi.bV5Height,
-				bmi.bV5XPelsPerMeter, bmi.bV5YPelsPerMeter,
-				GetPixelFormatFromBitsPerPixel(bmi.bV5BitCount), null,
-				reversedImageBytes, stride);
-
-			return bmpSource;
-		}
-
-		static byte[] GetAllBytesFromBitmapHeader(IntPtr hBitmap, BITMAPV5HEADER bmi)
-		{
 			var fileHeaderSize = Marshal.SizeOf(typeof(BITMAPFILEHEADER));
 			var infoHeaderSize = bmi.bV5Size;
 			var fileSize = (int)(fileHeaderSize + infoHeaderSize + bmi.bV5SizeImage);
@@ -133,31 +88,6 @@
 
 				return bitmapStream.ToArray();
 			}
-		}
-
-		static byte[] GetImageBytesFromAllBytes(byte[] bytes, BITMAPV5HEADER bmi)
-		{
-			var stride = GetStrideFromBitmapHeader(bmi);
-			var offset = bmi.bV5Size + Marshal.SizeOf(typeof(BITMAPFILEHEADER)) + bmi.bV5ClrUsed * Marshal.SizeOf<RGBQUAD>();
-			if (bmi.bV5Compression == (uint)BitmapCompressionMode.BI_BITFIELDS)
-			{
-				offset += 12;
-			}
-
-			var imageBytes = new byte[bmi.bV5SizeImage];
-			Array.Copy(bytes, offset, imageBytes, 0, imageBytes.Length);
-		
-			return imageBytes;
-		}
-
-		static int GetStrideFromBitmapHeader(BITMAPV5HEADER bmi)
-		{
-			return (int)(bmi.bV5SizeImage / bmi.bV5Height);
-		}
-
-		static BITMAPV5HEADER GetBitmapHeader(IntPtr hBitmap)
-		{
-			return (BITMAPV5HEADER)Marshal.PtrToStructure(hBitmap, typeof(BITMAPV5HEADER));
 		}
 	}
 }
