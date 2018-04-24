@@ -103,7 +103,7 @@
             {
                 Config.Register(
                     nameof(Shapeshifter),
-                    $"{processManager.GetCurrentProcessName()}.exe",
+                    $"{processManager.CurrentProcessName}.exe",
                     GetInjectedLibraryName());
             } catch(Exception ex)
             {

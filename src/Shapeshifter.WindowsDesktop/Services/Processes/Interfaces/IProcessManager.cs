@@ -1,23 +1,22 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Processes.Interfaces
 {
-    using System;
+	using System;
 
-    public interface IProcessManager: IDisposable
-    {
-        void LaunchFile(string fileName, string arguments = null);
+	public interface IProcessManager : IDisposable
+	{
+		void LaunchFile(string fileName, string arguments = null);
+		void LaunchFileWithAdministrativeRights(string fileName, string arguments = null);
 
-        void LaunchFileWithAdministrativeRights(string fileName, string arguments = null);
+		bool IsCurrentProcessElevated();
 
-        bool IsCurrentProcessElevated();
+		string GetCurrentProcessFilePath();
+		string GetCurrentProcessDirectory();
 
-        string GetCurrentProcessFilePath();
+		string CurrentProcessName { get; }
+		int CurrentProcessId { get; }
 
-        string GetCurrentProcessDirectory();
+		void LaunchCommand(string command, string arguments = null);
 
-        string GetCurrentProcessName();
-
-        void LaunchCommand(string command, string arguments = null);
-
-        void CloseAllDuplicateProcessesExceptCurrent();
-    }
+		void CloseAllDuplicateProcessesExceptCurrent();
+	}
 }

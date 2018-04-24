@@ -10,17 +10,11 @@
         : IProcessManager,
           IDesignerService
     {
-        public string GetCurrentProcessFilePath()
-        {
-            throw new NotImplementedException();
-        }
+		public string CurrentProcessName => throw new NotImplementedException();
 
-        public string GetCurrentProcessName()
-        {
-            throw new NotImplementedException();
-        }
+		public int CurrentProcessId => throw new NotImplementedException();
 
-        public void LaunchCommand(string command, string arguments = null) { }
+		public void LaunchCommand(string command, string arguments = null) { }
 
         public void CloseAllDuplicateProcessesExceptCurrent() { }
 
@@ -39,5 +33,10 @@
         {
             return null;
         }
-    }
+
+		public string GetCurrentProcessFilePath()
+		{
+			throw new NotImplementedException();
+		}
+	}
 }
