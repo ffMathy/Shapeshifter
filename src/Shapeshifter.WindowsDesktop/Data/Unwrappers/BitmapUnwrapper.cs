@@ -24,19 +24,22 @@
 		readonly IImageNativeApi imageNativeApi;
 		readonly IGeneralNativeApi generalNativeApi;
 		readonly IMainWindowHandleContainer mainWindowHandleContainer;
+		readonly IMemoryUnwrapper memoryUnwrapper;
 
 		public BitmapUnwrapper(
 			IImagePersistenceService imagePersistenceService,
 			IClipboardNativeApi clipboardNativeApi,
 			IImageNativeApi imageNativeApi,
 			IGeneralNativeApi generalNativeApi,
-			IMainWindowHandleContainer mainWindowHandleContainer)
+			IMainWindowHandleContainer mainWindowHandleContainer,
+			IMemoryUnwrapper memoryUnwrapper)
 		{
 			this.imagePersistenceService = imagePersistenceService;
 			this.clipboardNativeApi = clipboardNativeApi;
 			this.imageNativeApi = imageNativeApi;
 			this.generalNativeApi = generalNativeApi;
 			this.mainWindowHandleContainer = mainWindowHandleContainer;
+			this.memoryUnwrapper = memoryUnwrapper;
 		}
 
 		public bool CanUnwrap(uint format)
@@ -52,28 +55,35 @@
 			var hBitmap = clipboardNativeApi.GetClipboardData(ClipboardNativeApi.CF_DIBV5);
 			var ptr = generalNativeApi.GlobalLock(hBitmap);
 
-			var bmpSrc = DIBV5ToBitmapSource(hBitmap);
-			return imagePersistenceService.ConvertBitmapSourceToByteArray(bmpSrc);
+			var bitmapSource = DIBV5ToBitmapSource(hBitmap);
+			return imagePersistenceService.ConvertBitmapSourceToByteArray(bitmapSource);
 		}
 
 		private BitmapSource DIBV5ToBitmapSource(IntPtr hBitmap)
 		{
-			IntPtr scan0 = IntPtr.Zero;
 			var bmi = (BITMAPV5HEADER)Marshal.PtrToStructure(hBitmap, typeof(BITMAPV5HEADER));
 
-			int stride = (int)(bmi.bV5SizeImage / bmi.bV5Height);
-			long offset = bmi.bV5Size + bmi.bV5ClrUsed * Marshal.SizeOf<RGBQUAD>();
+			var stride = (int)(bmi.bV5SizeImage / bmi.bV5Height);
+			var offset = bmi.bV5Size + bmi.bV5ClrUsed * Marshal.SizeOf<RGBQUAD>();
 			if (bmi.bV5Compression == (uint)BitmapCompressionMode.BI_BITFIELDS)
 			{
-				offset += 12; //bit masks follow the header
+				offset += 12;
 			}
-			scan0 = new IntPtr(hBitmap.ToInt64() + offset);
+
+			var scan0 = new IntPtr(hBitmap.ToInt64() + offset);
+
+			var imageBytes = new byte[bmi.bV5SizeImage];
+			Marshal.Copy(scan0, imageBytes, 0, imageBytes.Length);
+			
+			var reversedImageBytes = new byte[imageBytes.Length];
+			for (int pBuf = imageBytes.Length, pMap = 0; pBuf > 0; pMap += stride, pBuf -= stride)
+				Array.Copy(imageBytes, pMap, reversedImageBytes, pBuf - stride, stride);
 
 			var bmpSource = BitmapSource.Create(
 				bmi.bV5Width, bmi.bV5Height,
 				bmi.bV5XPelsPerMeter, bmi.bV5YPelsPerMeter,
 				PixelFormats.Bgra32, null,
-				scan0, (int)bmi.bV5SizeImage, stride);
+				reversedImageBytes, stride);
 
 			return bmpSource;
 		}
