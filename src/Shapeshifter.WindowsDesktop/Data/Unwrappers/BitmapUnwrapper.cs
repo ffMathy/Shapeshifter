@@ -89,7 +89,7 @@
 		BitmapSource DIBV5ToBitmapSource(IntPtr hBitmap)
 		{
 			var bmi = GetBitmapHeader(hBitmap);
-			var imageBytes = GetBytesFromBitmapHeader(hBitmap, bmi);
+			var imageBytes = GetImageBytesFromBitmapHeader(hBitmap, bmi);
 			var stride = GetStrideFromBitmapHeader(bmi);
 			
 			var reversedImageBytes = new byte[imageBytes.Length];
@@ -105,7 +105,7 @@
 			return bmpSource;
 		}
 
-		static byte[] GetBytesFromBitmapHeader(IntPtr hBitmap, BITMAPV5HEADER bmi)
+		static byte[] GetImageBytesFromBitmapHeader(IntPtr hBitmap, BITMAPV5HEADER bmi)
 		{
 			var stride = GetStrideFromBitmapHeader(bmi);
 			var rgbQuadSize = Marshal.SizeOf<RGBQUAD>();

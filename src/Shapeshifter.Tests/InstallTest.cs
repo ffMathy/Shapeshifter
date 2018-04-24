@@ -90,7 +90,10 @@ namespace Shapeshifter.WindowsDesktop
 				Thread.Sleep(1000);
 			}
 
-			Assert.IsNotNull(lastLoad, "Install test failed with the following log output:\n" + File.ReadAllText(FileManager.GetFullPathFromTemporaryPath("Shapeshifter.log")));
+			var logFilePath = FileManager.GetFullPathFromTemporaryPath("Shapeshifter.log");
+			File.Copy(logFilePath, "Log.txt");
+
+			Assert.IsNotNull(lastLoad, "Install test failed with the following log output:\n" + File.ReadAllText("Log.txt"));
 		}
 
 		public string FindRootPathFromPath(string path)
