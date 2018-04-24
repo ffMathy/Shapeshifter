@@ -13,6 +13,7 @@ namespace Shapeshifter.WindowsDesktop
 	public class InstallTest : TestBase
 	{
 		[TestMethod]
+		[Priority(int.MinValue)]
 		[Category("Predeploy")]
 		public void CanInstallShapeshifter()
 		{
@@ -49,6 +50,12 @@ namespace Shapeshifter.WindowsDesktop
 				WorkingDirectory = applicationBuildPath,
 				FileName = executablePath
 			});
+
+			Console.WriteLine("Launched Shapeshifter");
+
+			shapeshifterProcess.WaitForInputIdle();
+
+			Console.WriteLine("Waited for input idle");
 
 			var now = DateTime.UtcNow;
 
