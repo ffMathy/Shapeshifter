@@ -63,7 +63,7 @@
             </ListBox>
             <Rectangle Name="ActionListVeil" IsHitTestVisible="False">
                 <Rectangle.Fill>
-                    <LinearGradientBrush EndPoint="1,0.5" StartPoint="0.25,0.5">
+                    <LinearGradientBrush EndPoint="0.5,0.5" StartPoint="0,0.5">
                         <GradientStop Color="#50000000" Offset="0"/>
                         <GradientStop Color="#00000000" Offset="1"/>
                     </LinearGradientBrush>
