@@ -13,7 +13,7 @@ namespace Shapeshifter.WindowsDesktop
 	public class InstallTest : TestBase
 	{
 		[TestMethod]
-		[Category("Integration")]
+		[Category("Predeploy")]
 		public void CanInstallShapeshifter()
 		{
 			var container = CreateContainer();
@@ -49,12 +49,26 @@ namespace Shapeshifter.WindowsDesktop
 				WorkingDirectory = applicationBuildPath,
 				FileName = executablePath
 			});
-			shapeshifterProcess.WaitForExit(10000);
 
-			Thread.Sleep(10000);
+			var now = DateTime.UtcNow;
 
-			var lastLoad = settingsManager.LoadSetting<DateTime?>("LastLoad");
+			var lastLoad = (DateTime?)null;
+			while(true) {
+				lastLoad = settingsManager.LoadSetting<DateTime?>("LastLoad");
+				if(lastLoad != null)
+					break;
+
+				if((DateTime.UtcNow - now).TotalMilliseconds > 10000)
+					break;
+					
+				Thread.Sleep(1000);
+			}
+
 			Assert.IsNotNull(lastLoad);
+
+			foreach(var process in Process.GetProcessesByName("Shapeshifter")) {
+				process.Kill();
+			}
 		}
 
 		public string FindRootPathFromPath(string path) {
