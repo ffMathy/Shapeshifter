@@ -1,8 +1,8 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Messages.Interceptors
 {
     using System;
-
-    using Autofac;
+	using System.Threading.Tasks;
+	using Autofac;
 
     using Infrastructure.Events;
 
@@ -13,13 +13,20 @@
     using Native.Interfaces;
 
     using NSubstitute;
+	using Shapeshifter.WindowsDesktop.Infrastructure.Threading.Interfaces;
 
-    [TestClass]
+	[TestClass]
     public class ClipboardCopyInterceptorTest: UnitTestFor<IClipboardCopyInterceptor>
     {
+		public ClipboardCopyInterceptorTest()
+		{
+			ExcludeFakeFor<IThreadDeferrer>();
+			ExcludeFakeFor<IThreadLoop>();
+		}
+
         [TestMethod]
         public void InstallAddsClipboardFormatListener()
-        {
+        { 
             var windowHandle = new IntPtr(1337);
 
             Container.Resolve<IClipboardNativeApi>()
@@ -76,7 +83,7 @@
         }
 
         [TestMethod]
-        public void DataCopiedIsSkippedForEveryNonUniqueSequenceOfCopies()
+        public async Task DataCopiedIsSkippedForEveryNonUniqueSequenceOfCopies()
         {
             var windowHandle = new IntPtr(1337);
 
@@ -88,19 +95,19 @@
             
             SystemUnderTest.DataCopied += (sender, e) => dataCopiedCount++;
 
-            SystemUnderTest.ReceiveMessageEvent(
+            await SystemUnderTest.ReceiveMessageEventAsync(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
                     IntPtr.Zero,
                     IntPtr.Zero));
-            SystemUnderTest.ReceiveMessageEvent(
+			await SystemUnderTest.ReceiveMessageEventAsync(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
                     IntPtr.Zero,
                     IntPtr.Zero));
-            SystemUnderTest.ReceiveMessageEvent(
+			await SystemUnderTest.ReceiveMessageEventAsync(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
@@ -111,7 +118,7 @@
         }
 
         [TestMethod]
-        public void SkipNextSkipsNextItem()
+        public async Task SkipNextSkipsNextItem()
         {
             var windowHandle = new IntPtr(1337);
 
@@ -123,7 +130,7 @@
             
             SystemUnderTest.DataCopied += (sender, e) => dataCopiedCount++;
 
-            SystemUnderTest.ReceiveMessageEvent(
+			await SystemUnderTest.ReceiveMessageEventAsync(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
@@ -134,7 +141,7 @@
 
             SystemUnderTest.SkipNext();
 
-            SystemUnderTest.ReceiveMessageEvent(
+			await SystemUnderTest.ReceiveMessageEventAsync(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
@@ -143,7 +150,7 @@
 
             Assert.AreEqual(1, dataCopiedCount);
 
-            SystemUnderTest.ReceiveMessageEvent(
+			await SystemUnderTest.ReceiveMessageEventAsync(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
@@ -154,7 +161,7 @@
         }
 
         [TestMethod]
-        public void DataCopiedIsSkippedForIrrelevantMessages()
+        public async Task DataCopiedIsSkippedForIrrelevantMessages()
         {
             var windowHandle = new IntPtr(1337);
 
@@ -166,13 +173,13 @@
             
             SystemUnderTest.DataCopied += (sender, e) => dataCopiedCount++;
 
-            SystemUnderTest.ReceiveMessageEvent(
+			await SystemUnderTest.ReceiveMessageEventAsync(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_HOTKEY,
                     IntPtr.Zero,
                     IntPtr.Zero));
-            SystemUnderTest.ReceiveMessageEvent(
+			await SystemUnderTest.ReceiveMessageEventAsync(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
@@ -183,7 +190,7 @@
         }
 
         [TestMethod]
-        public void DataCopiedIsTriggeredForEveryUniqueSequenceOfCopies()
+        public async Task DataCopiedIsTriggeredForEveryUniqueSequenceOfCopies()
         {
             var windowHandle = new IntPtr(1337);
 
@@ -195,19 +202,19 @@
 
             SystemUnderTest.DataCopied += (sender, e) => dataCopiedCount++;
 
-            SystemUnderTest.ReceiveMessageEvent(
+			await SystemUnderTest.ReceiveMessageEventAsync(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
                     IntPtr.Zero,
                     IntPtr.Zero));
-            SystemUnderTest.ReceiveMessageEvent(
+			await SystemUnderTest.ReceiveMessageEventAsync(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,
                     IntPtr.Zero,
                     IntPtr.Zero));
-            SystemUnderTest.ReceiveMessageEvent(
+			await SystemUnderTest.ReceiveMessageEventAsync(
                 new WindowMessageReceivedArgument(
                     windowHandle,
                     Message.WM_CLIPBOARDUPDATE,

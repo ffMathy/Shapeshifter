@@ -3,7 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Windows.Input;
+	using System.Threading.Tasks;
+	using System.Windows.Input;
 
     using Factories.Interfaces;
 
@@ -53,7 +54,7 @@
             isInstalled = true;
         }
 
-        public void ReceiveMessageEvent(WindowMessageReceivedArgument e)
+        public Task ReceiveMessageEventAsync(WindowMessageReceivedArgument e)
         {
             switch (e.Message)
             {
@@ -65,6 +66,8 @@
                     HandleHotkeyMessage(e);
                     break;
             }
+
+			return Task.CompletedTask;
         }
 
         IHotkeyInterception GetInterceptionForInterceptionId(int interceptionId)

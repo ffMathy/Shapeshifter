@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Messages.Interceptors
 {
 	using System;
+	using System.Threading.Tasks;
 	using System.Windows;
 	using System.Windows.Media;
 
@@ -32,12 +33,14 @@
         {
         }
 
-        public void ReceiveMessageEvent(WindowMessageReceivedArgument e)
+        public Task ReceiveMessageEventAsync(WindowMessageReceivedArgument e)
         {
-            if (e.Message != Message.WM_DWMCOLORIZATIONCOLORCHANGED) return;
+            if (e.Message != Message.WM_DWMCOLORIZATIONCOLORCHANGED) 
+				return Task.CompletedTask;
 
             UpdateAeroColor();
-        }
+			return Task.CompletedTask;
+		}
 
         void UpdateAeroColor()
         {

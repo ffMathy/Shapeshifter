@@ -164,7 +164,7 @@
 
         void HandleLeftPressed()
         {
-            if (CurrentPane == ClipboardUserInterfacePane.ClipboardPackages)
+            if (CurrentPane == ClipboardUserInterfacePane.Actions)
             {
                 Cancel();
             }
@@ -176,7 +176,7 @@
 
         void HandleRightPressed()
         {
-            if (CurrentPane == ClipboardUserInterfacePane.Actions)
+            if (CurrentPane == ClipboardUserInterfacePane.ClipboardPackages)
             {
                 Cancel();
             }

@@ -103,7 +103,7 @@
             var fakeInterceptor = Container.Resolve<IWindowMessageInterceptor>();
             fakeInterceptor
                 .Received()
-                .ReceiveMessageEvent(
+                .ReceiveMessageEventAsync(
                     Arg.Is<WindowMessageReceivedArgument>(
                         x => (x.LongParameter == lParam) &&
                              (x.WordParameter == wParam) &&

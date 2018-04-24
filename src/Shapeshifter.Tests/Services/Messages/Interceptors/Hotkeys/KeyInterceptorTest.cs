@@ -71,7 +71,7 @@
             
             SystemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
 
-            SystemUnderTest.ReceiveMessageEvent(
+            SystemUnderTest.ReceiveMessageEventAsync(
                 new WindowMessageReceivedArgument(
                     IntPtr.Zero,
                     Message.WM_SHOWWINDOW,
@@ -95,7 +95,7 @@
             systemUnderTest.AddInterceptingKey(IntPtr.Zero, Key.A);
             systemUnderTest.Install(IntPtr.Zero);
 
-            systemUnderTest.ReceiveMessageEvent(
+            systemUnderTest.ReceiveMessageEventAsync(
                 new WindowMessageReceivedArgument(
                     IntPtr.Zero,
                     Message.WM_SHOWWINDOW,
@@ -125,7 +125,7 @@
                 eventFired = e.Key == Key.B;
             };
 
-            SystemUnderTest.ReceiveMessageEvent(
+            SystemUnderTest.ReceiveMessageEventAsync(
                 new WindowMessageReceivedArgument(
                     IntPtr.Zero,
                     Message.WM_HOTKEY,

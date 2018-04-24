@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Messages.Interceptors.Hotkeys
 {
 	using System;
+	using System.Threading.Tasks;
 	using System.Windows.Input;
 
 	using Factories.Interfaces;
@@ -64,13 +65,15 @@
             isInstalled = false;
         }
 
-        public void ReceiveMessageEvent(WindowMessageReceivedArgument e)
+        public Task ReceiveMessageEventAsync(WindowMessageReceivedArgument e)
         {
             if ((e.Message == Message.WM_HOTKEY) &&
                 ((int) e.WordParameter == hotkeyInterception.InterceptionId))
             {
                 HandleHotkeyMessage();
             }
+
+			return Task.CompletedTask;
         }
 
         void HandleHotkeyMessage()

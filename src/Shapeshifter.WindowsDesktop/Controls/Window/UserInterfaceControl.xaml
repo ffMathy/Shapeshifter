@@ -25,13 +25,13 @@
             </VisualState>
         </VisualStateGroup>
     </VisualStateManager.VisualStateGroups>
-    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+    <Grid HorizontalAlignment="Right" VerticalAlignment="Top">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="5" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Grid VerticalAlignment="Top">
+        <Grid Grid.Column="2" VerticalAlignment="Top">
             <ListBox Style="{StaticResource DefaultListBoxStyle}" SelectedItem="{Binding SelectedElement, Mode=TwoWay}"
                      ItemsSource="{Binding Elements}">
                 <ListBox.Resources>
@@ -45,7 +45,7 @@
             </ListBox>
             <Rectangle Name="PackageListVeil" IsHitTestVisible="False">
                 <Rectangle.Fill>
-                    <LinearGradientBrush EndPoint="0.75,0.5" StartPoint="0,0.5">
+					<LinearGradientBrush EndPoint="0,0.5" StartPoint="0.75,0.5">
                         <GradientStop Color="#60000000" Offset="0"/>
                         <GradientStop Color="#00000000" Offset="1"/>
                     </LinearGradientBrush>
@@ -53,7 +53,7 @@
             </Rectangle>
         </Grid>
         <Rectangle Grid.Column="1" Fill="{DynamicResource AccentBrush}" />
-        <Grid Grid.Column="2" VerticalAlignment="Top">
+        <Grid Grid.Column="0" VerticalAlignment="Top">
             <ListBox Style="{StaticResource DefaultListBoxStyle}" SelectedItem="{Binding SelectedAction, Mode=TwoWay}" ItemsSource="{Binding Actions}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -63,7 +63,7 @@
             </ListBox>
             <Rectangle Name="ActionListVeil" IsHitTestVisible="False">
                 <Rectangle.Fill>
-                    <LinearGradientBrush EndPoint="0.25,0.5" StartPoint="1,0.5">
+                    <LinearGradientBrush EndPoint="1,0.5" StartPoint="0.25,0.5">
                         <GradientStop Color="#50000000" Offset="0"/>
                         <GradientStop Color="#00000000" Offset="1"/>
                     </LinearGradientBrush>

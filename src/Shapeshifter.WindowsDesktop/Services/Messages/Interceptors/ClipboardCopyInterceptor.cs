@@ -2,7 +2,7 @@
 {
 	using System;
 	using System.Runtime.InteropServices;
-
+	using System.Threading.Tasks;
 	using Infrastructure.Events;
 
 	using Interfaces;
@@ -38,9 +38,9 @@
 			this.threadDeferrer = threadDeferrer;
 		}
 
-        void HandleClipboardUpdateWindowMessage()
+        async Task HandleClipboardUpdateWindowMessage()
         {
-			threadDeferrer.DeferAsync(100, () => {
+			await threadDeferrer.DeferAsync(100, () => {
 				var clipboardItemIdentifier = clipboardNativeApi.GetClipboardSequenceNumber();
 
 				logger.Information(
@@ -94,7 +94,7 @@
             }
         }
 
-        public void ReceiveMessageEvent(WindowMessageReceivedArgument eventArgument)
+        public async Task ReceiveMessageEventAsync(WindowMessageReceivedArgument eventArgument)
         {
             if (eventArgument.Message != Message.WM_CLIPBOARDUPDATE)
             {
@@ -109,7 +109,7 @@
                 return;
             }
 
-            HandleClipboardUpdateWindowMessage();
+            await HandleClipboardUpdateWindowMessage();
         }
 
         public void SkipNext()
