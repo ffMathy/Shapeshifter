@@ -9,11 +9,10 @@
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
 	using Serilog;
 	using Services.Files.Interfaces;
-
+	
 	public abstract class UnitTestFor<TSystemUnderTest> : TestBase
 		where TSystemUnderTest : class
 	{
-
 		ILifetimeScope container;
 
 		/// <summary>
