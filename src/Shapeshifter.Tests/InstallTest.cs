@@ -14,7 +14,7 @@ namespace Shapeshifter.WindowsDesktop
 	{
 		[TestMethod]
 		[Priority(int.MinValue)]
-		[Category("Predeploy")]
+		[TestCategory("Predeploy")]
 		public void CanInstallShapeshifter()
 		{
 			var container = CreateContainer();
