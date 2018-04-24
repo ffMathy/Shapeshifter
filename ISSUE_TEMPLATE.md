@@ -1,4 +1,4 @@
-Hi! :smile:
+Hi there!
 
 It's great that you want to report bugs or suggest new features. You're getting it all for free.
 However, it's not free for us to fix these bugs or implement your requested features. 
