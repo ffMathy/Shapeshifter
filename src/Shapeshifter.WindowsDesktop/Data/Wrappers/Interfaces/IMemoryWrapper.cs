@@ -1,7 +1,7 @@
 ﻿using Shapeshifter.WindowsDesktop.Data.Interfaces;
 using System;
 
-namespace Shapeshifter.WindowsDesktop.Data.Wrappers
+namespace Shapeshifter.WindowsDesktop.Data.Wrappers.Interfaces
 {
 	public interface IMemoryWrapper
 	{

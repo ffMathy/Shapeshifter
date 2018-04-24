@@ -19,6 +19,8 @@ namespace Shapeshifter.WindowsDesktop
 		[TestCategory("Predeploy")]
 		public void CanInstallShapeshifter()
 		{
+			var lastLoad = (DateTime?)null;
+
 			try
 			{
 				var container = CreateContainer();
@@ -64,7 +66,6 @@ namespace Shapeshifter.WindowsDesktop
 
 				var now = DateTime.UtcNow;
 
-				var lastLoad = (DateTime?)null;
 				while (true)
 				{
 					lastLoad = settingsManager.LoadSetting<DateTime?>("LastLoad");
@@ -78,8 +79,6 @@ namespace Shapeshifter.WindowsDesktop
 					Console.WriteLine("Waited " + elapsedTimeInSeconds + " seconds so far for Shapeshifter to launch after installation.");
 					Thread.Sleep(1000);
 				}
-
-				Assert.IsNotNull(lastLoad, "Install test failed with the following log output:\n" + File.ReadAllText(FileManager.GetFullPathFromTemporaryPath("Shapeshifter.log")));
 			}
 			finally
 			{
@@ -87,7 +86,11 @@ namespace Shapeshifter.WindowsDesktop
 				{
 					process.Kill();
 				}
+
+				Thread.Sleep(1000);
 			}
+
+			Assert.IsNotNull(lastLoad, "Install test failed with the following log output:\n" + File.ReadAllText(FileManager.GetFullPathFromTemporaryPath("Shapeshifter.log")));
 		}
 
 		public string FindRootPathFromPath(string path)

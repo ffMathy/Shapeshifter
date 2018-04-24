@@ -20,11 +20,12 @@ namespace Shapeshifter.WindowsDesktop.Data.Wrappers
 
 		public bool CanWrap(IClipboardData clipboardData)
 		{
-			var format = clipboardData.RawFormat;
-			return (format == ClipboardNativeApi.CF_DIBV5) ||
-				   (format == ClipboardNativeApi.CF_DIB) ||
-				   (format == ClipboardNativeApi.CF_BITMAP) ||
-				   (format == ClipboardNativeApi.CF_DIF);
+			return false;
+			//var format = clipboardData.RawFormat;
+			//return (format == ClipboardNativeApi.CF_DIBV5) ||
+			//	   (format == ClipboardNativeApi.CF_DIB) ||
+			//	   (format == ClipboardNativeApi.CF_BITMAP) ||
+			//	   (format == ClipboardNativeApi.CF_DIF);
 		}
 
 		//[StructLayout(LayoutKind.Sequential)]
@@ -56,14 +57,14 @@ namespace Shapeshifter.WindowsDesktop.Data.Wrappers
 			var imageData = (IClipboardImageData)clipboardData;
 			var source = imagePersistenceService.ConvertByteArrayToBitmapSource(imageData.Image);
 
-//			DIBSECTION ds;
-//::GetObject(hBitmap, sizeof(DIBSECTION), &ds);
-//			//make sure compression is BI_RGB
-//			ds.dsBmih.biCompression = BI_RGB;
-//			HDC hdc = ::GetDC(NULL);
-//			HBITMAP hbitmap_ddb = ::CreateDIBitmap(
-//				hdc, &ds.dsBmih, CBM_INIT, ds.dsBm.bmBits, (BITMAPINFO*)&ds.dsBmih, DIB_RGB_COLORS);
-//::ReleaseDC(NULL, hdc);
+			//			DIBSECTION ds;
+			//::GetObject(hBitmap, sizeof(DIBSECTION), &ds);
+			//			//make sure compression is BI_RGB
+			//			ds.dsBmih.biCompression = BI_RGB;
+			//			HDC hdc = ::GetDC(NULL);
+			//			HBITMAP hbitmap_ddb = ::CreateDIBitmap(
+			//				hdc, &ds.dsBmih, CBM_INIT, ds.dsBm.bmBits, (BITMAPINFO*)&ds.dsBmih, DIB_RGB_COLORS);
+			//::ReleaseDC(NULL, hdc);
 
 			using (var outStream = new MemoryStream())
 			{

@@ -262,9 +262,9 @@
     <Compile Include="Data\Unwrappers\Interfaces\IGeneralUnwrapper.cs" />
     <Compile Include="Data\Wrappers\BitmapWrapper.cs" />
     <Compile Include="Data\Wrappers\GeneralWrapper.cs" />
-    <Compile Include="Data\Wrappers\IBitmapWrapper.cs" />
-    <Compile Include="Data\Wrappers\IGeneralWrapper.cs" />
-    <Compile Include="Data\Wrappers\IMemoryWrapper.cs" />
+    <Compile Include="Data\Wrappers\Interfaces\IBitmapWrapper.cs" />
+    <Compile Include="Data\Wrappers\Interfaces\IGeneralWrapper.cs" />
+    <Compile Include="Data\Wrappers\Interfaces\IMemoryWrapper.cs" />
     <Compile Include="Exceptions\ClipboardFormatNotUnderstoodException.cs" />
     <Compile Include="Exceptions\NoDataInClipboardException.cs" />
     <Compile Include="Infrastructure\Dependencies\AssemblyRegistrationHelper.cs" />
