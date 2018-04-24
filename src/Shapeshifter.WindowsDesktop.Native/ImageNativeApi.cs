@@ -52,6 +52,17 @@
 			public UInt16 bV5Reserved;
 		}
 
+		[StructLayout(LayoutKind.Sequential, Pack = 2)]
+		public struct BITMAPFILEHEADER
+		{
+			public static readonly short BM = 0x4d42; // BM
+			public short bfType;
+			public int bfSize;
+			public short bfReserved1;
+			public short bfReserved2;
+			public int bfOffBits;
+		}
+
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		public struct RGBQUAD
 		{
