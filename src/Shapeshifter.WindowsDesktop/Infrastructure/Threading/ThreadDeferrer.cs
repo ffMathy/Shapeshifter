@@ -36,9 +36,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
 				
 			await threadLoop.StartAsync(async () => {
 				if(DateTime.UtcNow >= currentDefer) {
-					threadLoop.Stop();
-
 					action();
+					threadLoop.Stop();
 					return;
 				}
 

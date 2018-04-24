@@ -59,33 +59,62 @@
 			return imagePersistenceService.ConvertBitmapSourceToByteArray(bitmapSource);
 		}
 
-		private BitmapSource DIBV5ToBitmapSource(IntPtr hBitmap)
+		PixelFormat GetPixelFormatFromBitsPerPixel(ushort bitsPerPixel)
+		{
+			using (CrossThreadLogContext.Add(nameof(bitsPerPixel), bitsPerPixel))
+			{
+				switch (bitsPerPixel)
+				{
+					case 2:
+						return PixelFormats.BlackWhite;
+
+					case 8:
+						return PixelFormats.Gray8;
+
+					case 16:
+						return PixelFormats.Gray16;
+			
+					case 24:
+						return PixelFormats.Bgr24;
+
+					case 32:
+						return PixelFormats.Bgra32;
+
+					default:
+						throw new InvalidOperationException("Could not recognize the pixel format.");
+				}
+			}
+		}
+
+		BitmapSource DIBV5ToBitmapSource(IntPtr hBitmap)
 		{
 			var bmi = (BITMAPV5HEADER)Marshal.PtrToStructure(hBitmap, typeof(BITMAPV5HEADER));
+			using(CrossThreadLogContext.Add(nameof(bmi), bmi)) { 
+				var stride = (int)(bmi.bV5SizeImage / bmi.bV5Height);
+				var rgbQuadSize = Marshal.SizeOf<RGBQUAD>();
+				var offset = bmi.bV5Size + bmi.bV5ClrUsed * rgbQuadSize;
+				if (bmi.bV5Compression == (uint)BitmapCompressionMode.BI_BITFIELDS)
+				{
+					offset += 12;
+				}
 
-			var stride = (int)(bmi.bV5SizeImage / bmi.bV5Height);
-			var offset = bmi.bV5Size + bmi.bV5ClrUsed * Marshal.SizeOf<RGBQUAD>();
-			if (bmi.bV5Compression == (uint)BitmapCompressionMode.BI_BITFIELDS)
-			{
-				offset += 12;
+				var scan0 = new IntPtr(hBitmap.ToInt64() + offset);
+
+				var imageBytes = new byte[bmi.bV5SizeImage];
+				Marshal.Copy(scan0, imageBytes, 0, imageBytes.Length);
+
+				var reversedImageBytes = new byte[imageBytes.Length];
+				for (int pBuf = imageBytes.Length, pMap = 0; pBuf > 0; pMap += stride, pBuf -= stride)
+					Array.Copy(imageBytes, pMap, reversedImageBytes, pBuf - stride, stride);
+
+				var bmpSource = BitmapSource.Create(
+					bmi.bV5Width, bmi.bV5Height,
+					bmi.bV5XPelsPerMeter, bmi.bV5YPelsPerMeter,
+					GetPixelFormatFromBitsPerPixel(bmi.bV5BitCount), null,
+					reversedImageBytes, stride);
+
+				return bmpSource;
 			}
-
-			var scan0 = new IntPtr(hBitmap.ToInt64() + offset);
-
-			var imageBytes = new byte[bmi.bV5SizeImage];
-			Marshal.Copy(scan0, imageBytes, 0, imageBytes.Length);
-			
-			var reversedImageBytes = new byte[imageBytes.Length];
-			for (int pBuf = imageBytes.Length, pMap = 0; pBuf > 0; pMap += stride, pBuf -= stride)
-				Array.Copy(imageBytes, pMap, reversedImageBytes, pBuf - stride, stride);
-
-			var bmpSource = BitmapSource.Create(
-				bmi.bV5Width, bmi.bV5Height,
-				bmi.bV5XPelsPerMeter, bmi.bV5YPelsPerMeter,
-				PixelFormats.Bgra32, null,
-				reversedImageBytes, stride);
-
-			return bmpSource;
 		}
 	}
 }
