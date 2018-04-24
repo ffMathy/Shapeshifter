@@ -94,12 +94,14 @@
                 Directory.Delete(folder, true);
             }
 
-            var temporaryPath = Path.Combine(
-                Path.GetTempPath(),
-                "Shapeshifter");
-            if (Directory.Exists(temporaryPath)) {
-                Directory.Delete(temporaryPath, true);
-            }
+			try { 
+				var temporaryPath = Path.Combine(
+					Path.GetTempPath(),
+					"Shapeshifter");
+				if (Directory.Exists(temporaryPath)) {
+					Directory.Delete(temporaryPath, true);
+				}
+			} catch { }
 
             fakeExceptions.Clear();
             fakeInclusions.Clear();
