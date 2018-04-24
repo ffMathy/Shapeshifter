@@ -98,6 +98,7 @@
 		public void Process()
 		{
 			if (!GetIsCurrentlyRunningFromInstallationFolder() && DoesTargetExecutableExist()) {
+				Logger.Verbose("Shapeshifter is already installed but was invoked from a non-install directory path. Will invoke the installed one.");
 				processManager.LaunchFile(TargetExecutableFile);
 				return;
 			}

@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.IO;
 	using System.Security.Principal;
@@ -94,6 +95,10 @@
 
 				process.Kill();
 			}
+			catch (Win32Exception)
+			{
+				//trying to kill an elevated process.
+			}
 			finally
 			{
 				process.Dispose();
@@ -141,12 +146,12 @@
 				logger.Verbose("Launching {verb} {fileName} in {workingDirectory} with arguments {arguments}.");
 
 				var process = Process.Start(
-				new ProcessStartInfo {
-					FileName = uri,
-					WorkingDirectory = workingDirectory,
-					Verb = verb,
-					Arguments = arguments
-				});
+					new ProcessStartInfo {
+						FileName = uri,
+						WorkingDirectory = workingDirectory,
+						Verb = verb,
+						Arguments = arguments
+					});
 				processes.Add(process);
 			}
 		}
