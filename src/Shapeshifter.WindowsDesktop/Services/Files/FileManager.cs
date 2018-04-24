@@ -12,7 +12,7 @@
 
     using Interfaces;
 
-    class FileManager
+    public class FileManager
         : IFileManager
     {
         readonly IRetryingThreadLoop retryingThreadLoop;
