@@ -51,6 +51,8 @@
 
             processManager.CloseAllDuplicateProcessesExceptCurrent();
             aggregateArgumentProcessor.ProcessArguments(Arguments);
-        }
+
+			logger.Verbose("Startup preparation operation completed.");
+		}
     }
 }

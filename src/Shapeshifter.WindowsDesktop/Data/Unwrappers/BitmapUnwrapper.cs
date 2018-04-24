@@ -57,8 +57,7 @@
 			var hBitmap = clipboardNativeApi.GetClipboardData(ClipboardNativeApi.CF_DIBV5);
 			var ptr = generalNativeApi.GlobalLock(hBitmap);
 
-			var bitmapSource = DIBV5ToBitmapSource(hBitmap);
-			return imagePersistenceService.ConvertBitmapSourceToByteArray(bitmapSource);
+			return GetAllBytesFromBitmapHeader(hBitmap, GetBitmapHeader(hBitmap));
 		}
 
 		PixelFormat GetPixelFormatFromBitsPerPixel(ushort bitsPerPixel)
@@ -91,7 +90,8 @@
 		BitmapSource DIBV5ToBitmapSource(IntPtr hBitmap)
 		{
 			var bmi = GetBitmapHeader(hBitmap);
-			var imageBytes = GetImageBytesFromBitmapHeader(hBitmap, bmi);
+			var allBytes = GetAllBytesFromBitmapHeader(hBitmap, bmi);
+			var imageBytes = GetImageBytesFromAllBytes(allBytes, bmi);
 			var stride = GetStrideFromBitmapHeader(bmi);
 			
 			var reversedImageBytes = new byte[imageBytes.Length];
@@ -135,21 +135,17 @@
 			}
 		}
 
-		static byte[] GetImageBytesFromBitmapHeader(IntPtr hBitmap, BITMAPV5HEADER bmi)
+		static byte[] GetImageBytesFromAllBytes(byte[] bytes, BITMAPV5HEADER bmi)
 		{
-			var allBytes = GetAllBytesFromBitmapHeader(hBitmap, bmi);
-
 			var stride = GetStrideFromBitmapHeader(bmi);
-			var offset = bmi.bV5Size + bmi.bV5ClrUsed * Marshal.SizeOf<RGBQUAD>();
+			var offset = bmi.bV5Size + Marshal.SizeOf(typeof(BITMAPFILEHEADER)) + bmi.bV5ClrUsed * Marshal.SizeOf<RGBQUAD>();
 			if (bmi.bV5Compression == (uint)BitmapCompressionMode.BI_BITFIELDS)
 			{
 				offset += 12;
 			}
 
-			var scan0 = new IntPtr(hBitmap.ToInt64() + offset);
-
 			var imageBytes = new byte[bmi.bV5SizeImage];
-			Marshal.Copy(scan0, imageBytes, 0, imageBytes.Length);
+			Array.Copy(bytes, offset, imageBytes, 0, imageBytes.Length);
 		
 			return imageBytes;
 		}
