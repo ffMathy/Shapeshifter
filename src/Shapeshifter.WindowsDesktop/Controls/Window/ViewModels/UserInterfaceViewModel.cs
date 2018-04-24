@@ -135,7 +135,8 @@
             {
                 HideInterface();
             } else {
-				SelectedElement = Elements.First();
+				var targetIndex = currentIndex == 0 ? 0 : currentIndex - 1;
+				SelectedElement = Elements.ElementAt(targetIndex);
 			}
         }
 
