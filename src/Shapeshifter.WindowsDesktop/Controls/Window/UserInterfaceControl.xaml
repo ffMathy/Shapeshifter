@@ -57,14 +57,14 @@
             <ListBox Style="{StaticResource DefaultListBoxStyle}" SelectedItem="{Binding SelectedAction, Mode=TwoWay}" ItemsSource="{Binding Actions}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <window:ActionControl Margin="-1,-1,0,0" />
+                        <window:ActionControl Margin="0,-1,-1,0" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
             <Rectangle Name="ActionListVeil" IsHitTestVisible="False">
                 <Rectangle.Fill>
                     <LinearGradientBrush EndPoint="0.5,0.5" StartPoint="0,0.5">
-                        <GradientStop Color="#20000000" Offset="0"/>
+                        <GradientStop Color="#30000000" Offset="0"/>
                         <GradientStop Color="#00000000" Offset="1"/>
                     </LinearGradientBrush>
                 </Rectangle.Fill>
