@@ -38,21 +38,5 @@ namespace Shapeshifter.WindowsDesktop.Services.Arguments
 
             Assert.IsFalse(SystemUnderTest.CanProcess());
         }
-
-        [TestMethod]
-        public void CanNotProcessWhenIsNotDebuggingAndDeployed()
-        {
-            var fakeEnvironmentInformation = Get<IEnvironmentInformation>();
-            fakeEnvironmentInformation.GetIsDebugging().Returns(false);
-
-            var fakeProcessManager = Get<IProcessManager>();
-            fakeProcessManager
-                .GetCurrentProcessDirectory()
-                .Returns(Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-                    "Shapeshifter"));
-
-            Assert.IsFalse(SystemUnderTest.CanProcess());
-        }
     }
 }
