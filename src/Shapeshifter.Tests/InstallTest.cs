@@ -21,7 +21,7 @@ namespace Shapeshifter.WindowsDesktop
 
 			var applicationBuildPath = Path.Combine(rootPath, "build", "application");
 			foreach(var file in Directory.GetFiles(applicationBuildPath)) {
-				if(Path.GetFileName(file) != "Shapeshifter.exe") 
+				if(Path.GetFileName(file) == "Shapeshifter.exe") 
 					continue;
 
 				Console.WriteLine("Deleting file " + file);
