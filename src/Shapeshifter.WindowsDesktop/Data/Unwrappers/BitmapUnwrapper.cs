@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Drawing;
+	using System.IO;
 	using System.Runtime.InteropServices;
 	using System.Windows.Forms;
 	using System.Windows.Interop;
@@ -15,6 +16,7 @@
 	using Native.Interfaces;
 
 	using Services.Images.Interfaces;
+	using Shapeshifter.WindowsDesktop.Helpers;
 	using static Shapeshifter.WindowsDesktop.Native.ImageNativeApi;
 
 	class BitmapUnwrapper : IBitmapUnwrapper
@@ -105,11 +107,40 @@
 			return bmpSource;
 		}
 
+		static byte[] GetAllBytesFromBitmapHeader(IntPtr hBitmap, BITMAPV5HEADER bmi)
+		{
+			var fileHeaderSize = Marshal.SizeOf(typeof(BITMAPFILEHEADER));
+			var infoHeaderSize = bmi.bV5Size;
+			var fileSize = (int)(fileHeaderSize + infoHeaderSize + bmi.bV5SizeImage);
+
+			var dibBuffer = new byte[fileSize];
+			Marshal.Copy(hBitmap, dibBuffer, 0, fileSize);
+
+			var fileHeader = new BITMAPFILEHEADER {
+				bfType = BITMAPFILEHEADER.BM,
+				bfSize = fileSize,
+				bfReserved1 = 0,
+				bfReserved2 = 0,
+				bfOffBits = (int)(fileHeaderSize + infoHeaderSize + bmi.bV5ClrUsed * Marshal.SizeOf<RGBQUAD>())
+			};
+
+			var fileHeaderBytes = BinaryStructHelper.ToByteArray(fileHeader);
+			using (var bitmapStream = new MemoryStream())
+			{
+				bitmapStream.Write(fileHeaderBytes, 0, fileHeaderSize);
+				bitmapStream.Write(dibBuffer, 0, dibBuffer.Length);
+				bitmapStream.Seek(0, SeekOrigin.Begin);
+
+				return bitmapStream.ToArray();
+			}
+		}
+
 		static byte[] GetImageBytesFromBitmapHeader(IntPtr hBitmap, BITMAPV5HEADER bmi)
 		{
+			var allBytes = GetAllBytesFromBitmapHeader(hBitmap, bmi);
+
 			var stride = GetStrideFromBitmapHeader(bmi);
-			var rgbQuadSize = Marshal.SizeOf<RGBQUAD>();
-			var offset = bmi.bV5Size + bmi.bV5ClrUsed * rgbQuadSize;
+			var offset = bmi.bV5Size + bmi.bV5ClrUsed * Marshal.SizeOf<RGBQUAD>();
 			if (bmi.bV5Compression == (uint)BitmapCompressionMode.BI_BITFIELDS)
 			{
 				offset += 12;
@@ -119,7 +150,7 @@
 
 			var imageBytes = new byte[bmi.bV5SizeImage];
 			Marshal.Copy(scan0, imageBytes, 0, imageBytes.Length);
-
+		
 			return imageBytes;
 		}
 

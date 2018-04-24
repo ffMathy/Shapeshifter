@@ -6,7 +6,7 @@
 	using System.Diagnostics;
 	using System.IO;
 	using System.Security.Principal;
-
+	using System.Threading;
 	using Interfaces;
 	using Serilog;
 
@@ -83,6 +83,8 @@
 					process.Dispose();
 				}
 			}
+
+			Thread.Sleep(1000);
 		}
 
 		static string GetProcessProductName(Process process)
