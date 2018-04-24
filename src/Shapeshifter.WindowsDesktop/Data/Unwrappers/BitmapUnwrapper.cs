@@ -76,7 +76,7 @@
 				bfSize = fileSize,
 				bfReserved1 = 0,
 				bfReserved2 = 0,
-				bfOffBits = (int)(fileHeaderSize + infoHeaderSize + bmi.bV5ClrUsed * Marshal.SizeOf<RGBQUAD>())
+				bfOffBits = (int)(fileHeaderSize + infoHeaderSize + bmi.bV5ClrUsed * 4)
 			};
 
 			var fileHeaderBytes = BinaryStructHelper.ToByteArray(fileHeader);

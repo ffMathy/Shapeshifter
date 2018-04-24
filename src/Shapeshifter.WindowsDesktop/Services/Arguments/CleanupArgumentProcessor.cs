@@ -13,8 +13,7 @@
 		[Inject]
 		public ILogger Logger { get; set; }
 
-		public bool Terminates
-            => true;
+		public bool Terminates => false;
 
         public bool CanProcess(string[] arguments)
         {
