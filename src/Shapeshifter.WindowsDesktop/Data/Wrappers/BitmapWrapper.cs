@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Media.Imaging;
 using Shapeshifter.WindowsDesktop.Data.Interfaces;
+using Shapeshifter.WindowsDesktop.Data.Wrappers.Interfaces;
 using Shapeshifter.WindowsDesktop.Native;
 using Shapeshifter.WindowsDesktop.Services.Images.Interfaces;
 
