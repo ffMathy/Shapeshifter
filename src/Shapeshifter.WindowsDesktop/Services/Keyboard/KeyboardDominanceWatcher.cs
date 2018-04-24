@@ -17,6 +17,8 @@
 	using System;
 	using System.Diagnostics.CodeAnalysis;
 	using Serilog;
+	using Serilog.Core;
+	using System.Threading;
 
 	public class KeyboardDominanceWatcher : IKeyboardDominanceWatcher
     {
@@ -101,11 +103,15 @@
         {
             try
             {
+				Thread.Sleep(1000);
+
                 Config.Register(
                     nameof(Shapeshifter),
                     $"{processManager.CurrentProcessName}.exe",
                     GetInjectedLibraryName());
-            } catch(Exception ex)
+					
+				logger.Information("Injection mechanism installed and configured in the Global Assembly Cache.");
+			} catch(Exception ex)
             {
                 logger.Error(ex, "Could not install the keyboard dominance watcher injection mechanism into the Global Assembly Cache.");
             }

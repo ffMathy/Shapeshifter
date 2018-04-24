@@ -131,8 +131,6 @@
 
 			keyboardDominanceWatcher.Install();
 
-			Logger.Information("Injection mechanism installed and configured in the Global Assembly Cache.");
-
 			LaunchInstalledExecutable(
 				processManager.GetCurrentProcessFilePath());
 
