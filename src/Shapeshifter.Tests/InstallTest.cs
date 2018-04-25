@@ -83,13 +83,6 @@ namespace Shapeshifter.WindowsDesktop
 					Console.WriteLine("Waited " + elapsedTimeInSeconds + " seconds so far for Shapeshifter to launch after installation.");
 					Thread.Sleep(1000);
 				}
-
-				Assert.IsFalse(File.Exists(executablePath));
-
-				File.Move(backupExecutablePath, executablePath);
-				Thread.Sleep(1000);
-
-				Assert.IsTrue(File.Exists(executablePath));
 			}
 			finally
 			{
@@ -110,6 +103,13 @@ namespace Shapeshifter.WindowsDesktop
 			foreach(var line in logOutput) {
 				Console.WriteLine(line);
 			}
+
+			Assert.IsFalse(File.Exists(executablePath));
+
+			File.Move(backupExecutablePath, executablePath);
+			Thread.Sleep(1000);
+
+			Assert.IsTrue(File.Exists(executablePath));
 
 			Assert.IsNotNull(lastLoad, "Install test failed.");
 

@@ -39,14 +39,14 @@
                 </ListBox.Resources>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <ContentPresenter Content="{Binding Control}" />
+                        <ContentPresenter Margin="-1,-1" Content="{Binding Control}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
             <Rectangle Name="PackageListVeil" IsHitTestVisible="False">
                 <Rectangle.Fill>
-					<LinearGradientBrush EndPoint="0,0.5" StartPoint="0.75,0.5">
-                        <GradientStop Color="#60000000" Offset="0"/>
+					<LinearGradientBrush EndPoint="0.6,0.5" StartPoint="1,0.5">
+                        <GradientStop Color="#40000000" Offset="0"/>
                         <GradientStop Color="#00000000" Offset="1"/>
                     </LinearGradientBrush>
                 </Rectangle.Fill>
