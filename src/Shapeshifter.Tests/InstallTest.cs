@@ -95,7 +95,7 @@ namespace Shapeshifter.WindowsDesktop
 					Console.WriteLine(line);
 				}
 
-				Assert.IsFalse(File.Exists(executablePath));
+				Assert.IsFalse(File.Exists(executablePath), "The old executable at " + executablePath + " was not cleaned up after installation.");
 
 				File.Move(backupExecutablePath, executablePath);
 				Thread.Sleep(1000);

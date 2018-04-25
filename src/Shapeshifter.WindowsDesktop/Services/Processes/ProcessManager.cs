@@ -61,7 +61,7 @@
 			logger.Verbose("Closing all duplicate processes.");
 
 			var currentProcessProductName = GetProcessProductName(currentProcess);
-			if(currentProcessProductName == null)
+			if (currentProcessProductName == null)
 				throw new Exception("Could not detect the current process product name.");
 
 			foreach (var process in Process.GetProcesses())
@@ -71,8 +71,10 @@
 					if (GetProcessProductName(process) != currentProcessProductName)
 						continue;
 
-					if (process.Id != currentProcess.Id)
-						CloseProcess(process);
+					if (process.Id == currentProcess.Id)
+						continue;
+						
+					CloseProcess(process);
 				}
 				catch (Win32Exception)
 				{
@@ -99,7 +101,7 @@
 			}
 		}
 
-		static void CloseProcess(Process process)
+		void CloseProcess(Process process)
 		{
 			try
 			{
@@ -113,6 +115,7 @@
 					return;
 				}
 
+				logger.Information("Killing process #{processId}.", process.Id);
 				process.Kill();
 			}
 			finally
