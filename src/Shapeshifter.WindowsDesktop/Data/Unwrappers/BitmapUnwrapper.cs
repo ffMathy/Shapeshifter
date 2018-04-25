@@ -46,10 +46,7 @@
 
 		public bool CanUnwrap(uint format)
 		{
-			return (format == ClipboardNativeApi.CF_DIBV5) ||
-				   (format == ClipboardNativeApi.CF_DIB) ||
-				   (format == ClipboardNativeApi.CF_BITMAP) ||
-				   (format == ClipboardNativeApi.CF_DIF);
+			return (format == ClipboardNativeApi.CF_DIBV5);
 		}
 
 		public byte[] UnwrapStructure(uint format)
@@ -63,26 +60,15 @@
 		static byte[] GetAllBytesFromBitmapHeader(IntPtr hBitmap)
 		{
 			var bmi = (BITMAPV5HEADER)Marshal.PtrToStructure(hBitmap, typeof(BITMAPV5HEADER));
-
-			var fileHeaderSize = Marshal.SizeOf(typeof(BITMAPFILEHEADER));
+			
 			var infoHeaderSize = bmi.bV5Size;
-			var fileSize = (int)(fileHeaderSize + infoHeaderSize + bmi.bV5SizeImage);
+			var fileSize = (int)(infoHeaderSize + bmi.bV5SizeImage);
 
 			var dibBuffer = new byte[fileSize];
 			Marshal.Copy(hBitmap, dibBuffer, 0, fileSize);
-
-			var fileHeader = new BITMAPFILEHEADER {
-				bfType = BITMAPFILEHEADER.BM,
-				bfSize = fileSize,
-				bfReserved1 = 0,
-				bfReserved2 = 0,
-				bfOffBits = (int)(fileHeaderSize + infoHeaderSize + bmi.bV5ClrUsed * 4)
-			};
-
-			var fileHeaderBytes = BinaryStructHelper.ToByteArray(fileHeader);
+			
 			using (var bitmapStream = new MemoryStream())
 			{
-				bitmapStream.Write(fileHeaderBytes, 0, fileHeaderSize);
 				bitmapStream.Write(dibBuffer, 0, dibBuffer.Length);
 				bitmapStream.Seek(0, SeekOrigin.Begin);
 
