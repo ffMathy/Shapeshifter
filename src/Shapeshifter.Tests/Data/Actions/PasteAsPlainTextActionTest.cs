@@ -13,8 +13,9 @@
     using NSubstitute;
 
     using Services.Clipboard.Interfaces;
+	using Shapeshifter.WindowsDesktop.Native.Interfaces;
 
-    [TestClass]
+	[TestClass]
     public class PasteAsPlainTextActionTest: ActionTestBase<IPasteAsPlainTextAction>
     {
         [TestMethod]
@@ -28,7 +29,11 @@
         [TestMethod]
         public async Task CanPerformWithTextData()
         {
+			var fakeClipboardNativeApi = Container.Resolve<IClipboardNativeApi>();
+			fakeClipboardNativeApi.GetClipboardFormatName(Arg.Any<uint>()).Returns("Rich Text Format");
+
             var fakeData = GetPackageContaining<IClipboardTextData>();
+
             Assert.IsTrue(
                 await SystemUnderTest.CanPerformAsync(fakeData));
         }
@@ -40,12 +45,6 @@
         }
 
         [TestMethod]
-        public void OrderIsCorrect()
-        {
-            Assert.AreEqual(25, SystemUnderTest.Order);
-        }
-
-        [TestMethod]
         public void CanGetTitle()
         {
             Assert.IsNotNull(SystemUnderTest.Title);
@@ -53,8 +52,11 @@
 
         [TestMethod]
         public async Task PerformCausesTextOfDataToBeCopied()
-        {
-            var fakeTextData = Substitute.For<IClipboardTextData>();
+		{
+			var fakeClipboardNativeApi = Container.Resolve<IClipboardNativeApi>();
+			fakeClipboardNativeApi.GetClipboardFormatName(Arg.Any<uint>()).Returns("Rich Text Format");
+
+			var fakeTextData = Substitute.For<IClipboardTextData>();
             fakeTextData.Text.Returns("foobar hello");
 
             var fakeData = GetPackageContaining(fakeTextData);

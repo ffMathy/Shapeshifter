@@ -246,15 +246,15 @@
         }
 
         void UninstallPasteHotkeyInterceptor()
-        {
-            pasteCombinationDurationMediator.Disconnect();
+		{
+			pasteCombinationDurationMediator.PasteCombinationDurationPassed -=
+				PasteCombinationDurationMediator_PasteCombinationDurationPassed;
+			pasteCombinationDurationMediator.PasteCombinationReleased -=
+				PasteCombinationDurationMediatorPasteCombinationReleased;
+			pasteCombinationDurationMediator.AfterPasteCombinationReleased -=
+				AfterPasteCombinationDurationMediatorAfterPasteCombinationReleased;
 
-            pasteCombinationDurationMediator.PasteCombinationDurationPassed -=
-                PasteCombinationDurationMediator_PasteCombinationDurationPassed;
-            pasteCombinationDurationMediator.PasteCombinationReleased -=
-                PasteCombinationDurationMediatorPasteCombinationReleased;
-            pasteCombinationDurationMediator.AfterPasteCombinationReleased -=
-                AfterPasteCombinationDurationMediatorAfterPasteCombinationReleased;
+			pasteCombinationDurationMediator.Disconnect();
         }
 
         void AfterPasteCombinationDurationMediatorAfterPasteCombinationReleased(

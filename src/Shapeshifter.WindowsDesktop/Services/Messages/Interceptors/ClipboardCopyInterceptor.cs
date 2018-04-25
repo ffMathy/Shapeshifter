@@ -40,7 +40,15 @@
 
         async Task HandleClipboardUpdateWindowMessage()
         {
-			await threadDeferrer.DeferAsync(100, () => {
+			await threadDeferrer.DeferAsync(200, () => {
+				if (shouldSkipNext)
+				{
+					logger.Information("Clipboard update message skipped.");
+
+					shouldSkipNext = false;
+					return;
+				}
+
 				var clipboardItemIdentifier = clipboardNativeApi.GetClipboardSequenceNumber();
 
 				logger.Information(
@@ -98,14 +106,6 @@
         {
             if (eventArgument.Message != Message.WM_CLIPBOARDUPDATE)
             {
-                return;
-            }
-
-            if (shouldSkipNext)
-            {
-                logger.Information("Clipboard update message skipped.");
-
-                shouldSkipNext = false;
                 return;
             }
 

@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading;
 using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shapeshifter.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using Shapeshifter.WindowsDesktop.Services.Files;
 using Shapeshifter.WindowsDesktop.Services.Files.Interfaces;
 using Shapeshifter.WindowsDesktop.Services.Interfaces;
@@ -19,7 +20,6 @@ namespace Shapeshifter.WindowsDesktop
 		[TestCategory("Predeploy")]
 		public void CanInstallShapeshifter()
 		{
-
 			try
 			{
 				var container = CreateContainer();
