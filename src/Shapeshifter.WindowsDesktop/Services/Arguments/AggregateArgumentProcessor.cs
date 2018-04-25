@@ -119,7 +119,7 @@
                 return;
             }
 
-            processor.Process(arguments);
+            processor.ProcessAsync(arguments);
             processorsUsed.Add(processor);
         }
     }
