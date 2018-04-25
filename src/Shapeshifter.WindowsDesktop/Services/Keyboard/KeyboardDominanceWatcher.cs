@@ -4,6 +4,7 @@
 	using System.Runtime.Remoting;
 	using System.Security.Principal;
 	using System.Threading.Tasks;
+	 using System.Collections.Generic;
 
 	using EasyHook;
 
