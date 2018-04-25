@@ -34,6 +34,7 @@
 		readonly ISettingsViewModel settingsViewModel;
 		readonly IKeyboardDominanceWatcher keyboardDominanceWatcher;
 		readonly IThreadDelay threadDelay;
+		readonly ITrayIconManager trayIconManager;
 
 		[Inject]
 		public ILogger Logger { get; set; }
@@ -45,7 +46,8 @@
 			IEnvironmentInformation environmentInformation,
 			ISettingsViewModel settingsViewModel,
 			IKeyboardDominanceWatcher keyboardDominanceWatcher,
-			IThreadDelay threadDelay)
+			IThreadDelay threadDelay,
+			ITrayIconManager trayIconManager)
 		{
 			this.processManager = processManager;
 			this.certificateManager = certificateManager;
@@ -54,6 +56,7 @@
 			this.settingsViewModel = settingsViewModel;
 			this.keyboardDominanceWatcher = keyboardDominanceWatcher;
 			this.threadDelay = threadDelay;
+			this.trayIconManager = trayIconManager;
 		}
 
 		public bool Terminates => CanProcess() && !GetIsCurrentlyRunningFromInstallationFolder();
@@ -98,6 +101,8 @@
 		{
 			if (!GetIsCurrentlyRunningFromInstallationFolder() && DoesTargetExecutableExist()) {
 				Logger.Verbose("Shapeshifter is already installed but was invoked from a non-install directory path. Will invoke the installed one.");
+
+				trayIconManager.DisplayInformation("Shapeshifter already installed", "Will launch from installed location: " + TargetDirectory);
 				LaunchInstalledExecutable(TargetExecutableFile);
 				return;
 			}
@@ -130,6 +135,7 @@
 
 			keyboardDominanceWatcher.Install();
 
+			trayIconManager.DisplayInformation("Shapeshifter installed", "Install location: " + TargetDirectory);
 			LaunchInstalledExecutable(
 				processManager.GetCurrentProcessFilePath());
 
