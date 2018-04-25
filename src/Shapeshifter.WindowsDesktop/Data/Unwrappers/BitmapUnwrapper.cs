@@ -54,7 +54,7 @@
 			var hBitmap = clipboardNativeApi.GetClipboardData(ClipboardNativeApi.CF_DIBV5);
 			var ptr = generalNativeApi.GlobalLock(hBitmap);
 
-			return GetAllBytesFromBitmapHeader(hBitmap);
+			return GetAllBytesFromBitmapHeader(ptr);
 		}
 
 		static byte[] GetAllBytesFromBitmapHeader(IntPtr hBitmap)

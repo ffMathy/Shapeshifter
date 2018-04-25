@@ -56,10 +56,6 @@
 		{
 			var stride = GetStrideFromBitmapHeader(bmi);
 			var offset = bmi.bV5Size + bmi.bV5ClrUsed * Marshal.SizeOf<RGBQUAD>();
-			if (bmi.bV5Compression == (uint)BitmapCompressionMode.BI_BITFIELDS)
-			{
-				offset += 12;
-			}
 
 			var imageBytes = new byte[bmi.bV5SizeImage];
 			Array.Copy(bytes, offset, imageBytes, 0, imageBytes.Length);
@@ -101,12 +97,12 @@
                 throw new InvalidOperationException("The given format is not supported.");
             }
 
-            return new ClipboardImageData(dataSourceService)
+			var bitmapSource = DIBV5ToBitmapSource(rawData);
+			return new ClipboardImageData(dataSourceService)
             {
                 RawData = rawData,
                 RawFormat = format,
-				Image = imagePersistenceService.ConvertBitmapSourceToByteArray(
-					DIBV5ToBitmapSource(rawData))
+				Image = imagePersistenceService.ConvertBitmapSourceToByteArray(bitmapSource)
             };
         }
 
