@@ -19,6 +19,7 @@
 	using Serilog;
 	using Serilog.Core;
 	using System.Threading;
+	using System.IO;
 
 	public class KeyboardDominanceWatcher : IKeyboardDominanceWatcher
     {
@@ -102,13 +103,26 @@
         public void Install()
         {
             try
-            {
+			{
+				var embeddedFile = GetInjectedLibraryName();
+				var targetResourceName = "costura." + embeddedFile.ToLower();
+
+				logger.Verbose("Looking for {resourceName} among embedded resources {@resources}.", targetResourceName, App.ResourceAssembly.GetManifestResourceNames());
+
+				using (var stream = App.ResourceAssembly.GetManifestResourceStream(targetResourceName)) {
+					var bytes = new byte[stream.Length];
+					stream.Read(bytes, 0, bytes.Length);
+
+					logger.Verbose("Resource {resourceName} of {length} bytes written to {embeddedFile}.", targetResourceName, bytes.Length, embeddedFile);
+					File.WriteAllBytes(embeddedFile, bytes);
+				}
+
 				Thread.Sleep(1000);
 
                 Config.Register(
                     nameof(Shapeshifter),
                     $"{processManager.CurrentProcessName}.exe",
-                    GetInjectedLibraryName());
+					embeddedFile);
 					
 				logger.Information("Injection mechanism installed and configured in the Global Assembly Cache.");
 			} catch(Exception ex)
