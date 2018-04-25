@@ -22,6 +22,7 @@
 	using Infrastructure.Dependencies;
 	using Infrastructure.Threading.Interfaces;
 	using Serilog;
+	using System.Threading;
 
 	class InstallArgumentProcessor : INoArgumentProcessor, IInstallArgumentProcessor
 	{
@@ -84,7 +85,7 @@
 			if (isDebugging)
 				return false;
 
-			return !GetIsCurrentlyRunningFromInstallationFolder() || DoesTargetExecutableExist();
+			return !GetIsCurrentlyRunningFromInstallationFolder();
 		}
 
 		private bool GetIsCurrentlyRunningFromInstallationFolder()
@@ -99,14 +100,6 @@
 
 		public void Process()
 		{
-			if (!GetIsCurrentlyRunningFromInstallationFolder() && DoesTargetExecutableExist()) {
-				Logger.Verbose("Shapeshifter is already installed but was invoked from a non-install directory path. Will invoke the installed one.");
-
-				trayIconManager.DisplayInformation("Shapeshifter already installed", "Will launch from installed location: " + TargetDirectory);
-				LaunchInstalledExecutable(processManager.GetCurrentProcessFilePath());
-				return;
-			}
-
 			if (!processManager.IsCurrentProcessElevated())
 			{
 				Logger.Information("Current process is not elevated which is needed for installation. Starting as elevated process.");
