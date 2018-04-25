@@ -10,29 +10,33 @@
     using Interfaces;
 
     using Services.Clipboard.Interfaces;
+	using Shapeshifter.WindowsDesktop.Native.Interfaces;
 
-    class PasteAsPlainTextAction: IPasteAsPlainTextAction
+	class PasteAsPlainTextAction: IPasteAsPlainTextAction
     {
         readonly IClipboardInjectionService clipboardInjectionService;
         readonly IClipboardPasteService clipboardPasteService;
         readonly IAsyncFilter asyncFilter;
+		readonly IClipboardNativeApi clipboardNativeApi;
 
-        public PasteAsPlainTextAction(
+		public PasteAsPlainTextAction(
             IClipboardInjectionService clipboardInjectionService,
             IClipboardPasteService clipboardPasteService,
-            IAsyncFilter asyncFilter)
+            IAsyncFilter asyncFilter,
+			IClipboardNativeApi clipboardNativeApi)
         {
             this.clipboardInjectionService = clipboardInjectionService;
             this.clipboardPasteService = clipboardPasteService;
             this.asyncFilter = asyncFilter;
-        }
+			this.clipboardNativeApi = clipboardNativeApi;
+		}
 
         public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
         {
             return "Pastes clipboard contents as plain text with no formatting.";
         }
 
-        public byte Order => 25;
+        public byte Order => 15;
 
         public string Title => "Paste as plain text";
 
@@ -48,10 +52,11 @@
             return supportedData.FirstOrDefault();
         }
 
-        static async Task<bool> CanPerformAsync(
+        async Task<bool> CanPerformAsync(
             IClipboardData data)
         {
-            return data is IClipboardTextData;
+			var formatName = clipboardNativeApi.GetClipboardFormatName(data.RawFormat);
+            return data is IClipboardTextData && formatName == "Rich Text Format";
         }
 
         public async Task PerformAsync(

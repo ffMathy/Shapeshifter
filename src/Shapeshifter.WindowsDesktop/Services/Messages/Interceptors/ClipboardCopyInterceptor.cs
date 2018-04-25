@@ -40,7 +40,7 @@
 
         async Task HandleClipboardUpdateWindowMessage()
         {
-			await threadDeferrer.DeferAsync(100, () => {
+			await threadDeferrer.DeferAsync(200, () => {
 				if (shouldSkipNext)
 				{
 					logger.Information("Clipboard update message skipped.");
