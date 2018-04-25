@@ -174,5 +174,10 @@
 				processes.Add(process);
 			}
 		}
+
+		public void CloseCurrentProcess()
+		{
+			CloseProcess(Process.GetCurrentProcess());
+		}
 	}
 }
