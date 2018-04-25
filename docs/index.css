@@ -1,3 +1,16 @@
-body {
+* {
     font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
+}
+
+body, html {
+    min-height: calc(100vh - 20vh);
+
+    padding: 10vh 10vw;
+
+    overflow-x: hidden;
+}
+
+section {
+    padding: 10vh;
 }
