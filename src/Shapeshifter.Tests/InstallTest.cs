@@ -111,6 +111,10 @@ namespace Shapeshifter.WindowsDesktop
 				Console.WriteLine(line);
 			}
 
+			foreach(var line in logOutput) {
+				Assert.IsFalse(line.Contains("[ERR]"), line);
+			}
+
 			Assert.IsNotNull(lastLoad, "Install test failed.");
 		}
 
