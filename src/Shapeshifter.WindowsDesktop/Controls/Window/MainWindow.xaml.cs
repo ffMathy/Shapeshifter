@@ -10,6 +10,8 @@
 
 	using ViewModels.Interfaces;
 	using System.Diagnostics.CodeAnalysis;
+	using Shapeshifter.WindowsDesktop.Infrastructure.Environment.Interfaces;
+	using System.Windows.Media;
 
 	[ExcludeFromCodeCoverage]
     public partial class MainWindow
@@ -21,7 +23,8 @@
 
         public MainWindow(
             IMainViewModel viewModel,
-            IMainWindowHandleContainer handleContainer)
+            IMainWindowHandleContainer handleContainer,
+			IEnvironmentInformation environmentInformation)
         {
             this.handleContainer = handleContainer;
             this.viewModel = viewModel;
@@ -31,6 +34,9 @@
 
             InitializeComponent();
             SetupViewModel();
+
+			if(environmentInformation.GetIsDebugging())
+				Background = Brushes.Transparent;
         }
 
         void MainWindow_SourceInitialized(object sender, EventArgs e)

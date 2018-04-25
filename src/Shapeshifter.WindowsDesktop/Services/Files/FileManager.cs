@@ -1,277 +1,300 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Files
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
+	using System;
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Linq;
 	using System.Threading;
 	using System.Threading.Tasks;
 
-    using Infrastructure.Threading;
-    using Infrastructure.Threading.Interfaces;
+	using Infrastructure.Threading;
+	using Infrastructure.Threading.Interfaces;
 
-    using Interfaces;
+	using Interfaces;
+	using Serilog;
 
-    public class FileManager
-        : IFileManager
-    {
-        readonly IRetryingThreadLoop retryingThreadLoop;
+	public class FileManager
+		: IFileManager
+	{
+		readonly IRetryingThreadLoop retryingThreadLoop;
 		readonly IThreadDelay threadDelay;
+		readonly ILogger logger;
 
 		readonly ICollection<string> temporaryPaths;
 
-        public FileManager(
-            IRetryingThreadLoop retryingThreadLoop,
-			IThreadDelay threadDelay)
-        {
-            this.retryingThreadLoop = retryingThreadLoop;
+		public FileManager(
+			IRetryingThreadLoop retryingThreadLoop,
+			IThreadDelay threadDelay,
+			ILogger logger)
+		{
+			this.retryingThreadLoop = retryingThreadLoop;
 			this.threadDelay = threadDelay;
+			this.logger = logger;
 			temporaryPaths = new HashSet<string>();
 
-            PurgeTemporaryDirectory();
-        }
+			var directory = PrepareTemporaryFolder();
+			PurgeDirectory(directory);
+		}
 
-        void PurgeTemporaryDirectory()
-        {
-            var directory = PrepareTemporaryFolder();
-            DeleteIsolatedDirectoryIfExistsAsync(directory);
-        }
+		void WrapGracefully(Action action)
+		{
+			try
+			{
+				action();
+			}
+			catch { }
+		}
 
-        public void Dispose()
-        {
-            foreach (var temporaryPath in temporaryPaths)
-            {
-                PurgePath(temporaryPath);
-            }
-        }
+		void PurgeDirectory(string directory)
+		{
+			foreach (var file in Directory.GetFiles(directory))
+			{
+				WrapGracefully(() => DeleteFileIfExists(file));
+			}
 
-        static void PurgePath(string temporaryPath)
-        {
-            DeleteFileIfExists(temporaryPath);
-            DeleteDirectoryIfExists(temporaryPath);
-        }
+			foreach (var folder in Directory.GetDirectories(directory))
+			{
+				WrapGracefully(() => PurgeDirectory(folder));
+			}
+		}
 
-        static RetryingThreadLoopJob CreateRetryingFileJob(
-            Func<Task> task)
-        {
-            return new RetryingThreadLoopJob
-            {
-                Action = task,
-                AttemptsBeforeFailing = 5,
-                IntervalInMilliseconds = 1000,
-                IsExceptionIgnored = IsExceptionIgnored
-            };
-        }
+		public void Dispose()
+		{
+			foreach (var temporaryPath in temporaryPaths)
+			{
+				PurgePath(temporaryPath);
+			}
+		}
 
-        static bool IsExceptionIgnored(Exception ex)
-        {
-            return ex is IOException;
-        }
+		void PurgePath(string temporaryPath)
+		{
+			DeleteFileIfExists(temporaryPath);
+			DeleteDirectoryIfExists(temporaryPath);
+		}
 
-        public Task DeleteFileIfExistsAsync(string path)
-        {
-            return retryingThreadLoop.StartAsync(
-                CreateRetryingFileJob(
-                    async () => DeleteFileIfExists(path)));
-        }
+		static RetryingThreadLoopJob CreateRetryingFileJob(
+			Func<Task> task)
+		{
+			return new RetryingThreadLoopJob {
+				Action = task,
+				AttemptsBeforeFailing = 5,
+				IntervalInMilliseconds = 1000,
+				IsExceptionIgnored = IsExceptionIgnored
+			};
+		}
 
-        static void DeleteFileIfExists(string path)
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+		static bool IsExceptionIgnored(Exception ex)
+		{
+			return ex is IOException;
+		}
 
-        public Task DeleteIsolatedFileIfExistsAsync(string path)
-        {
-            return DeleteFileIfExistsAsync(
-                GetFullPathFromIsolatedPath(path));
-        }
+		public Task DeleteFileIfExistsAsync(string path)
+		{
+			return retryingThreadLoop.StartAsync(
+				CreateRetryingFileJob(
+					async () => DeleteFileIfExists(path)));
+		}
 
-        public Task DeleteIsolatedDirectoryIfExistsAsync(string path)
-        {
-            return DeleteDirectoryIfExistsAsync(
-                GetFullPathFromIsolatedPath(path));
-        }
+		void DeleteFileIfExists(string path)
+		{
+			if (!File.Exists(path))
+				return;
 
-        public Task DeleteDirectoryIfExistsAsync(string path)
-        {
-            return retryingThreadLoop.StartAsync(
-                CreateRetryingFileJob(
-                    async () => DeleteDirectoryIfExists(path)));
-        }
+			logger.Verbose("Deleting file {file}.", path);
+			File.Delete(path);
+		}
 
-        static void DeleteDirectoryIfExists(string path)
-        {
-            if (Directory.Exists(path))
-            {
-                Directory.Delete(path, true);
-            }
-        }
+		public Task DeleteIsolatedFileIfExistsAsync(string path)
+		{
+			return DeleteFileIfExistsAsync(
+				GetFullPathFromIsolatedPath(path));
+		}
 
-        static string GetIsolatedPathRoot()
-        {
-            return PrepareShapeshifterFolder(
-                Environment.GetFolderPath(
-                    Environment.SpecialFolder.LocalApplicationData));
-        }
+		public Task DeleteIsolatedDirectoryIfExistsAsync(string path)
+		{
+			return DeleteDirectoryIfExistsAsync(
+				GetFullPathFromIsolatedPath(path));
+		}
 
-        static string PrepareShapeshifterFolder(string basePath)
-        {
-            const string folderName = "Shapeshifter";
+		public Task DeleteDirectoryIfExistsAsync(string path)
+		{
+			return retryingThreadLoop.StartAsync(
+				CreateRetryingFileJob(
+					async () => DeleteDirectoryIfExists(path)));
+		}
 
-            var path = Path.Combine(basePath, folderName);
-            CreateDirectoryIfNotExists(path);
+		void DeleteDirectoryIfExists(string path)
+		{
+			if (!Directory.Exists(path))
+				return;
 
-            return path;
-        }
+			logger.Verbose("Deleting directory {directory}.", path);
+			Directory.Delete(path, true);
+		}
 
-        static string PrepareTemporaryFolder()
-        {
-            return PrepareShapeshifterFolder(
-                Path.GetTempPath());
-        }
+		static string GetIsolatedPathRoot()
+		{
+			return PrepareShapeshifterFolder(
+				Environment.GetFolderPath(
+					Environment.SpecialFolder.LocalApplicationData));
+		}
 
-        public string FindCommonFolderFromPaths(IReadOnlyCollection<string> paths)
-        {
-            var pathSimilarityIndex = GetPathSegmentsInCommonCount(paths);
+		static string PrepareShapeshifterFolder(string basePath)
+		{
+			const string folderName = "Shapeshifter";
 
-            var firstPath = paths.First();
-            var segments = GetPathSegments(firstPath);
+			var path = Path.Combine(basePath, folderName);
+			CreateDirectoryIfNotExists(path);
 
-            var commonPath = Path.Combine(
-                segments
-                    .Take(pathSimilarityIndex)
-                    .ToArray());
+			return path;
+		}
 
-            return commonPath;
-        }
+		static string PrepareTemporaryFolder()
+		{
+			return PrepareShapeshifterFolder(
+				Path.GetTempPath());
+		}
 
-        static int GetPathSegmentsInCommonCount(IReadOnlyCollection<string> paths)
-        {
-            var splitPaths = paths
-                .Select(p => p.Split('\\', '/'))
-                .ToList();
+		public string FindCommonFolderFromPaths(IReadOnlyCollection<string> paths)
+		{
+			var pathSimilarityIndex = GetPathSegmentsInCommonCount(paths);
 
-            var shortestPath = splitPaths
-                .OrderBy(p => p.Count())
-                .First();
+			var firstPath = paths.First();
+			var segments = GetPathSegments(firstPath);
 
-            var commonCount = shortestPath
-                .TakeWhile((s, i) =>
-                    splitPaths.All(sp => sp[i] == s))
-                .Count();
+			var commonPath = Path.Combine(
+				segments
+					.Take(pathSimilarityIndex)
+					.ToArray());
 
-            return commonCount;
-        }
+			return commonPath;
+		}
 
-        static string[] GetPathSegments(string originPath)
-        {
-            return originPath.Split('\\', '/');
-        }
+		static int GetPathSegmentsInCommonCount(IReadOnlyCollection<string> paths)
+		{
+			var splitPaths = paths
+				.Select(p => p.Split('\\', '/'))
+				.ToList();
 
-        public string PrepareNewIsolatedFolder(string relativePath)
-        {
-            var count = 0;
+			var shortestPath = splitPaths
+				.OrderBy(p => p.Count())
+				.First();
 
-            string finalPath = null;
-            while ((finalPath == null) || Directory.Exists(finalPath))
-            {
-                finalPath = GetFullPathFromIsolatedPath(
-                    Path.Combine(relativePath, (++count).ToString()));
-            }
+			var commonCount = shortestPath
+				.TakeWhile((s, i) =>
+					splitPaths.All(sp => sp[i] == s))
+				.Count();
 
-            return PrepareFolder(finalPath);
-        }
+			return commonCount;
+		}
 
-        public string PrepareFolder(string path)
-        {
-            CreateDirectoryIfNotExists(path);
-            return path;
-        }
+		static string[] GetPathSegments(string originPath)
+		{
+			return originPath.Split('\\', '/');
+		}
 
-        public string PrepareIsolatedFolder(string relativePath = null)
-        {
-            var finalPath = GetFullPathFromIsolatedPath(relativePath);
-            return PrepareFolder(finalPath);
-        }
+		public string PrepareNewIsolatedFolder(string relativePath)
+		{
+			var count = 0;
 
-        public async Task AppendLineToFileAsync(string path, string line)
-        {
-			using(var writer = new StreamWriter(File.Open(path, FileMode.Append))) {
+			string finalPath = null;
+			while ((finalPath == null) || Directory.Exists(finalPath))
+			{
+				finalPath = GetFullPathFromIsolatedPath(
+					Path.Combine(relativePath, (++count).ToString()));
+			}
+
+			return PrepareFolder(finalPath);
+		}
+
+		public string PrepareFolder(string path)
+		{
+			CreateDirectoryIfNotExists(path);
+			return path;
+		}
+
+		public string PrepareIsolatedFolder(string relativePath = null)
+		{
+			var finalPath = GetFullPathFromIsolatedPath(relativePath);
+			return PrepareFolder(finalPath);
+		}
+
+		public async Task AppendLineToFileAsync(string path, string line)
+		{
+			using (var writer = new StreamWriter(File.Open(path, FileMode.Append)))
+			{
 				await writer.WriteLineAsync(line);
 			}
-        }
+		}
 
-        public async Task<string> WriteBytesToTemporaryFileAsync(string relativePath, byte[] bytes)
-        {
-            var finalPath = GetFullPathFromTemporaryPath(relativePath);
-            await WriteBytesToFileAsync(finalPath, bytes);
+		public async Task<string> WriteBytesToTemporaryFileAsync(string relativePath, byte[] bytes)
+		{
+			var finalPath = GetFullPathFromTemporaryPath(relativePath);
+			await WriteBytesToFileAsync(finalPath, bytes);
 
-            temporaryPaths.Add(finalPath);
+			temporaryPaths.Add(finalPath);
 
-            return finalPath;
-        }
+			return finalPath;
+		}
 
-        public async Task<string> AppendLineToTemporaryFileAsync(string relativePath, string line)
-        {
-            var finalPath = GetFullPathFromTemporaryPath(relativePath);
-            await AppendLineToFileAsync(finalPath, line);
+		public async Task<string> AppendLineToTemporaryFileAsync(string relativePath, string line)
+		{
+			var finalPath = GetFullPathFromTemporaryPath(relativePath);
+			await AppendLineToFileAsync(finalPath, line);
 
-            temporaryPaths.Add(finalPath);
+			temporaryPaths.Add(finalPath);
 
-            return finalPath;
-        }
+			return finalPath;
+		}
 
-        public async Task<string> PrepareTemporaryFolderAsync(string relativePath)
-        {
-            var finalPath = GetFullPathFromTemporaryPath(relativePath);
-            WatchDirectory(finalPath);
+		public async Task<string> PrepareTemporaryFolderAsync(string relativePath)
+		{
+			var finalPath = GetFullPathFromTemporaryPath(relativePath);
+			WatchDirectory(finalPath);
 
 			await threadDelay.ExecuteAsync(1000);
 
-            return finalPath;
-        }
+			return finalPath;
+		}
 
-        void WatchDirectory(string finalPath)
-        {
-            temporaryPaths.Add(finalPath);
-            CreateDirectoryIfNotExists(finalPath);
-        }
+		void WatchDirectory(string finalPath)
+		{
+			temporaryPaths.Add(finalPath);
+			CreateDirectoryIfNotExists(finalPath);
+		}
 
-        static void CreateDirectoryIfNotExists(string relativePath)
-        {
-            if (!Directory.Exists(relativePath))
-            {
-                Directory.CreateDirectory(relativePath);
-            }
-        }
+		static void CreateDirectoryIfNotExists(string relativePath)
+		{
+			if (!Directory.Exists(relativePath))
+			{
+				Directory.CreateDirectory(relativePath);
+			}
+		}
 
-        static string GetFullPathFromIsolatedPath(string path = null)
-        {
-            var isolatedFolderPath = GetIsolatedPathRoot();
+		static string GetFullPathFromIsolatedPath(string path = null)
+		{
+			var isolatedFolderPath = GetIsolatedPathRoot();
 
-            var finalPath = path == null
-                                ? isolatedFolderPath
-                                : Path.Combine(isolatedFolderPath, path);
-            return finalPath;
-        }
+			var finalPath = path == null
+								? isolatedFolderPath
+								: Path.Combine(isolatedFolderPath, path);
+			return finalPath;
+		}
 
-        public static string GetFullPathFromTemporaryPath(string path)
-        {
-            var isolatedFolderPath = PrepareTemporaryFolder();
+		public static string GetFullPathFromTemporaryPath(string path)
+		{
+			var isolatedFolderPath = PrepareTemporaryFolder();
 
-            var finalPath = Path.Combine(isolatedFolderPath, path);
-            return finalPath;
-        }
+			var finalPath = Path.Combine(isolatedFolderPath, path);
+			return finalPath;
+		}
 
-        public async Task WriteBytesToFileAsync(string relativePath, byte[] bytes)
+		public async Task WriteBytesToFileAsync(string relativePath, byte[] bytes)
 		{
 			using (var file = File.Open(relativePath, FileMode.Create))
 			{
 				await file.WriteAsync(bytes, 0, bytes.Length);
 			}
 		}
-    }
+	}
 }

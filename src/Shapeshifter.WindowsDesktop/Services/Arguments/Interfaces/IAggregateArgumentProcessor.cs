@@ -1,9 +1,11 @@
-﻿namespace Shapeshifter.WindowsDesktop.Services.Arguments.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace Shapeshifter.WindowsDesktop.Services.Arguments.Interfaces
 {
     public interface IAggregateArgumentProcessor
     {
         bool ShouldTerminate { get; }
 
-        void ProcessArguments(string[] arguments);
+        Task ProcessArgumentsAsync(string[] arguments);
     }
 }

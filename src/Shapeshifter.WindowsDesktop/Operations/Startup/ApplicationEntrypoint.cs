@@ -6,23 +6,27 @@
 
     using Interfaces;
 	using Serilog;
+	using Shapeshifter.WindowsDesktop.Services.Processes.Interfaces;
 
 	public class ApplicationEntrypoint: ISingleInstance
     {
         readonly IStartupPreparationOperation startupPreparationOperation;
         readonly IPostPreparationOperation postPreparationOperation;
         readonly IMainWindowPreparationOperation mainWindowPreparationOperation;
+		private readonly IProcessManager processManager;
 		readonly ILogger logger;
 
 		public ApplicationEntrypoint(
             IStartupPreparationOperation startupPreparationOperation,
             IPostPreparationOperation postPreparationOperation,
             IMainWindowPreparationOperation mainWindowPreparationOperation,
+			IProcessManager processManager,
 			ILogger logger)
         {
             this.startupPreparationOperation = startupPreparationOperation;
             this.postPreparationOperation = postPreparationOperation;
             this.mainWindowPreparationOperation = mainWindowPreparationOperation;
+			this.processManager = processManager;
 			this.logger = logger;
 		}
 
@@ -33,6 +37,7 @@
             if (startupPreparationOperation.ShouldTerminate)
             {
 				logger.Verbose("The startup preparation operation signalled a termination request. Will quit process.");
+				processManager.CloseCurrentProcess();
 				return;
             }
 

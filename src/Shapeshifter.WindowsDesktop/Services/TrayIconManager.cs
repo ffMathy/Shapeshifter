@@ -10,8 +10,8 @@
     using Interfaces;
 
     using Properties;
-
-    using Web.Updates.Interfaces;
+	using Serilog;
+	using Web.Updates.Interfaces;
 
     public class TrayIconManager: ITrayIconManager
     {
@@ -19,7 +19,8 @@
 
         public event EventHandler<TrayIconClickedEventArgument> IconClicked;
 
-        public TrayIconManager()
+        public TrayIconManager(
+			ILogger logger)
         {
             trayIcon = new NotifyIcon();
         }

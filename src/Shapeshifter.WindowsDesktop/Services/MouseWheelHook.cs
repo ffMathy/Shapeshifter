@@ -60,11 +60,11 @@
 
         void TriggerNeededEventsForCurrentDelta()
         {
-            if (currentDelta > Mouse.MouseWheelDeltaForOneLine)
+            if (currentDelta >= Mouse.MouseWheelDeltaForOneLine)
             {
                 OnWheelScrolledUp();
             }
-            else if (currentDelta < -Mouse.MouseWheelDeltaForOneLine)
+            else if (currentDelta <= -Mouse.MouseWheelDeltaForOneLine)
             {
                 OnWheelScrolledDown();
             }
@@ -183,7 +183,7 @@
 
         static short GetHighOrderWord(WindowMessageReceivedArgument e)
         {
-            return (short) (e.WordParameter.ToInt32() >> 16);
+            return (short) (e.WordParameter.ToInt64() >> 16);
         }
     }
 }

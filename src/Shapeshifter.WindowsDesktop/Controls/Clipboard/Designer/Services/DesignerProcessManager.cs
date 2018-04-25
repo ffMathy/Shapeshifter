@@ -38,5 +38,10 @@
 		{
 			throw new NotImplementedException();
 		}
+
+		public void CloseCurrentProcess()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

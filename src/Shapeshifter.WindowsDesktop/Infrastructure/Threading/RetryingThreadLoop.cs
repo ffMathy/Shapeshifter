@@ -5,19 +5,23 @@
     using System.Threading.Tasks;
 
     using Interfaces;
+	using Serilog;
 
-    public class RetryingThreadLoop: IRetryingThreadLoop
+	public class RetryingThreadLoop: IRetryingThreadLoop
     {
         readonly IThreadLoop threadLoop;
+		readonly ILogger logger;
 
-        public bool IsRunning
+		public bool IsRunning
             => threadLoop.IsRunning;
 
         public RetryingThreadLoop(
-            IThreadLoop threadLoop)
+            IThreadLoop threadLoop,
+			ILogger logger)
         {
             this.threadLoop = threadLoop;
-        }
+			this.logger = logger;
+		}
 
         public Task StartAsync(
             RetryingThreadLoopJob job)
@@ -61,6 +65,8 @@
             }
             catch (Exception ex)
             {
+				logger.Warning("Attempt #{attempt}. Will try {tries} more times. {message}", attempts, job.AttemptsBeforeFailing - attempts, ex.Message);
+
                 exceptionsCaught.Add(ex);
                 if (job.IsExceptionIgnored?.Invoke(ex) != true)
                 {

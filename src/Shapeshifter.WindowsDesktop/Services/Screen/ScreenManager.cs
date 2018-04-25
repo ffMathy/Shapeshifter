@@ -39,11 +39,12 @@
 
 			using (CrossThreadLogContext.Add(nameof(deviceIndependentMousePosition), deviceIndependentMousePosition))
 			using (CrossThreadLogContext.Add(nameof(screens), screens)) { 
-				return screens.Single(screen =>
+				var activeScreen = screens.First(screen =>
 					screen.Bounds.X <= deviceIndependentMousePosition.X &&
 					screen.Bounds.Y <= deviceIndependentMousePosition.Y &&
 					screen.Bounds.X + screen.Bounds.Width >= deviceIndependentMousePosition.X &&
 					screen.Bounds.Y + screen.Bounds.Height >= deviceIndependentMousePosition.Y);
+				return activeScreen;
 			}
 		}
 
@@ -57,8 +58,8 @@
 		private ScreenBounds GatherScreenBounds(System.Drawing.Rectangle inputBounds)
 		{
 			var devicePosition = new Vector(
-							inputBounds.X,
-							inputBounds.Y);
+				inputBounds.X,
+				inputBounds.Y);
 
 			var deviceSize = new Vector(
 				inputBounds.Width,

@@ -19,11 +19,12 @@ namespace Shapeshifter.WindowsDesktop
 		[TestCategory("Predeploy")]
 		public void CanInstallShapeshifter()
 		{
-			var lastLoad = (DateTime?)null;
 
 			try
 			{
 				var container = CreateContainer();
+
+				const string executableName = "Shapeshifter.exe";
 
 				var directory = Environment.CurrentDirectory;
 				Console.WriteLine("Working directory: " + directory);
@@ -33,7 +34,8 @@ namespace Shapeshifter.WindowsDesktop
 
 				var applicationBuildPath = Path.Combine(rootPath, "build", "application");
 
-				const string executableName = "Shapeshifter.exe";
+				var executablePath = Path.Combine(applicationBuildPath, executableName);
+				var backupExecutablePath = executablePath + ".bak";
 
 				foreach (var file in Directory.GetFiles(applicationBuildPath))
 				{
@@ -51,9 +53,6 @@ namespace Shapeshifter.WindowsDesktop
 				var settingsManager = container.Resolve<ISettingsManager>();
 				settingsManager.SaveSetting<DateTime?>("LastLoad", null);
 
-				var executablePath = Path.Combine(applicationBuildPath, executableName);
-				var backupExecutablePath = executablePath + ".bak";
-
 				File.Copy(executablePath, backupExecutablePath);
 
 				var shapeshifterProcess = Process.Start(new ProcessStartInfo() {
@@ -70,6 +69,7 @@ namespace Shapeshifter.WindowsDesktop
 
 				var now = DateTime.UtcNow;
 
+				var lastLoad = (DateTime?)null;
 				while (true)
 				{
 					lastLoad = settingsManager.LoadSetting<DateTime?>("LastLoad");
@@ -84,12 +84,30 @@ namespace Shapeshifter.WindowsDesktop
 					Thread.Sleep(1000);
 				}
 
-				Assert.IsFalse(File.Exists(executablePath));
+				var logFilePath = FileManager.GetFullPathFromTemporaryPath("Shapeshifter.log");
+				File.Copy(logFilePath, "Log.txt");
+
+				var logOutput = File.ReadAllLines("Log.txt");
+
+				Console.WriteLine("Log output:");
+				foreach (var line in logOutput)
+				{
+					Console.WriteLine(line);
+				}
+
+				Assert.IsFalse(File.Exists(executablePath), "The old executable at " + executablePath + " was not cleaned up after installation.");
 
 				File.Move(backupExecutablePath, executablePath);
 				Thread.Sleep(1000);
 
 				Assert.IsTrue(File.Exists(executablePath));
+
+				Assert.IsNotNull(lastLoad, "Install test failed.");
+
+				foreach (var line in logOutput)
+				{
+					Assert.IsFalse(line.Contains("[ERR]"), line);
+				}
 			}
 			finally
 			{
@@ -100,18 +118,6 @@ namespace Shapeshifter.WindowsDesktop
 
 				Thread.Sleep(1000);
 			}
-
-			var logFilePath = FileManager.GetFullPathFromTemporaryPath("Shapeshifter.log");
-			File.Copy(logFilePath, "Log.txt");
-
-			var logOutput = File.ReadAllLines("Log.txt");
-
-			Console.WriteLine("Log output:");
-			foreach(var line in logOutput) {
-				Console.WriteLine(line);
-			}
-
-			Assert.IsNotNull(lastLoad, "Install test failed.");
 		}
 
 		public string FindRootPathFromPath(string path)
