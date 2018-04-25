@@ -104,7 +104,7 @@
         {
             try {
 	    	var dependenciesToSave = new List<string>();
-		dependenciesToSave.Add("EasyHook" + (NativeAPI.Is64Bit ? "64" : "32") + "Svc.exe");
+		dependenciesToSave.Add("EasyHook" + (Environment.Is64BitOperatingSystem ? "64" : "32") + "Svc.exe");
 		dependenciesToSave.Add(GetInjectedLibraryName());
 	    
 	    	foreach(var dependencyName in dependenciesToSave) {
