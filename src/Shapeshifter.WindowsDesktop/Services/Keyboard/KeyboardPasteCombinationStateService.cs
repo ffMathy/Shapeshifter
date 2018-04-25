@@ -19,5 +19,7 @@
 
         public bool IsCombinationFullyHeldDown
             => keyboardManager.IsKeyDown(Key.LeftCtrl) && keyboardManager.IsKeyDown(Key.V);
-    }
+
+		public bool IsTextKeyDown => keyboardManager.IsKeyDown(Key.V);
+	}
 }

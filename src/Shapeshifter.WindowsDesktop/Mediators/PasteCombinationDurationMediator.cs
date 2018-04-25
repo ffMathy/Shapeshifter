@@ -137,7 +137,7 @@
             var decisecondsPassed = 0;
             while (
                 !IsCancellationRequested &&
-                keyboardPasteState.IsCombinationFullyHeldDown && 
+                keyboardPasteState.IsTextKeyDown && 
                 !shouldCancel)
             {
                 await threadDelay.ExecuteAsync(100);
@@ -146,8 +146,8 @@
                 logger.Information($"Paste combination held down for {decisecondsPassed}.");
 
                 RaiseDurationPassedEventIfNeeded(decisecondsPassed);
-            }
-        }
+			}
+		}
 
         void RaiseDurationPassedEventIfNeeded(int decisecondsPassed)
         {
