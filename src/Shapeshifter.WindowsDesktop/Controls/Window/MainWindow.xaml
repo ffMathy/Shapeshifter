@@ -19,6 +19,7 @@
         Title=""
         WindowStyle="None"
         Background="#10000000"
+		IsHitTestVisible="True"
         AllowsTransparency="True">
     <window:UserInterfaceControl x:Name="UserInterfaceControl" />
 </Window>

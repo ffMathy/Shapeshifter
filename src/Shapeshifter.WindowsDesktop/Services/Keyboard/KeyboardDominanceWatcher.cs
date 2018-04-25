@@ -115,7 +115,10 @@
 				dependenciesToSave.Add(dependencyPrefix + $"EasyLoad{processorArchitecture}.dll");
 
 				foreach(var dependency in dependenciesToSave) {
-					EmitEmbeddedResourceToDisk(dependency, dependency);
+					EmitEmbeddedResourceToDisk(
+						dependency, 
+						dependency.Substring(
+							dependencyPrefix.Length));
 				}
 
 				var injectedKeyboardHookInterceptionLibraryName = GetInjectedLibraryName();
