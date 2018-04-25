@@ -103,7 +103,7 @@
 				Logger.Verbose("Shapeshifter is already installed but was invoked from a non-install directory path. Will invoke the installed one.");
 
 				trayIconManager.DisplayInformation("Shapeshifter already installed", "Will launch from installed location: " + TargetDirectory);
-				LaunchInstalledExecutable(TargetExecutableFile);
+				LaunchInstalledExecutable(processManager.GetCurrentProcessFilePath());
 				return;
 			}
 
