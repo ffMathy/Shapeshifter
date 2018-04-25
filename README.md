@@ -1,7 +1,5 @@
 [![Join the chat at https://gitter.im/ffMathy/Shapeshifter](https://badges.gitter.im/ffMathy/Shapeshifter.svg)](https://gitter.im/ffMathy/Shapeshifter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Github All Releases](https://img.shields.io/github/downloads/ffMathy/Shapeshifter/total.svg)](https://github.com/ffMathy/Shapeshifter/releases)
 [![Build status](https://ci.appveyor.com/api/projects/status/hnhqpn0rwcsvccng/branch/master?svg=true)](https://ci.appveyor.com/project/ffMathy/shapeshifter/branch/master)
-[![codecov.io](https://codecov.io/github/ffMathy/Shapeshifter/coverage.svg?branch=master)](https://codecov.io/github/ffMathy/Shapeshifter?branch=master)
 
 # Shapeshifter
 Shapeshifter is a revolutionary clipboard manager that you might know of already. It allows you to copy multiple items and select which item you want to paste later without losing any of them.

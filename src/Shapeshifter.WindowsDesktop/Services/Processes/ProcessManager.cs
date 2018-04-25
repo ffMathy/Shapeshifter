@@ -48,7 +48,7 @@
 
 		public string GetCurrentProcessDirectory()
 		{
-			return Environment.CurrentDirectory;
+			return Path.GetDirectoryName(currentProcess.MainModule.FileName);
 		}
 
 		public void LaunchCommand(string command, string arguments = null)
