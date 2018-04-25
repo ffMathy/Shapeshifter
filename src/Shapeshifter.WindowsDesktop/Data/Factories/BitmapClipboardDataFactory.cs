@@ -30,12 +30,8 @@
 
 		BitmapSource DIBV5ToBitmapSource(byte[] allBytes)
 		{
-			var fileHeaderLength = Marshal.SizeOf(typeof(BITMAPFILEHEADER));
-			var dibv5Bytes = new byte[allBytes.Length - fileHeaderLength];
-			Array.Copy(allBytes, fileHeaderLength, dibv5Bytes, 0, dibv5Bytes.Length);
-
-			var bmi = BinaryStructHelper.FromByteArray<BITMAPV5HEADER>(dibv5Bytes);
-			var imageBytes = GetImageBytesFromAllBytes(dibv5Bytes, bmi);
+			var bmi = BinaryStructHelper.FromByteArray<BITMAPV5HEADER>(allBytes);
+			var imageBytes = GetImageBytesFromAllBytes(allBytes, bmi);
 			var stride = GetStrideFromBitmapHeader(bmi);
 
 			var reversedImageBytes = new byte[imageBytes.Length];
@@ -59,11 +55,7 @@
 		static byte[] GetImageBytesFromAllBytes(byte[] bytes, BITMAPV5HEADER bmi)
 		{
 			var stride = GetStrideFromBitmapHeader(bmi);
-			var offset = bmi.bV5Size + Marshal.SizeOf(typeof(BITMAPFILEHEADER)) + bmi.bV5ClrUsed * Marshal.SizeOf<RGBQUAD>();
-			if (bmi.bV5Compression == (uint)BitmapCompressionMode.BI_BITFIELDS)
-			{
-				offset += 12;
-			}
+			var offset = bmi.bV5Size + bmi.bV5ClrUsed * Marshal.SizeOf<RGBQUAD>();
 
 			var imageBytes = new byte[bmi.bV5SizeImage];
 			Array.Copy(bytes, offset, imageBytes, 0, imageBytes.Length);
@@ -105,19 +97,19 @@
                 throw new InvalidOperationException("The given format is not supported.");
             }
 
-            return new ClipboardImageData(dataSourceService)
+			var bitmapSource = DIBV5ToBitmapSource(rawData);
+			return new ClipboardImageData(dataSourceService)
             {
                 RawData = rawData,
                 RawFormat = format,
-				Image = imagePersistenceService.ConvertBitmapSourceToByteArray(
-					DIBV5ToBitmapSource(rawData))
+				Image = imagePersistenceService.ConvertBitmapSourceToByteArray(bitmapSource)
             };
         }
 
         public bool CanBuildData(uint format)
         {
             return
-                format == ClipboardNativeApi.CF_BITMAP;
+                format == ClipboardNativeApi.CF_DIBV5;
         }
     }
 }
