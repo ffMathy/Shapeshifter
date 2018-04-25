@@ -32,13 +32,30 @@
 			this.logger = logger;
 			temporaryPaths = new HashSet<string>();
 
-			PurgeTemporaryDirectory();
+			var directory = PrepareTemporaryFolder();
+			PurgeDirectory(directory);
 		}
 
-		void PurgeTemporaryDirectory()
+		void WrapGracefully(Action action)
 		{
-			var directory = PrepareTemporaryFolder();
-			DeleteIsolatedDirectoryIfExistsAsync(directory);
+			try
+			{
+				action();
+			}
+			catch { }
+		}
+
+		void PurgeDirectory(string directory)
+		{
+			foreach (var file in Directory.GetFiles(directory))
+			{
+				WrapGracefully(() => DeleteFileIfExists(file));
+			}
+
+			foreach (var folder in Directory.GetDirectories(directory))
+			{
+				WrapGracefully(() => PurgeDirectory(folder));
+			}
 		}
 
 		public void Dispose()
@@ -110,7 +127,7 @@
 		{
 			if (!Directory.Exists(path))
 				return;
-				
+
 			logger.Verbose("Deleting directory {directory}.", path);
 			Directory.Delete(path, true);
 		}

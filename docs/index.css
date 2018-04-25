@@ -14,3 +14,12 @@ body, html {
 section {
     padding: 10vh;
 }
+
+.download .specs {
+    font-size: 12px;
+    color: #AAA;
+    padding-left: 5px;
+    position: relative;
+    top: 9px;
+    display: inline-block;
+}
