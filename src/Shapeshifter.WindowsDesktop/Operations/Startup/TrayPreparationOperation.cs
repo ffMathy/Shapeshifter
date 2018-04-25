@@ -14,6 +14,7 @@
 	using Shapeshifter.WindowsDesktop.Services.Files;
 	using Shapeshifter.WindowsDesktop.Services.Files.Interfaces;
 	using Shapeshifter.WindowsDesktop.Services.Processes.Interfaces;
+	using Shapeshifter.WindowsDesktop.Services.Web.Updates.Interfaces;
 	using Application = System.Windows.Application;
 
 	public class TrayPreparationOperation : ITrayPreparationOperation
@@ -22,17 +23,20 @@
 		readonly ISettingsWindowFactory settingsWindowFactory;
 		readonly IProcessManager processManager;
 		readonly ISettingsManager settingsManager;
+		readonly IUpdateService updateService;
 
 		public TrayPreparationOperation(
 			ITrayIconManager trayIconManager,
 			ISettingsWindowFactory settingsWindowFactory,
 			IProcessManager processManager,
-			ISettingsManager settingsManger)
+			ISettingsManager settingsManger,
+			IUpdateService updateService)
 		{
 			this.trayIconManager = trayIconManager;
 			this.settingsWindowFactory = settingsWindowFactory;
 			this.processManager = processManager;
 			this.settingsManager = settingsManger;
+			this.updateService = updateService;
 		}
 
 		public async Task RunAsync()
@@ -46,13 +50,19 @@
 				new[]
 				{
 					new MenuItem(
-						"Exit",
-						(sender, e) => Application.Current.Shutdown()),
-					new MenuItem(
 						"Show log file",
 						(sender, e) => processManager.LaunchFile(
 							FileManager.GetFullPathFromTemporaryPath(
-								"Shapeshifter.log")))
+								"Shapeshifter.log"))),
+					new MenuItem(
+						"Search for updates",
+						(sender, e) => {
+							trayIconManager.DisplayInformation("Looking for updates", "You'll be notified if any are found.");
+							updateService.UpdateAsync();
+						}),
+					new MenuItem(
+						"Exit",
+						(sender, e) => Application.Current.Shutdown())
 				});
 
 			trayIconManager.DisplayInformation("Shapeshifter is ready", "You can now use Shapeshifter for managing your clipboard.");
