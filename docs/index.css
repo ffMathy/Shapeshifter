@@ -14,11 +14,8 @@ body, html {
     padding: 10vh 10vw !important;
 }
 
-.download {
-    max-width: 400px;
-}
-
 .download .selling-points {
+    max-width: 400px;
     margin-left: -40px;
     padding-top: 10px;
 }
