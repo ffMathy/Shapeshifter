@@ -40,7 +40,7 @@
 
 			var text = GetProcessedTextFromRawData(format, data);
 			return new ClipboardTextData(dataSourceService) {
-				Text = text,
+				Text = text.Trim(),
 				RawData = data,
 				RawFormat = format
 			};
@@ -80,7 +80,7 @@
 
 						case HtmlFormat:
 							return ConvertHtmlToText(
-								Encoding.Default.GetString(data));
+								Encoding.UTF8.GetString(data));
 
 						default:
 							throw new InvalidOperationException("Unknown format.");
@@ -90,8 +90,11 @@
 
 		static string ConvertHtmlToText(string html)
 		{
+			if(!html.Contains("<"))
+				return html;
+
 			var document = new HtmlDocument();
-			document.LoadHtml(html);
+			document.LoadHtml(html.Substring(html.IndexOf("<")));
 
 			return document.DocumentNode.InnerText;
 		}
