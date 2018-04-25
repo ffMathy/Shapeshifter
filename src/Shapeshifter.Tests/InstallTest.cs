@@ -52,6 +52,10 @@ namespace Shapeshifter.WindowsDesktop
 				settingsManager.SaveSetting<DateTime?>("LastLoad", null);
 
 				var executablePath = Path.Combine(applicationBuildPath, executableName);
+				var backupExecutablePath = executablePath + ".bak";
+
+				File.Copy(executablePath, backupExecutablePath);
+
 				var shapeshifterProcess = Process.Start(new ProcessStartInfo() {
 					Arguments = null,
 					WorkingDirectory = applicationBuildPath,
@@ -73,12 +77,19 @@ namespace Shapeshifter.WindowsDesktop
 						break;
 
 					var elapsedTimeInSeconds = (int)(DateTime.UtcNow - now).TotalSeconds;
-					if (elapsedTimeInSeconds > 30)
+					if (elapsedTimeInSeconds > 60)
 						break;
 
 					Console.WriteLine("Waited " + elapsedTimeInSeconds + " seconds so far for Shapeshifter to launch after installation.");
 					Thread.Sleep(1000);
 				}
+
+				Assert.IsFalse(File.Exists(executablePath));
+
+				File.Move(backupExecutablePath, executablePath);
+				Thread.Sleep(1000);
+
+				Assert.IsTrue(File.Exists(executablePath));
 			}
 			finally
 			{
