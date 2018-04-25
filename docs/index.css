@@ -1,14 +1,56 @@
 * {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto';
     box-sizing: border-box;
 }
 
 body, html {
-    min-height: calc(100vh - 20vh);
+    overflow-x: hidden !important;
 
-    padding: 10vh 10vw;
+    background: radial-gradient(#FFF, #EFEFEF);
+}
 
-    overflow-x: hidden;
+.app {
+    padding: 10vh 10vw !important;
+}
+
+.download .selling-points {
+    max-width: 400px;
+    margin-left: -40px;
+    padding-top: 10px;
+}
+
+.download .selling-points li {
+    padding-bottom: 20px;
+}
+
+.download .selling-points li:last-child {
+    padding-bottom: 0;
+}
+
+.download .selling-points li span {
+    display: block;
+    font-size: 14px;
+}
+
+.screenshot {
+    background-image: url(https://github.com/ffMathy/Shapeshifter/raw/master/assets/screenshots/blue.PNG);
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    min-width: 400px;
+    min-height: 300px;
+
+    margin-top: 7vh;
+    
+    cursor: pointer;
+}
+
+header h1 {
+    font-weight: 100 !important;
+}
+
+header span {
+    color: #333;
 }
 
 section {

@@ -1,9 +1,9 @@
 <html>
   <head>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,400" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,400" />
    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
     
@@ -11,22 +11,48 @@
     <script src="index.js"></script>
   </head>
   <body>
-      <header class="row text-center">
-        <div class="col-12">
+    <div class="app">
+      <header class="d-flex flex-row justify-content-around">
+        <div class="d-flex flex-column">
           <h1>Shapeshifter</h1>
           <span>a clipboard manager for the 21st century</span>
         </div>
       </header>
       <main>
-        <div class="row">
-          <section class="col-6 download">
-            <a class="btn btn-primary" href="#">Download</a>
-            <div class="specs">
-              <span>v6.2018.2934</span><br/>
-              <span>6.2 mb</span>
+        <div class="d-flex flex-row justify-content-around flex-wrap">
+          <section class="d-flex flex-column download">
+            <div class="d-flex flex-row">
+              <div class="d-flex flex-column">
+                <h2>Why?</h2>
+                <ul class="selling-points">
+                  <li>
+                    <b>It doesn't change your existing habits</b> 
+                    <span>CTRL + C to copy, CTRL + V to paste, hold down CTRL + V and use the arrow keys to swap between items.</span>
+                  </li>
+                  <li>
+                    <b>It looks sexy</b> 
+                    <span>The UI is tailored to adapt to your Windows 10 color scheme, and is designed to be minimal and efficient.</span>
+                  </li>
+                  <li>
+                    <b>It is maintained by you</b>
+                    <span>Powered by open source, anyone can help improve Shapeshifter. As a result, we keep updated constantly.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="d-flex flex-row">
+              <div class="d-flex flex-column">
+                <a class="btn btn-primary disabled" id="download-button" href="#">Download now</a>
+                <div class="specs">
+                  <span id="download-version"></span><br/>
+                  <span id="download-size"></span>
+                </div>
+              </div>
             </div>
           </section>
-          <div class="col-6">
+          <div class="d-flex flex-column flex-fill screenshot shadow-lg p-3 mb-5 bg-white rounded" id="screenshot">
+          </div>
+          <!--<div class="col">
             <section class="row patreon">
               <div class="col-12 text-center">
                 Support us on Patreon
@@ -37,8 +63,9 @@
                   Contribute to the source code
                 </div>
             </section>
-          </div>
+          </div>-->
         </div>
       </main>
+    </div>
   </body>
 </html>
