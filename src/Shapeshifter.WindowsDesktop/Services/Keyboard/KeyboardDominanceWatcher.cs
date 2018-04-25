@@ -93,6 +93,10 @@
         {
             processWatcher.Disconnect();
         }
+	
+	static string GetInjectedLibraryName() {
+		return $"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(KeyboardHookInterception)}.dll";
+	}
 
         [ExcludeFromCodeCoverage]
         public void Install()
@@ -100,7 +104,7 @@
             try {
 	    	var dependenciesToSave = new List<string, string>();
 		dependenciesToSave.Add("EasyHook" + (NativeAPI.Is64Bit ? "64" : "32") + "Svc.exe");
-		dependenciesToSave.Add($"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(KeyboardHookInterception)}.dll");
+		dependenciesToSave.Add(GetInjectedLibraryName());
 	    
 	    	foreach(var dependencyName in dependenciesToSave) {
 			var targetResourceName = "costura." + dependencyName.ToLower();
