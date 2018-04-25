@@ -77,10 +77,10 @@
 
         static void DeleteFileIfExists(string path)
         {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
+            if (!File.Exists(path))
+				return;
+
+            File.Delete(path);
         }
 
         public Task DeleteIsolatedFileIfExistsAsync(string path)

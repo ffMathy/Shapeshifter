@@ -1,7 +1,6 @@
-requirejs(["./Page", "./Header"], (Page, Header) => {
-  const App = () => (
-    <div>foo</div>
-  );
-  
-  ReactDOM.render(<App />, document.getElementById("root"));
-});
+ReactDOM.render(
+  React.createElement(() => {
+    
+  }, {toWhat: 'World'}, null),
+  document.getElementById('root')
+);
