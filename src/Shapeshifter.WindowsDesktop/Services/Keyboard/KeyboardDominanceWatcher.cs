@@ -84,11 +84,6 @@
             logger.Information($"Keyboard override library successfully injected.");
         }
 
-        static string GetInjectedLibraryName()
-        {
-            return $"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(KeyboardHookInterception)}.dll";
-        }
-
         public void Start()
         {
             processWatcher.Connect();
@@ -102,30 +97,34 @@
         [ExcludeFromCodeCoverage]
         public void Install()
         {
-            try
-			{
-				var embeddedFile = GetInjectedLibraryName();
-				var targetResourceName = "costura." + embeddedFile.ToLower();
+            try {
+	    	var dependenciesToSave = new List<string, string>();
+		dependenciesToSave.Add("EasyHook" + (NativeAPI.Is64Bit ? "64" : "32") + "Svc.exe");
+		dependenciesToSave.Add($"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(KeyboardHookInterception)}.dll");
+	    
+	    	foreach(var dependencyName in dependenciesToSave) {
+			var targetResourceName = "costura." + dependencyName.ToLower();
 
-				logger.Verbose("Looking for {resourceName} among embedded resources {@resources}.", targetResourceName, App.ResourceAssembly.GetManifestResourceNames());
+			logger.Verbose("Looking for {resourceName} among embedded resources {@resources}.", targetResourceName, App.ResourceAssembly.GetManifestResourceNames());
 
-				using (var stream = App.ResourceAssembly.GetManifestResourceStream(targetResourceName)) {
-					var bytes = new byte[stream.Length];
-					stream.Read(bytes, 0, bytes.Length);
+			using (var stream = App.ResourceAssembly.GetManifestResourceStream(targetResourceName)) {
+				var bytes = new byte[stream.Length];
+				stream.Read(bytes, 0, bytes.Length);
 
-					logger.Verbose("Resource {resourceName} of {length} bytes written to {embeddedFile}.", targetResourceName, bytes.Length, embeddedFile);
-					File.WriteAllBytes(embeddedFile, bytes);
-				}
+				logger.Verbose("Resource {resourceName} of {length} bytes written to {embeddedFile}.", targetResourceName, bytes.Length, dependencyName);
+				File.WriteAllBytes(dependencyName, bytes);
+			}
+		}
 
-				Thread.Sleep(1000);
+		Thread.Sleep(1000);
 
                 Config.Register(
-                    nameof(Shapeshifter),
-                    $"{processManager.CurrentProcessName}.exe",
-					embeddedFile);
+                    	nameof(Shapeshifter),
+                    	$"{processManager.CurrentProcessName}.exe",
+			embeddedFile);
 					
-				logger.Information("Injection mechanism installed and configured in the Global Assembly Cache.");
-			} catch(Exception ex)
+		logger.Information("Injection mechanism installed and configured in the Global Assembly Cache.");
+	} catch(Exception ex)
             {
                 logger.Error(ex, "Could not install the keyboard dominance watcher injection mechanism into the Global Assembly Cache.");
             }
