@@ -66,18 +66,22 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 
 		static void RegisterLogging(IEnvironmentInformation environment, ContainerBuilder builder)
 		{
+			var logPath = !environment.GetIsDebugging() && environment.GetIsRunningDeveloperVersion() ? 
+				Path.GetTempFileName() : 
+				FileManager.GetFullPathFromTemporaryPath("Shapeshifter.log");
+
 			Log.Logger = new LoggerConfiguration()
+				.MinimumLevel.Verbose()
 				.Enrich.WithProperty("ProcessId", Process.GetCurrentProcess().Id)
 				.Enrich.FromLogContext()
-				.WriteTo.ColoredConsole()
 				.WriteTo.Debug()
 				.WriteTo.File(
-					FileManager.GetFullPathFromTemporaryPath("Shapeshifter.log"),
+					logPath,
 					fileSizeLimitBytes: 1024 * 1024,
 					restrictedToMinimumLevel: LogEventLevel.Verbose,
-					rollOnFileSizeLimit: true,
+					rollOnFileSizeLimit: false,
 					shared: true,
-					outputTemplate: "[{ProcessId}] {Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+					outputTemplate: "[{ProcessId}] {Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
 				.CreateLogger();
 
 			builder.RegisterLogger(autowireProperties: true);

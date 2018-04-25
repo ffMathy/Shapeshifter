@@ -84,4 +84,8 @@ after_deploy:
 test_script:
   - nuget install opencover -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
 
-    %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -output:"coverage.xml" -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\build\tests\Shapeshifter.Tests.dll\"" -excludebyattribute:*ExcludeFromCodeCoverage* -register:user -skipautoprops -returntargetcode
+    %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -output:"coverage1.xml" -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\build\tests\Shapeshifter.Tests.dll\" /TestCaseFilter:(TestCategory!=Integration&TestCategory!=Predeploy)" -excludebyattribute:*ExcludeFromCodeCoverage* -register:user -skipautoprops -returntargetcode
+
+    %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -output:"coverage2.xml" -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\build\tests\Shapeshifter.Tests.dll\" /TestCaseFilter:\"TestCategory=Integration\"" -excludebyattribute:*ExcludeFromCodeCoverage* -register:user -skipautoprops -returntargetcode
+
+    %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -output:"coverage3.xml" -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\build\tests\Shapeshifter.Tests.dll\" /TestCaseFilter:\"TestCategory=Predeploy\"" -excludebyattribute:*ExcludeFromCodeCoverage* -register:user -skipautoprops -returntargetcode

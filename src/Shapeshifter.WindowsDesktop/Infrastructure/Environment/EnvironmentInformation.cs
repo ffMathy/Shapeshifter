@@ -27,7 +27,7 @@
             return !GetShouldUpdate() || Debugger.IsAttached;
         }
 
-        bool IsRunningDeveloperVersion()
+        public bool GetIsRunningDeveloperVersion()
         {
             var assemblyVersion = typeof(IEnvironmentInformation)
                 .Assembly
@@ -38,7 +38,7 @@
 
         public bool GetShouldUpdate()
         {
-            return !IsRunningDeveloperVersion();
+            return !GetIsRunningDeveloperVersion();
         }
 
         public bool GetHasInternetAccess()

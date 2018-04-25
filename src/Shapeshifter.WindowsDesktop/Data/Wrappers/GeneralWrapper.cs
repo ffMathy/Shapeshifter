@@ -21,14 +21,7 @@ namespace Shapeshifter.WindowsDesktop.Data.Wrappers
 			this.memoryHandleFactory = memoryHandleFactory;
 			this.generalNativeApi = generalNativeApi;
 
-			excludedFormats = new[]
-			{
-				ClipboardNativeApi.CF_DSPBITMAP,
-				ClipboardNativeApi.CF_DSPENHMETAFILE,
-				ClipboardNativeApi.CF_ENHMETAFILE,
-				ClipboardNativeApi.CF_METAFILEPICT,
-				ClipboardNativeApi.CF_BITMAP
-			};
+			excludedFormats = new int[0];
 		}
 
 		public bool CanWrap(IClipboardData clipboardData)

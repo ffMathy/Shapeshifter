@@ -6,7 +6,7 @@
 	using System.Diagnostics;
 	using System.IO;
 	using System.Security.Principal;
-
+	using System.Threading;
 	using Interfaces;
 	using Serilog;
 
@@ -83,6 +83,8 @@
 					process.Dispose();
 				}
 			}
+
+			Thread.Sleep(1000);
 		}
 
 		static string GetProcessProductName(Process process)
@@ -157,7 +159,7 @@
 			using (CrossThreadLogContext.Add("verb", verb))
 			using (CrossThreadLogContext.Add("arguments", arguments))
 			{
-				logger.Verbose("Launching {verb} {fileName} in {workingDirectory} with arguments {arguments}.");
+				logger.Verbose("Launching {fileName} under verb {verb} in {workingDirectory} with arguments {arguments}.");
 
 				var process = Process.Start(
 					new ProcessStartInfo {

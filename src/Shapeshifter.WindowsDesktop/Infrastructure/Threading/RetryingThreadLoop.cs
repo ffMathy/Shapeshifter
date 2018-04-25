@@ -62,8 +62,7 @@
             catch (Exception ex)
             {
                 exceptionsCaught.Add(ex);
-                if ((job.IsExceptionIgnored != null) &&
-                    !job.IsExceptionIgnored(ex))
+                if (job.IsExceptionIgnored?.Invoke(ex) != true)
                 {
                     throw;
                 }

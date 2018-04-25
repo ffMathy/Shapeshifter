@@ -60,16 +60,18 @@
 
         public void ProcessArguments(string[] arguments)
         {
-            logger.Information("Processing given command line arguments.");
+            logger.Information("Processing given command line arguments {@arguments}.", arguments);
 
             lock (processorsUsed)
             {
                 processorsUsed.Clear();
 
-                ProcessSingleArgumentProcessors(arguments);
+				logger.Information("Running single argument processors.");
+				ProcessSingleArgumentProcessors(arguments);
+
                 if (!processorsUsed.Any())
                 {
-                    logger.Information("Running no-argument argument processors since no single argument processor was used.");
+                    logger.Information("Running no-argument processors since no single argument processor was used.");
                     ProcessNoArgumentProcessors();
                 }
             }
@@ -77,13 +79,16 @@
             shouldTerminate = processorsUsed.Any(
                 x => x.Terminates);
             isProcessed = true;
+
+			logger.Verbose($"All command line arguments have been processed. Argument processor {(shouldTerminate ? "will" : "won't")} trigger termination.");
         }
 
         void ProcessNoArgumentProcessors()
         {
             foreach (var processor in noArgumentProcessors)
-            {
-                ProcessArgumentsWithNoArgumentProcessor(processor);
+			{
+				logger.Verbose("Triggering no-argument processor {processor}.", processor.GetType().Name);
+				ProcessArgumentsWithNoArgumentProcessor(processor);
             }
         }
 
@@ -102,6 +107,7 @@
         {
             foreach (var processor in singleArgumentProcessors)
             {
+				logger.Verbose("Triggering argument processor {processor} with arguments {@arguments}.", processor.GetType().Name, arguments);
                 ProcessArgumentsWithSingleArgumentProcessor(arguments, processor);
             }
         }

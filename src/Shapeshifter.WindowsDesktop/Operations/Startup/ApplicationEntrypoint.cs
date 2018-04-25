@@ -5,22 +5,26 @@
     using Infrastructure.Dependencies.Interfaces;
 
     using Interfaces;
+	using Serilog;
 
-    public class ApplicationEntrypoint: ISingleInstance
+	public class ApplicationEntrypoint: ISingleInstance
     {
         readonly IStartupPreparationOperation startupPreparationOperation;
         readonly IPostPreparationOperation postPreparationOperation;
         readonly IMainWindowPreparationOperation mainWindowPreparationOperation;
+		readonly ILogger logger;
 
-        public ApplicationEntrypoint(
+		public ApplicationEntrypoint(
             IStartupPreparationOperation startupPreparationOperation,
             IPostPreparationOperation postPreparationOperation,
-            IMainWindowPreparationOperation mainWindowPreparationOperation)
+            IMainWindowPreparationOperation mainWindowPreparationOperation,
+			ILogger logger)
         {
             this.startupPreparationOperation = startupPreparationOperation;
             this.postPreparationOperation = postPreparationOperation;
             this.mainWindowPreparationOperation = mainWindowPreparationOperation;
-        }
+			this.logger = logger;
+		}
 
         public async Task Start(
             params string[] arguments)
@@ -28,7 +32,8 @@
             await Prepare(arguments);
             if (startupPreparationOperation.ShouldTerminate)
             {
-                return;
+				logger.Verbose("The startup preparation operation signalled a termination request. Will quit process.");
+				return;
             }
 
             await postPreparationOperation.RunAsync();

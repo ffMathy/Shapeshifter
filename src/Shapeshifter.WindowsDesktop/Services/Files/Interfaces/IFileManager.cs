@@ -26,7 +26,7 @@
             string relativePath,
             string line);
 
-        string PrepareTemporaryFolder(
+        Task<string> PrepareTemporaryFolderAsync(
             string relativePath);
 
         string PrepareIsolatedFolder(

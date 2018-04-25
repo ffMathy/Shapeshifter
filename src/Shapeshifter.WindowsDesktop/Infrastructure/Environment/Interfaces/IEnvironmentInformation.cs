@@ -3,8 +3,9 @@
     public interface IEnvironmentInformation
     {
         bool GetIsInDesignTime();
+		bool GetIsRunningDeveloperVersion();
 
-        bool GetIsDebugging();
+		bool GetIsDebugging();
         bool GetShouldUpdate();
 
         bool GetHasInternetAccess();

@@ -66,7 +66,7 @@
 			return null;
 		}
 
-		public string PrepareTemporaryFolder(string relativePath)
+		public string PrepareTemporaryFolderAsync(string relativePath)
 		{
 			return null;
 		}
@@ -79,6 +79,11 @@
 		public Task<string> WriteBytesToTemporaryFileAsync(string relativePath, byte[] bytes)
 		{
 			return Task.FromResult<string>(null);
+		}
+
+		Task<string> IFileManager.PrepareTemporaryFolderAsync(string relativePath)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

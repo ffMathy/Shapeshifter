@@ -1,5 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Operations.Startup
 {
+	using System;
 	using System.Threading.Tasks;
 	using System.Windows.Forms;
 
@@ -20,15 +21,18 @@
 		readonly ITrayIconManager trayIconManager;
 		readonly ISettingsWindowFactory settingsWindowFactory;
 		readonly IProcessManager processManager;
+		readonly ISettingsManager settingsManager;
 
 		public TrayPreparationOperation(
 			ITrayIconManager trayIconManager,
 			ISettingsWindowFactory settingsWindowFactory,
-			IProcessManager processManager)
+			IProcessManager processManager,
+			ISettingsManager settingsManger)
 		{
 			this.trayIconManager = trayIconManager;
 			this.settingsWindowFactory = settingsWindowFactory;
 			this.processManager = processManager;
+			this.settingsManager = settingsManger;
 		}
 
 		public async Task RunAsync()
@@ -52,6 +56,8 @@
 				});
 
 			trayIconManager.DisplayInformation("Shapeshifter is ready", "You can now use Shapeshifter for managing your clipboard.");
+
+			settingsManager.SaveSetting("LastLoad", DateTime.UtcNow);
 		}
 
 		void TrayIconManager_IconClicked(object sender, TrayIconClickedEventArgument e)

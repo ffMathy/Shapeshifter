@@ -4,16 +4,17 @@
     using System.Threading.Tasks;
 
     using Interfaces;
-
-    using Services.Arguments.Interfaces;
+	using Serilog;
+	using Services.Arguments.Interfaces;
     using Services.Processes.Interfaces;
 
     class StartupPreparationOperation: IStartupPreparationOperation
     {
         readonly IProcessManager processManager;
         readonly IAggregateArgumentProcessor aggregateArgumentProcessor;
+		readonly ILogger logger;
 
-        bool hasRunBefore;
+		bool hasRunBefore;
 
         public bool ShouldTerminate
             => aggregateArgumentProcessor.ShouldTerminate;
@@ -22,14 +23,18 @@
 
         public StartupPreparationOperation(
             IProcessManager processManager,
-            IAggregateArgumentProcessor aggregateArgumentProcessor)
+            IAggregateArgumentProcessor aggregateArgumentProcessor,
+			ILogger logger)
         {
             this.processManager = processManager;
             this.aggregateArgumentProcessor = aggregateArgumentProcessor;
-        }
+			this.logger = logger;
+		}
 
         public async Task RunAsync()
         {
+			logger.Verbose("Invoking the startup preparation operation.");
+
             if (hasRunBefore)
             {
                 throw new InvalidOperationException(
@@ -46,6 +51,8 @@
 
             processManager.CloseAllDuplicateProcessesExceptCurrent();
             aggregateArgumentProcessor.ProcessArguments(Arguments);
-        }
+
+			logger.Verbose("Startup preparation operation completed.");
+		}
     }
 }
