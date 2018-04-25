@@ -4,7 +4,6 @@
 }
 
 body, html {
-    min-height: calc(100vh - 20vh) !important;
     overflow-x: hidden !important;
 
     background: radial-gradient(#FFF, #EFEFEF);
@@ -38,10 +37,12 @@ body, html {
     background-size: cover;
     background-repeat: no-repeat;
 
-    max-height: 800px;
-    max-width: 600px;
+    min-width: 400px;
+    min-height: 300px;
 
-    margin: 55px;
+    margin-top: 7vh;
+    
+    cursor: pointer;
 }
 
 header h1 {

@@ -10,4 +10,9 @@ $.getJSON("https://api.github.com/repos/ffMathy/Shapeshifter/releases/latest").d
   $("#download-size").text(sizeInMegabytes + " MB");
     
   $("#download-version").text(version);
+
+  $("#screenshot").click(() => {
+    window.location.href = "https://github.com/ffMathy/Shapeshifter/raw/master/assets/screenshots/blue.PNG"; 
+    return void 0;
+  })
 });
