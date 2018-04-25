@@ -126,7 +126,7 @@
                 Config.Register(
                     	nameof(Shapeshifter),
                     	$"{processManager.CurrentProcessName}.exe",
-			embeddedFile);
+			GetInjectedLibraryName());
 					
 		logger.Information("Injection mechanism installed and configured in the Global Assembly Cache.");
 	} catch(Exception ex)
