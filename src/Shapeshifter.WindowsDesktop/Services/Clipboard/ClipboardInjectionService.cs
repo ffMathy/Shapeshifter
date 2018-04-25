@@ -29,6 +29,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
         readonly IMemoryHandleFactory memoryHandleFactory;
         readonly ILogger logger;
         readonly IGeneralNativeApi generalNativeApi;
+		readonly IClipboardNativeApi clipboardNativeApi;
 		readonly IEnumerable<IMemoryWrapper> memoryWrappers;
 
 		public ClipboardInjectionService(
@@ -37,6 +38,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
             IMemoryHandleFactory memoryHandleFactory,
             ILogger logger,
             IGeneralNativeApi generalNativeApi,
+			IClipboardNativeApi clipboardNativeApi,
 			IEnumerable<IMemoryWrapper> memoryWrappers)
         {
             this.clipboardCopyInterceptor = clipboardCopyInterceptor;
@@ -44,6 +46,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
             this.memoryHandleFactory = memoryHandleFactory;
             this.logger = logger;
             this.generalNativeApi = generalNativeApi;
+			this.clipboardNativeApi = clipboardNativeApi;
 			this.memoryWrappers = memoryWrappers;
         }
 
@@ -74,8 +77,15 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
             IClipboardHandle session,
             IClipboardData clipboardData)
         {
-			var wrappers = memoryWrappers.Where(x => x.CanWrap(clipboardData));
-			foreach(var wrapper in wrappers) {
+			var wrappers = memoryWrappers
+				.Where(x => x.CanWrap(clipboardData))
+				.ToArray();
+			if(wrappers.Length > 0) { 
+				var formatName = clipboardNativeApi.GetClipboardFormatName(clipboardData.RawFormat);
+				logger.Verbose("Injecting {bytes} bytes of {format} format into the clipboard.", clipboardData.RawData.Length, formatName ?? clipboardData.RawFormat.ToString());
+			}
+
+			foreach (var wrapper in wrappers) {
 				var success = session.SetClipboardData(
 					clipboardData.RawFormat, 
 					wrapper.GetDataPointer(

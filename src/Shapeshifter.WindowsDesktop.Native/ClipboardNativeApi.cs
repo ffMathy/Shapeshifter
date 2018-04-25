@@ -247,7 +247,7 @@
         {
             var sb = new StringBuilder(512);
             GetClipboardFormatName(ClipboardFormat, sb, sb.Capacity);
-            return sb.ToString();
+            return sb.ToString().Trim();
         }
 
         [DllImport("user32.dll", SetLastError = true)]
