@@ -25,13 +25,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
             }
             set
             {
-                if (Equals(value, activeScreen))
-                {
-                    return;
-                }
-
                 activeScreen = value;
-
                 OnPropertyChanged();
             }
         }
