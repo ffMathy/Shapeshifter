@@ -56,8 +56,7 @@
 			this.threadDelay = threadDelay;
 		}
 
-		public bool Terminates
-			=> CanProcess();
+		public bool Terminates => CanProcess() && !GetIsCurrentlyRunningFromInstallationFolder();
 
 		static string TargetDirectory
 		{
@@ -99,7 +98,7 @@
 		{
 			if (!GetIsCurrentlyRunningFromInstallationFolder() && DoesTargetExecutableExist()) {
 				Logger.Verbose("Shapeshifter is already installed but was invoked from a non-install directory path. Will invoke the installed one.");
-				processManager.LaunchFile(TargetExecutableFile);
+				LaunchInstalledExecutable(TargetExecutableFile);
 				return;
 			}
 
