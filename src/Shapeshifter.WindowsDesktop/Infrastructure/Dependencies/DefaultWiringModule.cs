@@ -81,7 +81,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 					restrictedToMinimumLevel: LogEventLevel.Verbose,
 					rollOnFileSizeLimit: false,
 					shared: true,
-					outputTemplate: "[{ProcessId}] {Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+					outputTemplate: "[{ProcessId}] {Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj} ({SourceContext:l}){NewLine}{Exception}")
 				.CreateLogger();
 
 			builder.RegisterLogger(autowireProperties: true);
