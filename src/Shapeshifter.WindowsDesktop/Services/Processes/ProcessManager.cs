@@ -41,14 +41,12 @@
 
 		public string GetCurrentProcessFilePath()
 		{
-			return Path.Combine(
-				GetCurrentProcessDirectory(),
-				$"{CurrentProcessName}.exe");
+			return currentProcess.MainModule.FileName;
 		}
 
 		public string GetCurrentProcessDirectory()
 		{
-			return Path.GetDirectoryName(currentProcess.MainModule.FileName);
+			return Path.GetDirectoryName(GetCurrentProcessFilePath());
 		}
 
 		public void LaunchCommand(string command, string arguments = null)
