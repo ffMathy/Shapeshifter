@@ -66,10 +66,10 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 
 		static void RegisterLogging(IEnvironmentInformation environment, ContainerBuilder builder)
 		{
-			var logPath = !environment.GetIsDebugging() && environment.GetIsRunningDeveloperVersion() ? 
-				Path.GetTempFileName() : 
+			var logPath = !environment.GetIsDebugging() && environment.GetIsRunningDeveloperVersion() ?
+				Path.GetTempFileName() :
 				FileManager.GetFullPathFromTemporaryPath("Shapeshifter.log");
-
+				
 			Log.Logger = new LoggerConfiguration()
 				.MinimumLevel.Verbose()
 				.Enrich.WithProperty("ProcessId", Process.GetCurrentProcess().Id)
