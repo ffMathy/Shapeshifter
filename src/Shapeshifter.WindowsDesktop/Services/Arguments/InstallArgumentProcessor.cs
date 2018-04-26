@@ -33,7 +33,6 @@
 		readonly ISignHelper signHelper;
 		readonly IEnvironmentInformation environmentInformation;
 		readonly ISettingsViewModel settingsViewModel;
-		readonly IKeyboardDominanceWatcher keyboardDominanceWatcher;
 		readonly IThreadDelay threadDelay;
 		readonly ITrayIconManager trayIconManager;
 
@@ -46,7 +45,6 @@
 			ISignHelper signHelper,
 			IEnvironmentInformation environmentInformation,
 			ISettingsViewModel settingsViewModel,
-			IKeyboardDominanceWatcher keyboardDominanceWatcher,
 			IThreadDelay threadDelay,
 			ITrayIconManager trayIconManager)
 		{
@@ -55,7 +53,6 @@
 			this.signHelper = signHelper;
 			this.environmentInformation = environmentInformation;
 			this.settingsViewModel = settingsViewModel;
-			this.keyboardDominanceWatcher = keyboardDominanceWatcher;
 			this.threadDelay = threadDelay;
 			this.trayIconManager = trayIconManager;
 		}
