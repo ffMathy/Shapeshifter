@@ -32,14 +32,14 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="2" VerticalAlignment="Top">
-            <ListBox Style="{StaticResource DefaultListBoxStyle}" SelectedItem="{Binding SelectedElement, Mode=TwoWay}"
+            <ListBox Margin="0,-1,0,0" Style="{StaticResource DefaultListBoxStyle}" SelectedItem="{Binding SelectedElement, Mode=TwoWay}"
                      ItemsSource="{Binding Elements}">
                 <ListBox.Resources>
                     <Style TargetType="ListBoxItem" BasedOn="{StaticResource ClipboardDataControlStyle}" />
                 </ListBox.Resources>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <ContentPresenter Margin="-1,-1" Content="{Binding Control}" />
+                        <ContentPresenter Content="{Binding Control}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
