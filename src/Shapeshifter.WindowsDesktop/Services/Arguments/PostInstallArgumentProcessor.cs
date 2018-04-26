@@ -9,7 +9,7 @@
 	using Shapeshifter.WindowsDesktop.Infrastructure.Dependencies;
 	using Shapeshifter.WindowsDesktop.Services.Files.Interfaces;
 
-	class CleanupArgumentProcessor: ISingleArgumentProcessor
+	class PostInstallArgumentProcessor: ISingleArgumentProcessor
     {
 		readonly ILogger logger;
 		readonly IFileManager fileManager;
