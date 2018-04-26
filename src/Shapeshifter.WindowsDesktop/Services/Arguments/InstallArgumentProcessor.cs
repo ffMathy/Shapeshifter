@@ -202,7 +202,7 @@
 
 		void LaunchInstalledExecutable(string currentExecutableFile)
 		{
-			processManager.LaunchFileWithAdministrativeRights(TargetExecutableFile, $"cleanup \"{currentExecutableFile}\"");
+			processManager.LaunchFileWithAdministrativeRights(TargetExecutableFile, $"postinstall \"{currentExecutableFile}\"");
 		}
 
 		void WriteExecutable()
