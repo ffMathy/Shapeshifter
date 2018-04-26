@@ -30,6 +30,11 @@ namespace Shapeshifter.Website
 				app.UseDeveloperExceptionPage();
 			}
 
+			app.UseCors(builder => builder
+				.AllowAnyHeader()
+				.AllowAnyMethod()
+				.AllowAnyOrigin());
+
 			app.UseStaticFiles();
 			app.UseMvc(
 				routes => {

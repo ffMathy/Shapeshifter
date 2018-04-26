@@ -65,3 +65,12 @@ section {
     top: 9px;
     display: inline-block;
 }
+
+.card {
+    width: 18rem;
+}
+
+.card-img-top {
+    height: 138px;
+    object-fit: contain;
+}
