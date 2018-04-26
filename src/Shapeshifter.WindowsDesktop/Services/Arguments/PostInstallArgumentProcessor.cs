@@ -3,6 +3,7 @@
     using System;
     using System.IO;
     using System.Linq;
+	 using Keyboard.Interfaces;
 	using System.Threading.Tasks;
 	using Interfaces;
 	using Serilog;
@@ -17,7 +18,7 @@
 
 		public bool Terminates => false;
 
-		public CleanupArgumentProcessor(
+		public PostInstallArgumentProcessor(
 			ILogger logger,
 			IFileManager fileManager,
 			IKeyboardDominanceWatcher keyboardDominanceWatcher)
