@@ -13,15 +13,18 @@
     {
 		readonly ILogger logger;
 		readonly IFileManager fileManager;
+		readonly IKeyboardDominanceWatcher keyboardDominanceWatcher;
 
 		public bool Terminates => false;
 
 		public CleanupArgumentProcessor(
 			ILogger logger,
-			IFileManager fileManager)
+			IFileManager fileManager,
+			IKeyboardDominanceWatcher keyboardDominanceWatcher)
 		{
 			this.logger = logger;
 			this.fileManager = fileManager;
+			this.keyboardDominanceWatcher = keyboardDominanceWatcher;
 		}
 
         public bool CanProcess(string[] arguments)
@@ -33,6 +36,9 @@
         {
             var updateIndex = Array.IndexOf(arguments, "cleanup");
             var targetDirectory = arguments[updateIndex + 1];
+	    
+	    logger.Information("Configuring keyboard dominance watcher injection mechanism.");
+	    keyboardDominanceWatcher.Install();
 
 			logger.Information("Attempting to delete file {file}.", targetDirectory);
 			await fileManager.DeleteFileIfExistsAsync(targetDirectory);
