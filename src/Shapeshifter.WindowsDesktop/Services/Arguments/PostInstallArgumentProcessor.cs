@@ -29,12 +29,12 @@
 
         public bool CanProcess(string[] arguments)
         {
-            return arguments.Contains("cleanup");
+            return arguments.Contains("postinstall");
         }
 
         public async Task ProcessAsync(string[] arguments)
         {
-            var updateIndex = Array.IndexOf(arguments, "cleanup");
+            var updateIndex = Array.IndexOf(arguments, "postinstall");
             var targetDirectory = arguments[updateIndex + 1];
 	    
 	    logger.Information("Configuring keyboard dominance watcher injection mechanism.");
