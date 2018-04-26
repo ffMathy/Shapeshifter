@@ -33,7 +33,6 @@
 		readonly ISignHelper signHelper;
 		readonly IEnvironmentInformation environmentInformation;
 		readonly ISettingsViewModel settingsViewModel;
-		readonly IKeyboardDominanceWatcher keyboardDominanceWatcher;
 		readonly IThreadDelay threadDelay;
 		readonly ITrayIconManager trayIconManager;
 
@@ -46,7 +45,6 @@
 			ISignHelper signHelper,
 			IEnvironmentInformation environmentInformation,
 			ISettingsViewModel settingsViewModel,
-			IKeyboardDominanceWatcher keyboardDominanceWatcher,
 			IThreadDelay threadDelay,
 			ITrayIconManager trayIconManager)
 		{
@@ -55,7 +53,6 @@
 			this.signHelper = signHelper;
 			this.environmentInformation = environmentInformation;
 			this.settingsViewModel = settingsViewModel;
-			this.keyboardDominanceWatcher = keyboardDominanceWatcher;
 			this.threadDelay = threadDelay;
 			this.trayIconManager = trayIconManager;
 		}
@@ -124,9 +121,6 @@
 			ConfigureDefaultSettings();
 
 			Logger.Information("Default settings have been configured.");
-			Logger.Information("Configuring keyboard dominance watcher injection mechanism.");
-
-			keyboardDominanceWatcher.Install();
 
 			trayIconManager.DisplayInformation("Shapeshifter installed", "Install location: " + TargetDirectory);
 			LaunchInstalledExecutable(
@@ -208,7 +202,7 @@
 
 		void LaunchInstalledExecutable(string currentExecutableFile)
 		{
-			processManager.LaunchFileWithAdministrativeRights(TargetExecutableFile, $"cleanup \"{currentExecutableFile}\"");
+			processManager.LaunchFileWithAdministrativeRights(TargetExecutableFile, $"postinstall \"{currentExecutableFile}\"");
 		}
 
 		void WriteExecutable()

@@ -425,7 +425,7 @@
     <Compile Include="Mediators\Interfaces\IPasteCombinationDurationMediator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Services\Arguments\AggregateArgumentProcessor.cs" />
-    <Compile Include="Services\Arguments\CleanupArgumentProcessor.cs" />
+    <Compile Include="Services\Arguments\PostInstallArgumentProcessor.cs" />
     <Compile Include="Services\Arguments\Interfaces\IAggregateArgumentProcessor.cs" />
     <Compile Include="Services\Arguments\Interfaces\IArgumentProcessor.cs" />
     <Compile Include="Services\Arguments\Interfaces\INoArgumentProcessor.cs" />
