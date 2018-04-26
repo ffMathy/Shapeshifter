@@ -28,7 +28,7 @@
 		readonly IImagePersistenceService imagePersistenceService;
 		readonly IWindowNativeApi windowNativeApi;
 
-		readonly IDictionary<IntPtr, IDataSource> dataSourceCache;
+		readonly IDictionary<IntPtr, byte[]> dataSourceIconCache;
 
 		public DataSourceService(
 			IImagePersistenceService imagePersistenceService,
@@ -37,7 +37,7 @@
 			this.imagePersistenceService = imagePersistenceService;
 			this.windowNativeApi = windowNativeApi;
 
-			dataSourceCache = new Dictionary<IntPtr, IDataSource>();
+			dataSourceIconCache = new Dictionary<IntPtr, byte[]>();
 		}
 
 		BitmapSource GetWindowIcon(IntPtr windowHandle)
@@ -70,20 +70,20 @@
 		public IDataSource GetDataSource()
 		{
 			var activeWindowHandle = windowNativeApi.GetForegroundWindow();
+			var windowTitle = windowNativeApi.GetWindowTitle(activeWindowHandle);
 			lock (this)
 			{
-				if (dataSourceCache.ContainsKey(activeWindowHandle))
-					return dataSourceCache[activeWindowHandle];
-
-				var windowTitle = windowNativeApi.GetWindowTitle(activeWindowHandle);
-				var windowIcon = GetWindowIcon(activeWindowHandle);
-
-				var iconBytes = imagePersistenceService.ConvertBitmapSourceToByteArray(windowIcon);
+				byte[] iconBytes;
+				if (dataSourceIconCache.ContainsKey(activeWindowHandle)) {
+					iconBytes = dataSourceIconCache[activeWindowHandle];
+				} else
+				{
+					var windowIcon = GetWindowIcon(activeWindowHandle);
+					iconBytes = imagePersistenceService.ConvertBitmapSourceToByteArray(windowIcon);
+					dataSourceIconCache.Add(activeWindowHandle, iconBytes);
+				}
 
 				var dataSource = new DataSource(iconBytes, windowTitle);
-				if (!dataSourceCache.ContainsKey(activeWindowHandle))
-					dataSourceCache.Add(activeWindowHandle, dataSource);
-
 				return dataSource;
 			}
 		}

@@ -18,8 +18,8 @@
         ResizeMode="NoResize"
         Title=""
         WindowStyle="None"
-        Background="#10000000"
-		IsHitTestVisible="True"
+        Background="#01000000"
+	IsHitTestVisible="True"
         AllowsTransparency="True">
     <window:UserInterfaceControl x:Name="UserInterfaceControl" />
 </Window>
