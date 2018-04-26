@@ -124,9 +124,6 @@
 			ConfigureDefaultSettings();
 
 			Logger.Information("Default settings have been configured.");
-			Logger.Information("Configuring keyboard dominance watcher injection mechanism.");
-
-			keyboardDominanceWatcher.Install();
 
 			trayIconManager.DisplayInformation("Shapeshifter installed", "Install location: " + TargetDirectory);
 			LaunchInstalledExecutable(
