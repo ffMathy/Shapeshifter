@@ -16,3 +16,7 @@ $.getJSON("https://api.github.com/repos/ffMathy/Shapeshifter/releases/latest").d
     return void 0;
   })
 });
+
+$.getJSON("https://shapeshifter.azurewebsites.net/api/patreon/supporters").done(function(json) {
+  console.log(json);
+});
