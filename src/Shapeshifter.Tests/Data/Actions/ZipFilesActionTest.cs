@@ -27,13 +27,13 @@
         public async Task CanPerformForFiles()
         {
             Assert.IsTrue(
-                await SystemUnderTest.CanPerformAsync(GetPackageContaining<IClipboardFileData>()));
+                await SystemUnderTest.CanPerformAsync(CreateClipboardDataPackageContaining<IClipboardFileData>()));
         }
 
         [TestMethod]
         public async Task CanPerformForFileCollections()
         {
-            var fakeData = GetPackageContaining<IClipboardFileCollectionData>();
+            var fakeData = CreateClipboardDataPackageContaining<IClipboardFileCollectionData>();
             Assert.IsTrue(await SystemUnderTest.CanPerformAsync(fakeData));
         }
 

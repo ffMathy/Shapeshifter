@@ -63,7 +63,7 @@
              .GetFileTypeFromFileName(Arg.Any<string>())
              .Returns(FileType.Image);
 
-            var fakeData = GetPackageContaining<IClipboardFileData>();
+            var fakeData = CreateClipboardDataPackageContaining<IClipboardFileData>();
             Assert.IsTrue(
                 await SystemUnderTest.CanPerformAsync(fakeData));
         }
@@ -71,7 +71,7 @@
         [TestMethod]
         public async Task CanPerformWithImageData()
         {
-            var fakeData = GetPackageContaining<IClipboardImageData>();
+            var fakeData = CreateClipboardDataPackageContaining<IClipboardImageData>();
             Assert.IsTrue(
                 await SystemUnderTest.CanPerformAsync(fakeData));
         }

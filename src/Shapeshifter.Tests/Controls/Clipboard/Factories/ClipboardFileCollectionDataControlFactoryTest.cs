@@ -23,19 +23,19 @@
         [TestMethod]
         public void CanBuildControlReturnsFalseForNonFileData()
         {
-            Assert.IsFalse(SystemUnderTest.CanBuildControl(Substitute.For<IClipboardData>()));
+            Assert.IsFalse(SystemUnderTest.CanBuildControl(Substitute.For<IClipboardDataPackage>()));
         }
 
         [TestMethod]
         public void CanBuildControlReturnsTrueForFileData()
         {
-            Assert.IsTrue(SystemUnderTest.CanBuildControl(Substitute.For<IClipboardFileCollectionData>()));
+            Assert.IsTrue(SystemUnderTest.CanBuildControl(CreateClipboardDataPackageContaining<IClipboardFileCollectionData>()));
         }
 
         [TestMethod]
         public void CanBuildControlReturnsTrueForFileCollectionData()
         {
-            Assert.IsTrue(SystemUnderTest.CanBuildControl(Substitute.For<IClipboardFileCollectionData>()));
+            Assert.IsTrue(SystemUnderTest.CanBuildControl(CreateClipboardDataPackageContaining<IClipboardFileCollectionData>()));
         }
     }
 }

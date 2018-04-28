@@ -32,7 +32,7 @@
 			var fakeClipboardNativeApi = Container.Resolve<IClipboardNativeApi>();
 			fakeClipboardNativeApi.GetClipboardFormatName(Arg.Any<uint>()).Returns("Rich Text Format");
 
-            var fakeData = GetPackageContaining<IClipboardTextData>();
+            var fakeData = CreateClipboardDataPackageContaining<IClipboardTextData>();
 
             Assert.IsTrue(
                 await SystemUnderTest.CanPerformAsync(fakeData));
@@ -59,7 +59,7 @@
 			var fakeTextData = Substitute.For<IClipboardTextData>();
             fakeTextData.Text.Returns("foobar hello");
 
-            var fakeData = GetPackageContaining(fakeTextData);
+            var fakeData = CreateClipboardDataPackageContaining(fakeTextData);
             
             await SystemUnderTest.PerformAsync(fakeData);
 

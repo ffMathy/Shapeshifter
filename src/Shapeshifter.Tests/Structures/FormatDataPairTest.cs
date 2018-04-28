@@ -3,13 +3,13 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
-    public class FormatDataPairTest
+    public class FormatDataPairTest: TestBase
     {
         [TestMethod]
         public void CanConstructFormatDataPair()
         {
             var item = new FormatDataPair(
-                1337,
+				CreateClipboardFormatFromNumber(1337u),
                 new byte[]
                 {
                     1,
