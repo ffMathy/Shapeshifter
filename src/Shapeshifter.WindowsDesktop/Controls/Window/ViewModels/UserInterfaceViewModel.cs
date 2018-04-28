@@ -39,7 +39,6 @@
         public event EventHandler<UserInterfacePaneSwappedEventArgument> UserInterfacePaneSwapped;
 
         public ObservableCollection<IClipboardDataControlPackage> Elements { get; }
-
         public ObservableCollection<IActionViewModel> Actions { get; }
 
         public IActionViewModel SelectedAction

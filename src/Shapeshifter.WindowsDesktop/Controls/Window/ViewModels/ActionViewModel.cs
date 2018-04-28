@@ -6,6 +6,9 @@
 
     public class ActionViewModel: IActionViewModel
     {
+		public ActionViewModel() {
+		}
+
         public ActionViewModel(
             IAction action,
             string description)
