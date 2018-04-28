@@ -26,7 +26,7 @@ namespace Shapeshifter.WindowsDesktop.Data.Wrappers
 
 		public bool CanWrap(IClipboardData clipboardData)
 		{
-			return excludedFormats.All(x => x != clipboardData.RawFormat);
+			return excludedFormats.All(x => x != clipboardData.RawFormat.Number);
 		}
 
 		public IntPtr GetDataPointer(IClipboardData clipboardData)

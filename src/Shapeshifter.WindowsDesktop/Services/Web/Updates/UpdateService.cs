@@ -20,6 +20,7 @@
 	using Infrastructure.Environment.Interfaces;
 	using Serilog;
 	using Shapeshifter.WindowsDesktop.Services.Interfaces;
+	using Shapeshifter.WindowsDesktop.Infrastructure.Threading.Interfaces;
 
 	class UpdateService
         : IUpdateService
@@ -29,6 +30,7 @@
 
         readonly IGitHubClient client;
 		readonly ITrayIconManager trayIconManager;
+		readonly IThreadDelay threadDelay;
 		readonly IDownloader fileDownloader;
         readonly IFileManager fileManager;
         readonly IProcessManager processManager;
@@ -42,12 +44,14 @@
             ILogger logger,
             IGitHubClientFactory clientFactory,
             IEnvironmentInformation environmentInformation,
-			ITrayIconManager trayIconManager)
+			ITrayIconManager trayIconManager,
+			IThreadDelay threadDelay)
         {
             client = clientFactory.CreateClient();
 
 			this.trayIconManager = trayIconManager;
-            this.fileDownloader = fileDownloader;
+			this.threadDelay = threadDelay;
+			this.fileDownloader = fileDownloader;
             this.fileManager = fileManager;
             this.processManager = processManager;
             this.logger = logger;
@@ -67,7 +71,9 @@
                     return;
                 }
 				
-				trayIconManager.DisplayInformation("Downloading update", "An update is being downloaded. Shapeshifter will restart.");
+				trayIconManager.DisplayInformation("Downloading update", "An update is being downloaded. Shapeshifter will restart and apply the update.");
+				await threadDelay.ExecuteAsync(5000);
+
 				await UpdateFromReleaseAsync(pendingUpdateRelease);
             }
             catch (RateLimitExceededException)

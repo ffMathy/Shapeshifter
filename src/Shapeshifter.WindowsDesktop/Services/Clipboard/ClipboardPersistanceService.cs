@@ -19,16 +19,18 @@
     class ClipboardPersistanceService: IClipboardPersistanceService
     {
         readonly IFileManager fileManager;
+        readonly IClipboardDataPackageFactory clipboardDataPackageFactory;
+		readonly IClipboardFormatFactory clipboardFormatFactory;
 
-        readonly IClipboardDataPackageFactory factory;
-
-        public ClipboardPersistanceService(
+		public ClipboardPersistanceService(
             IFileManager fileManager,
-            IClipboardDataPackageFactory factory)
+            IClipboardDataPackageFactory clipboardDataPackageFactory,
+			IClipboardFormatFactory clipboardFormatFactory)
         {
             this.fileManager = fileManager;
-            this.factory = factory;
-        }
+            this.clipboardDataPackageFactory = clipboardDataPackageFactory;
+			this.clipboardFormatFactory = clipboardFormatFactory;
+		}
 
         public async Task PersistClipboardPackageAsync(IClipboardDataPackage package)
         {
@@ -38,7 +40,7 @@
                 var content = package.Contents[i];
                 var filePath = Path.Combine(
                     packageFolder,
-                    i + 1 + "." + content.RawFormat);
+                    i + 1 + "." + content.RawFormat.Number);
                 await fileManager.WriteBytesToFileAsync(
                     filePath,
                     content.RawData);
@@ -82,10 +84,12 @@
                 var format = uint.Parse(fileExtensionWithoutDot);
                 var data = File.ReadAllBytes(file);
 
-                dataPairs.Add(new FormatDataPair(format, data));
+                dataPairs.Add(new FormatDataPair(
+					clipboardFormatFactory.Create(format), 
+					data));
             }
 
-            return factory.CreateFromFormatsAndData(dataPairs.ToArray());
+            return clipboardDataPackageFactory.CreateFromFormatsAndData(dataPairs.ToArray());
         }
 
         public Task DeletePackageAsync(IClipboardDataPackage package)

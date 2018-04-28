@@ -266,11 +266,13 @@
     <Compile Include="Data\Actions\PinClipboardDataAction.cs" />
     <Compile Include="Data\Actions\UploadImageAction.cs" />
     <Compile Include="Data\Actions\ZipFilesAction.cs" />
+    <Compile Include="Data\ClipboardFormat.cs" />
+    <Compile Include="Data\Factories\ClipboardFormatFactory.cs" />
+    <Compile Include="Data\Factories\Interfaces\IClipboardFormatFactory.cs" />
+    <Compile Include="Data\Interfaces\IClipboardFormat.cs" />
     <Compile Include="Data\Unwrappers\Interfaces\IBitmapUnwrapper.cs" />
     <Compile Include="Data\Unwrappers\Interfaces\IGeneralUnwrapper.cs" />
-    <Compile Include="Data\Wrappers\BitmapWrapper.cs" />
     <Compile Include="Data\Wrappers\GeneralWrapper.cs" />
-    <Compile Include="Data\Wrappers\Interfaces\IBitmapWrapper.cs" />
     <Compile Include="Data\Wrappers\Interfaces\IGeneralWrapper.cs" />
     <Compile Include="Data\Wrappers\Interfaces\IMemoryWrapper.cs" />
     <Compile Include="Exceptions\ClipboardFormatNotUnderstoodException.cs" />

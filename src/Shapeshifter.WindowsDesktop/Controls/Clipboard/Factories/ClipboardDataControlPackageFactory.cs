@@ -17,10 +17,9 @@
     class ClipboardDataControlPackageFactory : IClipboardDataControlPackageFactory
     {
         readonly IClipboardDataPackageFactory dataPackageFactory;
+		readonly IMainThreadInvoker mainThreadInvoker;
 
-        readonly IEnumerable<IClipboardDataControlFactory> controlFactories;
-
-        readonly IMainThreadInvoker mainThreadInvoker;
+		readonly IEnumerable<IClipboardDataControlFactory> controlFactories;
 
         public ClipboardDataControlPackageFactory(
             IClipboardDataPackageFactory dataPackageFactory,
@@ -28,7 +27,7 @@
             IMainThreadInvoker mainThreadInvoker)
         {
             this.dataPackageFactory = dataPackageFactory;
-            this.controlFactories = controlFactories;
+            this.controlFactories = controlFactories.OrderBy(x => x.Priority);
             this.mainThreadInvoker = mainThreadInvoker;
         }
 
@@ -68,17 +67,14 @@
         }
 
         IClipboardControl CreateControlFromDataPackage(IClipboardDataPackage dataPackage)
-        {
-            foreach (var item in dataPackage.Contents)
-            {
-                var matchingFactory = controlFactories.FirstOrDefault(x => x.CanBuildControl(item));
-                if (matchingFactory != null)
-                {
-                    return matchingFactory.BuildControl(item);
-                }
-            }
+		{
+			var matchingFactory = controlFactories.FirstOrDefault(x => x.CanBuildControl(dataPackage));
+			if (matchingFactory != null)
+			{
+				return matchingFactory.BuildControl(dataPackage);
+			}
 
-            return null;
+			return null;
         }
     }
 }

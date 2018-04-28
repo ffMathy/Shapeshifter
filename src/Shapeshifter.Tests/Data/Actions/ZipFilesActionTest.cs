@@ -27,13 +27,13 @@
         public async Task CanPerformForFiles()
         {
             Assert.IsTrue(
-                await SystemUnderTest.CanPerformAsync(GetPackageContaining<IClipboardFileData>()));
+                await SystemUnderTest.CanPerformAsync(CreateClipboardDataPackageContaining<IClipboardFileData>()));
         }
 
         [TestMethod]
         public async Task CanPerformForFileCollections()
         {
-            var fakeData = GetPackageContaining<IClipboardFileCollectionData>();
+            var fakeData = CreateClipboardDataPackageContaining<IClipboardFileCollectionData>();
             Assert.IsTrue(await SystemUnderTest.CanPerformAsync(fakeData));
         }
 
@@ -73,9 +73,7 @@
         [TestCategory("Integration")]
         public async Task NoFilesAddedThrowsException()
         {
-            var fakeDataSourceService = Substitute.For<IDataSourceService>();
-
-            var fileCollectionData = new ClipboardFileCollectionData(fakeDataSourceService)
+            var fileCollectionData = new ClipboardFileCollectionData()
             {
                 Files = new Collection<IClipboardFileData>()
             };
@@ -97,19 +95,17 @@
 
             File.WriteAllText(file1, "file1");
             File.WriteAllText(file2, "file2");
-
-            var fakeDataSourceService = Substitute.For<IDataSourceService>();
-
-            var fileCollectionData = new ClipboardFileCollectionData(fakeDataSourceService)
+			
+            var fileCollectionData = new ClipboardFileCollectionData()
             {
                 Files = new[]
                 {
-                    new ClipboardFileData(fakeDataSourceService)
+                    new ClipboardFileData()
                     {
                         FullPath = file1,
                         FileName = Path.GetFileName(file1)
                     },
-                    new ClipboardFileData(fakeDataSourceService)
+                    new ClipboardFileData()
                     {
                         FullPath = file2,
                         FileName = Path.GetFileName(file2)
@@ -158,10 +154,8 @@
             var file = Path.GetTempFileName();
 
             File.WriteAllText(file, "file");
-
-            var fakeDataSourceService = Substitute.For<IDataSourceService>();
-
-            var fileData = new ClipboardFileData(fakeDataSourceService)
+			
+            var fileData = new ClipboardFileData()
             {
                 FullPath = file,
                 FileName = Path.GetFileName(file)

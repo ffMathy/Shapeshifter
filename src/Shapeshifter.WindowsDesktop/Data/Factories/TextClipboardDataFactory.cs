@@ -19,18 +19,7 @@
 		const string RichTextFormat = "Rich Text Format";
 		const string HtmlFormat = "HTML Format";
 
-		readonly IDataSourceService dataSourceService;
-		readonly IClipboardNativeApi clipboardNativeApi;
-
-		public TextClipboardDataFactory(
-			IDataSourceService dataSourceService,
-			IClipboardNativeApi clipboardNativeApi)
-		{
-			this.dataSourceService = dataSourceService;
-			this.clipboardNativeApi = clipboardNativeApi;
-		}
-
-		public IClipboardData BuildData(uint format, byte[] data)
+		public IClipboardData BuildData(IClipboardFormat format, byte[] data)
 		{
 			if (!CanBuildData(format))
 			{
@@ -40,14 +29,14 @@
 			}
 
 			var text = GetProcessedTextFromRawData(format, data);
-			return new ClipboardTextData(dataSourceService) {
+			return new ClipboardTextData() {
 				Text = text.Trim(),
 				RawData = data,
 				RawFormat = format
 			};
 		}
 
-		string GetProcessedTextFromRawData(uint format, byte[] data)
+		string GetProcessedTextFromRawData(IClipboardFormat format, byte[] data)
 		{
 			var text = GetTextFromRawData(format, data);
 
@@ -59,9 +48,9 @@
 			return text;
 		}
 
-		string GetTextFromRawData(uint format, byte[] data)
+		string GetTextFromRawData(IClipboardFormat format, byte[] data)
 		{
-			switch (format)
+			switch (format.Number)
 			{
 				case ClipboardNativeApi.CF_TEXT:
 					return Encoding.UTF8.GetString(data);
@@ -74,7 +63,7 @@
 
 				default:
 					var text = Encoding.UTF8.GetString(data);
-					switch (clipboardNativeApi.GetClipboardFormatName(format))
+					switch (format.Name)
 					{
 						case RichTextFormat:
 							return ConvertHtmlToText(
@@ -109,17 +98,16 @@
 			return Rtf.ToHtml(rtfCode);
 		}
 
-		public bool CanBuildData(uint format)
+		public bool CanBuildData(IClipboardFormat format)
 		{
 			var isCommonFormat =
-				(format == ClipboardNativeApi.CF_TEXT) ||
-				(format == ClipboardNativeApi.CF_OEMTEXT) ||
-				(format == ClipboardNativeApi.CF_UNICODETEXT);
+				(format.Number == ClipboardNativeApi.CF_TEXT) ||
+				(format.Number == ClipboardNativeApi.CF_OEMTEXT) ||
+				(format.Number == ClipboardNativeApi.CF_UNICODETEXT);
 			if (isCommonFormat)
 				return true;
-
-			var name = clipboardNativeApi.GetClipboardFormatName(format);
-			return name == RichTextFormat || name == HtmlFormat;
+				
+			return format.Name == RichTextFormat || format.Name == HtmlFormat;
 		}
 	}
 }

@@ -12,7 +12,7 @@
         public DesignerClipboardImageDataFacade(
             IDesignerImageConverterService designerImageConverterService)
             :
-                base(new DesignerFileDataSourceService(designerImageConverterService))
+                base()
         {
             RawData =
                 designerImageConverterService.GenerateDesignerImageBytesFromFileBytes(

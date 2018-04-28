@@ -87,7 +87,7 @@
                 });
 
             await SystemUnderTest.PerformAsync(
-                GetPackageContaining<IClipboardTextData>());
+                CreateClipboardDataPackageContaining<IClipboardTextData>());
 
             var fakeProcessManager = Container.Resolve<IProcessManager>();
             fakeProcessManager.Received(1)

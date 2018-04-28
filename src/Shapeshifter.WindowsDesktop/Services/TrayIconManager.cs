@@ -11,19 +11,23 @@
 
     using Properties;
 	using Serilog;
+	using Shapeshifter.WindowsDesktop.Infrastructure.Threading.Interfaces;
 	using Web.Updates.Interfaces;
 
     public class TrayIconManager: ITrayIconManager
     {
         readonly NotifyIcon trayIcon;
 
-        public event EventHandler<TrayIconClickedEventArgument> IconDoubleClicked;
+		readonly IMainThreadInvoker mainThreadInvoker;
+
+		public event EventHandler<TrayIconClickedEventArgument> IconDoubleClicked;
 
         public TrayIconManager(
-			ILogger logger)
+			IMainThreadInvoker mainThreadInvoker)
         {
             trayIcon = new NotifyIcon();
-        }
+			this.mainThreadInvoker = mainThreadInvoker;
+		}
 
         public void UpdateMenuItems(
             string boldMenuItemTitle,
@@ -61,22 +65,22 @@
 
 		public void UpdateHoverText(string text)
 		{
-			trayIcon.Text = text;
+			mainThreadInvoker.Invoke(() => trayIcon.Text = text);
 		}
 
 		public void DisplayInformation(string title, string text)
 		{
-			trayIcon.ShowBalloonTip(int.MaxValue, title, text, ToolTipIcon.Info);
+			mainThreadInvoker.Invoke(() => trayIcon.ShowBalloonTip(int.MaxValue, title, text, ToolTipIcon.Info));
 		}
 
 		public void DisplayWarning(string title, string text)
 		{
-			trayIcon.ShowBalloonTip(int.MaxValue, title, text, ToolTipIcon.Warning);
+			mainThreadInvoker.Invoke(() => trayIcon.ShowBalloonTip(int.MaxValue, title, text, ToolTipIcon.Warning));
 		}
 
 		public void DisplayError(string title, string text)
 		{
-			trayIcon.ShowBalloonTip(int.MaxValue, title, text, ToolTipIcon.Error);
+			mainThreadInvoker.Invoke(() => trayIcon.ShowBalloonTip(int.MaxValue, title, text, ToolTipIcon.Error));
 		}
 	}
 }

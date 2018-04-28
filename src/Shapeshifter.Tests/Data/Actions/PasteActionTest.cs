@@ -47,7 +47,7 @@
         [TestMethod]
         public async Task PerformTriggersPaste()
         {
-            var fakeData = GetPackageContaining<IClipboardData>();
+            var fakeData = CreateClipboardDataPackageContaining<IClipboardData>();
             await SystemUnderTest.PerformAsync(fakeData);
 
             var fakeClipboardInjectionService = Container.Resolve<IClipboardInjectionService>();

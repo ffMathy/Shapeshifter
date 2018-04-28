@@ -80,7 +80,7 @@
                     <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
                         <ScrollViewer Focusable="False" MaxHeight="1000">
-                            <ItemsPresenter Margin="0,0,0,0" />
+                            <ItemsPresenter Margin="0,-1,0,-1" />
                         </ScrollViewer>
                     </Border>
                 </ControlTemplate>
@@ -215,11 +215,11 @@
     </Style>
 
     <Style TargetType="UserControl" x:Key="ActionControlContentAreaStyle">
-        <Setter Property="BorderThickness" Value="0,0.5,1,0.5" />
+        <Setter Property="BorderThickness" Value="0,0,1,1" />
         <Setter Property="FontWeight" Value="ExtraLight" />
         <Setter Property="Foreground" Value="White" />
-        <Setter Property="Padding" Value="7,5,10,10" />
-        <Setter Property="Width" Value="300" />
+        <Setter Property="Padding" Value="7,5,7,7" />
+        <Setter Property="Width" Value="150" />
     </Style>
 
     <Style TargetType="TextBlock" x:Key="ActionControlHeaderStyle">

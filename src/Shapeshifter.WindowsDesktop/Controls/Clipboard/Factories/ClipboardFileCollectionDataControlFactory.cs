@@ -1,8 +1,8 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Factories
 {
     using System;
-
-    using Clipboard.Interfaces;
+	using System.Linq;
+	using Clipboard.Interfaces;
 
     using Data.Interfaces;
 
@@ -17,19 +17,21 @@
     {
         readonly IEnvironmentInformation environmentInformation;
 
-        public ClipboardFileCollectionDataControlFactory(
+		public int Priority => 1;
+
+		public ClipboardFileCollectionDataControlFactory(
             IEnvironmentInformation environmentInformation)
         {
             this.environmentInformation = environmentInformation;
         }
 
-        public bool CanBuildControl(IClipboardData data)
+        public bool CanBuildControl(IClipboardDataPackage data)
         {
-            return data is IClipboardFileCollectionData;
+            return data.Contents.Any(x => x is IClipboardFileCollectionData);
         }
 
         public IClipboardControl BuildControl(
-            IClipboardData data)
+			IClipboardDataPackage data)
         {
             if (data == null)
             {
@@ -38,7 +40,11 @@
                     nameof(data));
             }
 
-            return CreateClipboardFileCollectionDataControl((IClipboardFileCollectionData) data);
+			var fileCollectionData = data
+				.Contents
+				.OfType<IClipboardFileCollectionData>()
+				.First();
+            return CreateClipboardFileCollectionDataControl(fileCollectionData);
         }
 
         IClipboardControl CreateClipboardFileCollectionDataControl(

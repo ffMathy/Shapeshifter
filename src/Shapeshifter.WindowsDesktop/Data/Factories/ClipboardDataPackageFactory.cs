@@ -13,25 +13,29 @@
 
     using Unwrappers.Interfaces;
     using Exceptions;
+	using Shapeshifter.WindowsDesktop.Services.Clipboard.Interfaces;
 
-    class ClipboardDataPackageFactory: IClipboardDataPackageFactory
+	class ClipboardDataPackageFactory: IClipboardDataPackageFactory
     {
         readonly IClipboardHandleFactory clipboardSessionFactory;
-        readonly IEnumerable<IMemoryUnwrapper> memoryUnwrappers;
+		readonly IDataSourceService dataSourceService;
+		readonly IEnumerable<IMemoryUnwrapper> memoryUnwrappers;
         readonly IEnumerable<IClipboardDataFactory> dataFactories;
 
         public ClipboardDataPackageFactory(
             IEnumerable<IClipboardDataFactory> dataFactories,
             IEnumerable<IMemoryUnwrapper> memoryUnwrappers,
-            IClipboardHandleFactory clipboardSessionFactory)
+            IClipboardHandleFactory clipboardSessionFactory,
+			IDataSourceService dataSourceService)
         {
             this.dataFactories = dataFactories;
             this.memoryUnwrappers = memoryUnwrappers;
             this.clipboardSessionFactory = clipboardSessionFactory;
-        }
+			this.dataSourceService = dataSourceService;
+		}
 
         bool IsAnyFormatSupported(
-            IEnumerable<uint> formats)
+            IEnumerable<IClipboardFormat> formats)
         {
             return dataFactories.Any(
                 x => formats.Any(x.CanBuildData));
@@ -43,63 +47,64 @@
             {
                 var formats = session.GetClipboardFormats();
                 if(formats.Count == 0)
-                {
                     throw new NoDataInClipboardException();
-                }
 
                 if(!IsAnyFormatSupported(formats))
-                {
                     throw new ClipboardFormatNotUnderstoodException();
-                }
 
                 return ConstructPackageFromFormats(formats);
             }
         }
 
         public IClipboardDataPackage CreateFromFormatsAndData(params FormatDataPair[] formatsAndData)
+		{
+			if (!IsAnyFormatSupported(
+				formatsAndData.Select(x => x.Format)))
+			{
+				return null;
+			}
+
+			var package = CreateDataPackage();
+			foreach (var pair in formatsAndData)
+			{
+				DecoratePackageWithClipboardDataFromRawDataAndFormat(package, pair.Format, pair.Data);
+			}
+
+			return package;
+		}
+
+		ClipboardDataPackage CreateDataPackage()
+		{
+			return new ClipboardDataPackage() {
+				Source = dataSourceService.GetDataSource()
+			};
+		}
+
+		IClipboardDataPackage ConstructPackageFromFormats(
+            IEnumerable<IClipboardFormat> formats)
         {
-            if (!IsAnyFormatSupported(
-                formatsAndData.Select(x => x.Format)))
-            {
-                return null;
-            }
-
-            var package = new ClipboardDataPackage();
-            foreach (var pair in formatsAndData)
-            {
-                DecoratePackageWithClipboardDataFromRawDataAndFormat(package, pair.Format, pair.Data);
-            }
-
-            return package;
-        }
-
-        IClipboardDataPackage ConstructPackageFromFormats(
-            IEnumerable<uint> formats)
-        {
-            var package = new ClipboardDataPackage();
+            var package = CreateDataPackage();
             DecoratePackageWithClipboardData(formats, package);
 
             return package;
         }
 
         void DecoratePackageWithClipboardData(
-            IEnumerable<uint> formats,
+            IEnumerable<IClipboardFormat> formats,
             IClipboardDataPackage package)
         {
             foreach (var format in formats)
-            {
                 DecoratePackageWithClipboardDataForFormat(package, format);
-            }
         }
 
-        IClipboardDataFactory FindCapableFactoryFromFormat(uint format)
+        IClipboardDataFactory FindCapableFactoryFromFormat(IClipboardFormat format)
         {
             return dataFactories.FirstOrDefault(x => x.CanBuildData(format));
         }
 
         void DecoratePackageWithClipboardDataForFormat(
             IClipboardDataPackage package,
-            uint format)
+			IClipboardFormat format)
         {
             var unwrapper = memoryUnwrappers
                 .FirstOrDefault(
@@ -107,25 +112,21 @@
 
             var rawData = unwrapper?.UnwrapStructure(format);
             if (rawData == null)
-            {
                 return;
-            }
 
             DecoratePackageWithClipboardDataFromRawDataAndFormat(package, format, rawData);
         }
 
         void DecoratePackageWithClipboardDataFromRawDataAndFormat(
             IClipboardDataPackage package,
-            uint format,
+			IClipboardFormat format,
             byte[] rawData)
         {
             var factory = FindCapableFactoryFromFormat(format);
 
             var clipboardData = factory?.BuildData(format, rawData);
             if (clipboardData != null)
-            {
                 package.AddData(clipboardData);
-            }
         }
     }
 }

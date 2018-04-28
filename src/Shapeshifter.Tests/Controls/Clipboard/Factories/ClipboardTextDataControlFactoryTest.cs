@@ -23,13 +23,13 @@
         [TestMethod]
         public void CanBuildControlReturnsTrueForTextData()
         {
-            Assert.IsTrue(SystemUnderTest.CanBuildControl(Substitute.For<IClipboardTextData>()));
+            Assert.IsTrue(SystemUnderTest.CanBuildControl(CreateClipboardDataPackageContaining<IClipboardTextData>()));
         }
 
         [TestMethod]
         public void CanBuildControlReturnsFalseForNonTextData()
         {
-            Assert.IsFalse(SystemUnderTest.CanBuildControl(Substitute.For<IClipboardData>()));
+            Assert.IsFalse(SystemUnderTest.CanBuildControl(CreateClipboardDataPackageContaining<IClipboardData>()));
         }
     }
 }

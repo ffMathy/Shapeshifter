@@ -29,12 +29,12 @@
         [TestMethod]
         public async Task CanPerformWithTextData()
         {
-			var fakeClipboardNativeApi = Container.Resolve<IClipboardNativeApi>();
-			fakeClipboardNativeApi.GetClipboardFormatName(Arg.Any<uint>()).Returns("Rich Text Format");
+			var fakeRichTextFormat = CreateClipboardFormatFromName("Rich Text Format");
 
-            var fakeData = GetPackageContaining<IClipboardTextData>();
+			var fakeData = CreateClipboardDataPackageContaining<IClipboardTextData>();
+			fakeData.Contents[0].RawFormat.Returns(fakeRichTextFormat);
 
-            Assert.IsTrue(
+			Assert.IsTrue(
                 await SystemUnderTest.CanPerformAsync(fakeData));
         }
 
@@ -53,15 +53,15 @@
         [TestMethod]
         public async Task PerformCausesTextOfDataToBeCopied()
 		{
-			var fakeClipboardNativeApi = Container.Resolve<IClipboardNativeApi>();
-			fakeClipboardNativeApi.GetClipboardFormatName(Arg.Any<uint>()).Returns("Rich Text Format");
+			var fakeRichTextFormat = CreateClipboardFormatFromName("Rich Text Format");
 
 			var fakeTextData = Substitute.For<IClipboardTextData>();
             fakeTextData.Text.Returns("foobar hello");
+			fakeTextData.RawFormat.Returns(fakeRichTextFormat);
 
-            var fakeData = GetPackageContaining(fakeTextData);
-            
-            await SystemUnderTest.PerformAsync(fakeData);
+			var fakeData = CreateClipboardDataPackageContaining(fakeTextData);
+
+			await SystemUnderTest.PerformAsync(fakeData);
 
             var fakeClipboardInjectionService = Container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService.Received(1)

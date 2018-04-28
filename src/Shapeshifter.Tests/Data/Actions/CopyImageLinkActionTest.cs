@@ -25,7 +25,7 @@
         [TestMethod]
         public async Task CanPerformIsFalseForNonTextTypes()
         {
-            var someNonTextData = GetPackageContaining<IClipboardData>();
+            var someNonTextData = CreateClipboardDataPackageContaining<IClipboardData>();
 
             Assert.IsFalse(await SystemUnderTest.CanPerformAsync(someNonTextData));
         }
@@ -52,7 +52,7 @@
                     "example.com"
                 });
 
-            Assert.IsNotNull(await SystemUnderTest.GetDescriptionAsync(GetPackageContaining<IClipboardTextData>()));
+            Assert.IsNotNull(await SystemUnderTest.GetDescriptionAsync(CreateClipboardDataPackageContaining<IClipboardTextData>()));
         }
 
         [TestMethod]
@@ -77,7 +77,7 @@
                     LinkType.ImageFile)
                 .Returns(Task.FromResult(true));
             
-            Assert.IsTrue(await SystemUnderTest.CanPerformAsync(GetPackageContaining<IClipboardTextData>()));
+            Assert.IsTrue(await SystemUnderTest.CanPerformAsync(CreateClipboardDataPackageContaining<IClipboardTextData>()));
         }
 
         [TestMethod]
@@ -107,7 +107,7 @@
                     "example.com"
                 });
 
-            await SystemUnderTest.PerformAsync(GetPackageContaining<IClipboardTextData>());
+            await SystemUnderTest.PerformAsync(CreateClipboardDataPackageContaining<IClipboardTextData>());
 
             var fakeClipboardInjectionService = Container.Resolve<IClipboardInjectionService>();
             fakeClipboardInjectionService.Received(2)

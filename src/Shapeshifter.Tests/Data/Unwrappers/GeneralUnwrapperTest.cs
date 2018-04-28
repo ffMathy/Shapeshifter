@@ -13,28 +13,28 @@
         public void CantUnwrapDspBitmaps()
         {
             Assert.IsFalse(
-                SystemUnderTest.CanUnwrap(ClipboardNativeApi.CF_DSPBITMAP));
+                SystemUnderTest.CanUnwrap(CreateClipboardFormatFromNumber(ClipboardNativeApi.CF_DSPBITMAP)));
         }
 
         [TestMethod]
         public void CantUnwrapDspEnhancedMetafile()
         {
             Assert.IsFalse(
-                SystemUnderTest.CanUnwrap(ClipboardNativeApi.CF_DSPENHMETAFILE));
+                SystemUnderTest.CanUnwrap(CreateClipboardFormatFromNumber(ClipboardNativeApi.CF_DSPENHMETAFILE)));
         }
 
         [TestMethod]
         public void CantUnwrapEnhancedMetafile()
         {
             Assert.IsFalse(
-                SystemUnderTest.CanUnwrap(ClipboardNativeApi.CF_ENHMETAFILE));
+                SystemUnderTest.CanUnwrap(CreateClipboardFormatFromNumber(ClipboardNativeApi.CF_ENHMETAFILE)));
         }
 
         [TestMethod]
         public void CantUnwrapMetafilePicture()
         {
             Assert.IsFalse(
-                SystemUnderTest.CanUnwrap(ClipboardNativeApi.CF_METAFILEPICT));
+                SystemUnderTest.CanUnwrap(CreateClipboardFormatFromNumber(ClipboardNativeApi.CF_METAFILEPICT)));
         }
     }
 }

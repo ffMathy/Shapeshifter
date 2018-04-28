@@ -14,21 +14,21 @@
         {
             Assert.IsTrue(
                 SystemUnderTest.CanBuildData(
-                    ClipboardNativeApi.CF_TEXT));
+					CreateClipboardFormatFromNumber(ClipboardNativeApi.CF_TEXT)));
         }
 
         [TestMethod]
         public void CanBuildDataReturnsFalseForNonTextFormats()
         {
             Assert.IsFalse(
-                SystemUnderTest.CanBuildData(uint.MaxValue));
+                SystemUnderTest.CanBuildData(CreateClipboardFormatFromNumber(uint.MaxValue)));
         }
 
         [TestMethod]
         public void BuildDataReturnsTextData()
         {
             var data = SystemUnderTest.BuildData(
-                ClipboardNativeApi.CF_TEXT, new byte[0]);
+				CreateClipboardFormatFromNumber(ClipboardNativeApi.CF_TEXT), new byte[0]);
             Assert.IsInstanceOfType(data, typeof (ClipboardTextData));
         }
     }

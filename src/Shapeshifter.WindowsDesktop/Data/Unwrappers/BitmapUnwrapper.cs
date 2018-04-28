@@ -16,6 +16,7 @@
 	using Native.Interfaces;
 
 	using Services.Images.Interfaces;
+	using Shapeshifter.WindowsDesktop.Data.Interfaces;
 	using Shapeshifter.WindowsDesktop.Helpers;
 	using static Shapeshifter.WindowsDesktop.Native.ImageNativeApi;
 
@@ -44,12 +45,12 @@
 			this.memoryUnwrapper = memoryUnwrapper;
 		}
 
-		public bool CanUnwrap(uint format)
+		public bool CanUnwrap(IClipboardFormat format)
 		{
-			return (format == ClipboardNativeApi.CF_DIBV5);
+			return (format.Number == ClipboardNativeApi.CF_DIBV5);
 		}
 
-		public byte[] UnwrapStructure(uint format)
+		public byte[] UnwrapStructure(IClipboardFormat format)
 		{
 			var hBitmap = clipboardNativeApi.GetClipboardData(ClipboardNativeApi.CF_DIBV5);
 			var ptr = generalNativeApi.GlobalLock(hBitmap);

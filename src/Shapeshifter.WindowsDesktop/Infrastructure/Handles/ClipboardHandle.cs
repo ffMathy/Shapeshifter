@@ -2,23 +2,29 @@
 {
     using System;
     using System.Collections.Generic;
-
-    using Controls.Window.Interfaces;
+	using System.Linq;
+	using Controls.Window.Interfaces;
 
     using Interfaces;
 
     using Native.Interfaces;
+	using Shapeshifter.WindowsDesktop.Data;
+	using Shapeshifter.WindowsDesktop.Data.Factories.Interfaces;
+	using Shapeshifter.WindowsDesktop.Data.Interfaces;
 
-    class ClipboardHandle: IClipboardHandle
+	class ClipboardHandle: IClipboardHandle
     {
         readonly IClipboardNativeApi clipboardNativeApi;
+		readonly IClipboardFormatFactory clipboardFormatFactory;
 
-        public ClipboardHandle(
+		public ClipboardHandle(
             IClipboardNativeApi clipboardNativeApi,
+			IClipboardFormatFactory clipboardFormatFactory,
             IMainWindowHandleContainer mainWindow)
         {
             this.clipboardNativeApi = clipboardNativeApi;
-            clipboardNativeApi.OpenClipboard(mainWindow.Handle);
+			this.clipboardFormatFactory = clipboardFormatFactory;
+			clipboardNativeApi.OpenClipboard(mainWindow.Handle);
         }
 
         public void Dispose()
@@ -26,9 +32,12 @@
             clipboardNativeApi.CloseClipboard();
         }
 
-        public IReadOnlyCollection<uint> GetClipboardFormats()
+        public IReadOnlyCollection<IClipboardFormat> GetClipboardFormats()
         {
-            return clipboardNativeApi.GetClipboardFormats();
+            return clipboardNativeApi
+				.GetClipboardFormats()
+				.Select(clipboardFormatFactory.Create)
+				.ToArray();
         }
 
         public IntPtr SetClipboardData(uint uFormat, IntPtr hMem)

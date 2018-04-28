@@ -1,36 +1,39 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data
 {
-    using System.Collections.Generic;
-    using System.Threading;
+	using System.Collections.Generic;
+	using System.Threading;
 
-    using Interfaces;
+	using Interfaces;
 
-    public class ClipboardDataPackage: IClipboardDataPackage
-    {
-        readonly List<IClipboardData> dataCollection;
+	public class ClipboardDataPackage : IClipboardDataPackage
+	{
+		readonly List<IClipboardData> dataCollection;
 
-        static long idOffset;
+		static long idOffset;
 
-        public ClipboardDataPackage()
-        {
-            dataCollection = new List<IClipboardData>();
-            Id = Interlocked.Increment(ref idOffset);
-        }
+		public ClipboardDataPackage()
+		{
+			dataCollection = new List<IClipboardData>();
+			Id = Interlocked.Increment(ref idOffset);
+		}
 
-        public ClipboardDataPackage(long id)
-            : this()
-        {
-            Id = id;
-        }
+		public ClipboardDataPackage(long id)
+			: this()
+		{
+			Id = id;
+		}
 
-        public IReadOnlyList<IClipboardData> Contents =>
-            dataCollection;
+		public IReadOnlyList<IClipboardData> Contents =>
+			dataCollection;
 
-        public void AddData(IClipboardData data)
-        {
-            dataCollection.Add(data);
-        }
+		public void AddData(IClipboardData data)
+		{
+			data.Package = this;
+			dataCollection.Add(data);
+		}
 
-        public long Id { get; }
-    }
+		public long Id { get; }
+
+		public IDataSource Source { get; set; }
+	}
 }

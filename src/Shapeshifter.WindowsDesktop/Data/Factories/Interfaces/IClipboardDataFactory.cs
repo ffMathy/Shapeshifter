@@ -4,8 +4,8 @@
 
     public interface IClipboardDataFactory
     {
-        bool CanBuildData(uint format);
+        bool CanBuildData(IClipboardFormat format);
 
-        IClipboardData BuildData(uint format, byte[] rawData);
+        IClipboardData BuildData(IClipboardFormat format, byte[] rawData);
     }
 }

@@ -21,28 +21,22 @@
 
     class FileClipboardDataFactory: IFileClipboardDataFactory
     {
-        readonly IDataSourceService dataSourceService;
-
         readonly IFileIconService fileIconService;
-
         readonly IMemoryHandleFactory memoryHandleFactory;
-
         readonly IClipboardNativeApi clipboardNativeApi;
 
         public FileClipboardDataFactory(
-            IDataSourceService dataSourceService,
             IFileIconService fileIconService,
             IMemoryHandleFactory memoryHandleFactory,
             IClipboardNativeApi clipboardNativeApi)
         {
-            this.dataSourceService = dataSourceService;
             this.fileIconService = fileIconService;
             this.memoryHandleFactory = memoryHandleFactory;
             this.clipboardNativeApi = clipboardNativeApi;
         }
 
         public IClipboardData BuildData(
-            uint format,
+			IClipboardFormat format,
             byte[] rawData)
         {
             if (!CanBuildData(format))
@@ -96,7 +90,7 @@
 
         IClipboardData ConstructDataFromFiles(
             IReadOnlyCollection<string> files,
-            uint format,
+			IClipboardFormat format,
             byte[] rawData)
         {
             if (files.Count == 1)
@@ -115,13 +109,14 @@
 
         IClipboardData ConstructClipboardFileCollectionData(
             IEnumerable<string> files,
-            uint format,
+			IClipboardFormat format,
             byte[] rawData)
         {
-            return new ClipboardFileCollectionData(dataSourceService)
+            return new ClipboardFileCollectionData()
             {
-                Files = files.Select(ConstructClipboardFileData)
-                             .ToArray(),
+                Files = files
+					.Select(x => ConstructClipboardFileData(x, format))
+                    .ToArray(),
                 RawFormat = format,
                 RawData = rawData
             };
@@ -129,10 +124,10 @@
 
         IClipboardFileData ConstructClipboardFileData(
             string file,
-            uint format,
+			IClipboardFormat format,
             byte[] rawData)
         {
-            return new ClipboardFileData(dataSourceService)
+            return new ClipboardFileData()
             {
                 FileName = Path.GetFileName(file),
                 FullPath = file,
@@ -143,15 +138,15 @@
         }
 
         IClipboardFileData ConstructClipboardFileData(
-            string file)
+            string file,
+			IClipboardFormat format)
         {
-            return ConstructClipboardFileData(file, 0, null);
+            return ConstructClipboardFileData(file, format, null);
         }
 
-        public bool CanBuildData(uint format)
+        public bool CanBuildData(IClipboardFormat format)
         {
-            return
-                format == ClipboardNativeApi.CF_HDROP;
+            return format.Number == ClipboardNativeApi.CF_HDROP;
         }
     }
 }

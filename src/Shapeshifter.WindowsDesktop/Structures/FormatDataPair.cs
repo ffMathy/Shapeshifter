@@ -1,14 +1,16 @@
-﻿namespace Shapeshifter.WindowsDesktop.Structures
+﻿using Shapeshifter.WindowsDesktop.Data.Interfaces;
+
+namespace Shapeshifter.WindowsDesktop.Structures
 {
     public struct FormatDataPair
     {
-        public FormatDataPair(uint format, byte[] data)
+        public FormatDataPair(IClipboardFormat format, byte[] data)
         {
             Format = format;
             Data = data;
         }
 
-        public uint Format { get; set; }
+        public IClipboardFormat Format { get; set; }
 
         public byte[] Data { get; set; }
     }

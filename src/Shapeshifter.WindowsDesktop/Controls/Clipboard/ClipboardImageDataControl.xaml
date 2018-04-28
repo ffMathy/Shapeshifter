@@ -28,7 +28,7 @@
 			<UserControl Grid.Column="2" Style="{DynamicResource ClipboardDataControlContentAreaStyle}">
 				<Grid Style="{DynamicResource ClipboardDataControlContentAreaInnerStyle}">
                     <local:DataSourceControl VerticalAlignment="Bottom" TextVisibility="Collapsed"
-                                                 DataContext="{Binding Data.Source}" />
+                                                 DataContext="{Binding Data.Package.Source}" />
                 </Grid>
             </UserControl>
         </Grid>
