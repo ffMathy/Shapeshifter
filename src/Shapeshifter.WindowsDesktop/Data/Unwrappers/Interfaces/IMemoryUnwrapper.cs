@@ -1,9 +1,11 @@
-﻿namespace Shapeshifter.WindowsDesktop.Data.Unwrappers.Interfaces
+﻿using Shapeshifter.WindowsDesktop.Data.Interfaces;
+
+namespace Shapeshifter.WindowsDesktop.Data.Unwrappers.Interfaces
 {
     public interface IMemoryUnwrapper
     {
-        bool CanUnwrap(uint format);
+        bool CanUnwrap(IClipboardFormat format);
 
-        byte[] UnwrapStructure(uint format);
+        byte[] UnwrapStructure(IClipboardFormat format);
     }
 }

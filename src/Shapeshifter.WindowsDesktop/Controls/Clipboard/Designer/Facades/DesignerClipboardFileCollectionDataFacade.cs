@@ -10,7 +10,7 @@
         public DesignerClipboardFileCollectionDataFacade(
             IDesignerImageConverterService designerImageConverterService)
             :
-                base(new DesignerFileDataSourceService(designerImageConverterService))
+                base()
         {
             Files = new[]
             {

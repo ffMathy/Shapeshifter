@@ -33,7 +33,7 @@
                                Style="{StaticResource ClipboardDataControlHeaderTextStyle}" />
 
                 <local:DataSourceControl VerticalAlignment="Bottom" Margin="0,10,0,1"
-                                             DataContext="{Binding Data.Source}" Grid.Row="1" />
+                                             DataContext="{Binding Data.Package.Source}" Grid.Row="1" />
             </Grid>
         </UserControl>
     </Grid>

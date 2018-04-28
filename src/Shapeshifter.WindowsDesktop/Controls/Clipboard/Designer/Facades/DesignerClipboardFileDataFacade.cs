@@ -12,7 +12,7 @@
         public DesignerClipboardFileDataFacade(
             IDesignerImageConverterService designerImageConverterService)
             :
-                base(new DesignerFileDataSourceService(designerImageConverterService))
+                base()
         {
             FileName = "Kitten.jpg";
             FileIcon =

@@ -7,8 +7,9 @@
 
     using Native;
     using Native.Interfaces;
+	using Shapeshifter.WindowsDesktop.Data.Interfaces;
 
-    class GeneralUnwrapper: IGeneralUnwrapper
+	class GeneralUnwrapper: IGeneralUnwrapper
     {
         readonly IClipboardNativeApi clipboardNativeApi;
 
@@ -28,14 +29,14 @@
             };
         }
 
-        public bool CanUnwrap(uint format)
+        public bool CanUnwrap(IClipboardFormat format)
         {
-            return excludedFormats.All(x => x != format);
+            return excludedFormats.All(x => x != format.Number);
         }
 
-        public byte[] UnwrapStructure(uint format)
+        public byte[] UnwrapStructure(IClipboardFormat format)
         {
-            return clipboardNativeApi.GetClipboardDataBytes(format);
+            return clipboardNativeApi.GetClipboardDataBytes(format.Number);
         }
     }
 }

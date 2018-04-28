@@ -1,13 +1,15 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Factories.Interfaces
 {
-    using Clipboard.Interfaces;
+	using Clipboard.Interfaces;
 
-    using Data.Interfaces;
+	using Data.Interfaces;
 
-    public interface IClipboardDataControlFactory
-    {
-        bool CanBuildControl(IClipboardData data);
+	public interface IClipboardDataControlFactory
+	{
+		int Priority { get; }
 
-        IClipboardControl BuildControl(IClipboardData clipboardData);
-    }
+		bool CanBuildControl(IClipboardDataPackage data);
+
+		IClipboardControl BuildControl(IClipboardDataPackage clipboardData);
+	}
 }

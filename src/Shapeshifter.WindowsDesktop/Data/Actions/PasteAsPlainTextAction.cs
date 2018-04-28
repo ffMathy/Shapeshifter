@@ -17,18 +17,15 @@
         readonly IClipboardInjectionService clipboardInjectionService;
         readonly IClipboardPasteService clipboardPasteService;
         readonly IAsyncFilter asyncFilter;
-		readonly IClipboardNativeApi clipboardNativeApi;
 
 		public PasteAsPlainTextAction(
             IClipboardInjectionService clipboardInjectionService,
             IClipboardPasteService clipboardPasteService,
-            IAsyncFilter asyncFilter,
-			IClipboardNativeApi clipboardNativeApi)
+            IAsyncFilter asyncFilter)
         {
             this.clipboardInjectionService = clipboardInjectionService;
             this.clipboardPasteService = clipboardPasteService;
             this.asyncFilter = asyncFilter;
-			this.clipboardNativeApi = clipboardNativeApi;
 		}
 
         public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
@@ -55,8 +52,7 @@
         async Task<bool> CanPerformAsync(
             IClipboardData data)
         {
-			var formatName = clipboardNativeApi.GetClipboardFormatName(data.RawFormat);
-            return data is IClipboardTextData && formatName == "Rich Text Format";
+            return data is IClipboardTextData && data.RawFormat.Name == "Rich Text Format";
         }
 
         public async Task PerformAsync(

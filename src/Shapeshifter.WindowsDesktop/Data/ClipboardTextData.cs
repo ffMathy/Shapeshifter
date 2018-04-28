@@ -1,22 +1,16 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data
 {
-    using Interfaces;
+	using Interfaces;
 
-    using Services.Clipboard.Interfaces;
+	using Services.Clipboard.Interfaces;
 
-    public class ClipboardTextData: IClipboardTextData
-    {
-        public ClipboardTextData(IDataSourceService sourceFactory)
-        {
-            Source = sourceFactory.GetDataSource();
-        }
+	public class ClipboardTextData : IClipboardTextData
+	{
+		public string Text { get; set; }
 
-        public string Text { get; set; }
+		public byte[] RawData { get; set; }
 
-        public IDataSource Source { get; }
-
-        public byte[] RawData { get; set; }
-
-        public uint RawFormat { get; set; }
-    }
+		public IClipboardFormat RawFormat { get; set; }
+		public IClipboardDataPackage Package { get; set; }
+	}
 }

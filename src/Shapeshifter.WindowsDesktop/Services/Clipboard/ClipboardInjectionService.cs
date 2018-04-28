@@ -80,14 +80,12 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 			var wrappers = memoryWrappers
 				.Where(x => x.CanWrap(clipboardData))
 				.ToArray();
-			if(wrappers.Length > 0) { 
-				var formatName = clipboardNativeApi.GetClipboardFormatName(clipboardData.RawFormat);
-				logger.Verbose("Injecting {bytes} bytes of {format} format into the clipboard.", clipboardData.RawData.Length, formatName ?? clipboardData.RawFormat.ToString());
-			}
+			if(wrappers.Length > 0)
+				logger.Verbose("Injecting {bytes} bytes of {format} format into the clipboard.", clipboardData.RawData.Length, clipboardData.RawFormat);
 
 			foreach (var wrapper in wrappers) {
 				var success = session.SetClipboardData(
-					clipboardData.RawFormat, 
+					clipboardData.RawFormat.Number, 
 					wrapper.GetDataPointer(
 						clipboardData));
 				if(success == IntPtr.Zero)

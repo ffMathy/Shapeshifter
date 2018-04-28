@@ -1,13 +1,14 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Interfaces
 {
-    using System.Collections.Generic;
+	using System.Collections.Generic;
 
-    public interface IClipboardDataPackage
-    {
-        void AddData(IClipboardData data);
+	public interface IClipboardDataPackage
+	{
+		void AddData(IClipboardData data);
 
-        long Id { get; }
+		long Id { get; }
 
-        IReadOnlyList<IClipboardData> Contents { get; }
-    }
+		IReadOnlyList<IClipboardData> Contents { get; }
+		IDataSource Source { get; }
+	}
 }

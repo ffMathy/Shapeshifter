@@ -17,14 +17,11 @@
 
 	class BitmapClipboardDataFactory: IBitmapClipboardDataFactory
     {
-        readonly IDataSourceService dataSourceService;
 		readonly IImagePersistenceService imagePersistenceService;
 
 		public BitmapClipboardDataFactory(
-            IDataSourceService dataSourceService,
 			IImagePersistenceService imagePersistenceService)
         {
-            this.dataSourceService = dataSourceService;
 			this.imagePersistenceService = imagePersistenceService;
 		}
 
@@ -90,7 +87,7 @@
 			}
 		}
 
-		public IClipboardData BuildData(uint format, byte[] rawData)
+		public IClipboardData BuildData(IClipboardFormat format, byte[] rawData)
         {
             if (!CanBuildData(format))
             {
@@ -98,7 +95,7 @@
             }
 
 			var bitmapSource = DIBV5ToBitmapSource(rawData);
-			return new ClipboardImageData(dataSourceService)
+			return new ClipboardImageData()
             {
                 RawData = rawData,
                 RawFormat = format,
@@ -106,10 +103,9 @@
             };
         }
 
-        public bool CanBuildData(uint format)
+        public bool CanBuildData(IClipboardFormat format)
         {
-            return
-                format == ClipboardNativeApi.CF_DIBV5;
+            return format.Number == ClipboardNativeApi.CF_DIBV5;
         }
     }
 }
