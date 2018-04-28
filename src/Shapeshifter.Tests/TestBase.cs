@@ -4,6 +4,7 @@ using Shapeshifter.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.WindowsDesktop.Infrastructure.Dependencies;
 using Shapeshifter.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Shapeshifter.WindowsDesktop
 {
@@ -35,7 +36,8 @@ namespace Shapeshifter.WindowsDesktop
 
             return result;
         }
-		
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		protected IClipboardDataPackage CreateClipboardDataPackageContaining<TData>()
 			where TData : class, IClipboardData
 		{
@@ -49,6 +51,7 @@ namespace Shapeshifter.WindowsDesktop
 			return fakePackage;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		protected IClipboardDataPackage CreateClipboardDataPackageContaining<TData>(params TData[] data)
 			where TData : class, IClipboardData
 		{
@@ -58,6 +61,7 @@ namespace Shapeshifter.WindowsDesktop
 			return fakePackage;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		protected IClipboardFormat CreateClipboardFormatFromNumber(uint number)
 		{
 			var fake = Substitute.For<IClipboardFormat>();
@@ -66,6 +70,7 @@ namespace Shapeshifter.WindowsDesktop
 			return fake;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		protected IClipboardFormat CreateClipboardFormatFromName(string name)
 		{
 			var fake = Substitute.For<IClipboardFormat>();

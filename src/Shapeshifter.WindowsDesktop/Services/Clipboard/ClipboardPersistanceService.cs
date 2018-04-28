@@ -40,7 +40,7 @@
                 var content = package.Contents[i];
                 var filePath = Path.Combine(
                     packageFolder,
-                    i + 1 + "." + content.RawFormat);
+                    i + 1 + "." + content.RawFormat.Number);
                 await fileManager.WriteBytesToFileAsync(
                     filePath,
                     content.RawData);
