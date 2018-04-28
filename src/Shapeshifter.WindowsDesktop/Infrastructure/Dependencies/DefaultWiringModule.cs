@@ -80,9 +80,11 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 						outputTemplate: "{Timestamp:HH:mm:ss.fff} [{Level:u3}] {Message:lj} ({SourceContext:l}){NewLine}{Exception}")
 					.WriteTo.File(
 						logPath,
-						fileSizeLimitBytes: 1024 * 1024,
 						restrictedToMinimumLevel: LogEventLevel.Verbose,
+						fileSizeLimitBytes: int.MaxValue,
 						rollOnFileSizeLimit: false,
+						rollingInterval: RollingInterval.Day,
+						retainedFileCountLimit: 2,
 						shared: true,
 						outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [#{ProcessId}] [{SourceContext:l}] [{Level:u3}]{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
 					.CreateLogger();

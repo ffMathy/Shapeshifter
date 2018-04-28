@@ -256,11 +256,6 @@
             {
                 Elements.Insert(0, e.Package);
                 SelectedElement = e.Package;
-
-                while (Elements.Count > settingsViewModel.MaximumAmountOfItemsInClipboard)
-                {
-                    Elements.RemoveAt(Elements.Count - 1);
-                }
             }
         }
 

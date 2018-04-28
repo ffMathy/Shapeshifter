@@ -18,7 +18,6 @@
         readonly IKeyboardManager keyboardManager;
 
         int pasteDurationBeforeUserInterfaceShowsInMilliseconds;
-        int maximumAmountOfItemsInClipboard;
         string hotkeyString;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -37,9 +36,6 @@
             pasteDurationBeforeUserInterfaceShowsInMilliseconds = settingsManager.LoadSetting(
                 nameof(PasteDurationBeforeUserInterfaceShowsInMilliseconds),
                 300);
-            maximumAmountOfItemsInClipboard = settingsManager.LoadSetting(
-                nameof(MaximumAmountOfItemsInClipboard),
-                8);
         }
         
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -97,22 +93,6 @@
                     nameof(PasteDurationBeforeUserInterfaceShowsInMilliseconds),
                     pasteDurationBeforeUserInterfaceShowsInMilliseconds = value);
                 
-                OnPropertyChanged();
-            }
-        }
-
-        public int MaximumAmountOfItemsInClipboard
-        {
-            get
-            {
-                return maximumAmountOfItemsInClipboard;
-            }
-            set
-            {
-                if (value == maximumAmountOfItemsInClipboard) return;
-                settingsManager.SaveSetting(
-                    nameof(MaximumAmountOfItemsInClipboard),
-                    maximumAmountOfItemsInClipboard = value);
                 OnPropertyChanged();
             }
         }
