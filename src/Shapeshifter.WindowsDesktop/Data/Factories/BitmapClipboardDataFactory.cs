@@ -20,8 +20,6 @@
         readonly IDataSourceService dataSourceService;
 		readonly IImagePersistenceService imagePersistenceService;
 
-		public int Priority => 1;
-
 		public BitmapClipboardDataFactory(
             IDataSourceService dataSourceService,
 			IImagePersistenceService imagePersistenceService)
