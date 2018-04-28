@@ -20,21 +20,23 @@
         readonly IMainWindowHandleContainer handleContainer;
         readonly IKeyInterceptor keyInterceptor;
         readonly IWindowMessageHook windowMessageHook;
+		readonly ISourceClipboardQuantityOverlay sourceClipboardQuantityOverlay;
 
-        public MainWindowPreparationOperation(
+		public MainWindowPreparationOperation(
             IMainWindow mainWindow,
             IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator,
             IMainWindowHandleContainer handleContainer,
             IKeyInterceptor keyInterceptor,
-            IWindowMessageHook windowMessageHook)
+            IWindowMessageHook windowMessageHook,
+			ISourceClipboardQuantityOverlay sourceClipboardQuantityOverlay)
         {
             this.mainWindow = mainWindow;
             this.clipboardUserInterfaceInteractionMediator = clipboardUserInterfaceInteractionMediator;
             this.handleContainer = handleContainer;
             this.keyInterceptor = keyInterceptor;
             this.windowMessageHook = windowMessageHook;
-
-            SetupWindowMessageHook();
+			this.sourceClipboardQuantityOverlay = sourceClipboardQuantityOverlay;
+			SetupWindowMessageHook();
         }
 
         void SetupWindowMessageHook()
@@ -44,10 +46,16 @@
 
         public async Task RunAsync()
         {
-            mainWindow.SourceInitialized +=
-                OnMainWindowOnSourceInitialized;
-            mainWindow.Show();
-        }
+			await RunWindowAsync(mainWindow);
+			await RunWindowAsync(sourceClipboardQuantityOverlay);
+		}
+
+		async Task RunWindowAsync(IWindow window)
+		{
+			window.SourceInitialized +=
+				OnMainWindowOnSourceInitialized;
+			window.Show();
+		}
 
         void OnMainWindowOnSourceInitialized(object sender, EventArgs e)
         {

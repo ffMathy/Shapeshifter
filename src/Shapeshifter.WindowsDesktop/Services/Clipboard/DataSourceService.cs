@@ -64,6 +64,7 @@
 					Int32Rect.Empty,
 					BitmapSizeOptions.FromEmptyOptions());
 			}
+
 			throw new InvalidOperationException("Could not load window icon.");
 		}
 

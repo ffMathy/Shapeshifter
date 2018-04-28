@@ -233,6 +233,7 @@
     <Compile Include="Controls\Window\Factories\SettingsWindowFactory.cs" />
     <Compile Include="Controls\Window\Interfaces\IHookableWindow.cs" />
     <Compile Include="Controls\Window\Interfaces\ISettingsWindow.cs" />
+    <Compile Include="Controls\Window\Interfaces\ISourceClipboardQuantityOverlay.cs" />
     <Compile Include="Controls\Window\Interfaces\IWindow.cs" />
     <Compile Include="Controls\Window\PatreonWindow.xaml.cs">
       <DependentUpon>PatreonWindow.xaml</DependentUpon>
@@ -240,15 +241,20 @@
     <Compile Include="Controls\Window\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Window\SourceClipboardQuantityOverlay.xaml.cs">
+      <DependentUpon>SourceClipboardQuantityOverlay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Window\UserInterfaceControl.xaml.cs">
       <DependentUpon>UserInterfaceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Window\ViewModels\ActionViewModel.cs" />
+    <Compile Include="Controls\Window\ViewModels\Interfaces\ISourceClipboardQuantityOverlayViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\IMainViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\IActionViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\ISettingsViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\MainViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Controls\Window\ViewModels\SourceClipboardQuantityOverlayViewModel.cs" />
     <Compile Include="Data\Actions\CopyAsFileAction.cs" />
     <Compile Include="Data\Actions\CopyImageLinkAction.cs" />
     <Compile Include="Data\Actions\Interfaces\IAction.cs" />
@@ -283,6 +289,8 @@
     <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
     <Compile Include="Infrastructure\Dependencies\PropertySelector.cs" />
     <Compile Include="Infrastructure\Dependencies\PublicConstructorFinder.cs" />
+    <Compile Include="Infrastructure\Events\DataSourceClipboardQuantityHiddenEventArgument.cs" />
+    <Compile Include="Infrastructure\Events\DataSourceClipboardQuantityShownEventArgument.cs" />
     <Compile Include="Infrastructure\Events\ProcessStartedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\KeyDetectedArgument.cs" />
     <Compile Include="Infrastructure\Events\PastePerformedEventArgument.cs" />
@@ -535,6 +543,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Window\PatreonWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Window\SourceClipboardQuantityOverlay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

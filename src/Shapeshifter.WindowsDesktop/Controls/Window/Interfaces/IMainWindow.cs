@@ -6,6 +6,7 @@
 
     public interface IMainWindow
         : IHookableWindow,
+		  IWindow,
           IDisposable,
           ISingleInstance
     {

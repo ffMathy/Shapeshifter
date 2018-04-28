@@ -13,7 +13,7 @@
         readonly IStartupPreparationOperation startupPreparationOperation;
         readonly IPostPreparationOperation postPreparationOperation;
         readonly IMainWindowPreparationOperation mainWindowPreparationOperation;
-		private readonly IProcessManager processManager;
+		readonly IProcessManager processManager;
 		readonly ILogger logger;
 
 		public ApplicationEntrypoint(

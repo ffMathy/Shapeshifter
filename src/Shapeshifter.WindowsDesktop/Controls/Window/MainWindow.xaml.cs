@@ -72,8 +72,13 @@
         void ViewModel_UserInterfaceShown(
             object sender,
             UserInterfaceShownEventArgument e)
-        {
-            Show();
+		{
+			Left = viewModel.ActiveScreen.WorkingArea.X;
+			Top = viewModel.ActiveScreen.WorkingArea.Y;
+			Width = viewModel.ActiveScreen.WorkingArea.Width;
+			Height = viewModel.ActiveScreen.WorkingArea.Height;
+			
+			Show();
         }
 
         public void AddHwndSourceHook(HwndSourceHook hook)

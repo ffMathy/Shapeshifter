@@ -29,7 +29,6 @@
         readonly IKeyInterceptor hotkeyInterceptor;
         readonly IMouseWheelHook mouseWheelHook;
         readonly IClipboardInjectionService clipboardInjectionService;
-
         readonly IList<IClipboardDataControlPackage> clipboardPackages;
 
         ClipboardUserInterfacePane currentPane;
@@ -140,7 +139,7 @@
         {
             clipboardCopyInterceptor.SkipNext();
             clipboardInjectionService.ClearClipboard();
-
+			
             FireRemovedCurrentItem();
         }
 

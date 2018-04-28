@@ -4,20 +4,21 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Shapeshifter.WindowsDesktop.Services.Screen.Interfaces;
+using Shapeshifter.WindowsDesktop.Infrastructure.Events;
 
 namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 {
     class MainViewModel : IMainViewModel
     {
-        ScreenInformation activeScreen;
-
         readonly IScreenManager screenManager;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public IUserInterfaceViewModel UserInterfaceViewModel { get; private set; }
+		public IUserInterfaceViewModel UserInterfaceViewModel { get; private set; }
 
-        public ScreenInformation ActiveScreen
+		ScreenInformation activeScreen;
+
+		public ScreenInformation ActiveScreen
         {
             get
             {

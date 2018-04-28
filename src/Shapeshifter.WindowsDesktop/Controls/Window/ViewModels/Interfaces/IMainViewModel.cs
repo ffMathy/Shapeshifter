@@ -6,7 +6,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels.Interfaces
 {
     public interface IMainViewModel: INotifyPropertyChanged, IDisposable
     {
-        ScreenInformation ActiveScreen { get; set; }
+        ScreenInformation ActiveScreen { get; }
         IUserInterfaceViewModel UserInterfaceViewModel { get; }
     }
 }
