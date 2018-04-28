@@ -32,6 +32,15 @@ body, html {
     font-size: 14px;
 }
 
+.download .specs {
+    font-size: 12px;
+    color: #AAA;
+    padding-left: 5px;
+    position: relative;
+    top: 9px;
+    display: inline-block;
+}
+
 .screenshot {
     background-size: cover;
     background-repeat: no-repeat;
@@ -40,6 +49,31 @@ body, html {
     min-height: 300px;
 
     margin-top: 7vh;
+}
+
+.patrons {
+    background-color: #F9F9F9;
+}
+
+.patrons .list-group-item {
+    background-color: transparent;
+}
+
+.patrons .patron img {
+    width: 48px;
+    height: 48px;
+
+    margin: -12px;
+    margin-left: 5px;
+    margin-right: -20px;
+}
+
+.patrons .patron .amount {
+    padding-right: 10px;
+    width: 70px;
+    text-align: right;
+    display: inline-block;
+    font-weight: bold;
 }
 
 header h1 {
@@ -52,15 +86,6 @@ header span {
 
 section {
     padding: 10vh;
-}
-
-.download .specs {
-    font-size: 12px;
-    color: #AAA;
-    padding-left: 5px;
-    position: relative;
-    top: 9px;
-    display: inline-block;
 }
 
 .card {

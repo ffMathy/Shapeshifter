@@ -13,7 +13,41 @@ $.getJSON("https://api.github.com/repos/ffMathy/Shapeshifter/releases/latest").d
 });
 
 $.getJSON("https://shapeshifter.azurewebsites.net/api/patreon/supporters").done(function(json) {
-  console.log(json);
+  var supporters = json.sort((a, b) => b.amount - a.amount);
+  var amountSum = 0;
+  for(var supporter of supporters) {
+    amountSum += supporter.amount;
+
+    var profilePictureElement = $("<img />");
+    profilePictureElement.addClass("float-right");
+    profilePictureElement.prop("src", supporter.imageUrl);
+
+    var nameElement = $("<span />");
+    nameElement.text(supporter.fullName);
+
+    var pledgeAmountElement = $("<span />");
+    pledgeAmountElement.addClass("amount");
+    pledgeAmountElement.text("$" + supporter.amount + "/mo");
+
+    var nameContainerElement = $("<span />");
+    nameContainerElement.addClass("float-left");
+    nameContainerElement.append(pledgeAmountElement);
+    nameContainerElement.append(nameElement);
+
+    var clearfix = $("<div />");
+    clearfix.addClass("clearfix");
+
+    var listElement = $("<li />");
+    listElement.addClass("list-group-item");
+    listElement.addClass("patron");
+    listElement.append(nameContainerElement);
+    listElement.append(profilePictureElement);
+    listElement.append(clearfix);
+
+    $("#patrons").append(listElement);
+  }
+
+  
 });
 
 (function() {
