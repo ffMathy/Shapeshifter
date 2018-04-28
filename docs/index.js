@@ -13,10 +13,12 @@ $.getJSON("https://api.github.com/repos/ffMathy/Shapeshifter/releases/latest").d
 });
 
 $.getJSON("https://shapeshifter.azurewebsites.net/api/patreon/supporters").done(function(json) {
+  var goal = 100;
+
   var supporters = json.sort((a, b) => b.amount - a.amount);
-  var amountSum = 0;
+  var totalAmount = 0;
   for(var supporter of supporters) {
-    amountSum += supporter.amount;
+    totalAmount += supporter.amount;
 
     var profilePictureElement = $("<img />");
     profilePictureElement.addClass("float-right");
@@ -29,7 +31,9 @@ $.getJSON("https://shapeshifter.azurewebsites.net/api/patreon/supporters").done(
     pledgeAmountElement.addClass("amount");
     pledgeAmountElement.text("$" + supporter.amount + "/mo");
 
-    var nameContainerElement = $("<span />");
+    var nameContainerElement = $("<a />");
+    nameContainerElement.attr("href", supporter.url);
+    nameContainerElement.attr("target", "_blank");
     nameContainerElement.addClass("float-left");
     nameContainerElement.append(pledgeAmountElement);
     nameContainerElement.append(nameElement);
@@ -47,7 +51,13 @@ $.getJSON("https://shapeshifter.azurewebsites.net/api/patreon/supporters").done(
     $("#patrons").append(listElement);
   }
 
-  
+  var percentageOfGoal = (100 / goal * totalAmount).toFixed(0);
+  $("#funding-progress")
+    .css("width", percentageOfGoal + "%")
+    .text(percentageOfGoal + "%");
+
+  $("#total-amount").text("$" + totalAmount + "/mo");
+  $("#goal").text("$" + goal + "/mo");
 });
 
 (function() {

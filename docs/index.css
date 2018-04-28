@@ -9,6 +9,14 @@ body, html {
     background: radial-gradient(#FFF, #EFEFEF);
 }
 
+h1, h2 {
+    display: inline-block;
+}
+
+h2 {
+    padding-bottom: 12px;
+}
+
 .app {
     padding: 10vh 10vw !important;
 }
@@ -16,7 +24,6 @@ body, html {
 .download .selling-points {
     max-width: 400px;
     margin-left: -40px;
-    padding-top: 10px;
 }
 
 .download .selling-points li {
@@ -51,21 +58,16 @@ body, html {
     margin-top: 7vh;
 }
 
-.patrons {
-    background-color: #F9F9F9;
-}
-
-.patrons .list-group-item {
-    background-color: transparent;
+.patrons .patron a {
+    text-decoration: none;
+    color: black;
 }
 
 .patrons .patron img {
-    width: 48px;
-    height: 48px;
+    width: 24px;
+    height: 24px;
 
-    margin: -12px;
-    margin-left: 5px;
-    margin-right: -20px;
+    border-radius: 48px;
 }
 
 .patrons .patron .amount {
