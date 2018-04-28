@@ -22,6 +22,8 @@
 		readonly IDataSourceService dataSourceService;
 		readonly IClipboardNativeApi clipboardNativeApi;
 
+		public int Priority => 3;
+
 		public TextClipboardDataFactory(
 			IDataSourceService dataSourceService,
 			IClipboardNativeApi clipboardNativeApi)

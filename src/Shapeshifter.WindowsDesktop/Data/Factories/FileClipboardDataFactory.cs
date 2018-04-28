@@ -22,14 +22,13 @@
     class FileClipboardDataFactory: IFileClipboardDataFactory
     {
         readonly IDataSourceService dataSourceService;
-
         readonly IFileIconService fileIconService;
-
         readonly IMemoryHandleFactory memoryHandleFactory;
-
         readonly IClipboardNativeApi clipboardNativeApi;
 
-        public FileClipboardDataFactory(
+		public int Priority => 2;
+
+		public FileClipboardDataFactory(
             IDataSourceService dataSourceService,
             IFileIconService fileIconService,
             IMemoryHandleFactory memoryHandleFactory,

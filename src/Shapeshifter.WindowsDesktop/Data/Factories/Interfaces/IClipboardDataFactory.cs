@@ -4,7 +4,9 @@
 
     public interface IClipboardDataFactory
     {
-        bool CanBuildData(uint format);
+		int Priority { get; }
+
+		bool CanBuildData(uint format);
 
         IClipboardData BuildData(uint format, byte[] rawData);
     }

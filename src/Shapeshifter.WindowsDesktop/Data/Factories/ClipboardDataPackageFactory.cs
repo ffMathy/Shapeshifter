@@ -25,7 +25,7 @@
             IEnumerable<IMemoryUnwrapper> memoryUnwrappers,
             IClipboardHandleFactory clipboardSessionFactory)
         {
-            this.dataFactories = dataFactories;
+            this.dataFactories = dataFactories.OrderBy(x => x.Priority);
             this.memoryUnwrappers = memoryUnwrappers;
             this.clipboardSessionFactory = clipboardSessionFactory;
         }
