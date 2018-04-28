@@ -10,13 +10,19 @@ $.getJSON("https://api.github.com/repos/ffMathy/Shapeshifter/releases/latest").d
   $("#download-size").text(sizeInMegabytes + " MB");
     
   $("#download-version").text(version);
-
-  $("#screenshot").click(() => {
-    window.location.href = "https://github.com/ffMathy/Shapeshifter/raw/master/assets/screenshots/blue.PNG"; 
-    return void 0;
-  })
 });
 
 $.getJSON("https://shapeshifter.azurewebsites.net/api/patreon/supporters").done(function(json) {
   console.log(json);
 });
+
+(function() {
+  var currentColorIndex = 0;
+  var changeColorCallback = function() {
+    var colors = ["red", "blue", "green", "purple"];
+    var currentColor = colors[currentColorIndex++ % colors.length];
+    $("#screenshot").css("background-image", "url(https://github.com/ffMathy/Shapeshifter/raw/master/assets/screenshots/" + currentColor + ".PNG)");
+  };
+  setInterval(changeColorCallback, 3000);
+  changeColorCallback();
+})();

@@ -33,7 +33,6 @@ body, html {
 }
 
 .screenshot {
-    background-image: url(https://github.com/ffMathy/Shapeshifter/raw/master/assets/screenshots/blue.PNG);
     background-size: cover;
     background-repeat: no-repeat;
 
@@ -41,8 +40,6 @@ body, html {
     min-height: 300px;
 
     margin-top: 7vh;
-    
-    cursor: pointer;
 }
 
 header h1 {
