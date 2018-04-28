@@ -72,7 +72,11 @@ namespace Shapeshifter.WindowsDesktop.Controls
 		}
 
 		string InsertStringAtLocation(string origin, int index, string textToInsert) {
-			return origin.Substring(0, index) + textToInsert + origin.Substring(index + textToInsert.Length);
+			var text = origin.Substring(0, index) + textToInsert;
+			if(index + textToInsert.Length < origin.Length)
+				text += origin.Substring(index + textToInsert.Length);
+
+			return text;
 		}
 
 		bool IsTextAllowed(string text)
