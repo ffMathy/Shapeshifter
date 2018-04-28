@@ -35,7 +35,8 @@ namespace Shapeshifter.Website.Controllers
 				user.Id,
 				user.Attributes.FullName,
 				Amount = pledge.Attributes.AmountCents / 100.0,
-				user.Attributes.ImageUrl
+				user.Attributes.ImageUrl,
+				user.Attributes.Url
 			});
 		}
 

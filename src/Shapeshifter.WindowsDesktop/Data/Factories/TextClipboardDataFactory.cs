@@ -10,6 +10,7 @@
 	using Native;
 	using RtfPipe;
 	using RtfPipe.Converter.Text;
+	using RtfPipe.Support;
 	using Services.Clipboard.Interfaces;
 	using Shapeshifter.WindowsDesktop.Native.Interfaces;
 
@@ -72,15 +73,15 @@
 					return Encoding.Unicode.GetString(data);
 
 				default:
+					var text = Encoding.UTF8.GetString(data);
 					switch (clipboardNativeApi.GetClipboardFormatName(format))
 					{
 						case RichTextFormat:
 							return ConvertHtmlToText(
-								ConvertRtfToHtml(Encoding.Default.GetString(data)));
+								ConvertRtfToHtml(text));
 
 						case HtmlFormat:
-							return ConvertHtmlToText(
-								Encoding.UTF8.GetString(data));
+							return ConvertHtmlToText(text);
 
 						default:
 							throw new InvalidOperationException("Unknown format.");
@@ -101,6 +102,10 @@
 
 		static string ConvertRtfToHtml(string rtfCode)
 		{
+			const string missingVersionString = @"{\rtf\";
+			if (rtfCode.StartsWith(missingVersionString))
+				rtfCode = @"{\rtf1\" + rtfCode.Substring(missingVersionString.Length);
+
 			return Rtf.ToHtml(rtfCode);
 		}
 

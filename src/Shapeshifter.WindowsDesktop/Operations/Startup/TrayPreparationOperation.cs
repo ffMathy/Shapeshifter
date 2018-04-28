@@ -50,10 +50,8 @@
 				new[]
 				{
 					new MenuItem(
-						"Show log file",
-						(sender, e) => processManager.LaunchFile(
-							FileManager.GetFullPathFromTemporaryPath(
-								"Shapeshifter.log"))),
+						"Show log files",
+						(sender, e) => processManager.LaunchFile("explorer", "\"" + FileManager.GetFullPathFromTemporaryPath() + "\"")),
 					new MenuItem(
 						"Search for updates",
 						(sender, e) => {

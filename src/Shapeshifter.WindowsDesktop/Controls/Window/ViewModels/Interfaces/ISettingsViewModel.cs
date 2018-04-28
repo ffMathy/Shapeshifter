@@ -11,8 +11,6 @@
 
         int PasteDurationBeforeUserInterfaceShowsInMilliseconds { get; set; }
 
-        int MaximumAmountOfItemsInClipboard { get; set; }
-
         string HotkeyString { get; }
 
         void OnReceiveKeyDown(Key key);

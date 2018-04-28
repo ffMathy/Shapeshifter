@@ -276,16 +276,18 @@
 			var isolatedFolderPath = GetIsolatedPathRoot();
 
 			var finalPath = path == null
-								? isolatedFolderPath
-								: Path.Combine(isolatedFolderPath, path);
+				? isolatedFolderPath
+				: Path.Combine(isolatedFolderPath, path);
 			return finalPath;
 		}
 
-		public static string GetFullPathFromTemporaryPath(string path)
+		public static string GetFullPathFromTemporaryPath(string path = null)
 		{
 			var isolatedFolderPath = PrepareTemporaryFolder();
 
-			var finalPath = Path.Combine(isolatedFolderPath, path);
+			var finalPath = path == null
+				? isolatedFolderPath
+				: Path.Combine(isolatedFolderPath, path);
 			return finalPath;
 		}
 

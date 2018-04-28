@@ -55,53 +55,41 @@
           <div class="d-flex flex-column flex-fill screenshot shadow-lg p-3 mb-5 bg-white rounded" id="screenshot">
           </div>
         </div>
-        <!--<div class="d-flex flex-row justify-content-around">
+        <div class="d-flex flex-row justify-content-around">
           <section class="d-flex flex-column statistics">
-            <div class="d-flex flex-row">
-              <div class="d-flex flex-column">
-                <h2>By the numbers</h2>
-              </div>
+            <div class="d-flex flex-row justify-content-center">
+              <h2>Keeping Shapeshifter alive</h2>
             </div>
             <div class="d-flex flex-row">
               <div class="d-flex flex-column pl-2 pr-2">
-                <div class="card">
+                <div class="card-group shadow-sm">
+                  <div class="card">
                     <img class="card-img-top patreon" src="https://c5.patreon.com/external/logo/downloads_wordmark_white_on_coral.png">
                     <div class="card-body">
                       <h5 class="card-title">Patreon</h5>
-                      <p class="card-text">Our patrons on Patreon keep Shapeshifter alive by funding it.</p>
+                      <p class="card-text">Our patrons on Patreon keep Shapeshifter alive, get exclusive features and speed up its development up by funding it monthly.</p>
                       <ul>
-                        <li>$17/mo pledged</li>
-                        <li>$45/mo goal</li>
+                        <li><b id="total-amount">$0/mo</b> reached</li>
+                        <li><b id="goal">$0/mo</b> goal</li>
                       </ul>
                       <div class="progress big">
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: 35%">35%</div>
+                        <div id="funding-progress" class="progress-bar bg-warning" role="progressbar"></div>
                       </div>
                       <div class="mt-4">
-                        <a href="#" class="btn btn-primary">Become a patron</a>
+                        <a href="#" class="btn btn-primary">Support us on Patreon</a>
                       </div>
                     </div>
                   </div>
-              </div>
-              <div class="d-flex flex-column pl-2 pr-2">
-                <div class="card">
-                    <img class="card-img-top github" src="https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png">
-                    <div class="card-body">
-                      <h5 class="card-title">GitHub</h5>
-                      <p class="card-text">All of our code base lives here, even this website!</p>
-                      <ul>
-                        <li>3 contributors</li>
-                        <li>120 lines of code</li>
-                        <li>3 open issues</li>
-                      </ul>
-                      <div class="mt-4">
-                        <a href="#" class="btn btn-primary">Sources</a>
-                        <a href="#" class="btn btn-primary">Roadmap</a>
-                        <a href="#" class="btn btn-primary">Wiki</a>
-                      </div>
+                  <div class="card patrons">
+                    <div class="card-header">
+                      Top patrons
                     </div>
+                    <ul id="patrons" class="list-group list-group-flush">
+                    </ul>
                   </div>
+                </div>
               </div>
-            </div>-->
+            </div>
           </section>
         </div>
       </main>

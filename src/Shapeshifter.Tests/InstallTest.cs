@@ -84,7 +84,7 @@ namespace Shapeshifter.WindowsDesktop
 					Thread.Sleep(1000);
 				}
 
-				var logFilePath = FileManager.GetFullPathFromTemporaryPath("Shapeshifter.log");
+				var logFilePath = FileManager.GetFullPathFromTemporaryPath($"Shapeshifter{DateTime.Now:yyyyMMdd}.log");
 				File.Copy(logFilePath, "Log.txt");
 
 				var logOutput = File.ReadAllLines("Log.txt");

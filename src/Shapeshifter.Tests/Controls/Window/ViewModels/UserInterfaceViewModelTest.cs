@@ -337,10 +337,6 @@
         [TestMethod]
         public void ControlAddedInsertsElement()
         {
-            Container.Resolve<ISettingsViewModel>()
-                .MaximumAmountOfItemsInClipboard
-                .Returns(8);
-
             var fakeUserInterfaceMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
 
             var fakePackage = Substitute.For<IClipboardDataControlPackage>();

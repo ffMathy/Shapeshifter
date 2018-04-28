@@ -10,13 +10,63 @@ $.getJSON("https://api.github.com/repos/ffMathy/Shapeshifter/releases/latest").d
   $("#download-size").text(sizeInMegabytes + " MB");
     
   $("#download-version").text(version);
-
-  $("#screenshot").click(() => {
-    window.location.href = "https://github.com/ffMathy/Shapeshifter/raw/master/assets/screenshots/blue.PNG"; 
-    return void 0;
-  })
 });
 
 $.getJSON("https://shapeshifter.azurewebsites.net/api/patreon/supporters").done(function(json) {
-  console.log(json);
+  var goal = 100;
+
+  var supporters = json.sort((a, b) => b.amount - a.amount);
+  var totalAmount = 0;
+  for(var supporter of supporters) {
+    totalAmount += supporter.amount;
+
+    var profilePictureElement = $("<img />");
+    profilePictureElement.addClass("float-right");
+    profilePictureElement.prop("src", supporter.imageUrl);
+
+    var nameElement = $("<span />");
+    nameElement.text(supporter.fullName);
+
+    var pledgeAmountElement = $("<span />");
+    pledgeAmountElement.addClass("amount");
+    pledgeAmountElement.text("$" + supporter.amount + "/mo");
+
+    var nameContainerElement = $("<a />");
+    nameContainerElement.attr("href", supporter.url);
+    nameContainerElement.attr("target", "_blank");
+    nameContainerElement.addClass("float-left");
+    nameContainerElement.append(pledgeAmountElement);
+    nameContainerElement.append(nameElement);
+
+    var clearfix = $("<div />");
+    clearfix.addClass("clearfix");
+
+    var listElement = $("<li />");
+    listElement.addClass("list-group-item");
+    listElement.addClass("patron");
+    listElement.append(nameContainerElement);
+    listElement.append(profilePictureElement);
+    listElement.append(clearfix);
+
+    $("#patrons").append(listElement);
+  }
+
+  var percentageOfGoal = (100 / goal * totalAmount).toFixed(0);
+  $("#funding-progress")
+    .css("width", percentageOfGoal + "%")
+    .text(percentageOfGoal + "%");
+
+  $("#total-amount").text("$" + totalAmount + "/mo");
+  $("#goal").text("$" + goal + "/mo");
 });
+
+(function() {
+  var currentColorIndex = 0;
+  var changeColorCallback = function() {
+    var colors = ["red", "blue", "green", "purple"];
+    var currentColor = colors[currentColorIndex++ % colors.length];
+    $("#screenshot").css("background-image", "url(https://github.com/ffMathy/Shapeshifter/raw/master/assets/screenshots/" + currentColor + ".PNG)");
+  };
+  setInterval(changeColorCallback, 3000);
+  changeColorCallback();
+})();
