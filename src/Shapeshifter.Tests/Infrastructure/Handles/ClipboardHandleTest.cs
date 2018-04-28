@@ -1,8 +1,8 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Handles
 {
     using System;
-
-    using Autofac;
+	using System.Linq;
+	using Autofac;
 
     using Controls.Window.Interfaces;
 
@@ -13,8 +13,9 @@
     using Native.Interfaces;
 
     using NSubstitute;
+	using Shapeshifter.WindowsDesktop.Data.Factories.Interfaces;
 
-    [TestClass]
+	[TestClass]
     public class ClipboardHandleTest: UnitTestFor<IClipboardHandle>
     {
         [TestMethod]
@@ -38,10 +39,12 @@
         [TestMethod]
         public void GetClipboardFormatsForwardsCallToNativeApi()
         {
+			ExcludeFakeFor<IClipboardFormatFactory>();
+
             var fakeFormats = new uint[]
             {
                 1337,
-                1338
+				1338
             };
             
             Container.Resolve<IMainWindowHandleContainer>()
@@ -54,9 +57,13 @@
 
             var handle = Container.Resolve<IClipboardHandle>();
 
-            var formats = handle.GetClipboardFormats();
-            Assert.AreSame(fakeFormats, formats);
-        }
+            var formats = handle
+				.GetClipboardFormats()
+				.Select(x => x.Number)
+				.ToArray();
+            Assert.AreEqual(fakeFormats[0], formats[0]);
+            Assert.AreEqual(fakeFormats[1], formats[1]);
+		}
 
         [TestMethod]
         public void SetClipboardDataForwardsCallToNativeApi()
