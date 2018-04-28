@@ -28,10 +28,14 @@ namespace Shapeshifter.Website.Controllers
 		var users = pledges.Included.ToObject<User[]>();
 		foreach (var pledge in pledges.Data) {
 			var user = users.Single(x => x.Id == pledge.Relationships.Patron.Data.Id);
+			if(user.Attributes.IsDeleted || user.Attributes.IsSuspended || user.Attributes.IsNuked)
+				continue;
+
 			supporters.Add(new {
 				user.Id,
 				user.Attributes.FullName,
-				Amount = pledge.Attributes.AmountCents / 100.0
+				Amount = pledge.Attributes.AmountCents / 100.0,
+				user.Attributes.ImageUrl
 			});
 		}
 
