@@ -6,8 +6,9 @@
 		"Techie stuff:": ["technical debt"]
     },
 	"ignoreIssuesWith": [
-        "wont fix",
+        "won't fix",
         "duplicate",
-		"discussion"
+		"discussion",
+		"needs repro"
     ]
 }

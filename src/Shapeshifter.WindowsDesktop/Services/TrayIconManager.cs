@@ -17,7 +17,7 @@
     {
         readonly NotifyIcon trayIcon;
 
-        public event EventHandler<TrayIconClickedEventArgument> IconClicked;
+        public event EventHandler<TrayIconClickedEventArgument> IconDoubleClicked;
 
         public TrayIconManager(
 			ILogger logger)
@@ -29,8 +29,8 @@
             string boldMenuItemTitle,
             IReadOnlyCollection<MenuItem> contextMenuItems)
         {
-            trayIcon.Click += (sender, e) =>
-                              OnIconClicked(new TrayIconClickedEventArgument());
+            trayIcon.DoubleClick += (sender, e) =>
+                              OnIconDoubleClicked(new TrayIconClickedEventArgument());
 
             var contextMenu = new ContextMenu();
             contextMenu.MenuItems.Add(
@@ -49,9 +49,9 @@
             trayIcon.Visible = true;
         }
 
-        protected virtual void OnIconClicked(TrayIconClickedEventArgument e)
+        protected virtual void OnIconDoubleClicked(TrayIconClickedEventArgument e)
         {
-            IconClicked?.Invoke(this, e);
+            IconDoubleClicked?.Invoke(this, e);
         }
 
         public void Dispose()
