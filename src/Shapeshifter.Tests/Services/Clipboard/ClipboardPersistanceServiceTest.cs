@@ -94,6 +94,9 @@
 			ExcludeFakeFor<IClipboardDataPackageFactory>();
 			ExcludeFakeFor<IFileManager>();
 
+			var clipboardFormat1337 = CreateClipboardFormatFromNumber(1337u);
+			var clipboardFormat1338 = CreateClipboardFormatFromNumber(1338u);
+
 			Container.Resolve<IClipboardDataFactory>()
 			 .With(
 				 x => {
@@ -121,7 +124,7 @@
 			var fakeData1 = Substitute.For<IClipboardData>()
 									  .With(
 										  x => {
-											  x.RawFormat.Returns(CreateClipboardFormatFromNumber(1337u));
+											  x.RawFormat.Returns(clipboardFormat1337);
 											  x.RawData.Returns(
 												  new byte[]
 												  {
@@ -132,7 +135,7 @@
 			var fakeData2 = Substitute.For<IClipboardData>()
 									  .With(
 										  x => {
-											  x.RawFormat.Returns(CreateClipboardFormatFromNumber(1337u));
+											  x.RawFormat.Returns(clipboardFormat1338);
 											  x.RawData.Returns(
 												  new byte[]
 												  {
