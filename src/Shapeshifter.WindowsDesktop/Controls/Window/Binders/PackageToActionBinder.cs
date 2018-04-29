@@ -1,93 +1,107 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Window.Binders
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Collections.Specialized;
-    using System.Threading.Tasks;
+	using System;
+	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
+	using System.Collections.Specialized;
+	using System.Threading;
+	using System.Threading.Tasks;
 
-    using Data.Interfaces;
+	using Data.Interfaces;
 
-    using Interfaces;
+	using Interfaces;
 
-    using ViewModels.Interfaces;
+	using ViewModels.Interfaces;
 
-    class PackageToActionBinder: IAsyncListDictionaryBinder<IClipboardDataControlPackage, IActionViewModel>
-    {
-        readonly IDictionary<IClipboardDataControlPackage, ICollection<IActionViewModel>> dictionaryStates;
+	class PackageToActionBinder : IAsyncListDictionaryBinder<IClipboardDataControlPackage, IActionViewModel>
+	{
+		readonly IDictionary<IClipboardDataControlPackage, ICollection<IActionViewModel>> dictionaryStates;
 
-        IClipboardDataControlPackage currentKey;
+		readonly SemaphoreSlim collectionChangedLock;
 
-        ObservableCollection<IActionViewModel> boundDestinationCollection;
+		IClipboardDataControlPackage currentKey;
 
-        Func<IClipboardDataControlPackage, Task<IEnumerable<IActionViewModel>>> currentMappingFunction;
+		ObservableCollection<IActionViewModel> boundDestinationCollection;
 
-        public IActionViewModel Default { get; set; }
+		Func<IClipboardDataControlPackage, Task<IEnumerable<IActionViewModel>>> currentMappingFunction;
 
-        public PackageToActionBinder()
-        {
-            dictionaryStates = new Dictionary<IClipboardDataControlPackage, ICollection<IActionViewModel>>();
-        }
+		public IActionViewModel Default { get; set; }
 
-        public void Bind(
-            ObservableCollection<IClipboardDataControlPackage> sourceCollection,
-            ObservableCollection<IActionViewModel> destinationCollection,
-            Func<IClipboardDataControlPackage, Task<IEnumerable<IActionViewModel>>> mappingFunction)
-        {
-            this.boundDestinationCollection = destinationCollection;
-            this.currentMappingFunction = mappingFunction;
+		public PackageToActionBinder()
+		{
+			dictionaryStates = new Dictionary<IClipboardDataControlPackage, ICollection<IActionViewModel>>();
+			collectionChangedLock = new SemaphoreSlim(1);
+		}
 
-            sourceCollection.CollectionChanged += SourceCollection_CollectionChanged;
-        }
+		public void Bind(
+			ObservableCollection<IClipboardDataControlPackage> sourceCollection,
+			ObservableCollection<IActionViewModel> destinationCollection,
+			Func<IClipboardDataControlPackage, Task<IEnumerable<IActionViewModel>>> mappingFunction)
+		{
+			this.boundDestinationCollection = destinationCollection;
+			this.currentMappingFunction = mappingFunction;
 
-        public void LoadFromKey(IClipboardDataControlPackage key)
-        {
-            boundDestinationCollection.Clear();
-            boundDestinationCollection.Add(Default);
+			sourceCollection.CollectionChanged += SourceCollection_CollectionChanged;
+		}
 
-            this.currentKey = key;
-            foreach (var item in dictionaryStates[key])
-            {
-                boundDestinationCollection.Add(item);
-            }
-        }
+		public void LoadFromKey(IClipboardDataControlPackage key)
+		{
+			boundDestinationCollection.Clear();
+			boundDestinationCollection.Add(Default);
 
-        async void SourceCollection_CollectionChanged(
-            object sender,
-            NotifyCollectionChangedEventArgs e)
-        {
-            if ((e?.NewItems == null) || (e.NewItems.Count <= 0))
-            {
-                return;
-            }
+			this.currentKey = key;
+			foreach (var item in dictionaryStates[key])
+			{
+				boundDestinationCollection.Add(item);
+			}
+		}
 
-            foreach (IClipboardDataControlPackage item in e.NewItems)
-            {
-                PrepareDictionaryStateKey(item);
-                await AddResultsToDictionary(item);
-            }
-        }
+		async void SourceCollection_CollectionChanged(
+			object sender,
+			NotifyCollectionChangedEventArgs e)
+		{
+			await collectionChangedLock.WaitAsync();
 
-        async Task AddResultsToDictionary(IClipboardDataControlPackage item)
-        {
-            var collection = dictionaryStates[item];
-            var results = await currentMappingFunction(item);
-            foreach (var result in results)
-            {
-                collection.Add(result);
-                if (currentKey == item)
-                {
-                    boundDestinationCollection.Add(result);
-                }
-            }
-        }
+			try
+			{
+				if (e?.NewItems == null || e.NewItems.Count <= 0)
+					return;
 
-        void PrepareDictionaryStateKey(IClipboardDataControlPackage item)
-        {
-            if (!dictionaryStates.ContainsKey(item))
-            {
-                dictionaryStates.Add(item, new HashSet<IActionViewModel>());
-            }
-        }
-    }
+				if (e?.OldItems != null && e.OldItems.Count > 0)
+					return;
+
+				foreach (IClipboardDataControlPackage item in e.NewItems)
+				{
+					PrepareDictionaryStateKey(item);
+					await AddResultsToDictionary(item);
+				}
+			}
+			finally
+			{
+				collectionChangedLock.Release();
+			}
+		}
+
+		async Task AddResultsToDictionary(IClipboardDataControlPackage item)
+		{
+			var collection = dictionaryStates[item];
+			var results = await currentMappingFunction(item);
+			foreach (var result in results)
+			{
+				collection.Add(result);
+				if (currentKey == item)
+				{
+					boundDestinationCollection.Add(result);
+				}
+			}
+		}
+
+		void PrepareDictionaryStateKey(IClipboardDataControlPackage item)
+		{
+			if (!dictionaryStates.ContainsKey(item))
+			{
+				dictionaryStates.Add(item, new HashSet<IActionViewModel>());
+			}
+		}
+	}
 }

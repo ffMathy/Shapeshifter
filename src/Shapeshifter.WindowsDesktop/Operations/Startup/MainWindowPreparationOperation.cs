@@ -36,6 +36,7 @@
             this.keyInterceptor = keyInterceptor;
             this.windowMessageHook = windowMessageHook;
 			this.sourceClipboardQuantityOverlay = sourceClipboardQuantityOverlay;
+
 			SetupWindowMessageHook();
         }
 
@@ -59,10 +60,12 @@
 
         void OnMainWindowOnSourceInitialized(object sender, EventArgs e)
         {
-            SetupKeyInterception();
             windowMessageHook.Connect();
             clipboardUserInterfaceInteractionMediator.Connect();
-        }
+			SetupKeyInterception();
+
+			mainWindow.Hide();
+		}
 
         void SetupKeyInterception()
         {

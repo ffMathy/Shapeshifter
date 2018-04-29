@@ -41,19 +41,17 @@
         async Task HandleClipboardUpdateWindowMessage()
         {
 			await threadDeferrer.DeferAsync(200, () => {
+				var clipboardItemIdentifier = clipboardNativeApi.GetClipboardSequenceNumber();
 				if (shouldSkipNext)
 				{
 					logger.Information("Clipboard update message skipped.");
 
+					lastClipboardItemIdentifier = clipboardItemIdentifier;
 					shouldSkipNext = false;
 					return;
 				}
 
-				var clipboardItemIdentifier = clipboardNativeApi.GetClipboardSequenceNumber();
-
-				logger.Information(
-					$"Clipboard update message received with sequence #{clipboardItemIdentifier}.",
-					1);
+				logger.Information($"Clipboard update message received with sequence #{clipboardItemIdentifier}.", clipboardItemIdentifier);
 
 				if (clipboardItemIdentifier == lastClipboardItemIdentifier)
 				{

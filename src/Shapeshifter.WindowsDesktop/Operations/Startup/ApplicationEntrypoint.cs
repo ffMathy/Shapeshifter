@@ -28,6 +28,8 @@
             this.mainWindowPreparationOperation = mainWindowPreparationOperation;
 			this.processManager = processManager;
 			this.logger = logger;
+
+			logger.Verbose("Application entry point initialized.");
 		}
 
         public async Task Start(

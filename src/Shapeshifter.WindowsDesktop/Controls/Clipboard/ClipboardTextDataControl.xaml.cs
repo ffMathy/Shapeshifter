@@ -16,6 +16,13 @@
         public ClipboardTextDataControl()
         {
             InitializeComponent();
-        }
-    }
+		}
+
+		public IClipboardControl Clone()
+		{
+			return new ClipboardTextDataControl() {
+				DataContext = DataContext
+			};
+		}
+	}
 }

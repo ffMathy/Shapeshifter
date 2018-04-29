@@ -79,7 +79,7 @@
                 <ControlTemplate TargetType="{x:Type ListBox}">
                     <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
-                        <ScrollViewer Focusable="False" MaxHeight="1000">
+                        <ScrollViewer Focusable="False">
                             <ItemsPresenter Margin="0,-1,0,-1" />
                         </ScrollViewer>
                     </Border>

@@ -295,6 +295,7 @@
     <Compile Include="Infrastructure\Events\KeyDetectedArgument.cs" />
     <Compile Include="Infrastructure\Events\PastePerformedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\TrayIconDoubleClickedEventArgument.cs" />
+    <Compile Include="Infrastructure\Events\UserInterfaceDataControlAddedEventArgument.cs" />
     <Compile Include="Infrastructure\Events\UserInterfacePaneSwappedEventArgument.cs" />
     <Compile Include="Infrastructure\Handles\Interfaces\IHandle.cs" />
     <Compile Include="Infrastructure\Handles\Interfaces\IIndentationHandle.cs" />

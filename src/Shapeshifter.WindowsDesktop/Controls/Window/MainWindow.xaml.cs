@@ -30,7 +30,6 @@
             this.viewModel = viewModel;
 
             SourceInitialized += MainWindow_SourceInitialized;
-            Activated += MainWindow_Activated;
 
             InitializeComponent();
             SetupViewModel();
@@ -45,12 +44,6 @@
 		}
 
         public HwndSource HandleSource => PresentationSource.FromVisual(this) as HwndSource;
-
-        void MainWindow_Activated(object sender, EventArgs e)
-		{
-			Activated -= MainWindow_Activated;
-            Hide();
-        }
 
         void SetupViewModel()
         {

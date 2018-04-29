@@ -32,7 +32,7 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="2" VerticalAlignment="Top">
-            <ListBox Margin="0,-1,0,0" Style="{StaticResource DefaultListBoxStyle}" SelectedItem="{Binding SelectedElement, Mode=TwoWay}"
+			<ListBox Name="PackageList" ScrollViewer.VerticalScrollBarVisibility="Hidden" MaxHeight="{Binding ActiveScreen.WorkingArea.Height}" Margin="0,-1,0,0" Style="{StaticResource DefaultListBoxStyle}" SelectedItem="{Binding SelectedElement, Mode=TwoWay}"
                      ItemsSource="{Binding Elements}">
                 <ListBox.Resources>
                     <Style TargetType="ListBoxItem" BasedOn="{StaticResource ClipboardDataControlStyle}" />

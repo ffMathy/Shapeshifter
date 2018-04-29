@@ -91,22 +91,13 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 
 		void SetupEvents()
 		{
-			mainViewModel.UserInterfaceViewModel.Elements.CollectionChanged += Elements_CollectionChanged;
+			mainViewModel.UserInterfaceViewModel.UserInterfaceDataControlAdded += UserInterfaceViewModel_UserInterfaceDataControlAdded;
 		}
 
-		async void Elements_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		async void UserInterfaceViewModel_UserInterfaceDataControlAdded(object sender, UserInterfaceDataControlAddedEventArgument e)
 		{
-			if(e.NewItems == null || e.NewItems.Count == 0)
-				return;
-
 			ActiveScreen = screenManager.GetActiveScreen();
-
-			Source = e.NewItems
-				.OfType<IClipboardDataControlPackage>()
-				.First()
-				.Data
-				.Source;
-
+			Source = e.Package.Data.Source;
 			Count = mainViewModel
 				.UserInterfaceViewModel
 				.Elements.Count(x => x.Data.Source.Text == Source.Text);
@@ -125,7 +116,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 
 		public void Dispose()
 		{
-			mainViewModel.UserInterfaceViewModel.Elements.CollectionChanged -= Elements_CollectionChanged;
+			mainViewModel.UserInterfaceViewModel.UserInterfaceDataControlAdded -= UserInterfaceViewModel_UserInterfaceDataControlAdded;
 		}
 	}
 }

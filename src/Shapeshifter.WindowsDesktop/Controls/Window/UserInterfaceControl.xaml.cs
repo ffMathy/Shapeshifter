@@ -20,17 +20,28 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window
 		public UserInterfaceControl()
         {
             InitializeComponent();
+
 			VisualStateManager.GoToElementState(this, "InPackagesList", true);
+		}
+
+		private void PackageList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			PackageList.UpdateLayout();
+			if (PackageList.SelectedItem != null)
+				PackageList.ScrollIntoView(PackageList.SelectedItem);
 		}
 
 		public void Dispose()
 		{
 			viewModel.UserInterfacePaneSwapped -= ViewModel_UserInterfacePaneSwapped;
+			PackageList.SelectionChanged -= PackageList_SelectionChanged;
 		}
 
 		public void Initialize(IUserInterfaceViewModel viewModel)
 		{
 			viewModel.UserInterfacePaneSwapped += ViewModel_UserInterfacePaneSwapped;
+			PackageList.SelectionChanged += PackageList_SelectionChanged;
+
 			DataContext = viewModel;
 
 			this.viewModel = viewModel;

@@ -40,9 +40,7 @@
         async void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(viewModel.SelectedElement))
-            {
                 await OnSelectedItemChangedAsync();
-            }
         }
 
         async Task OnSelectedItemChangedAsync()
