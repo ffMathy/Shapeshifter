@@ -71,7 +71,7 @@ after_deploy:
 - cmd: >
     npm install github-release-notes -g
 
-    gren release --token=%gren_token% --override
+    gren release --token=%gren_token% --override --prerelease
 
     cd build\website
 
