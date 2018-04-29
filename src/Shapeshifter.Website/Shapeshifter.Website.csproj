@@ -50,5 +50,8 @@
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shapeshifter.Website.Models\Shapeshifter.Website.Models.csproj" />
+  </ItemGroup>
 
 </Project>
