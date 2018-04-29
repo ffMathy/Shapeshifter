@@ -20,7 +20,7 @@
 
 		readonly IMainThreadInvoker mainThreadInvoker;
 
-		public event EventHandler<TrayIconClickedEventArgument> IconDoubleClicked;
+		public event EventHandler<TrayIconDoubleClickedEventArgument> IconDoubleClicked;
 
         public TrayIconManager(
 			IMainThreadInvoker mainThreadInvoker)
@@ -34,11 +34,11 @@
             IReadOnlyCollection<MenuItem> contextMenuItems)
         {
             trayIcon.DoubleClick += (sender, e) =>
-                              OnIconDoubleClicked(new TrayIconClickedEventArgument());
+                              OnIconDoubleClicked(new TrayIconDoubleClickedEventArgument());
 
             var contextMenu = new ContextMenu();
             contextMenu.MenuItems.Add(
-                new MenuItem(boldMenuItemTitle)
+                new MenuItem(boldMenuItemTitle, (sender, e) => OnIconDoubleClicked(new TrayIconDoubleClickedEventArgument()))
                 {
                     DefaultItem = true,
                     BarBreak = true
@@ -53,7 +53,7 @@
             trayIcon.Visible = true;
         }
 
-        protected virtual void OnIconDoubleClicked(TrayIconClickedEventArgument e)
+        protected virtual void OnIconDoubleClicked(TrayIconDoubleClickedEventArgument e)
         {
             IconDoubleClicked?.Invoke(this, e);
         }
