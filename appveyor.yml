@@ -58,6 +58,7 @@ artifacts:
 deploy:
 - provider: GitHub
   release: shapeshifter-v$(appveyor_build_version)
+  description: 'Changelog is still being developed. It will be available in a few minutes.'
   artifact: Application
   prerelease: true
   auth_token:

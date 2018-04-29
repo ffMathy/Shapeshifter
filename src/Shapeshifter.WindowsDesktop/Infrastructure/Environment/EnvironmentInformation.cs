@@ -1,7 +1,8 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Environment
 {
     using System;
-    using System.Diagnostics;
+	using System.ComponentModel;
+	using System.Diagnostics;
     using System.Net.NetworkInformation;
     using System.Windows;
 
@@ -13,7 +14,7 @@
 
         public EnvironmentInformation()
         {
-            isInDesignTime = !(Application.Current is App);
+            isInDesignTime = DesignerProperties.GetIsInDesignMode(new DependencyObject());
         }
 
         public EnvironmentInformation(
