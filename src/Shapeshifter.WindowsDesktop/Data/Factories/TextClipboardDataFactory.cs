@@ -29,6 +29,9 @@
 			}
 
 			var text = GetProcessedTextFromRawData(format, data);
+			if(text == null)
+				return null;
+
 			return new ClipboardTextData() {
 				Text = text.Trim(),
 				RawData = data,
@@ -80,6 +83,9 @@
 
 		static string ConvertHtmlToText(string html)
 		{
+			if(html == null)
+				return null;
+
 			if(!html.Contains("<"))
 				return html;
 
@@ -91,6 +97,9 @@
 
 		static string ConvertRtfToHtml(string rtfCode)
 		{
+			if(!rtfCode.StartsWith(@"{\rtf"))
+				return null;
+
 			const string missingVersionString = @"{\rtf\";
 			if (rtfCode.StartsWith(missingVersionString))
 				rtfCode = @"{\rtf1\" + rtfCode.Substring(missingVersionString.Length);

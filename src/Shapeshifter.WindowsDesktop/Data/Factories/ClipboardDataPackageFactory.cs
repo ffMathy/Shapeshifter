@@ -13,12 +13,14 @@
 
 	using Unwrappers.Interfaces;
 	using Shapeshifter.WindowsDesktop.Services.Clipboard.Interfaces;
+	using Serilog;
 
 	class ClipboardDataPackageFactory : IClipboardDataPackageFactory
 	{
 		readonly IClipboardHandleFactory clipboardSessionFactory;
 		readonly IDataSourceService dataSourceService;
 		readonly IGeneralUnwrapper generalUnwrapper;
+		readonly ILogger logger;
 		readonly ICustomClipboardDataFactory customClipboardDataFactory;
 
 		readonly IEnumerable<IMemoryUnwrapper> allMemoryUnwrappers;
@@ -29,6 +31,7 @@
 			IEnumerable<IMemoryUnwrapper> allMemoryUnwrappers,
 			ICustomClipboardDataFactory customClipboardDataFactory,
 			IGeneralUnwrapper generalUnwrapper,
+			ILogger logger,
 			IClipboardHandleFactory clipboardSessionFactory,
 			IDataSourceService dataSourceService)
 		{
@@ -36,6 +39,7 @@
 			this.allMemoryUnwrappers = allMemoryUnwrappers;
 			this.customClipboardDataFactory = customClipboardDataFactory;
 			this.generalUnwrapper = generalUnwrapper;
+			this.logger = logger;
 			this.clipboardSessionFactory = clipboardSessionFactory;
 			this.dataSourceService = dataSourceService;
 		}
@@ -103,6 +107,11 @@
 			IClipboardFormat format)
 		{
 			var unwrapper = FindCapableUnwrapperFromFormat(format);
+			if(unwrapper == null)
+				return;
+
+			logger.Information("Unwrapping format {format} using {unwrapper}.", format, unwrapper.GetType().Name);
+
 			var rawData = unwrapper.UnwrapStructure(format);
 			if (rawData == null)
 				return;
@@ -115,7 +124,7 @@
 			var unwrapper = allMemoryUnwrappers
 				.Where(x => x.GetType() != generalUnwrapper.GetType())
 				.FirstOrDefault(x => x.CanUnwrap(format));
-			if (unwrapper == null)
+			if (unwrapper == null && generalUnwrapper.CanUnwrap(format))
 				unwrapper = generalUnwrapper;
 
 			return unwrapper;
@@ -127,6 +136,8 @@
 			byte[] rawData)
 		{
 			var factory = FindCapableFactoryFromFormat(format);
+			logger.Information("Generating clipboard data object for format {format} using {factory}.", format, factory.GetType().Name);
+
 			var clipboardData = factory.BuildData(format, rawData);
 			if (clipboardData != null)
 				package.AddData(clipboardData);

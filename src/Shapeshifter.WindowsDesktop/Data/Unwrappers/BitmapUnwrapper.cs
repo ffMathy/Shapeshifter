@@ -47,27 +47,41 @@
 
 		public bool CanUnwrap(IClipboardFormat format)
 		{
-			return (format.Number == ClipboardNativeApi.CF_DIBV5);
+			return 
+				format.Number == ClipboardNativeApi.CF_DIBV5 ||
+				format.Number == ClipboardNativeApi.CF_DIB ||
+				format.Number == ClipboardNativeApi.CF_BITMAP;
 		}
 
 		public byte[] UnwrapStructure(IClipboardFormat format)
 		{
-			var hBitmap = clipboardNativeApi.GetClipboardData(ClipboardNativeApi.CF_DIBV5);
-			var ptr = generalNativeApi.GlobalLock(hBitmap);
+			if(format.Number != ClipboardNativeApi.CF_DIBV5)
+				return null;
 
-			return GetAllBytesFromBitmapHeader(ptr);
+			var hBitmap = clipboardNativeApi.GetClipboardData(ClipboardNativeApi.CF_DIBV5);
+
+			var ptr = generalNativeApi.GlobalLock(hBitmap);
+			try
+			{
+				return GetAllBytesFromBitmapHeader(ptr);
+			}
+			finally
+			{
+				imageNativeApi.DeleteObject(ptr);
+			}
 		}
 
-		static byte[] GetAllBytesFromBitmapHeader(IntPtr hBitmap)
+		byte[] GetAllBytesFromBitmapHeader(IntPtr hBitmap)
 		{
 			var bmi = (BITMAPV5HEADER)Marshal.PtrToStructure(hBitmap, typeof(BITMAPV5HEADER));
-			
+
 			var infoHeaderSize = bmi.bV5Size;
-			var fileSize = (int)(infoHeaderSize + bmi.bV5SizeImage);
+			var imageSize = imageNativeApi.GetImageSizeFromBitmapHeader(bmi);
+			var fileSize = (int)(infoHeaderSize + imageSize);
 
 			var dibBuffer = new byte[fileSize];
 			Marshal.Copy(hBitmap, dibBuffer, 0, fileSize);
-			
+
 			using (var bitmapStream = new MemoryStream())
 			{
 				bitmapStream.Write(dibBuffer, 0, dibBuffer.Length);

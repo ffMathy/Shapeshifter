@@ -199,8 +199,37 @@
             var lastRetrievedFormat = 0u;
             while (0 != (lastRetrievedFormat = EnumClipboardFormats(lastRetrievedFormat)))
             {
-                formats.Add(lastRetrievedFormat);
+				switch(lastRetrievedFormat) {
+					case CF_BITMAP:
+						formats.Add(CF_DIB);
+						formats.Add(CF_DIBV5);
+						break;
+					
+					case CF_DIB:
+						formats.Add(CF_BITMAP);
+						formats.Add(CF_PALETTE);
+						formats.Add(CF_DIBV5);
+						break;
+
+					case CF_DIBV5:
+						formats.Add(CF_BITMAP);
+						formats.Add(CF_DIB);
+						formats.Add(CF_PALETTE);
+						break;
+
+					case CF_ENHMETAFILE:
+						formats.Add(CF_METAFILEPICT);
+						break;
+
+					case CF_METAFILEPICT:
+						formats.Add(CF_ENHMETAFILE);
+						break;
+				}
+
+				if(!formats.Contains(lastRetrievedFormat))
+					formats.Add(lastRetrievedFormat);
             }
+
             return formats;
         }
 		

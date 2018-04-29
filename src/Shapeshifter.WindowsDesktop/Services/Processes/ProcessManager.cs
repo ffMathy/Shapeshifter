@@ -97,6 +97,11 @@
 			{
 				return null;
 			}
+			catch (InvalidOperationException)
+			{
+				//process already closed.
+				return null;
+			}
 		}
 
 		void CloseProcess(Process process)
@@ -104,17 +109,17 @@
 			try
 			{
 				if (process.HasExited)
-				{
 					return;
-				}
 
 				if (CloseMainWindow(process))
-				{
 					return;
-				}
 
 				logger.Information("Killing process #{processId}.", process.Id);
 				process.Kill();
+			}
+			catch (InvalidOperationException)
+			{
+				//process already closed.
 			}
 			finally
 			{

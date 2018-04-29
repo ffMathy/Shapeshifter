@@ -12,6 +12,8 @@ environment:
     secure: c3EVYJ14R2JBDQgk6quSdHkcFMjtN2msgn2F4SRFjqdKVvRI4qkrU58ftCsZMB0g
   gren_token:
     secure: NdaCVjPIdd6UghkTaEJ1oNbh0ukOoPKMC4K+B4XnrGG1xEcYSIw63+25O+pTQA3T
+  issue_reporter_token:
+    secure: QfLm+3QNQHOvSlRkiScVRSDZ3a7cL4JfiqTDK2DsV3Pl+M/L3drNQrAkGhhg4e+r
 pull_requests:
   do_not_increment_build_number: false
 skip_tags: true
@@ -71,13 +73,13 @@ after_deploy:
 - cmd: >
     npm install github-release-notes -g
 
-    gren release --token=%gren_token% --override
+    gren release --token=%gren_token% --override --prerelease
 
     cd build\website
 
     del secrets.json /F
 
-    echo { "patreon": { "clientId": "%patreon_client_id%", "clientSecret": "%patreon_client_secret%", "creatorsAccessToken": "%patreon_creators_access_token%", "creatorsRefreshToken": "%patreon_creators_refresh_token%" } }>> secrets.json
+    echo { "patreon": { "clientId": "%patreon_client_id%", "clientSecret": "%patreon_client_secret%", "creatorsAccessToken": "%patreon_creators_access_token%", "creatorsRefreshToken": "%patreon_creators_refresh_token%" }, "github": { "token": "%issue_reporter_token%" } }>> secrets.json
 
     7z a Website.zip *
 

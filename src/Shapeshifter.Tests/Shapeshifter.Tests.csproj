@@ -112,7 +112,6 @@
     <Compile Include="Controls\Clipboard\Factories\ClipboardFileDataControlFactoryTest.cs" />
     <Compile Include="Controls\Clipboard\Factories\ClipboardFileCollectionDataControlFactoryTest.cs" />
     <Compile Include="Services\Clipboard\ClipboardInjectionServiceTest.cs" />
-    <Compile Include="Data\Unwrappers\GeneralUnwrapperTest.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardFileCollectionDataViewModelTest.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardFileDataViewModelTest.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\ClipboardTextDataViewModelTest.cs" />
