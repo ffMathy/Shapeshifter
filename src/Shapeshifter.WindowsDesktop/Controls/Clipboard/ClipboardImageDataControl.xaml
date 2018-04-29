@@ -34,7 +34,8 @@
         </Grid>
 
 		<Image Margin="-1" Height="92" Style="{DynamicResource ClipboardImageDataControlImageStyle}"
-               Source="{Binding Data.Image, Converter={converters:ByteArrayToImageSourceConverter}}">
+               Source="{Binding Data.Image, Converter={converters:ByteArrayToImageSourceConverter}}"
+			   RenderOptions.BitmapScalingMode="HighQuality">
             <Image.OpacityMask>
                 <DrawingBrush Stretch="None" AlignmentX="Right" AlignmentY="Top">
                     <DrawingBrush.RelativeTransform>
