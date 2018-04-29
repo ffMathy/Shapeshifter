@@ -75,11 +75,7 @@ namespace Shapeshifter.Website.Controllers
 						});
 				}
 
-				return existingIssue.Url;
-			}
-			catch (Exception ex)
-			{
-				return ex.ToString();
+				return existingIssue.HtmlUrl;
 			} finally {
 				_reportLock.Release();
 			}
@@ -91,35 +87,35 @@ namespace Shapeshifter.Website.Controllers
 
 			body += $"<b>Version:</b> {issueReport.Version}\n\n";
 
-			if (issueReport.OffendingLogLine != null)
-			{
-				body += $"<b>Offending log line</b>\n";
-				foreach (var line in issueReport.OffendingLogLine.Split('\n', '\r'))
-				{
-					if (string.IsNullOrEmpty(line.Trim()))
-						continue;
-
-					body += $">> {line}\n";
-				}
-			}
-
 			if (issueReport.Exception != null)
 			{
 				body += "<h1>Exception</h1>\n";
 				body += $"<b>Type:</b> {issueReport.Exception.Name}\n\n";
 				body += $"<b>Offending class:</b> {issueReport.Exception.Context}\n\n";
-				body += $"```\n{issueReport.Exception.StackTrace}\n```";
+				body += $"```\n{issueReport.Exception.StackTrace}\n```\n\n";
 			}
 
 			if (issueReport.RecentLogLines != null && issueReport.RecentLogLines.Length > 0)
 			{
 				body += "<h1>Log</h1>\n";
+				if (issueReport.OffendingLogLine != null)
+				{
+					foreach (var line in issueReport.OffendingLogLine.Split('\n', '\r'))
+					{
+						if (string.IsNullOrEmpty(line.Trim()))
+							continue;
+
+						body += $"> {line}\n";
+					}
+					body += "\n";
+				}
+
 				foreach (var line in issueReport.RecentLogLines)
 				{
 					if (string.IsNullOrEmpty(line.Trim()))
 						continue;
 
-					body += $">> {line}\n";
+					body += $"> {line}\n";
 				}
 			}
 
