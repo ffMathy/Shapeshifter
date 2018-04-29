@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Octokit;
@@ -15,6 +16,12 @@ namespace Shapeshifter.Website.Controllers
 	{
 		private readonly IGitHubClient _client;
 
+		private static SemaphoreSlim _reportLock;
+
+		static GitHubApiController() {
+			_reportLock = new SemaphoreSlim(1);
+		}
+
 		public GitHubApiController(
 		  IConfigurationReader configurationReader)
 		{
@@ -27,44 +34,55 @@ namespace Shapeshifter.Website.Controllers
 		[HttpPost("report")]
 		public async Task<string> ReportIssue([FromBody] IssueReport issueReport)
 		{
-			const string username = "ffMathy";
-			const string repository = "Shapeshifter";
+			await _reportLock.WaitAsync();
 
-			var existingIssues = await _client.Issue.GetAllForRepository(
-				username,
-				repository,
-				new RepositoryIssueRequest() {
-					Filter = IssueFilter.Created
-				});
-
-			string issueTitle;
-			if (issueReport.Exception != null)
+			try
 			{
-				issueTitle = issueReport.Exception.Name + " occured in " + issueReport.Exception.Context;
-			}
-			else
-			{
-				issueTitle = issueReport.OffendingLogMessage;
-			}
+				const string username = "ffMathy";
+				const string repository = "Shapeshifter";
 
-			issueTitle = issueTitle.TrimEnd('.', ' ', '\n', '\r');
-
-			var existingIssue = existingIssues
-				.Where(x => x.Title == issueTitle)
-				.FirstOrDefault(x =>
-					x.State.Value == ItemState.Open ||
-					DateTime.UtcNow - x.CreatedAt >= TimeSpan.FromDays(3));
-			if (existingIssue == null)
-			{
-				existingIssue = await _client.Issue.Create(
+				var existingIssues = await _client.Issue.GetAllForRepository(
 					username,
 					repository,
-					new NewIssue(issueTitle) {
-						Body = RenderIssueBody(issueReport)
+					new RepositoryIssueRequest() {
+						Filter = IssueFilter.Created
 					});
-			}
 
-			return existingIssue.Url;
+				string issueTitle;
+				if (issueReport.Exception != null)
+				{
+					issueTitle = issueReport.Exception.Name + " occured in " + issueReport.Exception.Context;
+				}
+				else
+				{
+					issueTitle = issueReport.OffendingLogMessage;
+				}
+
+				issueTitle = issueTitle.TrimEnd('.', ' ', '\n', '\r');
+
+				var existingIssue = existingIssues
+					.Where(x => x.Title == issueTitle)
+					.FirstOrDefault(x =>
+						x.State.Value == ItemState.Open ||
+						DateTime.UtcNow - x.CreatedAt >= TimeSpan.FromDays(3));
+				if (existingIssue == null)
+				{
+					existingIssue = await _client.Issue.Create(
+						username,
+						repository,
+						new NewIssue(issueTitle) {
+							Body = RenderIssueBody(issueReport)
+						});
+				}
+
+				return existingIssue.Url;
+			}
+			catch (Exception ex)
+			{
+				return ex.ToString();
+			} finally {
+				_reportLock.Release();
+			}
 		}
 
 		string RenderIssueBody(IssueReport issueReport)
@@ -73,27 +91,32 @@ namespace Shapeshifter.Website.Controllers
 
 			body += $"<b>Version:</b> {issueReport.Version}\n\n";
 
-			if (issueReport.OffendingLogLine != null) { 
+			if (issueReport.OffendingLogLine != null)
+			{
 				body += $"<b>Offending log line</b>\n";
-				foreach (var line in issueReport.OffendingLogLine.Split('\n', '\r')) { 
-					if(string.IsNullOrEmpty(line.Trim()))
+				foreach (var line in issueReport.OffendingLogLine.Split('\n', '\r'))
+				{
+					if (string.IsNullOrEmpty(line.Trim()))
 						continue;
 
 					body += $">> {line}\n";
 				}
 			}
 
-			if(issueReport.Exception != null) {
+			if (issueReport.Exception != null)
+			{
 				body += "<h1>Exception</h1>\n";
 				body += $"<b>Type:</b> {issueReport.Exception.Name}\n\n";
 				body += $"<b>Offending class:</b> {issueReport.Exception.Context}\n\n";
 				body += $"```\n{issueReport.Exception.StackTrace}\n```";
 			}
-				
-			if(issueReport.RecentLogLines != null && issueReport.RecentLogLines.Length > 0) { 
+
+			if (issueReport.RecentLogLines != null && issueReport.RecentLogLines.Length > 0)
+			{
 				body += "<h1>Log</h1>\n";
-				foreach(var line in issueReport.RecentLogLines) { 
-					if(string.IsNullOrEmpty(line.Trim()))
+				foreach (var line in issueReport.RecentLogLines)
+				{
+					if (string.IsNullOrEmpty(line.Trim()))
 						continue;
 
 					body += $">> {line}\n";
