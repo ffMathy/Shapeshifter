@@ -17,8 +17,7 @@ namespace Shapeshifter.Website.Controllers
     {
       _client = new PatreonClient(configurationReader.Read("patreon.creatorsAccessToken"));
     }
-
-    // GET: api/patreon/pledges
+	
     [HttpGet("supporters")]
     public async Task<IEnumerable<dynamic>> GetSupporters()
     {

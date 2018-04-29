@@ -25,7 +25,7 @@ namespace Shapeshifter.Website.Controllers
 		public GitHubApiController(
 		  IConfigurationReader configurationReader)
 		{
-			var client = new GitHubClient(new ProductHeaderValue("Shapeshifter website"));
+			var client = new GitHubClient(new ProductHeaderValue("Shapeshifter.Website"));
 			client.Credentials = new Credentials(configurationReader.Read("github.token"));
 
 			_client = client;
