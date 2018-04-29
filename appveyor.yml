@@ -59,6 +59,7 @@ deploy:
 - provider: GitHub
   release: shapeshifter-v$(appveyor_build_version)
   artifact: Application
+  prerelease: true
   auth_token:
     secure: ayEVarC+QEZFXazImnX3hY26ZG4O5xIqH1QPzn9eYbHmglTppws2bsqK8x8mrzEH
   on:
