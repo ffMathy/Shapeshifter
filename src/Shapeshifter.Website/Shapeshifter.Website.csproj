@@ -37,6 +37,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
     <PackageReference Include="newtonsoft.json" Version="11.0.2" />
+    <PackageReference Include="octokit" Version="0.29.0" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
@@ -48,6 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shapeshifter.Website.Models\Shapeshifter.Website.Models.csproj" />
   </ItemGroup>
 
 </Project>
