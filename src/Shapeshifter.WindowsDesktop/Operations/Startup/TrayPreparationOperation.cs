@@ -68,7 +68,7 @@
 			settingsManager.SaveSetting("LastLoad", DateTime.UtcNow);
 		}
 
-		void TrayIconManager_IconClicked(object sender, TrayIconClickedEventArgument e)
+		void TrayIconManager_IconClicked(object sender, TrayIconDoubleClickedEventArgument e)
 		{
 			var window = settingsWindowFactory.Create();
 			window.Show();

@@ -8,7 +8,7 @@
 
     public interface ITrayIconManager: IDisposable
     {
-        event EventHandler<TrayIconClickedEventArgument> IconDoubleClicked;
+        event EventHandler<TrayIconDoubleClickedEventArgument> IconDoubleClicked;
 
 		void UpdateHoverText(string text);
 
