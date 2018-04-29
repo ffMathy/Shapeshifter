@@ -76,5 +76,14 @@
         {
             return DeleteObject(hObject);
         }
-    }
+		
+		public uint GetImageSizeFromBitmapHeader(BITMAPV5HEADER bmi)
+		{
+			var imageSize = bmi.bV5SizeImage;
+			if (bmi.bV5Compression == 0)
+				imageSize = (uint)(bmi.bV5Height * bmi.bV5Width * (bmi.bV5BitCount / 8));
+
+			return imageSize;
+		}
+	}
 }

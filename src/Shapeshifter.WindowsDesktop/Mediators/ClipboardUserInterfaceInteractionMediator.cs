@@ -11,7 +11,7 @@
 	using Infrastructure.Events;
 
 	using Interfaces;
-
+	using Serilog;
 	using Services.Clipboard.Interfaces;
 	using Services.Interfaces;
 	using Services.Messages.Interceptors.Hotkeys.Interfaces;
@@ -27,6 +27,7 @@
 		readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
 		readonly IKeyInterceptor hotkeyInterceptor;
 		readonly IMouseWheelHook mouseWheelHook;
+		readonly ILogger logger;
 		readonly IClipboardInjectionService clipboardInjectionService;
 		readonly IList<IClipboardDataControlPackage> clipboardPackages;
 
@@ -74,6 +75,7 @@
 			IClipboardDataControlPackageFactory clipboardDataControlPackageFactory,
 			IKeyInterceptor hotkeyInterceptor,
 			IMouseWheelHook mouseWheelHook,
+			ILogger logger,
 			IClipboardInjectionService clipboardInjectionService)
 		{
 			this.clipboardCopyInterceptor = clipboardCopyInterceptor;
@@ -83,6 +85,7 @@
 			this.clipboardDataControlPackageFactory = clipboardDataControlPackageFactory;
 			this.hotkeyInterceptor = hotkeyInterceptor;
 			this.mouseWheelHook = mouseWheelHook;
+			this.logger = logger;
 			this.clipboardInjectionService = clipboardInjectionService;
 
 			clipboardPackages = new List<IClipboardDataControlPackage>();
@@ -262,6 +265,7 @@
 
 		void UninstallClipboardHook()
 		{
+			logger.Information("Uninstalling clipboard hook.");
 			clipboardCopyInterceptor.DataCopied -= ClipboardHook_DataCopied;
 		}
 
@@ -298,6 +302,7 @@
 
 		void InstallClipboardHook()
 		{
+			logger.Information("Installing clipboard hook.");
 			clipboardCopyInterceptor.DataCopied += ClipboardHook_DataCopied;
 		}
 

@@ -12,28 +12,30 @@
 
     using Services.Clipboard.Interfaces;
 	using Shapeshifter.WindowsDesktop.Helpers;
+	using Shapeshifter.WindowsDesktop.Native.Interfaces;
 	using Shapeshifter.WindowsDesktop.Services.Images.Interfaces;
 	using static Shapeshifter.WindowsDesktop.Native.ImageNativeApi;
 
 	class BitmapClipboardDataFactory: IBitmapClipboardDataFactory
     {
 		readonly IImagePersistenceService imagePersistenceService;
+		readonly IImageNativeApi imageNativeApi;
 
 		public BitmapClipboardDataFactory(
-			IImagePersistenceService imagePersistenceService)
+			IImagePersistenceService imagePersistenceService,
+			IImageNativeApi imageNativeApi)
         {
 			this.imagePersistenceService = imagePersistenceService;
+			this.imageNativeApi = imageNativeApi;
 		}
 
 		BitmapSource DIBV5ToBitmapSource(byte[] allBytes)
 		{
 			var bmi = BinaryStructHelper.FromByteArray<BITMAPV5HEADER>(allBytes);
 			var imageBytes = GetImageBytesFromAllBytes(allBytes, bmi);
-			var stride = GetStrideFromBitmapHeader(bmi);
 
-			var reversedImageBytes = new byte[imageBytes.Length];
-			for (int pBuf = imageBytes.Length, pMap = 0; pBuf > 0; pMap += stride, pBuf -= stride)
-				Array.Copy(imageBytes, pMap, reversedImageBytes, pBuf - stride, stride);
+			var stride = GetStrideFromBitmapHeader(bmi);
+			var reversedImageBytes = ConvertImageBytesFromBottomUpToTopDown(imageBytes, stride);
 
 			var bmpSource = BitmapSource.Create(
 				bmi.bV5Width, bmi.bV5Height,
@@ -44,17 +46,31 @@
 			return bmpSource;
 		}
 
-		static int GetStrideFromBitmapHeader(BITMAPV5HEADER bmi)
+		static byte[] ConvertImageBytesFromBottomUpToTopDown(byte[] imageBytes, int stride)
 		{
-			return (int)(bmi.bV5SizeImage / bmi.bV5Height);
+			var reversedImageBytes = new byte[imageBytes.Length];
+			for (int pBuf = imageBytes.Length, pMap = 0; pBuf > 0; pMap += stride, pBuf -= stride)
+				Array.Copy(imageBytes, pMap, reversedImageBytes, pBuf - stride, stride);
+
+			return reversedImageBytes;
 		}
 
-		static byte[] GetImageBytesFromAllBytes(byte[] bytes, BITMAPV5HEADER bmi)
+		int GetStrideFromBitmapHeader(BITMAPV5HEADER bmi)
+		{
+			var imageSize = imageNativeApi.GetImageSizeFromBitmapHeader(bmi);
+			return (int)(imageSize / bmi.bV5Height);
+		}
+
+		byte[] GetImageBytesFromAllBytes(byte[] bytes, BITMAPV5HEADER bmi)
 		{
 			var stride = GetStrideFromBitmapHeader(bmi);
-			var offset = bmi.bV5Size + bmi.bV5ClrUsed * Marshal.SizeOf<RGBQUAD>();
 
-			var imageBytes = new byte[bmi.bV5SizeImage];
+			var offset = bmi.bV5Size;
+			if(bmi.bV5ClrUsed > 0)
+				offset += bmi.bV5ClrUsed * (uint)Marshal.SizeOf<RGBQUAD>();
+
+			var imageSize = imageNativeApi.GetImageSizeFromBitmapHeader(bmi);
+			var imageBytes = new byte[imageSize];
 			Array.Copy(bytes, offset, imageBytes, 0, imageBytes.Length);
 
 			return imageBytes;
@@ -90,9 +106,7 @@
 		public IClipboardData BuildData(IClipboardFormat format, byte[] rawData)
         {
             if (!CanBuildData(format))
-            {
                 throw new InvalidOperationException("The given format is not supported.");
-            }
 
 			var bitmapSource = DIBV5ToBitmapSource(rawData);
 			return new ClipboardImageData()
