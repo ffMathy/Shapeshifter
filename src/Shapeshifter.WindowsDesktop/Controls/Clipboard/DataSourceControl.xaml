@@ -9,7 +9,7 @@
             mc:Ignorable="d"
             d:DataContext="{d:DesignInstance Type=facades:DesignerDataSourceFacade, IsDesignTimeCreatable=True}"
             Orientation="Horizontal" VerticalAlignment="Center">
-    <Image Style="{StaticResource DataSourceIconStyle}"
+    <Image SnapsToDevicePixels="True" Style="{StaticResource DataSourceIconStyle}"
            Source="{Binding Icon, Converter={converters:ByteArrayToImageSourceConverter}}" />
     <TextBlock Style="{StaticResource DataSourceTextStyle}"
                Visibility="{Binding RelativeSource={RelativeSource AncestorType=clipboard:DataSourceControl}, Path=TextVisibility}"
