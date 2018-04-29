@@ -6,11 +6,11 @@
              xmlns:viewModels="clr-namespace:Shapeshifter.WindowsDesktop.Controls.Window.ViewModels"
              mc:Ignorable="d" Style="{StaticResource ActionControlContentAreaStyle}"
              d:DataContext="{d:DesignInstance Type=viewModels:ActionViewModel, IsDesignTimeCreatable=True}">
-    <Grid>
+	<Grid Height="35">
         <Grid.RowDefinitions>
 			<RowDefinition />
 		</Grid.RowDefinitions>
-		<TextBlock Style="{StaticResource ActionControlHeaderStyle}" Text="{Binding Title}" />
+		<TextBlock VerticalAlignment="Center" Style="{StaticResource ActionControlHeaderStyle}" Text="{Binding Title}" />
 	</Grid>
     <UserControl.Template>
         <ControlTemplate TargetType="UserControl">
