@@ -97,7 +97,7 @@ namespace Shapeshifter.Website.Controllers
 
 			if (issueReport.RecentLogLines != null && issueReport.RecentLogLines.Length > 0)
 			{
-				body += "<h1>Log</h1>\n";
+				body += "<h1>Log</h1>\n\n";
 				if (issueReport.OffendingLogLine != null)
 				{
 					foreach (var line in issueReport.OffendingLogLine.Split('\n', '\r'))
