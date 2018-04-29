@@ -25,7 +25,7 @@ namespace Shapeshifter.Website.Controllers
 		}
 
 		[HttpPost("report")]
-		public async Task<string> ReportIssue(IssueReport issueReport)
+		public async Task<string> ReportIssue([FromBody] IssueReport issueReport)
 		{
 			const string username = "ffMathy";
 			const string repository = "Shapeshifter";
@@ -73,8 +73,15 @@ namespace Shapeshifter.Website.Controllers
 
 			body += $"<b>Version:</b> {issueReport.Version}\n\n";
 
-			if (issueReport.OffendingLogLine != null)
-				body += $"<b>Offending log line:</b> {issueReport.OffendingLogLine}\n\n";
+			if (issueReport.OffendingLogLine != null) { 
+				body += $"<b>Offending log line</b>\n";
+				foreach (var line in issueReport.OffendingLogLine.Split('\n', '\r')) { 
+					if(string.IsNullOrEmpty(line.Trim()))
+						continue;
+
+					body += $">> {line}\n";
+				}
+			}
 
 			if(issueReport.Exception != null) {
 				body += "<h1>Exception</h1>\n";
@@ -85,8 +92,12 @@ namespace Shapeshifter.Website.Controllers
 				
 			if(issueReport.RecentLogLines != null && issueReport.RecentLogLines.Length > 0) { 
 				body += "<h1>Log</h1>\n";
-				foreach(var line in issueReport.RecentLogLines)
+				foreach(var line in issueReport.RecentLogLines) { 
+					if(string.IsNullOrEmpty(line.Trim()))
+						continue;
+
 					body += $">> {line}\n";
+				}
 			}
 
 			return body;

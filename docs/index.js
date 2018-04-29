@@ -65,7 +65,7 @@ $.getJSON("https://shapeshifter.azurewebsites.net/api/patreon/supporters").done(
   var changeColorCallback = function() {
     var colors = ["red", "blue", "green", "purple"];
     var currentColor = colors[currentColorIndex++ % colors.length];
-    $("#screenshot").css("background-image", "url(https://github.com/ffMathy/Shapeshifter/raw/master/assets/screenshots/" + currentColor + ".PNG)");
+    $("#screenshot").css("background-image", "url(https://raw.githubusercontent.com/ffMathy/Shapeshifter/master/assets/screenshots/" + currentColor + ".PNG)");
   };
   setInterval(changeColorCallback, 3000);
   changeColorCallback();
