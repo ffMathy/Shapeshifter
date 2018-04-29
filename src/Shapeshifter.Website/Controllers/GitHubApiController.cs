@@ -75,11 +75,7 @@ namespace Shapeshifter.Website.Controllers
 						});
 				}
 
-				return existingIssue.Url;
-			}
-			catch (Exception ex)
-			{
-				return ex.ToString();
+				return existingIssue.HtmlUrl;
 			} finally {
 				_reportLock.Release();
 			}
