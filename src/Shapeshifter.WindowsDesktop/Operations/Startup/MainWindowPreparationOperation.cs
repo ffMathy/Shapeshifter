@@ -46,16 +46,12 @@
         }
 
         public async Task RunAsync()
-        {
-			await RunWindowAsync(mainWindow);
-			await RunWindowAsync(sourceClipboardQuantityOverlay);
-		}
-
-		async Task RunWindowAsync(IWindow window)
 		{
-			window.SourceInitialized +=
-				OnMainWindowOnSourceInitialized;
-			window.Show();
+			mainWindow.SourceInitialized += OnMainWindowOnSourceInitialized;
+			mainWindow.Show();
+
+			sourceClipboardQuantityOverlay.Show();
+			sourceClipboardQuantityOverlay.Hide();
 		}
 
         void OnMainWindowOnSourceInitialized(object sender, EventArgs e)
