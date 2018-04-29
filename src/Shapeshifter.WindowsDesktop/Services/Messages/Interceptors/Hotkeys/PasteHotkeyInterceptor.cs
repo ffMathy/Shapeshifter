@@ -90,7 +90,7 @@
                 return;
             }
 
-            logger.Information("Paste hotkey message received.", 1);
+            logger.Information("Paste hotkey message received.");
 
             OnPasteDetected();
         }
@@ -102,7 +102,12 @@
 
         protected virtual void OnPasteDetected()
         {
-            PasteDetected?.Invoke(this, new EventArgs());
+			if(PasteDetected == null) {
+				logger.Warning("Tried to fire a PasteDetected event, but there were no listeners.");
+				return;
+			}
+
+            PasteDetected.Invoke(this, new EventArgs());
         }
     }
 }

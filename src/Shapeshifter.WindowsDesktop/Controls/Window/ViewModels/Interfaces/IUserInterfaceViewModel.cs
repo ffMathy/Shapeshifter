@@ -14,6 +14,7 @@
 		event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
 		event EventHandler<UserInterfacePaneSwappedEventArgument> UserInterfacePaneSwapped;
 		event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
+		event EventHandler<UserInterfaceDataControlAddedEventArgument> UserInterfaceDataControlAdded;
 
 		IClipboardDataControlPackage SelectedElement { get; set; }
 		IActionViewModel SelectedAction { get; set; }

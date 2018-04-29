@@ -70,10 +70,8 @@
         public void Connect()
         {
             if (IsConnected)
-            {
                 throw new InvalidOperationException(
                     "The clipboard combination mediator is already connected.");
-            }
 
             pasteDetectionHandler.Connect();
             InstallPasteHotkeyInterceptor();
@@ -81,7 +79,7 @@
 
         async Task MonitorClipboardCombinationStateAsync()
         {
-            logger.Information("Paste combination duration loop has ticked.");
+            logger.Verbose("Paste combination duration loop has ticked.");
 
             shouldCancel = false;
 
@@ -179,7 +177,7 @@
         void PasteHotkeyInterceptor_PasteDetected(object sender, EventArgs e)
         {
             logger.Information(
-                "Paste combination duration mediator reacted to paste hotkey.", 1);
+                "Paste combination duration mediator reacted to paste hotkey.");
 
             OnPasteCombinationHeldDown();
 

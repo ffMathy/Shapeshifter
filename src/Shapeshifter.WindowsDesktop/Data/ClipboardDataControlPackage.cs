@@ -15,7 +15,11 @@
         }
 
         public IClipboardDataPackage Data { get; }
-
         public IClipboardControl Control { get; }
-    }
+
+		public IClipboardDataControlPackage Clone()
+		{
+			return new ClipboardDataControlPackage(Data, Control.Clone());
+		}
+	}
 }
