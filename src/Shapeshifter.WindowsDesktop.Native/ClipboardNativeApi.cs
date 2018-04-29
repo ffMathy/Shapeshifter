@@ -203,8 +203,7 @@
             }
             return formats;
         }
-
-        //TODO: refactor this into custom service.
+		
         internal static byte[] GetClipboardDataBytes(uint format)
         {
             var dataPointer = GetClipboardDataPointer(format);
@@ -247,7 +246,12 @@
         {
             var sb = new StringBuilder(512);
             GetClipboardFormatName(ClipboardFormat, sb, sb.Capacity);
-            return sb.ToString().Trim();
+
+			var formatName = sb.ToString().Trim();
+			if(formatName.Contains("\0"))
+				formatName = formatName.Substring(0, formatName.IndexOf("\0"));
+
+			return formatName;
         }
 
         [DllImport("user32.dll", SetLastError = true)]

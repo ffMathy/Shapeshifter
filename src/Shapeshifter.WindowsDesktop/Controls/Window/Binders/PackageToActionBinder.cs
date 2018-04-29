@@ -46,13 +46,16 @@
 
 		public void LoadFromKey(IClipboardDataControlPackage key)
 		{
-			boundDestinationCollection.Clear();
-			boundDestinationCollection.Add(Default);
-
-			this.currentKey = key;
-			foreach (var item in dictionaryStates[key])
+			lock (this)
 			{
-				boundDestinationCollection.Add(item);
+				boundDestinationCollection.Clear();
+				boundDestinationCollection.Add(Default);
+
+				this.currentKey = key;
+				foreach (var item in dictionaryStates[key])
+				{
+					boundDestinationCollection.Add(item);
+				}
 			}
 		}
 
@@ -98,9 +101,12 @@
 
 		void PrepareDictionaryStateKey(IClipboardDataControlPackage item)
 		{
-			if (!dictionaryStates.ContainsKey(item))
+			lock (this)
 			{
-				dictionaryStates.Add(item, new HashSet<IActionViewModel>());
+				if (!dictionaryStates.ContainsKey(item))
+				{
+					dictionaryStates.Add(item, new HashSet<IActionViewModel>());
+				}
 			}
 		}
 	}

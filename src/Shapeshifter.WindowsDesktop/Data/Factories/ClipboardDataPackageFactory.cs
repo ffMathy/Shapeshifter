@@ -1,69 +1,59 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Factories
 {
-    using System.Collections.Generic;
-    using System.Linq;
+	using System.Collections.Generic;
+	using System.Linq;
 
-    using Data.Interfaces;
+	using Data.Interfaces;
 
-    using Infrastructure.Handles.Factories.Interfaces;
+	using Infrastructure.Handles.Factories.Interfaces;
 
-    using Interfaces;
+	using Interfaces;
 
-    using Structures;
+	using Structures;
 
-    using Unwrappers.Interfaces;
-    using Exceptions;
+	using Unwrappers.Interfaces;
 	using Shapeshifter.WindowsDesktop.Services.Clipboard.Interfaces;
 
-	class ClipboardDataPackageFactory: IClipboardDataPackageFactory
-    {
-        readonly IClipboardHandleFactory clipboardSessionFactory;
+	class ClipboardDataPackageFactory : IClipboardDataPackageFactory
+	{
+		readonly IClipboardHandleFactory clipboardSessionFactory;
 		readonly IDataSourceService dataSourceService;
-		readonly IEnumerable<IMemoryUnwrapper> memoryUnwrappers;
-        readonly IEnumerable<IClipboardDataFactory> dataFactories;
+		readonly IGeneralUnwrapper generalUnwrapper;
+		readonly ICustomClipboardDataFactory customClipboardDataFactory;
 
-        public ClipboardDataPackageFactory(
-            IEnumerable<IClipboardDataFactory> dataFactories,
-            IEnumerable<IMemoryUnwrapper> memoryUnwrappers,
-            IClipboardHandleFactory clipboardSessionFactory,
+		readonly IEnumerable<IMemoryUnwrapper> allMemoryUnwrappers;
+		readonly IEnumerable<IClipboardDataFactory> allDataFactories;
+
+		public ClipboardDataPackageFactory(
+			IEnumerable<IClipboardDataFactory> allDataFactories,
+			IEnumerable<IMemoryUnwrapper> allMemoryUnwrappers,
+			ICustomClipboardDataFactory customClipboardDataFactory,
+			IGeneralUnwrapper generalUnwrapper,
+			IClipboardHandleFactory clipboardSessionFactory,
 			IDataSourceService dataSourceService)
-        {
-            this.dataFactories = dataFactories;
-            this.memoryUnwrappers = memoryUnwrappers;
-            this.clipboardSessionFactory = clipboardSessionFactory;
+		{
+			this.allDataFactories = allDataFactories;
+			this.allMemoryUnwrappers = allMemoryUnwrappers;
+			this.customClipboardDataFactory = customClipboardDataFactory;
+			this.generalUnwrapper = generalUnwrapper;
+			this.clipboardSessionFactory = clipboardSessionFactory;
 			this.dataSourceService = dataSourceService;
 		}
 
-        bool IsAnyFormatSupported(
-            IEnumerable<IClipboardFormat> formats)
-        {
-            return dataFactories.Any(
-                x => formats.Any(x.CanBuildData));
-        }
-
-        public IClipboardDataPackage CreateFromCurrentClipboardData()
-        {
-            using (var session = clipboardSessionFactory.StartNewSession())
-            {
-                var formats = session.GetClipboardFormats();
-                if(formats.Count == 0)
-                    throw new NoDataInClipboardException();
-
-                if(!IsAnyFormatSupported(formats))
-                    throw new ClipboardFormatNotUnderstoodException();
-
-                return ConstructPackageFromFormats(formats);
-            }
-        }
-
-        public IClipboardDataPackage CreateFromFormatsAndData(params FormatDataPair[] formatsAndData)
+		public IClipboardDataPackage CreateFromCurrentClipboardData()
 		{
-			if (!IsAnyFormatSupported(
-				formatsAndData.Select(x => x.Format)))
+			using (var session = clipboardSessionFactory.StartNewSession())
 			{
-				return null;
-			}
+				var formats = session.GetClipboardFormats();
+				if (formats.Count == 0)
+					return null;
 
+				return ConstructPackageFromFormats(formats);
+			}
+		}
+
+		public IClipboardDataPackage CreateFromFormatsAndData(params FormatDataPair[] formatsAndData)
+		{
 			var package = CreateDataPackage();
 			foreach (var pair in formatsAndData)
 			{
@@ -81,52 +71,65 @@
 		}
 
 		IClipboardDataPackage ConstructPackageFromFormats(
-            IEnumerable<IClipboardFormat> formats)
-        {
-            var package = CreateDataPackage();
-            DecoratePackageWithClipboardData(formats, package);
+			IEnumerable<IClipboardFormat> formats)
+		{
+			var package = CreateDataPackage();
+			DecoratePackageWithClipboardData(formats, package);
 
-            return package;
-        }
+			return package;
+		}
 
-        void DecoratePackageWithClipboardData(
-            IEnumerable<IClipboardFormat> formats,
-            IClipboardDataPackage package)
-        {
-            foreach (var format in formats)
-                DecoratePackageWithClipboardDataForFormat(package, format);
-        }
+		void DecoratePackageWithClipboardData(
+			IEnumerable<IClipboardFormat> formats,
+			IClipboardDataPackage package)
+		{
+			foreach (var format in formats)
+				DecoratePackageWithClipboardDataForFormat(package, format);
+		}
 
-        IClipboardDataFactory FindCapableFactoryFromFormat(IClipboardFormat format)
-        {
-            return dataFactories.FirstOrDefault(x => x.CanBuildData(format));
-        }
+		IClipboardDataFactory FindCapableFactoryFromFormat(IClipboardFormat format)
+		{
+			var factory = allDataFactories
+				.Where(x => x.GetType() != customClipboardDataFactory.GetType())
+				.FirstOrDefault(x => x.CanBuildData(format));
+			if(factory == null)
+				factory = customClipboardDataFactory;
 
-        void DecoratePackageWithClipboardDataForFormat(
-            IClipboardDataPackage package,
+			return factory;
+		}
+
+		void DecoratePackageWithClipboardDataForFormat(
+			IClipboardDataPackage package,
 			IClipboardFormat format)
-        {
-            var unwrapper = memoryUnwrappers
-                .FirstOrDefault(
-                    x => x.CanUnwrap(format));
+		{
+			var unwrapper = FindCapableUnwrapperFromFormat(format);
+			var rawData = unwrapper.UnwrapStructure(format);
+			if (rawData == null)
+				return;
 
-            var rawData = unwrapper?.UnwrapStructure(format);
-            if (rawData == null)
-                return;
+			DecoratePackageWithClipboardDataFromRawDataAndFormat(package, format, rawData);
+		}
 
-            DecoratePackageWithClipboardDataFromRawDataAndFormat(package, format, rawData);
-        }
+		IMemoryUnwrapper FindCapableUnwrapperFromFormat(IClipboardFormat format)
+		{
+			var unwrapper = allMemoryUnwrappers
+				.Where(x => x.GetType() != generalUnwrapper.GetType())
+				.FirstOrDefault(x => x.CanUnwrap(format));
+			if (unwrapper == null)
+				unwrapper = generalUnwrapper;
 
-        void DecoratePackageWithClipboardDataFromRawDataAndFormat(
-            IClipboardDataPackage package,
+			return unwrapper;
+		}
+
+		void DecoratePackageWithClipboardDataFromRawDataAndFormat(
+			IClipboardDataPackage package,
 			IClipboardFormat format,
-            byte[] rawData)
-        {
-            var factory = FindCapableFactoryFromFormat(format);
-
-            var clipboardData = factory?.BuildData(format, rawData);
-            if (clipboardData != null)
-                package.AddData(clipboardData);
-        }
-    }
+			byte[] rawData)
+		{
+			var factory = FindCapableFactoryFromFormat(format);
+			var clipboardData = factory.BuildData(format, rawData);
+			if (clipboardData != null)
+				package.AddData(clipboardData);
+		}
+	}
 }

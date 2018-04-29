@@ -219,7 +219,7 @@
         <Setter Property="FontWeight" Value="ExtraLight" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="Padding" Value="7,5,7,7" />
-        <Setter Property="Width" Value="150" />
+        <Setter Property="Width" Value="250" />
     </Style>
 
     <Style TargetType="TextBlock" x:Key="ActionControlHeaderStyle">

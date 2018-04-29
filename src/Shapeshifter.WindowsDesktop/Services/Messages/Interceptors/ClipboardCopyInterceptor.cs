@@ -67,7 +67,12 @@
 
         void TriggerDataCopiedEvent()
         {
-            DataCopied?.Invoke(this, new DataCopiedEventArgument());
+			if(DataCopied == null) {
+				logger.Warning("Tried to fire a DataCopied event, but there were no listeners.");
+				return;
+			}
+
+            DataCopied.Invoke(this, new DataCopiedEventArgument());
         }
 
         public void Install(IntPtr windowHandle)
