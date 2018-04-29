@@ -13,25 +13,18 @@
     {
         readonly IClipboardNativeApi clipboardNativeApi;
 
-        readonly IEnumerable<int> excludedFormats;
-
-        public GeneralUnwrapper(
+		public GeneralUnwrapper(
             IClipboardNativeApi clipboardNativeApi)
         {
             this.clipboardNativeApi = clipboardNativeApi;
-            excludedFormats = new[]
-            {
-                ClipboardNativeApi.CF_DSPBITMAP,
-                ClipboardNativeApi.CF_DSPENHMETAFILE,
-                ClipboardNativeApi.CF_ENHMETAFILE,
-                ClipboardNativeApi.CF_METAFILEPICT,
-                ClipboardNativeApi.CF_BITMAP
-            };
         }
 
         public bool CanUnwrap(IClipboardFormat format)
         {
-            return excludedFormats.All(x => x != format.Number);
+			if(format.Name == "DataObject")
+				return false;
+
+            return true;
         }
 
         public byte[] UnwrapStructure(IClipboardFormat format)

@@ -47,27 +47,27 @@
 
 		public bool CanUnwrap(IClipboardFormat format)
 		{
-			return (format.Number == ClipboardNativeApi.CF_DIBV5);
+			return 
+				format.Number == ClipboardNativeApi.CF_DIBV5 ||
+				format.Number == ClipboardNativeApi.CF_DIB ||
+				format.Number == ClipboardNativeApi.CF_BITMAP;
 		}
 
 		public byte[] UnwrapStructure(IClipboardFormat format)
 		{
+			if(format.Number != ClipboardNativeApi.CF_DIBV5)
+				return null;
+
 			var hBitmap = clipboardNativeApi.GetClipboardData(ClipboardNativeApi.CF_DIBV5);
+
+			var ptr = generalNativeApi.GlobalLock(hBitmap);
 			try
 			{
-				var ptr = generalNativeApi.GlobalLock(hBitmap);
-				try
-				{
-					return GetAllBytesFromBitmapHeader(ptr);
-				}
-				finally
-				{
-					imageNativeApi.DeleteObject(ptr);
-				}
+				return GetAllBytesFromBitmapHeader(ptr);
 			}
 			finally
 			{
-				imageNativeApi.DeleteObject(hBitmap);
+				imageNativeApi.DeleteObject(ptr);
 			}
 		}
 
