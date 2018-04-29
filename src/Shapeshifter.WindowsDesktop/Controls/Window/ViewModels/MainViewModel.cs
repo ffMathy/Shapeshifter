@@ -27,6 +27,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
             set
             {
                 activeScreen = value;
+				UserInterfaceViewModel.ActiveScreen = value;
                 OnPropertyChanged();
             }
         }

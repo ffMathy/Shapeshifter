@@ -20,8 +20,9 @@
     using Interfaces;
 
     using Mediators.Interfaces;
+	using Shapeshifter.WindowsDesktop.Services.Screen;
 
-    class UserInterfaceViewModel
+	class UserInterfaceViewModel
         :
             IUserInterfaceViewModel,
             IDisposable
@@ -29,7 +30,9 @@
         IClipboardDataControlPackage selectedElement;
         IActionViewModel selectedAction;
 
-        readonly SemaphoreSlim singlePasteLock;
+		ScreenInformation activeScreen;
+
+		readonly SemaphoreSlim singlePasteLock;
 
         readonly IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator;
         readonly ISettingsViewModel settingsViewModel;
@@ -41,7 +44,20 @@
         public ObservableCollection<IClipboardDataControlPackage> Elements { get; }
         public ObservableCollection<IActionViewModel> Actions { get; }
 
-        public IActionViewModel SelectedAction
+		public ScreenInformation ActiveScreen
+		{
+			get
+			{
+				return activeScreen;
+			}
+			set
+			{
+				activeScreen = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public IActionViewModel SelectedAction
         {
             get
             {
