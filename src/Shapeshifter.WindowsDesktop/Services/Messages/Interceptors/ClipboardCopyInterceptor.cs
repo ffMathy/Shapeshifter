@@ -15,7 +15,7 @@
     {
         public event EventHandler<DataCopiedEventArgument> DataCopied;
 
-        uint lastClipboardItemIdentifier;
+        long lastClipboardItemIdentifier;
 		DateTime lastCopy;
 
         bool shouldSkipNext;
@@ -39,24 +39,25 @@
 			this.threadDeferrer = threadDeferrer;
 		}
 
-        async Task HandleClipboardUpdateWindowMessage()
+        async void HandleClipboardUpdateWindowMessage()
         {
 			await threadDeferrer.DeferAsync(500, () => {
-				var clipboardItemIdentifier = clipboardNativeApi.GetClipboardSequenceNumber();
+				var timeSinceLastCopy = DateTime.UtcNow - lastCopy;
+				if (timeSinceLastCopy.TotalSeconds > 1)
+					lastClipboardItemIdentifier = -1;
+
+				lastCopy = DateTime.UtcNow;
+
+				var clipboardItemIdentifier = (long)clipboardNativeApi.GetClipboardSequenceNumber();
 				if (shouldSkipNext)
 				{
 					logger.Information("Clipboard update message skipped.");
 
 					lastClipboardItemIdentifier = clipboardItemIdentifier;
-					lastCopy = DateTime.UtcNow;
 
 					shouldSkipNext = false;
 					return;
 				}
-
-				var timeSinceLastCopy = DateTime.UtcNow - lastCopy;
-				if(timeSinceLastCopy.TotalSeconds > 1)
-					lastClipboardItemIdentifier = 0;
 
 				logger.Information($"Clipboard update message received with sequence #{clipboardItemIdentifier}.", clipboardItemIdentifier);
 				if (clipboardItemIdentifier == lastClipboardItemIdentifier)
@@ -64,8 +65,7 @@
 					logger.Verbose("Skipping clipboard update message because the sequence ID has not changed.");
 					return;
 				}
-
-				lastCopy = DateTime.UtcNow;
+				
 				lastClipboardItemIdentifier = clipboardItemIdentifier;
 
 				TriggerDataCopiedEvent();
@@ -117,7 +117,7 @@
             if (eventArgument.Message != Message.WM_CLIPBOARDUPDATE)
                 return;
 
-            await HandleClipboardUpdateWindowMessage();
+            HandleClipboardUpdateWindowMessage();
         }
 
         public void SkipNext()
