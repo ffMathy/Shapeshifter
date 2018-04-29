@@ -29,34 +29,31 @@
         const string RepositoryName = "Shapeshifter";
 
         readonly IGitHubClient client;
-		readonly ITrayIconManager trayIconManager;
-		readonly IThreadDelay threadDelay;
 		readonly IDownloader fileDownloader;
         readonly IFileManager fileManager;
         readonly IProcessManager processManager;
         readonly ILogger logger;
         readonly IEnvironmentInformation environmentInformation;
+		readonly ISettingsManager settingsManager;
 
-        public UpdateService(
+		public UpdateService(
             IDownloader fileDownloader,
             IFileManager fileManager,
             IProcessManager processManager,
             ILogger logger,
             IGitHubClientFactory clientFactory,
             IEnvironmentInformation environmentInformation,
-			ITrayIconManager trayIconManager,
-			IThreadDelay threadDelay)
+			ISettingsManager settingsManager)
         {
             client = clientFactory.CreateClient();
-
-			this.trayIconManager = trayIconManager;
-			this.threadDelay = threadDelay;
+			
 			this.fileDownloader = fileDownloader;
             this.fileManager = fileManager;
             this.processManager = processManager;
             this.logger = logger;
             this.environmentInformation = environmentInformation;
-        }
+			this.settingsManager = settingsManager;
+		}
 
         public async Task UpdateAsync()
         {
@@ -70,9 +67,6 @@
                 {
                     return;
                 }
-				
-				trayIconManager.DisplayInformation("Downloading update", "An update is being downloaded. Shapeshifter will restart and apply the update.");
-				await threadDelay.ExecuteAsync(5000);
 
 				await UpdateFromReleaseAsync(pendingUpdateRelease);
             }
@@ -130,10 +124,9 @@
 
         bool IsUpdateToReleaseNeeded(Release release)
         {
-            if (release.Prerelease)
-            {
+			var shouldUpdateToPrerelease = settingsManager.LoadSetting("PreferPrerelease", false);
+            if (release.Prerelease && !shouldUpdateToPrerelease)
                 return false;
-            }
 
             if (release.Draft)
             {
@@ -166,11 +159,24 @@
                 .FirstOrDefault();
         }
 
+		bool IsCurrentRelease(Release release) {
+			var releaseVersion = GetReleaseVersion(release);
+			return releaseVersion == Program.GetCurrentVersion();
+		}
+
         async Task<IEnumerable<Release>> GetReleasesWithUpdatesAsync()
         {
             var allReleases = await client.Repository.Release.GetAll(
                 RepositoryOwner,
                 RepositoryName);
+
+			var currentRelease = allReleases.SingleOrDefault(IsCurrentRelease);
+			if(currentRelease == null) {
+				logger.Warning("Could not find the current release version v{version}.", Program.GetCurrentVersion());
+			} else if(currentRelease.Prerelease) {
+				settingsManager.SaveSetting("PreferPrerelease", true);
+			}
+
             return allReleases.Where(IsUpdateToReleaseNeeded);
         }
     }
