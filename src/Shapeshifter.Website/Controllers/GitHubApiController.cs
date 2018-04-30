@@ -59,16 +59,20 @@ namespace Shapeshifter.Website.Controllers
 					issueTitle = issueReport.OffendingLogMessage;
 				}
 
-				if(!string.IsNullOrWhiteSpace(issueReport.Context))
-					issueTitle += " in " + issueReport.Context;
-
 				issueTitle = issueTitle.TrimEnd('.', ' ', '\n', '\r');
+
+				if(!string.IsNullOrWhiteSpace(issueReport.Context)) {
+					var nameSplit = issueReport.Context.Split('.');
+					issueReport.Context = nameSplit[nameSplit.Length - 1];
+					
+					issueTitle += " in " + issueReport.Context;
+				}
+				
+				issueTitle += " on v" + issueReport.Version;
 
 				var existingIssue = existingIssues
 					.Where(x => x.Title == issueTitle)
-					.FirstOrDefault(x =>
-						x.State.Value == ItemState.Open ||
-						DateTime.UtcNow - x.CreatedAt >= TimeSpan.FromDays(3));
+					.FirstOrDefault();
 				if (existingIssue == null)
 				{
 					existingIssue = await _client.Issue.Create(
