@@ -19,6 +19,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 	using Serilog.Events;
 	using Serilog.Formatting;
 	using Serilog.Formatting.Compact;
+	using Shapeshifter.WindowsDesktop.Infrastructure.Logging;
 	using Shapeshifter.WindowsDesktop.Services.Files;
 	using Shapeshifter.WindowsDesktop.Services.Processes;
 	using Threading;
@@ -87,6 +88,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 						retainedFileCountLimit: 2,
 						shared: true,
 						outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [#{ProcessId}] [{SourceContext:l}] [{Level:u3}]{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
+					.WriteTo.Sink(new IssueReporterSink())
 					.CreateLogger();
 			}
 

@@ -52,11 +52,11 @@ namespace Shapeshifter.Website.Controllers
 				string issueTitle;
 				if (issueReport.Exception != null)
 				{
-					issueTitle = issueReport.Exception.Name + " occured in " + issueReport.Exception.Context;
+					issueTitle = issueReport.Exception.Name + " in " + issueReport.Context;
 				}
 				else
 				{
-					issueTitle = issueReport.OffendingLogMessage;
+					issueTitle = issueReport.OffendingLogMessage + " in " + issueReport.Context;
 				}
 
 				issueTitle = issueTitle.TrimEnd('.', ' ', '\n', '\r');

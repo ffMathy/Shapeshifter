@@ -6,6 +6,7 @@ using Shapeshifter.Website.Models.GitHub.Request;
 using Shapeshifter.WindowsDesktop.Shared.GitHub.Response;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -51,10 +52,15 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 				await reportingSemaphore.WaitAsync();
 				await Task.Delay(5000);
 
+				var contextBuilder = new StringBuilder();
+
+				using (var writer = new StringWriter(contextBuilder))
+					logEvent.Properties.SingleOrDefault(x => x.Key == "Context").Value?.Render(writer);
+
 				var response = await restClient.PostAsync<ReportResponse>(
 					new Uri("https://shapeshifter.azurewebsites.net/api/github/report"),
 					new IssueReport() {
-						Exception = ConvertExceptionToSerializableException(logEvent.Exception),
+						Exception = ConvertExceptionToSerializableException(logEvent),
 						OffendingLogLine = logEvent.RenderMessage(),
 						OffendingLogMessage = logEvent.MessageTemplate.Text,
 						RecentLogLines = lastMessages.ToArray(),
@@ -72,9 +78,16 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 			}
 		}
 
-		private SerializableException ConvertExceptionToSerializableException(Exception exception)
+		private SerializableException ConvertExceptionToSerializableException(LogEvent logEvent)
 		{
-			throw new NotImplementedException();
+			if(logEvent.Exception == null)
+				return null;
+
+			return new SerializableException() {
+				Message = logEvent.Exception.Message,
+				Name = logEvent.Exception.GetType().Name,
+				StackTrace = logEvent.Exception.StackTrace
+			};
 		}
 
 		public void Emit(LogEvent logEvent)
