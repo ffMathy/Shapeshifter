@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Octokit;
 using Shapeshifter.Website.Models;
 using Shapeshifter.Website.Models.GitHub.Request;
+using Shapeshifter.WindowsDesktop.Shared.GitHub.Response;
 
 namespace Shapeshifter.Website.Controllers
 {
@@ -32,7 +33,7 @@ namespace Shapeshifter.Website.Controllers
 		}
 
 		[HttpPost("report")]
-		public async Task<string> ReportIssue([FromBody] IssueReport issueReport)
+		public async Task<ReportResponse> ReportIssue([FromBody] IssueReport issueReport)
 		{
 			await _reportLock.WaitAsync();
 
@@ -51,11 +52,11 @@ namespace Shapeshifter.Website.Controllers
 				string issueTitle;
 				if (issueReport.Exception != null)
 				{
-					issueTitle = issueReport.Exception.Name + " occured in " + issueReport.Exception.Context;
+					issueTitle = issueReport.Exception.Name + " in " + issueReport.Context;
 				}
 				else
 				{
-					issueTitle = issueReport.OffendingLogMessage;
+					issueTitle = issueReport.OffendingLogMessage + " in " + issueReport.Context;
 				}
 
 				issueTitle = issueTitle.TrimEnd('.', ' ', '\n', '\r');
@@ -75,7 +76,9 @@ namespace Shapeshifter.Website.Controllers
 						});
 				}
 
-				return existingIssue.HtmlUrl;
+				return new ReportResponse() {
+					IssueUrl = existingIssue.HtmlUrl
+				};
 			} finally {
 				_reportLock.Release();
 			}
@@ -86,18 +89,18 @@ namespace Shapeshifter.Website.Controllers
 			var body = string.Empty;
 
 			body += $"<b>Version:</b> {issueReport.Version}\n\n";
+			body += $"<b>Offending class:</b> {issueReport.Context}\n\n";
 
 			if (issueReport.Exception != null)
 			{
 				body += "<h1>Exception</h1>\n";
 				body += $"<b>Type:</b> {issueReport.Exception.Name}\n\n";
-				body += $"<b>Offending class:</b> {issueReport.Exception.Context}\n\n";
 				body += $"```\n{issueReport.Exception.StackTrace}\n```\n\n";
 			}
 
 			if (issueReport.RecentLogLines != null && issueReport.RecentLogLines.Length > 0)
 			{
-				body += "<h1>Log</h1>\n";
+				body += "<h1>Log</h1>\n\n";
 				if (issueReport.OffendingLogLine != null)
 				{
 					foreach (var line in issueReport.OffendingLogLine.Split('\n', '\r'))
