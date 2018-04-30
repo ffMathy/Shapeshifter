@@ -43,12 +43,8 @@
 
         async void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-			try { 
-				if (e.PropertyName == nameof(viewModel.SelectedElement))
-					await OnSelectedItemChangedAsync();
-			} catch(Exception ex) {
-				logger.Error(ex, "An error occured as the selected element changed.");
-			}
+			if (e.PropertyName == nameof(viewModel.SelectedElement))
+				await OnSelectedItemChangedAsync();
         }
 
         async Task OnSelectedItemChangedAsync()

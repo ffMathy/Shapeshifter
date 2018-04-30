@@ -50,7 +50,6 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 			try
 			{
 				await reportingSemaphore.WaitAsync();
-				await Task.Delay(5000);
 
 				var contextBuilder = new StringBuilder();
 
