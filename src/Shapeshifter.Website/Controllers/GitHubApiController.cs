@@ -92,7 +92,9 @@ namespace Shapeshifter.Website.Controllers
 			var body = string.Empty;
 
 			body += $"<b>Version:</b> {issueReport.Version}\n\n";
-			body += $"<b>Offending class:</b> {issueReport.Context}\n\n";
+			
+			if(!string.IsNullOrEmpty(issueReport.Context))
+				body += $"<b>Offending class:</b> {issueReport.Context}\n\n";
 
 			if (issueReport.Exception != null)
 			{
