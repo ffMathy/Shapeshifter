@@ -55,7 +55,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 				var contextBuilder = new StringBuilder();
 
 				using (var writer = new StringWriter(contextBuilder))
-					logEvent.Properties.SingleOrDefault(x => x.Key == "Context").Value?.Render(writer);
+					logEvent.Properties.SingleOrDefault(x => x.Key == "SourceContext").Value?.Render(writer);
 
 				var context = contextBuilder.ToString();
 				if(string.IsNullOrEmpty(context))
@@ -99,7 +99,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 
 		public void Emit(LogEvent logEvent)
 		{
-			if (logEvent.Exception != null || logEvent.Level == LogEventLevel.Error || logEvent.Level == LogEventLevel.Warning)
+			if (logEvent.Level == LogEventLevel.Error || logEvent.Level == LogEventLevel.Warning)
 				ScheduleLogEventReport(logEvent);
 
 			var message = logEvent.RenderMessage();
