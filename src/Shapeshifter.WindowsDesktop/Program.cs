@@ -137,13 +137,17 @@
 				null;
 
 			Log.Logger.Error(ex, "An unhandled error occured. {@parameters}", parameters);
-			Log.CloseAndFlush();
-
+			
 			if (Debugger.IsAttached)
 			{
 				Debugger.Break();
 			}
-			else
+
+			Thread.Sleep(10000);
+			Log.CloseAndFlush();
+			Thread.Sleep(10000);
+
+			if(!Debugger.IsAttached)
 			{
 				Process.GetCurrentProcess().Kill();
 			}

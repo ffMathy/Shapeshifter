@@ -35,6 +35,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 		{
 			lock (logHistory)
 			{
+				Log.Logger.Verbose("Reporting the log entry \"{entryName}\".", logEvent.MessageTemplate.Text);
+
 				var lastMessages = new List<string>();
 				for (var i = 0; i < logHistoryLength && logHistory.Count > 0; i++)
 				{
@@ -57,10 +59,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 					logEvent.Properties.SingleOrDefault(x => x.Key == "SourceContext").Value?.Render(writer);
 
 				var context = contextBuilder.ToString();
-				context = context?.Trim('\"');
-
-				if(string.IsNullOrEmpty(context))
-					return;
+				context = context?.Trim('\"') ?? "";
 
 				var issueReport = new IssueReport() {
 					Exception = ConvertExceptionToSerializableException(logEvent),
@@ -75,7 +74,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 					new Uri("https://shapeshifter.azurewebsites.net/api/github/report"),
 					issueReport,
 					new Dictionary<HttpRequestHeader, string>());
-				Log.Logger.Verbose("Reported the log entry {entryName} as {githubIssueLink}.", logEvent.MessageTemplate.Text, response.IssueUrl);
+
+				Log.Logger.Verbose("Reported the log entry \"{entryName}\" as {githubIssueLink}.", logEvent.MessageTemplate.Text, response.IssueUrl);
 			}
 			catch
 			{
