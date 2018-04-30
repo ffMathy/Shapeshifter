@@ -57,15 +57,22 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 				using (var writer = new StringWriter(contextBuilder))
 					logEvent.Properties.SingleOrDefault(x => x.Key == "Context").Value?.Render(writer);
 
+				var context = contextBuilder.ToString();
+				if(string.IsNullOrEmpty(context))
+					return;
+
+				var issueReport = new IssueReport() {
+					Exception = ConvertExceptionToSerializableException(logEvent),
+					OffendingLogLine = logEvent.RenderMessage(),
+					OffendingLogMessage = logEvent.MessageTemplate.Text,
+					RecentLogLines = lastMessages.ToArray(),
+					Version = Program.GetCurrentVersion().ToString(),
+					Context = context
+				};
+
 				var response = await restClient.PostAsync<ReportResponse>(
 					new Uri("https://shapeshifter.azurewebsites.net/api/github/report"),
-					new IssueReport() {
-						Exception = ConvertExceptionToSerializableException(logEvent),
-						OffendingLogLine = logEvent.RenderMessage(),
-						OffendingLogMessage = logEvent.MessageTemplate.Text,
-						RecentLogLines = lastMessages.ToArray(),
-						Version = Program.GetCurrentVersion().ToString()
-					},
+					issueReport,
 					new Dictionary<HttpRequestHeader, string>());
 				Log.Logger.Verbose("Reported the log entry {entryName} as {githubIssueLink}.", logEvent.MessageTemplate.Text, response.IssueUrl);
 			}
