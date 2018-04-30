@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Window.Binders
 {
-    using System.Collections.Generic;
+	using System;
+	using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
@@ -12,8 +13,8 @@
     using Infrastructure.Threading.Interfaces;
 
     using Interfaces;
-
-    using ViewModels;
+	using Serilog;
+	using ViewModels;
     using ViewModels.Interfaces;
 
     public class SelectedElementToActionsSwitchMechanism : IPackageToActionSwitch
@@ -25,22 +26,29 @@
         readonly IAsyncListDictionaryBinder<IClipboardDataControlPackage, IActionViewModel> packageActionBinder;
 
         readonly IAsyncFilter asyncFilter;
+		readonly ILogger logger;
 
-        public SelectedElementToActionsSwitchMechanism(
+		public SelectedElementToActionsSwitchMechanism(
             IAction[] allActions,
             IAsyncFilter asyncFilter,
+			ILogger logger,
             IAsyncListDictionaryBinder<IClipboardDataControlPackage, IActionViewModel> packageActionBinder)
         {
             this.asyncFilter = asyncFilter;
-            this.packageActionBinder = packageActionBinder;
+			this.logger = logger;
+			this.packageActionBinder = packageActionBinder;
 
-            PrepareActions(allActions);
+			PrepareActions(allActions);
         }
 
         async void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(viewModel.SelectedElement))
-                await OnSelectedItemChangedAsync();
+			try { 
+				if (e.PropertyName == nameof(viewModel.SelectedElement))
+					await OnSelectedItemChangedAsync();
+			} catch(Exception ex) {
+				logger.Error(ex, "An error occured as the selected element changed.");
+			}
         }
 
         async Task OnSelectedItemChangedAsync()
