@@ -89,12 +89,12 @@ namespace Shapeshifter.Website.Controllers
 			var body = string.Empty;
 
 			body += $"<b>Version:</b> {issueReport.Version}\n\n";
+			body += $"<b>Offending class:</b> {issueReport.Context}\n\n";
 
 			if (issueReport.Exception != null)
 			{
 				body += "<h1>Exception</h1>\n";
 				body += $"<b>Type:</b> {issueReport.Exception.Name}\n\n";
-				body += $"<b>Offending class:</b> {issueReport.Exception.Context}\n\n";
 				body += $"```\n{issueReport.Exception.StackTrace}\n```\n\n";
 			}
 
