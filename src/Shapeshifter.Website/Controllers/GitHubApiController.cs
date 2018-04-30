@@ -59,16 +59,20 @@ namespace Shapeshifter.Website.Controllers
 					issueTitle = issueReport.OffendingLogMessage;
 				}
 
-				if(!string.IsNullOrWhiteSpace(issueReport.Context))
-					issueTitle += " in " + issueReport.Context;
-
 				issueTitle = issueTitle.TrimEnd('.', ' ', '\n', '\r');
+
+				if(!string.IsNullOrWhiteSpace(issueReport.Context)) {
+					var nameSplit = issueReport.Context.Split('.');
+					issueReport.Context = nameSplit[nameSplit.Length - 1];
+					
+					issueTitle += " in " + issueReport.Context;
+				}
+				
+				issueTitle += " on v" + issueReport.Version;
 
 				var existingIssue = existingIssues
 					.Where(x => x.Title == issueTitle)
-					.FirstOrDefault(x =>
-						x.State.Value == ItemState.Open ||
-						DateTime.UtcNow - x.CreatedAt >= TimeSpan.FromDays(3));
+					.FirstOrDefault();
 				if (existingIssue == null)
 				{
 					existingIssue = await _client.Issue.Create(
@@ -92,7 +96,9 @@ namespace Shapeshifter.Website.Controllers
 			var body = string.Empty;
 
 			body += $"<b>Version:</b> {issueReport.Version}\n\n";
-			body += $"<b>Offending class:</b> {issueReport.Context}\n\n";
+			
+			if(!string.IsNullOrEmpty(issueReport.Context))
+				body += $"<b>Offending class:</b> {issueReport.Context}\n\n";
 
 			if (issueReport.Exception != null)
 			{
