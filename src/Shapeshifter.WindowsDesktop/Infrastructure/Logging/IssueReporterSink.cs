@@ -57,10 +57,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 					logEvent.Properties.SingleOrDefault(x => x.Key == "SourceContext").Value?.Render(writer);
 
 				var context = contextBuilder.ToString();
-				context = context?.Trim('\"');
-
-				if(string.IsNullOrEmpty(context))
-					return;
+				context = context?.Trim('\"') ?? "";
 
 				var issueReport = new IssueReport() {
 					Exception = ConvertExceptionToSerializableException(logEvent),
