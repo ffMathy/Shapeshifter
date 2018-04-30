@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Octokit;
 using Shapeshifter.Website.Models;
 using Shapeshifter.Website.Models.GitHub.Request;
+using Shapeshifter.WindowsDesktop.Shared.GitHub.Response;
 
 namespace Shapeshifter.Website.Controllers
 {
@@ -32,7 +33,7 @@ namespace Shapeshifter.Website.Controllers
 		}
 
 		[HttpPost("report")]
-		public async Task<string> ReportIssue([FromBody] IssueReport issueReport)
+		public async Task<ReportResponse> ReportIssue([FromBody] IssueReport issueReport)
 		{
 			await _reportLock.WaitAsync();
 
@@ -75,7 +76,9 @@ namespace Shapeshifter.Website.Controllers
 						});
 				}
 
-				return existingIssue.HtmlUrl;
+				return new ReportResponse() {
+					IssueUrl = existingIssue.HtmlUrl
+				};
 			} finally {
 				_reportLock.Release();
 			}

@@ -1,10 +1,15 @@
 ﻿using FluffySpoon.Http;
+using Serilog;
 using Serilog.Core;
 using Serilog.Events;
+using Shapeshifter.Website.Models.GitHub.Request;
+using Shapeshifter.WindowsDesktop.Shared.GitHub.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
@@ -14,12 +19,15 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 		readonly Stack<string> logHistory;
 		readonly IRestClient restClient;
 
+		readonly SemaphoreSlim reportingSemaphore;
+
 		const int logHistoryLength = 100;
 
 		public IssueReporterSink()
 		{
 			logHistory = new Stack<string>();
 			restClient = new RestClient();
+			reportingSemaphore = new SemaphoreSlim(1);
 		}
 
 		void ScheduleLogEventReport(LogEvent logEvent)
@@ -36,17 +44,37 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 			}
 		}
 
-		async void ReportLogEvent(LogEvent logEvent, List<string> lastMessages)
+		async void ReportLogEvent(LogEvent logEvent, IEnumerable<string> lastMessages)
 		{
 			try
 			{
-				//await restClient.PostAsync<string>(
-				//	new Uri("https://shapeshifter.azurewebsites.net/api/github/report"))
+				await reportingSemaphore.WaitAsync();
+				await Task.Delay(5000);
+
+				var response = await restClient.PostAsync<ReportResponse>(
+					new Uri("https://shapeshifter.azurewebsites.net/api/github/report"),
+					new IssueReport() {
+						Exception = ConvertExceptionToSerializableException(logEvent.Exception),
+						OffendingLogLine = logEvent.RenderMessage(),
+						OffendingLogMessage = logEvent.MessageTemplate.Text,
+						RecentLogLines = lastMessages.ToArray(),
+						Version = Program.GetCurrentVersion().ToString()
+					},
+					new Dictionary<HttpRequestHeader, string>());
+				Log.Logger.Verbose("Reported the log entry {entryName} as {githubIssueLink}.", logEvent.MessageTemplate.Text, response.IssueUrl);
 			}
 			catch
 			{
 				//don't allow errors here to ruin everything.
 			}
+			finally {
+				reportingSemaphore.Release();
+			}
+		}
+
+		private SerializableException ConvertExceptionToSerializableException(Exception exception)
+		{
+			throw new NotImplementedException();
 		}
 
 		public void Emit(LogEvent logEvent)
