@@ -75,6 +75,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 					new Uri("https://shapeshifter.azurewebsites.net/api/github/report"),
 					issueReport,
 					new Dictionary<HttpRequestHeader, string>());
+
 				Log.Logger.Verbose("Reported the log entry {entryName} as {githubIssueLink}.", logEvent.MessageTemplate.Text, response.IssueUrl);
 			}
 			catch

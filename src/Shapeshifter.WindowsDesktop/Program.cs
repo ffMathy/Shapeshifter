@@ -137,7 +137,9 @@
 				null;
 
 			Log.Logger.Error(ex, "An unhandled error occured. {@parameters}", parameters);
+			Thread.Sleep(10000);
 			Log.CloseAndFlush();
+			Thread.Sleep(10000);
 
 			if (Debugger.IsAttached)
 			{
