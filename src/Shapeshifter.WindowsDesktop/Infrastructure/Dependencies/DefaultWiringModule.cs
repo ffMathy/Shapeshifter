@@ -88,7 +88,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 						retainedFileCountLimit: 2,
 						shared: true,
 						outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [#{ProcessId}] [{SourceContext:l}] [{Level:u3}]{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-					.WriteTo.Sink(new IssueReporterSink())
+					.WriteTo.Sink(new IssueReporterSink(environment))
 					.CreateLogger();
 			}
 

@@ -12,7 +12,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using static System.Environment;
+using SystemEnvironment = System.Environment;
 
 namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 {
@@ -55,8 +56,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 
 				var issueReport = new IssueReport() {
 					Exception = ConvertExceptionToSerializableException(logEvent),
-					OffendingLogLine = logEvent.RenderMessage(),
-					OffendingLogMessage = logEvent.MessageTemplate.Text,
+					OffendingLogLine = StripSensitiveInformation(logEvent.RenderMessage()),
+					OffendingLogMessage = StripSensitiveInformation(logEvent.MessageTemplate.Text),
 					RecentLogLines = lastMessages.ToArray(),
 					Version = Program.GetCurrentVersion().ToString(),
 					Context = context
@@ -78,7 +79,18 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 			}
 		}
 
-		private static string GetPropertyValue(LogEvent logEvent, string name)
+		string StripSensitiveInformation(string input)
+		{
+			return input
+				.Replace(
+					GetFolderPath(SpecialFolder.UserProfile),
+					"%USERPROFILE%")
+				.Replace(
+					UserName, 
+					"%USERNAME%");
+		}
+
+		static string GetPropertyValue(LogEvent logEvent, string name)
 		{
 			var contextBuilder = new StringBuilder();
 
@@ -89,15 +101,15 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 			return context;
 		}
 
-		private SerializableException ConvertExceptionToSerializableException(LogEvent logEvent)
+		SerializableException ConvertExceptionToSerializableException(LogEvent logEvent)
 		{
 			if(logEvent.Exception == null)
 				return null;
 
 			return new SerializableException() {
-				Message = logEvent.Exception.Message,
+				Message = StripSensitiveInformation(logEvent.Exception.Message),
 				Name = logEvent.Exception.GetType().Name,
-				StackTrace = logEvent.Exception.StackTrace
+				StackTrace = StripSensitiveInformation(logEvent.Exception.StackTrace)
 			};
 		}
 
@@ -110,7 +122,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 				ScheduleLogEventReport(logEvent);
 
 			var level = GetPropertyValue(logEvent, "Level");
-			var message = $"{level:u3} {logEvent.RenderMessage()}";
+			var message = StripSensitiveInformation($"{level:u3} {logEvent.RenderMessage()}");
 			lock (logHistory)
 			{
 				logHistory.AddLast(message);
