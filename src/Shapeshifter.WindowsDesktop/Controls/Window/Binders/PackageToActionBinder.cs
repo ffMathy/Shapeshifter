@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Window.Binders
 {
 	using System;
+	using System.Linq;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
 	using System.Collections.Specialized;
@@ -44,9 +45,11 @@
 			sourceCollection.CollectionChanged += SourceCollection_CollectionChanged;
 		}
 
-		public void LoadFromKey(IClipboardDataControlPackage key)
+		public async void LoadFromKey(IClipboardDataControlPackage key)
 		{
-			lock (this)
+			await collectionChangedLock.WaitAsync();
+
+			try
 			{
 				boundDestinationCollection.Clear();
 				boundDestinationCollection.Add(Default);
@@ -57,22 +60,25 @@
 					boundDestinationCollection.Add(item);
 				}
 			}
+			finally
+			{
+				collectionChangedLock.Release();
+			}
 		}
 
 		async void SourceCollection_CollectionChanged(
 			object sender,
 			NotifyCollectionChangedEventArgs e)
 		{
-			await collectionChangedLock.WaitAsync();
+			if (e?.NewItems == null || e.NewItems.Count <= 0)
+				return;
 
+			if (e?.OldItems != null && e.OldItems.Count > 0)
+				return;
+
+			await collectionChangedLock.WaitAsync();
 			try
 			{
-				if (e?.NewItems == null || e.NewItems.Count <= 0)
-					return;
-
-				if (e?.OldItems != null && e.OldItems.Count > 0)
-					return;
-
 				foreach (IClipboardDataControlPackage item in e.NewItems)
 				{
 					PrepareDictionaryStateKey(item);
@@ -101,13 +107,8 @@
 
 		void PrepareDictionaryStateKey(IClipboardDataControlPackage item)
 		{
-			lock (this)
-			{
-				if (!dictionaryStates.ContainsKey(item))
-				{
-					dictionaryStates.Add(item, new HashSet<IActionViewModel>());
-				}
-			}
+			if (!dictionaryStates.ContainsKey(item))
+				dictionaryStates.Add(item, new HashSet<IActionViewModel>());
 		}
 	}
 }

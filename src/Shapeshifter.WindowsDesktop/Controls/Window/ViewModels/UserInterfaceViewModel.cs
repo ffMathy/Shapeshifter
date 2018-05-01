@@ -266,7 +266,7 @@
 		{
 			if (Elements.Count == 0)
 			{
-				logger.Warning("Did not show the UI because there are no clipboard elements in the list.");
+				logger.Information("Did not show the UI because there are no clipboard elements in the list.");
 				return;
 			}
 
