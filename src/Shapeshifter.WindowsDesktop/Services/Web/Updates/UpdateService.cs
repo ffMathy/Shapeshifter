@@ -70,12 +70,12 @@
             }
             catch (RateLimitExceededException)
             {
-                logger.Warning(
+                logger.Information(
                     "Did not search for updates due to the GitHub rate limit being exceed.");
             }
             catch (HttpRequestException)
             {
-                logger.Warning(
+                logger.Information(
                     "Could not search for updates due to a connection issue.");
             }
         }
