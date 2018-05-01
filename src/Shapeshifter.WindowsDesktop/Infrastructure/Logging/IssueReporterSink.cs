@@ -18,17 +18,17 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 {
 	class IssueReporterSink : ILogEventSink
 	{
-		readonly Stack<string> logHistory;
+		readonly LinkedList<string> logHistory;
 		readonly SemaphoreSlim reportingSemaphore;
 
 		readonly IRestClient restClient;
 		readonly IEnvironmentInformation environmentInformation;
 
-		const int logHistoryLength = 100;
+		const int logHistoryLength = 1000;
 
 		public IssueReporterSink(IEnvironmentInformation environmentInformation)
 		{
-			logHistory = new Stack<string>();
+			logHistory = new LinkedList<string>();
 			restClient = new RestClient();
 			reportingSemaphore = new SemaphoreSlim(1);
 
@@ -40,14 +40,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 			lock (logHistory)
 			{
 				Log.Logger.Verbose("Reporting the log entry \"{entryName}\".", logEvent.MessageTemplate.Text);
-
-				var lastMessages = new List<string>();
-				for (var i = 0; i < logHistoryLength && logHistory.Count > 0; i++)
-				{
-					lastMessages.Add(logHistory.Pop());
-				}
-
-				ReportLogEvent(logEvent, lastMessages);
+				ReportLogEvent(logEvent, logHistory);
 			}
 		}
 
@@ -57,12 +50,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 			{
 				await reportingSemaphore.WaitAsync();
 
-				var contextBuilder = new StringBuilder();
-
-				using (var writer = new StringWriter(contextBuilder))
-					logEvent.Properties.SingleOrDefault(x => x.Key == "SourceContext").Value?.Render(writer);
-
-				var context = contextBuilder.ToString();
+				var context = GetPropertyValue(logEvent, "SourceContext");
 				context = context?.Trim('\"') ?? "";
 
 				var issueReport = new IssueReport() {
@@ -90,6 +78,17 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 			}
 		}
 
+		private static string GetPropertyValue(LogEvent logEvent, string name)
+		{
+			var contextBuilder = new StringBuilder();
+
+			using (var writer = new StringWriter(contextBuilder))
+				logEvent.Properties.SingleOrDefault(x => x.Key == name).Value?.Render(writer);
+
+			var context = contextBuilder.ToString();
+			return context;
+		}
+
 		private SerializableException ConvertExceptionToSerializableException(LogEvent logEvent)
 		{
 			if(logEvent.Exception == null)
@@ -110,10 +109,13 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 			if (logEvent.Level == LogEventLevel.Error || logEvent.Level == LogEventLevel.Warning)
 				ScheduleLogEventReport(logEvent);
 
-			var message = logEvent.RenderMessage();
+			var level = GetPropertyValue(logEvent, "Level");
+			var message = $"{level:u3} {logEvent.RenderMessage()}";
 			lock (logHistory)
 			{
-				logHistory.Push(message);
+				logHistory.AddLast(message);
+				if(logHistory.Count > logHistoryLength)
+					logHistory.RemoveFirst();
 			}
 		}
 	}
