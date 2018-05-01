@@ -298,7 +298,6 @@
     <Compile Include="Data\Wrappers\GeneralWrapper.cs" />
     <Compile Include="Data\Wrappers\Interfaces\IGeneralWrapper.cs" />
     <Compile Include="Data\Wrappers\Interfaces\IMemoryWrapper.cs" />
-    <Compile Include="Helpers\BinaryStructHelper.cs" />
     <Compile Include="Infrastructure\Dependencies\AssemblyRegistrationHelper.cs" />
     <Compile Include="Infrastructure\Dependencies\InjectAttribute.cs" />
     <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />

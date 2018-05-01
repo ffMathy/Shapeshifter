@@ -80,6 +80,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BinaryStructHelper.cs" />
     <Compile Include="ClipboardNativeApi.cs" />
     <Compile Include="GeneralNativeApi.cs" />
     <Compile Include="Interfaces\IClipboardNativeApi.cs" />
