@@ -3,6 +3,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using Shapeshifter.Website.Models.GitHub.Request;
+using Shapeshifter.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using Shapeshifter.WindowsDesktop.Shared.GitHub.Response;
 using System;
 using System.Collections.Generic;
@@ -11,24 +12,28 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using static System.Environment;
+using SystemEnvironment = System.Environment;
 
 namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 {
 	class IssueReporterSink : ILogEventSink
 	{
-		readonly Stack<string> logHistory;
-		readonly IRestClient restClient;
-
+		readonly LinkedList<string> logHistory;
 		readonly SemaphoreSlim reportingSemaphore;
 
-		const int logHistoryLength = 100;
+		readonly IRestClient restClient;
+		readonly IEnvironmentInformation environmentInformation;
 
-		public IssueReporterSink()
+		const int logHistoryLength = 1000;
+
+		public IssueReporterSink(IEnvironmentInformation environmentInformation)
 		{
-			logHistory = new Stack<string>();
+			logHistory = new LinkedList<string>();
 			restClient = new RestClient();
 			reportingSemaphore = new SemaphoreSlim(1);
+
+			this.environmentInformation = environmentInformation;
 		}
 
 		void ScheduleLogEventReport(LogEvent logEvent)
@@ -36,14 +41,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 			lock (logHistory)
 			{
 				Log.Logger.Verbose("Reporting the log entry \"{entryName}\".", logEvent.MessageTemplate.Text);
-
-				var lastMessages = new List<string>();
-				for (var i = 0; i < logHistoryLength && logHistory.Count > 0; i++)
-				{
-					lastMessages.Add(logHistory.Pop());
-				}
-
-				ReportLogEvent(logEvent, lastMessages);
+				ReportLogEvent(logEvent, logHistory);
 			}
 		}
 
@@ -53,18 +51,13 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 			{
 				await reportingSemaphore.WaitAsync();
 
-				var contextBuilder = new StringBuilder();
-
-				using (var writer = new StringWriter(contextBuilder))
-					logEvent.Properties.SingleOrDefault(x => x.Key == "SourceContext").Value?.Render(writer);
-
-				var context = contextBuilder.ToString();
+				var context = GetPropertyValue(logEvent, "SourceContext");
 				context = context?.Trim('\"') ?? "";
 
 				var issueReport = new IssueReport() {
 					Exception = ConvertExceptionToSerializableException(logEvent),
-					OffendingLogLine = logEvent.RenderMessage(),
-					OffendingLogMessage = logEvent.MessageTemplate.Text,
+					OffendingLogLine = StripSensitiveInformation(logEvent.RenderMessage()),
+					OffendingLogMessage = StripSensitiveInformation(logEvent.MessageTemplate.Text),
 					RecentLogLines = lastMessages.ToArray(),
 					Version = Program.GetCurrentVersion().ToString(),
 					Context = context
@@ -75,7 +68,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 					issueReport,
 					new Dictionary<HttpRequestHeader, string>());
 
-				Log.Logger.Verbose("Reported the log entry \"{entryName}\" as {githubIssueLink}.", logEvent.MessageTemplate.Text, response.IssueUrl);
+				Log.Logger.Verbose("Reported the log entry {entryName} as {githubIssueLink}.", logEvent.MessageTemplate.Text, response.IssueUrl);
 			}
 			catch
 			{
@@ -86,27 +79,55 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 			}
 		}
 
-		private SerializableException ConvertExceptionToSerializableException(LogEvent logEvent)
+		string StripSensitiveInformation(string input)
+		{
+			return input
+				.Replace(
+					GetFolderPath(SpecialFolder.UserProfile),
+					"%USERPROFILE%")
+				.Replace(
+					UserName, 
+					"%USERNAME%");
+		}
+
+		static string GetPropertyValue(LogEvent logEvent, string name)
+		{
+			var contextBuilder = new StringBuilder();
+
+			using (var writer = new StringWriter(contextBuilder))
+				logEvent.Properties.SingleOrDefault(x => x.Key == name).Value?.Render(writer);
+
+			var context = contextBuilder.ToString();
+			return context;
+		}
+
+		SerializableException ConvertExceptionToSerializableException(LogEvent logEvent)
 		{
 			if(logEvent.Exception == null)
 				return null;
 
 			return new SerializableException() {
-				Message = logEvent.Exception.Message,
+				Message = StripSensitiveInformation(logEvent.Exception.Message),
 				Name = logEvent.Exception.GetType().Name,
-				StackTrace = logEvent.Exception.StackTrace
+				StackTrace = StripSensitiveInformation(logEvent.Exception.StackTrace)
 			};
 		}
 
 		public void Emit(LogEvent logEvent)
 		{
+			if (environmentInformation.GetIsDebugging())
+				return;
+
 			if (logEvent.Level == LogEventLevel.Error || logEvent.Level == LogEventLevel.Warning)
 				ScheduleLogEventReport(logEvent);
 
-			var message = logEvent.RenderMessage();
+			var level = GetPropertyValue(logEvent, "Level");
+			var message = StripSensitiveInformation($"{level:u3} {logEvent.RenderMessage()}");
 			lock (logHistory)
 			{
-				logHistory.Push(message);
+				logHistory.AddLast(message);
+				if(logHistory.Count > logHistoryLength)
+					logHistory.RemoveFirst();
 			}
 		}
 	}

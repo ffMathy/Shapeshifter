@@ -117,21 +117,29 @@ namespace Shapeshifter.Website.Controllers
 						if (string.IsNullOrEmpty(line.Trim()))
 							continue;
 
-						body += $"> {line}\n";
+						body += $"> {GitHubEncode(line)}\n";
 					}
 					body += "\n";
 				}
 
+				body += "<details><summary>Full log</summary><p>\n\n";
 				foreach (var line in issueReport.RecentLogLines)
 				{
 					if (string.IsNullOrEmpty(line.Trim()))
 						continue;
 
-					body += $"> {line}\n";
+					body += $"> {GitHubEncode(line)}\n";
 				}
+				body += "\n</p></details>";
 			}
 
 			return body;
+		}
+
+		string GitHubEncode(string input) {
+			return input
+				.Replace("@", "&commat;")
+				.Replace("#", "&#35;");
 		}
 	}
 }
