@@ -3,6 +3,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using Shapeshifter.Website.Models.GitHub.Request;
+using Shapeshifter.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using Shapeshifter.WindowsDesktop.Shared.GitHub.Response;
 using System;
 using System.Collections.Generic;
@@ -18,17 +19,20 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 	class IssueReporterSink : ILogEventSink
 	{
 		readonly Stack<string> logHistory;
-		readonly IRestClient restClient;
-
 		readonly SemaphoreSlim reportingSemaphore;
+
+		readonly IRestClient restClient;
+		readonly IEnvironmentInformation environmentInformation;
 
 		const int logHistoryLength = 100;
 
-		public IssueReporterSink()
+		public IssueReporterSink(IEnvironmentInformation environmentInformation)
 		{
 			logHistory = new Stack<string>();
 			restClient = new RestClient();
 			reportingSemaphore = new SemaphoreSlim(1);
+
+			this.environmentInformation = environmentInformation;
 		}
 
 		void ScheduleLogEventReport(LogEvent logEvent)
@@ -75,7 +79,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 					issueReport,
 					new Dictionary<HttpRequestHeader, string>());
 
-				Log.Logger.Verbose("Reported the log entry \"{entryName}\" as {githubIssueLink}.", logEvent.MessageTemplate.Text, response.IssueUrl);
+				Log.Logger.Verbose("Reported the log entry {entryName} as {githubIssueLink}.", logEvent.MessageTemplate.Text, response.IssueUrl);
 			}
 			catch
 			{
@@ -100,6 +104,9 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 
 		public void Emit(LogEvent logEvent)
 		{
+			if (environmentInformation.GetIsDebugging())
+				return;
+
 			if (logEvent.Level == LogEventLevel.Error || logEvent.Level == LogEventLevel.Warning)
 				ScheduleLogEventReport(logEvent);
 
