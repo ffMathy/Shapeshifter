@@ -83,9 +83,7 @@
         async Task RunSecondKeyboardPhaseAsync(bool isCtrlDown, bool isVDown)
         {
             if (!isCtrlDown && !isVDown)
-            {
                 return;
-            }
 
             var secondPhaseOperations = GetSecondPhaseKeyOperations(isCtrlDown, isVDown);
             await keyboardManager.SendKeysAsync(secondPhaseOperations.ToArray());
