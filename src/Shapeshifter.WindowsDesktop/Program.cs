@@ -111,8 +111,9 @@
 			try
 			{
 				AppDomain.CurrentDomain.FirstChanceException += (sender, e) => {
-					if(Debugger.IsAttached)
-						Log.Debug(e.Exception, "First chance exception occured.");
+					if(Debugger.IsAttached) { 
+						//Log.Debug(e.Exception, "First chance exception occured.");
+					}
 				};
 
 				AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) => {
