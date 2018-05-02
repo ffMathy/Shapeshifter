@@ -59,5 +59,10 @@
             var resources = Application.Current.Resources;
             resources[key + "Brush"] = new SolidColorBrush(color);
         }
-    }
+
+		public bool CanReceiveMessage(Message message)
+		{
+			return message == Message.WM_DWMCOLORIZATIONCOLORCHANGED;
+		}
+	}
 }

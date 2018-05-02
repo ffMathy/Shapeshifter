@@ -34,9 +34,14 @@
         public void ResetAccumulatedWheelDelta()
         {
             currentDelta = 0;
-        }
+		}
 
-        void TriggerScrollEventsIfNeeded()
+		public bool CanReceiveMessage(Message message)
+		{
+			return message == Message.WM_XBUTTONDOWN || message == Message.WM_MOUSEHWHEEL || message == Message.WM_MOUSEWHEEL;
+		}
+
+		void TriggerScrollEventsIfNeeded()
         {
             if ((currentDelta < Mouse.MouseWheelDeltaForOneLine) && 
                 (currentDelta > -Mouse.MouseWheelDeltaForOneLine))
@@ -185,5 +190,5 @@
         {
             return (short) (e.WordParameter.ToInt64() >> 16);
         }
-    }
+	}
 }

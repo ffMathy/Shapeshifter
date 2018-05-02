@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading;
 	using System.Threading.Tasks;
 
@@ -108,11 +109,11 @@
 		async Task HandleNextMessageAsync()
 		{
 			var nextMessage = pendingMessages.Dequeue();
-			foreach (var interceptor in windowMessageInterceptors)
+			var relevantInterceptors = windowMessageInterceptors.Where(x => x.CanReceiveMessage(nextMessage.Message));
+			foreach (var interceptor in relevantInterceptors)
 			{
 				var messageName = FormatMessage(nextMessage.Message);
-				var interceptorName = interceptor.GetType()
-												 .Name;
+				var interceptorName = interceptor.GetType().Name;
 
 				logger.Information(
 					$"Passing message {messageName} to interceptor {interceptorName}.");

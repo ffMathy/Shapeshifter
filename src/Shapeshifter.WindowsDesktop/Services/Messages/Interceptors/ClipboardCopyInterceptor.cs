@@ -126,5 +126,10 @@
 		{
 			shouldSkipNext = true;
 		}
+
+		public bool CanReceiveMessage(Message message)
+		{
+			return message == Message.WM_CLIPBOARDUPDATE;
+		}
 	}
 }
