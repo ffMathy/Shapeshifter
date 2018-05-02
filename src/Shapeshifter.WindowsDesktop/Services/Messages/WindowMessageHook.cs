@@ -88,15 +88,11 @@
 		public void Connect()
 		{
 			if (IsConnected)
-			{
 				throw new InvalidOperationException(
 					"The window message hook has already been connected.");
-			}
 
 			if (TargetWindow == null)
-			{
 				throw new InvalidOperationException($"You must first specify the {nameof(TargetWindow)} to connect to.");
-			}
 
 			connectedWindow = TargetWindow;
 
@@ -146,12 +142,7 @@
 			ref bool handled)
 		{
 			if (!Enum.IsDefined(typeof(Message), msg))
-			{
 				return IntPtr.Zero;
-			}
-
-			logger.Information(
-				$"Message received: [{hwnd}, {FormatMessage((Message)msg)}, {wParam}, {lParam}]");
 
 			var argument = new WindowMessageReceivedArgument(hwnd, (Message)msg, wParam, lParam);
 			pendingMessages.Enqueue(argument);

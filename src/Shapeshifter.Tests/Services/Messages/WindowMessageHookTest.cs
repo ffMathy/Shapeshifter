@@ -94,13 +94,15 @@
 
             Assert.IsNotNull(windowHookCallback);
 
-            var hwnd = new IntPtr(1);
+			var fakeInterceptor = Container.Resolve<IWindowMessageInterceptor>();
+			fakeInterceptor.CanReceiveMessage(Message.WM_HOTKEY).Returns(true);
+
+			var hwnd = new IntPtr(1);
             var wParam = new IntPtr(2);
             var lParam = new IntPtr(3);
             var handled = false;
             windowHookCallback(hwnd, (int) Message.WM_HOTKEY, wParam, lParam, ref handled);
 
-            var fakeInterceptor = Container.Resolve<IWindowMessageInterceptor>();
             fakeInterceptor
                 .Received()
                 .ReceiveMessageEventAsync(
