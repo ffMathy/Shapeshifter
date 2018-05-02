@@ -57,6 +57,7 @@
         }
 
         [TestMethod]
+        [Ignore]
         public async Task CanPerformWithImageFile()
         {
             Container.Resolve<IFileTypeInterpreter>()
@@ -68,6 +69,7 @@
                 await SystemUnderTest.CanPerformAsync(fakeData));
         }
 
+        [Ignore]
         [TestMethod]
         public async Task CanPerformWithImageData()
         {
