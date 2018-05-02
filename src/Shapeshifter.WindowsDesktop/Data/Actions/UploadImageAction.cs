@@ -46,6 +46,9 @@
         async Task<bool> CanPerformAsync(
             IClipboardData clipboardData)
         {
+            // Until implemented
+            return false;
+
             return IsSuitableImageData(clipboardData) || IsSuitableFileData(clipboardData);
         }
 
