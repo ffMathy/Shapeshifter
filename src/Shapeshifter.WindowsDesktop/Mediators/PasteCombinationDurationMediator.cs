@@ -141,7 +141,8 @@
                 await threadDelay.ExecuteAsync(100);
                 decisecondsPassed++;
 				
-                logger.Information($"Paste combination held down for {decisecondsPassed}.");
+				if(decisecondsPassed <= DurationInDeciseconds)
+					logger.Information($"Paste combination held down for {decisecondsPassed} deciseconds.");
 
                 RaiseDurationPassedEventIfNeeded(decisecondsPassed);
 			}
@@ -150,18 +151,16 @@
         void RaiseDurationPassedEventIfNeeded(int decisecondsPassed)
         {
             if ((DurationInDeciseconds != 0) && ((decisecondsPassed != DurationInDeciseconds) || (PasteCombinationDurationPassed == null)))
-            {
                 return;
-            }
 
-            mainThreadInvoker.Invoke(
+			logger.Information("Raising paste duration passed event.");
+			mainThreadInvoker.Invoke(
                 () => {
                     PasteCombinationDurationPassed?.Invoke(
                         this,
                         new PasteCombinationDurationPassedEventArgument
                             ());
                 });
-            logger.Information("Paste duration passed event raised.");
         }
 
         void InstallPasteHotkeyInterceptor()
