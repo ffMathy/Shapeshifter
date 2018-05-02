@@ -40,9 +40,7 @@
         public void Install(IntPtr windowHandle)
         {
             if (isInstalled)
-            {
                 throw new InvalidOperationException("This interceptor has already been installed.");
-            }
 
             installedWindowHandle = windowHandle;
 
@@ -52,9 +50,14 @@
             }
 
             isInstalled = true;
-        }
+		}
 
-        public Task ReceiveMessageEventAsync(WindowMessageReceivedArgument e)
+		public bool CanReceiveMessage(Message message)
+		{
+			return message == Message.WM_SHOWWINDOW || message == Message.WM_HOTKEY;
+		}
+
+		public Task ReceiveMessageEventAsync(WindowMessageReceivedArgument e)
         {
             switch (e.Message)
             {
@@ -79,9 +82,7 @@
         void HandleHotkeyMessage(WindowMessageReceivedArgument e)
         {
             if (!isInstalled)
-            {
                 return;
-            }
 
             var interception = GetInterceptionForInterceptionId((int) e.WordParameter);
             if (interception != null)
@@ -186,5 +187,5 @@
 
             keyInterceptions.Remove(key);
         }
-    }
+	}
 }

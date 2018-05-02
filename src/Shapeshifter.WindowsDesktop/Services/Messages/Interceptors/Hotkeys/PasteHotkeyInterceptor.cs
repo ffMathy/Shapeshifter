@@ -63,9 +63,14 @@
             hotkeyInterception.Stop(mainWindowHandle);
 
             isInstalled = false;
-        }
+		}
 
-        public Task ReceiveMessageEventAsync(WindowMessageReceivedArgument e)
+		public bool CanReceiveMessage(Message message)
+		{
+			return message == Message.WM_HOTKEY;
+		}
+
+		public Task ReceiveMessageEventAsync(WindowMessageReceivedArgument e)
         {
             if ((e.Message == Message.WM_HOTKEY) &&
                 ((int) e.WordParameter == hotkeyInterception.InterceptionId))
@@ -109,5 +114,5 @@
 
             PasteDetected.Invoke(this, new EventArgs());
         }
-    }
+	}
 }

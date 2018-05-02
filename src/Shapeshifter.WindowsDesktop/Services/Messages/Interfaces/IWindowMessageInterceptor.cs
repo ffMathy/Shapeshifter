@@ -11,6 +11,7 @@
 
         void Uninstall();
 
-        Task ReceiveMessageEventAsync(WindowMessageReceivedArgument e);
+		bool CanReceiveMessage(Message message);
+		Task ReceiveMessageEventAsync(WindowMessageReceivedArgument e);
     }
 }
