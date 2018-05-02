@@ -49,7 +49,7 @@
             // Until implemented
             return false;
 
-            return IsSuitableImageData(clipboardData) || IsSuitableFileData(clipboardData);
+            //return IsSuitableImageData(clipboardData) || IsSuitableFileData(clipboardData);
         }
 
         static bool IsSuitableImageData(
