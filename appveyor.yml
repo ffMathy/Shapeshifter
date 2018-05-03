@@ -14,7 +14,7 @@ environment:
     secure: NdaCVjPIdd6UghkTaEJ1oNbh0ukOoPKMC4K+B4XnrGG1xEcYSIw63+25O+pTQA3T
   issue_reporter_token:
     secure: QfLm+3QNQHOvSlRkiScVRSDZ3a7cL4JfiqTDK2DsV3Pl+M/L3drNQrAkGhhg4e+r
-  code_signing_certificate_password:
+  code_signing_password:
     secure: bn6XW8obH7l9TqBmBbmn5Q/yQLKaAR3xwqb1rOGSEJ+LlHgt3zfMw81HQcWK6Z8h
 
 pull_requests:
@@ -48,7 +48,7 @@ after_build:
 
     cd build\application
 
-    "C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe" sign /f "..\Certificate.pfx" /p %code_signing_certificate_password% /d "Shapeshifter" /du "https://shapeshifter.software/" /t "http://timestamp.comodoca.com/authenticode" /v "Shapeshifter.exe"
+    "C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe" sign /f "..\Certificate.pfx" /p "%code_signing_password%" /d "Shapeshifter" /du "https://shapeshifter.software/" /t "http://timestamp.comodoca.com/authenticode" /v "Shapeshifter.exe"
 
     cd ..\..\
 
