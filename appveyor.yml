@@ -48,7 +48,7 @@ after_build:
 
     cd build\application
 
-    "C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin\signtool.exe" sign /f "..\Certificate.pfx" /p %code_signing_certificate_password% /d "Shapeshifter" /du "https://shapeshifter.software/" /t "http://timestamp.comodoca.com/authenticode" /v "Shapeshifter.exe"
+    "C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe" sign /f "..\Certificate.pfx" /p %code_signing_certificate_password% /d "Shapeshifter" /du "https://shapeshifter.software/" /t "http://timestamp.comodoca.com/authenticode" /v "Shapeshifter.exe"
 
     cd ..\..\
 
