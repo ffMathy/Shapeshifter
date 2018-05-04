@@ -33,12 +33,6 @@ init:
 - ps: Update-AppveyorBuild -Version "6.$(Get-Date -format yyyy).$(Get-Date -format Mdd).$((Get-ChildItem Env:APPVEYOR_BUILD_NUMBER).Value)"
 after_build:
 - cmd: >
-    cd build\application
-
-    "C:\Program Files (x86)\Windows Kits\10\bin\10.0.16299.0\x86\signtool.exe" sign /f "..\Certificate.pfx" /fd SHA256 /p "%code_signing_password%" /d "Shapeshifter" /du "https://shapeshifter.software/" /tr "http://timestamp.comodoca.com/authenticode" /v "Shapeshifter.exe"
-
-    cd ..\..\
-
     mkdir build\website
 
     cd src\Shapeshifter.Website
@@ -77,6 +71,14 @@ deploy:
     branch: master
 install:
   - ps: Install-Product node ''
+before_deploy:
+- cmd: >
+    cd build\application
+
+    "C:\Program Files (x86)\Windows Kits\10\bin\10.0.16299.0\x86\signtool.exe" sign /f "..\Certificate.pfx" /fd SHA256 /p "%code_signing_password%" /d "Shapeshifter" /du "https://shapeshifter.software/" /tr "http://timestamp.comodoca.com/authenticode" /v "Shapeshifter.exe"
+
+    cd ..\..\
+
 after_deploy:
 - cmd: >
     npm install github-release-notes -g
