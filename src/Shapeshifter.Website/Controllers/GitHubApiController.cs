@@ -112,24 +112,27 @@ namespace Shapeshifter.Website.Controllers
 				body += "<h1>Log</h1>\n\n";
 				if (issueReport.OffendingLogLine != null)
 				{
+					body += "```\n";
 					foreach (var line in issueReport.OffendingLogLine.Split('\n', '\r'))
 					{
 						if (string.IsNullOrEmpty(line.Trim()))
 							continue;
 
-						body += $"> {GitHubEncode(line)}\n";
+						body += $"{GitHubEncode(line)}\n";
 					}
-					body += "\n";
+					body += "```\n";
 				}
 
 				body += "<details><summary>Full log</summary><p>\n\n";
+				body += "```\n";
 				foreach (var line in issueReport.RecentLogLines)
 				{
 					if (string.IsNullOrEmpty(line.Trim()))
 						continue;
 
-					body += $"> {GitHubEncode(line)}\n";
+					body += $"{GitHubEncode(line)}\n";
 				}
+				body += "\n```";
 				body += "\n</p></details>";
 			}
 
