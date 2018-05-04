@@ -1,5 +1,7 @@
 version: 1.0.0.{build}
 environment:
+  code_signing_password:
+    secure: bn6XW8obH7l9TqBmBbmn5Q/yQLKaAR3xwqb1rOGSEJ+LlHgt3zfMw81HQcWK6Z8h
   webdeploy_password:
     secure: 5Urzbp6Aj24/wHED9+Q/CtH4EjN7nv9PGdCdBDr5XECq8wnDxQcHK5YoS246hOqcEBNCU2OZ4rq26LVWCRbfbw==
   patreon_client_id:
@@ -69,6 +71,14 @@ deploy:
     branch: master
 install:
   - ps: Install-Product node ''
+before_deploy:
+- cmd: >
+    cd build\application
+
+    "C:\Program Files (x86)\Windows Kits\10\bin\10.0.16299.0\x86\signtool.exe" sign /f "..\Certificate.pfx" /fd SHA256 /p "%code_signing_password%" /d "Shapeshifter" /du "https://shapeshifter.software/" /tr "http://timestamp.comodoca.com/authenticode" /v "Shapeshifter.exe"
+
+    cd ..\..\
+
 after_deploy:
 - cmd: >
     npm install github-release-notes -g
