@@ -32,7 +32,7 @@
 
 		public IClipboardDataControlPackage CreateFromCurrentClipboardData()
 		{
-			var dataPackage = dataPackageFactory.CreateFromCurrentClipboardData();
+			var dataPackage = dataPackageFactory.CreateFromCurrentClipboardData();			
 			return CreateFromDataPackage(dataPackage);
 		}
 
@@ -57,11 +57,12 @@
 
 		IClipboardControl CreateControlFromDataPackage(IClipboardDataPackage dataPackage)
 		{
+			if(dataPackage == null)
+				return null;
+		
 			var matchingFactory = controlFactories.FirstOrDefault(x => x.CanBuildControl(dataPackage));
 			if (matchingFactory != null)
-			{
 				return matchingFactory.BuildControl(dataPackage);
-			}
 
 			return null;
 		}
