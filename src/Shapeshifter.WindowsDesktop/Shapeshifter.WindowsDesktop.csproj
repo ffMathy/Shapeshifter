@@ -314,8 +314,6 @@
     <Compile Include="Infrastructure\Handles\Interfaces\IHandle.cs" />
     <Compile Include="Infrastructure\Handles\Interfaces\IIndentationHandle.cs" />
     <Compile Include="Infrastructure\Logging\IssueReporterSink.cs" />
-    <Compile Include="Infrastructure\Signing\Interfaces\ISignHelper.cs" />
-    <Compile Include="Infrastructure\Signing\SignHelper.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IRetryingThreadLoop.cs" />
     <Compile Include="Infrastructure\Threading\Interfaces\IThreadDeferrer.cs" />
     <Compile Include="Infrastructure\Threading\RetryingThreadLoop.cs" />

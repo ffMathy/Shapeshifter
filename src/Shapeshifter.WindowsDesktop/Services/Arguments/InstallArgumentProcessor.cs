@@ -8,7 +8,6 @@
 	using Controls.Window.ViewModels.Interfaces;
 
 	using Infrastructure.Environment.Interfaces;
-	using Infrastructure.Signing.Interfaces;
 
 	using Interfaces;
 
@@ -30,7 +29,6 @@
 
 		readonly IProcessManager processManager;
 		readonly ICertificateManager certificateManager;
-		readonly ISignHelper signHelper;
 		readonly IEnvironmentInformation environmentInformation;
 		readonly ISettingsViewModel settingsViewModel;
 		readonly IThreadDelay threadDelay;
@@ -42,7 +40,6 @@
 		public InstallArgumentProcessor(
 			IProcessManager processManager,
 			ICertificateManager certificateManager,
-			ISignHelper signHelper,
 			IEnvironmentInformation environmentInformation,
 			ISettingsViewModel settingsViewModel,
 			IThreadDelay threadDelay,
@@ -50,7 +47,6 @@
 		{
 			this.processManager = processManager;
 			this.certificateManager = certificateManager;
-			this.signHelper = signHelper;
 			this.environmentInformation = environmentInformation;
 			this.settingsViewModel = settingsViewModel;
 			this.threadDelay = threadDelay;
@@ -114,10 +110,8 @@
 		void Install()
 		{
 			PrepareInstallDirectory();
-			
 			InstallToInstallDirectory();
-			SignAssembly();
-
+			
 			ConfigureDefaultSettings();
 
 			Logger.Information("Default settings have been configured.");
@@ -127,18 +121,6 @@
 				processManager.GetCurrentProcessFilePath());
 
 			Logger.Information("Launched installed executable.");
-		}
-
-		void SignAssembly()
-		{
-			var selfSignedCertificate = InstallCertificateIfNotFound();
-			signHelper.SignAssemblyWithCertificate(
-				TargetExecutableFile,
-				selfSignedCertificate);
-
-			threadDelay.Execute(1000);
-
-			Logger.Information("Executable signed with newly created self-signing certificate.");
 		}
 
 		void InstallToInstallDirectory()
