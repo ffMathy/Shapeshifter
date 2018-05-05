@@ -40,7 +40,7 @@
             var isVDown = keyboardManager.IsKeyDown(Key.V);
             var isCtrlDown = keyboardManager.IsKeyDown(Key.LeftCtrl);
 
-            await SimulatePaste(isCtrlDown, isVDown);
+			await SimulatePaste(isCtrlDown, isVDown);
 
             logger.Information("Paste simulated.", 1);
         }

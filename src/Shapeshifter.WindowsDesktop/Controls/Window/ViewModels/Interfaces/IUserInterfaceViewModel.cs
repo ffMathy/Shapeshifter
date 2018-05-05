@@ -7,9 +7,10 @@
 	using Data.Interfaces;
 
 	using Infrastructure.Events;
+	using Shapeshifter.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
 	using Shapeshifter.WindowsDesktop.Services.Screen;
 
-	public interface IUserInterfaceViewModel : INotifyPropertyChanged
+	public interface IUserInterfaceViewModel : INotifyPropertyChanged, ISingleInstance
 	{
 		event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
 		event EventHandler<UserInterfacePaneSwappedEventArgument> UserInterfacePaneSwapped;
