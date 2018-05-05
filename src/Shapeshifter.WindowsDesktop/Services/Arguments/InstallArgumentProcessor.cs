@@ -125,12 +125,18 @@
 
 		void InstallToInstallDirectory()
 		{
-			WriteManifest();
 			WriteExecutable();
-
-			threadDelay.Execute(1000);
-
+			WriteApplicationConfiguration();
 			Logger.Information("Executable and manifest written to install directory.");
+		}
+
+		void WriteApplicationConfiguration()
+		{
+			File.WriteAllText(
+				Resources.App,
+				Path.Combine(
+					TargetDirectory, 
+					"Shapeshifter.config"));
 		}
 
 		void ConfigureDefaultSettings()
@@ -195,22 +201,12 @@
 				true);
 		}
 
-		static void WriteManifest()
-		{
-			var targetManifestFile = $"{TargetExecutableFile}.manifest";
-			File.WriteAllBytes(
-				targetManifestFile,
-				Resources.App);
-		}
-
 		void PrepareInstallDirectory()
 		{
 			Logger.Information("Target install directory is " + TargetDirectory + ".");
 
 			if (Directory.Exists(TargetDirectory))
-			{
 				Directory.Delete(TargetDirectory, true);
-			}
 
 			Directory.CreateDirectory(TargetDirectory);
 

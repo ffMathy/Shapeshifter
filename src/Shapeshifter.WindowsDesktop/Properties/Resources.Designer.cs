@@ -61,12 +61,24 @@ namespace Shapeshifter.WindowsDesktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;configuration&gt;
+        ///  &lt;startup&gt;
+        ///    &lt;supportedRuntime version=&quot;v4.0&quot; sku=&quot;.NETFramework,Version=v4.6.1&quot; /&gt;
+        ///  &lt;/startup&gt;
+        ///  &lt;runtime&gt;
+        ///    &lt;assemblyBinding xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot;&gt;
+        ///      &lt;dependentAssembly&gt;
+        ///        &lt;assemblyIdentity name=&quot;System.Core&quot; publicKeyToken=&quot;b77a5c561934e089&quot; culture=&quot;neutral&quot; /&gt;
+        ///        &lt;bindingRedirect oldVersion=&quot;0.0.0.0-4.0.0.0&quot; newVersion=&quot;4.0.0.0&quot; /&gt;
+        ///      &lt;/dependentAssembly&gt;
+        ///    &lt;/assemblyBinding&gt;
+        ///  &lt;/runtime&gt;
+        ///&lt;/ [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static byte[] App {
+        internal static string App {
             get {
-                object obj = ResourceManager.GetObject("App", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("App", resourceCulture);
             }
         }
         
