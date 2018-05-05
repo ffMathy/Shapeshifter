@@ -9,8 +9,8 @@
     using Interfaces;
 
     using Mediators.Interfaces;
-
-    using Services.Messages.Interceptors.Hotkeys.Interfaces;
+	using Serilog;
+	using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interfaces;
 
     public class MainWindowPreparationOperation: IMainWindowPreparationOperation
@@ -21,6 +21,7 @@
         readonly IKeyInterceptor keyInterceptor;
         readonly IWindowMessageHook windowMessageHook;
 		readonly ISourceClipboardQuantityOverlay sourceClipboardQuantityOverlay;
+		readonly ILogger logger;
 
 		public MainWindowPreparationOperation(
             IMainWindow mainWindow,
@@ -28,7 +29,8 @@
             IMainWindowHandleContainer handleContainer,
             IKeyInterceptor keyInterceptor,
             IWindowMessageHook windowMessageHook,
-			ISourceClipboardQuantityOverlay sourceClipboardQuantityOverlay)
+			ISourceClipboardQuantityOverlay sourceClipboardQuantityOverlay,
+			ILogger logger)
         {
             this.mainWindow = mainWindow;
             this.clipboardUserInterfaceInteractionMediator = clipboardUserInterfaceInteractionMediator;
@@ -36,7 +38,7 @@
             this.keyInterceptor = keyInterceptor;
             this.windowMessageHook = windowMessageHook;
 			this.sourceClipboardQuantityOverlay = sourceClipboardQuantityOverlay;
-
+			this.logger = logger;
 			SetupWindowMessageHook();
         }
 
@@ -47,6 +49,8 @@
 
         public async Task RunAsync()
 		{
+			logger.Verbose("Initializing clipboard quantity overlay and main window.");
+
 			mainWindow.SourceInitialized += OnMainWindowOnSourceInitialized;
 			mainWindow.Show();
 
@@ -56,6 +60,8 @@
 
         void OnMainWindowOnSourceInitialized(object sender, EventArgs e)
         {
+			logger.Verbose("The main window source handle has been determined.");
+
             windowMessageHook.Connect();
             clipboardUserInterfaceInteractionMediator.Connect();
 			SetupKeyInterception();
