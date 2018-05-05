@@ -22,6 +22,7 @@
 	using Infrastructure.Threading.Interfaces;
 	using Serilog;
 	using System.Threading;
+	using System.Windows;
 
 	class InstallArgumentProcessor : INoArgumentProcessor, IInstallArgumentProcessor
 	{
@@ -32,7 +33,6 @@
 		readonly IEnvironmentInformation environmentInformation;
 		readonly ISettingsViewModel settingsViewModel;
 		readonly IThreadDelay threadDelay;
-		readonly ITrayIconManager trayIconManager;
 
 		[Inject]
 		public ILogger Logger { get; set; }
@@ -42,15 +42,13 @@
 			ICertificateManager certificateManager,
 			IEnvironmentInformation environmentInformation,
 			ISettingsViewModel settingsViewModel,
-			IThreadDelay threadDelay,
-			ITrayIconManager trayIconManager)
+			IThreadDelay threadDelay)
 		{
 			this.processManager = processManager;
 			this.certificateManager = certificateManager;
 			this.environmentInformation = environmentInformation;
 			this.settingsViewModel = settingsViewModel;
 			this.threadDelay = threadDelay;
-			this.trayIconManager = trayIconManager;
 		}
 
 		public bool Terminates => CanProcess() && !GetIsCurrentlyRunningFromInstallationFolder();
@@ -116,7 +114,12 @@
 
 			Logger.Information("Default settings have been configured.");
 
-			trayIconManager.DisplayInformation("Shapeshifter installed", "Install location: " + TargetDirectory);
+			MessageBox.Show(
+				"Install location: " + TargetDirectory, 
+				"Shapeshifter has been installed", 
+				MessageBoxButton.OK, 
+				MessageBoxImage.Information);
+
 			LaunchInstalledExecutable(
 				processManager.GetCurrentProcessFilePath());
 
