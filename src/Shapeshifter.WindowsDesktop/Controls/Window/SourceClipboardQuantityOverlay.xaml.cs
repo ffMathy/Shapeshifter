@@ -11,7 +11,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window
 	/// </summary>
 	public partial class SourceClipboardQuantityOverlay : Window, ISourceClipboardQuantityOverlay
 	{
-		private readonly ISourceClipboardQuantityOverlayViewModel viewModel;
+		readonly ISourceClipboardQuantityOverlayViewModel viewModel;
 
 		public SourceClipboardQuantityOverlay(
 			ISourceClipboardQuantityOverlayViewModel viewModel)

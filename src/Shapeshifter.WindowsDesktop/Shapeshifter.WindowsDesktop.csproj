@@ -43,10 +43,11 @@
     <ApplicationIcon>Resources\Icon\Shapeshifter.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>StrongName.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
@@ -216,15 +217,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="..\Shapeshifter.Website.Models\GitHub\Request\IssueReport.cs">
-      <Link>Shared\GitHub\Request\IssueReport.cs</Link>
-    </Compile>
-    <Compile Include="..\Shapeshifter.Website.Models\GitHub\Request\SerializableException.cs">
-      <Link>Shared\GitHub\Request\SerializableException.cs</Link>
-    </Compile>
-    <Compile Include="..\Shapeshifter.Website.Models\GitHub\Response\ReportResponse.cs">
-      <Link>Shared\GitHub\Response\ReportResponse.cs</Link>
-    </Compile>
     <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardFileDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardImageDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardTextDataControlFactory.cs" />
@@ -660,13 +652,14 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="App.manifest" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="StrongName.snk" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -677,6 +670,10 @@
     <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileImageSample.dat" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Shapeshifter.Website.Models\Shapeshifter.Website.Models.csproj">
+      <Project>{8e163449-154b-44b2-94d6-de67715b1627}</Project>
+      <Name>Shapeshifter.Website.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Shapeshifter.WindowsDesktop.KeyboardHookInterception\Shapeshifter.WindowsDesktop.KeyboardHookInterception.csproj">
       <Project>{9A7B5B69-AB84-4906-B65A-EE5581568C5E}</Project>
       <Name>Shapeshifter.WindowsDesktop.KeyboardHookInterception</Name>
@@ -720,13 +717,8 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Costura.Fody.2.0.0\build\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.2.0.0\build\Costura.Fody.targets'))" />
-    <Error Condition="!Exists('..\packages\Brutal.Dev.StrongNameSigner.2.1.4\build\Brutal.Dev.StrongNameSigner.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Brutal.Dev.StrongNameSigner.2.1.4\build\Brutal.Dev.StrongNameSigner.targets'))" />
     <Error Condition="!Exists('..\packages\Fody.3.0.3\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.3.0.3\build\Fody.targets'))" />
   </Target>
   <Import Project="..\packages\Costura.Fody.2.0.0\build\Costura.Fody.targets" Condition="Exists('..\packages\Costura.Fody.2.0.0\build\Costura.Fody.targets')" />
-  <Import Project="..\packages\Brutal.Dev.StrongNameSigner.2.1.4\build\Brutal.Dev.StrongNameSigner.targets" Condition="Exists('..\packages\Brutal.Dev.StrongNameSigner.2.1.4\build\Brutal.Dev.StrongNameSigner.targets')" />
-  <Target Name="BeforeBuild">
-    <Exec ContinueOnError="false" Command="&quot;..\packages\Brutal.Dev.StrongNameSigner.2.1.4\build\StrongNameSigner.Console.exe&quot; -in &quot;..\packages\Octokit.*&quot;" />
-  </Target>
   <Import Project="..\packages\Fody.3.0.3\build\Fody.targets" Condition="Exists('..\packages\Fody.3.0.3\build\Fody.targets')" />
 </Project>

@@ -12,7 +12,7 @@
 	/// </summary>
 	public partial class App : Application
 	{
-		private readonly ILifetimeScope container;
+		readonly ILifetimeScope container;
 
 		public App()
 		{

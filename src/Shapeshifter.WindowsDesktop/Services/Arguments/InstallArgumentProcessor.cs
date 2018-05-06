@@ -74,12 +74,12 @@
 			return !GetIsCurrentlyRunningFromInstallationFolder();
 		}
 
-		private bool GetIsCurrentlyRunningFromInstallationFolder()
+		bool GetIsCurrentlyRunningFromInstallationFolder()
 		{
 			return processManager.GetCurrentProcessDirectory() == TargetDirectory;
 		}
 
-		private static bool DoesTargetExecutableExist()
+		static bool DoesTargetExecutableExist()
 		{
 			return File.Exists(TargetExecutableFile);
 		}

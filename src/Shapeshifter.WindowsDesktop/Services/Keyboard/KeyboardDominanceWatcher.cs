@@ -109,10 +109,12 @@
 
 				var dependencyPrefix = $"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.";
 
-				var dependenciesToSave = new List<string>();
-				dependenciesToSave.Add(dependencyPrefix + $"EasyHook{processorArchitecture}Svc.exe");
-				dependenciesToSave.Add(dependencyPrefix + $"EasyHook{processorArchitecture}.dll");
-				dependenciesToSave.Add(dependencyPrefix + $"EasyLoad{processorArchitecture}.dll");
+				var dependenciesToSave = new List<string>
+				{
+					dependencyPrefix + $"EasyHook{processorArchitecture}Svc.exe",
+					dependencyPrefix + $"EasyHook{processorArchitecture}.dll",
+					dependencyPrefix + $"EasyLoad{processorArchitecture}.dll"
+				};
 
 				foreach(var dependency in dependenciesToSave) {
 					EmitEmbeddedResourceToDisk(
@@ -127,13 +129,6 @@
 				var injectedNativeLibraryName = $"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(Native)}.dll";
 				EmitEmbeddedResourceToDisk("costura." + injectedNativeLibraryName.ToLower(), injectedNativeLibraryName);
 
-				Thread.Sleep(1000);
-
-				Config.Register(
-					nameof(Shapeshifter),
-					$"{processManager.CurrentProcessName}.exe",
-					injectedKeyboardHookInterceptionLibraryName);
-
 				logger.Information("Injection mechanism installed and configured in the Global Assembly Cache.");
 			}
 			catch (Exception ex)
@@ -142,7 +137,7 @@
 			}
 		}
 
-		private void EmitEmbeddedResourceToDisk(string targetResourceName, string targetFile)
+		void EmitEmbeddedResourceToDisk(string targetResourceName, string targetFile)
 		{
 			logger.Verbose("Attempting to write resource {resourceName} to {embeddedFile}.", targetResourceName, targetFile);
 			using (var stream = App.ResourceAssembly.GetManifestResourceStream(targetResourceName))

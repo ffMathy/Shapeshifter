@@ -17,7 +17,7 @@
 
 	public static class CrossThreadLogContext
 	{
-		private static readonly Dictionary<int, IDictionary<string, object>> threadContexts;
+		static readonly Dictionary<int, IDictionary<string, object>> threadContexts;
 
 		public static IReadOnlyDictionary<int, IDictionary<string, object>> ThreadContexts => threadContexts;
 

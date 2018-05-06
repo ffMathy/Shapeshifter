@@ -13,9 +13,9 @@ namespace Shapeshifter.Website.Controllers
 	[Route("api/github")]
 	public class GitHubApiController : Controller
 	{
-		private readonly IGitHubClient _client;
+		readonly IGitHubClient _client;
 
-		private static SemaphoreSlim _reportLock;
+		static SemaphoreSlim _reportLock;
 
 		static GitHubApiController() {
 			_reportLock = new SemaphoreSlim(1);

@@ -48,14 +48,14 @@
 			}
 		}
 
-		private ScreenInformation GetScreenInformationFromScreen(Screen screen)
+		ScreenInformation GetScreenInformationFromScreen(Screen screen)
 		{
 			return new ScreenInformation(
 				GatherScreenBounds(screen.Bounds),
 				GatherScreenBounds(screen.WorkingArea));
 		}
 
-		private ScreenBounds GatherScreenBounds(System.Drawing.Rectangle inputBounds)
+		ScreenBounds GatherScreenBounds(System.Drawing.Rectangle inputBounds)
 		{
 			var devicePosition = new Vector(
 				inputBounds.X,
