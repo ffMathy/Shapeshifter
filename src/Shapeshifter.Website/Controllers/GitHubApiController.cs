@@ -24,10 +24,10 @@ namespace Shapeshifter.Website.Controllers
 		public GitHubApiController(
 		  IConfigurationReader configurationReader)
 		{
-			var client = new GitHubClient(new ProductHeaderValue("Shapeshifter.Website"));
-			client.Credentials = new Credentials(configurationReader.Read("github.token"));
-
-			_client = client;
+			_client = new GitHubClient(new ProductHeaderValue("Shapeshifter.Website"))
+			{
+				Credentials = new Credentials(configurationReader.Read("github.token"))
+			};
 		}
 
 		[HttpPost("report")]
@@ -47,15 +47,9 @@ namespace Shapeshifter.Website.Controllers
 						Filter = IssueFilter.Created
 					});
 
-				string issueTitle;
-				if (issueReport.Exception != null)
-				{
-					issueTitle = issueReport.Exception.Name;
-				}
-				else
-				{
-					issueTitle = issueReport.OffendingLogMessage;
-				}
+				var issueTitle = issueReport.Exception != null ? 
+					issueReport.Exception.Name : 
+					issueReport.OffendingLogMessage;
 
 				issueTitle = issueTitle.TrimEnd('.', ' ', '\n', '\r');
 
@@ -68,18 +62,13 @@ namespace Shapeshifter.Website.Controllers
 				
 				issueTitle += " on v" + issueReport.Version;
 
-				var existingIssue = existingIssues
-					.Where(x => x.Title == issueTitle)
-					.FirstOrDefault();
-				if (existingIssue == null)
-				{
-					existingIssue = await _client.Issue.Create(
+				var existingIssue = existingIssues.FirstOrDefault(x => x.Title == issueTitle) ?? 
+					await _client.Issue.Create(
 						username,
 						repository,
 						new NewIssue(issueTitle) {
 							Body = RenderIssueBody(issueReport)
 						});
-				}
 
 				return new ReportResponse() {
 					IssueUrl = existingIssue.HtmlUrl
@@ -89,7 +78,7 @@ namespace Shapeshifter.Website.Controllers
 			}
 		}
 
-		string RenderIssueBody(IssueReport issueReport)
+		static string RenderIssueBody(IssueReport issueReport)
 		{
 			var body = string.Empty;
 
@@ -102,45 +91,40 @@ namespace Shapeshifter.Website.Controllers
 			{
 				body += "<h1>Exception</h1>\n";
 				body += $"<b>Type:</b> {issueReport.Exception.Name}\n\n";
+				body += $"<b>Message:</b> {issueReport.Exception.Message}\n\n";
 				body += $"```\n{issueReport.Exception.StackTrace}\n```\n\n";
 			}
 
-			if (issueReport.RecentLogLines != null && issueReport.RecentLogLines.Length > 0)
+			if (issueReport.RecentLogLines == null || issueReport.RecentLogLines.Length <= 0) 
+				return body;
+
+			body += "<h1>Log</h1>\n\n";
+			if (issueReport.OffendingLogLine != null)
 			{
-				body += "<h1>Log</h1>\n\n";
-				if (issueReport.OffendingLogLine != null)
-				{
-					body += "```\n";
-					foreach (var line in issueReport.OffendingLogLine.Split('\n', '\r'))
-					{
-						if (string.IsNullOrEmpty(line.Trim()))
-							continue;
-
-						body += $"{GitHubEncode(line)}\n";
-					}
-					body += "```\n";
-				}
-
-				body += "<details><summary>Full log</summary><p>\n\n";
 				body += "```\n";
-				foreach (var line in issueReport.RecentLogLines)
+				foreach (var line in issueReport.OffendingLogLine.Split('\n', '\r'))
 				{
 					if (string.IsNullOrEmpty(line.Trim()))
 						continue;
 
-					body += $"{GitHubEncode(line)}\n";
+					body += $"{line}\n";
 				}
-				body += "\n```";
-				body += "\n</p></details>";
+				body += "```\n";
 			}
 
-			return body;
-		}
+			body += "<details><summary>Full log</summary><p>\n\n";
+			body += "```\n";
+			foreach (var line in issueReport.RecentLogLines)
+			{
+				if (string.IsNullOrEmpty(line.Trim()))
+					continue;
 
-		string GitHubEncode(string input) {
-			return input
-				.Replace("@", "&commat;")
-				.Replace("#", "&#35;");
+				body += $"{line}\n";
+			}
+			body += "\n```";
+			body += "\n</p></details>";
+
+			return body;
 		}
 	}
 }
