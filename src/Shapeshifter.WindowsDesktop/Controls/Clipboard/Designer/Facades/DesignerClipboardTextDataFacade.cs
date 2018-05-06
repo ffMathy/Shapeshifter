@@ -3,7 +3,6 @@
     using Data;
     using Data.Interfaces;
 
-    using Services;
     using Services.Interfaces;
 
     class DesignerClipboardTextDataFacade

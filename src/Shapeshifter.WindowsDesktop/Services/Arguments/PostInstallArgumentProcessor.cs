@@ -1,13 +1,12 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Arguments
 {
 	using System;
-	using System.IO;
 	using System.Linq;
 	using Keyboard.Interfaces;
 	using System.Threading.Tasks;
 	using Interfaces;
 	using Serilog;
-	using Shapeshifter.WindowsDesktop.Infrastructure.Dependencies;
+
 	using Shapeshifter.WindowsDesktop.Services.Files.Interfaces;
 	using Shapeshifter.WindowsDesktop.Services.Processes.Interfaces;
 

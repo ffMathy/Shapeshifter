@@ -1,13 +1,9 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Unwrappers
 {
 	using System;
-	using System.Drawing;
 	using System.IO;
 	using System.Runtime.InteropServices;
-	using System.Windows.Forms;
-	using System.Windows.Interop;
-	using System.Windows.Media;
-	using System.Windows.Media.Imaging;
+
 	using Controls.Window.Interfaces;
 
 	using Interfaces;
@@ -17,7 +13,7 @@
 
 	using Services.Images.Interfaces;
 	using Shapeshifter.WindowsDesktop.Data.Interfaces;
-	using Shapeshifter.WindowsDesktop.Helpers;
+
 	using static Shapeshifter.WindowsDesktop.Native.ImageNativeApi;
 
 	class BitmapUnwrapper : IBitmapUnwrapper

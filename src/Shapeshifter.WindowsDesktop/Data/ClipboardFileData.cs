@@ -2,9 +2,7 @@
 {
     using Interfaces;
 
-    using Services.Clipboard.Interfaces;
-
-    public class ClipboardFileData: IClipboardFileData
+	public class ClipboardFileData: IClipboardFileData
     {
         public string FileName { get; set; }
         public string FullPath { get; set; }

@@ -11,17 +11,15 @@
 
 	using Interfaces;
 
-	using Keyboard.Interfaces;
-
 	using Processes.Interfaces;
 
 	using Properties;
 
 	using Services.Interfaces;
 	using Infrastructure.Dependencies;
-	using Infrastructure.Threading.Interfaces;
+
 	using Serilog;
-	using System.Threading;
+
 	using System.Windows;
 
 	class InstallArgumentProcessor : INoArgumentProcessor, IInstallArgumentProcessor
@@ -32,7 +30,6 @@
 		readonly ICertificateManager certificateManager;
 		readonly IEnvironmentInformation environmentInformation;
 		readonly ISettingsViewModel settingsViewModel;
-		readonly IThreadDelay threadDelay;
 
 		[Inject]
 		public ILogger Logger { get; set; }
@@ -41,14 +38,12 @@
 			IProcessManager processManager,
 			ICertificateManager certificateManager,
 			IEnvironmentInformation environmentInformation,
-			ISettingsViewModel settingsViewModel,
-			IThreadDelay threadDelay)
+			ISettingsViewModel settingsViewModel)
 		{
 			this.processManager = processManager;
 			this.certificateManager = certificateManager;
 			this.environmentInformation = environmentInformation;
 			this.settingsViewModel = settingsViewModel;
-			this.threadDelay = threadDelay;
 		}
 
 		public bool Terminates => CanProcess() && !GetIsCurrentlyRunningFromInstallationFolder();

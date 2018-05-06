@@ -3,9 +3,8 @@
   using System;
 
   using Newtonsoft.Json;
-  using Newtonsoft.Json.Serialization;
 
-  public class CampaignAttributes
+	public class CampaignAttributes
   {
     [JsonProperty("summary")]
     public string Summary { get; set; }

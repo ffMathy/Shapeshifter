@@ -4,7 +4,7 @@
 	using System.Windows;
 	using System.Windows.Forms;
 	using Interfaces;
-	using Serilog.Context;
+
 	using Services.Interfaces;
 
 	class ScreenManager : IScreenManager

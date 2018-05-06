@@ -2,8 +2,6 @@
 {
 	using Interfaces;
 
-	using Services.Clipboard.Interfaces;
-
 	public class ClipboardTextData : IClipboardTextData
 	{
 		public string Text { get; set; }

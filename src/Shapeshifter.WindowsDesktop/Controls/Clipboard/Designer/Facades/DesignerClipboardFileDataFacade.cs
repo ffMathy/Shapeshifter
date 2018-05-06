@@ -4,7 +4,6 @@
 
     using Properties;
 
-    using Services;
     using Services.Interfaces;
 
     class DesignerClipboardFileDataFacade: ClipboardFileData

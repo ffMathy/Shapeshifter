@@ -19,7 +19,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 	using Messages.Interceptors.Interfaces;
 	using Native.Interfaces;
 	using Serilog;
-	using Shapeshifter.WindowsDesktop.Data.Wrappers;
+
 	using Shapeshifter.WindowsDesktop.Data.Wrappers.Interfaces;
 
 	class ClipboardInjectionService : IClipboardInjectionService

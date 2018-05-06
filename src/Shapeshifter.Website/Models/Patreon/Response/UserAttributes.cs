@@ -3,9 +3,8 @@
   using System;
 
   using Newtonsoft.Json;
-  using Newtonsoft.Json.Serialization;
 
-  public class UserAttributes
+	public class UserAttributes
   {
     [JsonProperty("first_name")]
     public string FirstName { get; set; }

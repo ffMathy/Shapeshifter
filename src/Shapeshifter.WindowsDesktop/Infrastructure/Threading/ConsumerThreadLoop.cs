@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
 {
 	using System;
-	using System.Diagnostics;
 	using System.Threading;
 	using System.Threading.Tasks;
 

@@ -1,12 +1,8 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Unwrappers
 {
-    using System.Collections.Generic;
-    using System.Linq;
+	using Interfaces;
 
-    using Interfaces;
-
-    using Native;
-    using Native.Interfaces;
+	using Native.Interfaces;
 	using Shapeshifter.WindowsDesktop.Data.Interfaces;
 
 	class GeneralUnwrapper: IGeneralUnwrapper

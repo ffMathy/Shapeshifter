@@ -2,7 +2,6 @@
 {
     using Data;
 
-    using Services;
     using Services.Interfaces;
 
     class DesignerClipboardFileCollectionDataFacade: ClipboardFileCollectionData

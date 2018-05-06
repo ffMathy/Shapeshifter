@@ -10,7 +10,6 @@
     using Interfaces;
 
     using Services.Clipboard.Interfaces;
-	using Shapeshifter.WindowsDesktop.Native.Interfaces;
 
 	class PasteAsPlainTextAction: IPasteAsPlainTextAction
     {

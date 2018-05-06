@@ -3,13 +3,12 @@
 	using Autofac;
 	using Serilog;
 	using Serilog.Context;
-	using Serilog.Core;
+
 	using Shapeshifter.WindowsDesktop.Controls.Window.Interfaces;
 	using Shapeshifter.WindowsDesktop.Infrastructure.Dependencies;
 	using Shapeshifter.WindowsDesktop.Infrastructure.Environment.Interfaces;
 	using Shapeshifter.WindowsDesktop.Services.Web.Updates.Interfaces;
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;

@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Windows;
 	using System.Windows.Interop;

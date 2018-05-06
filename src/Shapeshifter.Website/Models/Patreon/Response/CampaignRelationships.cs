@@ -1,9 +1,8 @@
 ﻿namespace Shapeshifter.Website.Models
 {
   using Newtonsoft.Json;
-  using Newtonsoft.Json.Serialization;
 
-  public class CampaignRelationships
+	public class CampaignRelationships
   {
     [JsonProperty("creator")]
     public User Creator { get; set; }

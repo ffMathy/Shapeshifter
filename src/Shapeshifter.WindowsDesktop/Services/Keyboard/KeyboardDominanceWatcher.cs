@@ -18,7 +18,7 @@
 	using System;
 	using System.Diagnostics.CodeAnalysis;
 	using Serilog;
-	using Serilog.Core;
+
 	using System.Threading;
 	using System.IO;
 

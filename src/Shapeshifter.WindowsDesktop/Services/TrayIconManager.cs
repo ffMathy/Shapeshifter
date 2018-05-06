@@ -10,11 +10,10 @@
     using Interfaces;
 
     using Properties;
-	using Serilog;
-	using Shapeshifter.WindowsDesktop.Infrastructure.Threading.Interfaces;
-	using Web.Updates.Interfaces;
 
-    public class TrayIconManager: ITrayIconManager
+    using Shapeshifter.WindowsDesktop.Infrastructure.Threading.Interfaces;
+
+	public class TrayIconManager: ITrayIconManager
     {
         readonly NotifyIcon trayIcon;
 
