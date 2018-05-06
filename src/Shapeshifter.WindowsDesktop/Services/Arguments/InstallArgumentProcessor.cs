@@ -5,6 +5,7 @@
 	using System.IO;
 	using System.Linq;
 	using System.Threading.Tasks;
+	using System.Windows;
 
 	using Controls.Window.Interfaces;
 	using Controls.Window.ViewModels.Interfaces;
@@ -121,13 +122,17 @@
 		void EmitEmbeddedResourceToDisk(string targetResourceName, string targetFile)
 		{
 			logger.Verbose("Attempting to write resource {resourceName} to {embeddedFile}.", targetResourceName, targetFile);
-			using (var stream = App.ResourceAssembly.GetManifestResourceStream(targetResourceName))
+			using (var stream = Application.ResourceAssembly.GetManifestResourceStream(targetResourceName))
 			{
 				var bytes = new byte[stream.Length];
 				stream.Read(bytes, 0, bytes.Length);
 
 				logger.Verbose("Resource {resourceName} of {length} bytes written to {embeddedFile}.", targetResourceName, bytes.Length, targetFile);
-				File.WriteAllBytes(targetFile, bytes);
+				File.WriteAllBytes(
+					Path.Combine(
+						TargetDirectory, 
+						targetFile), 
+					bytes);
 			}
 		}
 
