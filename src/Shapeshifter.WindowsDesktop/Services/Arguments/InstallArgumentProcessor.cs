@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Arguments
 {
 	using System;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
 	using System.Threading.Tasks;
@@ -62,7 +63,7 @@
 
 			PrepareInstallDirectory();
 			InstallToInstallDirectory();
-			
+
 			ConfigureDefaultSettings();
 
 			logger.Information("Default settings have been configured.");
@@ -76,10 +77,58 @@
 		void InstallToInstallDirectory()
 		{
 			WriteExecutable();
+			WriteHookDependencies();
 			WriteApplicationConfiguration();
 			WriteApplicationManifest();
 
 			logger.Information("Executable, configuration and manifest written to install directory.");
+		}
+
+		void WriteHookDependencies()
+		{
+			WriteEasyHookDependencies();
+			
+			EmitCosturaResourceToDisk($"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(KeyboardHookInterception)}.dll");
+			EmitCosturaResourceToDisk($"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(Native)}.dll");
+		}
+
+		void WriteEasyHookDependencies()
+		{
+			var processorArchitecture = Environment.Is64BitOperatingSystem ? "64" : "32";
+			var dependencyPrefix = $"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.";
+
+			var dependenciesToSave = new List<string>
+			{
+					dependencyPrefix + $"EasyHook{processorArchitecture}Svc.exe",
+					dependencyPrefix + $"EasyHook{processorArchitecture}.dll",
+					dependencyPrefix + $"EasyLoad{processorArchitecture}.dll"
+				};
+
+			foreach (var dependency in dependenciesToSave)
+			{
+				EmitEmbeddedResourceToDisk(
+					dependency,
+					dependency.Substring(
+						dependencyPrefix.Length));
+			}
+		}
+
+		void EmitCosturaResourceToDisk(string targetFile)
+		{
+			EmitEmbeddedResourceToDisk("costura." + targetFile.ToLower(), targetFile);
+		}
+
+		void EmitEmbeddedResourceToDisk(string targetResourceName, string targetFile)
+		{
+			logger.Verbose("Attempting to write resource {resourceName} to {embeddedFile}.", targetResourceName, targetFile);
+			using (var stream = App.ResourceAssembly.GetManifestResourceStream(targetResourceName))
+			{
+				var bytes = new byte[stream.Length];
+				stream.Read(bytes, 0, bytes.Length);
+
+				logger.Verbose("Resource {resourceName} of {length} bytes written to {embeddedFile}.", targetResourceName, bytes.Length, targetFile);
+				File.WriteAllBytes(targetFile, bytes);
+			}
 		}
 
 		static void WriteApplicationManifest()

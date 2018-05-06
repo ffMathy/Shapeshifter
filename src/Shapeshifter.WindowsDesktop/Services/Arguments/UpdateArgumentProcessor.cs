@@ -3,7 +3,6 @@
 	using System.Linq;
 	using System.Threading.Tasks;
 	using Interfaces;
-	using Serilog;
 
 	using Shapeshifter.WindowsDesktop.Services.Files.Interfaces;
 	using Shapeshifter.WindowsDesktop.Services.Processes.Interfaces;
