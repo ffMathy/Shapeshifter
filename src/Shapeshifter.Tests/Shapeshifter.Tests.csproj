@@ -138,7 +138,7 @@
     <Compile Include="Services\LinkParserTest.cs" />
     <Compile Include="Services\SettingsManagerTest.cs" />
     <Compile Include="Services\Web\Updates\UpdateServiceTest.cs" />
-    <Compile Include="Structures\FormatDataPairTest.cs" />
+    <Compile Include="Data\FormatDataPairTest.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="InstallTest.cs" />
     <Compile Include="UnitTestFor.cs" />

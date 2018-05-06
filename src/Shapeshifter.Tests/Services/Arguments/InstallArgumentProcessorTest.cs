@@ -20,7 +20,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Arguments
                 .GetCurrentProcessDirectory()
                 .Returns(@"C:\foo");
 
-            Assert.IsTrue(SystemUnderTest.CanProcess());
+            Assert.IsTrue(SystemUnderTest.CanProcess(new [] {"install"}));
         }
 
         [TestMethod]
@@ -34,7 +34,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Arguments
                 .GetCurrentProcessDirectory()
                 .Returns(@"C:\foo");
 
-            Assert.IsFalse(SystemUnderTest.CanProcess());
+            Assert.IsFalse(SystemUnderTest.CanProcess(new[] { "install" }));
         }
     }
 }

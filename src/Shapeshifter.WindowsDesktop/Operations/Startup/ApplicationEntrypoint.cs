@@ -38,8 +38,7 @@
             await Prepare(arguments);
             if (startupPreparationOperation.ShouldTerminate)
             {
-				logger.Verbose("The startup preparation operation signalled a termination request. Will quit process.");
-				processManager.CloseCurrentProcess();
+				logger.Verbose("The startup preparation operation signalled a termination request.");
 				return;
             }
 

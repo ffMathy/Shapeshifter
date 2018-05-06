@@ -214,29 +214,27 @@
     <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardImageDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\Factories\Interfaces\IClipboardTextDataControlFactory.cs" />
     <Compile Include="Controls\Clipboard\ViewModels\Interfaces\IClipboardTextDataViewModel.cs" />
+    <Compile Include="Controls\Commands\RelayCommand.cs" />
     <Compile Include="Controls\Designer\Services\IDesignerService.cs" />
     <Compile Include="Controls\NumberTextBox.xaml.cs">
       <DependentUpon>NumberTextBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Patreon\PatreonDonateControl.xaml.cs">
-      <DependentUpon>PatreonDonateControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Setup\ColorPickerControl.xaml.cs">
-      <DependentUpon>ColorPickerControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Setup\ViewModels\ColorPickerViewModel.cs" />
-    <Compile Include="Controls\Setup\ViewModels\Interfaces\IColorPickerViewModel.cs" />
     <Compile Include="Controls\Window\Binders\Interfaces\IPackageToActionSwitch.cs" />
     <Compile Include="Controls\Window\Binders\SelectedElementToActionsSwitchMechanism.cs" />
     <Compile Include="Controls\Window\Factories\Interfaces\ISettingsWindowFactory.cs" />
     <Compile Include="Controls\Window\Factories\SettingsWindowFactory.cs" />
+    <Compile Include="Controls\Window\MaintenanceWindow.xaml.cs">
+      <DependentUpon>MaintenanceWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Window\InstallWindow.xaml.cs">
+      <DependentUpon>InstallWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Window\Interfaces\IHookableWindow.cs" />
+    <Compile Include="Controls\Window\Interfaces\IMaintenanceWindow.cs" />
+    <Compile Include="Controls\Window\Interfaces\IInstallWindow.cs" />
     <Compile Include="Controls\Window\Interfaces\ISettingsWindow.cs" />
     <Compile Include="Controls\Window\Interfaces\ISourceClipboardQuantityOverlay.cs" />
     <Compile Include="Controls\Window\Interfaces\IWindow.cs" />
-    <Compile Include="Controls\Window\PatreonWindow.xaml.cs">
-      <DependentUpon>PatreonWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Window\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -247,6 +245,8 @@
       <DependentUpon>UserInterfaceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Window\ViewModels\ActionViewModel.cs" />
+    <Compile Include="Controls\Window\ViewModels\InstallViewModel.cs" />
+    <Compile Include="Controls\Window\ViewModels\Interfaces\IInstallViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\ISourceClipboardQuantityOverlayViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\IMainViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\IActionViewModel.cs" />
@@ -306,11 +306,13 @@
     <Compile Include="Infrastructure\Threading\RetryingThreadLoopJob.cs" />
     <Compile Include="Infrastructure\Threading\ThreadDeferrer.cs" />
     <Compile Include="Mediators\Interfaces\ClipboardUserInterfacePane.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\Arguments\DefaultArgumentProcessor.cs" />
     <Compile Include="Services\Arguments\UpdateArgumentProcessor.cs" />
     <Compile Include="Services\Arguments\Interfaces\IInstallArgumentProcessor.cs" />
     <Compile Include="Services\ColorBrightnessAdjustmentService.cs" />
@@ -514,7 +516,7 @@
     <Compile Include="Operations\Startup\StartupPreparationOperation.cs" />
     <Compile Include="Operations\Startup\TrayPreparationOperation.cs" />
     <Compile Include="Services\WindowManager.cs" />
-    <Compile Include="Structures\FormatDataPair.cs" />
+    <Compile Include="Data\FormatDataPair.cs" />
     <Compile Include="Controls\Window\Binders\PackageToActionBinder.cs" />
     <Compile Include="Controls\Window\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -533,15 +535,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Patreon\PatreonDonateControl.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Controls\Window\MaintenanceWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Setup\ColorPickerControl.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Window\PatreonWindow.xaml">
+    <Page Include="Controls\Window\InstallWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -702,6 +700,9 @@
     <EmbeddedResource Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controls\Setup\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

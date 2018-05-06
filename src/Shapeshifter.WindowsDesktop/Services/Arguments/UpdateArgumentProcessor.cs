@@ -10,16 +10,13 @@
 
 	class UpdateArgumentProcessor : ISingleArgumentProcessor
     {
-		readonly ILogger logger;
 		readonly IFileManager fileManager;
 		readonly IProcessManager processManager;
 
 		public UpdateArgumentProcessor(
-			ILogger logger,
 			IFileManager fileManager,
 			IProcessManager processManager)
 		{
-			this.logger = logger;
 			this.fileManager = fileManager;
 			this.processManager = processManager;
 		}
