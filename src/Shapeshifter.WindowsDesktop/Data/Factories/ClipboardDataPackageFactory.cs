@@ -9,8 +9,6 @@
 
 	using Interfaces;
 
-	using Structures;
-
 	using Unwrappers.Interfaces;
 	using Shapeshifter.WindowsDesktop.Services.Clipboard.Interfaces;
 	using Serilog;

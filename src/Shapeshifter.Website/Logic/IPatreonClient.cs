@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
-using Shapeshifter.Website.Models;
-
-namespace Shapeshifter.Website
+﻿namespace Shapeshifter.Website.Logic
 {
+	using System.Threading.Tasks;
+
+	using Models.Patreon.Response;
+
 	public interface IPatreonClient
 	{
 		Task<DataWrapper<Pledge[]>> GetPledgesAsync();

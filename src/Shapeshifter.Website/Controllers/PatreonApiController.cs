@@ -6,7 +6,11 @@ using Shapeshifter.Website.Models;
 
 namespace Shapeshifter.Website.Controllers
 {
-  [Produces("application/json")]
+	using Logic;
+
+	using Models.Patreon.Response;
+
+	[Produces("application/json")]
   [Route("api/patreon")]
   public class PatreonApiController : Controller
   {

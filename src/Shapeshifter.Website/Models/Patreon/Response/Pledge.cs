@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.Website.Models
+﻿namespace Shapeshifter.Website.Models.Patreon.Response
 {
 	using Newtonsoft.Json;
 

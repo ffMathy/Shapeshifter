@@ -4,7 +4,7 @@ using Serilog.Core;
 using Serilog.Events;
 using Shapeshifter.Website.Models.GitHub.Request;
 using Shapeshifter.WindowsDesktop.Infrastructure.Environment.Interfaces;
-using Shapeshifter.WindowsDesktop.Shared.GitHub.Response;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,6 +17,8 @@ using SystemEnvironment = System.Environment;
 
 namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 {
+	using Website.Models.GitHub.Response;
+
 	class IssueReporterSink : ILogEventSink
 	{
 		readonly LinkedList<string> logHistory;

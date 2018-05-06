@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Shapeshifter.Website
+﻿namespace Shapeshifter.Website.Logic
 {
-	using FluffySpoon.Http;
-	using Models;
+	using System;
+	using System.Collections.Generic;
 	using System.Net;
+	using System.Threading.Tasks;
+
+	using FluffySpoon.Http;
+
+	using Models.Patreon.Response;
 
 	public class PatreonClient : IPatreonClient
 	{

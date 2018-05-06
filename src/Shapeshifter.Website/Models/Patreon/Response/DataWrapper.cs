@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace Shapeshifter.Website.Models
+﻿namespace Shapeshifter.Website.Models.Patreon.Response
 {
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+
 	public class DataWrapper<T>
     {
 		[JsonProperty("data")]

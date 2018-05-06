@@ -1,6 +1,4 @@
-﻿using Shapeshifter.WindowsDesktop.Data.Wrappers.Interfaces;
-
-namespace Shapeshifter.WindowsDesktop.Data.Wrappers
+﻿namespace Shapeshifter.WindowsDesktop.Data.Wrappers.Interfaces
 {
 	public interface IGeneralWrapper: IMemoryWrapper
 	{

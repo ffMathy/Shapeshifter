@@ -2,9 +2,7 @@
 {
     using Data.Interfaces;
 
-    using Structures;
-
-    public interface IClipboardDataPackageFactory
+	public interface IClipboardDataPackageFactory
     {
         IClipboardDataPackage CreateFromCurrentClipboardData();
 

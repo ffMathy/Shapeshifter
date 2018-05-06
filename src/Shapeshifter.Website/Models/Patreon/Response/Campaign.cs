@@ -1,8 +1,8 @@
-﻿namespace Shapeshifter.Website.Models
+﻿namespace Shapeshifter.Website.Models.Patreon.Response
 {
-  using Newtonsoft.Json;
+	using Newtonsoft.Json;
 
-  public class Campaign
+	public class Campaign
   {
     [JsonProperty("id")]
     public string Id { get; set; }

@@ -7,6 +7,8 @@ using Shapeshifter.WindowsDesktop.Native.Interfaces;
 
 namespace Shapeshifter.WindowsDesktop.Data.Wrappers
 {
+	using Interfaces;
+
 	class GeneralWrapper : IGeneralWrapper
 	{
 		readonly IMemoryHandleFactory memoryHandleFactory;

@@ -10,7 +10,6 @@
 
     using Native;
 
-    using Helpers;
 	using Shapeshifter.WindowsDesktop.Native.Interfaces;
 	using Shapeshifter.WindowsDesktop.Services.Images.Interfaces;
 	using static Native.ImageNativeApi;

@@ -6,7 +6,9 @@ namespace Shapeshifter.Website.Controllers
     using System.Net;
     using System.Net.Http;
 
-    using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+	using Logic;
+
+	using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 
     using Newtonsoft.Json;
 
