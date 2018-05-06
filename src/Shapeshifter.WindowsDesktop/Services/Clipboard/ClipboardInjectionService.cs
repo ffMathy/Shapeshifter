@@ -5,7 +5,9 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 	using System;
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
+	using System.ComponentModel;
 	using System.Linq;
+	using System.Runtime.InteropServices;
 	using System.Threading.Tasks;
 	using System.Windows.Media.Imaging;
 
@@ -17,37 +19,30 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 	using Interfaces;
 
 	using Messages.Interceptors.Interfaces;
-	using Native.Interfaces;
+
 	using Serilog;
-	using Shapeshifter.WindowsDesktop.Data.Wrappers;
+
 	using Shapeshifter.WindowsDesktop.Data.Wrappers.Interfaces;
 
 	class ClipboardInjectionService : IClipboardInjectionService
 	{
 		readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
 		readonly IClipboardHandleFactory clipboardHandleFactory;
-		readonly IMemoryHandleFactory memoryHandleFactory;
 		readonly ILogger logger;
-		readonly IGeneralNativeApi generalNativeApi;
-		readonly IClipboardNativeApi clipboardNativeApi;
 		readonly IEnumerable<IMemoryWrapper> memoryWrappers;
 
 		public ClipboardInjectionService(
 			IClipboardCopyInterceptor clipboardCopyInterceptor,
 			IClipboardHandleFactory clipboardHandleFactory,
-			IMemoryHandleFactory memoryHandleFactory,
 			ILogger logger,
-			IGeneralNativeApi generalNativeApi,
-			IClipboardNativeApi clipboardNativeApi,
 			IEnumerable<IMemoryWrapper> memoryWrappers)
 		{
 			this.clipboardCopyInterceptor = clipboardCopyInterceptor;
 			this.clipboardHandleFactory = clipboardHandleFactory;
-			this.memoryHandleFactory = memoryHandleFactory;
 			this.logger = logger;
-			this.generalNativeApi = generalNativeApi;
-			this.clipboardNativeApi = clipboardNativeApi;
 			this.memoryWrappers = memoryWrappers;
+
+
 		}
 
 		public async Task InjectDataAsync(IClipboardDataPackage package)
@@ -90,7 +85,11 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 					wrapper.GetDataPointer(
 						clipboardData));
 				if (success == IntPtr.Zero)
-					throw new Exception("Could not set clipboard data format " + clipboardData.RawFormat + ".");
+				{
+					throw new Exception(
+						"Could not set clipboard data format " + clipboardData.RawFormat + ".",
+						new Win32Exception(Marshal.GetLastWin32Error()));
+				}
 			}
 		}
 

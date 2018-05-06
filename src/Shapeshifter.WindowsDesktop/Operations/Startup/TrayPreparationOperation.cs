@@ -11,8 +11,7 @@
 	using Interfaces;
 
 	using Services.Interfaces;
-	using Shapeshifter.WindowsDesktop.Services.Files;
-	using Shapeshifter.WindowsDesktop.Services.Files.Interfaces;
+	using Services.Files;
 	using Shapeshifter.WindowsDesktop.Services.Processes.Interfaces;
 	using Shapeshifter.WindowsDesktop.Services.Web.Updates.Interfaces;
 	using Application = System.Windows.Application;

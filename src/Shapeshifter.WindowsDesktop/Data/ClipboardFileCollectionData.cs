@@ -4,9 +4,7 @@
 
     using Interfaces;
 
-    using Services.Clipboard.Interfaces;
-
-    public class ClipboardFileCollectionData: IClipboardFileCollectionData
+	public class ClipboardFileCollectionData: IClipboardFileCollectionData
     {
         public IReadOnlyCollection<IClipboardFileData> Files { get; set; }
 

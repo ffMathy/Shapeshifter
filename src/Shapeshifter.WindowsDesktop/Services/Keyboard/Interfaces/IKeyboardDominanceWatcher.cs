@@ -6,7 +6,5 @@
     {
         void Start();
         void Stop();
-
-        void Install();
     }
 }

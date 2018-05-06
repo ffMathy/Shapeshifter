@@ -10,7 +10,7 @@ namespace Shapeshifter.Website.Controllers
   [Route("api/patreon")]
   public class PatreonApiController : Controller
   {
-    private readonly IPatreonClient _client;
+	  readonly IPatreonClient _client;
 
     public PatreonApiController(
       IConfigurationReader configurationReader)

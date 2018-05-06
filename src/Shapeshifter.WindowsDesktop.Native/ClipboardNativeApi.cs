@@ -162,19 +162,19 @@
             return EnumClipboardFormats(format);
         }
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", SetLastError = true)]
         internal static extern bool OpenClipboard(IntPtr hWndNewOwner);
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", SetLastError = true)]
         internal static extern IntPtr GetClipboardData(uint uFormat);
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", SetLastError = true)]
         internal static extern bool CloseClipboard();
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", SetLastError = true)]
         internal static extern bool EmptyClipboard();
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", SetLastError = true)]
         internal static extern int GetClipboardFormatName(
             uint format,
             [Out] StringBuilder lpszFormatName,
@@ -190,7 +190,7 @@
         [DllImport("shell32.dll")]
         internal static extern void DragFinish(IntPtr hDrop);
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", SetLastError = true)]
         internal static extern IntPtr SetClipboardData(uint uFormat, IntPtr hMem);
 
         internal static IReadOnlyCollection<uint> GetClipboardFormats()
@@ -236,6 +236,8 @@
         internal static byte[] GetClipboardDataBytes(uint format)
         {
             var dataPointer = GetClipboardDataPointer(format);
+			if (dataPointer == IntPtr.Zero)
+				return null;
 
             var length = GetPointerDataLength(dataPointer);
             if (length == UIntPtr.Zero)
@@ -244,16 +246,22 @@
             }
 
             var lockedMemory = GetLockedMemoryBlockPointer(dataPointer);
-            if (lockedMemory == IntPtr.Zero)
-            {
-                throw new Win32Exception(Marshal.GetLastWin32Error());
-            }
+			try
+			{
+				if (lockedMemory == IntPtr.Zero)
+				{
+					throw new Win32Exception(Marshal.GetLastWin32Error());
+				}
 
-            var buffer = new byte[(int) length];
-            Marshal.Copy(lockedMemory, buffer, 0, (int) length);
-            GeneralNativeApi.GlobalUnlock(dataPointer);
+				var buffer = new byte[(int) length];
+				Marshal.Copy(lockedMemory, buffer, 0, (int) length);
 
-            return buffer;
+				return buffer;
+			}
+			finally
+			{
+				GeneralNativeApi.GlobalUnlock(dataPointer);
+			}
         }
 
         static IntPtr GetClipboardDataPointer(uint format)

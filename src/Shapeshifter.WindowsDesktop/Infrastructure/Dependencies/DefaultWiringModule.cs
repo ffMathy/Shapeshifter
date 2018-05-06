@@ -17,11 +17,10 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 	using Native;
 	using Serilog;
 	using Serilog.Events;
-	using Serilog.Formatting;
-	using Serilog.Formatting.Compact;
-	using Shapeshifter.WindowsDesktop.Infrastructure.Logging;
-	using Shapeshifter.WindowsDesktop.Services.Files;
-	using Shapeshifter.WindowsDesktop.Services.Processes;
+
+	using Logging;
+	using Services.Files;
+
 	using Threading;
 
 	public class DefaultWiringModule : AutofacModule
@@ -37,7 +36,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 		}
 
 		public DefaultWiringModule(Action<ContainerBuilder> callback = null)
-			: this(new Infrastructure.Environment.EnvironmentInformation())
+			: this(new EnvironmentInformation())
 		{
 			this.callback = callback;
 		}

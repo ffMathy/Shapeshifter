@@ -2,8 +2,6 @@
 {
 	using System;
 	using System.IO;
-	using System.Linq;
-	using System.Security.Cryptography.X509Certificates;
 
 	using Controls.Window.ViewModels.Interfaces;
 
@@ -11,46 +9,33 @@
 
 	using Interfaces;
 
-	using Keyboard.Interfaces;
-
 	using Processes.Interfaces;
 
 	using Properties;
 
-	using Services.Interfaces;
 	using Infrastructure.Dependencies;
-	using Infrastructure.Threading.Interfaces;
+
 	using Serilog;
-	using System.Threading;
+
+	using System.Windows;
 
 	class InstallArgumentProcessor : INoArgumentProcessor, IInstallArgumentProcessor
 	{
-		const string CertificateName = "Shapeshifter";
-
 		readonly IProcessManager processManager;
-		readonly ICertificateManager certificateManager;
 		readonly IEnvironmentInformation environmentInformation;
 		readonly ISettingsViewModel settingsViewModel;
-		readonly IThreadDelay threadDelay;
-		readonly ITrayIconManager trayIconManager;
 
 		[Inject]
 		public ILogger Logger { get; set; }
 
 		public InstallArgumentProcessor(
 			IProcessManager processManager,
-			ICertificateManager certificateManager,
 			IEnvironmentInformation environmentInformation,
-			ISettingsViewModel settingsViewModel,
-			IThreadDelay threadDelay,
-			ITrayIconManager trayIconManager)
+			ISettingsViewModel settingsViewModel)
 		{
 			this.processManager = processManager;
-			this.certificateManager = certificateManager;
 			this.environmentInformation = environmentInformation;
 			this.settingsViewModel = settingsViewModel;
-			this.threadDelay = threadDelay;
-			this.trayIconManager = trayIconManager;
 		}
 
 		public bool Terminates => CanProcess() && !GetIsCurrentlyRunningFromInstallationFolder();
@@ -64,13 +49,7 @@
 			}
 		}
 
-		static string TargetExecutableFile
-		{
-			get
-			{
-				return Path.Combine(TargetDirectory, "Shapeshifter.exe");
-			}
-		}
+		static string TargetExecutableFile => Path.Combine(TargetDirectory, "Shapeshifter.exe");
 
 		public bool CanProcess()
 		{
@@ -81,14 +60,9 @@
 			return !GetIsCurrentlyRunningFromInstallationFolder();
 		}
 
-		private bool GetIsCurrentlyRunningFromInstallationFolder()
+		bool GetIsCurrentlyRunningFromInstallationFolder()
 		{
 			return processManager.GetCurrentProcessDirectory() == TargetDirectory;
-		}
-
-		private static bool DoesTargetExecutableExist()
-		{
-			return File.Exists(TargetExecutableFile);
 		}
 
 		public void Process()
@@ -116,7 +90,6 @@
 
 			Logger.Information("Default settings have been configured.");
 
-			trayIconManager.DisplayInformation("Shapeshifter installed", "Install location: " + TargetDirectory);
 			LaunchInstalledExecutable(
 				processManager.GetCurrentProcessFilePath());
 
@@ -125,61 +98,34 @@
 
 		void InstallToInstallDirectory()
 		{
-			WriteManifest();
 			WriteExecutable();
+			WriteApplicationConfiguration();
+			WriteApplicationManifest();
 
-			threadDelay.Execute(1000);
+			Logger.Information("Executable, configuration and manifest written to install directory.");
+		}
 
-			Logger.Information("Executable and manifest written to install directory.");
+		static void WriteApplicationManifest()
+		{
+			File.WriteAllBytes(
+				Path.Combine(
+					TargetDirectory,
+					"Shapeshifter.manifest"),
+				Resources.AppManifest);
+		}
+
+		static void WriteApplicationConfiguration()
+		{
+			File.WriteAllText(
+				Path.Combine(
+					TargetDirectory,
+					"Shapeshifter.config"),
+				Resources.AppConfiguration);
 		}
 
 		void ConfigureDefaultSettings()
 		{
 			settingsViewModel.StartWithWindows = true;
-		}
-
-		X509Certificate2 InstallCertificateIfNotFound()
-		{
-			var existingCertificates = certificateManager.GetCertificatesByIssuerFromStore(
-				$"CN={CertificateName}",
-				StoreName.My,
-				StoreLocation.LocalMachine);
-			if (existingCertificates.Any())
-			{
-				try
-				{
-					return existingCertificates.Single();
-				}
-				finally
-				{
-					Logger.Information("Using existing code signing certificate.");
-				}
-			}
-
-			try
-			{
-				return InstallCodeSigningCertificate();
-			}
-			finally
-			{
-				Logger.Information("Installed new code signing certificate.");
-			}
-		}
-
-		X509Certificate2 InstallCodeSigningCertificate()
-		{
-			var certificate = certificateManager.GenerateSelfSignedCertificate(
-				$"CN={CertificateName}");
-			certificateManager.InstallCertificateToStore(
-				certificate,
-				StoreName.My,
-				StoreLocation.LocalMachine);
-			certificateManager.InstallCertificateToStore(
-				certificate,
-				StoreName.Root,
-				StoreLocation.LocalMachine);
-
-			return certificate;
 		}
 
 		void LaunchInstalledExecutable(string currentExecutableFile)
@@ -195,22 +141,12 @@
 				true);
 		}
 
-		static void WriteManifest()
-		{
-			var targetManifestFile = $"{TargetExecutableFile}.manifest";
-			File.WriteAllBytes(
-				targetManifestFile,
-				Resources.App);
-		}
-
 		void PrepareInstallDirectory()
 		{
 			Logger.Information("Target install directory is " + TargetDirectory + ".");
 
 			if (Directory.Exists(TargetDirectory))
-			{
 				Directory.Delete(TargetDirectory, true);
-			}
 
 			Directory.CreateDirectory(TargetDirectory);
 

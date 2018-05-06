@@ -1,9 +1,8 @@
 ﻿namespace Shapeshifter.Website.Models
 {
   using Newtonsoft.Json;
-  using Newtonsoft.Json.Serialization;
 
-  public class PledgeRelationships
+	public class PledgeRelationships
   {
     [JsonProperty("patron")]
     public User Patron { get; set; }

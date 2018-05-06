@@ -3,8 +3,6 @@ using NSubstitute;
 using Shapeshifter.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using Shapeshifter.WindowsDesktop.Services.Arguments.Interfaces;
 using Shapeshifter.WindowsDesktop.Services.Processes.Interfaces;
-using System;
-using System.IO;
 
 namespace Shapeshifter.WindowsDesktop.Services.Arguments
 {

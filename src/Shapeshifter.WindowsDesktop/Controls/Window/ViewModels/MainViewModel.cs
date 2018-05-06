@@ -4,7 +4,6 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Shapeshifter.WindowsDesktop.Services.Screen.Interfaces;
-using Shapeshifter.WindowsDesktop.Infrastructure.Events;
 
 namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 {

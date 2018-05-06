@@ -21,7 +21,7 @@
 
 	using Mediators.Interfaces;
 	using Serilog;
-	using Shapeshifter.WindowsDesktop.Services.Screen;
+	using Services.Screen;
 
 	class UserInterfaceViewModel  : 
 		IUserInterfaceViewModel, 
@@ -36,7 +36,7 @@
 
 		readonly IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator;
 		readonly ISettingsViewModel settingsViewModel;
-		private readonly ILogger logger;
+		readonly ILogger logger;
 
 		public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
 		public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
@@ -290,7 +290,7 @@
 			AddElement(e.Package);
 		}
 
-		private void AddElement(IClipboardDataControlPackage package)
+		void AddElement(IClipboardDataControlPackage package)
 		{
 			lock (Elements)
 			{

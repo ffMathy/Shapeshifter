@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Shapeshifter.Website.Models.GitHub.Request
+﻿namespace Shapeshifter.Website.Models.GitHub.Request
 {
     public class SerializableException
 	{

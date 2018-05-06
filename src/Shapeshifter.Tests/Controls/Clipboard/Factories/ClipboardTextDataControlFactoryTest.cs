@@ -8,9 +8,7 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using NSubstitute;
-
-    [TestClass]
+	[TestClass]
     public class ClipboardTextDataControlFactoryTest: UnitTestFor<IClipboardTextDataControlFactory>
     {
         [TestMethod]

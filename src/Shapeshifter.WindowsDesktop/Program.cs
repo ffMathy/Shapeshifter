@@ -3,13 +3,12 @@
 	using Autofac;
 	using Serilog;
 	using Serilog.Context;
-	using Serilog.Core;
-	using Shapeshifter.WindowsDesktop.Controls.Window.Interfaces;
-	using Shapeshifter.WindowsDesktop.Infrastructure.Dependencies;
-	using Shapeshifter.WindowsDesktop.Infrastructure.Environment.Interfaces;
-	using Shapeshifter.WindowsDesktop.Services.Web.Updates.Interfaces;
+
+	using Controls.Window.Interfaces;
+	using Infrastructure.Dependencies;
+	using Infrastructure.Environment.Interfaces;
+	using Services.Web.Updates.Interfaces;
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
@@ -18,7 +17,7 @@
 
 	public static class CrossThreadLogContext
 	{
-		private static readonly Dictionary<int, IDictionary<string, object>> threadContexts;
+		static readonly Dictionary<int, IDictionary<string, object>> threadContexts;
 
 		public static IReadOnlyDictionary<int, IDictionary<string, object>> ThreadContexts => threadContexts;
 

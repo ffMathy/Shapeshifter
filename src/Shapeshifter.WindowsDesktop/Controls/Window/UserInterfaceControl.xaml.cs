@@ -15,7 +15,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window
 	[TemplateVisualState(Name = "InActionList", GroupName = "TargetList")]
 	public partial class UserInterfaceControl : UserControl, IDisposable
     {
-		private IUserInterfaceViewModel viewModel;
+	    IUserInterfaceViewModel viewModel;
 
 		public UserInterfaceControl()
         {
@@ -24,7 +24,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window
 			VisualStateManager.GoToElementState(this, "InPackagesList", true);
 		}
 
-		private void PackageList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+	    void PackageList_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			PackageList.UpdateLayout();
 			if (PackageList.SelectedItem != null)
@@ -52,7 +52,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window
 			base.OnInitialized(e);
 		}
 
-		private void ViewModel_UserInterfacePaneSwapped(object sender, UserInterfacePaneSwappedEventArgument e)
+	    void ViewModel_UserInterfacePaneSwapped(object sender, UserInterfacePaneSwappedEventArgument e)
 		{
 			switch (e.Pane)
 			{

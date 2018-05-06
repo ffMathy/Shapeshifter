@@ -9,10 +9,6 @@
 
 	using Native;
 	using RtfPipe;
-	using RtfPipe.Converter.Text;
-	using RtfPipe.Support;
-	using Services.Clipboard.Interfaces;
-	using Shapeshifter.WindowsDesktop.Native.Interfaces;
 
 	class TextClipboardDataFactory : ITextClipboardDataFactory
 	{

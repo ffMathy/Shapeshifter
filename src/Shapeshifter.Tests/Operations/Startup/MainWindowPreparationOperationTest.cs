@@ -12,7 +12,7 @@
 
     using NSubstitute;
 
-    using Operations.Startup.Interfaces;
+    using Interfaces;
 
     [TestClass]
     public class MainWindowPreparationOperationTest: UnitTestFor<IMainWindowPreparationOperation>

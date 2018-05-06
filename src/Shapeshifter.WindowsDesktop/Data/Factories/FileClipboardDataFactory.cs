@@ -16,7 +16,6 @@
     using Native;
     using Native.Interfaces;
 
-    using Services.Clipboard.Interfaces;
     using Services.Files.Interfaces;
 
     class FileClipboardDataFactory: IFileClipboardDataFactory

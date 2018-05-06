@@ -3,9 +3,8 @@
   using System;
 
   using Newtonsoft.Json;
-  using Newtonsoft.Json.Serialization;
 
-  public class PledgeAttributes
+	public class PledgeAttributes
   {
     [JsonProperty("amount_cents")]
     public int AmountCents { get; set; }

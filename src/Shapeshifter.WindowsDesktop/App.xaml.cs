@@ -1,27 +1,18 @@
 ﻿namespace Shapeshifter.WindowsDesktop
 {
 	using System;
-	using System.Diagnostics;
 	using System.Windows;
 
 	using Autofac;
 
-	using Infrastructure.Dependencies;
-
 	using Operations.Startup;
-	using Infrastructure.Environment.Interfaces;
-	using Controls.Window.Interfaces;
-	using Serilog;
-	using System.Threading;
-	using Shapeshifter.WindowsDesktop.Services.Web.Updates.Interfaces;
-	using Serilog.Context;
 
 	/// <summary>
 	///     Interaction logic for App.xaml
 	/// </summary>
 	public partial class App : Application
 	{
-		private readonly ILifetimeScope container;
+		readonly ILifetimeScope container;
 
 		public App()
 		{

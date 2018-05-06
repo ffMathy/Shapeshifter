@@ -31,7 +31,7 @@
                 return;
             }
 
-            var environmentInformation = new Infrastructure.Environment.EnvironmentInformation();
+            var environmentInformation = new EnvironmentInformation();
             if (environmentInformation.GetIsInDesignTime())
             {
                 container = DesignTimeContainerHelper.CreateDesignTimeContainer();

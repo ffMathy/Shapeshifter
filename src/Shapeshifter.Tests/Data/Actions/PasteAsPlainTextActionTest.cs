@@ -13,7 +13,6 @@
     using NSubstitute;
 
     using Services.Clipboard.Interfaces;
-	using Shapeshifter.WindowsDesktop.Native.Interfaces;
 
 	[TestClass]
     public class PasteAsPlainTextActionTest: ActionTestBase<IPasteAsPlainTextAction>

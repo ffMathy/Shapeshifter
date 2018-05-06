@@ -10,11 +10,10 @@
 
     using Native;
 
-    using Services.Clipboard.Interfaces;
-	using Shapeshifter.WindowsDesktop.Helpers;
+    using Helpers;
 	using Shapeshifter.WindowsDesktop.Native.Interfaces;
 	using Shapeshifter.WindowsDesktop.Services.Images.Interfaces;
-	using static Shapeshifter.WindowsDesktop.Native.ImageNativeApi;
+	using static Native.ImageNativeApi;
 
 	class BitmapClipboardDataFactory: IBitmapClipboardDataFactory
     {

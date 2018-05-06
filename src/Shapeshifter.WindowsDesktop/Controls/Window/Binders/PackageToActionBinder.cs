@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Window.Binders
 {
 	using System;
-	using System.Linq;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
 	using System.Collections.Specialized;

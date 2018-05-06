@@ -8,8 +8,8 @@
     using Interfaces;
 
     using Native.Interfaces;
-	using Shapeshifter.WindowsDesktop.Data;
-	using Shapeshifter.WindowsDesktop.Data.Factories.Interfaces;
+
+    using Shapeshifter.WindowsDesktop.Data.Factories.Interfaces;
 	using Shapeshifter.WindowsDesktop.Data.Interfaces;
 
 	class ClipboardHandle: IClipboardHandle

@@ -8,7 +8,7 @@
 
     using NSubstitute;
 
-    using Operations.Startup.Interfaces;
+    using Interfaces;
 
     [TestClass]
     public class ApplicationEntryPointTest: UnitTestFor<ApplicationEntrypoint>

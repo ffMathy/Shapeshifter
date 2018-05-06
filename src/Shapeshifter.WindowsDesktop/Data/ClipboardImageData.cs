@@ -2,8 +2,6 @@
 {
 	using Interfaces;
 
-	using Services.Clipboard.Interfaces;
-
 	public class ClipboardImageData : IClipboardImageData
 	{
 		public byte[] Image { get; set; }

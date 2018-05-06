@@ -1,48 +1,32 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Unwrappers
 {
 	using System;
-	using System.Drawing;
 	using System.IO;
 	using System.Runtime.InteropServices;
-	using System.Windows.Forms;
-	using System.Windows.Interop;
-	using System.Windows.Media;
-	using System.Windows.Media.Imaging;
-	using Controls.Window.Interfaces;
 
 	using Interfaces;
 
 	using Native;
 	using Native.Interfaces;
 
-	using Services.Images.Interfaces;
 	using Shapeshifter.WindowsDesktop.Data.Interfaces;
-	using Shapeshifter.WindowsDesktop.Helpers;
-	using static Shapeshifter.WindowsDesktop.Native.ImageNativeApi;
+
+	using static Native.ImageNativeApi;
 
 	class BitmapUnwrapper : IBitmapUnwrapper
 	{
-		readonly IImagePersistenceService imagePersistenceService;
 		readonly IClipboardNativeApi clipboardNativeApi;
 		readonly IImageNativeApi imageNativeApi;
 		readonly IGeneralNativeApi generalNativeApi;
-		readonly IMainWindowHandleContainer mainWindowHandleContainer;
-		readonly IMemoryUnwrapper memoryUnwrapper;
 
 		public BitmapUnwrapper(
-			IImagePersistenceService imagePersistenceService,
 			IClipboardNativeApi clipboardNativeApi,
 			IImageNativeApi imageNativeApi,
-			IGeneralNativeApi generalNativeApi,
-			IMainWindowHandleContainer mainWindowHandleContainer,
-			IMemoryUnwrapper memoryUnwrapper)
+			IGeneralNativeApi generalNativeApi)
 		{
-			this.imagePersistenceService = imagePersistenceService;
 			this.clipboardNativeApi = clipboardNativeApi;
 			this.imageNativeApi = imageNativeApi;
 			this.generalNativeApi = generalNativeApi;
-			this.mainWindowHandleContainer = mainWindowHandleContainer;
-			this.memoryUnwrapper = memoryUnwrapper;
 		}
 
 		public bool CanUnwrap(IClipboardFormat format)

@@ -1,6 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Events
 {
-	using Shapeshifter.WindowsDesktop.Data.Interfaces;
+	using Data.Interfaces;
 	using System;
 
     public class UserInterfaceDataControlAddedEventArgument : EventArgs {

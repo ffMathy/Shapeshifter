@@ -3,18 +3,12 @@ using Shapeshifter.WindowsDesktop.Data.Interfaces;
 using Shapeshifter.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using Shapeshifter.WindowsDesktop.Infrastructure.Events;
 using Shapeshifter.WindowsDesktop.Infrastructure.Threading.Interfaces;
-using Shapeshifter.WindowsDesktop.Mediators.Interfaces;
-using Shapeshifter.WindowsDesktop.Services.Clipboard.Interfaces;
-using Shapeshifter.WindowsDesktop.Services.Messages.Interceptors.Interfaces;
 using Shapeshifter.WindowsDesktop.Services.Screen;
 using Shapeshifter.WindowsDesktop.Services.Screen.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 {
