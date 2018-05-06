@@ -5,7 +5,9 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 	using System;
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
+	using System.ComponentModel;
 	using System.Linq;
+	using System.Runtime.InteropServices;
 	using System.Threading.Tasks;
 	using System.Windows.Media.Imaging;
 
@@ -90,7 +92,11 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 					wrapper.GetDataPointer(
 						clipboardData));
 				if (success == IntPtr.Zero)
-					throw new Exception("Could not set clipboard data format " + clipboardData.RawFormat + ".");
+				{
+					throw new Exception(
+						"Could not set clipboard data format " + clipboardData.RawFormat + ".",
+						new Win32Exception(Marshal.GetLastWin32Error()));
+				}
 			}
 		}
 

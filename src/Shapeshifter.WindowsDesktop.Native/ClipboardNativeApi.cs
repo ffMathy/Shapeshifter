@@ -190,7 +190,7 @@
         [DllImport("shell32.dll")]
         internal static extern void DragFinish(IntPtr hDrop);
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", SetLastError = true)]
         internal static extern IntPtr SetClipboardData(uint uFormat, IntPtr hMem);
 
         internal static IReadOnlyCollection<uint> GetClipboardFormats()

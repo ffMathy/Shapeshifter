@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.Linq;
-	using Keyboard.Interfaces;
 	using System.Threading.Tasks;
 	using Interfaces;
 	using Serilog;
@@ -14,7 +13,6 @@
 	{
 		readonly ILogger logger;
 		readonly IFileManager fileManager;
-		readonly IKeyboardDominanceWatcher keyboardDominanceWatcher;
 		readonly IProcessManager processManager;
 
 		public bool Terminates => true;
@@ -22,12 +20,10 @@
 		public PostInstallArgumentProcessor(
 			ILogger logger,
 			IFileManager fileManager,
-			IKeyboardDominanceWatcher keyboardDominanceWatcher,
 			IProcessManager processManager)
 		{
 			this.logger = logger;
 			this.fileManager = fileManager;
-			this.keyboardDominanceWatcher = keyboardDominanceWatcher;
 			this.processManager = processManager;
 		}
 
