@@ -90,12 +90,6 @@
 
 			Logger.Information("Default settings have been configured.");
 
-			MessageBox.Show(
-				"Install location: " + TargetDirectory, 
-				"Shapeshifter has been installed", 
-				MessageBoxButton.OK, 
-				MessageBoxImage.Information);
-
 			LaunchInstalledExecutable(
 				processManager.GetCurrentProcessFilePath());
 
