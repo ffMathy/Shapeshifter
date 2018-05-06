@@ -101,29 +101,28 @@ namespace Shapeshifter.Website.Controllers
 			body += "<h1>Log</h1>\n\n";
 			if (issueReport.OffendingLogLine != null)
 			{
-				body += "```\n";
-				foreach (var line in issueReport.OffendingLogLine.Split('\n', '\r'))
-				{
-					if (string.IsNullOrEmpty(line.Trim()))
-						continue;
-
-					body += $"{line}\n";
-				}
-				body += "```\n";
+				body += ConvertLinesIntoCodeRegion(
+					issueReport.OffendingLogLine.Split('\n', '\r'));
 			}
 
 			body += "<details><summary>Full log</summary><p>\n\n";
-			body += "```\n";
-			foreach (var line in issueReport.RecentLogLines)
+			body += ConvertLinesIntoCodeRegion(issueReport.RecentLogLines);
+			body += "\n</p></details>";
+
+			return body;
+		}
+
+		static string ConvertLinesIntoCodeRegion(string[] lines)
+		{
+			var body = "```\n";
+			foreach (var line in lines)
 			{
 				if (string.IsNullOrEmpty(line.Trim()))
 					continue;
 
 				body += $"{line}\n";
 			}
-			body += "\n```";
-			body += "\n</p></details>";
-
+			body += "```\n";
 			return body;
 		}
 	}
