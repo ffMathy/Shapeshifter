@@ -19,7 +19,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 	using Interfaces;
 
 	using Messages.Interceptors.Interfaces;
-	using Native.Interfaces;
+
 	using Serilog;
 
 	using Shapeshifter.WindowsDesktop.Data.Wrappers.Interfaces;
@@ -28,28 +28,21 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 	{
 		readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
 		readonly IClipboardHandleFactory clipboardHandleFactory;
-		readonly IMemoryHandleFactory memoryHandleFactory;
 		readonly ILogger logger;
-		readonly IGeneralNativeApi generalNativeApi;
-		readonly IClipboardNativeApi clipboardNativeApi;
 		readonly IEnumerable<IMemoryWrapper> memoryWrappers;
 
 		public ClipboardInjectionService(
 			IClipboardCopyInterceptor clipboardCopyInterceptor,
 			IClipboardHandleFactory clipboardHandleFactory,
-			IMemoryHandleFactory memoryHandleFactory,
 			ILogger logger,
-			IGeneralNativeApi generalNativeApi,
-			IClipboardNativeApi clipboardNativeApi,
 			IEnumerable<IMemoryWrapper> memoryWrappers)
 		{
 			this.clipboardCopyInterceptor = clipboardCopyInterceptor;
 			this.clipboardHandleFactory = clipboardHandleFactory;
-			this.memoryHandleFactory = memoryHandleFactory;
 			this.logger = logger;
-			this.generalNativeApi = generalNativeApi;
-			this.clipboardNativeApi = clipboardNativeApi;
 			this.memoryWrappers = memoryWrappers;
+
+
 		}
 
 		public async Task InjectDataAsync(IClipboardDataPackage package)

@@ -4,41 +4,29 @@
 	using System.IO;
 	using System.Runtime.InteropServices;
 
-	using Controls.Window.Interfaces;
-
 	using Interfaces;
 
 	using Native;
 	using Native.Interfaces;
 
-	using Services.Images.Interfaces;
 	using Shapeshifter.WindowsDesktop.Data.Interfaces;
 
 	using static Native.ImageNativeApi;
 
 	class BitmapUnwrapper : IBitmapUnwrapper
 	{
-		readonly IImagePersistenceService imagePersistenceService;
 		readonly IClipboardNativeApi clipboardNativeApi;
 		readonly IImageNativeApi imageNativeApi;
 		readonly IGeneralNativeApi generalNativeApi;
-		readonly IMainWindowHandleContainer mainWindowHandleContainer;
-		readonly IMemoryUnwrapper memoryUnwrapper;
 
 		public BitmapUnwrapper(
-			IImagePersistenceService imagePersistenceService,
 			IClipboardNativeApi clipboardNativeApi,
 			IImageNativeApi imageNativeApi,
-			IGeneralNativeApi generalNativeApi,
-			IMainWindowHandleContainer mainWindowHandleContainer,
-			IMemoryUnwrapper memoryUnwrapper)
+			IGeneralNativeApi generalNativeApi)
 		{
-			this.imagePersistenceService = imagePersistenceService;
 			this.clipboardNativeApi = clipboardNativeApi;
 			this.imageNativeApi = imageNativeApi;
 			this.generalNativeApi = generalNativeApi;
-			this.mainWindowHandleContainer = mainWindowHandleContainer;
-			this.memoryUnwrapper = memoryUnwrapper;
 		}
 
 		public bool CanUnwrap(IClipboardFormat format)

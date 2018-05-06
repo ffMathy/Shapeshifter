@@ -2,6 +2,7 @@
 {
 	using Interfaces;
 
+	using Native;
 	using Native.Interfaces;
 	using Shapeshifter.WindowsDesktop.Data.Interfaces;
 
@@ -18,6 +19,10 @@
         public bool CanUnwrap(IClipboardFormat format)
         {
 			if(format.Name == "DataObject")
+				return false;
+
+			//applications like Word can throw some nasty metafiles into the clipboard causing a fatal crash.
+			if (format.Number == ClipboardNativeApi.CF_ENHMETAFILE || format.Number == ClipboardNativeApi.CF_METAFILEPICT)
 				return false;
 
             return true;
