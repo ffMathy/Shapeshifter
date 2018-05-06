@@ -21,7 +21,7 @@
 
 	using Mediators.Interfaces;
 	using Serilog;
-	using Shapeshifter.WindowsDesktop.Services.Screen;
+	using Services.Screen;
 
 	class UserInterfaceViewModel  : 
 		IUserInterfaceViewModel, 

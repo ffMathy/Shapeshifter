@@ -2,8 +2,6 @@
 {
 	using System;
 	using System.IO;
-	using System.Linq;
-	using System.Security.Cryptography.X509Certificates;
 
 	using Controls.Window.ViewModels.Interfaces;
 
@@ -15,7 +13,6 @@
 
 	using Properties;
 
-	using Services.Interfaces;
 	using Infrastructure.Dependencies;
 
 	using Serilog;
@@ -24,10 +21,7 @@
 
 	class InstallArgumentProcessor : INoArgumentProcessor, IInstallArgumentProcessor
 	{
-		const string CertificateName = "Shapeshifter";
-
 		readonly IProcessManager processManager;
-		readonly ICertificateManager certificateManager;
 		readonly IEnvironmentInformation environmentInformation;
 		readonly ISettingsViewModel settingsViewModel;
 
@@ -36,12 +30,10 @@
 
 		public InstallArgumentProcessor(
 			IProcessManager processManager,
-			ICertificateManager certificateManager,
 			IEnvironmentInformation environmentInformation,
 			ISettingsViewModel settingsViewModel)
 		{
 			this.processManager = processManager;
-			this.certificateManager = certificateManager;
 			this.environmentInformation = environmentInformation;
 			this.settingsViewModel = settingsViewModel;
 		}
@@ -57,13 +49,7 @@
 			}
 		}
 
-		static string TargetExecutableFile
-		{
-			get
-			{
-				return Path.Combine(TargetDirectory, "Shapeshifter.exe");
-			}
-		}
+		static string TargetExecutableFile => Path.Combine(TargetDirectory, "Shapeshifter.exe");
 
 		public bool CanProcess()
 		{
@@ -77,11 +63,6 @@
 		bool GetIsCurrentlyRunningFromInstallationFolder()
 		{
 			return processManager.GetCurrentProcessDirectory() == TargetDirectory;
-		}
-
-		static bool DoesTargetExecutableExist()
-		{
-			return File.Exists(TargetExecutableFile);
 		}
 
 		public void Process()
@@ -125,65 +106,32 @@
 		{
 			WriteExecutable();
 			WriteApplicationConfiguration();
-			Logger.Information("Executable and manifest written to install directory.");
+			WriteApplicationManifest();
+
+			Logger.Information("Executable, configuration and manifest written to install directory.");
 		}
 
-		void WriteApplicationConfiguration()
+		static void WriteApplicationManifest()
+		{
+			File.WriteAllBytes(
+				Path.Combine(
+					TargetDirectory,
+					"Shapeshifter.manifest"),
+				Resources.AppManifest);
+		}
+
+		static void WriteApplicationConfiguration()
 		{
 			File.WriteAllText(
-				Resources.App,
 				Path.Combine(
-					TargetDirectory, 
-					"Shapeshifter.config"));
+					TargetDirectory,
+					"Shapeshifter.config"),
+				Resources.AppConfiguration);
 		}
 
 		void ConfigureDefaultSettings()
 		{
 			settingsViewModel.StartWithWindows = true;
-		}
-
-		X509Certificate2 InstallCertificateIfNotFound()
-		{
-			var existingCertificates = certificateManager.GetCertificatesByIssuerFromStore(
-				$"CN={CertificateName}",
-				StoreName.My,
-				StoreLocation.LocalMachine);
-			if (existingCertificates.Any())
-			{
-				try
-				{
-					return existingCertificates.Single();
-				}
-				finally
-				{
-					Logger.Information("Using existing code signing certificate.");
-				}
-			}
-
-			try
-			{
-				return InstallCodeSigningCertificate();
-			}
-			finally
-			{
-				Logger.Information("Installed new code signing certificate.");
-			}
-		}
-
-		X509Certificate2 InstallCodeSigningCertificate()
-		{
-			var certificate = certificateManager.GenerateSelfSignedCertificate(
-				$"CN={CertificateName}");
-			certificateManager.InstallCertificateToStore(
-				certificate,
-				StoreName.My,
-				StoreLocation.LocalMachine);
-			certificateManager.InstallCertificateToStore(
-				certificate,
-				StoreName.Root,
-				StoreLocation.LocalMachine);
-
-			return certificate;
 		}
 
 		void LaunchInstalledExecutable(string currentExecutableFile)

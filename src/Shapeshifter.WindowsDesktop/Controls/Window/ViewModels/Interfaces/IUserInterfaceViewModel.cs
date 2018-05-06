@@ -8,7 +8,7 @@
 
 	using Infrastructure.Events;
 	using Shapeshifter.WindowsDesktop.Infrastructure.Dependencies.Interfaces;
-	using Shapeshifter.WindowsDesktop.Services.Screen;
+	using Services.Screen;
 
 	public interface IUserInterfaceViewModel : INotifyPropertyChanged, ISingleInstance
 	{

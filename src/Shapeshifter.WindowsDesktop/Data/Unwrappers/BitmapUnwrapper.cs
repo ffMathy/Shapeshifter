@@ -14,7 +14,7 @@
 	using Services.Images.Interfaces;
 	using Shapeshifter.WindowsDesktop.Data.Interfaces;
 
-	using static Shapeshifter.WindowsDesktop.Native.ImageNativeApi;
+	using static Native.ImageNativeApi;
 
 	class BitmapUnwrapper : IBitmapUnwrapper
 	{

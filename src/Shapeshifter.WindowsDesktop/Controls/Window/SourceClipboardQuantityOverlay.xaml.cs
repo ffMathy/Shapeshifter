@@ -1,7 +1,7 @@
 ﻿
 namespace Shapeshifter.WindowsDesktop.Controls.Window
 {
-	using Shapeshifter.WindowsDesktop.Controls.Window.Interfaces;
+	using Interfaces;
 	using Shapeshifter.WindowsDesktop.Controls.Window.ViewModels.Interfaces;
 	using System;
 	using System.Windows;

@@ -18,8 +18,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 	using Serilog;
 	using Serilog.Events;
 
-	using Shapeshifter.WindowsDesktop.Infrastructure.Logging;
-	using Shapeshifter.WindowsDesktop.Services.Files;
+	using Logging;
+	using Services.Files;
 
 	using Threading;
 
@@ -36,7 +36,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 		}
 
 		public DefaultWiringModule(Action<ContainerBuilder> callback = null)
-			: this(new Infrastructure.Environment.EnvironmentInformation())
+			: this(new EnvironmentInformation())
 		{
 			this.callback = callback;
 		}

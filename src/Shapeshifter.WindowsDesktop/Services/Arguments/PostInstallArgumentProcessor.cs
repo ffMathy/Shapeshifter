@@ -41,9 +41,6 @@
 			var updateIndex = Array.IndexOf(arguments, "postinstall");
 			var targetDirectory = arguments[updateIndex + 1];
 
-			logger.Information("Configuring keyboard dominance watcher injection mechanism.");
-			keyboardDominanceWatcher.Install();
-
 			logger.Information("Attempting to delete file {file}.", targetDirectory);
 			await fileManager.DeleteFileIfExistsAsync(targetDirectory);
 			logger.Verbose("Old file has been cleaned up.");

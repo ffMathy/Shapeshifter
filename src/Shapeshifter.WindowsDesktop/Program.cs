@@ -4,10 +4,10 @@
 	using Serilog;
 	using Serilog.Context;
 
-	using Shapeshifter.WindowsDesktop.Controls.Window.Interfaces;
-	using Shapeshifter.WindowsDesktop.Infrastructure.Dependencies;
-	using Shapeshifter.WindowsDesktop.Infrastructure.Environment.Interfaces;
-	using Shapeshifter.WindowsDesktop.Services.Web.Updates.Interfaces;
+	using Controls.Window.Interfaces;
+	using Infrastructure.Dependencies;
+	using Infrastructure.Environment.Interfaces;
+	using Services.Web.Updates.Interfaces;
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;

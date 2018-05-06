@@ -67,8 +67,9 @@
     <Optimize>false</Optimize>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
-    <ApplicationManifest>App.manifest</ApplicationManifest>
+    <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac">
@@ -77,10 +78,6 @@
     </Reference>
     <Reference Include="AutofacSerilogIntegration">
       <HintPath>..\packages\AutofacSerilogIntegration.2.0.0\lib\net45\AutofacSerilogIntegration.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="BouncyCastle.Crypto">
-      <HintPath>..\packages\BouncyCastle.1.8.2\lib\BouncyCastle.Crypto.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Costura, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
@@ -448,7 +445,6 @@
     <Compile Include="Services\Arguments\Interfaces\INoArgumentProcessor.cs" />
     <Compile Include="Services\Arguments\Interfaces\ISingleArgumentProcessor.cs" />
     <Compile Include="Services\Arguments\InstallArgumentProcessor.cs" />
-    <Compile Include="Services\CertificateManager.cs" />
     <Compile Include="Services\Clipboard\ClipboardPasteService.cs" />
     <Compile Include="Infrastructure\Handles\ClipboardHandle.cs" />
     <Compile Include="Services\Clipboard\ClipboardPersistanceService.cs" />
