@@ -68,11 +68,11 @@ namespace Shapeshifter.WindowsDesktop.Properties {
         ///  &lt;/startup&gt;
         ///  &lt;runtime&gt;
         ///	&lt;gcAllowVeryLargeObjects enabled=&quot;true&quot; /&gt;
-        ///	&lt;ThrowUnobservedTaskExceptions enabled=&quot;true&quot; /&gt;
+        ///	&lt;ThrowUnobservedTaskExceptions enabled=&quot;false&quot; /&gt;
         ///	&lt;assemblyBinding xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot;&gt;
         ///	  &lt;dependentAssembly&gt;
         ///		&lt;assemblyIdentity name=&quot;System.Core&quot; publicKeyToken=&quot;b77a5c561934e089&quot; culture=&quot;neutral&quot; /&gt;
-        ///		&lt;bindingRedirect oldVersion=&quot;0.0.0.0-4.0.0.0&quot; newVersion=&quot;4.0.0. [rest of string was truncated]&quot;;.
+        ///		&lt;bindingRedirect oldVersion=&quot;0.0.0.0-4.0.0.0&quot; newVersion=&quot;4.0.0 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string AppConfiguration {
             get {
@@ -117,6 +117,21 @@ namespace Shapeshifter.WindowsDesktop.Properties {
             get {
                 object obj = ResourceManager.GetObject("FileImageSample", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;Project ToolsVersion=&quot;15.0&quot; DefaultTargets=&quot;Build&quot; xmlns=&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&gt;
+        ///  &lt;Import Project=&quot;$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props&quot; Condition=&quot;Exists(&apos;$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props&apos;)&quot; /&gt;
+        ///  &lt;PropertyGroup&gt;
+        ///    &lt;Configuration Condition=&quot; &apos;$(Configuration)&apos; == &apos;&apos; &quot;&gt;Debug&lt;/Configuration&gt;
+        ///    &lt;Platform Condition=&quot; &apos;$(Platform)&apos; == &apos;&apos; &quot;&gt;AnyCPU&lt;/Platform&gt;
+        ///    [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ProjectFile {
+            get {
+                return ResourceManager.GetString("ProjectFile", resourceCulture);
             }
         }
         
