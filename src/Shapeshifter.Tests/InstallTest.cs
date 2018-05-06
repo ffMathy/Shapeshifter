@@ -54,20 +54,20 @@ namespace Shapeshifter.WindowsDesktop
 				File.Copy(executablePath, backupExecutablePath);
 
 				var shapeshifterProcess = Process.Start(new ProcessStartInfo() {
-					Arguments = null,
+					Arguments = "install",
 					WorkingDirectory = applicationBuildPath,
 					FileName = executablePath
 				});
 
 				Console.WriteLine("Launched Shapeshifter");
 
-				shapeshifterProcess.WaitForInputIdle();
+				shapeshifterProcess?.WaitForInputIdle();
 
 				Console.WriteLine("Waited for input idle");
 
 				var now = DateTime.UtcNow;
 
-				var lastLoad = (DateTime?)null;
+				DateTime? lastLoad;
 				while (true)
 				{
 					lastLoad = settingsManager.LoadSetting<DateTime?>("LastLoad");

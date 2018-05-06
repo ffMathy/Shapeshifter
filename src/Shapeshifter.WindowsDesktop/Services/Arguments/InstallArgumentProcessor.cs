@@ -1,11 +1,14 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Arguments
 {
 	using System;
+	using System.Collections.Generic;
 	using System.IO;
+	using System.Linq;
+	using System.Threading.Tasks;
+	using System.Windows;
 
+	using Controls.Window.Interfaces;
 	using Controls.Window.ViewModels.Interfaces;
-
-	using Infrastructure.Environment.Interfaces;
 
 	using Interfaces;
 
@@ -13,34 +16,30 @@
 
 	using Properties;
 
-	using Infrastructure.Dependencies;
-
 	using Serilog;
 
-	using System.Windows;
-
-	class InstallArgumentProcessor : INoArgumentProcessor, IInstallArgumentProcessor
+	class InstallArgumentProcessor : IInstallArgumentProcessor
 	{
 		readonly IProcessManager processManager;
-		readonly IEnvironmentInformation environmentInformation;
 		readonly ISettingsViewModel settingsViewModel;
-
-		[Inject]
-		public ILogger Logger { get; set; }
+		readonly IMaintenanceWindow maintenanceWindow;
+		readonly ILogger logger;
 
 		public InstallArgumentProcessor(
 			IProcessManager processManager,
-			IEnvironmentInformation environmentInformation,
-			ISettingsViewModel settingsViewModel)
+			ISettingsViewModel settingsViewModel,
+			IMaintenanceWindow maintenanceWindow,
+			ILogger logger)
 		{
 			this.processManager = processManager;
-			this.environmentInformation = environmentInformation;
 			this.settingsViewModel = settingsViewModel;
+			this.maintenanceWindow = maintenanceWindow;
+			this.logger = logger;
 		}
 
-		public bool Terminates => CanProcess() && !GetIsCurrentlyRunningFromInstallationFolder();
+		public bool Terminates => true;
 
-		static string TargetDirectory
+		internal static string TargetDirectory
 		{
 			get
 			{
@@ -51,58 +50,90 @@
 
 		static string TargetExecutableFile => Path.Combine(TargetDirectory, "Shapeshifter.exe");
 
-		public bool CanProcess()
-		{
-			var isDebugging = environmentInformation.GetIsDebugging();
-			if (isDebugging)
-				return false;
+		public bool CanProcess(string[] arguments) => arguments.Contains("install");
 
-			return !GetIsCurrentlyRunningFromInstallationFolder();
-		}
-
-		bool GetIsCurrentlyRunningFromInstallationFolder()
+		public async Task ProcessAsync(string[] arguments)
 		{
-			return processManager.GetCurrentProcessDirectory() == TargetDirectory;
-		}
-
-		public void Process()
-		{
-			if (!processManager.IsCurrentProcessElevated())
-			{
-				Logger.Information("Current process is not elevated which is needed for installation. Starting as elevated process.");
-				processManager.LaunchFileWithAdministrativeRights(
-					processManager.GetCurrentProcessFilePath());
-			}
-			else
-			{
-				Logger.Information("Current process is elevated.");
-				Logger.Information("Running installation procedure.");
-				Install();
-			}
+			logger.Information("Running installation procedure.");
+			Install();
 		}
 
 		void Install()
 		{
+			maintenanceWindow.Show("Installing Shapeshifter ...");
+
 			PrepareInstallDirectory();
 			InstallToInstallDirectory();
-			
+
 			ConfigureDefaultSettings();
 
-			Logger.Information("Default settings have been configured.");
+			logger.Information("Default settings have been configured.");
 
 			LaunchInstalledExecutable(
 				processManager.GetCurrentProcessFilePath());
 
-			Logger.Information("Launched installed executable.");
+			logger.Information("Launched installed executable.");
 		}
 
 		void InstallToInstallDirectory()
 		{
 			WriteExecutable();
+			WriteHookDependencies();
 			WriteApplicationConfiguration();
 			WriteApplicationManifest();
 
-			Logger.Information("Executable, configuration and manifest written to install directory.");
+			logger.Information("Executable, configuration and manifest written to install directory.");
+		}
+
+		void WriteHookDependencies()
+		{
+			WriteEasyHookDependencies();
+			
+			EmitCosturaResourceToDisk($"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(KeyboardHookInterception)}.dll");
+			EmitCosturaResourceToDisk($"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(Native)}.dll");
+		}
+
+		void WriteEasyHookDependencies()
+		{
+			var processorArchitecture = Environment.Is64BitOperatingSystem ? "64" : "32";
+			var dependencyPrefix = $"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.";
+
+			var dependenciesToSave = new List<string>
+			{
+					dependencyPrefix + $"EasyHook{processorArchitecture}Svc.exe",
+					dependencyPrefix + $"EasyHook{processorArchitecture}.dll",
+					dependencyPrefix + $"EasyLoad{processorArchitecture}.dll"
+				};
+
+			foreach (var dependency in dependenciesToSave)
+			{
+				EmitEmbeddedResourceToDisk(
+					dependency,
+					dependency.Substring(
+						dependencyPrefix.Length));
+			}
+		}
+
+		void EmitCosturaResourceToDisk(string targetFile)
+		{
+			EmitEmbeddedResourceToDisk("costura." + targetFile.ToLower(), targetFile);
+		}
+
+		void EmitEmbeddedResourceToDisk(string targetResourceName, string targetFile)
+		{
+			logger.Verbose("Attempting to write resource {resourceName} to {embeddedFile}.", targetResourceName, targetFile);
+			using (var stream = Application.ResourceAssembly.GetManifestResourceStream(targetResourceName))
+			{
+				var bytes = new byte[stream.Length];
+				stream.Read(bytes, 0, bytes.Length);
+
+				logger.Verbose("Resource {resourceName} of {length} bytes written to {embeddedFile}.", targetResourceName, bytes.Length, targetFile);
+				File.WriteAllBytes(
+					Path.Combine(
+						TargetDirectory, 
+						targetFile), 
+					bytes);
+			}
 		}
 
 		static void WriteApplicationManifest()
@@ -143,14 +174,14 @@
 
 		void PrepareInstallDirectory()
 		{
-			Logger.Information("Target install directory is " + TargetDirectory + ".");
+			logger.Information("Target install directory is " + TargetDirectory + ".");
 
 			if (Directory.Exists(TargetDirectory))
 				Directory.Delete(TargetDirectory, true);
 
 			Directory.CreateDirectory(TargetDirectory);
 
-			Logger.Information("Install directory prepared.");
+			logger.Information("Install directory prepared.");
 		}
 	}
 }
