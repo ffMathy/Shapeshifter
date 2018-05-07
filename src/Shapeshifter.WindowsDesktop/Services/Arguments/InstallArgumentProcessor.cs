@@ -81,6 +81,7 @@
 			WriteHookDependencies();
 			WriteApplicationConfiguration();
 			WriteApplicationManifest();
+			WriteApplicationDebugInformation();
 
 			logger.Information("Executable, configuration and manifest written to install directory.");
 		}
@@ -143,6 +144,15 @@
 					TargetDirectory,
 					"Shapeshifter.manifest"),
 				Resources.AppManifest);
+		}
+
+		static void WriteApplicationDebugInformation()
+		{
+			File.WriteAllBytes(
+				Path.Combine(
+					TargetDirectory,
+					"Shapeshifter.pdb"),
+				Resources.AppDebugFile);
 		}
 
 		static void WriteApplicationConfiguration()
