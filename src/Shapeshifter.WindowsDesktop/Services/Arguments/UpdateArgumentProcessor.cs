@@ -32,7 +32,7 @@
 			var targetDirectory = fileManager.PrepareIsolatedFolder();
 			await fileManager.DeleteDirectoryIfExistsAsync(targetDirectory);
 
-			processManager.LaunchFile(processManager.GetCurrentProcessFilePath());
+			processManager.LaunchFileWithAdministrativeRights(processManager.GetCurrentProcessFilePath(), "install");
 		}
     }
 }
