@@ -92,11 +92,11 @@
 		void WriteDependencies()
 		{
 			WriteEasyHookDependencies();
-			
+
 			EmitCosturaResourceToDisk($"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(KeyboardHookInterception)}.dll");
 			EmitCosturaResourceToDisk($"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(Native)}.dll");
-			
-			using(var textReader = new StringReader(Resources.ProjectFile))
+
+			using (var textReader = new StringReader(Resources.ProjectFile))
 			using (var reader = XmlReader.Create(textReader))
 			{
 				var project = new Project(reader);
@@ -150,8 +150,8 @@
 				logger.Verbose("Resource {resourceName} of {length} bytes written to {embeddedFile}.", targetResourceName, bytes.Length, targetFile);
 				File.WriteAllBytes(
 					Path.Combine(
-						TargetDirectory, 
-						targetFile), 
+						TargetDirectory,
+						targetFile),
 					bytes);
 			}
 		}
