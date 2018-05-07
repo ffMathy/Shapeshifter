@@ -39,7 +39,7 @@ after_build:
 
     cd src\Shapeshifter.WindowsDesktop
 
-    dotnet build Shapeshifter.WindowsDesktop.csproj
+    msbuild Shapeshifter.WindowsDesktop.csproj
 
     cd ..\..\
 
