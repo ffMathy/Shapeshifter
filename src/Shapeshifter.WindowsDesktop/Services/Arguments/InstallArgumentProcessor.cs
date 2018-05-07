@@ -6,11 +6,14 @@
 	using System.Linq;
 	using System.Threading.Tasks;
 	using System.Windows;
+	using System.Xml;
 
 	using Controls.Window.Interfaces;
 	using Controls.Window.ViewModels.Interfaces;
 
 	using Interfaces;
+	using Microsoft.Build.Construction;
+	using Microsoft.Build.Evaluation;
 
 	using Processes.Interfaces;
 
@@ -92,20 +95,22 @@
 			
 			EmitCosturaResourceToDisk($"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(KeyboardHookInterception)}.dll");
 			EmitCosturaResourceToDisk($"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(Native)}.dll");
+			
+			using(var textReader = new StringReader(Resources.ProjectFile))
+			using (var reader = XmlReader.Create(textReader))
+			{
+				var project = new Project(reader);
+				//var embeddedResources =
+				//	from grp in project.ItemGroups.Cast<BuildItemGroup>()
+				//	from item in grp.Cast<BuildItem>()
+				//	where item.Name == "EmbeddedResource"
+				//	select item;
 
-			//var project = new Project();
-			//project.LoadXml(Resources.ProjectFile);
-
-			//var embeddedResources =
-			//	from grp in project.ItemGroups.Cast<BuildItemGroup>()
-			//	from item in grp.Cast<BuildItem>()
-			//	where item.Name == "EmbeddedResource"
-			//	select item;
-
-			//foreach (BuildItem item in embeddedResources)
-			//{
-			//	Console.WriteLine(item.Include); // prints the name of the resource file
-			//}
+				//foreach (BuildItem item in embeddedResources)
+				//{
+				//	Console.WriteLine(item.Include); // prints the name of the resource file
+				//}
+			}
 		}
 
 		void WriteEasyHookDependencies()
