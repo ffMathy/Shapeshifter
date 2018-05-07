@@ -35,7 +35,7 @@
 			};
 		}
 
-		string GetProcessedTextFromRawData(IClipboardFormat format, byte[] data)
+		static string GetProcessedTextFromRawData(IClipboardFormat format, byte[] data)
 		{
 			var text = GetTextFromRawData(format, data);
 			if(text == null)
@@ -50,7 +50,7 @@
 			return HtmlEntity.DeEntitize(text);
 		}
 
-		string GetTextFromRawData(IClipboardFormat format, byte[] data)
+		static string GetTextFromRawData(IClipboardFormat format, byte[] data)
 		{
 			switch (format.Number)
 			{
@@ -103,7 +103,14 @@
 			if (rtfCode.StartsWith(missingVersionString))
 				rtfCode = @"{\rtf1\" + rtfCode.Substring(missingVersionString.Length);
 
-			return Rtf.ToHtml(rtfCode);
+			try
+			{
+				return Rtf.ToHtml(rtfCode);
+			}
+			catch (RtfException)
+			{
+				return null;
+			}
 		}
 
 		public bool CanBuildData(IClipboardFormat format)
