@@ -13,21 +13,26 @@
 	using Shapeshifter.WindowsDesktop.Infrastructure.Environment.Interfaces;
 	using System.Windows.Media;
 
+	using Serilog;
+
 	[ExcludeFromCodeCoverage]
     public partial class MainWindow
         : Window,
           IMainWindow
     {
         readonly IMainWindowHandleContainer handleContainer;
-        readonly IMainViewModel viewModel;
+		readonly ILogger logger;
+		readonly IMainViewModel viewModel;
 
         public MainWindow(
             IMainViewModel viewModel,
             IMainWindowHandleContainer handleContainer,
-			IEnvironmentInformation environmentInformation)
+			IEnvironmentInformation environmentInformation,
+			ILogger logger)
         {
             this.handleContainer = handleContainer;
-            this.viewModel = viewModel;
+			this.logger = logger;
+			this.viewModel = viewModel;
 
             SourceInitialized += MainWindow_SourceInitialized;
 
@@ -58,14 +63,17 @@
         void ViewModel_UserInterfaceHidden(
             object sender,
             UserInterfaceHiddenEventArgument e)
-        {
-            Hide();
+		{
+			logger.Information("Hiding user interface.");
+			Hide();
         }
 
         void ViewModel_UserInterfaceShown(
             object sender,
             UserInterfaceShownEventArgument e)
 		{
+			logger.Information("Showing user interface.");
+
 			Left = viewModel.ActiveScreen.WorkingArea.X;
 			Top = viewModel.ActiveScreen.WorkingArea.Y;
 			Width = viewModel.ActiveScreen.WorkingArea.Width;

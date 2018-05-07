@@ -738,9 +738,7 @@
   <ItemGroup>
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\Setup\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="App.pdb" />
     <EmbeddedResource Include="EasyHook32.dll">
