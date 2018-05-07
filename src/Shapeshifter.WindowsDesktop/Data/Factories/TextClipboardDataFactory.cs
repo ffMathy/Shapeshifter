@@ -38,6 +38,8 @@
 		string GetProcessedTextFromRawData(IClipboardFormat format, byte[] data)
 		{
 			var text = GetTextFromRawData(format, data);
+			if(text == null)
+				return null;
 
 			var terminaryNullCharacterPosition = text.IndexOf('\0');
 			if (terminaryNullCharacterPosition > -1)
