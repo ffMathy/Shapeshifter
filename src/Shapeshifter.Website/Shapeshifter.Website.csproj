@@ -23,7 +23,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutputPath />
+    <OutputPath>..\..\build\website\</OutputPath>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
