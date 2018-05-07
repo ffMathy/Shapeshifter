@@ -100,12 +100,15 @@
   <ItemGroup>
     <Reference Include="Autofac, Version=4.8.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.8.0\lib\net45\Autofac.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="AutofacSerilogIntegration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d672c67444a98ac9, processorArchitecture=MSIL">
       <HintPath>..\packages\AutofacSerilogIntegration.2.0.0\lib\net45\AutofacSerilogIntegration.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Costura, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
       <HintPath>..\packages\Costura.Fody.2.0.0\lib\net452\Costura.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="EasyHook, Version=2.7.6684.0, Culture=neutral, PublicKeyToken=4b580fca19d0b0c5, processorArchitecture=MSIL">
       <HintPath>..\packages\EasyHook.2.7.6684\lib\net40\EasyHook.dll</HintPath>
@@ -113,9 +116,11 @@
     </Reference>
     <Reference Include="FluffySpoon.Http, Version=1.0.16.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FluffySpoon.Http.1.0.16\lib\netstandard2.0\FluffySpoon.Http.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.8.1.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.8.1\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Build, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Build.15.6.85\lib\net46\Microsoft.Build.dll</HintPath>
@@ -132,27 +137,35 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Octokit, Version=0.29.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Octokit.0.29.0\lib\net45\Octokit.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="RtfPipe, Version=0.7.6669.2200, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RtfPipe.0.7.0.6\lib\net40\RtfPipe.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.6.0\lib\net46\Serilog.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Serilog.Formatting.Compact, Version=1.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Formatting.Compact.1.0.0\lib\net45\Serilog.Formatting.Compact.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Serilog.Sinks.Console, Version=3.1.1.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.Console.3.1.1\lib\net45\Serilog.Sinks.Console.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Serilog.Sinks.Debug, Version=1.0.1.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.Debug.1.0.1\lib\net46\Serilog.Sinks.Debug.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Serilog.Sinks.File, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.File.4.0.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System">
       <Private>True</Private>
