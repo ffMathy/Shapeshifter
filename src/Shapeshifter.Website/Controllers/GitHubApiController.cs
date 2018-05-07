@@ -47,6 +47,7 @@ namespace Shapeshifter.Website.Controllers
 					username,
 					repository,
 					new RepositoryIssueRequest() {
+						State = ItemStateFilter.All,
 						Filter = IssueFilter.Created
 					});
 
