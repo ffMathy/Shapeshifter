@@ -6,11 +6,13 @@
 	using System.Linq;
 	using System.Threading.Tasks;
 	using System.Windows;
+	using System.Xml;
 
 	using Controls.Window.Interfaces;
 	using Controls.Window.ViewModels.Interfaces;
 
 	using Interfaces;
+	using Microsoft.Build.Evaluation;
 
 	using Processes.Interfaces;
 
@@ -78,19 +80,43 @@
 		void InstallToInstallDirectory()
 		{
 			WriteExecutable();
-			WriteHookDependencies();
+			WriteDependencies();
 			WriteApplicationConfiguration();
 			WriteApplicationManifest();
+			WriteApplicationDebugInformation();
 
 			logger.Information("Executable, configuration and manifest written to install directory.");
 		}
 
-		void WriteHookDependencies()
+		void WriteDependencies()
 		{
 			WriteEasyHookDependencies();
 			
-			EmitCosturaResourceToDisk($"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(KeyboardHookInterception)}.dll");
-			EmitCosturaResourceToDisk($"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(Native)}.dll");
+			using (var textReader = new StringReader(Resources.ProjectFile))
+			using (var reader = XmlReader.Create(textReader))
+			{
+				var project = new Project(reader);
+
+				var projectReferences = project.Items
+					.Where(x => x.ItemType == "ProjectReference")
+					.Select(x => x.EvaluatedInclude)
+					.Select(Path.GetFileNameWithoutExtension)
+					.ToArray();
+
+				var assemblyReferences = project.Items
+					.Where(x => x.ItemType == "Reference")
+					.Select(x => x.EvaluatedInclude)
+					.Select(x => x.Split(',').First())
+					.ToArray();
+
+				var allReferences = projectReferences
+					.Union(assemblyReferences)
+					.ToArray();
+				foreach (var reference in allReferences)
+				{
+					EmitCosturaResourceToDisk(reference + ".dll");
+				}
+			}
 		}
 
 		void WriteEasyHookDependencies()
@@ -121,8 +147,12 @@
 
 		void EmitEmbeddedResourceToDisk(string targetResourceName, string targetFile)
 		{
+			var stream = Application.ResourceAssembly.GetManifestResourceStream(targetResourceName);
+			if (stream == null)
+				return;
+
 			logger.Verbose("Attempting to write resource {resourceName} to {embeddedFile}.", targetResourceName, targetFile);
-			using (var stream = Application.ResourceAssembly.GetManifestResourceStream(targetResourceName))
+			using (stream)
 			{
 				var bytes = new byte[stream.Length];
 				stream.Read(bytes, 0, bytes.Length);
@@ -130,8 +160,8 @@
 				logger.Verbose("Resource {resourceName} of {length} bytes written to {embeddedFile}.", targetResourceName, bytes.Length, targetFile);
 				File.WriteAllBytes(
 					Path.Combine(
-						TargetDirectory, 
-						targetFile), 
+						TargetDirectory,
+						targetFile),
 					bytes);
 			}
 		}
@@ -143,6 +173,15 @@
 					TargetDirectory,
 					"Shapeshifter.manifest"),
 				Resources.AppManifest);
+		}
+
+		static void WriteApplicationDebugInformation()
+		{
+			File.WriteAllBytes(
+				Path.Combine(
+					TargetDirectory,
+					"Shapeshifter.pdb"),
+				Resources.AppDebugFile);
 		}
 
 		static void WriteApplicationConfiguration()

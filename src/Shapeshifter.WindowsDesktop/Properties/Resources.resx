@@ -121,6 +121,9 @@
   <data name="AppConfiguration" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\app.config;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="ProjectFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Shapeshifter.WindowsDesktop.csproj;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="AppManifest" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\app.manifest;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -138,5 +141,8 @@
   </data>
   <data name="TextDataSourceIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\controls\clipboard\designer\resources\textdatasourceicon.dat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="AppDebugFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\app.pdb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

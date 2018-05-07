@@ -9,6 +9,7 @@
 	using System.Threading;
 	using Interfaces;
 	using Serilog;
+	using Serilog.Context;
 
 	class ProcessManager
 		: IProcessManager
@@ -160,10 +161,10 @@
 
 		void SpawnProcess(string uri, string workingDirectory, string arguments = null, string verb = null)
 		{
-			using (CrossThreadLogContext.Add("fileName", uri))
-			using (CrossThreadLogContext.Add("workingDirectory", workingDirectory))
-			using (CrossThreadLogContext.Add("verb", verb))
-			using (CrossThreadLogContext.Add("arguments", arguments))
+			using (LogContext.PushProperty("fileName", uri))
+			using (LogContext.PushProperty("workingDirectory", workingDirectory))
+			using (LogContext.PushProperty("verb", verb))
+			using (LogContext.PushProperty("arguments", arguments))
 			{
 				logger.Verbose("Launching {fileName} under verb {verb} in {workingDirectory} with arguments {arguments}.");
 
