@@ -42,7 +42,7 @@
     <Reference Include="NSubstitute, Version=3.1.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
       <HintPath>..\packages\NSubstitute.3.1.0\lib\net46\NSubstitute.dll</HintPath>
     </Reference>
-    <Reference Include="Octokit, Version=0.29.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Octokit, Version=0.29.0.0, Culture=neutral, PublicKeyToken=5c24135245c74171, processorArchitecture=MSIL">
       <HintPath>..\packages\Octokit.0.29.0\lib\net45\Octokit.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore">
