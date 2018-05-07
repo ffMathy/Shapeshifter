@@ -42,9 +42,10 @@
 			var terminaryNullCharacterPosition = text.IndexOf('\0');
 			if (terminaryNullCharacterPosition > -1)
 			{
-				return text.Substring(0, terminaryNullCharacterPosition);
+				text = text.Substring(0, terminaryNullCharacterPosition);
 			}
-			return text;
+			
+			return HtmlEntity.DeEntitize(text);
 		}
 
 		string GetTextFromRawData(IClipboardFormat format, byte[] data)
