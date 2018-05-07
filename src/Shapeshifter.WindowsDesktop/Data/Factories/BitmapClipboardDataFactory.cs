@@ -10,6 +10,8 @@
 
     using Native;
 
+	using Serilog.Context;
+
 	using Shapeshifter.WindowsDesktop.Native.Interfaces;
 	using Shapeshifter.WindowsDesktop.Services.Images.Interfaces;
 	using static Native.ImageNativeApi;
@@ -76,7 +78,7 @@
 
 		PixelFormat GetPixelFormatFromBitsPerPixel(ushort bitsPerPixel)
 		{
-			using (CrossThreadLogContext.Add(nameof(bitsPerPixel), bitsPerPixel))
+			using (LogContext.PushProperty(nameof(bitsPerPixel), bitsPerPixel))
 			{
 				switch (bitsPerPixel)
 				{

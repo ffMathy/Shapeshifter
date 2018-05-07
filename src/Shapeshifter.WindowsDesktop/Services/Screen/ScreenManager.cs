@@ -37,15 +37,12 @@
 						deviceMousePosition.X,
 						deviceMousePosition.Y));
 
-			using (CrossThreadLogContext.Add(nameof(deviceIndependentMousePosition), deviceIndependentMousePosition))
-			using (CrossThreadLogContext.Add(nameof(screens), screens)) { 
-				var activeScreen = screens.First(screen =>
-					screen.Bounds.X <= deviceIndependentMousePosition.X &&
-					screen.Bounds.Y <= deviceIndependentMousePosition.Y &&
-					screen.Bounds.X + screen.Bounds.Width >= deviceIndependentMousePosition.X &&
-					screen.Bounds.Y + screen.Bounds.Height >= deviceIndependentMousePosition.Y);
-				return activeScreen;
-			}
+			var activeScreen = screens.First(screen =>
+				screen.Bounds.X <= deviceIndependentMousePosition.X &&
+				screen.Bounds.Y <= deviceIndependentMousePosition.Y &&
+				screen.Bounds.X + screen.Bounds.Width >= deviceIndependentMousePosition.X &&
+				screen.Bounds.Y + screen.Bounds.Height >= deviceIndependentMousePosition.Y);
+			return activeScreen;
 		}
 
 		ScreenInformation GetScreenInformationFromScreen(Screen screen)
