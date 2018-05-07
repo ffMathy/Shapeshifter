@@ -83,6 +83,16 @@ namespace Shapeshifter.WindowsDesktop.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] AppDebugFile {
+            get {
+                object obj = ResourceManager.GetObject("AppDebugFile", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] AppManifest {
             get {
                 object obj = ResourceManager.GetObject("AppManifest", resourceCulture);

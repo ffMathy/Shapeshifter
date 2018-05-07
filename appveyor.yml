@@ -35,6 +35,14 @@ after_build:
 - cmd: >
     mkdir build\website
 
+    copy build\application\Shapeshifter.pdb src\Shapeshifter.WindowsDesktop\App.pdb
+
+    cd src\Shapeshifter.WindowsDesktop
+
+    dotnet build Shapeshifter.WindowsDesktop.csproj
+
+    cd ..\..\
+
     cd src\Shapeshifter.Website
 
     dotnet restore Shapeshifter.Website.csproj
