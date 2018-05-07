@@ -14,7 +14,7 @@
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 		<TextBlock Grid.Row="0" TextWrapping="Wrap">
-			<Run>Shapeshifter will will install itself within</Run>
+			<Run>Shapeshifter will install itself within</Run>
 			<Run Text="{Binding InstallDirectory, Mode=OneWay}" FontWeight="Bold" />
 			<Run>and start automatically with Windows. This can be changed later in the settings.</Run>
 		</TextBlock>
