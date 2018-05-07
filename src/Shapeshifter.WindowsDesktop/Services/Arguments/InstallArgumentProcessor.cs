@@ -78,7 +78,7 @@
 		void InstallToInstallDirectory()
 		{
 			WriteExecutable();
-			WriteHookDependencies();
+			WriteDependencies();
 			WriteApplicationConfiguration();
 			WriteApplicationManifest();
 			WriteApplicationDebugInformation();
@@ -86,12 +86,26 @@
 			logger.Information("Executable, configuration and manifest written to install directory.");
 		}
 
-		void WriteHookDependencies()
+		void WriteDependencies()
 		{
 			WriteEasyHookDependencies();
 			
 			EmitCosturaResourceToDisk($"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(KeyboardHookInterception)}.dll");
 			EmitCosturaResourceToDisk($"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.{nameof(Native)}.dll");
+
+			//var project = new Project();
+			//project.LoadXml(Resources.ProjectFile);
+
+			//var embeddedResources =
+			//	from grp in project.ItemGroups.Cast<BuildItemGroup>()
+			//	from item in grp.Cast<BuildItem>()
+			//	where item.Name == "EmbeddedResource"
+			//	select item;
+
+			//foreach (BuildItem item in embeddedResources)
+			//{
+			//	Console.WriteLine(item.Include); // prints the name of the resource file
+			//}
 		}
 
 		void WriteEasyHookDependencies()
