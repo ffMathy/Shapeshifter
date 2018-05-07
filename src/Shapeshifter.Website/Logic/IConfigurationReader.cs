@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.Website
+﻿namespace Shapeshifter.Website.Logic
 {
   public interface IConfigurationReader
   {

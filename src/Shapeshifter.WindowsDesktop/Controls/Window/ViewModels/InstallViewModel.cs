@@ -6,11 +6,11 @@
 	using System.Runtime.CompilerServices;
 	using System.Windows.Input;
 
-	using Annotations;
-
 	using Commands;
 
 	using Interfaces;
+
+	using Properties;
 
 	using Services.Processes.Interfaces;
 

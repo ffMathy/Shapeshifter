@@ -1,4 +1,4 @@
-﻿namespace Shapeshifter.WindowsDesktop.Shared.GitHub.Response
+﻿namespace Shapeshifter.Website.Models.GitHub.Response
 {
 	public class ReportResponse
 	{

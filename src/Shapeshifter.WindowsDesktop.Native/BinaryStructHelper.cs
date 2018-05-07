@@ -1,8 +1,8 @@
-﻿using System;
-using System.Runtime.InteropServices;
-
-namespace Shapeshifter.WindowsDesktop.Helpers
+﻿namespace Shapeshifter.WindowsDesktop.Native
 {
+	using System;
+	using System.Runtime.InteropServices;
+
 	/// <summary>
 	/// A helper class which does the mashalling for structs
 	/// </summary>

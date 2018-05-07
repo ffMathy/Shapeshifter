@@ -1,8 +1,8 @@
-﻿namespace Shapeshifter.WindowsDesktop.Structures
+﻿namespace Shapeshifter.WindowsDesktop.Data
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+	using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    [TestClass]
+	[TestClass]
     public class FormatDataPairTest: TestBase
     {
         [TestMethod]

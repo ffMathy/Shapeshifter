@@ -1,8 +1,8 @@
-﻿using Shapeshifter.WindowsDesktop.Data.Interfaces;
-
-namespace Shapeshifter.WindowsDesktop.Structures
+﻿namespace Shapeshifter.WindowsDesktop.Data
 {
-    public struct FormatDataPair
+	using Interfaces;
+
+	public struct FormatDataPair
     {
         public FormatDataPair(IClipboardFormat format, byte[] data)
         {

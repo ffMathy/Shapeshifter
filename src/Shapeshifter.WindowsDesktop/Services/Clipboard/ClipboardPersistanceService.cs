@@ -7,16 +7,15 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Data.Factories.Interfaces;
+	using Data;
+	using Data.Factories.Interfaces;
     using Data.Interfaces;
 
     using Files.Interfaces;
 
     using Interfaces;
 
-    using Structures;
-
-    class ClipboardPersistanceService: IClipboardPersistanceService
+	class ClipboardPersistanceService: IClipboardPersistanceService
     {
         readonly IFileManager fileManager;
         readonly IClipboardDataPackageFactory clipboardDataPackageFactory;

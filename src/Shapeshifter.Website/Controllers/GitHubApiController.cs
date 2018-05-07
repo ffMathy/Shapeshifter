@@ -5,10 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Octokit;
 
 using Shapeshifter.Website.Models.GitHub.Request;
-using Shapeshifter.WindowsDesktop.Shared.GitHub.Response;
 
 namespace Shapeshifter.Website.Controllers
 {
+	using Logic;
+
+	using Models.GitHub.Response;
+
 	[Produces("application/json")]
 	[Route("api/github")]
 	public class GitHubApiController : Controller

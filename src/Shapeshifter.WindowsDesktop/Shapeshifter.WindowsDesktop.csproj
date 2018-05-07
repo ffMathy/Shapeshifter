@@ -20,9 +20,9 @@
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\build\application\</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
@@ -34,6 +34,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>
     </DocumentationFile>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Shapeshifter.WindowsDesktop.Program</StartupObject>
@@ -663,6 +664,7 @@
     <ProjectReference Include="..\Shapeshifter.Website.Models\Shapeshifter.Website.Models.csproj">
       <Project>{8e163449-154b-44b2-94d6-de67715b1627}</Project>
       <Name>Shapeshifter.Website.Models</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\Shapeshifter.WindowsDesktop.KeyboardHookInterception\Shapeshifter.WindowsDesktop.KeyboardHookInterception.csproj">
       <Project>{9A7B5B69-AB84-4906-B65A-EE5581568C5E}</Project>
