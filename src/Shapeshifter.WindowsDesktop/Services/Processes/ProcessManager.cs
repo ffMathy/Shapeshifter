@@ -138,13 +138,13 @@
 			return false;
 		}
 
-		public Process LaunchFile(string fileName, string arguments = null)
+		public Process LaunchFile(string fileName, string arguments = null, ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal)
 		{
 			var workingDirectory = Path.GetDirectoryName(fileName);
 			return SpawnProcess(fileName, workingDirectory, arguments);
 		}
 
-		public Process LaunchFileWithAdministrativeRights(string fileName, string arguments = null)
+		public Process LaunchFileWithAdministrativeRights(string fileName, string arguments = null, ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal)
 		{
 			var workingDirectory = Path.GetDirectoryName(fileName);
 			return SpawnProcess(fileName, workingDirectory, arguments, "runas");
@@ -159,7 +159,12 @@
 			}
 		}
 
-		Process SpawnProcess(string uri, string workingDirectory, string arguments = null, string verb = null)
+		Process SpawnProcess(
+			string uri, 
+			string workingDirectory, 
+			string arguments = null, 
+			string verb = null, 
+			ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal)
 		{
 			using (LogContext.PushProperty("fileName", uri))
 			using (LogContext.PushProperty("workingDirectory", workingDirectory))
@@ -173,7 +178,11 @@
 						FileName = uri,
 						WorkingDirectory = workingDirectory,
 						Verb = verb,
-						Arguments = arguments
+						Arguments = arguments,
+						WindowStyle = windowStyle,
+						RedirectStandardError = true,
+						RedirectStandardInput = true,
+						RedirectStandardOutput = true
 					});
 				processes.Add(process);
 

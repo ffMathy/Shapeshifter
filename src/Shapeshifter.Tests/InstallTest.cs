@@ -56,7 +56,10 @@ namespace Shapeshifter.WindowsDesktop
 				var shapeshifterProcess = Process.Start(new ProcessStartInfo() {
 					Arguments = "install",
 					WorkingDirectory = applicationBuildPath,
-					FileName = executablePath
+					FileName = executablePath,
+					RedirectStandardInput = true,
+					RedirectStandardError = true,
+					RedirectStandardOutput = true
 				});
 
 				Console.WriteLine("Launched Shapeshifter");

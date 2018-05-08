@@ -23,7 +23,7 @@
 		readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
 		readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
 		readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
-		readonly IClipboardPersistanceService clipboardPersistanceService;
+		readonly IClipboardPersistenceService clipboardPersistenceService;
 		readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
 		readonly IKeyInterceptor hotkeyInterceptor;
 		readonly IMouseWheelHook mouseWheelHook;
@@ -71,7 +71,7 @@
 			IClipboardCopyInterceptor clipboardCopyInterceptor,
 			IPasteCombinationDurationMediator pasteCombinationDurationMediator,
 			IPasteHotkeyInterceptor pasteHotkeyInterceptor,
-			IClipboardPersistanceService clipboardPersistanceService,
+			IClipboardPersistenceService clipboardPersistenceService,
 			IClipboardDataControlPackageFactory clipboardDataControlPackageFactory,
 			IKeyInterceptor hotkeyInterceptor,
 			IMouseWheelHook mouseWheelHook,
@@ -81,7 +81,7 @@
 			this.clipboardCopyInterceptor = clipboardCopyInterceptor;
 			this.pasteCombinationDurationMediator = pasteCombinationDurationMediator;
 			this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
-			this.clipboardPersistanceService = clipboardPersistanceService;
+			this.clipboardPersistenceService = clipboardPersistenceService;
 			this.clipboardDataControlPackageFactory = clipboardDataControlPackageFactory;
 			this.hotkeyInterceptor = hotkeyInterceptor;
 			this.mouseWheelHook = mouseWheelHook;
@@ -96,7 +96,7 @@
 
 		async void LoadPersistedPackagesAsync()
 		{
-			var packages = await clipboardPersistanceService.GetPersistedPackagesAsync();
+			var packages = await clipboardPersistenceService.GetPersistedPackagesAsync();
 			foreach (var package in packages)
 			{
 				var controlPackage = clipboardDataControlPackageFactory.CreateFromDataPackage(package);

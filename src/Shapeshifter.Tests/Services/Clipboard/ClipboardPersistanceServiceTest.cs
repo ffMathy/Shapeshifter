@@ -18,7 +18,7 @@
 	using NSubstitute;
 
 	[TestClass]
-	public class ClipboardPersistanceServiceTest : UnitTestFor<IClipboardPersistanceService>
+	public class ClipboardPersistanceServiceTest : UnitTestFor<IClipboardPersistenceService>
 	{
 
 		[TestMethod]
@@ -67,7 +67,7 @@
 							fakeData2
 						}));
 
-			var service = Container.Resolve<IClipboardPersistanceService>();
+			var service = Container.Resolve<IClipboardPersistenceService>();
 			await service.PersistClipboardPackageAsync(fakePackage);
 
 			var fakeFileManager = Container.Resolve<IFileManager>();

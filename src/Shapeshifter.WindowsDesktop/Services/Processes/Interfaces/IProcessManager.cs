@@ -5,8 +5,8 @@
 
 	public interface IProcessManager : IDisposable
 	{
-		Process LaunchFile(string fileName, string arguments = null);
-		Process LaunchFileWithAdministrativeRights(string fileName, string arguments = null);
+		Process LaunchFile(string fileName, string arguments = null, ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal);
+		Process LaunchFileWithAdministrativeRights(string fileName, string arguments = null, ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal);
 
 		bool IsCurrentProcessElevated();
 

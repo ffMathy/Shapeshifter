@@ -273,7 +273,7 @@
 			}
 		}
 
-		static string GetFullPathFromIsolatedPath(string path = null)
+		public static string GetFullPathFromIsolatedPath(string path = null)
 		{
 			var isolatedFolderPath = GetIsolatedPathRoot();
 
