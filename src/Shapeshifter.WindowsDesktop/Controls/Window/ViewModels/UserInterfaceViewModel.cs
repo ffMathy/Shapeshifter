@@ -21,6 +21,8 @@
 
 	using Mediators.Interfaces;
 	using Serilog;
+
+	using Services.Clipboard.Interfaces;
 	using Services.Screen;
 
 	class UserInterfaceViewModel : 
@@ -36,6 +38,7 @@
 
 		readonly IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator;
 		readonly ILogger logger;
+		readonly IClipboardPersistanceService clipboardPersistanceService;
 
 		public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
 		public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
@@ -79,7 +82,8 @@
 		public UserInterfaceViewModel(
 			IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator,
 			IPackageToActionSwitch packageToActionSwitch,
-			ILogger logger)
+			ILogger logger,
+			IClipboardPersistanceService clipboardPersistanceService)
 		{
 			Elements = new ObservableCollection<IClipboardDataControlPackage>();
 			Actions = new ObservableCollection<IActionViewModel>();
@@ -90,6 +94,7 @@
 
 			this.clipboardUserInterfaceInteractionMediator = clipboardUserInterfaceInteractionMediator;
 			this.logger = logger;
+			this.clipboardPersistanceService = clipboardPersistanceService;
 
 			SetUpClipboardUserInterfaceInteractionMediator();
 
@@ -207,13 +212,16 @@
 				try
 				{
 					await SelectedAction.Action.PerformAsync(SelectedElement.Data);
+					if (await clipboardPersistanceService.IsPinnedAsync(SelectedElement.Data))
+						return;
 
 					var oldSelectedElement = SelectedElement;
-					var clone = oldSelectedElement.Clone();
 					SelectedElement = null;
 
 					Elements.Remove(oldSelectedElement);
-					Elements.Insert(0, clone);
+
+					var clone = oldSelectedElement.Clone();
+					Elements.Insert(await GetIndexToInsertItemAsync(clone), clone);
 
 					SelectedElement = clone;
 				}
@@ -222,6 +230,11 @@
 					singlePasteLock.Release();
 				}
 			}
+		}
+
+		async Task<int> GetIndexToInsertItemAsync(IClipboardDataControlPackage package)
+		{
+
 		}
 
 		static T GetNewSelectedElementAfterHandlingUpKey<T>(
@@ -269,16 +282,16 @@
 				new UserInterfaceHiddenEventArgument());
 		}
 
-		void MediatorPackageAdded(object sender, PackageEventArgument e)
+		async void MediatorPackageAdded(object sender, PackageEventArgument e)
 		{
-			AddElement(e.Package);
+			await AddElementAsync(e.Package);
 		}
 
-		void AddElement(IClipboardDataControlPackage package)
+		async Task AddElementAsync(IClipboardDataControlPackage package)
 		{
 			lock (Elements)
 			{
-				Elements.Insert(0, package);
+				Elements.Insert(await GetIndexToInsertItemAsync(package), package);
 				SelectedElement = package;
 
 				UserInterfaceDataControlAdded?.Invoke(this, new UserInterfaceDataControlAddedEventArgument(package));

@@ -75,11 +75,11 @@ namespace Shapeshifter.WindowsDesktop
 						break;
 
 					var elapsedTimeInSeconds = (int)(DateTime.UtcNow - now).TotalSeconds;
-					if (elapsedTimeInSeconds > 60)
+					if (elapsedTimeInSeconds > 60 * 3)
 						break;
 
 					Console.WriteLine("Waited " + elapsedTimeInSeconds + " seconds so far for Shapeshifter to launch after installation.");
-					Thread.Sleep(1000);
+					Thread.Sleep(5000);
 				}
 
 				var logFilePath = FileManager.GetFullPathFromTemporaryPath($"Shapeshifter{DateTime.Now:yyyyMMdd}.log");

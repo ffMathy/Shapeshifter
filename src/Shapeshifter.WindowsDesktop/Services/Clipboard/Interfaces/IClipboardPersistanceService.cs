@@ -13,6 +13,6 @@
 
         Task DeletePackageAsync(IClipboardDataPackage package);
 
-        Task IsPinnedAsync(IClipboardDataPackage package);
+        Task<bool> IsPinnedAsync(IClipboardDataPackage package);
     }
 }
