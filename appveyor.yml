@@ -39,6 +39,8 @@ after_build:
 
     del *.* /F /Q
 
+    cd ..\..\
+
     cd src\Shapeshifter.WindowsDesktop
 
     msbuild Shapeshifter.WindowsDesktop.csproj
