@@ -91,9 +91,13 @@
 
 		void RunNativeGeneration()
 		{
-			processManager.LaunchFileWithAdministrativeRights(
+			var process = processManager.LaunchFileWithAdministrativeRights(
 				@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe",
 				"install \"" + TargetExecutableFile + "\" /ExeConfig:\"" + TargetExecutableFile + "\"");
+			process.WaitForExit();
+
+			if (process.ExitCode != 0)
+				throw new Exception("Could not generate a native image of the installed executable.");
 		}
 
 		void WriteDependencies()
