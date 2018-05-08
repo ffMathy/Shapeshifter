@@ -4,14 +4,14 @@
 
     using Services.Interfaces;
 
-    class DesignerDataSourceFacade: IDataSource
+    class DesignerDataSourceFacade : IDataSource
     {
-        byte[] icon;
+        byte[] iconLarge;
+        byte[] iconSmall;
 
         readonly IDesignerImageConverterService designerImageConverterService;
 
-        public DesignerDataSourceFacade(
-            IDesignerImageConverterService designerImageConverterService)
+        public DesignerDataSourceFacade(IDesignerImageConverterService designerImageConverterService)
         {
             this.designerImageConverterService = designerImageConverterService;
         }
@@ -21,15 +21,27 @@
             return designerImageConverterService.GenerateDesignerImageBytesFromFileBytes(iconBytes);
         }
 
-        public byte[] Icon
+        public byte[] IconLarge
         {
             get
             {
-                return icon;
+                return iconLarge;
             }
             set
             {
-                icon = DecorateIcon(value);
+                iconLarge = DecorateIcon(value);
+            }
+        }
+
+        public byte[] IconSmall
+        {
+            get
+            {
+                return iconSmall;
+            }
+            set
+            {
+                iconSmall = DecorateIcon(value);
             }
         }
 

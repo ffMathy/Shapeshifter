@@ -2,15 +2,17 @@
 {
     using Interfaces;
 
-    public class DataSource: IDataSource
+    public class DataSource : IDataSource
     {
-        public DataSource(byte[] icon, string text)
+        public DataSource(byte[] iconBig, byte[] iconSmall, string text)
         {
-            Icon = icon;
+            IconLarge = iconBig;
+            IconSmall = iconSmall;
             Text = text;
         }
 
-        public byte[] Icon { get; }
+        public byte[] IconLarge { get; }
+        public byte[] IconSmall { get; }
 
         public string Text { get; }
     }

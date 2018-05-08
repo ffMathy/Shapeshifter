@@ -1,16 +1,11 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
-    using WindowsDesktop.Services.Clipboard.Interfaces;
-
     using Controls.Designer.Services;
-
     using Data.Interfaces;
-
     using Facades;
-
     using Interfaces;
-
     using Properties;
+    using WindowsDesktop.Services.Clipboard.Interfaces;
 
     class DesignerTextDataSourceService
         : IDataSourceService,
@@ -29,7 +24,8 @@
             return new DesignerDataSourceFacade(designerImageConverterService)
             {
                 Text = "Skype",
-                Icon = Resources.TextDataSourceIcon
+                IconLarge = Resources.TextDataSourceIcon,
+                IconSmall = Resources.TextDataSourceIcon
             };
         }
     }
