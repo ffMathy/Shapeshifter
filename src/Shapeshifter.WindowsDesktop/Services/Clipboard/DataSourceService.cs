@@ -1,91 +1,102 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Windows;
-	using System.Windows.Interop;
-	using System.Windows.Media.Imaging;
+    using Data;
+    using Data.Interfaces;
+    using Images.Interfaces;
+    using Infrastructure.Dependencies.Interfaces;
+    using Interfaces;
+    using Messages;
+    using Native;
+    using Native.Interfaces;
+    using System;
+    using System.Collections.Generic;
+    using System.Windows;
+    using System.Windows.Interop;
+    using System.Windows.Media.Imaging;
 
-	using Data;
-	using Data.Interfaces;
+    class DataSourceService
+        : IDataSourceService,
+          ISingleInstance
+    {
+        readonly IImagePersistenceService imagePersistenceService;
+        readonly IWindowNativeApi windowNativeApi;
 
-	using Images.Interfaces;
+        readonly IDictionary<IntPtr, byte[]> dataSourceIconCacheLarge;
+        readonly IDictionary<IntPtr, byte[]> dataSourceIconCacheSmall;
 
-	using Infrastructure.Dependencies.Interfaces;
+        public DataSourceService(
+            IImagePersistenceService imagePersistenceService,
+            IWindowNativeApi windowNativeApi)
+        {
+            this.imagePersistenceService = imagePersistenceService;
+            this.windowNativeApi = windowNativeApi;
 
-	using Interfaces;
+            dataSourceIconCacheLarge = new Dictionary<IntPtr, byte[]>();
+            dataSourceIconCacheSmall = new Dictionary<IntPtr, byte[]>();
+        }
 
-	using Messages;
+        BitmapSource GetWindowIcon(IntPtr windowHandle, bool bigIconSize = true)
+        {
+            var hIcon = windowNativeApi.SendMessage(
+                windowHandle,
+                (int)Message.WM_GETICON,
+                bigIconSize ? WindowNativeApi.ICON_LARGE : WindowNativeApi.ICON_SMALL,
+                IntPtr.Zero);
 
-	using Native;
-	using Native.Interfaces;
+            if (hIcon == IntPtr.Zero)
+            {
+                hIcon = windowNativeApi.GetClassLongPtr(windowHandle, WindowNativeApi.GCL_HICON);
+            }
 
-	class DataSourceService
-		: IDataSourceService,
-		  ISingleInstance
-	{
-		readonly IImagePersistenceService imagePersistenceService;
-		readonly IWindowNativeApi windowNativeApi;
+            if (hIcon == IntPtr.Zero)
+            {
+                hIcon = windowNativeApi.LoadIcon(IntPtr.Zero, WindowNativeApi.IDI_APPLICATION);
+            }
 
-		readonly IDictionary<IntPtr, byte[]> dataSourceIconCache;
+            if (hIcon != IntPtr.Zero)
+            {
+                return Imaging.CreateBitmapSourceFromHIcon(
+                    hIcon,
+                    Int32Rect.Empty,
+                    BitmapSizeOptions.FromEmptyOptions());
+            }
 
-		public DataSourceService(
-			IImagePersistenceService imagePersistenceService,
-			IWindowNativeApi windowNativeApi)
-		{
-			this.imagePersistenceService = imagePersistenceService;
-			this.windowNativeApi = windowNativeApi;
+            throw new InvalidOperationException("Could not load window icon.");
+        }
 
-			dataSourceIconCache = new Dictionary<IntPtr, byte[]>();
-		}
+        public IDataSource GetDataSource()
+        {
+            var activeWindowHandle = windowNativeApi.GetForegroundWindow();
+            var windowTitle = windowNativeApi.GetWindowTitle(activeWindowHandle);
+            lock (this)
+            {
+                byte[] iconBytesBig;
+                if (dataSourceIconCacheLarge.ContainsKey(activeWindowHandle))
+                {
+                    iconBytesBig = dataSourceIconCacheLarge[activeWindowHandle];
+                }
+                else
+                {
+                    var windowIconBig = GetWindowIcon(activeWindowHandle);
+                    iconBytesBig = imagePersistenceService.ConvertBitmapSourceToByteArray(windowIconBig);
+                    dataSourceIconCacheLarge.Add(activeWindowHandle, iconBytesBig);
+                }
 
-		BitmapSource GetWindowIcon(IntPtr windowHandle)
-		{
-			var hIcon = windowNativeApi.SendMessage(
-				windowHandle,
-				(int)Message.WM_GETICON,
-				WindowNativeApi.ICON_BIG,
-				IntPtr.Zero);
-			if (hIcon == IntPtr.Zero)
-			{
-				hIcon = windowNativeApi.GetClassLongPtr(windowHandle, WindowNativeApi.GCL_HICON);
-			}
+                byte[] iconBytesSmall;
+                if (dataSourceIconCacheSmall.ContainsKey(activeWindowHandle))
+                {
+                    iconBytesSmall = dataSourceIconCacheSmall[activeWindowHandle];
+                }
+                else
+                {
+                    var windowIconSmall = GetWindowIcon(activeWindowHandle, false);
+                    iconBytesSmall = imagePersistenceService.ConvertBitmapSourceToByteArray(windowIconSmall);
+                    dataSourceIconCacheSmall.Add(activeWindowHandle, iconBytesSmall);
+                }
 
-			if (hIcon == IntPtr.Zero)
-			{
-				hIcon = windowNativeApi.LoadIcon(IntPtr.Zero, WindowNativeApi.IDI_APPLICATION);
-			}
-
-			if (hIcon != IntPtr.Zero)
-			{
-				return Imaging.CreateBitmapSourceFromHIcon(
-					hIcon,
-					Int32Rect.Empty,
-					BitmapSizeOptions.FromEmptyOptions());
-			}
-
-			throw new InvalidOperationException("Could not load window icon.");
-		}
-
-		public IDataSource GetDataSource()
-		{
-			var activeWindowHandle = windowNativeApi.GetForegroundWindow();
-			var windowTitle = windowNativeApi.GetWindowTitle(activeWindowHandle);
-			lock (this)
-			{
-				byte[] iconBytes;
-				if (dataSourceIconCache.ContainsKey(activeWindowHandle)) {
-					iconBytes = dataSourceIconCache[activeWindowHandle];
-				} else
-				{
-					var windowIcon = GetWindowIcon(activeWindowHandle);
-					iconBytes = imagePersistenceService.ConvertBitmapSourceToByteArray(windowIcon);
-					dataSourceIconCache.Add(activeWindowHandle, iconBytes);
-				}
-
-				var dataSource = new DataSource(iconBytes, windowTitle);
-				return dataSource;
-			}
-		}
-	}
+                var dataSource = new DataSource(iconBytesBig, iconBytesSmall, windowTitle);
+                return dataSource;
+            }
+        }
+    }
 }

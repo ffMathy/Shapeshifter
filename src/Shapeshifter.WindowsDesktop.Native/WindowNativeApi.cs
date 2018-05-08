@@ -115,9 +115,11 @@
             return GetClassLong64(hWnd, nIndex);
         }
 
-        public static IntPtr ICON_BIG => new IntPtr(1);
-
-        IntPtr IWindowNativeApi.ICON_BIG => ICON_BIG;
+        public static IntPtr ICON_LARGE => new IntPtr(1);
+        public static IntPtr ICON_SMALL => new IntPtr(0);
+       
+        IntPtr IWindowNativeApi.ICON_LARGE => ICON_LARGE;
+        IntPtr IWindowNativeApi.ICON_SMALL => ICON_SMALL;
 
         public static IntPtr IDI_APPLICATION => new IntPtr(0x7F00);
 

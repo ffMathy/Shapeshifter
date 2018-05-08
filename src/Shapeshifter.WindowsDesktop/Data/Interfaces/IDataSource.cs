@@ -2,7 +2,9 @@
 {
     public interface IDataSource
     {
-        byte[] Icon { get; }
+        byte[] IconLarge { get; }
+
+        byte[] IconSmall { get; }
 
         string Text { get; }
     }

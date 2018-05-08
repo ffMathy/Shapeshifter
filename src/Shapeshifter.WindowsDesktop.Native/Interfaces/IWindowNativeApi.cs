@@ -5,7 +5,8 @@
 
     public interface IWindowNativeApi
     {
-        IntPtr ICON_BIG { get; }
+        IntPtr ICON_LARGE { get; }
+        IntPtr ICON_SMALL { get; }
 
         IntPtr IDI_APPLICATION { get; }
 
