@@ -7,6 +7,8 @@
 	using System.Text.RegularExpressions;
 	using System.Threading.Tasks;
 
+	using Controls.Window.Interfaces;
+
 	using Files.Interfaces;
 
 	using Interfaces;
@@ -33,6 +35,7 @@
         readonly ILogger logger;
         readonly IEnvironmentInformation environmentInformation;
 		readonly ISettingsManager settingsManager;
+		readonly IMaintenanceWindow maintenanceWindow;
 
 		public UpdateService(
             IDownloader fileDownloader,
@@ -41,7 +44,8 @@
             ILogger logger,
             IGitHubClientFactory clientFactory,
             IEnvironmentInformation environmentInformation,
-			ISettingsManager settingsManager)
+			ISettingsManager settingsManager,
+			IMaintenanceWindow maintenanceWindow)
         {
             client = clientFactory.CreateClient();
 			
@@ -51,6 +55,7 @@
             this.logger = logger;
             this.environmentInformation = environmentInformation;
 			this.settingsManager = settingsManager;
+			this.maintenanceWindow = maintenanceWindow;
 		}
 
         public async Task UpdateAsync()
@@ -66,6 +71,7 @@
                     return;
                 }
 
+				maintenanceWindow.Show("Updating to v" + GetReleaseVersion(pendingUpdateRelease) + "...");
 				await UpdateFromReleaseAsync(pendingUpdateRelease);
             }
             catch (RateLimitExceededException)
@@ -135,7 +141,7 @@
             return IsUpdateToVersionNeeded(releaseVersion);
         }
 
-        bool IsUpdateToVersionNeeded(Version releaseVersion)
+		static bool IsUpdateToVersionNeeded(Version releaseVersion)
         {
             return releaseVersion > Program.GetCurrentVersion();
         }
@@ -157,7 +163,7 @@
                 .FirstOrDefault();
         }
 
-		bool IsCurrentRelease(Release release) {
+		static bool IsCurrentRelease(Release release) {
 			var releaseVersion = GetReleaseVersion(release);
 			return releaseVersion == Program.GetCurrentVersion();
 		}

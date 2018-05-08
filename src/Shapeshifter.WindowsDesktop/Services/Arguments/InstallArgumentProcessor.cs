@@ -62,7 +62,7 @@
 
 		void Install()
 		{
-			maintenanceWindow.Show("Installing Shapeshifter ...");
+			maintenanceWindow.Show("Installing ...");
 
 			PrepareInstallDirectory();
 			InstallToInstallDirectory();
@@ -84,8 +84,16 @@
 			WriteApplicationConfiguration();
 			WriteApplicationManifest();
 			WriteApplicationDebugInformation();
+			RunNativeGeneration();
 
 			logger.Information("Executable, configuration and manifest written to install directory.");
+		}
+
+		void RunNativeGeneration()
+		{
+			processManager.LaunchFileWithAdministrativeRights(
+				@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe", 
+				"install \"" + TargetExecutableFile + "\" /ExeConfig:\"" + TargetExecutableFile + "\"");
 		}
 
 		void WriteDependencies()
