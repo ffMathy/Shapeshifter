@@ -195,20 +195,6 @@
 			return originPath.Split('\\', '/');
 		}
 
-		public string PrepareNewIsolatedFolder(string relativePath)
-		{
-			var count = 0;
-
-			string finalPath = null;
-			while ((finalPath == null) || Directory.Exists(finalPath))
-			{
-				finalPath = GetFullPathFromIsolatedPath(
-					Path.Combine(relativePath, (++count).ToString()));
-			}
-
-			return PrepareFolder(finalPath);
-		}
-
 		public string PrepareFolder(string path)
 		{
 			CreateDirectoryIfNotExists(path);

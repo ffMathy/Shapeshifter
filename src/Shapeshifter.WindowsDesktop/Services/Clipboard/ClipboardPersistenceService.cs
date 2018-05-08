@@ -36,7 +36,7 @@
 
         public async Task PersistClipboardPackageAsync(IClipboardDataPackage package)
         {
-            var packageFolder = fileManager.PrepareNewIsolatedFolder(
+            var packageFolder = fileManager.PrepareIsolatedFolder(
 				GetUniquePackageFolder(package.Id));
             for (var i = 0; i < package.Contents.Count; i++)
             {
@@ -94,7 +94,7 @@
             }
 
             return clipboardDataPackageFactory.CreateFromFormatsAndData(
-				Guid.Parse(directory),
+				Guid.Parse(Path.GetFileName(directory)),
 				dataPairs.ToArray());
         }
 

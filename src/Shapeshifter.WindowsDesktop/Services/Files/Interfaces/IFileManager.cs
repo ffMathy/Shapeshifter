@@ -32,9 +32,6 @@
         string PrepareIsolatedFolder(
             string relativePath = null);
 
-        string PrepareNewIsolatedFolder(
-            string relativePath);
-
         string PrepareFolder(
             string path);
 
