@@ -62,7 +62,7 @@
 
 		void Install()
 		{
-			maintenanceWindow.Show("Installing Shapeshifter ...");
+			maintenanceWindow.Show("Installing ...");
 
 			PrepareInstallDirectory();
 			InstallToInstallDirectory();
@@ -84,14 +84,26 @@
 			WriteApplicationConfiguration();
 			WriteApplicationManifest();
 			WriteApplicationDebugInformation();
+			RunNativeGeneration();
 
 			logger.Information("Executable, configuration and manifest written to install directory.");
+		}
+
+		void RunNativeGeneration()
+		{
+			var process = processManager.LaunchFileWithAdministrativeRights(
+				@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe",
+				"install \"" + TargetExecutableFile + "\" /ExeConfig:\"" + TargetExecutableFile + "\"");
+			process.WaitForExit();
+
+			if (process.ExitCode != 0)
+				throw new Exception("Could not generate a native image of the installed executable.");
 		}
 
 		void WriteDependencies()
 		{
 			WriteEasyHookDependencies();
-			
+
 			using (var textReader = new StringReader(Resources.ProjectFile))
 			using (var reader = XmlReader.Create(textReader))
 			{
@@ -121,15 +133,13 @@
 
 		void WriteEasyHookDependencies()
 		{
-			var processorArchitecture = Environment.Is64BitOperatingSystem ? "64" : "32";
 			var dependencyPrefix = $"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.";
-
 			var dependenciesToSave = new List<string>
 			{
-					dependencyPrefix + $"EasyHook{processorArchitecture}Svc.exe",
-					dependencyPrefix + $"EasyHook{processorArchitecture}.dll",
-					dependencyPrefix + $"EasyLoad{processorArchitecture}.dll"
-				};
+				dependencyPrefix + $"EasyHook64Svc.exe",
+				dependencyPrefix + $"EasyHook64.dll",
+				dependencyPrefix + $"EasyLoad64.dll"
+			};
 
 			foreach (var dependency in dependenciesToSave)
 			{

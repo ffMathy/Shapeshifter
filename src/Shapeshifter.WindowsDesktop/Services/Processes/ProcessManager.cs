@@ -50,9 +50,9 @@
 			return Path.GetDirectoryName(GetCurrentProcessFilePath());
 		}
 
-		public void LaunchCommand(string command, string arguments = null)
+		public Process LaunchCommand(string command, string arguments = null)
 		{
-			SpawnProcess(command, Environment.CurrentDirectory);
+			return SpawnProcess(command, Environment.CurrentDirectory);
 		}
 
 		public void CloseAllDuplicateProcessesExceptCurrent()
@@ -138,16 +138,16 @@
 			return false;
 		}
 
-		public void LaunchFile(string fileName, string arguments = null)
+		public Process LaunchFile(string fileName, string arguments = null)
 		{
 			var workingDirectory = Path.GetDirectoryName(fileName);
-			SpawnProcess(fileName, workingDirectory, arguments);
+			return SpawnProcess(fileName, workingDirectory, arguments);
 		}
 
-		public void LaunchFileWithAdministrativeRights(string fileName, string arguments = null)
+		public Process LaunchFileWithAdministrativeRights(string fileName, string arguments = null)
 		{
 			var workingDirectory = Path.GetDirectoryName(fileName);
-			SpawnProcess(fileName, workingDirectory, arguments, "runas");
+			return SpawnProcess(fileName, workingDirectory, arguments, "runas");
 		}
 
 		public bool IsCurrentProcessElevated()
@@ -159,7 +159,7 @@
 			}
 		}
 
-		void SpawnProcess(string uri, string workingDirectory, string arguments = null, string verb = null)
+		Process SpawnProcess(string uri, string workingDirectory, string arguments = null, string verb = null)
 		{
 			using (LogContext.PushProperty("fileName", uri))
 			using (LogContext.PushProperty("workingDirectory", workingDirectory))
@@ -176,6 +176,8 @@
 						Arguments = arguments
 					});
 				processes.Add(process);
+
+				return process;
 			}
 		}
 

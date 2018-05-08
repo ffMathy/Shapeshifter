@@ -33,15 +33,21 @@ init:
 - ps: Update-AppveyorBuild -Version "6.$(Get-Date -format yyyy).$(Get-Date -format Mdd).$((Get-ChildItem Env:APPVEYOR_BUILD_NUMBER).Value)"
 after_build:
 - cmd: >
-    mkdir build\website
-
     copy build\application\Shapeshifter.pdb src\Shapeshifter.WindowsDesktop\App.pdb
+
+    cd build\application
+
+    del *.* /F /Q
+
+    cd ..\..\
 
     cd src\Shapeshifter.WindowsDesktop
 
     msbuild Shapeshifter.WindowsDesktop.csproj
 
     cd ..\..\
+
+    mkdir build\website
 
     cd src\Shapeshifter.Website
 

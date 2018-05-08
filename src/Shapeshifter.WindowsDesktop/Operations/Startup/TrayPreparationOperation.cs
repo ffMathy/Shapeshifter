@@ -61,9 +61,7 @@
 						"Exit",
 						(sender, e) => Application.Current.Shutdown())
 				});
-
-			trayIconManager.DisplayInformation("Shapeshifter is ready", "You can now use Shapeshifter for managing your clipboard.");
-
+			
 			settingsManager.SaveSetting("LastLoad", DateTime.UtcNow);
 		}
 
