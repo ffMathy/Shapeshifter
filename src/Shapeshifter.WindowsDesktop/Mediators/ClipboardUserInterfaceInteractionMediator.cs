@@ -332,6 +332,7 @@
 			object sender,
 			PasteCombinationDurationPassedEventArgument e)
 		{
+			logger.Verbose("Paste combination duration passed event has been received by user interface interaction mediator.");
 			RaiseUserInterfaceShownEvent();
 		}
 
