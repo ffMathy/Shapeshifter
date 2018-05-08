@@ -189,7 +189,7 @@
 			File.WriteAllText(
 				Path.Combine(
 					TargetDirectory,
-					"Shapeshifter.config"),
+					"Shapeshifter.exe.config"),
 				Resources.AppConfiguration);
 		}
 
