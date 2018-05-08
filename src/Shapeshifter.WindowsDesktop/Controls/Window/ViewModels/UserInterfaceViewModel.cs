@@ -23,7 +23,7 @@
 	using Serilog;
 	using Services.Screen;
 
-	class UserInterfaceViewModel  : 
+	class UserInterfaceViewModel : 
 		IUserInterfaceViewModel, 
 		IDisposable
 	{
@@ -35,7 +35,6 @@
 		readonly SemaphoreSlim singlePasteLock;
 
 		readonly IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator;
-		readonly ISettingsViewModel settingsViewModel;
 		readonly ILogger logger;
 
 		public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
@@ -48,10 +47,7 @@
 
 		public ScreenInformation ActiveScreen
 		{
-			get
-			{
-				return activeScreen;
-			}
+			get => activeScreen;
 			set
 			{
 				activeScreen = value;
@@ -61,10 +57,7 @@
 
 		public IActionViewModel SelectedAction
 		{
-			get
-			{
-				return selectedAction;
-			}
+			get => selectedAction;
 			set
 			{
 				selectedAction = value;
@@ -74,10 +67,7 @@
 
 		public IClipboardDataControlPackage SelectedElement
 		{
-			get
-			{
-				return selectedElement;
-			}
+			get => selectedElement;
 			set
 			{
 				selectedElement = value;
@@ -89,7 +79,6 @@
 		public UserInterfaceViewModel(
 			IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator,
 			IPackageToActionSwitch packageToActionSwitch,
-			ISettingsViewModel settingsViewModel,
 			ILogger logger)
 		{
 			Elements = new ObservableCollection<IClipboardDataControlPackage>();
@@ -100,7 +89,6 @@
 			Actions.CollectionChanged += Actions_CollectionChanged;
 
 			this.clipboardUserInterfaceInteractionMediator = clipboardUserInterfaceInteractionMediator;
-			this.settingsViewModel = settingsViewModel;
 			this.logger = logger;
 
 			SetUpClipboardUserInterfaceInteractionMediator();
@@ -242,9 +230,7 @@
 		{
 			var indexToUse = list.IndexOf(selectedElement) - 1;
 			if (indexToUse < 0)
-			{
 				indexToUse = list.Count - 1;
-			}
 
 			return list[indexToUse];
 		}
@@ -255,9 +241,7 @@
 		{
 			var indexToUse = list.IndexOf(selectedElement) + 1;
 			if (indexToUse == list.Count)
-			{
 				indexToUse = 0;
-			}
 
 			return list[indexToUse];
 		}
@@ -269,7 +253,7 @@
 				logger.Information("Did not show the UI because there are no clipboard elements in the list.");
 				return;
 			}
-
+			
 			UserInterfaceShown?.Invoke(this, e);
 		}
 
