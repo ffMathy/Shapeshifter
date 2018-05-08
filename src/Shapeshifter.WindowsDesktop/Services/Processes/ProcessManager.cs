@@ -182,7 +182,8 @@
 						WindowStyle = windowStyle,
 						RedirectStandardError = true,
 						RedirectStandardInput = true,
-						RedirectStandardOutput = true
+						RedirectStandardOutput = true,
+						UseShellExecute = false
 					});
 				processes.Add(process);
 

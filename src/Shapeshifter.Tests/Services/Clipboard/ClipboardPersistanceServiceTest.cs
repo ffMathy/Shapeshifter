@@ -1,5 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
@@ -25,10 +26,8 @@
 		public async Task CanPersistClipboardData()
 		{
 			Container.Resolve<IFileManager>()
-			 .PrepareIsolatedFolder(
-				 Arg.Is<string>(
-					 x => x.StartsWith("Pinned")))
-			 .Returns("preparedFolder");
+				.PrepareIsolatedFolder(Arg.Any<string>())
+				.Returns("preparedFolder");
 
 			var clipboardFormat1337 = CreateClipboardFormatFromNumber(1337u);
 			var clipboardFormat1338 = CreateClipboardFormatFromNumber(1338u);
@@ -56,7 +55,10 @@
 												  });
 										  });
 
+			var fakePackageId = Guid.NewGuid();
+
 			var fakePackage = Substitute.For<IClipboardDataPackage>();
+			fakePackage.Id.Returns(fakePackageId);
 			fakePackage
 				.Contents
 				.Returns(
@@ -145,6 +147,7 @@
 										  });
 
 			var fakePackage1 = Substitute.For<IClipboardDataPackage>();
+			fakePackage1.Id.Returns(Guid.NewGuid());
 			fakePackage1
 				.Contents
 				.Returns(
@@ -156,6 +159,7 @@
 						}));
 
 			var fakePackage2 = Substitute.For<IClipboardDataPackage>();
+			fakePackage2.Id.Returns(Guid.NewGuid());
 			fakePackage2
 				.Contents
 				.Returns(
@@ -177,8 +181,8 @@
 			var persistedPackage1 = persistedPackagesArray[0];
 			var persistedPackage2 = persistedPackagesArray[1];
 
-			Assert.AreEqual(1, persistedPackage1.Id);
-			Assert.AreEqual(2, persistedPackage2.Id);
+			Assert.AreEqual(fakePackage1.Id, persistedPackage1.Id);
+			Assert.AreEqual(fakePackage2.Id, persistedPackage2.Id);
 
 			Assert.AreEqual(
 				1,

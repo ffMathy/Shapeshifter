@@ -7,6 +7,9 @@
 	using Autofac;
 
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+	using NSubstitute;
+
 	using Serilog;
 	using Services.Files.Interfaces;
 	
@@ -88,11 +91,12 @@
 		{
 			Log.CloseAndFlush();
 
-			var fileManager = Container.Resolve<IFileManager>();
-			var folder = fileManager.PrepareIsolatedFolder();
-			if (!string.IsNullOrEmpty(folder))
+			var appDataPath = Path.Combine(
+				Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+				"Shapeshifter");
+			if (Directory.Exists(appDataPath))
 			{
-				Directory.Delete(folder, true);
+				Directory.Delete(appDataPath, true);
 			}
 
 			var temporaryPath = Path.Combine(
