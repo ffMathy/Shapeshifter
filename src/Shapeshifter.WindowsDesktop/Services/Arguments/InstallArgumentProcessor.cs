@@ -129,14 +129,12 @@
 
 		void WriteEasyHookDependencies()
 		{
-			var processorArchitecture = Environment.Is64BitOperatingSystem ? "64" : "32";
 			var dependencyPrefix = $"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.";
-
 			var dependenciesToSave = new List<string>
 			{
-					dependencyPrefix + $"EasyHook{processorArchitecture}Svc.exe",
-					dependencyPrefix + $"EasyHook{processorArchitecture}.dll",
-					dependencyPrefix + $"EasyLoad{processorArchitecture}.dll"
+					dependencyPrefix + $"EasyHook64Svc.exe",
+					dependencyPrefix + $"EasyHook64.dll",
+					dependencyPrefix + $"EasyLoad64.dll"
 				};
 
 			foreach (var dependency in dependenciesToSave)
