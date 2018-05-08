@@ -68,7 +68,7 @@
         {
             return new ActionViewModel(
                 action,
-                await action.GetDescriptionAsync(package.Data));
+                await action.GetTitleAsync(package.Data));
         }
 
         void PrepareActions(IAction[] actions)

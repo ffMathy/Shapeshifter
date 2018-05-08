@@ -34,14 +34,12 @@
             this.clipboardInjectionService = clipboardInjectionService;
         }
 
-        public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
+        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
         {
-            return "Compress the clipboard contents into a ZIP-file and copy it.";
+            return "Copy as compressed folder";
         }
 
         public byte Order => 75;
-
-        public string Title => "Copy as compressed folder";
 
         public async Task<bool> CanPerformAsync(
             IClipboardDataPackage package)

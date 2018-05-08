@@ -25,7 +25,7 @@
 		public async Task CanPersistClipboardData()
 		{
 			Container.Resolve<IFileManager>()
-			 .PrepareNewIsolatedFolder(
+			 .PrepareIsolatedFolder(
 				 Arg.Is<string>(
 					 x => x.StartsWith("Pinned")))
 			 .Returns("preparedFolder");

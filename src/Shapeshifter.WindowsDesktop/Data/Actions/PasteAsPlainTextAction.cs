@@ -27,14 +27,12 @@
             this.asyncFilter = asyncFilter;
 		}
 
-        public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
+        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
         {
-            return "Pastes clipboard contents as plain text with no formatting.";
+            return "Paste as plain text";
         }
 
         public byte Order => 15;
-
-        public string Title => "Paste as plain text";
 
         public async Task<bool> CanPerformAsync(
             IClipboardDataPackage data)

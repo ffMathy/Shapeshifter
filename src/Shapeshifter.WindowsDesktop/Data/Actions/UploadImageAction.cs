@@ -27,12 +27,10 @@
             this.asyncFilter = asyncFilter;
         }
 
-        public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
+        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
         {
-            return "Uploads the given image to Imgur and copies a link to it.";
+            return "Upload image";
         }
-
-        public string Title => "Upload image";
 
         public byte Order => 50;
 

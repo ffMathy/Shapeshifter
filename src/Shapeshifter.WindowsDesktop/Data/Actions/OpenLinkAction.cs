@@ -30,48 +30,12 @@
             this.asyncFilter = asyncFilter;
         }
 
-        public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
-        {
-            var links = await ExtractLinksFromPackageAsync(package);
-
-            var description = string.Empty;
-            for (var i = 0; i < links.Count; i++)
-            {
-                if (i == 0)
-                {
-                    description += "Open the ";
-                    if (links.Count == 1)
-                    {
-                        description += "link ";
-                    }
-                    else
-                    {
-                        description += "links ";
-                    }
-                }
-                else
-                {
-                    if (i == links.Count - 1)
-                    {
-                        description += " and ";
-                    }
-                    else
-                    {
-                        description += ", ";
-                    }
-                }
-
-                var link = links[i];
-                description += link;
-            }
-            description += ".";
-
-            return description;
-        }
+        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
+		{
+			return "Open links";
+		}
 
         public byte Order => 200;
-
-        public string Title => "Open links";
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
         {

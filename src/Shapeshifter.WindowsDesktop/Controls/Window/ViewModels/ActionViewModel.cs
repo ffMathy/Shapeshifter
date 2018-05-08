@@ -11,16 +11,14 @@
 
         public ActionViewModel(
             IAction action,
-            string description)
+            string title)
         {
             Action = action;
-            Title = action.Title;
-            Description = description;
+            Title = title;
         }
 
         public IAction Action { get; }
 
-        public string Description { get; }
         public string Title { get; }
     }
 }

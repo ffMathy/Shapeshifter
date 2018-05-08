@@ -33,15 +33,9 @@
         }
 
         [TestMethod]
-        public void CanGetTitle()
-        {
-            Assert.IsNotNull(SystemUnderTest.Title);
-        }
-
-        [TestMethod]
         public async Task CanReadDescription()
         {
-            Assert.IsNotNull(await SystemUnderTest.GetDescriptionAsync(Substitute.For<IClipboardDataPackage>()));
+            Assert.IsNotNull(await SystemUnderTest.GetTitleAsync(Substitute.For<IClipboardDataPackage>()));
         }
 
         [TestMethod]

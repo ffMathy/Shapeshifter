@@ -5,8 +5,7 @@
     public interface IActionViewModel
     {
         IAction Action { get; }
-
-        string Description { get; }
+		
         string Title { get; }
     }
 }

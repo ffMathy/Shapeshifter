@@ -13,11 +13,13 @@
     class PinClipboardDataAction: IPinClipboardDataAction
     {
         readonly IClipboardPersistenceService clipboardPersistenceService;
-        public string Title => "Pin to clipboard";
 
-        public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
-        {
-            return "Pins this item so that it always stays in the top, and gets saved to your harddrive so that it is there the next time you open Shapeshifter.";
+        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
+		{
+			if (await clipboardPersistenceService.IsPersistedAsync(package))
+				return "Unpin from clipboard";
+
+            return "Pin to clipboard";
         }
 
         public byte Order => byte.MaxValue;

@@ -225,31 +225,34 @@
 				try
 				{
 					await SelectedAction.Action.PerformAsync(SelectedElement.Data);
-					if (await clipboardPersistenceService.IsPersistedAsync(SelectedElement.Data))
-						return;
-
-					await elementsModificationLock.WaitAsync();
-					try
-					{
-						var oldSelectedElement = SelectedElement;
-						SelectedElement = null;
-
-						Elements.Remove(oldSelectedElement);
-
-						var clone = oldSelectedElement.Clone();
-						Elements.Insert(await GetIndexToInsertNewItemAsync(), clone);
-
-						SelectedElement = clone;
-					}
-					finally
-					{
-						elementsModificationLock.Release();
-					}
+					if (!await clipboardPersistenceService.IsPersistedAsync(SelectedElement.Data))
+						await MoveSelectedItemToTopAsync();
 				}
 				finally
 				{
 					singlePasteLock.Release();
 				}
+			}
+		}
+
+		async Task MoveSelectedItemToTopAsync()
+		{
+			await elementsModificationLock.WaitAsync();
+			try
+			{
+				var oldSelectedElement = SelectedElement;
+				SelectedElement = null;
+
+				Elements.Remove(oldSelectedElement);
+
+				var clone = oldSelectedElement.Clone();
+				Elements.Insert(await GetIndexToInsertNewItemAsync(), clone);
+
+				SelectedElement = clone;
+			}
+			finally
+			{
+				elementsModificationLock.Release();
 			}
 		}
 
