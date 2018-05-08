@@ -92,14 +92,14 @@
 		void RunNativeGeneration()
 		{
 			processManager.LaunchFileWithAdministrativeRights(
-				@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe", 
+				@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe",
 				"install \"" + TargetExecutableFile + "\" /ExeConfig:\"" + TargetExecutableFile + "\"");
 		}
 
 		void WriteDependencies()
 		{
 			WriteEasyHookDependencies();
-			
+
 			using (var textReader = new StringReader(Resources.ProjectFile))
 			using (var reader = XmlReader.Create(textReader))
 			{
@@ -132,10 +132,10 @@
 			var dependencyPrefix = $"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.";
 			var dependenciesToSave = new List<string>
 			{
-					dependencyPrefix + $"EasyHook64Svc.exe",
-					dependencyPrefix + $"EasyHook64.dll",
-					dependencyPrefix + $"EasyLoad64.dll"
-				};
+				dependencyPrefix + $"EasyHook64Svc.exe",
+				dependencyPrefix + $"EasyHook64.dll",
+				dependencyPrefix + $"EasyLoad64.dll"
+			};
 
 			foreach (var dependency in dependenciesToSave)
 			{

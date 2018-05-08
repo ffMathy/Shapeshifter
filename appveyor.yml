@@ -39,7 +39,7 @@ after_build:
 
     cd build\application
 
-    del *.*
+    del *.* /F /Q
 
     cd src\Shapeshifter.WindowsDesktop
 
