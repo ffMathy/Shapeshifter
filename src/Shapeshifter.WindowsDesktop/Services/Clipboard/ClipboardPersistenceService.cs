@@ -50,7 +50,7 @@
             }
         }
 
-		static string GetUniquePackageFolder(long id)
+		static string GetUniquePackageFolder(Guid id)
 		{
 			return FileManager.GetFullPathFromIsolatedPath(
 				Path.Combine(
@@ -72,7 +72,7 @@
         }
 
         async Task<IClipboardDataPackage> GetPersistedPackageAsync(string directory)
-        {
+		{
             var packageFiles = Directory
                 .GetFiles(directory)
                 .OrderBy(x => x);
@@ -93,7 +93,9 @@
 					data));
             }
 
-            return clipboardDataPackageFactory.CreateFromFormatsAndData(dataPairs.ToArray());
+            return clipboardDataPackageFactory.CreateFromFormatsAndData(
+				Guid.Parse(directory),
+				dataPairs.ToArray());
         }
 
         public async Task DeletePackageAsync(IClipboardDataPackage package)
