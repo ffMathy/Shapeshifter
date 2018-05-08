@@ -35,13 +35,16 @@
 			PurgeDirectory(directory);
 		}
 
-		void WrapGracefully(Action action)
+		static void WrapGracefully(Action action)
 		{
 			try
 			{
 				action();
 			}
-			catch { }
+			catch
+			{
+				// ignored
+			}
 		}
 
 		void PurgeDirectory(string directory)
