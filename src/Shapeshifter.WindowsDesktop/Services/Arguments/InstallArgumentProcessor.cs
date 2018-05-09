@@ -5,6 +5,7 @@
 	using System.Diagnostics;
 	using System.IO;
 	using System.Linq;
+	using System.Threading;
 	using System.Threading.Tasks;
 	using System.Windows;
 	using System.Xml;
@@ -58,15 +59,15 @@
 		public async Task ProcessAsync(string[] arguments)
 		{
 			logger.Information("Running installation procedure.");
-			Install();
+			await InstallAsync();
 		}
 
-		void Install()
+		async Task InstallAsync()
 		{
 			maintenanceWindow.Show("Installing ...");
 
 			PrepareInstallDirectory();
-			InstallToInstallDirectory();
+			await InstallToInstallDirectoryAsync();
 
 			ConfigureDefaultSettings();
 
@@ -78,28 +79,35 @@
 			logger.Information("Launched installed executable.");
 		}
 
-		void InstallToInstallDirectory()
+		async Task InstallToInstallDirectoryAsync()
 		{
 			WriteExecutable();
 			WriteDependencies();
 			WriteApplicationConfiguration();
 			WriteApplicationManifest();
 			WriteApplicationDebugInformation();
-			RunNativeGeneration();
+
+			var exitCode = await RunNativeGenerationAsync();
+			if (exitCode != 0)
+				throw new Exception("Could not generate a native image of the installed executable.");
 
 			logger.Information("Executable, configuration and manifest written to install directory.");
 		}
 
-		void RunNativeGeneration()
+		Task<int> RunNativeGenerationAsync()
 		{
-			var process = processManager.LaunchFileWithAdministrativeRights(
+			var process = processManager.LaunchFile(
 				@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe",
 				"install \"" + TargetExecutableFile + "\" /ExeConfig:\"" + TargetExecutableFile + "\"",
 				ProcessWindowStyle.Hidden);
-			process.WaitForExit();
 
-			if (process.ExitCode != 0)
-				throw new Exception("Could not generate a native image of the installed executable.");
+			process.EnableRaisingEvents = true; 
+			
+			var taskCompletionSource = new TaskCompletionSource<int>();
+			process.EnableRaisingEvents = true;
+			process.Exited += (sender, args) => taskCompletionSource.TrySetResult(process.ExitCode);
+
+			return taskCompletionSource.Task;
 		}
 
 		void WriteDependencies()
