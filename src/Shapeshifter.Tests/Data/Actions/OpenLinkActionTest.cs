@@ -32,19 +32,13 @@
                     "bar.com"
                 });
 
-            Assert.IsNotNull(await SystemUnderTest.GetDescriptionAsync(Substitute
+            Assert.IsNotNull(await SystemUnderTest.GetTitleAsync(Substitute
                 .For<IClipboardDataPackage>()
                 .With(x => x.Contents.Returns(
                     new []
                     {
                         Substitute.For<IClipboardTextData>() 
                     }))));
-        }
-
-        [TestMethod]
-        public void CanReadTitle()
-        {
-            Assert.IsNotNull(SystemUnderTest.Title);
         }
 
         [TestMethod]

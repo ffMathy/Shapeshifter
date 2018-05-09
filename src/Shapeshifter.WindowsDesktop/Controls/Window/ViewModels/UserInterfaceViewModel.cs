@@ -21,6 +21,8 @@
 
 	using Mediators.Interfaces;
 	using Serilog;
+
+	using Services.Clipboard.Interfaces;
 	using Services.Screen;
 
 	class UserInterfaceViewModel : 
@@ -33,9 +35,11 @@
 		ScreenInformation activeScreen;
 
 		readonly SemaphoreSlim singlePasteLock;
+		readonly SemaphoreSlim elementsModificationLock;
 
 		readonly IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator;
 		readonly ILogger logger;
+		readonly IClipboardPersistenceService clipboardPersistenceService;
 
 		public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
 		public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
@@ -79,17 +83,20 @@
 		public UserInterfaceViewModel(
 			IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator,
 			IPackageToActionSwitch packageToActionSwitch,
-			ILogger logger)
+			ILogger logger,
+			IClipboardPersistenceService clipboardPersistenceService)
 		{
 			Elements = new ObservableCollection<IClipboardDataControlPackage>();
 			Actions = new ObservableCollection<IActionViewModel>();
 
 			singlePasteLock = new SemaphoreSlim(1);
+			elementsModificationLock = new SemaphoreSlim(1);
 
 			Actions.CollectionChanged += Actions_CollectionChanged;
 
 			this.clipboardUserInterfaceInteractionMediator = clipboardUserInterfaceInteractionMediator;
 			this.logger = logger;
+			this.clipboardPersistenceService = clipboardPersistenceService;
 
 			SetUpClipboardUserInterfaceInteractionMediator();
 
@@ -121,26 +128,37 @@
 			clipboardUserInterfaceInteractionMediator.SelectedPreviousItem += ClipboardUserInterfaceInteractionMediator_SelectedPreviousItem;
 		}
 
-		void ClipboardUserInterfaceInteractionMediator_RemovedCurrentItem(object sender, EventArgs e)
+		async void ClipboardUserInterfaceInteractionMediator_RemovedCurrentItem(object sender, EventArgs e)
 		{
-			RemoveCurrentElement();
+			await RemoveCurrentElementAsync();
 		}
 
-		void RemoveCurrentElement()
+		async Task RemoveCurrentElementAsync()
 		{
-			var currentElement = SelectedElement;
-			var currentIndex = Elements.IndexOf(currentElement);
-
-			Elements.Remove(currentElement);
-
-			if (Elements.Count == 0)
+			await elementsModificationLock.WaitAsync();
+			try
 			{
-				HideInterface();
+				var currentElement = SelectedElement;
+				var currentIndex = Elements.IndexOf(currentElement);
+
+				Elements.Remove(currentElement);
+
+				if (Elements.Count == 0)
+				{
+					HideInterface();
+				}
+				else
+				{
+					var targetIndex = currentIndex == Elements.Count - 1 ? Elements.Count - 1 : currentIndex + 1;
+					SelectedElement = Elements.ElementAt(targetIndex);
+				}
+
+				if (await clipboardPersistenceService.IsPersistedAsync(currentElement.Data))
+					await clipboardPersistenceService.DeletePackageAsync(currentElement.Data);
 			}
-			else
+			finally
 			{
-				var targetIndex = currentIndex == Elements.Count - 1 ? Elements.Count - 1 : currentIndex + 1;
-				SelectedElement = Elements.ElementAt(targetIndex);
+				elementsModificationLock.Release();
 			}
 		}
 
@@ -207,21 +225,47 @@
 				try
 				{
 					await SelectedAction.Action.PerformAsync(SelectedElement.Data);
-
-					var oldSelectedElement = SelectedElement;
-					var clone = oldSelectedElement.Clone();
-					SelectedElement = null;
-
-					Elements.Remove(oldSelectedElement);
-					Elements.Insert(0, clone);
-
-					SelectedElement = clone;
+					if (!await clipboardPersistenceService.IsPersistedAsync(SelectedElement.Data))
+						await MoveSelectedItemToTopAsync();
 				}
 				finally
 				{
 					singlePasteLock.Release();
 				}
 			}
+		}
+
+		async Task MoveSelectedItemToTopAsync()
+		{
+			await elementsModificationLock.WaitAsync();
+			try
+			{
+				var oldSelectedElement = SelectedElement;
+				SelectedElement = null;
+
+				Elements.Remove(oldSelectedElement);
+
+				var clone = oldSelectedElement.Clone();
+				Elements.Insert(await GetIndexToInsertNewItemAsync(), clone);
+
+				SelectedElement = clone;
+			}
+			finally
+			{
+				elementsModificationLock.Release();
+			}
+		}
+
+		async Task<int> GetIndexToInsertNewItemAsync()
+		{
+			for (var i = 0; i < Elements.Count; i++)
+			{
+				var element = Elements[i];
+				if (!await clipboardPersistenceService.IsPersistedAsync(element.Data))
+					return i;
+			}
+
+			return Elements.Count;
 		}
 
 		static T GetNewSelectedElementAfterHandlingUpKey<T>(
@@ -269,20 +313,25 @@
 				new UserInterfaceHiddenEventArgument());
 		}
 
-		void MediatorPackageAdded(object sender, PackageEventArgument e)
+		async void MediatorPackageAdded(object sender, PackageEventArgument e)
 		{
-			AddElement(e.Package);
+			await AddElementAsync(e.Package);
 		}
 
-		void AddElement(IClipboardDataControlPackage package)
+		async Task AddElementAsync(IClipboardDataControlPackage package)
 		{
-			lock (Elements)
+			await elementsModificationLock.WaitAsync();
+			try
 			{
-				Elements.Insert(0, package);
+				Elements.Insert(await GetIndexToInsertNewItemAsync(), package);
 				SelectedElement = package;
-
-				UserInterfaceDataControlAdded?.Invoke(this, new UserInterfaceDataControlAddedEventArgument(package));
 			}
+			finally
+			{
+				elementsModificationLock.Release();
+			}
+
+			UserInterfaceDataControlAdded?.Invoke(this, new UserInterfaceDataControlAddedEventArgument(package));
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

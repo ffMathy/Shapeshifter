@@ -56,7 +56,11 @@ namespace Shapeshifter.WindowsDesktop
 				var shapeshifterProcess = Process.Start(new ProcessStartInfo() {
 					Arguments = "install",
 					WorkingDirectory = applicationBuildPath,
-					FileName = executablePath
+					FileName = executablePath,
+					RedirectStandardInput = true,
+					RedirectStandardError = true,
+					RedirectStandardOutput = true,
+					UseShellExecute = false
 				});
 
 				Console.WriteLine("Launched Shapeshifter");
@@ -75,11 +79,11 @@ namespace Shapeshifter.WindowsDesktop
 						break;
 
 					var elapsedTimeInSeconds = (int)(DateTime.UtcNow - now).TotalSeconds;
-					if (elapsedTimeInSeconds > 60)
+					if (elapsedTimeInSeconds > 60 * 3)
 						break;
 
 					Console.WriteLine("Waited " + elapsedTimeInSeconds + " seconds so far for Shapeshifter to launch after installation.");
-					Thread.Sleep(1000);
+					Thread.Sleep(5000);
 				}
 
 				var logFilePath = FileManager.GetFullPathFromTemporaryPath($"Shapeshifter{DateTime.Now:yyyyMMdd}.log");

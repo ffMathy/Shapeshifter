@@ -16,13 +16,10 @@
     {
         readonly IFileManager fileManager;
         readonly IClipboardInjectionService clipboardInjectionService;
-
-        public string Title
-            => "Copy as file";
-
-        public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
+		
+        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
         {
-            return "Copy this text to the clipboard as a file.";
+            return "Copy as file";
         }
 
         public byte Order

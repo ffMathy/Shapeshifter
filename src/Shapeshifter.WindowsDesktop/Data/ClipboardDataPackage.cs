@@ -1,5 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Threading;
 
@@ -9,15 +10,13 @@
 	{
 		readonly List<IClipboardData> dataCollection;
 
-		static long idOffset;
-
 		public ClipboardDataPackage()
 		{
 			dataCollection = new List<IClipboardData>();
-			Id = Interlocked.Increment(ref idOffset);
+			Id = Guid.NewGuid();
 		}
 
-		public ClipboardDataPackage(long id)
+		public ClipboardDataPackage(Guid id)
 			: this()
 		{
 			Id = id;
@@ -32,7 +31,7 @@
 			dataCollection.Add(data);
 		}
 
-		public long Id { get; }
+		public Guid Id { get; set; }
 
 		public IDataSource Source { get; set; }
 	}

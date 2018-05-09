@@ -12,20 +12,22 @@
 
     class PinClipboardDataAction: IPinClipboardDataAction
     {
-        readonly IClipboardPersistanceService clipboardPersistanceService;
-        public string Title => "Pin to clipboard";
+        readonly IClipboardPersistenceService clipboardPersistenceService;
 
-        public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
-        {
-            return "Pins this item so that it always stays in the top, and gets saved to your harddrive so that it is there the next time you open Shapeshifter.";
+        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
+		{
+			if (await clipboardPersistenceService.IsPersistedAsync(package))
+				return "Unpin from clipboard";
+
+            return "Pin to clipboard";
         }
 
         public byte Order => byte.MaxValue;
 
         public PinClipboardDataAction(
-            IClipboardPersistanceService clipboardPersistanceService)
+            IClipboardPersistenceService clipboardPersistenceService)
         {
-            this.clipboardPersistanceService = clipboardPersistanceService;
+            this.clipboardPersistenceService = clipboardPersistenceService;
         }
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
@@ -36,7 +38,7 @@
 
         public async Task PerformAsync(IClipboardDataPackage package)
         {
-            await clipboardPersistanceService.PersistClipboardPackageAsync(package);
+            await clipboardPersistenceService.PersistClipboardPackageAsync(package);
         }
 
         static IEnumerable<IClipboardData> GetRelevantData(IClipboardDataPackage package)

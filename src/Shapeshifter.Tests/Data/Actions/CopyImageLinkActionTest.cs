@@ -31,12 +31,6 @@
         }
 
         [TestMethod]
-        public void CanReadTitle()
-        {
-            Assert.IsNotNull(SystemUnderTest.Title);
-        }
-
-        [TestMethod]
         public void OrderIsCorrect()
         {
             Assert.AreEqual(100, SystemUnderTest.Order);
@@ -52,7 +46,7 @@
                     "example.com"
                 });
 
-            Assert.IsNotNull(await SystemUnderTest.GetDescriptionAsync(CreateClipboardDataPackageContaining<IClipboardTextData>()));
+            Assert.IsNotNull(await SystemUnderTest.GetTitleAsync(CreateClipboardDataPackageContaining<IClipboardTextData>()));
         }
 
         [TestMethod]

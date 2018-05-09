@@ -22,12 +22,12 @@
 
 		public void CloseAllDuplicateProcessesExceptCurrent() { }
 
-		public Process LaunchFile(string fileName, string arguments = null)
+		public Process LaunchFile(string fileName, string arguments = null, ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Process LaunchFileWithAdministrativeRights(string fileName, string arguments = null)
+		public Process LaunchFileWithAdministrativeRights(string fileName, string arguments = null, ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal)
 		{
 			throw new NotImplementedException();
 		}

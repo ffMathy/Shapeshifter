@@ -1,5 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Factories
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 
@@ -54,9 +55,9 @@
 			}
 		}
 
-		public IClipboardDataPackage CreateFromFormatsAndData(params FormatDataPair[] formatsAndData)
+		public IClipboardDataPackage CreateFromFormatsAndData(Guid packageId, params FormatDataPair[] formatsAndData)
 		{
-			var package = CreateDataPackage();
+			var package = CreateDataPackage(packageId);
 			foreach (var pair in formatsAndData)
 			{
 				DecoratePackageWithClipboardDataFromRawDataAndFormat(package, pair.Format, pair.Data);
@@ -65,10 +66,14 @@
 			return package;
 		}
 
-		ClipboardDataPackage CreateDataPackage()
+		ClipboardDataPackage CreateDataPackage(Guid packageId = default)
 		{
+			if (packageId == default)
+				packageId = Guid.NewGuid();
+
 			return new ClipboardDataPackage() {
-				Source = dataSourceService.GetDataSource()
+				Source = dataSourceService.GetDataSource(),
+				Id = packageId
 			};
 		}
 

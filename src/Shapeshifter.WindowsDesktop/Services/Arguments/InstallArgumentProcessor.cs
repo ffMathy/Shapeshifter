@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.IO;
 	using System.Linq;
 	using System.Threading.Tasks;
@@ -93,7 +94,8 @@
 		{
 			var process = processManager.LaunchFileWithAdministrativeRights(
 				@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe",
-				"install \"" + TargetExecutableFile + "\" /ExeConfig:\"" + TargetExecutableFile + "\"");
+				"install \"" + TargetExecutableFile + "\" /ExeConfig:\"" + TargetExecutableFile + "\"",
+				ProcessWindowStyle.Hidden);
 			process.WaitForExit();
 
 			if (process.ExitCode != 0)

@@ -235,6 +235,10 @@
     <Reference Include="System.Runtime.Serialization">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.6.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Dataflow.4.8.0\lib\netstandard2.0\System.Threading.Tasks.Dataflow.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Threading.Thread">
       <HintPath>..\packages\System.Threading.Thread.4.0.0\lib\net46\System.Threading.Thread.dll</HintPath>
       <Private>True</Private>
@@ -521,9 +525,9 @@
     <Compile Include="Services\Arguments\InstallArgumentProcessor.cs" />
     <Compile Include="Services\Clipboard\ClipboardPasteService.cs" />
     <Compile Include="Infrastructure\Handles\ClipboardHandle.cs" />
-    <Compile Include="Services\Clipboard\ClipboardPersistanceService.cs" />
+    <Compile Include="Services\Clipboard\ClipboardPersistenceService.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IClipboardPasteService.cs" />
-    <Compile Include="Services\Clipboard\Interfaces\IClipboardPersistanceService.cs" />
+    <Compile Include="Services\Clipboard\Interfaces\IClipboardPersistenceService.cs" />
     <Compile Include="Services\Files\FileManager.cs" />
     <Compile Include="Services\Files\Interfaces\IFileManager.cs" />
     <Compile Include="Services\Clipboard\Interfaces\IDataSourceService.cs" />

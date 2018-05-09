@@ -27,14 +27,12 @@
             this.logger = logger;
         }
         
-        public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
+        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
         {
-            return "Pastes clipboard contents as-is.";
+            return "Paste";
         }
 
         public byte Order => 0;
-
-        public string Title => "Paste";
 
         public async Task<bool> CanPerformAsync(
             IClipboardDataPackage package)

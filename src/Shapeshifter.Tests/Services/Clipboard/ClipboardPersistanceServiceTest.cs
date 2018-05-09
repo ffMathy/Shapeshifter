@@ -1,5 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
@@ -18,17 +19,15 @@
 	using NSubstitute;
 
 	[TestClass]
-	public class ClipboardPersistanceServiceTest : UnitTestFor<IClipboardPersistanceService>
+	public class ClipboardPersistanceServiceTest : UnitTestFor<IClipboardPersistenceService>
 	{
 
 		[TestMethod]
 		public async Task CanPersistClipboardData()
 		{
 			Container.Resolve<IFileManager>()
-			 .PrepareNewIsolatedFolder(
-				 Arg.Is<string>(
-					 x => x.StartsWith("Pinned")))
-			 .Returns("preparedFolder");
+				.PrepareIsolatedFolder(Arg.Any<string>())
+				.Returns("preparedFolder");
 
 			var clipboardFormat1337 = CreateClipboardFormatFromNumber(1337u);
 			var clipboardFormat1338 = CreateClipboardFormatFromNumber(1338u);
@@ -56,7 +55,10 @@
 												  });
 										  });
 
+			var fakePackageId = Guid.NewGuid();
+
 			var fakePackage = Substitute.For<IClipboardDataPackage>();
+			fakePackage.Id.Returns(fakePackageId);
 			fakePackage
 				.Contents
 				.Returns(
@@ -67,7 +69,7 @@
 							fakeData2
 						}));
 
-			var service = Container.Resolve<IClipboardPersistanceService>();
+			var service = Container.Resolve<IClipboardPersistenceService>();
 			await service.PersistClipboardPackageAsync(fakePackage);
 
 			var fakeFileManager = Container.Resolve<IFileManager>();
@@ -144,7 +146,9 @@
 												  });
 										  });
 
+			var fakeId1 = Guid.NewGuid();
 			var fakePackage1 = Substitute.For<IClipboardDataPackage>();
+			fakePackage1.Id.Returns(fakeId1);
 			fakePackage1
 				.Contents
 				.Returns(
@@ -155,7 +159,9 @@
 							fakeData2
 						}));
 
+			var fakeId2 = Guid.NewGuid();
 			var fakePackage2 = Substitute.For<IClipboardDataPackage>();
+			fakePackage2.Id.Returns(fakeId2);
 			fakePackage2
 				.Contents
 				.Returns(
@@ -174,11 +180,8 @@
 
 			Assert.AreEqual(2, persistedPackagesArray.Length);
 
-			var persistedPackage1 = persistedPackagesArray[0];
-			var persistedPackage2 = persistedPackagesArray[1];
-
-			Assert.AreEqual(1, persistedPackage1.Id);
-			Assert.AreEqual(2, persistedPackage2.Id);
+			var persistedPackage1 = persistedPackagesArray.Single(x => x.Id == fakeId1);
+			var persistedPackage2 = persistedPackagesArray.Single(x => x.Id == fakeId2);
 
 			Assert.AreEqual(
 				1,

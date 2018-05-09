@@ -38,46 +38,10 @@
             this.clipboardInjectionService = clipboardInjectionService;
         }
 
-        public async Task<string> GetDescriptionAsync(IClipboardDataPackage package)
+        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
         {
-            var links = await ExtractLinksFromPackageAsync(package);
-
-            var description = string.Empty;
-            for (var i = 0; i < links.Count; i++)
-            {
-                if (i == 0)
-                {
-                    description += "Copies the images from the ";
-                    if (links.Count == 1)
-                    {
-                        description += "link ";
-                    }
-                    else
-                    {
-                        description += "links ";
-                    }
-                }
-                else
-                {
-                    if (i == links.Count - 1)
-                    {
-                        description += " and ";
-                    }
-                    else
-                    {
-                        description += ", ";
-                    }
-                }
-
-                var link = links[i];
-                description += link;
-            }
-            description += " to the clipboard.";
-
-            return description;
+			return "Copy images from links";
         }
-
-        public string Title => "Copy images from links";
 
         public byte Order => 100;
 
@@ -96,8 +60,7 @@
 
         async Task<bool> CanPerformAsync(IClipboardData data)
         {
-            var textData = data as IClipboardTextData;
-            return (textData != null) &&
+			return data is IClipboardTextData textData &&
                    await linkParser.HasLinkOfTypeAsync(textData.Text, LinkType.ImageFile)
                                    .ConfigureAwait(false);
         }
