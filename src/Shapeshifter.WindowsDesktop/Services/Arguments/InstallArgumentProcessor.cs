@@ -100,12 +100,12 @@
 				@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe",
 				"install \"" + TargetExecutableFile + "\" /ExeConfig:\"" + TargetExecutableFile + "\"",
 				ProcessWindowStyle.Hidden);
-
-			process.EnableRaisingEvents = true; 
 			
 			var taskCompletionSource = new TaskCompletionSource<int>();
 			process.EnableRaisingEvents = true;
 			process.Exited += (sender, args) => taskCompletionSource.TrySetResult(process.ExitCode);
+
+			process.EnableRaisingEvents = true;
 
 			return taskCompletionSource.Task;
 		}
