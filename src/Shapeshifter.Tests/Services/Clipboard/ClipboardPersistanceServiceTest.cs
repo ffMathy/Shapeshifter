@@ -146,8 +146,9 @@
 												  });
 										  });
 
+			var fakeId1 = Guid.NewGuid();
 			var fakePackage1 = Substitute.For<IClipboardDataPackage>();
-			fakePackage1.Id.Returns(Guid.NewGuid());
+			fakePackage1.Id.Returns(fakeId1);
 			fakePackage1
 				.Contents
 				.Returns(
@@ -158,8 +159,9 @@
 							fakeData2
 						}));
 
+			var fakeId2 = Guid.NewGuid();
 			var fakePackage2 = Substitute.For<IClipboardDataPackage>();
-			fakePackage2.Id.Returns(Guid.NewGuid());
+			fakePackage2.Id.Returns(fakeId2);
 			fakePackage2
 				.Contents
 				.Returns(
@@ -181,8 +183,8 @@
 			var persistedPackage1 = persistedPackagesArray[0];
 			var persistedPackage2 = persistedPackagesArray[1];
 
-			Assert.AreEqual(fakePackage1.Id, persistedPackage1.Id);
-			Assert.AreEqual(fakePackage2.Id, persistedPackage2.Id);
+			Assert.AreEqual(fakeId1, persistedPackage1.Id);
+			Assert.AreEqual(fakeId2, persistedPackage2.Id);
 
 			Assert.AreEqual(
 				1,
