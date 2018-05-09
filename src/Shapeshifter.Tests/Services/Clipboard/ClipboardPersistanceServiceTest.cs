@@ -180,11 +180,8 @@
 
 			Assert.AreEqual(2, persistedPackagesArray.Length);
 
-			var persistedPackage1 = persistedPackagesArray[0];
-			var persistedPackage2 = persistedPackagesArray[1];
-
-			Assert.AreEqual(fakeId1, persistedPackage1.Id);
-			Assert.AreEqual(fakeId2, persistedPackage2.Id);
+			var persistedPackage1 = persistedPackagesArray.Single(x => x.Id == fakeId1);
+			var persistedPackage2 = persistedPackagesArray.Single(x => x.Id == fakeId2);
 
 			Assert.AreEqual(
 				1,
