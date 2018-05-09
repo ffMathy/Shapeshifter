@@ -173,6 +173,8 @@
 			{
 				logger.Verbose("Launching {fileName} under verb {verb} in {workingDirectory} with arguments {arguments}.");
 
+				var hasVerb = !string.IsNullOrEmpty(verb);
+
 				var process = Process.Start(
 					new ProcessStartInfo {
 						FileName = uri,
@@ -180,10 +182,10 @@
 						Verb = verb,
 						Arguments = arguments,
 						WindowStyle = windowStyle,
-						RedirectStandardError = true,
-						RedirectStandardInput = true,
-						RedirectStandardOutput = true,
-						UseShellExecute = false
+						RedirectStandardError = !hasVerb,
+						RedirectStandardInput = !hasVerb,
+						RedirectStandardOutput = !hasVerb,
+						UseShellExecute = hasVerb
 					});
 				processes.Add(process);
 
