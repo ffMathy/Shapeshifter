@@ -59,7 +59,8 @@ namespace Shapeshifter.WindowsDesktop
 					FileName = executablePath,
 					RedirectStandardInput = true,
 					RedirectStandardError = true,
-					RedirectStandardOutput = true
+					RedirectStandardOutput = true,
+					UseShellExecute = false
 				});
 
 				Console.WriteLine("Launched Shapeshifter");
