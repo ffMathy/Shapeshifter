@@ -30,7 +30,9 @@ assembly_info:
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
 init:
-- ps: Update-AppveyorBuild -Version "6.$(Get-Date -format yyyy).$(Get-Date -format Mdd).$((Get-ChildItem Env:APPVEYOR_BUILD_NUMBER).Value)"
+- ps: >
+    git config --global core.autocrlf false
+    Update-AppveyorBuild -Version "6.$(Get-Date -format yyyy).$(Get-Date -format Mdd).$((Get-ChildItem Env:APPVEYOR_BUILD_NUMBER).Value)"
 after_build:
 - cmd: >
     copy build\application\Shapeshifter.pdb src\Shapeshifter.WindowsDesktop\App.pdb
