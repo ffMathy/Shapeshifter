@@ -34,39 +34,26 @@ init:
 after_build:
 - cmd: >
     copy build\application\Shapeshifter.pdb src\Shapeshifter.WindowsDesktop\App.pdb
-
+    
     cd build\application
-
     del *.* /F /Q
-
     cd ..\..\
-
+    
     cd src\Shapeshifter.WindowsDesktop
-
     msbuild Shapeshifter.WindowsDesktop.csproj
-
     cd ..\..\
 
     mkdir build\website
-
     cd src\Shapeshifter.Website
-
     dotnet restore Shapeshifter.Website.csproj
-
     dotnet build Shapeshifter.Website.csproj
-
     dotnet publish --output "..\..\build\website"
-
     cd ..\..\
-
 before_build:
 - cmd: >
     cd src
-
     nuget restore Shapeshifter.sln
-
     cd ..\
-
 build:
   project: src\Shapeshifter.sln
   verbosity: normal
@@ -88,32 +75,19 @@ install:
 before_deploy:
 - cmd: >
     cd build\application
-
     "C:\Program Files (x86)\Windows Kits\10\bin\10.0.16299.0\x86\signtool.exe" sign /f "..\Certificate.pfx" /fd SHA256 /p "%code_signing_password%" /d "Shapeshifter" /du "https://shapeshifter.software/" /tr "http://timestamp.comodoca.com/authenticode" /v "Shapeshifter.exe"
-
     cd ..\..\
-
 after_deploy:
 - cmd: >
     npm install github-release-notes -g
-
     gren release --token=%gren_token% --override --prerelease
-
     cd build\website
-
     del secrets.json /F
-
     echo { "patreon": { "clientId": "%patreon_client_id%", "clientSecret": "%patreon_client_secret%", "creatorsAccessToken": "%patreon_creators_access_token%", "creatorsRefreshToken": "%patreon_creators_refresh_token%" }, "github": { "token": "%issue_reporter_token%" } }>> secrets.json
-
     7z a Website.zip *
-
     "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -enablerule:AppOffline -verb=sync -source:package="Website.zip" -dest:auto,computerName=https://shapeshifter.scm.azurewebsites.net:443/msdeploy.axd?site=shapeshifter,userName=$shapeshifter,password=%webdeploy_password%,authType=basic -allowUntrusted=true -skip:Directory="App_Data"
-
 test_script:
   - nuget install opencover -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
-
     %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -output:"coverage1.xml" -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\build\tests\Shapeshifter.Tests.dll\" /TestCaseFilter:(TestCategory!=Integration&TestCategory!=Predeploy)" -excludebyattribute:*ExcludeFromCodeCoverage* -register:user -skipautoprops -returntargetcode
-
     %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -output:"coverage2.xml" -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\build\tests\Shapeshifter.Tests.dll\" /TestCaseFilter:\"TestCategory=Integration\"" -excludebyattribute:*ExcludeFromCodeCoverage* -register:user -skipautoprops -returntargetcode
-
     %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -output:"coverage3.xml" -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\build\tests\Shapeshifter.Tests.dll\" /TestCaseFilter:\"TestCategory=Predeploy\"" -excludebyattribute:*ExcludeFromCodeCoverage* -register:user -skipautoprops -returntargetcode
