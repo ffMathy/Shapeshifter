@@ -185,7 +185,8 @@
 						RedirectStandardError = !hasVerb,
 						RedirectStandardInput = !hasVerb,
 						RedirectStandardOutput = !hasVerb,
-						UseShellExecute = hasVerb
+						UseShellExecute = hasVerb,
+						CreateNoWindow = windowStyle == ProcessWindowStyle.Hidden && !hasVerb
 					});
 				processes.Add(process);
 
