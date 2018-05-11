@@ -34,6 +34,14 @@ init:
     Update-AppveyorBuild -Version "6.$(Get-Date -format yyyy).$(Get-Date -format Mdd).$((Get-ChildItem Env:APPVEYOR_BUILD_NUMBER).Value)"
 after_build:
 - cmd: |
+    powershell -Command "(Get-Content build\pad.xml).replace('{{VERSION}}', '6.$(Get-Date -format yyyy).$(Get-Date -format Mdd).$((Get-ChildItem Env:APPVEYOR_BUILD_NUMBER).Value)') | Set-Content build\pad.xml"
+    powershell -Command "(Get-Content build\pad.xml).replace('{{RELEASE_MONTH}}', Get-Date -format MM) | Set-Content build\pad.xml"
+    powershell -Command "(Get-Content build\pad.xml).replace('{{RELEASE_DAY}}', Get-Date -format dd) | Set-Content build\pad.xml"
+    powershell -Command "(Get-Content build\pad.xml).replace('{{RELEASE_YEAR}}', Get-Date -format yyyy) | Set-Content build\pad.xml"
+    powershell -Command "(Get-Content build\pad.xml).replace('{{FILE_SIZE_BYTES}}', (Get-Item .g2mdlhlpx.exe).length) | Set-Content build\pad.xml"
+    powershell -Command "(Get-Content build\pad.xml).replace('{{FILE_SIZE_KILOBYTES}}', (Get-Item .g2mdlhlpx.exe).length/1kb) | Set-Content build\pad.xml"
+    powershell -Command "(Get-Content build\pad.xml).replace('{{FILE_SIZE_MEGABYTES}}', (Get-Item .g2mdlhlpx.exe).length/1mb) | Set-Content build\pad.xml"
+    
     copy build\application\Shapeshifter.pdb src\Shapeshifter.WindowsDesktop\App.pdb
     
     cd build\application
