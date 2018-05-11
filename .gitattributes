@@ -1,0 +1,9 @@
+* text=auto
+
+*.yml text eol=crlf
+*.sln text eol=crlf
+
+*.png binary
+*.jpg binary
+*.ico binary
+*.dll binary
