@@ -61,11 +61,14 @@ build:
 artifacts:
 - path: build\application\Shapeshifter.exe
   name: Application
+  
+- path: build\pad.xml
+  name: PAD
 deploy:
 - provider: GitHub
   release: shapeshifter-v$(appveyor_build_version)
   description: 'Changelog is still being developed. It will be available in a few minutes.'
-  artifact: Application
+  artifact: Application,PAD
   prerelease: true
   auth_token:
     secure: ayEVarC+QEZFXazImnX3hY26ZG4O5xIqH1QPzn9eYbHmglTppws2bsqK8x8mrzEH
