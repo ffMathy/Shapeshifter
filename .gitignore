@@ -9,3 +9,4 @@ bin/
 obj/
 /src/_NCrunch_Shapeshifter
 /src/**/*.user
+/src/MigrationBackup
