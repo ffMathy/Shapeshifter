@@ -9,7 +9,7 @@ environment:
   patreon_client_secret:
     secure: 7j+7Tcf0cjqkaY/WX1TqP4y65RI9n8oWu98LyI4y98ShrJ02GMGoVUemhyw35xTVp9jfVizPphnLYB49OMShmcuO+5mDYSkZD5M+typnB40=
   patreon_creators_access_token:
-    secure: yx1+zw2XQkMLfRuZ5S3M+5Lqs5dGuDmUbgjvISta5A8atFQctDHVb7UqtZnNcB2I
+    secure: WTlmus0dhKgzKKtcNjBpT0k2jrBKSBE8Q3LJC6zjpUghnjzH1d7fIJXdWLXW1DAi
   patreon_creators_refresh_token:
     secure: c3EVYJ14R2JBDQgk6quSdHkcFMjtN2msgn2F4SRFjqdKVvRI4qkrU58ftCsZMB0g
   gren_token:
