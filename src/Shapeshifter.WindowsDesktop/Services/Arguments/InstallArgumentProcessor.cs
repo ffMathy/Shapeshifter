@@ -104,7 +104,7 @@
 			process.EnableRaisingEvents = true;
 			process.Exited += (sender, args) => taskCompletionSource.TrySetResult(process.ExitCode);
 
-			process.EnableRaisingEvents = true;
+			process.Start();
 
 			return taskCompletionSource.Task;
 		}
