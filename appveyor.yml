@@ -35,10 +35,7 @@ init:
 after_build:
 - ps: |    
     copy build\application\Shapeshifter.pdb src\Shapeshifter.WindowsDesktop\App.pdb
-    
-    cd build\application
-    del *.* /F /Q
-    cd ..\..\
+    Remove-Item "build\application\*.*"
     
     cd src\Shapeshifter.WindowsDesktop
     msbuild Shapeshifter.WindowsDesktop.csproj
