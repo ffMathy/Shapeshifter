@@ -46,9 +46,6 @@
 
 		public async Task ProcessAsync()
 		{
-			if (!ShouldInstall)
-				return;
-
 			if (!IsCurrentlyRunningFromInstallationFolder)
 				maintenanceWindow.Show("Searching for updates ...");
 
@@ -57,7 +54,8 @@
 
 			maintenanceWindow.Hide();
 
-			installWindow.Show();
+			if (ShouldInstall)
+				installWindow.Show();
 		}
 	}
 }
