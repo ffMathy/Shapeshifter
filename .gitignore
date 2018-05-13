@@ -1,12 +1,8 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
+﻿/build/
 
-packages/
+/src/*/bin/
+/src/*/obj/
+
 .vs/
-build/
-bin/
-obj/
-/src/_NCrunch_Shapeshifter
-/src/**/*.user
-/src/MigrationBackup
+
+*.user
