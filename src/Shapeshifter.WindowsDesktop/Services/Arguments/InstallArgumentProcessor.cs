@@ -103,8 +103,11 @@
 			var taskCompletionSource = new TaskCompletionSource<int>();
 			process.EnableRaisingEvents = true;
 			process.Exited += (sender, args) => taskCompletionSource.TrySetResult(process.ExitCode);
+			
+			process.Refresh();
 
-			process.Start();
+			if (process.HasExited)
+				return Task.FromResult(process.ExitCode);
 
 			return taskCompletionSource.Task;
 		}
