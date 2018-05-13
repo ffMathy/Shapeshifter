@@ -36,6 +36,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ISSUE_TEMPLATE", "ISSUE_TEM
 		..\.github\ISSUE_TEMPLATE\Feature_request.md = ..\.github\ISSUE_TEMPLATE\Feature_request.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{A8523FE5-A474-471B-A300-F8513B76E062}"
+	ProjectSection(SolutionItems) = preProject
+		..\docs\index.css = ..\docs\index.css
+		..\docs\index.html = ..\docs\index.html
+		..\docs\index.js = ..\docs\index.js
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -74,6 +81,7 @@ Global
 		{C9D0F0F8-B6FC-46AA-B650-3B586E75E0A1} = {360BD9A8-28E9-42EF-8731-0BACCB60B8DC}
 		{3CEE82D8-78D3-4633-AD6D-54E1F6D8DAE3} = {360BD9A8-28E9-42EF-8731-0BACCB60B8DC}
 		{0FF6A2DB-5D81-4EE6-BED0-DDFEF62DD525} = {3CEE82D8-78D3-4633-AD6D-54E1F6D8DAE3}
+		{A8523FE5-A474-471B-A300-F8513B76E062} = {360BD9A8-28E9-42EF-8731-0BACCB60B8DC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {393FBA7D-43EE-46A3-B8B1-9B601D15F6D0}

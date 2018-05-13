@@ -13,20 +13,22 @@ namespace Shapeshifter.Website.Controllers
 	[Route("api/patreon")]
 	public class PatreonApiController : Controller
 	{
-		readonly IPatreonClient _client;
+		readonly IPatreonClient client;
 
 		public PatreonApiController(
-		  IConfigurationReader configurationReader)
+			IPatreonClient client)
 		{
-			_client = new PatreonClient(configurationReader.Read("patreon.creatorsAccessToken"));
+			this.client = client;
 		}
 
 		[HttpGet("supporters")]
 		public async Task<IEnumerable<dynamic>> GetSupporters()
 		{
+			await client.RefreshTokenAsync();
+
 			var supporters = new List<dynamic>();
 
-			var pledges = await _client.GetPledgesAsync();
+			var pledges = await client.GetPledgesAsync();
 			var users = pledges.Included.ToObject<User[]>();
 			foreach (var pledge in pledges.Data)
 			{

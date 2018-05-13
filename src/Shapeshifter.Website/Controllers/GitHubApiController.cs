@@ -18,7 +18,7 @@ namespace Shapeshifter.Website.Controllers
 	{
 		readonly IGitHubClient _client;
 
-		static SemaphoreSlim _reportLock;
+		static readonly SemaphoreSlim _reportLock;
 
 		static GitHubApiController() {
 			_reportLock = new SemaphoreSlim(1);

@@ -7,5 +7,6 @@
 	public interface IPatreonClient
 	{
 		Task<DataWrapper<Pledge[]>> GetPledgesAsync();
+		Task RefreshTokenAsync();
 	}
 }
