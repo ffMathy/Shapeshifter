@@ -105,3 +105,7 @@ section {
     height: 138px;
     padding: 19px;
 }
+
+.funding-progress {
+	display: none;
+}
