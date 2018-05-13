@@ -118,6 +118,15 @@
 				GetFullPathFromIsolatedPath(path));
 		}
 
+		public async Task CopyFileAsync(string origin, string destination)
+		{
+			await retryingThreadLoop.StartAsync(
+				CreateRetryingFileJob(
+					async () => File.Copy(origin, destination, true)));
+			while (!File.Exists(destination))
+				await threadDelay.ExecuteAsync(100);
+		}
+
 		public Task DeleteDirectoryIfExistsAsync(string path)
 		{
 			return retryingThreadLoop.StartAsync(
@@ -143,7 +152,7 @@
 
 		static string PrepareShapeshifterFolder(string basePath)
 		{
-			const string folderName = "Shapeshifter";
+			const string folderName = nameof(Shapeshifter);
 
 			var path = Path.Combine(basePath, folderName);
 			CreateDirectoryIfNotExists(path);

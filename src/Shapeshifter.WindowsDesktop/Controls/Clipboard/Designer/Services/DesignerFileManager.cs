@@ -21,6 +21,11 @@
 			return Task.FromResult<string>(null);
 		}
 
+		public Task CopyFileAsync(string origin, string destination)
+		{
+			throw new System.NotImplementedException();
+		}
+
 		public Task DeleteDirectoryIfExistsAsync(string path)
 		{
 			return Task.CompletedTask;
