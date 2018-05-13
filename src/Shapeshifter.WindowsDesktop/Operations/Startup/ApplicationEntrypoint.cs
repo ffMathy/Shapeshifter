@@ -6,27 +6,23 @@
 
     using Interfaces;
 	using Serilog;
-	using Shapeshifter.WindowsDesktop.Services.Processes.Interfaces;
 
 	public class ApplicationEntrypoint: ISingleInstance
     {
         readonly IStartupPreparationOperation startupPreparationOperation;
-        readonly IPostPreparationOperation postPreparationOperation;
+        readonly ITrayPreparationOperation trayPreparationOperation;
         readonly IMainWindowPreparationOperation mainWindowPreparationOperation;
-		readonly IProcessManager processManager;
 		readonly ILogger logger;
 
 		public ApplicationEntrypoint(
             IStartupPreparationOperation startupPreparationOperation,
-            IPostPreparationOperation postPreparationOperation,
+            ITrayPreparationOperation trayPreparationOperation,
             IMainWindowPreparationOperation mainWindowPreparationOperation,
-			IProcessManager processManager,
 			ILogger logger)
         {
             this.startupPreparationOperation = startupPreparationOperation;
-            this.postPreparationOperation = postPreparationOperation;
+            this.trayPreparationOperation = trayPreparationOperation;
             this.mainWindowPreparationOperation = mainWindowPreparationOperation;
-			this.processManager = processManager;
 			this.logger = logger;
 
 			logger.Verbose("Application entry point initialized.");
@@ -42,9 +38,9 @@
 				return;
             }
 
-            await postPreparationOperation.RunAsync();
             await mainWindowPreparationOperation.RunAsync();
-        }
+			await trayPreparationOperation.RunAsync();
+		}
 
         async Task Prepare(string[] arguments)
         {

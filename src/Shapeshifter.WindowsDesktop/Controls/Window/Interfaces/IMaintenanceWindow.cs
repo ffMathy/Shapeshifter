@@ -1,7 +1,10 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Window.Interfaces
 {
-	public interface IMaintenanceWindow
+	using Infrastructure.Dependencies.Interfaces;
+
+	public interface IMaintenanceWindow: ISingleInstance
 	{
 		void Show(string progressText);
+		void Hide();
 	}
 }

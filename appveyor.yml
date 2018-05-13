@@ -33,15 +33,7 @@ init:
 - ps: |
     Update-AppveyorBuild -Version "6.$(Get-Date -format yyyy).$(Get-Date -format Mdd).$((Get-ChildItem Env:APPVEYOR_BUILD_NUMBER).Value)"
 after_build:
-- ps: |
-    (Get-Content build\pad.xml).replace('{{VERSION}}', "6.$(Get-Date -format yyyy).$(Get-Date -format Mdd).$((Get-ChildItem Env:APPVEYOR_BUILD_NUMBER).Value)") | Set-Content build\pad.xml
-    (Get-Content build\pad.xml).replace('{{RELEASE_MONTH}}', "$(Get-Date -format MM)") | Set-Content build\pad.xml
-    (Get-Content build\pad.xml).replace('{{RELEASE_DAY}}', "$(Get-Date -format dd)") | Set-Content build\pad.xml
-    (Get-Content build\pad.xml).replace('{{RELEASE_YEAR}}', "$(Get-Date -format yyyy)") | Set-Content build\pad.xml
-    (Get-Content build\pad.xml).replace('{{FILE_SIZE_BYTES}}', "$((Get-Item .g2mdlhlpx.exe).length)") | Set-Content build\pad.xml
-    (Get-Content build\pad.xml).replace('{{FILE_SIZE_KILOBYTES}}', $"((Get-Item .g2mdlhlpx.exe).length/1kb)") | Set-Content build\pad.xml
-    (Get-Content build\pad.xml).replace('{{FILE_SIZE_MEGABYTES}}', "$((Get-Item .g2mdlhlpx.exe).length/1mb)") | Set-Content build\pad.xml
-    
+- ps: |    
     copy build\application\Shapeshifter.pdb src\Shapeshifter.WindowsDesktop\App.pdb
     
     cd build\application
@@ -51,6 +43,15 @@ after_build:
     cd src\Shapeshifter.WindowsDesktop
     msbuild Shapeshifter.WindowsDesktop.csproj
     cd ..\..\
+    
+    $fileSize = (Get-Item build\application\Shapeshifter.exe).Length
+    (Get-Content build\pad.xml).Replace('{{VERSION}}', "6.$(Get-Date -format yyyy).$(Get-Date -format Mdd).$((Get-ChildItem Env:APPVEYOR_BUILD_NUMBER).Value)") | Set-Content build\pad.xml
+    (Get-Content build\pad.xml).Replace('{{RELEASE_MONTH}}', "$(Get-Date -format MM)") | Set-Content build\pad.xml
+    (Get-Content build\pad.xml).Replace('{{RELEASE_DAY}}', "$(Get-Date -format dd)") | Set-Content build\pad.xml
+    (Get-Content build\pad.xml).Replace('{{RELEASE_YEAR}}', "$(Get-Date -format yyyy)") | Set-Content build\pad.xml
+    (Get-Content build\pad.xml).Replace('{{FILE_SIZE_BYTES}}', "$($fileSize)") | Set-Content build\pad.xml
+    (Get-Content build\pad.xml).Replace('{{FILE_SIZE_KILOBYTES}}', $"($fileSize/1024)") | Set-Content build\pad.xml
+    (Get-Content build\pad.xml).Replace('{{FILE_SIZE_MEGABYTES}}', "$($fileSize/1024/1024)") | Set-Content build\pad.xml
 
     mkdir build\website
     cd src\Shapeshifter.Website

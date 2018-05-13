@@ -53,9 +53,12 @@
 						(sender, e) => processManager.LaunchFile("explorer", "\"" + FileManager.GetFullPathFromTemporaryPath() + "\"")),
 					new MenuItem(
 						"Search for updates",
-						(sender, e) => {
-							trayIconManager.DisplayInformation("Looking for updates", "You'll be notified if any are found.");
-							updateService.UpdateAsync();
+						async (sender, e) => {
+							trayIconManager.DisplayInformation("Looking for updates", "This might take a minute.");
+
+							var wereUpdatesFound = await updateService.UpdateAsync();
+							if (!wereUpdatesFound)
+								trayIconManager.DisplayInformation("No updates", "No updates were found at the moment.");
 						}),
 					new MenuItem(
 						"Exit",

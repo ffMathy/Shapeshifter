@@ -6,6 +6,6 @@
 
     public interface IUpdateService: ISingleInstance
     {
-        Task UpdateAsync();
+        Task<bool> UpdateAsync();
     }
 }

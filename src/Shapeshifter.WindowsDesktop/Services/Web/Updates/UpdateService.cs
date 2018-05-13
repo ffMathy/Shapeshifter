@@ -58,22 +58,22 @@
 			this.maintenanceWindow = maintenanceWindow;
 		}
 
-        public async Task UpdateAsync()
+        public async Task<bool> UpdateAsync()
         {
-            if (!environmentInformation.GetHasInternetAccess()) return;
-            if (!environmentInformation.GetShouldUpdate()) return;
+            if (!environmentInformation.GetHasInternetAccess()) return false;
+            if (!environmentInformation.GetShouldUpdate()) return false;
 
             try
             {
                 var pendingUpdateRelease = await GetAvailableUpdateAsync();
                 if (pendingUpdateRelease == null)
-                {
-                    return;
-                }
+					return false;
 
 				maintenanceWindow.Show("Updating to v" + GetReleaseVersion(pendingUpdateRelease) + "...");
 				await UpdateFromReleaseAsync(pendingUpdateRelease);
-            }
+
+				return true;
+			}
             catch (RateLimitExceededException)
             {
                 logger.Information(
@@ -84,7 +84,9 @@
                 logger.Information(
                     "Could not search for updates due to a connection issue.");
             }
-        }
+
+			return false;
+		}
 
         async Task UpdateFromReleaseAsync(Release pendingUpdateRelease)
         {

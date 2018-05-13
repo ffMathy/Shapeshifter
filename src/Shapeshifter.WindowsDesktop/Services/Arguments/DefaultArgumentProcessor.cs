@@ -1,5 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Arguments
 {
+	using System.Threading.Tasks;
+
 	using Controls.Window.Interfaces;
 
 	using Infrastructure.Environment.Interfaces;
@@ -8,37 +10,52 @@
 
 	using Processes.Interfaces;
 
+	using Web.Updates.Interfaces;
+
 	class DefaultArgumentProcessor: INoArgumentProcessor
 	{
 		readonly IProcessManager processManager;
 		readonly IInstallWindow installWindow;
 		readonly IEnvironmentInformation environmentInformation;
+		readonly IMaintenanceWindow maintenanceWindow;
+		readonly IUpdateService updateService;
 
-		public bool Terminates => CanProcess();
+		public bool Terminates => ShouldInstall;
+
+		bool ShouldInstall => !IsCurrentlyRunningFromInstallationFolder && !environmentInformation.GetIsDebugging();
+		bool IsCurrentlyRunningFromInstallationFolder => processManager.GetCurrentProcessDirectory() == InstallArgumentProcessor.TargetDirectory;
 
 		public DefaultArgumentProcessor(
 			IProcessManager processManager,
 			IInstallWindow installWindow,
-			IEnvironmentInformation environmentInformation)
+			IEnvironmentInformation environmentInformation,
+			IMaintenanceWindow maintenanceWindow,
+			IUpdateService updateService)
 		{
 			this.processManager = processManager;
 			this.installWindow = installWindow;
 			this.environmentInformation = environmentInformation;
+			this.maintenanceWindow = maintenanceWindow;
+			this.updateService = updateService;
 		}
 
 		public bool CanProcess()
 		{
-			return !GetIsCurrentlyRunningFromInstallationFolder() && !environmentInformation.GetIsDebugging();
+			return true;
 		}
 
-		public void Process()
+		public async Task ProcessAsync()
 		{
-			installWindow.Show();
-		}
+			if(!IsCurrentlyRunningFromInstallationFolder)
+				maintenanceWindow.Show("Searching for updates ...");
 
-		bool GetIsCurrentlyRunningFromInstallationFolder()
-		{
-			return processManager.GetCurrentProcessDirectory() == InstallArgumentProcessor.TargetDirectory;
+			if (await updateService.UpdateAsync())
+				return;
+
+			maintenanceWindow.Hide();
+
+			if(!IsCurrentlyRunningFromInstallationFolder)
+				installWindow.Show();
 		}
 	}
 }
