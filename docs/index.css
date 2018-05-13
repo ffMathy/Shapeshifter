@@ -106,6 +106,6 @@ section {
     padding: 19px;
 }
 
-.funding-progress {
+.funding-progress, .patrons {
 	display: none;
 }

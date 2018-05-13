@@ -60,6 +60,7 @@ $.getJSON("https://shapeshifter.azurewebsites.net/api/patreon/supporters").done(
 	$("#goal").text("$" + goal + "/mo");
 
 	$(".funding-progress").show();
+	$(".patrons").show();
 });
 
 (function () {
