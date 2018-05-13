@@ -61,19 +61,19 @@
 
 				AppDomain.CurrentDomain.UnhandledException += (sender, exceptionEventArguments) => {
 					var exception = (Exception)exceptionEventArguments.ExceptionObject;
-					ExceptionLogCallback(exception);
+					OnGlobalErrorOccured(exception);
 				};
 
 				var app = new App(Container);
 				app.InitializeComponent();
 				app.Run();
 			}
-			catch (Exception ex) when (ExceptionLogCallback(ex))
+			catch (Exception ex) when (OnGlobalErrorOccured(ex))
 			{
 			}
 		}
 
-		static bool ExceptionLogCallback(Exception ex)
+		public static bool OnGlobalErrorOccured(Exception ex)
 		{
 			Log.Logger.Error(ex, "An unhandled error occured.");
 

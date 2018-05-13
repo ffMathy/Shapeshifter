@@ -108,7 +108,7 @@ namespace Shapeshifter.WindowsDesktop
 
 				foreach (var line in logOutput)
 				{
-					Assert.IsFalse(line.Contains("[ERR]"), line);
+					Assert.IsFalse(line.Contains("[ERR]"), "Error: " + line);
 				}
 			}
 			finally
