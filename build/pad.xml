@@ -73,7 +73,7 @@
     <Program_Target_Platform>Windows</Program_Target_Platform>
     <Program_OS_Support>Win2000,WinXP,Win7 x32,Win7 x64,Windows 8,Windows 10,WinServer,WinOther,Windows2000,Windows2003,Windows Server 2000,Windows Server 2003,Windows Server 2008,Windows Server 2008r2,Windows Server 2012,Windows Tablet PC Edition 2005,Windows Media Center Edition 2005,WinVista,Windows Vista Starter,Windows Vista Home Basic,Windows Vista Home Premium,Windows Vista Business,Windows Vista Enterprise,Windows Vista Ultimate,WinVista x64,Windows Vista Home Basic x64,Windows Vista Home Premium x64,Windows Vista Business x64,Windows Vista Enterprise x64,Windows Vista Ultimate x64</Program_OS_Support>
     <Program_Language>English</Program_Language>
-    <Program_Change_Info>New UI, performance improvements, higher compatibility</Program_Change_Info>
+    <Program_Change_Info>New UI, performance improvements, better compatibility</Program_Change_Info>
     <Program_System_Requirements>Runs best on Windows 10</Program_System_Requirements>
     <Limitations>No limitations</Limitations>
     <Awards></Awards>
@@ -97,11 +97,11 @@
   </Program_Info>
   <Web_Info>
     <Application_URLs>
-      <Application_Info_URL>https://github.com/ffMathy/Shapeshifter/blob/master/README.md</Application_Info_URL>
-      <Application_Order_URL>https://github.com/ffMathy/Shapeshifter/blob/master/README.md</Application_Order_URL>
+      <Application_Info_URL>https://shapeshifter.software</Application_Info_URL>
+      <Application_Order_URL>https://shapeshifter.software</Application_Order_URL>
       <Application_Screenshot_URL>https://github.com/ffMathy/Shapeshifter/raw/master/assets/screenshots/pad.PNG</Application_Screenshot_URL>
       <Application_Icon_URL>https://raw.githubusercontent.com/ffMathy/Shapeshifter/master/assets/icons/pad.png</Application_Icon_URL>
-      <Application_XML_File_URL>http://repository.appvisor.com/app-ea00e465a1ec/site-01/Shapeshifter_pad.xml</Application_XML_File_URL>
+      <Application_XML_File_URL>https://github.com/ffMathy/Shapeshifter/releases/download/shapeshifter-v{{VERSION}}/pad.xml</Application_XML_File_URL>
     </Application_URLs>
     <Download_URLs>
       <Primary_Download_URL>https://github.com/ffMathy/Shapeshifter/releases/download/shapeshifter-v{{VERSION}}/Shapeshifter.exe</Primary_Download_URL>
