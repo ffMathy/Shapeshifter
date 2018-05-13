@@ -112,7 +112,6 @@
 				.StandardOutput
 				.ReadToEnd()
 				.Split(new [] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries)
-				.Select(x => "NGen: " + x)
 				.ToArray();
 			foreach (var line in linesOutput)
 			{
