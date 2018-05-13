@@ -12,7 +12,7 @@
 	using Controls.Window.Interfaces;
 	using Controls.Window.ViewModels.Interfaces;
 
-	using Files;
+	using Files.Interfaces;
 
 	using Interfaces;
 	using Microsoft.Build.Evaluation;
@@ -26,17 +26,20 @@
 	class InstallArgumentProcessor : IInstallArgumentProcessor
 	{
 		readonly IProcessManager processManager;
+		readonly IFileManager fileManager;
 		readonly ISettingsViewModel settingsViewModel;
 		readonly IMaintenanceWindow maintenanceWindow;
 		readonly ILogger logger;
 
 		public InstallArgumentProcessor(
 			IProcessManager processManager,
+			IFileManager fileManager,
 			ISettingsViewModel settingsViewModel,
 			IMaintenanceWindow maintenanceWindow,
 			ILogger logger)
 		{
 			this.processManager = processManager;
+			this.fileManager = fileManager;
 			this.settingsViewModel = settingsViewModel;
 			this.maintenanceWindow = maintenanceWindow;
 			this.logger = logger;
@@ -82,7 +85,7 @@
 
 		async Task InstallToInstallDirectoryAsync()
 		{
-			WriteExecutable();
+			await WriteExecutableAsync();
 			WriteDependencies();
 			WriteApplicationConfiguration();
 			WriteApplicationManifest();
@@ -244,12 +247,11 @@
 			processManager.LaunchFileWithAdministrativeRights(TargetExecutableFile, $"postinstall \"{currentExecutableFile}\"");
 		}
 
-		void WriteExecutable()
+		async Task WriteExecutableAsync()
 		{
-			File.Copy(
+			await fileManager.CopyFileAsync(
 				processManager.GetCurrentProcessFilePath(),
-				TargetExecutableFile,
-				true);
+				TargetExecutableFile);
 		}
 
 		void PrepareInstallDirectory()

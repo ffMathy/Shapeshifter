@@ -35,6 +35,10 @@
         string PrepareFolder(
             string path);
 
+		Task CopyFileAsync(
+			string origin, 
+			string destination);
+
         Task DeleteDirectoryIfExistsAsync(
             string path);
 
