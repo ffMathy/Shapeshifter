@@ -98,3 +98,10 @@ section {
     height: 138px;
     object-fit: contain;
 }
+
+.profile-picture {
+    border-radius: 100px;
+    width: 138px;
+    height: 138px;
+    padding: 19px;
+}
