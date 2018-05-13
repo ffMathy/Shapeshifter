@@ -196,7 +196,7 @@
             var fakeProcessManager = Container.Resolve<IProcessManager>();
             fakeProcessManager
                 .Received()
-                .LaunchFile("temporaryInstallPath", "update");
+                .LaunchFile("temporaryInstallPath", Arg.Is<string>(x => x.StartsWith("update")));
         }
 
         static ReleaseAsset CreateReleaseAsset(string name)
