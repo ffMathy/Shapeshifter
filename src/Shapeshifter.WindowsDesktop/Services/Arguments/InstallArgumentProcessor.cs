@@ -12,6 +12,8 @@
 	using Controls.Window.Interfaces;
 	using Controls.Window.ViewModels.Interfaces;
 
+	using Files;
+
 	using Interfaces;
 	using Microsoft.Build.Evaluation;
 
@@ -97,14 +99,34 @@
 		{
 			var process = processManager.LaunchFile(
 				@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe",
-				"install \"" + TargetExecutableFile + "\" /ExeConfig:\"" + TargetExecutableFile + "\"",
+				@"install """ + TargetExecutableFile + @""" /ExeConfig:""" + TargetExecutableFile + @""" /nologo",
 				ProcessWindowStyle.Hidden);
 			
 			var taskCompletionSource = new TaskCompletionSource<int>();
 			process.EnableRaisingEvents = true;
 			process.Exited += (sender, args) => taskCompletionSource.TrySetResult(process.ExitCode);
+			
+			process.Refresh();
 
-			process.Start();
+			var linesOutput = process
+				.StandardOutput
+				.ReadToEnd()
+				.Split(new [] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries)
+				.ToArray();
+			foreach (var line in linesOutput)
+			{
+				if (line.StartsWith("Failed"))
+				{
+					logger.Error(line);
+				}
+				else
+				{
+					logger.Verbose(line);
+				}
+			}
+
+			if (process.HasExited)
+				return Task.FromResult(process.ExitCode);
 
 			return taskCompletionSource.Task;
 		}

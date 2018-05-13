@@ -97,8 +97,8 @@
   </Program_Info>
   <Web_Info>
     <Application_URLs>
-      <Application_Info_URL>https://shapeshifter.software</Application_Info_URL>
-      <Application_Order_URL>https://shapeshifter.software</Application_Order_URL>
+      <Application_Info_URL>https://shapeshifter.app</Application_Info_URL>
+      <Application_Order_URL>https://shapeshifter.app</Application_Order_URL>
       <Application_Screenshot_URL>https://github.com/ffMathy/Shapeshifter/raw/master/assets/screenshots/pad.PNG</Application_Screenshot_URL>
       <Application_Icon_URL>https://raw.githubusercontent.com/ffMathy/Shapeshifter/master/assets/icons/pad.png</Application_Icon_URL>
       <Application_XML_File_URL>https://github.com/ffMathy/Shapeshifter/releases/download/shapeshifter-v{{VERSION}}/pad.xml</Application_XML_File_URL>

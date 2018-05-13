@@ -57,6 +57,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EasyHook, Version=2.7.6684.0, Culture=neutral, PublicKeyToken=4b580fca19d0b0c5, processorArchitecture=MSIL">
+      <HintPath>..\packages\EasyHook.2.7.6684\lib\net40\EasyHook.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System">
       <Private>True</Private>
     </Reference>
@@ -95,17 +99,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shapeshifter.WindowsDesktop.Native\Shapeshifter.WindowsDesktop.Native.csproj">
       <Project>{25acb6f2-f5e2-4c38-ab51-697eaa995cc4}</Project>
       <Name>Shapeshifter.WindowsDesktop.Native</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="EasyHook">
-      <Version>2.7.6684</Version>
-    </PackageReference>
+    <Content Include="EasyHook32.dll" />
+    <Content Include="EasyHook32Svc.exe" />
+    <Content Include="EasyHook64.dll" />
+    <Content Include="EasyHook64Svc.exe" />
+    <Content Include="EasyLoad32.dll" />
+    <Content Include="EasyLoad64.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

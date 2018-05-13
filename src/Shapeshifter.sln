@@ -16,14 +16,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.gitignore = ..\.gitignore
 		..\.grenrc.json = ..\.grenrc.json
 		..\appveyor.yml = ..\appveyor.yml
-		..\ISSUE_TEMPLATE.md = ..\ISSUE_TEMPLATE.md
-		..\build\pad.xml = ..\build\pad.xml
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shapeshifter.Website", "Shapeshifter.Website\Shapeshifter.Website.csproj", "{E2A47969-CF84-470E-9C89-B24508607957}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shapeshifter.Website.Models", "Shapeshifter.Website.Models\Shapeshifter.Website.Models.csproj", "{8E163449-154B-44B2-94D6-DE67715B1627}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{C9D0F0F8-B6FC-46AA-B650-3B586E75E0A1}"
+	ProjectSection(SolutionItems) = preProject
+		..\build\pad.xml = ..\build\pad.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{3CEE82D8-78D3-4633-AD6D-54E1F6D8DAE3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ISSUE_TEMPLATE", "ISSUE_TEMPLATE", "{0FF6A2DB-5D81-4EE6-BED0-DDFEF62DD525}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\ISSUE_TEMPLATE\Bug_report.md = ..\.github\ISSUE_TEMPLATE\Bug_report.md
+		..\.github\ISSUE_TEMPLATE\Feature_request.md = ..\.github\ISSUE_TEMPLATE\Feature_request.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,6 +69,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C9D0F0F8-B6FC-46AA-B650-3B586E75E0A1} = {360BD9A8-28E9-42EF-8731-0BACCB60B8DC}
+		{3CEE82D8-78D3-4633-AD6D-54E1F6D8DAE3} = {360BD9A8-28E9-42EF-8731-0BACCB60B8DC}
+		{0FF6A2DB-5D81-4EE6-BED0-DDFEF62DD525} = {3CEE82D8-78D3-4633-AD6D-54E1F6D8DAE3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {393FBA7D-43EE-46A3-B8B1-9B601D15F6D0}

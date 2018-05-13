@@ -4,7 +4,7 @@
 # Shapeshifter
 Shapeshifter is a clipboard manager that allows you to copy multiple items and select which item you want to paste later without losing any of them.
 
-<b>To get Shapeshifter or to see more information, go to the website here:</b> [https://shapeshifter.software](https://shapeshifter.software)
+<b>To get Shapeshifter or to see more information, go to the website here:</b> [https://shapeshifter.app](https://shapeshifter.app)
 
 # Contributing
 Feel free to contribute to Shapeshifter 6 development! Create a pull request, and we'll look at it. *The repository has a DotSettings ReSharper file included, which comes with the conventions we want to use for this repository. These conventions also contain a few templates for creating Unit Tests.*

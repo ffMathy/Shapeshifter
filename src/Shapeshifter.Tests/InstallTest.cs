@@ -82,7 +82,7 @@ namespace Shapeshifter.WindowsDesktop
 					if (elapsedTimeInSeconds > 60 * 5)
 						break;
 
-					Console.WriteLine("Waited " + elapsedTimeInSeconds + " seconds so far for Shapeshifter to launch after installation.");
+					Console.WriteLine(DateTime.Now + ": Waited " + elapsedTimeInSeconds + " seconds.");
 					Thread.Sleep(5000);
 				}
 
@@ -108,7 +108,7 @@ namespace Shapeshifter.WindowsDesktop
 
 				foreach (var line in logOutput)
 				{
-					Assert.IsFalse(line.Contains("[ERR]"), line);
+					Assert.IsFalse(line.Contains("[ERR]"), "Error: " + line);
 				}
 			}
 			finally

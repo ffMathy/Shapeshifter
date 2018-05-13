@@ -1,7 +1,8 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Operations.Startup
 {
     using System;
-    using System.Threading.Tasks;
+	using System.Diagnostics;
+	using System.Threading.Tasks;
 
     using Interfaces;
 	using Serilog;
@@ -33,28 +34,35 @@
 
         public async Task RunAsync()
         {
-			logger.Verbose("Invoking the startup preparation operation.");
+			try
+			{
+				logger.Verbose("Invoking the startup preparation operation.");
 
-            if (hasRunBefore)
-            {
-                throw new InvalidOperationException(
-                    "Can't run the startup preparation twice.");
-            }
+				if (hasRunBefore)
+				{
+					throw new InvalidOperationException(
+						"Can't run the startup preparation twice.");
+				}
 
-            if (Arguments == null)
-            {
-                throw new ArgumentNullException(
-                    nameof(Arguments));
-            }
+				if (Arguments == null)
+				{
+					throw new ArgumentNullException(
+						nameof(Arguments));
+				}
 
-            hasRunBefore = true;
+				hasRunBefore = true;
 
-            processManager.CloseAllDuplicateProcessesExceptCurrent();
-			await Task.Delay(1000);
+				processManager.CloseAllDuplicateProcessesExceptCurrent();
+				await Task.Delay(1000);
 
-            await aggregateArgumentProcessor.ProcessArgumentsAsync(Arguments);
+				await aggregateArgumentProcessor.ProcessArgumentsAsync(Arguments);
 
-			logger.Verbose("Startup preparation operation completed.");
+				logger.Verbose("Startup preparation operation completed.");
+			}
+			catch (Exception ex)
+			{
+				Program.OnGlobalErrorOccured(ex);
+			}
 		}
     }
 }
