@@ -39,6 +39,7 @@
     <PackageReference Include="FluffySpoon.Http" Version="1.0.16" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.3" />
