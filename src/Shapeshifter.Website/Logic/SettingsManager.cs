@@ -31,15 +31,15 @@
 
 		static RegistryKey OpenShapeshifterKey()
 		{
-			using (var softwareKey = Registry.CurrentUser.OpenSubKey("Software"))
+			using (var softwareKey = Registry.CurrentUser.OpenSubKey("Software", RegistryKeyPermissionCheck.ReadWriteSubTree))
 			{
 				Debug.Assert(softwareKey != null, nameof(softwareKey) + " != null");
 
 				var keyNames = softwareKey.GetSubKeyNames();
 				if (!keyNames.Contains(nameof(Shapeshifter)))
-					return softwareKey.CreateSubKey(nameof(Shapeshifter));
+					return softwareKey.CreateSubKey(nameof(Shapeshifter), RegistryKeyPermissionCheck.ReadWriteSubTree);
 
-				return softwareKey.OpenSubKey(nameof(Shapeshifter));
+				return softwareKey.OpenSubKey(nameof(Shapeshifter), RegistryKeyPermissionCheck.ReadWriteSubTree);
 			}
 		}
 	}
