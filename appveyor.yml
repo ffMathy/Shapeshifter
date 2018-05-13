@@ -30,54 +30,51 @@ assembly_info:
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
 init:
-- ps: Update-AppveyorBuild -Version "6.$(Get-Date -format yyyy).$(Get-Date -format Mdd).$((Get-ChildItem Env:APPVEYOR_BUILD_NUMBER).Value)"
+- ps: |
+    Update-AppveyorBuild -Version "6.$(Get-Date -format yyyy).$(Get-Date -format Mdd).$((Get-ChildItem Env:APPVEYOR_BUILD_NUMBER).Value)"
 after_build:
-- cmd: >
+- ps: |    
     copy build\application\Shapeshifter.pdb src\Shapeshifter.WindowsDesktop\App.pdb
-
-    cd build\application
-
-    del *.* /F /Q
-
-    cd ..\..\
-
+    Remove-Item "build\application\*.*"
+    
     cd src\Shapeshifter.WindowsDesktop
-
     msbuild Shapeshifter.WindowsDesktop.csproj
-
     cd ..\..\
+    
+    $fileSize = (Get-Item build\application\Shapeshifter.exe).Length
+    (Get-Content build\pad.xml).Replace('{{VERSION}}', "6.$(Get-Date -format yyyy).$(Get-Date -format Mdd).$((Get-ChildItem Env:APPVEYOR_BUILD_NUMBER).Value)") | Set-Content build\pad.xml
+    (Get-Content build\pad.xml).Replace('{{RELEASE_MONTH}}', "$(Get-Date -format MM)") | Set-Content build\pad.xml
+    (Get-Content build\pad.xml).Replace('{{RELEASE_DAY}}', "$(Get-Date -format dd)") | Set-Content build\pad.xml
+    (Get-Content build\pad.xml).Replace('{{RELEASE_YEAR}}', "$(Get-Date -format yyyy)") | Set-Content build\pad.xml
+    (Get-Content build\pad.xml).Replace('{{FILE_SIZE_BYTES}}', "$($fileSize)") | Set-Content build\pad.xml
+    (Get-Content build\pad.xml).Replace('{{FILE_SIZE_KILOBYTES}}', "$($fileSize/1024)") | Set-Content build\pad.xml
+    (Get-Content build\pad.xml).Replace('{{FILE_SIZE_MEGABYTES}}', "$($fileSize/1024/1024)") | Set-Content build\pad.xml
 
     mkdir build\website
-
     cd src\Shapeshifter.Website
-
     dotnet restore Shapeshifter.Website.csproj
-
     dotnet build Shapeshifter.Website.csproj
-
     dotnet publish --output "..\..\build\website"
-
     cd ..\..\
-
 before_build:
-- cmd: >
+- cmd: |
     cd src
-
     nuget restore Shapeshifter.sln
-
     cd ..\
-
 build:
   project: src\Shapeshifter.sln
   verbosity: normal
 artifacts:
 - path: build\application\Shapeshifter.exe
   name: Application
+  
+- path: build\pad.xml
+  name: PAD
 deploy:
 - provider: GitHub
   release: shapeshifter-v$(appveyor_build_version)
   description: 'Changelog is still being developed. It will be available in a few minutes.'
-  artifact: Application
+  artifact: Application,PAD
   prerelease: true
   auth_token:
     secure: ayEVarC+QEZFXazImnX3hY26ZG4O5xIqH1QPzn9eYbHmglTppws2bsqK8x8mrzEH
@@ -86,34 +83,21 @@ deploy:
 install:
   - ps: Install-Product node ''
 before_deploy:
-- cmd: >
+- cmd: |
     cd build\application
-
-    "C:\Program Files (x86)\Windows Kits\10\bin\10.0.16299.0\x86\signtool.exe" sign /f "..\Certificate.pfx" /fd SHA256 /p "%code_signing_password%" /d "Shapeshifter" /du "https://shapeshifter.software/" /tr "http://timestamp.comodoca.com/authenticode" /v "Shapeshifter.exe"
-
+    "C:\Program Files (x86)\Windows Kits\10\bin\10.0.16299.0\x86\signtool.exe" sign /f "..\signing.pfx" /fd SHA256 /p "%code_signing_password%" /d "Shapeshifter" /du "https://shapeshifter.software/" /tr "http://timestamp.comodoca.com/authenticode" /v "Shapeshifter.exe"
     cd ..\..\
-
 after_deploy:
-- cmd: >
+- cmd: |
     npm install github-release-notes -g
-
     gren release --token=%gren_token% --override --prerelease
-
     cd build\website
-
     del secrets.json /F
-
     echo { "patreon": { "clientId": "%patreon_client_id%", "clientSecret": "%patreon_client_secret%", "creatorsAccessToken": "%patreon_creators_access_token%", "creatorsRefreshToken": "%patreon_creators_refresh_token%" }, "github": { "token": "%issue_reporter_token%" } }>> secrets.json
-
     7z a Website.zip *
-
     "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -enablerule:AppOffline -verb=sync -source:package="Website.zip" -dest:auto,computerName=https://shapeshifter.scm.azurewebsites.net:443/msdeploy.axd?site=shapeshifter,userName=$shapeshifter,password=%webdeploy_password%,authType=basic -allowUntrusted=true -skip:Directory="App_Data"
-
-test_script:
-  - nuget install opencover -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
-
+test_script: |
+    nuget install opencover -ExcludeVersion -OutputDirectory %APPVEYOR_BUILD_FOLDER%\tools
     %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -output:"coverage1.xml" -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\build\tests\Shapeshifter.Tests.dll\" /TestCaseFilter:(TestCategory!=Integration&TestCategory!=Predeploy)" -excludebyattribute:*ExcludeFromCodeCoverage* -register:user -skipautoprops -returntargetcode
-
     %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -output:"coverage2.xml" -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\build\tests\Shapeshifter.Tests.dll\" /TestCaseFilter:\"TestCategory=Integration\"" -excludebyattribute:*ExcludeFromCodeCoverage* -register:user -skipautoprops -returntargetcode
-
     %APPVEYOR_BUILD_FOLDER%\tools\OpenCover\tools\OpenCover.Console.exe -output:"coverage3.xml" -target:"vstest.console.exe" -targetargs:"/logger:Appveyor \"%APPVEYOR_BUILD_FOLDER%\build\tests\Shapeshifter.Tests.dll\" /TestCaseFilter:\"TestCategory=Predeploy\"" -excludebyattribute:*ExcludeFromCodeCoverage* -register:user -skipautoprops -returntargetcode

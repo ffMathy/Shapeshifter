@@ -1,6 +1,5 @@
 ﻿using Shapeshifter.WindowsDesktop.Controls.Window.ViewModels.Interfaces;
 using Shapeshifter.WindowsDesktop.Data.Interfaces;
-using Shapeshifter.WindowsDesktop.Infrastructure.Environment.Interfaces;
 using Shapeshifter.WindowsDesktop.Infrastructure.Events;
 using Shapeshifter.WindowsDesktop.Infrastructure.Threading.Interfaces;
 using Shapeshifter.WindowsDesktop.Services.Screen;
@@ -15,8 +14,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 	class SourceClipboardQuantityOverlayViewModel : ISourceClipboardQuantityOverlayViewModel
 	{
 		readonly IScreenManager screenManager;
-		readonly IThreadDelay threadDelay;
-		readonly IEnvironmentInformation environmentInformation;
+		readonly IThreadDeferrer threadDeferrer;
 		readonly IMainViewModel mainViewModel;
 
 		public event EventHandler<DataSourceClipboardQuantityShownEventArgument> ClipboardQuantityShown;
@@ -32,10 +30,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 
 		public ScreenInformation ActiveScreen
 		{
-			get
-			{
-				return activeScreen;
-			}
+			get => activeScreen;
 			set
 			{
 				activeScreen = value;
@@ -45,10 +40,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 
 		public IDataSource Source
 		{
-			get
-			{
-				return source;
-			}
+			get => source;
 			set
 			{
 				source = value;
@@ -58,10 +50,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 
 		public int Count
 		{
-			get
-			{
-				return count;
-			}
+			get => count;
 			set
 			{
 				count = value;
@@ -71,13 +60,11 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 
 		public SourceClipboardQuantityOverlayViewModel(
 			IScreenManager screenManager,
-			IThreadDelay threadDelay,
-			IEnvironmentInformation environmentInformation,
+			IThreadDeferrer threadDeferrer,
 			IMainViewModel mainViewModel)
 		{
 			this.screenManager = screenManager;
-			this.threadDelay = threadDelay;
-			this.environmentInformation = environmentInformation;
+			this.threadDeferrer = threadDeferrer;
 			this.mainViewModel = mainViewModel;
 
 			SetupEvents();
@@ -98,8 +85,11 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 
 			ClipboardQuantityShown?.Invoke(this, new DataSourceClipboardQuantityShownEventArgument());
 
-			await threadDelay.ExecuteAsync(environmentInformation.GetIsDebugging() ? 3000 : 1500);
+			await threadDeferrer.DeferAsync(1500, FireOnClipboardQuantityHidden);
+		}
 
+		void FireOnClipboardQuantityHidden()
+		{
 			ClipboardQuantityHidden?.Invoke(this, new DataSourceClipboardQuantityHiddenEventArgument());
 		}
 

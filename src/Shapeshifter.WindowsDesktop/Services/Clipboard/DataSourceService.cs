@@ -9,30 +9,33 @@
     using Native;
     using Native.Interfaces;
     using System;
-    using System.Collections.Generic;
-    using System.Windows;
+	using System.Windows;
     using System.Windows.Interop;
     using System.Windows.Media.Imaging;
 
-    class DataSourceService
+	using Infrastructure.Caching.Interfaces;
+
+	class DataSourceService
         : IDataSourceService,
           ISingleInstance
     {
         readonly IImagePersistenceService imagePersistenceService;
         readonly IWindowNativeApi windowNativeApi;
 
-        readonly IDictionary<IntPtr, byte[]> dataSourceIconCacheLarge;
-        readonly IDictionary<IntPtr, byte[]> dataSourceIconCacheSmall;
+        readonly IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheLarge;
+        readonly IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheSmall;
 
         public DataSourceService(
             IImagePersistenceService imagePersistenceService,
-            IWindowNativeApi windowNativeApi)
+            IWindowNativeApi windowNativeApi,
+			IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheSmall,
+			IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheLarge)
         {
             this.imagePersistenceService = imagePersistenceService;
             this.windowNativeApi = windowNativeApi;
 
-            dataSourceIconCacheLarge = new Dictionary<IntPtr, byte[]>();
-            dataSourceIconCacheSmall = new Dictionary<IntPtr, byte[]>();
+            this.dataSourceIconCacheLarge = dataSourceIconCacheLarge;
+            this.dataSourceIconCacheSmall = dataSourceIconCacheSmall;
         }
 
         BitmapSource GetWindowIcon(IntPtr windowHandle, bool bigIconSize = true)
@@ -70,28 +73,22 @@
             var windowTitle = windowNativeApi.GetWindowTitle(activeWindowHandle);
             lock (this)
             {
-                byte[] iconBytesBig;
-                if (dataSourceIconCacheLarge.ContainsKey(activeWindowHandle))
-                {
-                    iconBytesBig = dataSourceIconCacheLarge[activeWindowHandle];
-                }
-                else
+                var iconBytesBig = dataSourceIconCacheLarge.Get(activeWindowHandle);
+				if (iconBytesBig == null)
                 {
                     var windowIconBig = GetWindowIcon(activeWindowHandle);
                     iconBytesBig = imagePersistenceService.ConvertBitmapSourceToByteArray(windowIconBig);
-                    dataSourceIconCacheLarge.Add(activeWindowHandle, iconBytesBig);
+
+                    dataSourceIconCacheLarge.Set(activeWindowHandle, iconBytesBig);
                 }
 
-                byte[] iconBytesSmall;
-                if (dataSourceIconCacheSmall.ContainsKey(activeWindowHandle))
-                {
-                    iconBytesSmall = dataSourceIconCacheSmall[activeWindowHandle];
-                }
-                else
+                var iconBytesSmall = dataSourceIconCacheSmall.Get(activeWindowHandle);
+                if (dataSourceIconCacheSmall == null)
                 {
                     var windowIconSmall = GetWindowIcon(activeWindowHandle, false);
                     iconBytesSmall = imagePersistenceService.ConvertBitmapSourceToByteArray(windowIconSmall);
-                    dataSourceIconCacheSmall.Add(activeWindowHandle, iconBytesSmall);
+
+                    dataSourceIconCacheSmall.Set(activeWindowHandle, iconBytesSmall);
                 }
 
                 var dataSource = new DataSource(iconBytesBig, iconBytesSmall, windowTitle);

@@ -96,7 +96,7 @@
 				return;
 			}
 
-			processor.Process();
+			processor.ProcessAsync();
 			processorsUsed.Add(processor);
 		}
 

@@ -79,7 +79,7 @@ namespace Shapeshifter.WindowsDesktop
 						break;
 
 					var elapsedTimeInSeconds = (int)(DateTime.UtcNow - now).TotalSeconds;
-					if (elapsedTimeInSeconds > 60 * 3)
+					if (elapsedTimeInSeconds > 60 * 5)
 						break;
 
 					Console.WriteLine("Waited " + elapsedTimeInSeconds + " seconds so far for Shapeshifter to launch after installation.");

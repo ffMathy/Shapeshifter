@@ -8,16 +8,9 @@
 	using Services.Web.Updates.Interfaces;
 	using System;
 	using System.Diagnostics;
-	using System.IO;
-	using System.Linq;
 	using System.Reflection;
 	using System.Threading;
 	using System.Windows;
-	using System.Xml;
-
-	using Microsoft.Build.Evaluation;
-
-	using Properties;
 
 	public static class Program
 	{
@@ -94,14 +87,16 @@
 
 			Log.CloseAndFlush();
 
+			var updateService = Container.Resolve<IUpdateService>();
+			var updateTask = updateService.UpdateAsync();
+
 			MessageBox.Show(
 				"Woops, something bad happened with Shapeshifter, and it needs to close. We're so sorry!\n\nYou can find a detailed log file with details in %TEMP%\\Shapeshifter\\Shapeshifter.log.",
 				"Shapeshifter error",
 				MessageBoxButton.OK,
 				MessageBoxImage.Error);
 
-			var updateService = Container.Resolve<IUpdateService>();
-			updateService.UpdateAsync().Wait();
+			updateTask.Wait();
 
 			Thread.Sleep(10000);
 

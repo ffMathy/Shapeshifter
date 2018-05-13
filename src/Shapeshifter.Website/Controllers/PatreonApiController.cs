@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Shapeshifter.Website.Models;
 
 namespace Shapeshifter.Website.Controllers
 {
@@ -11,39 +10,40 @@ namespace Shapeshifter.Website.Controllers
 	using Models.Patreon.Response;
 
 	[Produces("application/json")]
-  [Route("api/patreon")]
-  public class PatreonApiController : Controller
-  {
-	  readonly IPatreonClient _client;
+	[Route("api/patreon")]
+	public class PatreonApiController : Controller
+	{
+		readonly IPatreonClient _client;
 
-    public PatreonApiController(
-      IConfigurationReader configurationReader)
-    {
-      _client = new PatreonClient(configurationReader.Read("patreon.creatorsAccessToken"));
-    }
-	
-    [HttpGet("supporters")]
-    public async Task<IEnumerable<dynamic>> GetSupporters()
-    {
-		var supporters = new List<dynamic>();
-
-		var pledges = await _client.GetPledgesAsync();
-		var users = pledges.Included.ToObject<User[]>();
-		foreach (var pledge in pledges.Data) {
-			var user = users.Single(x => x.Id == pledge.Relationships.Patron.Data.Id);
-			if(user.Attributes.IsDeleted || user.Attributes.IsSuspended || user.Attributes.IsNuked)
-				continue;
-
-			supporters.Add(new {
-				user.Id,
-				user.Attributes.FullName,
-				Amount = pledge.Attributes.AmountCents / 100.0,
-				user.Attributes.ImageUrl,
-				user.Attributes.Url
-			});
+		public PatreonApiController(
+		  IConfigurationReader configurationReader)
+		{
+			_client = new PatreonClient(configurationReader.Read("patreon.creatorsAccessToken"));
 		}
 
-		return supporters;
-    }
-  }
+		[HttpGet("supporters")]
+		public async Task<IEnumerable<dynamic>> GetSupporters()
+		{
+			var supporters = new List<dynamic>();
+
+			var pledges = await _client.GetPledgesAsync();
+			var users = pledges.Included.ToObject<User[]>();
+			foreach (var pledge in pledges.Data)
+			{
+				var user = users.Single(x => x.Id == pledge.Relationships.Patron.Data.Id);
+				if (user.Attributes.IsDeleted || user.Attributes.IsSuspended || user.Attributes.IsNuked)
+					continue;
+
+				supporters.Add(new {
+					user.Id,
+					user.Attributes.FullName,
+					Amount = pledge.Attributes.AmountCents / 100.0,
+					user.Attributes.ImageUrl,
+					user.Attributes.Url
+				});
+			}
+
+			return supporters;
+		}
+	}
 }

@@ -2,38 +2,9 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/hnhqpn0rwcsvccng/branch/master?svg=true)](https://ci.appveyor.com/project/ffMathy/shapeshifter/branch/master)
 
 # Shapeshifter
-Shapeshifter is a revolutionary clipboard manager that you might know of already. It allows you to copy multiple items and select which item you want to paste later without losing any of them.
+Shapeshifter is a clipboard manager that allows you to copy multiple items and select which item you want to paste later without losing any of them.
 
-Download the latest release of version 6:  
-
-[![Download the latest release](https://i.imgur.com/9or42mi.png)](https://github.com/ffMathy/Shapeshifter/releases/latest)
-
-# Want to see releases more often?
-Developing Shapeshifter is something we do for free, so that you can enjoy it without cost. However, that also means we can only spend our spare time on it. 
-
-If you want to see more frequent releases, fixes and new features, please support us on Patreon:  
-
-[![Support us on Patreon](https://i.imgur.com/hNXgdNI.png)](https://www.patreon.com/flamefusion/overview)
-
-### Thanks to our supporters
-Patreon is what keeps further development of Shapeshifter possible. Thanks to all the Patreon supporters that helped. We'll soon provide a dynamic list showing all supporters.
-
-## Screenshots
-Shapeshifter is simple. You hold down CTRL + V, and the following UI pops up. You then navigate to the item you want to paste using your arrow keys (arrow up/down or use some of the actions with arrow right/left), and then release CTRL + V to paste.
-
-![Holding down CTRL shows this UI](/assets/screenshots/blue.PNG)
-
-### Other colors
-The color of Shapeshifter adapts to the color you've chosen as your Windows 10 accent (theme) color. Here's one where those colors are different.
-
-![Holding down CTRL and V shows this UI](/assets/screenshots/purple.PNG)
-![Holding down CTRL and V shows this UI](/assets/screenshots/green.PNG)
-![Holding down CTRL and V shows this UI](/assets/screenshots/red.PNG)
-
-## Legacy versions
-
-- Version 5 (not supported anymore in favor of version 6):
-https://github.com/ffMathy/Shapeshifter/releases/tag/shapeshifter-v5.0.107
+<b>To get Shapeshifter or to see more information, go to the website here:</b> [https://shapeshifter.application](https://shapeshifter.application)
 
 # Contributing
 Feel free to contribute to Shapeshifter 6 development! Create a pull request, and we'll look at it. *The repository has a DotSettings ReSharper file included, which comes with the conventions we want to use for this repository. These conventions also contain a few templates for creating Unit Tests.*

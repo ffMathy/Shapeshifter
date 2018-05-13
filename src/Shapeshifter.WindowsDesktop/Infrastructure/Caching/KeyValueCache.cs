@@ -44,9 +44,7 @@
             {
                 var cachedResult = Get(argument);
                 if (!Equals(cachedResult, default(TValue)))
-                {
                     return cachedResult;
-                }
 
                 var result = method(argument);
                 Set(argument, result);

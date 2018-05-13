@@ -8,11 +8,8 @@
 
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-	using NSubstitute;
-
 	using Serilog;
-	using Services.Files.Interfaces;
-	
+
 	public abstract class UnitTestFor<TSystemUnderTest> : TestBase
 		where TSystemUnderTest : class
 	{

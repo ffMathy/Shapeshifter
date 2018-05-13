@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1024" height="1024" viewBox="0 0 24 24">
+	<defs>
+		<filter id="shadow">
+			<feDropShadow flood-color="rgba(0,0,0,0.2)" dx="0" dy="0" stdDeviation="0.6"/>
+		</filter>
+	</defs>
+	<linearGradient id="Gradient2" x1="1" x2="0" y1="0" y2="1">
+		<stop offset="0%" stop-color="#0087ff"/>
+		<stop offset="100%" stop-color="#005eb2"/>
+	</linearGradient>
+	<path style="fill: url(#Gradient2); filter:url(#shadow);" stroke="#0063bc" stroke-width="1px" vector-effect="non-scaling-stroke"
+	      d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+	<line x1="19" y1="7" x2="19" y2="21" stroke="#0063bc" stroke-width="1px"  vector-effect="non-scaling-stroke"/>
+</svg>

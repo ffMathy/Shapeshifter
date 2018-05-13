@@ -13,8 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapeshifter.WindowsDesktop
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{360BD9A8-28E9-42EF-8731-0BACCB60B8DC}"
 	ProjectSection(SolutionItems) = preProject
+		..\.gitignore = ..\.gitignore
 		..\.grenrc.json = ..\.grenrc.json
 		..\appveyor.yml = ..\appveyor.yml
+		..\ISSUE_TEMPLATE.md = ..\ISSUE_TEMPLATE.md
 		..\pad.xml = ..\pad.xml
 		..\README.md = ..\README.md
 	EndProjectSection
