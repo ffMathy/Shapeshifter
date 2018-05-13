@@ -141,13 +141,13 @@
 		public Process LaunchFile(string fileName, string arguments = null, ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal)
 		{
 			var workingDirectory = Path.GetDirectoryName(fileName);
-			return SpawnProcess(fileName, workingDirectory, arguments);
+			return SpawnProcess(fileName, workingDirectory, arguments, null, windowStyle);
 		}
 
 		public Process LaunchFileWithAdministrativeRights(string fileName, string arguments = null, ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal)
 		{
 			var workingDirectory = Path.GetDirectoryName(fileName);
-			return SpawnProcess(fileName, workingDirectory, arguments, "runas");
+			return SpawnProcess(fileName, workingDirectory, arguments, "runas", windowStyle);
 		}
 
 		public bool IsCurrentProcessElevated()
