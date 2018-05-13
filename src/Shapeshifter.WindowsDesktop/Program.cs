@@ -8,16 +8,9 @@
 	using Services.Web.Updates.Interfaces;
 	using System;
 	using System.Diagnostics;
-	using System.IO;
-	using System.Linq;
 	using System.Reflection;
 	using System.Threading;
 	using System.Windows;
-	using System.Xml;
-
-	using Microsoft.Build.Evaluation;
-
-	using Properties;
 
 	public static class Program
 	{

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Shapeshifter.Website.Models;
 
 namespace Shapeshifter.Website.Controllers
 {

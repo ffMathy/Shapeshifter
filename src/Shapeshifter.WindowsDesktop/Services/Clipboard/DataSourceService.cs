@@ -9,8 +9,7 @@
     using Native;
     using Native.Interfaces;
     using System;
-    using System.Collections.Generic;
-    using System.Windows;
+	using System.Windows;
     using System.Windows.Interop;
     using System.Windows.Media.Imaging;
 
