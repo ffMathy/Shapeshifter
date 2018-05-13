@@ -83,7 +83,7 @@
                 }
 
                 var iconBytesSmall = dataSourceIconCacheSmall.Get(activeWindowHandle);
-                if (dataSourceIconCacheSmall == null)
+                if (iconBytesSmall == null)
                 {
                     var windowIconSmall = GetWindowIcon(activeWindowHandle, false);
                     iconBytesSmall = imagePersistenceService.ConvertBitmapSourceToByteArray(windowIconSmall);
