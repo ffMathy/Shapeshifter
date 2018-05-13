@@ -105,27 +105,16 @@
     <ProjectReference Include="..\Shapeshifter.WindowsDesktop.Native\Shapeshifter.WindowsDesktop.Native.csproj">
       <Project>{25acb6f2-f5e2-4c38-ab51-697eaa995cc4}</Project>
       <Name>Shapeshifter.WindowsDesktop.Native</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="EasyHook32.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EasyHook32Svc.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EasyHook64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EasyHook64Svc.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EasyLoad32.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EasyLoad64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="EasyHook32.dll" />
+    <Content Include="EasyHook32Svc.exe" />
+    <Content Include="EasyHook64.dll" />
+    <Content Include="EasyHook64Svc.exe" />
+    <Content Include="EasyLoad32.dll" />
+    <Content Include="EasyLoad64.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

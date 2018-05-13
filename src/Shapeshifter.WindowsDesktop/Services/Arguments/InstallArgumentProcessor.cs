@@ -99,7 +99,7 @@
 		{
 			var process = processManager.LaunchFile(
 				@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe",
-				@"install """ + TargetExecutableFile + @""" /ExeConfig:""" + TargetExecutableFile + @"""",
+				@"install """ + TargetExecutableFile + @""" /ExeConfig:""" + TargetExecutableFile + @""" /nologo",
 				ProcessWindowStyle.Hidden);
 			
 			var taskCompletionSource = new TaskCompletionSource<int>();
