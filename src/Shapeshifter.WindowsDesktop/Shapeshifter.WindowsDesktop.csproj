@@ -41,7 +41,7 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
-    <ApplicationIcon>Resources\Icon\Shapeshifter.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Icon\Application.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -642,9 +642,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Icon\Shapeshifter.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -708,6 +705,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.pdb" />
+    <Resource Include="Resources\Icon\Application.ico" />
+    <Content Include="Resources\Icon\Application.svg" />
+    <Content Include="Resources\Icon\Test.html" />
+    <Content Include="Resources\Icon\Tray.svg" />
+    <Resource Include="Resources\Icon\Tray.ico" />
     <EmbeddedResource Include="EasyHook32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>

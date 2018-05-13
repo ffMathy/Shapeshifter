@@ -46,7 +46,7 @@
                 .MenuItems
                 .AddRange(contextMenuItems.ToArray());
 
-            trayIcon.Icon = Resources.ShapeshifterIcon;
+            trayIcon.Icon = Resources.ShapeshifterTrayIcon;
             trayIcon.ContextMenu = contextMenu;
             trayIcon.Text = "Shapeshifter version " + Program.GetCurrentVersion();
             trayIcon.Visible = true;
