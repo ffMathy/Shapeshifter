@@ -149,7 +149,7 @@
 				}
 				else
 				{
-					var targetIndex = currentIndex == Elements.Count - 1 ? Elements.Count - 1 : currentIndex + 1;
+					var targetIndex = currentIndex == Elements.Count ? Elements.Count - 1 : currentIndex;
 					SelectedElement = Elements.ElementAt(targetIndex);
 				}
 

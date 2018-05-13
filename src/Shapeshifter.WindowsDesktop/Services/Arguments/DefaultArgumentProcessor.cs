@@ -12,7 +12,7 @@
 
 	using Web.Updates.Interfaces;
 
-	class DefaultArgumentProcessor: INoArgumentProcessor
+	class DefaultArgumentProcessor : INoArgumentProcessor
 	{
 		readonly IProcessManager processManager;
 		readonly IInstallWindow installWindow;
@@ -46,7 +46,10 @@
 
 		public async Task ProcessAsync()
 		{
-			if(!IsCurrentlyRunningFromInstallationFolder)
+			if (!ShouldInstall)
+				return;
+
+			if (!IsCurrentlyRunningFromInstallationFolder)
 				maintenanceWindow.Show("Searching for updates ...");
 
 			if (await updateService.UpdateAsync())
@@ -54,8 +57,7 @@
 
 			maintenanceWindow.Hide();
 
-			if(!IsCurrentlyRunningFromInstallationFolder)
-				installWindow.Show();
+			installWindow.Show();
 		}
 	}
 }

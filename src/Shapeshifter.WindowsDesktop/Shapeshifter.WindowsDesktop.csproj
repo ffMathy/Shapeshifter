@@ -477,12 +477,10 @@
     <Compile Include="Services\Web\LinkType.cs" />
     <Compile Include="Services\Messages\WindowMessageHook.cs" />
     <Compile Include="Operations\Startup\Interfaces\IMainWindowPreparationOperation.cs" />
-    <Compile Include="Operations\Startup\Interfaces\IPostPreparationOperation.cs" />
     <Compile Include="Operations\Interfaces\IOperation.cs" />
     <Compile Include="Operations\Startup\Interfaces\IStartupPreparationOperation.cs" />
     <Compile Include="Operations\Startup\Interfaces\ITrayPreparationOperation.cs" />
     <Compile Include="Operations\Startup\MainWindowPreparationOperation.cs" />
-    <Compile Include="Operations\Startup\PostPreparationOperation.cs" />
     <Compile Include="Operations\Startup\StartupPreparationOperation.cs" />
     <Compile Include="Operations\Startup\TrayPreparationOperation.cs" />
     <Compile Include="Services\WindowManager.cs" />
