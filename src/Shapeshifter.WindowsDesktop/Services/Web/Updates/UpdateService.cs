@@ -178,7 +178,7 @@
 
 			var currentRelease = allReleases.SingleOrDefault(IsCurrentRelease);
 			if(currentRelease == null) {
-				logger.Warning("Could not find the current release version v{version}.", Program.GetCurrentVersion());
+				logger.Warning("Could not find the current release version {version}.", Program.GetCurrentVersion());
 			} else if(currentRelease.Prerelease) {
 				settingsManager.SaveSetting("PreferPrerelease", true);
 			}
