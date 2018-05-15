@@ -153,8 +153,11 @@
 					SelectedElement = Elements.ElementAt(targetIndex);
 				}
 
-				if (await clipboardPersistenceService.IsPersistedAsync(currentElement.Data))
-					await clipboardPersistenceService.DeletePackageAsync(currentElement.Data);
+				if (currentElement != null)
+				{
+					if (await clipboardPersistenceService.IsPersistedAsync(currentElement.Data))
+						await clipboardPersistenceService.DeletePackageAsync(currentElement.Data);
+				}
 			}
 			finally
 			{
