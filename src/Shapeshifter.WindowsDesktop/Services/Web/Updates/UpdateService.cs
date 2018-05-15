@@ -114,7 +114,7 @@
             var localFilePath = await DownloadUpdateToDiskAsync(asset);
             processManager.LaunchFile(
                 localFilePath,
-                "update " + processManager.GetCurrentProcessFilePath());
+                "update \"" + processManager.GetCurrentProcessFilePath() + "\"");
         }
 
         async Task<string> DownloadUpdateToDiskAsync(ReleaseAsset asset)
