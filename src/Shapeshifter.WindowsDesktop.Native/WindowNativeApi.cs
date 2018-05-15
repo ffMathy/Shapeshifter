@@ -45,10 +45,10 @@
             return UnhookWinEvent(hWinEventHook);
         }
 
-        [DllImport("user32.dll")]
-        internal static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
+        [DllImport("user32.dll")] 
+		static extern int GetWindowThreadProcessId(IntPtr hWnd, IntPtr procid);
 
-        IntPtr IWindowNativeApi.SetWinEventHook(
+		IntPtr IWindowNativeApi.SetWinEventHook(
             uint eventMin,
             uint eventMax,
             IntPtr hmodWinEventProc,
@@ -60,9 +60,9 @@
             return SetWinEventHook(eventMin, eventMax, hmodWinEventProc, lpfnWinEventProc, idProcess, idThread, dwFlags);
         }
 
-        IntPtr IWindowNativeApi.GetWindowThreadProcessId(IntPtr hWnd, out uint processId)
+        int IWindowNativeApi.GetWindowThreadProcessId(IntPtr hWnd, IntPtr procid)
         {
-            return GetWindowThreadProcessId(hWnd, out processId);
+            return GetWindowThreadProcessId(hWnd, procid);
         }
 
         public delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);

@@ -16,6 +16,8 @@
 		string CurrentProcessName { get; }
 		int CurrentProcessId { get; }
 
+		ProcessThread GetUserInterfaceThreadOfProcess(Process process);
+
 		Process LaunchCommand(string command, string arguments = null);
 
 		void CloseAllDuplicateProcessesExceptCurrent();

@@ -29,7 +29,7 @@
         IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WindowNativeApi.WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
 
         bool UnhookWinEvent(IntPtr hWinEventHook);
-
-        IntPtr GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
-    }
+		
+		int GetWindowThreadProcessId(IntPtr hWnd, IntPtr procid);
+	}
 }

@@ -8,6 +8,9 @@
 	using System.Security.Principal;
 	using System.Threading;
 	using Interfaces;
+
+	using Native.Interfaces;
+
 	using Serilog;
 	using Serilog.Context;
 
@@ -15,17 +18,20 @@
 		: IProcessManager
 	{
 		readonly ILogger logger;
+		readonly IWindowNativeApi windowNativeApi;
 
 		readonly ICollection<Process> processes;
 		readonly Process currentProcess;
 
 		public ProcessManager(
-			ILogger logger)
+			ILogger logger,
+			IWindowNativeApi windowNativeApi)
 		{
 			processes = new HashSet<Process>();
 			currentProcess = Process.GetCurrentProcess();
 
 			this.logger = logger;
+			this.windowNativeApi = windowNativeApi;
 		}
 
 		public void Dispose()
@@ -53,6 +59,23 @@
 		public Process LaunchCommand(string command, string arguments = null)
 		{
 			return SpawnProcess(command, Environment.CurrentDirectory);
+		}
+
+		public ProcessThread GetUserInterfaceThreadOfProcess(Process process)
+		{
+			if (process.MainWindowHandle == IntPtr.Zero) 
+				return null;
+
+			var processThreadId = windowNativeApi.GetWindowThreadProcessId(
+				process.MainWindowHandle, 
+				IntPtr.Zero);
+			foreach (ProcessThread processThread in process.Threads)
+			{
+				if (processThread.Id == processThreadId)
+					return processThread;
+			}
+
+			return null;
 		}
 
 		public void CloseAllDuplicateProcessesExceptCurrent()

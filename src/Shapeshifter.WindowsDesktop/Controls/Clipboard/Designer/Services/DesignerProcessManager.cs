@@ -15,6 +15,11 @@
 
 		public int CurrentProcessId => throw new NotImplementedException();
 
+		public ProcessThread GetUserInterfaceThreadOfProcess(Process process)
+		{
+			throw new NotImplementedException();
+		}
+
 		public Process LaunchCommand(string command, string arguments = null)
 		{
 			throw new NotImplementedException();
