@@ -1,14 +1,18 @@
 {
-	"dataSource": "issues",
-    "groupBy": {
-        "Enhancements:": ["enhancement"],
-        "Bug fixes:": ["bug"],
-		"Techie stuff:": ["tech"]
-    },
-	"ignoreIssuesWith": [
-        "won't fix",
-        "duplicate",
-		"discussion",
-		"incomplete"
-    ]
+  "dataSource": "issues",
+  "groupBy": {
+	"Enhancements:": [ "enhancement" ],
+	"Bug fixes:": [ "bug" ],
+	"Techie stuff:": [ "tech" ]
+  },
+  "ignoreIssuesWith": [
+	"won't fix",
+	"duplicate",
+	"discussion",
+	"incomplete"
+  ],
+  "ignoreLabels": [
+	"good first issue",
+	"help wanted"
+  ]
 }

@@ -61,7 +61,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <None Include="wwwroot\index.css" />
+    <None Include="wwwroot\index.html" />
+    <None Include="wwwroot\index.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shapeshifter.Website.Models\Shapeshifter.Website.Models.csproj" />
