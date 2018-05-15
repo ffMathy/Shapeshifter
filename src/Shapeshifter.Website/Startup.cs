@@ -6,6 +6,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Shapeshifter.Website
 {
+	using System.Collections.Generic;
+
 	using Logic;
 
 	public class Startup
@@ -37,7 +39,9 @@ namespace Shapeshifter.Website
 				.AllowAnyMethod()
 				.AllowAnyOrigin());
 
+			app.UseDefaultFiles();
 			app.UseStaticFiles();
+
 			app.UseMvc(
 				routes => {
 					routes.MapRoute(
