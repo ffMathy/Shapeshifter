@@ -160,6 +160,10 @@
 				}
 				else
 				{
+					var hintPath = referenceNode.SelectSingleNode("./default:HintPath", namespaceManager);
+					if (hintPath == null)
+						continue;
+
 					reference = include
 						.Split(',')
 						.First();
