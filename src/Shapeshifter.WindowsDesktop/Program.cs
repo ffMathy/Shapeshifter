@@ -28,6 +28,11 @@
 			}
 		}
 
+		static Program()
+		{
+			CosturaUtility.Initialize();
+		}
+
 		public static void CreateContainer(Action<ContainerBuilder> callback = null)
 		{
 			lock (typeof(App))
@@ -50,8 +55,6 @@
 		[STAThread]
 		public static void Main(string[] args)
 		{
-			CosturaUtility.Initialize();
-
 			try
 			{
 				AppDomain.CurrentDomain.FirstChanceException += (sender, e) => {
