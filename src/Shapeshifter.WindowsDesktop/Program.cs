@@ -50,6 +50,8 @@
 		[STAThread]
 		public static void Main(string[] args)
 		{
+			CosturaUtility.Initialize();
+
 			try
 			{
 				AppDomain.CurrentDomain.FirstChanceException += (sender, e) => {
