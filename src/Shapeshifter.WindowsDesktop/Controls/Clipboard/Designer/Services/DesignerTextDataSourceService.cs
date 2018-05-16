@@ -23,7 +23,7 @@
         {
             return new DesignerDataSourceFacade(designerImageConverterService)
             {
-                Text = "Skype",
+                Title = "Skype",
                 IconLarge = Resources.TextDataSourceIcon,
                 IconSmall = Resources.TextDataSourceIcon
             };

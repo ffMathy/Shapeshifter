@@ -70,6 +70,7 @@
         public IDataSource GetDataSource()
         {
             var activeWindowHandle = windowNativeApi.GetForegroundWindow();
+			windowNativeApi.getpro
             var windowTitle = windowNativeApi.GetWindowTitle(activeWindowHandle);
             lock (this)
             {

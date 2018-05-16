@@ -81,7 +81,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 			Source = e.Package.Data.Source;
 			Count = mainViewModel
 				.UserInterfaceViewModel
-				.Elements.Count(x => x.Data.Source.Text == Source.Text);
+				.Elements.Count(x => x.Data.Source.Title == Source.Title);
 
 			ClipboardQuantityShown?.Invoke(this, new DataSourceClipboardQuantityShownEventArgument());
 

@@ -63,6 +63,9 @@
             if (!environmentInformation.GetHasInternetAccess()) return false;
             if (!environmentInformation.GetShouldUpdate()) return false;
 
+			if (settingsManager.LoadSetting<bool>("NoUpdating"))
+				return false;
+
             try
             {
                 var pendingUpdateRelease = await GetAvailableUpdateAsync();

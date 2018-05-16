@@ -50,6 +50,7 @@ namespace Shapeshifter.WindowsDesktop
 
 				var settingsManager = container.Resolve<ISettingsManager>();
 				settingsManager.SaveSetting<DateTime?>("LastLoad", null);
+				settingsManager.SaveSetting<bool>("NoUpdating", true);
 
 				File.Copy(executablePath, backupExecutablePath);
 

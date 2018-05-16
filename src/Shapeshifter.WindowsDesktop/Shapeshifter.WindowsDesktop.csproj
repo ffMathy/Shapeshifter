@@ -759,12 +759,12 @@
   <ItemGroup>
     <Content Include="App.pdb" />
     <Resource Include="Resources\Icon\Application.ico" />
-    <Content Include="EasyHook32.dll" />
-    <Content Include="EasyHook32Svc.exe" />
-    <Content Include="EasyHook64.dll" />
-    <Content Include="EasyHook64Svc.exe" />
-    <Content Include="EasyLoad32.dll" />
-    <Content Include="EasyLoad64.dll" />
+    <EmbeddedResource Include="EasyHook32.dll" />
+    <EmbeddedResource Include="EasyHook32Svc.exe" />
+    <EmbeddedResource Include="EasyHook64.dll" />
+    <EmbeddedResource Include="EasyHook64Svc.exe" />
+    <EmbeddedResource Include="EasyLoad32.dll" />
+    <EmbeddedResource Include="EasyLoad64.dll" />
     <Content Include="Resources\Icon\Application.svg" />
     <Content Include="Resources\Icon\Test.html" />
     <Content Include="Resources\Icon\Tray.svg" />

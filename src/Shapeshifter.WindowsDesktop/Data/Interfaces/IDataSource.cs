@@ -6,6 +6,8 @@
 
         byte[] IconSmall { get; }
 
-        string Text { get; }
+        string Title { get; }
+
+		string ProcessName { get; }
     }
 }

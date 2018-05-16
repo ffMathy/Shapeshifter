@@ -8,12 +8,12 @@
         {
             IconLarge = iconBig;
             IconSmall = iconSmall;
-            Text = text;
+            Title = text;
         }
 
         public byte[] IconLarge { get; }
         public byte[] IconSmall { get; }
 
-        public string Text { get; }
+        public string Title { get; }
     }
 }

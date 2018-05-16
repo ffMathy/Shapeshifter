@@ -193,7 +193,7 @@
 		{
 			var stream = Application.ResourceAssembly.GetManifestResourceStream(targetResourceName);
 			if (stream == null)
-				return;
+				throw new Exception("Could not load emit embedded resource " + targetResourceName + " as " + targetFile + ".");
 
 			logger.Verbose("Attempting to write resource {resourceName} to {embeddedFile}.", targetResourceName, targetFile);
 			using (stream)
