@@ -63,11 +63,11 @@
 
 		public ProcessThread GetUserInterfaceThreadOfProcess(Process process)
 		{
-			if (process.MainWindowHandle == IntPtr.Zero) 
+			if (process.MainWindowHandle == IntPtr.Zero)
 				return null;
 
 			var processThreadId = windowNativeApi.GetWindowThreadProcessId(
-				process.MainWindowHandle, 
+				process.MainWindowHandle,
 				out _);
 			foreach (ProcessThread processThread in process.Threads)
 			{
@@ -95,7 +95,7 @@
 
 					if (process.Id == currentProcess.Id)
 						continue;
-						
+
 					CloseProcess(process);
 				}
 				catch (Win32Exception)
@@ -183,10 +183,10 @@
 		}
 
 		Process SpawnProcess(
-			string uri, 
-			string workingDirectory, 
-			string arguments = null, 
-			string verb = null, 
+			string uri,
+			string workingDirectory,
+			string arguments = null,
+			string verb = null,
 			ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal)
 		{
 			using (LogContext.PushProperty("fileName", uri))
