@@ -119,10 +119,10 @@
 
             var fakeDownloader = Container.Resolve<IDownloader>();
             fakeDownloader.Received(1)
-                          .DownloadBytesAsync("foobar.com")
+                          .DownloadBytesAsync(new Uri("foobar.com"))
                           .IgnoreAwait();
             fakeDownloader.Received(1)
-                          .DownloadBytesAsync("example.com")
+                          .DownloadBytesAsync(new Uri("example.com"))
                           .IgnoreAwait();
         }
 
