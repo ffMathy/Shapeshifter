@@ -3,7 +3,11 @@
 	using System;
 	using System.Linq;
 	using System.Threading.Tasks;
+
+	using Information;
+
 	using Interfaces;
+
 	using Serilog;
 
 	using Shapeshifter.WindowsDesktop.Services.Files.Interfaces;
@@ -41,7 +45,7 @@
 			await fileManager.DeleteFileIfExistsAsync(targetDirectory);
 			logger.Verbose("Old file has been cleaned up.");
 
-			processManager.LaunchFileWithAdministrativeRights(processManager.GetCurrentProcessFilePath());
+			processManager.LaunchFileWithAdministrativeRights(CurrentProcessInformation.GetCurrentProcessFilePath());
 		}
 	}
 }

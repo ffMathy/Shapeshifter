@@ -11,6 +11,8 @@
 
 	using Files.Interfaces;
 
+	using Information;
+
 	using Interfaces;
 
 	using Octokit;
@@ -19,6 +21,7 @@
 
 	using Web.Interfaces;
 	using Infrastructure.Environment.Interfaces;
+
 	using Serilog;
 	using Shapeshifter.WindowsDesktop.Services.Interfaces;
 
@@ -117,7 +120,7 @@
             var localFilePath = await DownloadUpdateToDiskAsync(asset);
             processManager.LaunchFile(
                 localFilePath,
-                "update \"" + processManager.GetCurrentProcessFilePath() + "\"");
+                "update \"" + CurrentProcessInformation.GetCurrentProcessFilePath() + "\"");
         }
 
         async Task<string> DownloadUpdateToDiskAsync(ReleaseAsset asset)

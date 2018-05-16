@@ -4,17 +4,16 @@
 
 	using Controls.Window.Interfaces;
 
+	using Information;
+
 	using Infrastructure.Environment.Interfaces;
 
 	using Interfaces;
-
-	using Processes.Interfaces;
 
 	using Web.Updates.Interfaces;
 
 	class DefaultArgumentProcessor : INoArgumentProcessor
 	{
-		readonly IProcessManager processManager;
 		readonly IInstallWindow installWindow;
 		readonly IEnvironmentInformation environmentInformation;
 		readonly IMaintenanceWindow maintenanceWindow;
@@ -22,17 +21,18 @@
 
 		public bool Terminates => ShouldInstall;
 
-		bool ShouldInstall => !IsCurrentlyRunningFromInstallationFolder && !environmentInformation.GetIsDebugging();
-		bool IsCurrentlyRunningFromInstallationFolder => processManager.GetCurrentProcessDirectory() == InstallArgumentProcessor.TargetDirectory;
+		bool ShouldInstall => 
+			!IsCurrentlyRunningFromInstallationFolder && !environmentInformation.GetIsDebugging();
+
+		static bool IsCurrentlyRunningFromInstallationFolder => 
+			CurrentProcessInformation.GetCurrentProcessDirectory() == InstallationInformation.TargetDirectory;
 
 		public DefaultArgumentProcessor(
-			IProcessManager processManager,
 			IInstallWindow installWindow,
 			IEnvironmentInformation environmentInformation,
 			IMaintenanceWindow maintenanceWindow,
 			IUpdateService updateService)
 		{
-			this.processManager = processManager;
 			this.installWindow = installWindow;
 			this.environmentInformation = environmentInformation;
 			this.maintenanceWindow = maintenanceWindow;

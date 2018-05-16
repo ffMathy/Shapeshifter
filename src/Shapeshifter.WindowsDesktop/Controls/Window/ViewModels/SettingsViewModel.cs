@@ -4,11 +4,13 @@
     using System.Runtime.CompilerServices;
     using System.Windows.Input;
 
-    using Interfaces;
+	using Information;
+
+	using Interfaces;
 
     using Services.Interfaces;
     using Services.Keyboard.Interfaces;
-    using Services.Processes.Interfaces;
+	using Services.Processes.Interfaces;
 
     class SettingsViewModel: ISettingsViewModel
     {
@@ -62,7 +64,7 @@
                 var runRegistryPath = GetRunRegistryPath();
                 if (value)
                 {
-                    var currentExecutablePath = processManager.GetCurrentProcessFilePath();
+                    var currentExecutablePath = CurrentProcessInformation.GetCurrentProcessFilePath();
                     registryManager.AddValue(
                         runRegistryPath,
                         nameof(Shapeshifter),

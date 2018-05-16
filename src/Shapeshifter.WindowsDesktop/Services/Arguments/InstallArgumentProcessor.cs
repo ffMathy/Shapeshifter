@@ -14,6 +14,8 @@
 
 	using Files.Interfaces;
 
+	using Information;
+
 	using Interfaces;
 
 	using Processes.Interfaces;
@@ -46,17 +48,6 @@
 
 		public bool Terminates => true;
 
-		internal static string TargetDirectory
-		{
-			get
-			{
-				var programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-				return Path.Combine(programFilesPath, "Shapeshifter");
-			}
-		}
-
-		static string TargetExecutableFile => Path.Combine(TargetDirectory, "Shapeshifter.exe");
-
 		public bool CanProcess(string[] arguments) => arguments.Contains("install");
 
 		public async Task ProcessAsync(string[] arguments)
@@ -77,7 +68,7 @@
 			logger.Information("Default settings have been configured.");
 
 			LaunchInstalledExecutable(
-				processManager.GetCurrentProcessFilePath());
+				CurrentProcessInformation.GetCurrentProcessFilePath());
 
 			logger.Information("Launched installed executable.");
 		}
@@ -101,7 +92,7 @@
 		{
 			var process = processManager.LaunchFile(
 				@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe",
-				@"install """ + TargetExecutableFile + @""" /ExeConfig:""" + TargetExecutableFile + @""" /nologo",
+				@"install """ + InstallationInformation.TargetExecutableFile + @""" /ExeConfig:""" + InstallationInformation.TargetExecutableFile + @""" /nologo",
 				ProcessWindowStyle.Hidden);
 
 			var taskCompletionSource = new TaskCompletionSource<int>();
@@ -212,7 +203,7 @@
 				logger.Verbose("Resource {resourceName} of {length} bytes written to {embeddedFile}.", targetResourceName, bytes.Length, targetFile);
 				File.WriteAllBytes(
 					Path.Combine(
-						TargetDirectory,
+						InstallationInformation.TargetDirectory,
 						targetFile),
 					bytes);
 			}
@@ -222,8 +213,8 @@
 		{
 			File.WriteAllBytes(
 				Path.Combine(
-					TargetDirectory,
-					"Shapeshifter.manifest"),
+					InstallationInformation.TargetDirectory,
+					$"{nameof(Shapeshifter)}.manifest"),
 				Resources.AppManifest);
 		}
 
@@ -231,8 +222,8 @@
 		{
 			File.WriteAllBytes(
 				Path.Combine(
-					TargetDirectory,
-					"Shapeshifter.pdb"),
+					InstallationInformation.TargetDirectory,
+					$"{nameof(Shapeshifter)}.pdb"),
 				Resources.AppDebugFile);
 		}
 
@@ -240,8 +231,8 @@
 		{
 			File.WriteAllText(
 				Path.Combine(
-					TargetDirectory,
-					"Shapeshifter.exe.config"),
+					InstallationInformation.TargetDirectory,
+					$"{nameof(Shapeshifter)}.exe.config"),
 				Resources.AppConfiguration);
 		}
 
@@ -252,24 +243,24 @@
 
 		void LaunchInstalledExecutable(string currentExecutableFile)
 		{
-			processManager.LaunchFileWithAdministrativeRights(TargetExecutableFile, $"postinstall \"{currentExecutableFile}\"");
+			processManager.LaunchFileWithAdministrativeRights(InstallationInformation.TargetExecutableFile, $"postinstall \"{currentExecutableFile}\"");
 		}
 
 		async Task WriteExecutableAsync()
 		{
 			await fileManager.CopyFileAsync(
-				processManager.GetCurrentProcessFilePath(),
-				TargetExecutableFile);
+				CurrentProcessInformation.GetCurrentProcessFilePath(),
+				InstallationInformation.TargetExecutableFile);
 		}
 
 		void PrepareInstallDirectory()
 		{
-			logger.Information("Target install directory is " + TargetDirectory + ".");
+			logger.Information("Target install directory is " + InstallationInformation.TargetDirectory + ".");
 
-			if (Directory.Exists(TargetDirectory))
-				Directory.Delete(TargetDirectory, true);
+			if (Directory.Exists(InstallationInformation.TargetDirectory))
+				Directory.Delete(InstallationInformation.TargetDirectory, true);
 
-			Directory.CreateDirectory(TargetDirectory);
+			Directory.CreateDirectory(InstallationInformation.TargetDirectory);
 
 			logger.Information("Install directory prepared.");
 		}

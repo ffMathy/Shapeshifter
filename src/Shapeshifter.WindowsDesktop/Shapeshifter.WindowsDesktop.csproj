@@ -323,6 +323,7 @@
     <Compile Include="Data\Wrappers\GeneralWrapper.cs" />
     <Compile Include="Data\Wrappers\Interfaces\IGeneralWrapper.cs" />
     <Compile Include="Data\Wrappers\Interfaces\IMemoryWrapper.cs" />
+    <Compile Include="Information\InstallationInformation.cs" />
     <Compile Include="Infrastructure\Dependencies\AssemblyRegistrationHelper.cs" />
     <Compile Include="Infrastructure\Dependencies\InjectAttribute.cs" />
     <Compile Include="Infrastructure\Dependencies\Interfaces\ISingleInstance.cs" />
@@ -373,6 +374,7 @@
     <Compile Include="Services\Messages\Interceptors\Interfaces\IAeroColorChangeInterceptor.cs" />
     <Compile Include="Services\MouseWheelHook.cs" />
     <Compile Include="Services\PixelConversionService.cs" />
+    <Compile Include="Information\CurrentProcessInformation.cs" />
     <Compile Include="Services\Processes\Interfaces\IProcessWatcher.cs" />
     <Compile Include="Services\Processes\ProcessWatcher.cs" />
     <Compile Include="Services\RegistryManager.cs" />
