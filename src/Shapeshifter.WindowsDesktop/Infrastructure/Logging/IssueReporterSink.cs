@@ -29,7 +29,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 
 		const int logHistoryLength = 1000;
 
-		public IssueReporterSink(IEnvironmentInformation environmentInformation)
+		public IssueReporterSink(
+			IEnvironmentInformation environmentInformation)
 		{
 			logHistory = new LinkedList<string>();
 			restClient = new RestClient();

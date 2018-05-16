@@ -49,8 +49,9 @@ namespace Shapeshifter.WindowsDesktop
 				Assert.AreEqual(1, Directory.GetFiles(applicationBuildPath).Length);
 
 				var settingsManager = container.Resolve<ISettingsManager>();
+
 				settingsManager.SaveSetting<DateTime?>("LastLoad", null);
-				settingsManager.SaveSetting<bool>("NoUpdating", true);
+				settingsManager.SaveSetting("NoUpdating", true);
 
 				File.Copy(executablePath, backupExecutablePath);
 
