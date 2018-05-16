@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Actions
 {
-    using System.Collections.Generic;
+	using System;
+	using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Media.Imaging;
@@ -105,7 +106,7 @@
             var downloadTasks = new List<Task<byte[]>>();
             foreach (var link in links)
             {
-                downloadTasks.Add(downloader.DownloadBytesAsync(link));
+                downloadTasks.Add(downloader.DownloadBytesAsync(new Uri(link)));
             }
 
             await Task.WhenAll(downloadTasks)

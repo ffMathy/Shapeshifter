@@ -115,8 +115,8 @@
       <HintPath>..\packages\EasyHook.2.7.6684\lib\net40\EasyHook.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FluffySpoon.Http, Version=1.0.17.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluffySpoon.Http.1.0.17\lib\netstandard2.0\FluffySpoon.Http.dll</HintPath>
+    <Reference Include="FluffySpoon.Http, Version=1.0.18.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluffySpoon.Http.1.0.18\lib\netstandard2.0\FluffySpoon.Http.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.8.2.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.8.2\lib\Net45\HtmlAgilityPack.dll</HintPath>

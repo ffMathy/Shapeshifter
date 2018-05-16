@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Actions
 {
-    using System.Collections.Generic;
+	using System;
+	using System.Collections.Generic;
     using System.Threading.Tasks;
     using System.Windows.Media.Imaging;
 
@@ -8,7 +9,9 @@
 
     using Data.Interfaces;
 
-    using Interfaces;
+	using FluffySpoon.Http;
+
+	using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -87,7 +90,7 @@
             };
             
             Container.Resolve<IDownloader>()
-             .DownloadBytesAsync(Arg.Any<string>())
+             .DownloadBytesAsync(Arg.Any<Uri>())
              .Returns(
                  Task.FromResult(
                      firstFakeDownloadedImageBytes),

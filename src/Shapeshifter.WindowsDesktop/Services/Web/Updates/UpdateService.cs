@@ -11,6 +11,8 @@
 
 	using Files.Interfaces;
 
+	using FluffySpoon.Http;
+
 	using Information;
 
 	using Interfaces;
@@ -18,8 +20,7 @@
 	using Octokit;
 
 	using Processes.Interfaces;
-
-	using Web.Interfaces;
+	
 	using Infrastructure.Environment.Interfaces;
 
 	using Serilog;
@@ -126,7 +127,7 @@
         async Task<string> DownloadUpdateToDiskAsync(ReleaseAsset asset)
         {
             var data = await fileDownloader.DownloadBytesAsync(
-                asset.BrowserDownloadUrl);
+                new Uri(asset.BrowserDownloadUrl));
             var localFilePath = await fileManager.WriteBytesToTemporaryFileAsync(
                 asset.Name,
                 data);
