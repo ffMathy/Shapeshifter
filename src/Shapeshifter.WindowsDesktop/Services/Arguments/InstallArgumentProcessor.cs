@@ -161,7 +161,7 @@
 				else
 				{
 					var hintPath = referenceNode.SelectSingleNode("./default:HintPath", namespaceManager);
-					if (hintPath?.Value == null)
+					if (string.IsNullOrEmpty(hintPath?.InnerText))
 						continue;
 
 					reference = include
