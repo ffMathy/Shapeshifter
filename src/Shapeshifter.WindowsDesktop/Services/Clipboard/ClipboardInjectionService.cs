@@ -87,7 +87,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 				if (success == IntPtr.Zero)
 				{
 					throw new Exception(
-						"Could not set clipboard data format " + clipboardData.RawFormat + " from " + clipboardData.Package.Source.Title + ".",
+						"Could not set clipboard data format " + clipboardData.RawFormat + " from " + clipboardData.Package.Source.ProcessName + ".",
 						new Win32Exception(Marshal.GetLastWin32Error()));
 				}
 			}

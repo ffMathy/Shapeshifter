@@ -68,7 +68,7 @@
 
 			var processThreadId = windowNativeApi.GetWindowThreadProcessId(
 				process.MainWindowHandle, 
-				IntPtr.Zero);
+				out _);
 			foreach (ProcessThread processThread in process.Threads)
 			{
 				if (processThread.Id == processThreadId)

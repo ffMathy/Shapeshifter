@@ -9,6 +9,7 @@
     using Native;
     using Native.Interfaces;
     using System;
+	using System.Diagnostics;
 	using System.Windows;
     using System.Windows.Interop;
     using System.Windows.Media.Imaging;
@@ -25,18 +26,23 @@
         readonly IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheLarge;
         readonly IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheSmall;
 
+		readonly IKeyValueCache<IntPtr, string> dataSourceProcessNameCache;
+
         public DataSourceService(
             IImagePersistenceService imagePersistenceService,
             IWindowNativeApi windowNativeApi,
 			IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheSmall,
-			IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheLarge)
+			IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheLarge,
+			IKeyValueCache<IntPtr, string> dataSourceProcessNameCache)
         {
             this.imagePersistenceService = imagePersistenceService;
             this.windowNativeApi = windowNativeApi;
 
             this.dataSourceIconCacheLarge = dataSourceIconCacheLarge;
             this.dataSourceIconCacheSmall = dataSourceIconCacheSmall;
-        }
+
+			this.dataSourceProcessNameCache = dataSourceProcessNameCache;
+		}
 
         BitmapSource GetWindowIcon(IntPtr windowHandle, bool bigIconSize = true)
         {
@@ -70,12 +76,22 @@
         public IDataSource GetDataSource()
         {
             var activeWindowHandle = windowNativeApi.GetForegroundWindow();
-			windowNativeApi.getpro
             var windowTitle = windowNativeApi.GetWindowTitle(activeWindowHandle);
-            lock (this)
-            {
-                var iconBytesBig = dataSourceIconCacheLarge.Get(activeWindowHandle);
-				if (iconBytesBig == null)
+			windowNativeApi.GetWindowThreadProcessId(activeWindowHandle, out var processId);
+			lock (this)
+			{
+				var processName = dataSourceProcessNameCache.Get(activeWindowHandle);
+				if (processName == default)
+				{
+					using (var process = Process.GetProcessById((int)processId))
+					{
+						processName = process.ProcessName + ".exe";
+						dataSourceProcessNameCache.Set(activeWindowHandle, processName);
+					}
+				}
+
+				var iconBytesBig = dataSourceIconCacheLarge.Get(activeWindowHandle);
+				if (iconBytesBig == default)
                 {
                     var windowIconBig = GetWindowIcon(activeWindowHandle);
                     iconBytesBig = imagePersistenceService.ConvertBitmapSourceToByteArray(windowIconBig);
@@ -84,7 +100,7 @@
                 }
 
                 var iconBytesSmall = dataSourceIconCacheSmall.Get(activeWindowHandle);
-                if (iconBytesSmall == null)
+                if (iconBytesSmall == default)
                 {
                     var windowIconSmall = GetWindowIcon(activeWindowHandle, false);
                     iconBytesSmall = imagePersistenceService.ConvertBitmapSourceToByteArray(windowIconSmall);
@@ -92,7 +108,7 @@
                     dataSourceIconCacheSmall.Set(activeWindowHandle, iconBytesSmall);
                 }
 
-                var dataSource = new DataSource(iconBytesBig, iconBytesSmall, windowTitle);
+                var dataSource = new DataSource(iconBytesBig, iconBytesSmall, windowTitle, processName);
                 return dataSource;
             }
         }

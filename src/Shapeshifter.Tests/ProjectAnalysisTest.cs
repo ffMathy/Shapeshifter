@@ -2,7 +2,8 @@
 {
     using System.ComponentModel;
     using System.IO;
-    using System.Xml;
+	using System.Linq;
+	using System.Xml;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -34,11 +35,13 @@
                 var namespaceManager = new XmlNamespaceManager(document.NameTable);
                 namespaceManager.AddNamespace("default", "http://schemas.microsoft.com/developer/msbuild/2003");
 
-                var references = document.SelectNodes("//default:Reference", namespaceManager);
-                Assert.IsNotNull(references);
-                Assert.AreNotEqual(0, references.Count);
+                var references = document.SelectNodes("//default:Reference", namespaceManager).OfType<XmlNode>().ToArray();
+				var projectReferences = document.SelectNodes("//default:ProjectReference", namespaceManager).OfType<XmlNode>().ToArray();
 
-                foreach (XmlNode reference in references)
+				var allReferences = references.Union(projectReferences).ToArray();
+                Assert.AreNotEqual(0, allReferences.Length);
+
+                foreach (var reference in allReferences)
                 {
                     var privateNode = reference.SelectSingleNode("./default:Private", namespaceManager);
                     Assert.IsNotNull(privateNode, "A specific project reference (" + reference.InnerText + " in " + project + ") was not set to copy local.");

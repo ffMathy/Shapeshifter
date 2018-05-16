@@ -46,5 +46,6 @@
         }
 
         public string Title { get; set; }
-    }
+		public string ProcessName { get; }
+	}
 }

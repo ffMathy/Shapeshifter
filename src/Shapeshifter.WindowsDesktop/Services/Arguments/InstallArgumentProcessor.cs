@@ -15,7 +15,6 @@
 	using Files.Interfaces;
 
 	using Interfaces;
-	using Microsoft.Build.Evaluation;
 
 	using Processes.Interfaces;
 
@@ -104,17 +103,17 @@
 				@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe",
 				@"install """ + TargetExecutableFile + @""" /ExeConfig:""" + TargetExecutableFile + @""" /nologo",
 				ProcessWindowStyle.Hidden);
-			
+
 			var taskCompletionSource = new TaskCompletionSource<int>();
 			process.EnableRaisingEvents = true;
 			process.Exited += (sender, args) => taskCompletionSource.TrySetResult(process.ExitCode);
-			
+
 			process.Refresh();
 
 			var linesOutput = process
 				.StandardOutput
 				.ReadToEnd()
-				.Split(new [] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries)
+				.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
 				.ToArray();
 			foreach (var line in linesOutput)
 			{
@@ -138,30 +137,35 @@
 		{
 			WriteEasyHookDependencies();
 
-			using (var textReader = new StringReader(Resources.ProjectFile))
-			using (var reader = XmlReader.Create(textReader))
+			var document = new XmlDocument();
+			document.LoadXml(Resources.ProjectFile);
+
+			var namespaceManager = new XmlNamespaceManager(document.NameTable);
+			namespaceManager.AddNamespace("default", "http://schemas.microsoft.com/developer/msbuild/2003");
+
+			var references = document.SelectNodes("//default:Reference", namespaceManager).OfType<XmlNode>().ToArray();
+			var projectReferences = document.SelectNodes("//default:ProjectReference", namespaceManager).OfType<XmlNode>().ToArray();
+
+			var allReferences = references.Union(projectReferences).ToArray();
+			foreach (var referenceNode in allReferences)
 			{
-				var project = new Project(reader);
+				Debug.Assert(referenceNode.Attributes != null, "referenceNode.Attributes != null");
 
-				var projectReferences = project.Items
-					.Where(x => x.ItemType == "ProjectReference")
-					.Select(x => x.EvaluatedInclude)
-					.Select(Path.GetFileNameWithoutExtension)
-					.ToArray();
+				var include = referenceNode.Attributes["Include"].Value;
 
-				var assemblyReferences = project.Items
-					.Where(x => x.ItemType == "Reference")
-					.Select(x => x.EvaluatedInclude)
-					.Select(x => x.Split(',').First())
-					.ToArray();
-
-				var allReferences = projectReferences
-					.Union(assemblyReferences)
-					.ToArray();
-				foreach (var reference in allReferences)
+				string reference;
+				if (include.StartsWith("..\\"))
 				{
-					EmitCosturaResourceToDisk(reference + ".dll");
+					reference = Path.GetFileNameWithoutExtension(include);
 				}
+				else
+				{
+					reference = include
+						.Split(',')
+						.First();
+				}
+
+				EmitCosturaResourceToDisk(reference + ".dll");
 			}
 		}
 
