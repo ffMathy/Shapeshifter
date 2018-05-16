@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.Website.Logic
 {
 	using System.Diagnostics;
+	using System.IO;
 	using System.Linq;
 
 	using Microsoft.Win32;
@@ -11,36 +12,15 @@
 	{
 		public void SaveSetting<T>(string key, T value)
 		{
-			using (var registryKey = OpenShapeshifterKey())
-			{
-				registryKey.SetValue(key, JsonConvert.SerializeObject(value));
-			}
+			File.WriteAllText(key + ".settings", JsonConvert.SerializeObject(value));
 		}
 
 		public T LoadSetting<T>(string key, T defaultValue = default(T))
 		{
-			using (var registryKey = OpenShapeshifterKey())
-			{
-				var value = (string)registryKey.GetValue(key, string.Empty);
-				if (string.IsNullOrEmpty(value))
-					return defaultValue;
+			if (!File.Exists(key + ".settings"))
+				return defaultValue;
 
-				return JsonConvert.DeserializeObject<T>(value);
-			}
-		}
-
-		static RegistryKey OpenShapeshifterKey()
-		{
-			using (var softwareKey = Registry.CurrentUser.OpenSubKey("Software", RegistryKeyPermissionCheck.ReadWriteSubTree))
-			{
-				Debug.Assert(softwareKey != null, nameof(softwareKey) + " != null");
-
-				var keyNames = softwareKey.GetSubKeyNames();
-				if (!keyNames.Contains(nameof(Shapeshifter)))
-					return softwareKey.CreateSubKey(nameof(Shapeshifter), RegistryKeyPermissionCheck.ReadWriteSubTree);
-
-				return softwareKey.OpenSubKey(nameof(Shapeshifter), RegistryKeyPermissionCheck.ReadWriteSubTree);
-			}
+			return JsonConvert.DeserializeObject<T>(File.ReadAllText(key + ".settings"));
 		}
 	}
 }

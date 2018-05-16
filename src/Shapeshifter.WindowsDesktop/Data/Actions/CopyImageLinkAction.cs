@@ -7,7 +7,9 @@
 
     using Data.Interfaces;
 
-    using Infrastructure.Threading.Interfaces;
+	using FluffySpoon.Http;
+
+	using Infrastructure.Threading.Interfaces;
 
     using Interfaces;
 
@@ -27,7 +29,7 @@
         public CopyImageLinkAction(
             ILinkParser linkParser,
             IImageFileInterpreter imageFileInterpreter,
-            IDownloader downloader,
+			IDownloader downloader,
             IClipboardInjectionService clipboardInjectionService,
             IAsyncFilter asyncFilter)
         {

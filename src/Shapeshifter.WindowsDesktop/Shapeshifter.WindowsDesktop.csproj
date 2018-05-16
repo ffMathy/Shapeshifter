@@ -115,9 +115,8 @@
       <HintPath>..\packages\EasyHook.2.7.6684\lib\net40\EasyHook.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FluffySpoon.Http, Version=1.0.16.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluffySpoon.Http.1.0.16\lib\netstandard2.0\FluffySpoon.Http.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="FluffySpoon.Http, Version=1.0.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluffySpoon.Http.1.0.17\lib\netstandard2.0\FluffySpoon.Http.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.8.2.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.8.2\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -184,10 +183,6 @@
     </Reference>
     <Reference Include="System.Management">
       <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Net.Http">
-      <Private>True</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System.Numerics">
       <Private>True</Private>
@@ -529,11 +524,9 @@
     <Compile Include="Services\Images\Interfaces\IImageFileInterpreter.cs" />
     <Compile Include="Services\Messages\Interceptors\Interfaces\IClipboardCopyInterceptor.cs" />
     <Compile Include="Mediators\Interfaces\IClipboardUserInterfaceInteractionMediator.cs" />
-    <Compile Include="Services\Web\Downloader.cs" />
     <Compile Include="Services\Web\Interfaces\IDomainNameResolver.cs" />
     <Compile Include="Services\Interfaces\IHookService.cs" />
     <Compile Include="Services\Images\Interfaces\IImagePersistenceService.cs" />
-    <Compile Include="Services\Web\Interfaces\IDownloader.cs" />
     <Compile Include="Services\Web\Interfaces\ILinkParser.cs" />
     <Compile Include="Services\Messages\Interceptors\Hotkeys\Interfaces\IPasteHotkeyInterceptor.cs" />
     <Compile Include="Infrastructure\Events\WindowMessageReceivedArgument.cs" />
