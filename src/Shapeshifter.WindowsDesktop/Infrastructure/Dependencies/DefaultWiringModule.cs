@@ -14,6 +14,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 	using Environment;
 	using Environment.Interfaces;
 
+	using FluffySpoon.Http;
+
 	using Native;
 	using Serilog;
 	using Serilog.Events;
@@ -48,6 +50,9 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 
 			AssemblyRegistrationHelper
 				.RegisterAssemblyTypes(builder, NativeAssemblyHelper.Assembly, this.environmentInformation.GetIsInDesignTime());
+
+			AssemblyRegistrationHelper
+				.RegisterAssemblyTypes(builder, typeof(IDownloader).Assembly, this.environmentInformation.GetIsInDesignTime());
 
 			RegisterMainThread(builder);
 
