@@ -65,7 +65,7 @@
             }
             catch (Exception ex)
             {
-				logger.Warning("Attempt #{attempt}. Will try {tries} more times. {message}", attempts, job.AttemptsBeforeFailing - attempts, ex.Message);
+				logger.Verbose("Attempt #{attempt}. Will try {tries} more times. {message}", attempts, job.AttemptsBeforeFailing - attempts, ex.Message);
 
                 exceptionsCaught.Add(ex);
                 if (job.IsExceptionIgnored?.Invoke(ex) != true)

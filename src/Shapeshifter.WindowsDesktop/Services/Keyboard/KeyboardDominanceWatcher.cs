@@ -84,7 +84,11 @@
 			}
 			catch (DllNotFoundException ex)
 			{
-				logger.Error(ex, "Could not load a dependency required for keyboard dominace watching.");
+				logger.Error(ex, "Could not load a dependency required for keyboard dominance watching.");
+			}
+			catch (Exception ex)
+			{
+				logger.Error(ex, "An error occured while trying to watch for keyboard dominance.");
 			}
 		}
 
