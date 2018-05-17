@@ -73,6 +73,8 @@ namespace Shapeshifter.WindowsDesktop
 
 				var now = DateTime.UtcNow;
 
+				var lastLogLength = 0;
+
 				DateTime? lastLoad;
 				while (true)
 				{
@@ -86,17 +88,24 @@ namespace Shapeshifter.WindowsDesktop
 
 					Console.WriteLine(DateTime.Now + ": Waited " + elapsedTimeInSeconds + " seconds.");
 					Thread.Sleep(5000);
-				}
 
-				var logFilePath = FileManager.GetFullPathFromTemporaryPath($"Shapeshifter{DateTime.Now:yyyyMMdd}.log");
-				File.Copy(logFilePath, "Log.txt");
+					try
+					{
+						var logOutput = GetLogOutput();
+						for (var index = lastLogLength; index < logOutput.Length; index++)
+						{
+							var line = logOutput[index];
+							Assert.IsFalse(line.Contains("[ERR]"), "Error: " + line);
 
-				var logOutput = File.ReadAllLines("Log.txt");
+							Console.WriteLine(line);
+						}
 
-				Console.WriteLine("Log output:");
-				foreach (var line in logOutput)
-				{
-					Console.WriteLine(line);
+						lastLogLength = logOutput.Length;
+					}
+					catch
+					{
+						//ignored.
+					}
 				}
 
 				Assert.IsFalse(File.Exists(executablePath), "The old executable at " + executablePath + " was not cleaned up after installation.");
@@ -107,11 +116,6 @@ namespace Shapeshifter.WindowsDesktop
 				Assert.IsTrue(File.Exists(executablePath));
 
 				Assert.IsNotNull(lastLoad, "Install test failed.");
-
-				foreach (var line in logOutput)
-				{
-					Assert.IsFalse(line.Contains("[ERR]"), "Error: " + line);
-				}
 			}
 			finally
 			{
@@ -122,6 +126,15 @@ namespace Shapeshifter.WindowsDesktop
 
 				Thread.Sleep(1000);
 			}
+		}
+
+		private static string[] GetLogOutput()
+		{
+			var logFilePath = FileManager.GetFullPathFromTemporaryPath($"Shapeshifter{DateTime.Now:yyyyMMdd}.log");
+			File.Copy(logFilePath, "Log.txt");
+
+			var logOutput = File.ReadAllLines("Log.txt");
+			return logOutput;
 		}
 
 		public string FindRootPathFromPath(string path)
