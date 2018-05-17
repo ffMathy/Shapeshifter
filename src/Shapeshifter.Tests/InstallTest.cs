@@ -128,10 +128,10 @@ namespace Shapeshifter.WindowsDesktop
 			}
 		}
 
-		private static string[] GetLogOutput()
+		static string[] GetLogOutput()
 		{
 			var logFilePath = FileManager.GetFullPathFromTemporaryPath($"Shapeshifter{DateTime.Now:yyyyMMdd}.log");
-			File.Copy(logFilePath, "Log.txt");
+			File.Copy(logFilePath, "Log.txt", true);
 
 			var logOutput = File.ReadAllLines("Log.txt");
 			return logOutput;

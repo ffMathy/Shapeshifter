@@ -50,6 +50,9 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 
 		async void ReportLogEvent(LogEvent logEvent, IEnumerable<string> lastMessages)
 		{
+			if (!string.IsNullOrEmpty(GetEnvironmentVariable("APPVEYOR")))
+				return;
+
 			try
 			{
 				await reportingSemaphore.WaitAsync();
