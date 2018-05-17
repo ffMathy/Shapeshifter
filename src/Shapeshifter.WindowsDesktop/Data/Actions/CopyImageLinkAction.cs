@@ -1,13 +1,16 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Actions
 {
-    using System.Collections.Generic;
+	using System;
+	using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Media.Imaging;
 
     using Data.Interfaces;
 
-    using Infrastructure.Threading.Interfaces;
+	using FluffySpoon.Http;
+
+	using Infrastructure.Threading.Interfaces;
 
     using Interfaces;
 
@@ -27,7 +30,7 @@
         public CopyImageLinkAction(
             ILinkParser linkParser,
             IImageFileInterpreter imageFileInterpreter,
-            IDownloader downloader,
+			IDownloader downloader,
             IClipboardInjectionService clipboardInjectionService,
             IAsyncFilter asyncFilter)
         {
@@ -103,7 +106,7 @@
             var downloadTasks = new List<Task<byte[]>>();
             foreach (var link in links)
             {
-                downloadTasks.Add(downloader.DownloadBytesAsync(link));
+                downloadTasks.Add(downloader.DownloadBytesAsync(new Uri(link)));
             }
 
             await Task.WhenAll(downloadTasks)

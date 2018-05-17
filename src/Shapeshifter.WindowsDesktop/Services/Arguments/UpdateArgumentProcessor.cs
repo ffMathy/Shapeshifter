@@ -1,9 +1,11 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Arguments
 {
 	using System;
-	using System.IO;
 	using System.Linq;
 	using System.Threading.Tasks;
+
+	using Information;
+
 	using Interfaces;
 
 	using Shapeshifter.WindowsDesktop.Services.Files.Interfaces;
@@ -39,17 +41,17 @@
 				origin = arguments[originIndex];
 			}
 			
-			var isOriginFromInstallPath = origin == null || origin.StartsWith(InstallArgumentProcessor.TargetDirectory);
+			var isOriginFromInstallPath = origin == null || origin.StartsWith(InstallationInformation.TargetDirectory);
 			if (!isOriginFromInstallPath)
 			{
 				await fileManager.DeleteFileIfExistsAsync(origin);
-				await fileManager.CopyFileAsync(processManager.GetCurrentProcessFilePath(), origin);
+				await fileManager.CopyFileAsync(CurrentProcessInformation.GetCurrentProcessFilePath(), origin);
 
 				processManager.LaunchFileWithAdministrativeRights(origin);
 			}
 			else
 			{
-				processManager.LaunchFileWithAdministrativeRights(processManager.GetCurrentProcessFilePath(), "install");
+				processManager.LaunchFileWithAdministrativeRights(CurrentProcessInformation.GetCurrentProcessFilePath(), "install");
 			}
 		}
 	}

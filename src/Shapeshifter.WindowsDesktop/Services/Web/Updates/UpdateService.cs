@@ -11,14 +11,18 @@
 
 	using Files.Interfaces;
 
+	using FluffySpoon.Http;
+
+	using Information;
+
 	using Interfaces;
 
 	using Octokit;
 
 	using Processes.Interfaces;
-
-	using Web.Interfaces;
+	
 	using Infrastructure.Environment.Interfaces;
+
 	using Serilog;
 	using Shapeshifter.WindowsDesktop.Services.Interfaces;
 
@@ -62,6 +66,9 @@
         {
             if (!environmentInformation.GetHasInternetAccess()) return false;
             if (!environmentInformation.GetShouldUpdate()) return false;
+
+			if (settingsManager.LoadSetting<bool>("NoUpdating"))
+				return false;
 
             try
             {
@@ -114,13 +121,13 @@
             var localFilePath = await DownloadUpdateToDiskAsync(asset);
             processManager.LaunchFile(
                 localFilePath,
-                "update \"" + processManager.GetCurrentProcessFilePath() + "\"");
+                "update \"" + CurrentProcessInformation.GetCurrentProcessFilePath() + "\"");
         }
 
         async Task<string> DownloadUpdateToDiskAsync(ReleaseAsset asset)
         {
             var data = await fileDownloader.DownloadBytesAsync(
-                asset.BrowserDownloadUrl);
+                new Uri(asset.BrowserDownloadUrl));
             var localFilePath = await fileManager.WriteBytesToTemporaryFileAsync(
                 asset.Name,
                 data);
@@ -178,7 +185,7 @@
 
 			var currentRelease = allReleases.SingleOrDefault(IsCurrentRelease);
 			if(currentRelease == null) {
-				logger.Warning("Could not find the current release version v{version}.", Program.GetCurrentVersion());
+				logger.Warning("Could not find the current release version {version}.", Program.GetCurrentVersion());
 			} else if(currentRelease.Prerelease) {
 				settingsManager.SaveSetting("PreferPrerelease", true);
 			}

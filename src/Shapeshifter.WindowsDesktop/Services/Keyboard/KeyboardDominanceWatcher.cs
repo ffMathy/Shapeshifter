@@ -1,5 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Keyboard
 {
+	using System;
 	using System.Linq;
 	using System.Runtime.Remoting;
 	using System.Security.Principal;
@@ -54,30 +55,37 @@
 			if (!SuspiciousProcesses.Contains(e.ProcessName)) 
 				return;
 
-			logger.Information($"Injecting keyboard override library into process {e.ProcessName}.");
+			logger.Information($"Injecting keyboard override library into process {e.ProcessName}.exe.");
 
-			var injectedLibraryName = GetInjectedLibraryName();
+			try
+			{
+				var injectedLibraryName = GetInjectedLibraryName();
 
-			string channelName = null;
-			RemoteHooking.IpcCreateServer(
-				ref channelName,
-				WellKnownObjectMode.SingleCall,
-				communicator,
-				WellKnownSidType.WorldSid);
+				string channelName = null;
+				RemoteHooking.IpcCreateServer(
+					ref channelName,
+					WellKnownObjectMode.SingleCall,
+					communicator,
+					WellKnownSidType.WorldSid);
 
-			const InjectionOptions injectionOptions =
-				InjectionOptions.DoNotRequireStrongName &
-				InjectionOptions.NoService &
-				InjectionOptions.NoWOW64Bypass;
+				const InjectionOptions injectionOptions =
+					InjectionOptions.DoNotRequireStrongName &
+					InjectionOptions.NoService &
+					InjectionOptions.NoWOW64Bypass;
 
-			RemoteHooking.Inject(
-				e.ProcessId,
-				injectionOptions,
-				injectedLibraryName,
-				injectedLibraryName,
-				channelName);
+				RemoteHooking.Inject(
+					e.ProcessId,
+					injectionOptions,
+					injectedLibraryName,
+					injectedLibraryName,
+					channelName);
 
-			logger.Information($"Keyboard override library successfully injected.");
+				logger.Information($"Keyboard override library successfully injected.");
+			}
+			catch (DllNotFoundException ex)
+			{
+				logger.Error(ex, "Could not load a dependency required for keyboard dominace watching.");
+			}
 		}
 
 		public void Start()

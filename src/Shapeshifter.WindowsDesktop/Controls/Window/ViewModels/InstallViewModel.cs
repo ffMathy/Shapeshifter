@@ -8,6 +8,8 @@
 
 	using Commands;
 
+	using Information;
+
 	using Interfaces;
 
 	using Properties;
@@ -37,7 +39,7 @@
 		void Install()
 		{
 			processManager.LaunchFileWithAdministrativeRights(
-				processManager.GetCurrentProcessFilePath(),
+				CurrentProcessInformation.GetCurrentProcessFilePath(),
 				"install");
 		}
 

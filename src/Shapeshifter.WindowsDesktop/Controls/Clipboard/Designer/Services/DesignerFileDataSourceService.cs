@@ -23,7 +23,7 @@
         {
             return new DesignerDataSourceFacade(designerImageConverterService)
             {
-                Text = "My pictures",
+                Title = "My pictures",
                 IconLarge = Resources.FileDataSourceIcon,
                 IconSmall = Resources.FileDataSourceIcon
             };

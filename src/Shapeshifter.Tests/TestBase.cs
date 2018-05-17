@@ -10,6 +10,11 @@ namespace Shapeshifter.WindowsDesktop
 {
 	public abstract class TestBase
     {
+		static TestBase()
+		{
+			Program.Void();
+		}
+
         protected static ILifetimeScope CreateContainer(
             Action<ContainerBuilder> setupCallback = null)
         {

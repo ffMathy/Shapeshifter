@@ -49,7 +49,9 @@ namespace Shapeshifter.WindowsDesktop
 				Assert.AreEqual(1, Directory.GetFiles(applicationBuildPath).Length);
 
 				var settingsManager = container.Resolve<ISettingsManager>();
+
 				settingsManager.SaveSetting<DateTime?>("LastLoad", null);
+				settingsManager.SaveSetting("NoUpdating", true);
 
 				File.Copy(executablePath, backupExecutablePath);
 
@@ -71,6 +73,8 @@ namespace Shapeshifter.WindowsDesktop
 
 				var now = DateTime.UtcNow;
 
+				var lastLogLength = 0;
+
 				DateTime? lastLoad;
 				while (true)
 				{
@@ -84,17 +88,24 @@ namespace Shapeshifter.WindowsDesktop
 
 					Console.WriteLine(DateTime.Now + ": Waited " + elapsedTimeInSeconds + " seconds.");
 					Thread.Sleep(5000);
-				}
 
-				var logFilePath = FileManager.GetFullPathFromTemporaryPath($"Shapeshifter{DateTime.Now:yyyyMMdd}.log");
-				File.Copy(logFilePath, "Log.txt");
+					try
+					{
+						var logOutput = GetLogOutput();
+						for (var index = lastLogLength; index < logOutput.Length; index++)
+						{
+							var line = logOutput[index];
+							Console.WriteLine(line);
+							
+							Assert.IsFalse(line.Contains("[ERR]"), "Error: " + line);
+						}
 
-				var logOutput = File.ReadAllLines("Log.txt");
-
-				Console.WriteLine("Log output:");
-				foreach (var line in logOutput)
-				{
-					Console.WriteLine(line);
+						lastLogLength = logOutput.Length;
+					}
+					catch (Exception ex) when (ex.GetType() != typeof(AssertFailedException))
+					{
+						Console.WriteLine("Test error: " + ex);
+					}
 				}
 
 				Assert.IsFalse(File.Exists(executablePath), "The old executable at " + executablePath + " was not cleaned up after installation.");
@@ -105,11 +116,6 @@ namespace Shapeshifter.WindowsDesktop
 				Assert.IsTrue(File.Exists(executablePath));
 
 				Assert.IsNotNull(lastLoad, "Install test failed.");
-
-				foreach (var line in logOutput)
-				{
-					Assert.IsFalse(line.Contains("[ERR]"), "Error: " + line);
-				}
 			}
 			finally
 			{
@@ -120,6 +126,15 @@ namespace Shapeshifter.WindowsDesktop
 
 				Thread.Sleep(1000);
 			}
+		}
+
+		static string[] GetLogOutput()
+		{
+			var logFilePath = FileManager.GetFullPathFromTemporaryPath($"Shapeshifter{DateTime.Now:yyyyMMdd}.log");
+			File.Copy(logFilePath, "Log.txt", true);
+
+			var logOutput = File.ReadAllText("Log.txt").Replace("\r", "").Split(new [] {"\n\n"}, StringSplitOptions.None);
+			return logOutput;
 		}
 
 		public string FindRootPathFromPath(string path)

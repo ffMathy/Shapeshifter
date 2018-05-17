@@ -8,7 +8,9 @@
 
     using Files.Interfaces;
 
-    using Interfaces;
+	using FluffySpoon.Http;
+
+	using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -190,7 +192,7 @@
             var fakeDownloader = Container.Resolve<IDownloader>();
             fakeDownloader
                 .Received()
-                .DownloadBytesAsync("browserDownloadUrl")
+                .DownloadBytesAsync(new Uri("http://browserDownloadUrl.com"))
                 .IgnoreAwait();
 
             var fakeProcessManager = Container.Resolve<IProcessManager>();
@@ -212,7 +214,7 @@
                 3,
                 DateTimeOffset.Now,
                 DateTimeOffset.Now,
-                "browserDownloadUrl",
+                "http://browserDownloadUrl.com",
                 new Author());
         }
 

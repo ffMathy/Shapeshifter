@@ -39,7 +39,7 @@
 			this.threadDeferrer = threadDeferrer;
 		}
 
-		async void HandleClipboardUpdateWindowMessage()
+		async Task HandleClipboardUpdateWindowMessageAsync()
 		{
 			var timeSinceLastCopy = DateTime.UtcNow - lastCopy;
 			if (timeSinceLastCopy.TotalSeconds > 1)
@@ -47,7 +47,7 @@
 
 			lastCopy = DateTime.UtcNow;
 
-			await threadDeferrer.DeferAsync(500, () => {
+			await threadDeferrer.DeferAsync(100, () => {
 				var clipboardItemIdentifier = (long)clipboardNativeApi.GetClipboardSequenceNumber();
 				if (shouldSkipNext)
 				{
@@ -119,7 +119,7 @@
 			if (eventArgument.Message != Message.WM_CLIPBOARDUPDATE)
 				return;
 
-			HandleClipboardUpdateWindowMessage();
+			await HandleClipboardUpdateWindowMessageAsync();
 		}
 
 		public void SkipNext()

@@ -6,7 +6,9 @@
 	using System.Diagnostics;
 	using System.IO;
 	using System.Security.Principal;
-	using System.Threading;
+
+	using Information;
+
 	using Interfaces;
 
 	using Native.Interfaces;
@@ -21,14 +23,12 @@
 		readonly IWindowNativeApi windowNativeApi;
 
 		readonly ICollection<Process> processes;
-		readonly Process currentProcess;
 
 		public ProcessManager(
 			ILogger logger,
 			IWindowNativeApi windowNativeApi)
 		{
 			processes = new HashSet<Process>();
-			currentProcess = Process.GetCurrentProcess();
 
 			this.logger = logger;
 			this.windowNativeApi = windowNativeApi;
@@ -42,19 +42,9 @@
 			}
 		}
 
-		public int CurrentProcessId => currentProcess.Id;
+		public int CurrentProcessId => CurrentProcessInformation.CurrentProcess.Id;
 
-		public string CurrentProcessName => $"{currentProcess.ProcessName}";
-
-		public string GetCurrentProcessFilePath()
-		{
-			return currentProcess.MainModule.FileName;
-		}
-
-		public string GetCurrentProcessDirectory()
-		{
-			return Path.GetDirectoryName(GetCurrentProcessFilePath());
-		}
+		public string CurrentProcessName => $"{CurrentProcessInformation.CurrentProcess.ProcessName}";
 
 		public Process LaunchCommand(string command, string arguments = null)
 		{
@@ -63,12 +53,12 @@
 
 		public ProcessThread GetUserInterfaceThreadOfProcess(Process process)
 		{
-			if (process.MainWindowHandle == IntPtr.Zero) 
+			if (process.MainWindowHandle == IntPtr.Zero)
 				return null;
 
 			var processThreadId = windowNativeApi.GetWindowThreadProcessId(
-				process.MainWindowHandle, 
-				IntPtr.Zero);
+				process.MainWindowHandle,
+				out _);
 			foreach (ProcessThread processThread in process.Threads)
 			{
 				if (processThread.Id == processThreadId)
@@ -82,7 +72,7 @@
 		{
 			logger.Verbose("Closing all duplicate processes.");
 
-			var currentProcessProductName = GetProcessProductName(currentProcess);
+			var currentProcessProductName = GetProcessProductName(CurrentProcessInformation.CurrentProcess);
 			if (currentProcessProductName == null)
 				throw new Exception("Could not detect the current process product name.");
 
@@ -93,9 +83,9 @@
 					if (GetProcessProductName(process) != currentProcessProductName)
 						continue;
 
-					if (process.Id == currentProcess.Id)
+					if (process.Id == CurrentProcessInformation.CurrentProcess.Id)
 						continue;
-						
+
 					CloseProcess(process);
 				}
 				catch (Win32Exception)
@@ -107,8 +97,6 @@
 					process.Dispose();
 				}
 			}
-
-			Thread.Sleep(1000);
 		}
 
 		static string GetProcessProductName(Process process)
@@ -154,11 +142,7 @@
 		static bool CloseMainWindow(Process process)
 		{
 			process.CloseMainWindow();
-			if (process.WaitForExit(3000))
-			{
-				return true;
-			}
-			return false;
+			return process.WaitForExit(3000);
 		}
 
 		public Process LaunchFile(string fileName, string arguments = null, ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal)
@@ -183,10 +167,10 @@
 		}
 
 		Process SpawnProcess(
-			string uri, 
-			string workingDirectory, 
-			string arguments = null, 
-			string verb = null, 
+			string uri,
+			string workingDirectory,
+			string arguments = null,
+			string verb = null,
 			ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal)
 		{
 			using (LogContext.PushProperty("fileName", uri))

@@ -45,9 +45,9 @@
             return clipboardNativeApi.SetClipboardData(uFormat, hMem);
         }
 
-        public void EmptyClipboard()
+        public bool EmptyClipboard()
         {
-            clipboardNativeApi.EmptyClipboard();
+            return clipboardNativeApi.EmptyClipboard();
         }
     }
 }

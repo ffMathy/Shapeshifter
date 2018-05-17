@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Actions
 {
-    using System.Collections.Generic;
+	using System;
+	using System.Collections.Generic;
     using System.Threading.Tasks;
     using System.Windows.Media.Imaging;
 
@@ -8,7 +9,9 @@
 
     using Data.Interfaces;
 
-    using Interfaces;
+	using FluffySpoon.Http;
+
+	using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -87,7 +90,7 @@
             };
             
             Container.Resolve<IDownloader>()
-             .DownloadBytesAsync(Arg.Any<string>())
+             .DownloadBytesAsync(Arg.Any<Uri>())
              .Returns(
                  Task.FromResult(
                      firstFakeDownloadedImageBytes),
@@ -97,9 +100,9 @@
             FakeHasImageLinks(
                 new[]
                 {
-                    "foobar.com",
-                    "example.com"
-                });
+                    "http://foobar.com",
+					"http://example.com"
+				});
 
             await SystemUnderTest.PerformAsync(CreateClipboardDataPackageContaining<IClipboardTextData>());
 
@@ -116,10 +119,10 @@
 
             var fakeDownloader = Container.Resolve<IDownloader>();
             fakeDownloader.Received(1)
-                          .DownloadBytesAsync("foobar.com")
+                          .DownloadBytesAsync(new Uri("http://foobar.com"))
                           .IgnoreAwait();
             fakeDownloader.Received(1)
-                          .DownloadBytesAsync("example.com")
+                          .DownloadBytesAsync(new Uri("http://example.com"))
                           .IgnoreAwait();
         }
 

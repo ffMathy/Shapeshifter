@@ -2,16 +2,17 @@
 {
     using Autofac;
 
-    using Interfaces;
+	using Information;
+
+	using Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using NSubstitute;
 
     using Services.Interfaces;
-    using Services.Processes.Interfaces;
 
-    [TestClass]
+	[TestClass]
     public class SettingsViewModelTest: UnitTestFor<ISettingsViewModel>
     {
         static string GetRunRegistryPath()
@@ -54,11 +55,6 @@
                     GetRunRegistryPath(),
                     "Shapeshifter")
                 .Returns((string)null);
-
-            Container
-                .Resolve<IProcessManager>()
-                .GetCurrentProcessFilePath()
-                .Returns("executablePath");
             
             SystemUnderTest.StartWithWindows = true;
 
@@ -68,7 +64,7 @@
                 .AddValue(
                     GetRunRegistryPath(),
                     "Shapeshifter",
-                    @"""executablePath""");
+                    @"""" + CurrentProcessInformation.GetCurrentProcessFilePath() + @"""");
         }
 
         [TestMethod]

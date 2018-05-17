@@ -1,111 +1,121 @@
 <html>
-  <head>
+<head>
     <title>Shapeshifter - a clipboard manager for the 21st century</title>
-    
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,400" />
-   
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-    
+
     <link rel="stylesheet" href="index.css" />
-    <script src="index.js"></script>
-  </head>
-  <body>
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./icons/favicon-16x16.png">
+    <link rel="manifest" href="./icons/site.webmanifest">
+    <link rel="mask-icon" href="./icons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="./icons/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="Shapeshifter">
+    <meta name="application-name" content="Shapeshifter">
+    <meta name="msapplication-TileColor" content="#00aba9">
+    <meta name="msapplication-config" content="./icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body>
     <div class="app">
-      <header class="d-flex flex-row justify-content-around">
-        <div class="d-flex flex-column text-center">
-          <h1>Shapeshifter</h1>
-          <span>a clipboard manager for the 21st century</span>
-        </div>
-      </header>
-      <main>
-        <div class="d-flex flex-row justify-content-around flex-wrap">
-          <section class="d-flex flex-column download">
-            <div class="d-flex flex-row">
-              <div class="d-flex flex-column">
-                <h2>Why?</h2>
-                <ul class="selling-points">
-                  <li>
-                    <b>It doesn't change your existing habits</b> 
-                    <span>CTRL + C to copy, CTRL + V to paste, hold down CTRL + V and use the arrow keys to swap between items.</span>
-                  </li>
-                  <li>
-                    <b>It looks sexy</b> 
-                    <span>The UI is tailored to adapt to your Windows 10 color scheme, and is designed to be minimal and efficient.</span>
-                  </li>
-                  <li>
-                    <b>It is maintained by you</b>
-                    <span>Powered by open source, anyone can help improve it. As a result, we keep it updated constantly.</span>
-                  </li>
-                </ul>
-              </div>
+        <header class="d-flex flex-row justify-content-around">
+            <div class="d-flex flex-column text-center">
+                <h1>Shapeshifter</h1>
+                <span>a clipboard manager for the 21st century</span>
             </div>
-            <div class="d-flex flex-row">
-              <div>
-                <a class="btn btn-primary disabled" id="download-button" href="#">Download now</a>
-                <div class="specs">
-                  <span id="download-version"></span><br/>
-                  <span id="download-size"></span>
-                </div>
-              </div>
-            </div>
-          </section>
-          <div class="d-flex flex-column flex-fill screenshot shadow-lg p-3 mb-5 bg-white rounded" id="screenshot">
-          </div>
-        </div>
-        <div class="d-flex flex-row justify-content-around">
-          <section class="d-flex flex-column support">
-            <div class="d-flex flex-row justify-content-center">
-              <h2>Support me</h2>
-            </div>
-            <div class="d-flex flex-row">
-              <div class="d-flex flex-column pl-2 pr-2">
-                <div class="card-group shadow-sm">
-                  <div class="card">
-                    <img alt="Mathias Lorenzen profile picture" class="profile-picture" src="https://media.licdn.com/dms/image/C5603AQEyE-vaAwZD2g/profile-displayphoto-shrink_200_200/0?e=1531958400&v=beta&t=qIipVoEqTklqt8xzOZAVUoocrj_LDSmTh26JQ0Ub3l4">
-                    <div class="card-body">
-                      <h5 class="card-title">About me</h5>
-                      <p class="card-text">My name is Mathias Lorenzen and I'm a geek with a passion for all creating and perfecting software. While Shapeshifter is free for you to use, showing your support helps me keep the project alive.</p>
+        </header>
+        <main>
+            <div class="d-flex flex-row justify-content-around flex-wrap">
+                <section class="d-flex flex-column download">
+                    <div class="d-flex flex-row">
+                        <div class="d-flex flex-column">
+                            <h2>Why?</h2>
+                            <ul class="selling-points">
+                                <li>
+                                    <b>It doesn't change your existing habits</b>
+                                    <span>CTRL + C to copy, CTRL + V to paste, hold down CTRL + V and use the arrow keys to swap between items.</span>
+                                </li>
+                                <li>
+                                    <b>It looks sexy</b>
+                                    <span>The UI is tailored to adapt to your Windows 10 color scheme, and is designed to be minimal and efficient.</span>
+                                </li>
+                                <li>
+                                    <b>It is maintained by you</b>
+                                    <span>Powered by open source, anyone can help improve it. As a result, we keep it updated constantly.</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div class="d-flex flex-column pl-2 pr-2">
-                <div class="card-group shadow-sm">
-                  <div class="card">
-                    <img class="card-img-top patreon" src="https://c5.patreon.com/external/logo/downloads_wordmark_white_on_coral.png">
-                    <div class="card-body">
-                      <h5 class="card-title">Patreon</h5>
-                      <p class="card-text">My patrons on Patreon keep Shapeshifter alive, get exclusive features and speed up its development up by funding it monthly.</p>
-                      <ul class="funding-progress">
-                        <li><b id="total-amount">$0/mo</b> reached</li>
-                        <li><b id="goal">$0/mo</b> goal</li>
-                      </ul>
-                      <div class="progress big funding-progress">
-                        <div id="funding-progress-bar" class="progress-bar bg-warning" role="progressbar"></div>
-                      </div>
-                      <div class="mt-4">
-                        <a href="https://www.patreon.com/flamefusion" class="btn btn-primary">
-                          Support me
-                        </a>
-                      </div>
+                    <div class="d-flex flex-row">
+                        <div>
+                            <a class="btn btn-primary disabled" id="download-button" href="#">Download now</a>
+                            <div class="specs">
+                                <span id="download-version"></span><br />
+                                <span id="download-size"></span>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                  <div class="card patrons">
-                    <div class="card-header">
-                      Top patrons
-                    </div>
-                    <ul id="patrons" class="list-group list-group-flush">
-                    </ul>
-                  </div>
+                </section>
+                <div class="d-flex flex-column flex-fill screenshot shadow-lg p-3 mb-5 bg-white rounded" id="screenshot">
                 </div>
-              </div>
             </div>
-          </section>
-        </div>
-      </main>
+            <div class="d-flex flex-row justify-content-around">
+                <section class="d-flex flex-column support">
+                    <div class="d-flex flex-row justify-content-center">
+                        <h2>Support me</h2>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="d-flex flex-column pl-2 pr-2">
+                            <div class="card-group shadow-sm">
+                                <div class="card">
+                                    <img alt="Mathias Lorenzen profile picture" class="profile-picture" src="https://media.licdn.com/dms/image/C5603AQEyE-vaAwZD2g/profile-displayphoto-shrink_200_200/0?e=1531958400&v=beta&t=qIipVoEqTklqt8xzOZAVUoocrj_LDSmTh26JQ0Ub3l4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">About me</h5>
+                                        <p class="card-text">My name is Mathias Lorenzen and I'm a geek with a passion for all creating and perfecting software. While Shapeshifter is free for you to use, showing your support helps me keep the project alive.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column pl-2 pr-2">
+                            <div class="card-group shadow-sm">
+                                <div class="card">
+                                    <img class="card-img-top patreon" src="https://c5.patreon.com/external/logo/downloads_wordmark_white_on_coral.png">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Patreon</h5>
+                                        <p class="card-text">My patrons on Patreon keep Shapeshifter alive, get exclusive features and speed up its development up by funding it monthly.</p>
+                                        <ul class="funding-progress">
+                                            <li><b id="total-amount">$0/mo</b> reached</li>
+                                            <li><b id="goal">$0/mo</b> goal</li>
+                                        </ul>
+                                        <div class="progress big funding-progress">
+                                            <div id="funding-progress-bar" class="progress-bar bg-warning" role="progressbar"></div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <a href="https://www.patreon.com/flamefusion" class="btn btn-primary">
+                                                Support me
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card patrons">
+                                    <div class="card-header">
+                                        Top patrons
+                                    </div>
+                                    <ul id="patrons" class="list-group list-group-flush"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
     </div>
-  </body>
+    <script src="index.js"></script>
+</body>
 </html>

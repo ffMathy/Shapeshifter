@@ -29,7 +29,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 
 		const int logHistoryLength = 1000;
 
-		public IssueReporterSink(IEnvironmentInformation environmentInformation)
+		public IssueReporterSink(
+			IEnvironmentInformation environmentInformation)
 		{
 			logHistory = new LinkedList<string>();
 			restClient = new RestClient();
@@ -49,6 +50,9 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 
 		async void ReportLogEvent(LogEvent logEvent, IEnumerable<string> lastMessages)
 		{
+			if (!string.IsNullOrEmpty(GetEnvironmentVariable("APPVEYOR")))
+				return;
+
 			try
 			{
 				await reportingSemaphore.WaitAsync();
@@ -81,7 +85,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 			}
 		}
 
-		string StripSensitiveInformation(string input)
+		static string StripSensitiveInformation(string input)
 		{
 			return input
 				.Replace(
@@ -103,7 +107,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 			return context;
 		}
 
-		SerializableException ConvertExceptionToSerializableException(LogEvent logEvent)
+		static SerializableException ConvertExceptionToSerializableException(LogEvent logEvent)
 		{
 			if(logEvent.Exception == null)
 				return null;
@@ -124,7 +128,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 				ScheduleLogEventReport(logEvent);
 
 			var level = GetPropertyValue(logEvent, "Level");
-			var message = StripSensitiveInformation($"{level:u3} {logEvent.RenderMessage()}");
+			var message = StripSensitiveInformation($"{level} {logEvent.RenderMessage()}");
 			lock (logHistory)
 			{
 				logHistory.AddLast(message);

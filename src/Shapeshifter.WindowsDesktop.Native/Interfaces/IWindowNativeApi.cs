@@ -30,6 +30,6 @@
 
         bool UnhookWinEvent(IntPtr hWinEventHook);
 		
-		int GetWindowThreadProcessId(IntPtr hWnd, IntPtr procid);
+		int GetWindowThreadProcessId(IntPtr hWnd, out uint procid);
 	}
 }

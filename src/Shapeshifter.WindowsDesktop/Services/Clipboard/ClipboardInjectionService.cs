@@ -47,15 +47,25 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 
 		public async Task InjectDataAsync(IClipboardDataPackage package)
 		{
-			clipboardCopyInterceptor.SkipNext();
-
-			using (var session = clipboardHandleFactory.StartNewSession())
+			try
 			{
-				session.EmptyClipboard();
-				InjectPackageContents(session, package);
-			}
+				clipboardCopyInterceptor.SkipNext();
 
-			logger.Information("Clipboard package has been injected to the clipboard.", 1);
+				using (var session = clipboardHandleFactory.StartNewSession())
+				{
+					if (!session.EmptyClipboard())
+						logger.Warning("Could not empty clipboard.");
+
+					InjectPackageContents(session, package);
+				}
+
+				logger.Information("Clipboard package has been injected to the clipboard.", 1);
+			}
+			catch (Exception ex)
+			{
+				logger.Error(ex, "Could not inject clipboard data.");
+				throw;
+			}
 		}
 
 		void InjectPackageContents(
@@ -76,7 +86,13 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 				.Where(x => x.CanWrap(clipboardData))
 				.ToArray();
 			if (wrappers.Length > 0)
+			{
 				logger.Verbose("Injecting {bytes} bytes of {format} format into the clipboard.", clipboardData.RawData.Length, clipboardData.RawFormat);
+			}
+			else
+			{
+				logger.Verbose("No suitable memory wrapper found for format {format}.", clipboardData.RawFormat);
+			}
 
 			foreach (var wrapper in wrappers)
 			{
@@ -87,8 +103,16 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 				if (success == IntPtr.Zero)
 				{
 					throw new Exception(
-						"Could not set clipboard data format " + clipboardData.RawFormat + ".",
+						"Could not set clipboard data format " + clipboardData.RawFormat + " from " + clipboardData.Package.Source.ProcessName + ".",
 						new Win32Exception(Marshal.GetLastWin32Error()));
+				}
+
+				var formats = session.GetClipboardFormats();
+				if (formats.All(x => x.Number != clipboardData.RawFormat.Number))
+				{
+					logger.Warning(
+						"The format {format} was not found in the clipboard after attempting injecting it to the clipboard.", 
+						clipboardData.RawFormat);
 				}
 			}
 		}

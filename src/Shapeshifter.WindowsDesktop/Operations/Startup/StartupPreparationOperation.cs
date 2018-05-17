@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Operations.Startup
 {
     using System;
-	using System.Diagnostics;
 	using System.Threading.Tasks;
 
     using Interfaces;

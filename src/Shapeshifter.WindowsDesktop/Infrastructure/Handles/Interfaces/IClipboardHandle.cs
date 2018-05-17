@@ -10,6 +10,6 @@
 
         IntPtr SetClipboardData(uint uFormat, IntPtr hMem);
 
-        void EmptyClipboard();
+        bool EmptyClipboard();
     }
 }

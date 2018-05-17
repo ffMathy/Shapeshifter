@@ -14,8 +14,9 @@
 
 	using Files.Interfaces;
 
+	using Information;
+
 	using Interfaces;
-	using Microsoft.Build.Evaluation;
 
 	using Processes.Interfaces;
 
@@ -47,17 +48,6 @@
 
 		public bool Terminates => true;
 
-		internal static string TargetDirectory
-		{
-			get
-			{
-				var programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-				return Path.Combine(programFilesPath, "Shapeshifter");
-			}
-		}
-
-		static string TargetExecutableFile => Path.Combine(TargetDirectory, "Shapeshifter.exe");
-
 		public bool CanProcess(string[] arguments) => arguments.Contains("install");
 
 		public async Task ProcessAsync(string[] arguments)
@@ -78,7 +68,7 @@
 			logger.Information("Default settings have been configured.");
 
 			LaunchInstalledExecutable(
-				processManager.GetCurrentProcessFilePath());
+				CurrentProcessInformation.GetCurrentProcessFilePath());
 
 			logger.Information("Launched installed executable.");
 		}
@@ -102,19 +92,19 @@
 		{
 			var process = processManager.LaunchFile(
 				@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe",
-				@"install """ + TargetExecutableFile + @""" /ExeConfig:""" + TargetExecutableFile + @""" /nologo",
+				@"install """ + InstallationInformation.TargetExecutableFile + @""" /ExeConfig:""" + InstallationInformation.TargetExecutableFile + @""" /nologo",
 				ProcessWindowStyle.Hidden);
-			
+
 			var taskCompletionSource = new TaskCompletionSource<int>();
 			process.EnableRaisingEvents = true;
 			process.Exited += (sender, args) => taskCompletionSource.TrySetResult(process.ExitCode);
-			
+
 			process.Refresh();
 
 			var linesOutput = process
 				.StandardOutput
 				.ReadToEnd()
-				.Split(new [] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries)
+				.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
 				.ToArray();
 			foreach (var line in linesOutput)
 			{
@@ -138,30 +128,39 @@
 		{
 			WriteEasyHookDependencies();
 
-			using (var textReader = new StringReader(Resources.ProjectFile))
-			using (var reader = XmlReader.Create(textReader))
+			var document = new XmlDocument();
+			document.LoadXml(Resources.ProjectFile);
+
+			var namespaceManager = new XmlNamespaceManager(document.NameTable);
+			namespaceManager.AddNamespace("default", "http://schemas.microsoft.com/developer/msbuild/2003");
+
+			var references = document.SelectNodes("//default:Reference", namespaceManager).OfType<XmlNode>().ToArray();
+			var projectReferences = document.SelectNodes("//default:ProjectReference", namespaceManager).OfType<XmlNode>().ToArray();
+
+			var allReferences = references.Union(projectReferences).ToArray();
+			foreach (var referenceNode in allReferences)
 			{
-				var project = new Project(reader);
+				Debug.Assert(referenceNode.Attributes != null, "referenceNode.Attributes != null");
 
-				var projectReferences = project.Items
-					.Where(x => x.ItemType == "ProjectReference")
-					.Select(x => x.EvaluatedInclude)
-					.Select(Path.GetFileNameWithoutExtension)
-					.ToArray();
+				var include = referenceNode.Attributes["Include"].Value;
 
-				var assemblyReferences = project.Items
-					.Where(x => x.ItemType == "Reference")
-					.Select(x => x.EvaluatedInclude)
-					.Select(x => x.Split(',').First())
-					.ToArray();
-
-				var allReferences = projectReferences
-					.Union(assemblyReferences)
-					.ToArray();
-				foreach (var reference in allReferences)
+				string reference;
+				if (include.StartsWith("..\\"))
 				{
-					EmitCosturaResourceToDisk(reference + ".dll");
+					reference = Path.GetFileNameWithoutExtension(include);
 				}
+				else
+				{
+					var hintPath = referenceNode.SelectSingleNode("./default:HintPath", namespaceManager);
+					if (string.IsNullOrEmpty(hintPath?.InnerText))
+						continue;
+
+					reference = include
+						.Split(',')
+						.First();
+				}
+
+				EmitCosturaResourceToDisk(reference + ".dll");
 			}
 		}
 
@@ -193,18 +192,26 @@
 		{
 			var stream = Application.ResourceAssembly.GetManifestResourceStream(targetResourceName);
 			if (stream == null)
+			{
+				if(!targetFile.StartsWith(nameof(System) + "."))
+					throw new Exception("Could not load emit embedded resource " + targetResourceName + " as " + targetFile + ".");
+
+				logger.Verbose("Embedded system assembly {name} resource was not found.", targetFile);
 				return;
+			}
 
 			logger.Verbose("Attempting to write resource {resourceName} to {embeddedFile}.", targetResourceName, targetFile);
 			using (stream)
 			{
+				Debug.Assert(stream != null, nameof(stream) + " != null");
+
 				var bytes = new byte[stream.Length];
 				stream.Read(bytes, 0, bytes.Length);
 
 				logger.Verbose("Resource {resourceName} of {length} bytes written to {embeddedFile}.", targetResourceName, bytes.Length, targetFile);
 				File.WriteAllBytes(
 					Path.Combine(
-						TargetDirectory,
+						InstallationInformation.TargetDirectory,
 						targetFile),
 					bytes);
 			}
@@ -214,8 +221,8 @@
 		{
 			File.WriteAllBytes(
 				Path.Combine(
-					TargetDirectory,
-					"Shapeshifter.manifest"),
+					InstallationInformation.TargetDirectory,
+					$"{nameof(Shapeshifter)}.manifest"),
 				Resources.AppManifest);
 		}
 
@@ -223,8 +230,8 @@
 		{
 			File.WriteAllBytes(
 				Path.Combine(
-					TargetDirectory,
-					"Shapeshifter.pdb"),
+					InstallationInformation.TargetDirectory,
+					$"{nameof(Shapeshifter)}.pdb"),
 				Resources.AppDebugFile);
 		}
 
@@ -232,8 +239,8 @@
 		{
 			File.WriteAllText(
 				Path.Combine(
-					TargetDirectory,
-					"Shapeshifter.exe.config"),
+					InstallationInformation.TargetDirectory,
+					$"{nameof(Shapeshifter)}.exe.config"),
 				Resources.AppConfiguration);
 		}
 
@@ -244,24 +251,24 @@
 
 		void LaunchInstalledExecutable(string currentExecutableFile)
 		{
-			processManager.LaunchFileWithAdministrativeRights(TargetExecutableFile, $"postinstall \"{currentExecutableFile}\"");
+			processManager.LaunchFileWithAdministrativeRights(InstallationInformation.TargetExecutableFile, $"postinstall \"{currentExecutableFile}\"");
 		}
 
 		async Task WriteExecutableAsync()
 		{
 			await fileManager.CopyFileAsync(
-				processManager.GetCurrentProcessFilePath(),
-				TargetExecutableFile);
+				CurrentProcessInformation.GetCurrentProcessFilePath(),
+				InstallationInformation.TargetExecutableFile);
 		}
 
 		void PrepareInstallDirectory()
 		{
-			logger.Information("Target install directory is " + TargetDirectory + ".");
+			logger.Information("Target install directory is " + InstallationInformation.TargetDirectory + ".");
 
-			if (Directory.Exists(TargetDirectory))
-				Directory.Delete(TargetDirectory, true);
+			if (Directory.Exists(InstallationInformation.TargetDirectory))
+				Directory.Delete(InstallationInformation.TargetDirectory, true);
 
-			Directory.CreateDirectory(TargetDirectory);
+			Directory.CreateDirectory(InstallationInformation.TargetDirectory);
 
 			logger.Information("Install directory prepared.");
 		}

@@ -12,6 +12,8 @@
 	using System.Threading;
 	using System.Windows;
 
+	using Information;
+
 	public static class Program
 	{
 		static ILifetimeScope container;
@@ -26,6 +28,12 @@
 				}
 				return container;
 			}
+		}
+
+		static Program()
+		{
+			if(InstallationInformation.TargetExecutableFile != CurrentProcessInformation.GetCurrentProcessFilePath())
+				CosturaUtility.Initialize();
 		}
 
 		public static void CreateContainer(Action<ContainerBuilder> callback = null)
@@ -106,6 +114,11 @@
 			}
 
 			return false;
+		}
+
+		public static void Void()
+		{
+			//this method exists to force the static constructor to load and initialize assemblies via costura fody.
 		}
 	}
 }
