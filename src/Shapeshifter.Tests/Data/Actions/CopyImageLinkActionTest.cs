@@ -100,9 +100,9 @@
             FakeHasImageLinks(
                 new[]
                 {
-                    "foobar.com",
-                    "example.com"
-                });
+                    "http://foobar.com",
+					"http://example.com"
+				});
 
             await SystemUnderTest.PerformAsync(CreateClipboardDataPackageContaining<IClipboardTextData>());
 
@@ -119,10 +119,10 @@
 
             var fakeDownloader = Container.Resolve<IDownloader>();
             fakeDownloader.Received(1)
-                          .DownloadBytesAsync(new Uri("foobar.com"))
+                          .DownloadBytesAsync(new Uri("http://foobar.com"))
                           .IgnoreAwait();
             fakeDownloader.Received(1)
-                          .DownloadBytesAsync(new Uri("example.com"))
+                          .DownloadBytesAsync(new Uri("http://example.com"))
                           .IgnoreAwait();
         }
 
