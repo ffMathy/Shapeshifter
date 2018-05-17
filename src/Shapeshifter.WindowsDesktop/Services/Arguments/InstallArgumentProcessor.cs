@@ -197,6 +197,7 @@
 					throw new Exception("Could not load emit embedded resource " + targetResourceName + " as " + targetFile + ".");
 
 				logger.Verbose("Embedded system assembly {name} resource was not found.", targetFile);
+				return;
 			}
 
 			logger.Verbose("Attempting to write resource {resourceName} to {embeddedFile}.", targetResourceName, targetFile);
