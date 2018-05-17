@@ -106,6 +106,14 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 						"Could not set clipboard data format " + clipboardData.RawFormat + " from " + clipboardData.Package.Source.ProcessName + ".",
 						new Win32Exception(Marshal.GetLastWin32Error()));
 				}
+
+				var formats = session.GetClipboardFormats();
+				if (formats.All(x => x.Number != clipboardData.RawFormat.Number))
+				{
+					logger.Warning(
+						"The format {format} was not found in the clipboard after attempting injecting it to the clipboard.", 
+						clipboardData.RawFormat);
+				}
 			}
 		}
 
