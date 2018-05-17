@@ -12,7 +12,7 @@
     using Infrastructure.Threading.Interfaces;
 
     using Interfaces;
-	using Serilog;
+
 	using ViewModels;
     using ViewModels.Interfaces;
 
@@ -25,16 +25,13 @@
         readonly IAsyncListDictionaryBinder<IClipboardDataControlPackage, IActionViewModel> packageActionBinder;
 
         readonly IAsyncFilter asyncFilter;
-		readonly ILogger logger;
 
 		public SelectedElementToActionsSwitchMechanism(
             IAction[] allActions,
             IAsyncFilter asyncFilter,
-			ILogger logger,
             IAsyncListDictionaryBinder<IClipboardDataControlPackage, IActionViewModel> packageActionBinder)
         {
             this.asyncFilter = asyncFilter;
-			this.logger = logger;
 			this.packageActionBinder = packageActionBinder;
 
 			PrepareActions(allActions);
