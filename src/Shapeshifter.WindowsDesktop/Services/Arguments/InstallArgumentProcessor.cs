@@ -192,11 +192,18 @@
 		{
 			var stream = Application.ResourceAssembly.GetManifestResourceStream(targetResourceName);
 			if (stream == null)
-				throw new Exception("Could not load emit embedded resource " + targetResourceName + " as " + targetFile + ".");
+			{
+				if(!targetFile.StartsWith(nameof(System) + "."))
+					throw new Exception("Could not load emit embedded resource " + targetResourceName + " as " + targetFile + ".");
+
+				logger.Verbose("Embedded system assembly {name} resource was not found.", targetFile);
+			}
 
 			logger.Verbose("Attempting to write resource {resourceName} to {embeddedFile}.", targetResourceName, targetFile);
 			using (stream)
 			{
+				Debug.Assert(stream != null, nameof(stream) + " != null");
+
 				var bytes = new byte[stream.Length];
 				stream.Read(bytes, 0, bytes.Length);
 
