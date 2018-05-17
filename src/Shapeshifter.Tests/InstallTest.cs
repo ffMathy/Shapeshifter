@@ -102,7 +102,7 @@ namespace Shapeshifter.WindowsDesktop
 
 						lastLogLength = logOutput.Length;
 					}
-					catch (Exception ex)
+					catch (Exception ex) when (ex.GetType() != typeof(AssertFailedException))
 					{
 						Console.WriteLine("Test error: " + ex);
 					}
