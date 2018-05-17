@@ -41,8 +41,6 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 			this.clipboardHandleFactory = clipboardHandleFactory;
 			this.logger = logger;
 			this.memoryWrappers = memoryWrappers;
-
-
 		}
 
 		public async Task InjectDataAsync(IClipboardDataPackage package)
