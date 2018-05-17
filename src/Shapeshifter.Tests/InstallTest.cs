@@ -133,7 +133,7 @@ namespace Shapeshifter.WindowsDesktop
 			var logFilePath = FileManager.GetFullPathFromTemporaryPath($"Shapeshifter{DateTime.Now:yyyyMMdd}.log");
 			File.Copy(logFilePath, "Log.txt", true);
 
-			var logOutput = File.ReadAllLines("Log.txt");
+			var logOutput = File.ReadAllText("Log.txt")-Replace("\r", "").Split("\n\n");
 			return logOutput;
 		}
 
