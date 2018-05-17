@@ -95,9 +95,9 @@ namespace Shapeshifter.WindowsDesktop
 						for (var index = lastLogLength; index < logOutput.Length; index++)
 						{
 							var line = logOutput[index];
-							Assert.IsFalse(line.Contains("[ERR]"), "Error: " + line);
-
 							Console.WriteLine(line);
+							
+							Assert.IsFalse(line.Contains("[ERR]"), "Error: " + line);
 						}
 
 						lastLogLength = logOutput.Length;
