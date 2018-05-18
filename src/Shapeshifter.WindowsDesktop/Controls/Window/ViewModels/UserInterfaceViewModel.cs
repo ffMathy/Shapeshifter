@@ -304,7 +304,7 @@
 			UserInterfaceShown?.Invoke(this, e);
 		}
 
-		async void Mediator_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
+		void Mediator_UserInterfaceHidden(object sender, UserInterfaceHiddenEventArgument e)
 		{
 			HideInterface();
 		}
