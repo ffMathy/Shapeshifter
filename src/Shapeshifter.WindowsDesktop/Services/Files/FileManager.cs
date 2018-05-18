@@ -87,7 +87,7 @@
 
 		static bool IsExceptionIgnored(Exception ex)
 		{
-			return ex is IOException;
+			return ex is IOException || ex is UnauthorizedAccessException;
 		}
 
 		public Task DeleteFileIfExistsAsync(string path)
