@@ -17,7 +17,7 @@
 
 		Process LaunchCommand(string command, string arguments = null);
 
-		void CloseAllDuplicateProcessesExceptCurrent();
+        void CloseAllDuplicateProcessesExceptCurrent();
 		void CloseCurrentProcess();
 	}
 }

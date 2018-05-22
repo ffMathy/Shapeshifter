@@ -115,8 +115,8 @@
       <HintPath>..\packages\EasyHook.2.7.6684\lib\net40\EasyHook.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FluffySpoon.Http, Version=1.0.18.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluffySpoon.Http.1.0.18\lib\netstandard2.0\FluffySpoon.Http.dll</HintPath>
+    <Reference Include="FluffySpoon.Http, Version=1.0.19.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluffySpoon.Http.1.0.19\lib\netstandard2.0\FluffySpoon.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.8.2.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
@@ -136,7 +136,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.2.6.0\lib\net46\Serilog.dll</HintPath>
+      <HintPath>..\packages\Serilog.2.7.1\lib\net46\Serilog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Serilog.Formatting.Compact, Version=1.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
@@ -207,7 +207,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.1\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
@@ -219,8 +219,8 @@
       <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.2\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Forms">
@@ -382,7 +382,7 @@
     <Compile Include="Services\Interfaces\IPixelConversionService.cs" />
     <Compile Include="Services\Interfaces\IRegistryManager.cs" />
     <Compile Include="Services\Interfaces\ISettingsManager.cs" />
-    <Compile Include="Services\Interfaces\IWindowManager.cs" />
+    <Compile Include="Services\Window\Interfaces\IActiveWindowService.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardHook.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IPasteDetectionHandler.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardPasteCombinationStateService.cs" />
@@ -573,7 +573,8 @@
     <Compile Include="Operations\Startup\MainWindowPreparationOperation.cs" />
     <Compile Include="Operations\Startup\StartupPreparationOperation.cs" />
     <Compile Include="Operations\Startup\TrayPreparationOperation.cs" />
-    <Compile Include="Services\WindowManager.cs" />
+    <Compile Include="Services\Window\Interfaces\IWindowThreadMerger.cs" />
+    <Compile Include="Services\Window\ActiveWindowService.cs" />
     <Compile Include="Data\FormatDataPair.cs" />
     <Compile Include="Controls\Window\Binders\PackageToActionBinder.cs" />
     <Compile Include="Controls\Window\MainWindow.xaml.cs">
@@ -585,6 +586,7 @@
     <Compile Include="Controls\Window\MainWindowHandleContainer.cs" />
     <Compile Include="Controls\Window\ViewModels\UserInterfaceViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\IUserInterfaceViewModel.cs" />
+    <Compile Include="Services\Window\WindowThreadMerger.cs" />
     <Page Include="Controls\Clipboard\ClipboardImageDataControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

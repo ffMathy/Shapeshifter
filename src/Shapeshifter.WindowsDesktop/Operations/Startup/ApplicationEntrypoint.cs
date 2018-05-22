@@ -7,6 +7,8 @@
     using Interfaces;
 	using Serilog;
 
+	using Services.Interfaces;
+
 	public class ApplicationEntrypoint: ISingleInstance
     {
         readonly IStartupPreparationOperation startupPreparationOperation;
@@ -40,7 +42,7 @@
 
             await mainWindowPreparationOperation.RunAsync();
 			await trayPreparationOperation.RunAsync();
-		}
+        }
 
         async Task Prepare(string[] arguments)
         {

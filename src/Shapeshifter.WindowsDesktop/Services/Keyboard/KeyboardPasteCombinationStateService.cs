@@ -4,7 +4,7 @@
 
     using Interfaces;
 
-    public class KeyboardPasteCombinationStateService: IKeyboardPasteCombinationStateService
+    public class KeyboardPasteCombinationStateService : IKeyboardPasteCombinationStateService
     {
         readonly IKeyboardManager keyboardManager;
 
@@ -20,13 +20,22 @@
         public bool IsCombinationFullyHeldDown
             => keyboardManager.IsKeyDown(Key.LeftCtrl) && keyboardManager.IsKeyDown(Key.V);
 
-		public bool IsTextKeyDown
-		{
-			get
-			{
-				var isKeyDown = keyboardManager.IsKeyDown(Key.V);
+        public bool IsTextKeyDown
+        {
+            get
+            {
+                var isKeyDown = keyboardManager.IsKeyDown(Key.V);
+                return isKeyDown;
+            }
+        }
+
+        public bool IsModiferKeyDown
+        {
+            get
+            {
+				var isKeyDown = keyboardManager.IsKeyDown(Key.LeftCtrl);
 				return isKeyDown;
-			}
-		}
-	}
+            }
+        }
+    }
 }

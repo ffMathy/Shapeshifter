@@ -5,5 +5,6 @@
         bool IsCombinationFullyHeldDown { get; }
         bool IsCombinationPartiallyHeldDown { get; }
 		bool IsTextKeyDown { get; }
-	}
+		bool IsModiferKeyDown { get; }
+    }
 }

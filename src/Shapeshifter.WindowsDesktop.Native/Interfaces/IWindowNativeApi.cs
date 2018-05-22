@@ -31,5 +31,7 @@
         bool UnhookWinEvent(IntPtr hWinEventHook);
 		
 		int GetWindowThreadProcessId(IntPtr hWnd, out uint procid);
-	}
+		
+		IntPtr AttachThreadInput(IntPtr idAttach, IntPtr idAttachTo, bool fAttach);
+    }
 }

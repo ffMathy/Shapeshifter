@@ -48,7 +48,15 @@
         [DllImport("user32.dll")] 
 		static extern int GetWindowThreadProcessId(IntPtr hWnd, out uint procid);
 
-		IntPtr IWindowNativeApi.SetWinEventHook(
+		IntPtr IWindowNativeApi.AttachThreadInput(IntPtr idAttach, IntPtr idAttachTo, bool fAttach)
+		{
+			return AttachThreadInput(idAttach, idAttachTo, fAttach);
+		}
+
+		[DllImport("user32.dll")]
+		static extern IntPtr AttachThreadInput(IntPtr idAttach, IntPtr idAttachTo, bool fAttach);
+
+        IntPtr IWindowNativeApi.SetWinEventHook(
             uint eventMin,
             uint eventMax,
             IntPtr hmodWinEventProc,
