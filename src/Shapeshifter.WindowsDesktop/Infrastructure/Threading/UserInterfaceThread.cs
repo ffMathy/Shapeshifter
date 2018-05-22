@@ -18,5 +18,7 @@
         {
             targetThread.Invoke(action);
         }
-    }
+
+		public int Id => targetThread.Thread.ManagedThreadId;
+	}
 }

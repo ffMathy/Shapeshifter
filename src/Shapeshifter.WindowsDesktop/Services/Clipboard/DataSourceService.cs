@@ -21,12 +21,14 @@
 
 	using Services.Interfaces;
 
-    class DataSourceService
+	using Window.Interfaces;
+
+	class DataSourceService
         : IDataSourceService,
           ISingleInstance
     {
         readonly IImagePersistenceService imagePersistenceService;
-        readonly IWindowManager windowManager;
+        readonly IActiveWindowService activeWindowService;
 		readonly IWindowNativeApi windowNativeApi;
 
 		readonly IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheLarge;
@@ -34,13 +36,13 @@
 
         public DataSourceService(
             IImagePersistenceService imagePersistenceService,
-            IWindowManager windowManager,
+            IActiveWindowService activeWindowService,
 			IWindowNativeApi windowNativeApi,
 			IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheSmall,
             IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheLarge)
         {
             this.imagePersistenceService = imagePersistenceService;
-            this.windowManager = windowManager;
+            this.activeWindowService = activeWindowService;
 			this.windowNativeApi = windowNativeApi;
 
 			this.dataSourceIconCacheLarge = dataSourceIconCacheLarge;
@@ -51,9 +53,9 @@
         {
             lock (this)
 			{
-                var activeWindowHandle = windowManager.ActiveWindowHandle;
+                var activeWindowHandle = activeWindowService.ActiveWindowHandle;
 
-                var processName = windowManager.
+                var processName = activeWindowService.
 					GetProcessFromWindowHandle(activeWindowHandle)
 					.ProcessName + ".exe";
 
@@ -78,7 +80,7 @@
                 var dataSource = new DataSource(
 					iconBytesBig, 
 					iconBytesSmall,
-                    windowManager.GetWindowTitleFromWindowHandle(activeWindowHandle), 
+                    activeWindowService.GetWindowTitleFromWindowHandle(activeWindowHandle), 
 					processName);
                 return dataSource;
             }

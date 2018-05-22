@@ -5,5 +5,7 @@
     public interface IUserInterfaceThread
     {
         void Invoke(Action action);
+
+		int Id { get; }
     }
 }

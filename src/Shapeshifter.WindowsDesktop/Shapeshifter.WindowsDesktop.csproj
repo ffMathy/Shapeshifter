@@ -380,7 +380,7 @@
     <Compile Include="Services\Interfaces\IPixelConversionService.cs" />
     <Compile Include="Services\Interfaces\IRegistryManager.cs" />
     <Compile Include="Services\Interfaces\ISettingsManager.cs" />
-    <Compile Include="Services\Interfaces\IWindowManager.cs" />
+    <Compile Include="Services\Window\Interfaces\IActiveWindowService.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardHook.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IPasteDetectionHandler.cs" />
     <Compile Include="Services\Keyboard\Interfaces\IKeyboardPasteCombinationStateService.cs" />
@@ -571,7 +571,8 @@
     <Compile Include="Operations\Startup\MainWindowPreparationOperation.cs" />
     <Compile Include="Operations\Startup\StartupPreparationOperation.cs" />
     <Compile Include="Operations\Startup\TrayPreparationOperation.cs" />
-    <Compile Include="Services\WindowManager.cs" />
+    <Compile Include="Services\Window\Interfaces\IWindowThreadMerger.cs" />
+    <Compile Include="Services\Window\ActiveWindowService.cs" />
     <Compile Include="Data\FormatDataPair.cs" />
     <Compile Include="Controls\Window\Binders\PackageToActionBinder.cs" />
     <Compile Include="Controls\Window\MainWindow.xaml.cs">
@@ -583,6 +584,7 @@
     <Compile Include="Controls\Window\MainWindowHandleContainer.cs" />
     <Compile Include="Controls\Window\ViewModels\UserInterfaceViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\IUserInterfaceViewModel.cs" />
+    <Compile Include="Services\Window\WindowThreadMerger.cs" />
     <Page Include="Controls\Clipboard\ClipboardImageDataControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
