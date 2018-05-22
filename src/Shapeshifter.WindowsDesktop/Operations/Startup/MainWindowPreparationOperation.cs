@@ -62,9 +62,9 @@
         {
 			logger.Verbose("The main window source handle has been determined.");
 
-            windowMessageHook.Connect();
-            clipboardUserInterfaceInteractionMediator.Connect();
+			clipboardUserInterfaceInteractionMediator.Connect();
 			SetupKeyInterception();
+            windowMessageHook.Connect();
 
 			mainWindow.Hide();
 		}

@@ -272,10 +272,8 @@
 		public void Connect()
 		{
 			if (IsConnected)
-			{
 				throw new InvalidOperationException(
 					"The user interface mediator is already connected.");
-			}
 
 			LoadInitialClipboardData();
 			InstallClipboardHook();
