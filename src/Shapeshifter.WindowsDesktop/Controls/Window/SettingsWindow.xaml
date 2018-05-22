@@ -21,9 +21,12 @@
 			<Slider TickFrequency="100" Minimum="0" Maximum="3000" SmallChange="100" Value="{Binding PasteDurationBeforeUserInterfaceShowsInMilliseconds}" TickPlacement="Both" IsSnapToTickEnabled="True" AutoToolTipPlacement="TopLeft" />
 			<controls:NumberTextBox Minimum="0" Maximum="3000" HorizontalAlignment="Center" Text="{Binding PasteDurationBeforeUserInterfaceShowsInMilliseconds}" FontWeight="Bold" />
 		</StackPanel>
-		<StackPanel Margin="0,5" Grid.Row="3">
+		<!--<StackPanel Margin="0,5" Grid.Row="3">
+            
+            WORK IN PROGRESS
+        
             <Label>Shapeshifter hotkey</Label>
             <TextBox Text="{Binding HotkeyString, Mode=OneWay}" KeyDown="UIElement_OnKeyDown" />
-        </StackPanel>
+        </StackPanel>-->
     </Grid>
 </Window>

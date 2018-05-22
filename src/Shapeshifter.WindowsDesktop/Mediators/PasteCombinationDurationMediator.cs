@@ -135,7 +135,7 @@
             var decisecondsPassed = 0;
             while (
                 !IsCancellationRequested &&
-                keyboardPasteState.IsTextKeyDown && 
+                keyboardPasteState.IsCombinationPartiallyHeldDown && 
                 !shouldCancel)
             {
                 await threadDelay.ExecuteAsync(100);
