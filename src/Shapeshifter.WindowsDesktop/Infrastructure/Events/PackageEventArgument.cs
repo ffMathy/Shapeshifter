@@ -11,6 +11,6 @@
             Package = package;
         }
 
-        public IClipboardDataControlPackage Package { get; private set; }
+        public IClipboardDataControlPackage Package { get; }
     }
 }

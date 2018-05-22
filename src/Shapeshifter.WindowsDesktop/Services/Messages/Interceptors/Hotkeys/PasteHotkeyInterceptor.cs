@@ -91,6 +91,7 @@
 
             if (shouldSkipNext)
             {
+				logger.Verbose("Skipped paste hotkey message because the interceptor was instructed to skip next.");
                 shouldSkipNext = false;
                 return;
             }

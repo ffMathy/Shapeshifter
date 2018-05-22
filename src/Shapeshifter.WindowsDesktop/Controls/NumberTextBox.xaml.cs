@@ -40,9 +40,9 @@ namespace Shapeshifter.WindowsDesktop.Controls
 
 		void NumberTextBox_Pasting(object sender, DataObjectPastingEventArgs e)
 		{
-			if (e.DataObject.GetDataPresent(typeof(String)))
+			if (e.DataObject.GetDataPresent(typeof(string)))
 			{
-				var text = (string)e.DataObject.GetData(typeof(String));
+				var text = (string)e.DataObject.GetData(typeof(string));
 				if (IsTextAllowed(InsertStringAtLocation(Text, CaretIndex, text)))
 					return;
 			}

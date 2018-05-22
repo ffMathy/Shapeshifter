@@ -29,27 +29,27 @@
 			public uint bV5Size;
 			public int bV5Width;
 			public int bV5Height;
-			public UInt16 bV5Planes;
-			public UInt16 bV5BitCount;
+			public ushort bV5Planes;
+			public ushort bV5BitCount;
 			public uint bV5Compression;
 			public uint bV5SizeImage;
 			public int bV5XPelsPerMeter;
 			public int bV5YPelsPerMeter;
-			public UInt16 bV5ClrUsed;
-			public UInt16 bV5ClrImportant;
-			public UInt16 bV5RedMask;
-			public UInt16 bV5GreenMask;
-			public UInt16 bV5BlueMask;
-			public UInt16 bV5AlphaMask;
-			public UInt16 bV5CSType;
+			public ushort bV5ClrUsed;
+			public ushort bV5ClrImportant;
+			public ushort bV5RedMask;
+			public ushort bV5GreenMask;
+			public ushort bV5BlueMask;
+			public ushort bV5AlphaMask;
+			public ushort bV5CSType;
 			public IntPtr bV5Endpoints;
-			public UInt16 bV5GammaRed;
-			public UInt16 bV5GammaGreen;
-			public UInt16 bV5GammaBlue;
-			public UInt16 bV5Intent;
-			public UInt16 bV5ProfileData;
-			public UInt16 bV5ProfileSize;
-			public UInt16 bV5Reserved;
+			public ushort bV5GammaRed;
+			public ushort bV5GammaGreen;
+			public ushort bV5GammaBlue;
+			public ushort bV5Intent;
+			public ushort bV5ProfileData;
+			public ushort bV5ProfileSize;
+			public ushort bV5Reserved;
 		}
 
 		[StructLayout(LayoutKind.Sequential, Pack = 2)]

@@ -3,7 +3,6 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window
 {
 	using Interfaces;
 	using Shapeshifter.WindowsDesktop.Controls.Window.ViewModels.Interfaces;
-	using System;
 	using System.Windows;
 
 	/// <summary>
@@ -21,12 +20,6 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window
 			DataContext = this.viewModel = viewModel;
 
 			SetupEvents();
-		}
-
-		void SourceClipboardQuantityOverlayWindow_Activated(object sender, EventArgs e)
-		{
-			Activated -= SourceClipboardQuantityOverlayWindow_Activated;
-			Hide();
 		}
 
 		void SetupEvents()

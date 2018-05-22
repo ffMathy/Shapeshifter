@@ -13,17 +13,14 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-		public IUserInterfaceViewModel UserInterfaceViewModel { get; private set; }
+		public IUserInterfaceViewModel UserInterfaceViewModel { get; }
 
 		ScreenInformation activeScreen;
 
 		public ScreenInformation ActiveScreen
         {
-            get
-            {
-                return activeScreen;
-            }
-            set
+            get => activeScreen;
+			set
             {
                 activeScreen = value;
 				UserInterfaceViewModel.ActiveScreen = value;
@@ -46,7 +43,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
             UserInterfaceViewModel.UserInterfaceShown += UserInterfaceViewModel_UserInterfaceShown;
         }
 
-        void UserInterfaceViewModel_UserInterfaceShown(Object sender, Infrastructure.Events.UserInterfaceShownEventArgument e)
+        void UserInterfaceViewModel_UserInterfaceShown(object sender, Infrastructure.Events.UserInterfaceShownEventArgument e)
         {
             ActiveScreen = screenManager.GetActiveScreen();
         }

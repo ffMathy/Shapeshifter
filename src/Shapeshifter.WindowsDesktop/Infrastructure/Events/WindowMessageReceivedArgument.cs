@@ -18,12 +18,12 @@
             LongParameter = longParameter;
         }
 
-        public IntPtr WindowHandle { get; private set; }
+        public IntPtr WindowHandle { get; }
 
-        public Message Message { get; private set; }
+        public Message Message { get; }
 
-        public IntPtr WordParameter { get; private set; }
+        public IntPtr WordParameter { get; }
 
-        public IntPtr LongParameter { get; private set; }
+        public IntPtr LongParameter { get; }
     }
 }

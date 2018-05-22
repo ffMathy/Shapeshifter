@@ -260,7 +260,7 @@
 
 		void RaisePastePerformedEvent()
 		{
-			PastePerformed?.Invoke(this, new PastePerformedEventArgument());
+            PastePerformed?.Invoke(this, new PastePerformedEventArgument());
 		}
 
 		void UninstallClipboardHook()
@@ -338,9 +338,8 @@
 
 		void RaiseUserInterfaceShownEvent()
 		{
-			pasteHotkeyInterceptor.SkipNext();
 			UserInterfaceShown?.Invoke(this, new UserInterfaceShownEventArgument());
-		}
+        }
 
 		void PasteCombinationDurationMediatorPasteCombinationReleased(
 			object sender,

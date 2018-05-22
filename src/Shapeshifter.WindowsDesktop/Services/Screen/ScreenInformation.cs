@@ -24,8 +24,8 @@
 
 	public class ScreenInformation
 	{
-		public ScreenBounds Bounds { get; private set; }
-		public ScreenBounds WorkingArea { get; private set; }
+		public ScreenBounds Bounds { get; }
+		public ScreenBounds WorkingArea { get; }
 
 		public ScreenInformation(
 			ScreenBounds bounds,

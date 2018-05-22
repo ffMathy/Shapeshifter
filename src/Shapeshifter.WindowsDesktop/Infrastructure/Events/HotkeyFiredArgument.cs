@@ -11,8 +11,8 @@
             IsControlDown = isControlDown;
         }
 
-        public bool IsControlDown { get; private set; }
+        public bool IsControlDown { get; }
 
-        public Key Key { get; private set; }
+        public Key Key { get; }
     }
 }

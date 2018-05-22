@@ -34,6 +34,11 @@
 			this.logger = logger;
 			this.viewModel = viewModel;
 
+			Left = int.MinValue;
+			Top = int.MinValue;
+			Width = 1;
+			Height = 1;
+
             SourceInitialized += MainWindow_SourceInitialized;
 
             InitializeComponent();

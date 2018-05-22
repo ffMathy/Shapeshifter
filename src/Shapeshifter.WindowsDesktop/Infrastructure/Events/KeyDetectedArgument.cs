@@ -17,10 +17,10 @@
 
         public bool Cancel { get; set; }
 
-        public KeyStates KeyState { get; private set; }
+        public KeyStates KeyState { get; }
 
-        public bool IsControlDown { get; private set; }
+        public bool IsControlDown { get; }
 
-        public Key Key { get; private set; }
+        public Key Key { get; }
     }
 }
