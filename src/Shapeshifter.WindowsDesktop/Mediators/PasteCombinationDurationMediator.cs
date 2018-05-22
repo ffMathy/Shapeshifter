@@ -85,15 +85,11 @@
 
             await WaitForCombinationReleaseOrDurationPass();
             if (IsCancellationRequested)
-            {
                 return;
-            }
 
             RegisterCombinationReleased();
             if (shouldCancel)
-            {
                 return;
-            }
 
             RegisterAfterCombinationReleased();
         }
@@ -101,9 +97,7 @@
         void RegisterCombinationReleased()
         {
             if (PasteCombinationReleased == null)
-            {
                 return;
-            }
 
             logger.Information("Firing " + nameof(PasteCombinationReleased) + " event.");
             mainThreadInvoker.Invoke(
@@ -117,9 +111,7 @@
         void RegisterAfterCombinationReleased()
         {
             if (AfterPasteCombinationReleased == null)
-            {
                 return;
-            }
 
             logger.Information("Firing " + nameof(AfterPasteCombinationReleased) + " event.");
             mainThreadInvoker.Invoke(
@@ -135,7 +127,7 @@
             var decisecondsPassed = 0;
             while (
                 !IsCancellationRequested &&
-                keyboardPasteState.IsCombinationPartiallyHeldDown && 
+                keyboardPasteState.IsCombinationFullyHeldDown && 
                 !shouldCancel)
             {
                 await threadDelay.ExecuteAsync(100);
@@ -150,7 +142,7 @@
 
         void RaiseDurationPassedEventIfNeeded(int decisecondsPassed)
         {
-            if ((DurationInDeciseconds != 0) && ((decisecondsPassed != DurationInDeciseconds) || (PasteCombinationDurationPassed == null)))
+            if ((decisecondsPassed != DurationInDeciseconds) || (PasteCombinationDurationPassed == null))
                 return;
 
 			logger.Information("Raising paste duration passed event.");
