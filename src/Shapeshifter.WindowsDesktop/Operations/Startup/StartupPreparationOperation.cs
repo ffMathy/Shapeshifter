@@ -52,8 +52,6 @@
 				hasRunBefore = true;
 
 				processManager.CloseAllDuplicateProcessesExceptCurrent();
-				await Task.Delay(1000);
-
 				await aggregateArgumentProcessor.ProcessArgumentsAsync(Arguments);
 
 				logger.Verbose("Startup preparation operation completed.");

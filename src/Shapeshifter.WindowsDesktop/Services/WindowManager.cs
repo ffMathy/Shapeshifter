@@ -3,14 +3,19 @@
     using System;
     using System.Diagnostics;
 
-    using Interfaces;
+	using Infrastructure.Caching.Interfaces;
 
-    using Native;
+	using Interfaces;
+
+	using Native;
     using Native.Interfaces;
 
     public class WindowManager: IWindowManager
     {
         readonly IWindowNativeApi windowNativeApi;
+		readonly IKeyValueCache<IntPtr, Process> dataSourceProcessCache;
+
+		readonly WindowNativeApi.WinEventDelegate callbackPointer;
 
         IntPtr hookHandle;
         
@@ -19,21 +24,37 @@
 
         public bool IsConnected { get; private set; }
 
+        public IntPtr ActiveWindowHandle { get; private set; }
+
         public WindowManager(
-            IWindowNativeApi windowNativeApi)
+            IWindowNativeApi windowNativeApi,
+			IKeyValueCache<IntPtr, Process> dataSourceProcessCache)
         {
             this.windowNativeApi = windowNativeApi;
+			this.dataSourceProcessCache = dataSourceProcessCache;
+
+			this.callbackPointer = OnWindowChanged;
+			GC.KeepAlive(callbackPointer);
         }
 
-        public Process GetActiveWindowProcess()
+		public Process GetProcessFromWindowHandle(IntPtr handle)
         {
-            throw new NotImplementedException();
-        }
+			var process = dataSourceProcessCache.Get(handle);
+			if (process != default) 
+				return process;
 
-        public string GetActiveWindowProcessTitle()
+			windowNativeApi.GetWindowThreadProcessId(handle, out var processId);
+			process = Process.GetProcessById((int) processId);
+			dataSourceProcessCache.Set(handle, process);
+
+			return process;
+		}
+
+        public string GetWindowTitleFromWindowHandle(IntPtr handle)
         {
-            throw new NotImplementedException();
-        }
+			var windowTitle = windowNativeApi.GetWindowTitle(handle);
+			return windowTitle;
+		}
 
         public void Disconnect()
         {
@@ -60,14 +81,15 @@
             hookHandle = windowNativeApi.SetWinEventHook(
                 WindowNativeApi.EVENT_SYSTEM_FOREGROUND,
                 WindowNativeApi.EVENT_SYSTEM_FOREGROUND, 
-                IntPtr.Zero, OnWindowChanged, 0, 0, 
+                IntPtr.Zero, callbackPointer, 0, 0, 
                 WindowNativeApi.WINEVENT_OUTOFCONTEXT);
 
             IsConnected = true;
         }
 
         void OnWindowChanged(IntPtr hwineventhook, uint eventtype, IntPtr hwnd, int idobject, int idchild, uint dweventthread, uint dwmseventtime)
-        {
+		{
+			ActiveWindowHandle = hwnd;
             OnActiveWindowChanged();
         }
 

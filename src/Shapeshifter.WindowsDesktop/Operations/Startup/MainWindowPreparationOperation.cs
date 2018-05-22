@@ -10,6 +10,8 @@
 
     using Mediators.Interfaces;
 	using Serilog;
+
+	using Services.Interfaces;
 	using Services.Messages.Interceptors.Hotkeys.Interfaces;
     using Services.Messages.Interfaces;
 
@@ -22,6 +24,7 @@
         readonly IWindowMessageHook windowMessageHook;
 		readonly ISourceClipboardQuantityOverlay sourceClipboardQuantityOverlay;
 		readonly ILogger logger;
+		readonly IWindowManager windowManager;
 
 		public MainWindowPreparationOperation(
             IMainWindow mainWindow,
@@ -30,7 +33,8 @@
             IKeyInterceptor keyInterceptor,
             IWindowMessageHook windowMessageHook,
 			ISourceClipboardQuantityOverlay sourceClipboardQuantityOverlay,
-			ILogger logger)
+			ILogger logger,
+			IWindowManager windowManager)
         {
             this.mainWindow = mainWindow;
             this.clipboardUserInterfaceInteractionMediator = clipboardUserInterfaceInteractionMediator;
@@ -39,6 +43,7 @@
             this.windowMessageHook = windowMessageHook;
 			this.sourceClipboardQuantityOverlay = sourceClipboardQuantityOverlay;
 			this.logger = logger;
+			this.windowManager = windowManager;
 			SetupWindowMessageHook();
         }
 
@@ -64,6 +69,8 @@
 
 			clipboardUserInterfaceInteractionMediator.Connect();
 			SetupKeyInterception();
+
+			windowManager.Connect();
             windowMessageHook.Connect();
 
 			mainWindow.Hide();

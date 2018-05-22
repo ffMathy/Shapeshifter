@@ -8,8 +8,10 @@
         event EventHandler ActiveWindowChanged;
         event EventHandler ActiveWindowProcessChanged;
 
-        Process GetActiveWindowProcess();
+		IntPtr ActiveWindowHandle { get; }
 
-        string GetActiveWindowProcessTitle();
+        Process GetProcessFromWindowHandle(IntPtr handle);
+
+        string GetWindowTitleFromWindowHandle(IntPtr handle);
     }
 }
