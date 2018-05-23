@@ -222,7 +222,7 @@
 			File.WriteAllBytes(
 				Path.Combine(
 					InstallationInformation.TargetDirectory,
-					$"{nameof(Shapeshifter)}.manifest"),
+					$"{nameof(Shapeshifter)}.exe.manifest"),
 				Resources.AppManifest);
 		}
 
