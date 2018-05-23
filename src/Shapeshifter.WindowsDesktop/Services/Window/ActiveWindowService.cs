@@ -55,6 +55,9 @@
 				return process;
 
 			windowNativeApi.GetWindowThreadProcessId(handle, out var processId);
+			if (processId == CurrentProcessInformation.CurrentProcess.Id)
+				return CurrentProcessInformation.CurrentProcess;
+
 			process = Process.GetProcessById((int) processId);
 			windowProcessCache.Set(handle, process);
 
@@ -94,25 +97,26 @@
 
         void OnWindowChanged(IntPtr hwineventhook, uint eventtype, IntPtr hwnd, int idobject, int idchild, uint dweventthread, uint dwmseventtime)
 		{
-			var previousThreadId = GetActiveWindowUserInterfaceThreadId();
+			var newProcess = GetProcessFromWindowHandle(hwnd);
+			if (newProcess == CurrentProcessInformation.CurrentProcess)
+				return;
+
+			var oldProcess = GetProcessFromWindowHandle(ActiveWindowHandle);
+            var previousThreadId = GetProcessActiveWindowUserInterfaceThreadId(oldProcess);
 			if(previousThreadId != null)
 				windowThreadMerger.UnmergeThread(previousThreadId.Value);
 
             ActiveWindowHandle = hwnd;
 
-			var currentThreadId = GetActiveWindowUserInterfaceThreadId();
+			var currentThreadId = GetProcessActiveWindowUserInterfaceThreadId(newProcess);
 			if (currentThreadId != null)
                 windowThreadMerger.MergeThread(currentThreadId.Value);
 
             OnActiveWindowChanged();
         }
 
-        int? GetActiveWindowUserInterfaceThreadId()
+        int? GetProcessActiveWindowUserInterfaceThreadId(Process process)
 		{
-			var process = GetProcessFromWindowHandle(ActiveWindowHandle);
-			if (process.Id == CurrentProcessInformation.CurrentProcess.Id)
-				return null;
-
             var thread = processManager.GetUserInterfaceThreadOfProcess(process);
 			return thread?.Id;
         }

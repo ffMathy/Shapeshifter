@@ -15,6 +15,6 @@
 
         int DurationInDeciseconds { get; }
 
-        void CancelCombinationRegistration();
+        void CancelOngoingCombinationRegistration();
     }
 }

@@ -23,9 +23,7 @@
         readonly IKeyboardPasteCombinationStateService keyboardPasteState;
         readonly IMainThreadInvoker mainThreadInvoker;
         
-        readonly CancellationTokenSource threadCancellationTokenSource;
-
-        bool shouldCancel;
+        CancellationTokenSource threadCancellationTokenSource;
 
         public event EventHandler<PasteCombinationDurationPassedEventArgument> PasteCombinationDurationPassed;
         public event EventHandler<PasteCombinationReleasedEventArgument> PasteCombinationReleased;
@@ -48,20 +46,18 @@
             this.mainThreadInvoker = mainThreadInvoker;
             this.logger = logger;
             this.keyboardPasteState = keyboardPasteState;
-
-            threadCancellationTokenSource = new CancellationTokenSource();
         }
 
         public bool IsConnected
             => consumerLoop.IsRunning;
 
         bool IsCancellationRequested
-            => threadCancellationTokenSource.Token.IsCancellationRequested;
+            => threadCancellationTokenSource?.Token.IsCancellationRequested ?? true;
 
-        public void CancelCombinationRegistration()
+        public void CancelOngoingCombinationRegistration()
         {
             logger.Information("Cancelling duration mediator combination registration.");
-            shouldCancel = true;
+			threadCancellationTokenSource.Cancel();
         }
 
         public int DurationInDeciseconds
@@ -81,20 +77,18 @@
         {
             logger.Verbose("Paste combination duration loop has ticked.");
 
-            shouldCancel = false;
-
             await WaitForCombinationReleaseOrDurationPass();
-            if (IsCancellationRequested)
-                return;
+			if (IsCancellationRequested)
+				return;
 
-            RegisterCombinationReleased();
-            if (shouldCancel)
-                return;
+			RegisterCombinationReleased();
+			if (IsCancellationRequested)
+				return;
 
             RegisterAfterCombinationReleased();
         }
 
-        void RegisterCombinationReleased()
+		void RegisterCombinationReleased()
         {
             if (PasteCombinationReleased == null)
                 return;
@@ -127,8 +121,7 @@
             var decisecondsPassed = 0;
             while (
                 !IsCancellationRequested &&
-                keyboardPasteState.IsCombinationFullyHeldDown && 
-                !shouldCancel)
+                keyboardPasteState.IsCombinationFullyHeldDown)
             {
                 await threadDelay.ExecuteAsync(100);
                 decisecondsPassed++;
@@ -169,6 +162,9 @@
         {
             logger.Information(
                 "Paste combination duration mediator reacted to paste hotkey.");
+
+			if(IsCancellationRequested)
+				threadCancellationTokenSource = new CancellationTokenSource();
 
             OnPasteCombinationHeldDown();
 

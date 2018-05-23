@@ -22,7 +22,6 @@
 	{
 		readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
 		readonly IPasteCombinationDurationMediator pasteCombinationDurationMediator;
-		readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
 		readonly IClipboardPersistenceService clipboardPersistenceService;
 		readonly IClipboardDataControlPackageFactory clipboardDataControlPackageFactory;
 		readonly IKeyInterceptor hotkeyInterceptor;
@@ -64,14 +63,13 @@
 
 		public void Cancel()
 		{
-			pasteCombinationDurationMediator.CancelCombinationRegistration();
-			pasteHotkeyInterceptor.SkipNext();
+            pasteCombinationDurationMediator.CancelOngoingCombinationRegistration();
+			RaiseUserInterfaceHiddenEvent();
 		}
 
 		public ClipboardUserInterfaceInteractionMediator(
 			IClipboardCopyInterceptor clipboardCopyInterceptor,
 			IPasteCombinationDurationMediator pasteCombinationDurationMediator,
-			IPasteHotkeyInterceptor pasteHotkeyInterceptor,
 			IClipboardPersistenceService clipboardPersistenceService,
 			IClipboardDataControlPackageFactory clipboardDataControlPackageFactory,
 			IKeyInterceptor hotkeyInterceptor,
@@ -81,7 +79,6 @@
 		{
 			this.clipboardCopyInterceptor = clipboardCopyInterceptor;
 			this.pasteCombinationDurationMediator = pasteCombinationDurationMediator;
-			this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
 			this.clipboardPersistenceService = clipboardPersistenceService;
 			this.clipboardDataControlPackageFactory = clipboardDataControlPackageFactory;
 			this.hotkeyInterceptor = hotkeyInterceptor;
