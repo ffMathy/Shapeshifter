@@ -27,7 +27,7 @@
         {
             linkValidationExpression =
                 new Regex(
-                    @"^(?:(?:http|https):\/\/)?(?:\w+.)*(\/.+)?$",
+                    @"^(?:(?:http|https):\/\/)?((?:.+\.)*\w+)(?:\/.+)?(?:\?.+)?$",
                     RegexOptions.IgnoreCase | RegexOptions.Singleline);
         }
 
