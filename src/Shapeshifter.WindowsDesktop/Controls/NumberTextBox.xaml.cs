@@ -1,11 +1,11 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Shapeshifter.WindowsDesktop.Controls
 {
+	using Re2.Net;
+
 	/// <summary>
 	/// Interaction logic for NumberTextBox.xaml
 	/// </summary>

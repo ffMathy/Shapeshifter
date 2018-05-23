@@ -131,6 +131,10 @@
       <HintPath>..\packages\Octokit.0.29.0\lib\net45\Octokit.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Re2.Net">
+      <HintPath>..\..\lib\Re2.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="RtfPipe, Version=0.7.6669.2200, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RtfPipe.0.7.0.6\lib\net40\RtfPipe.dll</HintPath>
       <Private>True</Private>

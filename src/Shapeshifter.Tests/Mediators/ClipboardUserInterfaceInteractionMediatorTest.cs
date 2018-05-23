@@ -34,7 +34,7 @@
 
             var fakeDurationMediator = Container.Resolve<IPasteCombinationDurationMediator>();
             fakeDurationMediator.Received(1)
-                                .CancelCombinationRegistration();
+                                .CancelOngoingCombinationRegistration();
         }
 
         [TestMethod]

@@ -1,7 +1,6 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.ViewModels
 {
     using System;
-    using System.Text.RegularExpressions;
 
     using Autofac;
 
@@ -13,17 +12,10 @@
 
     using Interfaces;
 
-    class ClipboardTextDataViewModel
+	class ClipboardTextDataViewModel
         : ClipboardDataViewModel<IClipboardTextData>,
           IClipboardTextDataViewModel
     {
-        static readonly Regex whitespaceSubstitutionExpression;
-
-        static ClipboardTextDataViewModel()
-        {
-            whitespaceSubstitutionExpression = new Regex(@"\s+", RegexOptions.Compiled);
-        }
-
         public ClipboardTextDataViewModel()
             : this(new Infrastructure.Environment.EnvironmentInformation(true)) { }
 
@@ -45,10 +37,16 @@
         public string FriendlyText
         {
             get
-            {
-                var text = Data.Text.Trim();
-                text = whitespaceSubstitutionExpression.Replace(text, " ");
-                text = text.Substring(0, Math.Min(text.Length, 512));
+			{
+				var text = Data.Text.Trim();
+				text = text
+					.Substring(0, Math.Min(text.Length, 512))
+					.Replace("\r", " ")
+					.Replace("\n", " ")
+					.Replace("\t", " ");
+
+				while (text.Contains("  "))
+					text = text.Replace("  ", " ");
 
                 return text;
             }

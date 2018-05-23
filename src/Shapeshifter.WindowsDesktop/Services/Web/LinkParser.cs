@@ -1,196 +1,183 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Web
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Text.RegularExpressions;
-	using System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
-	using Files;
-	using Files.Interfaces;
+    using Files;
+    using Files.Interfaces;
 
-	using Infrastructure.Handles.Factories.Interfaces;
-	using Infrastructure.Threading.Interfaces;
+    using Infrastructure.Handles.Factories.Interfaces;
+    using Infrastructure.Threading.Interfaces;
 
-	using Interfaces;
+    using Interfaces;
 
-	class LinkParser : ILinkParser
-	{
-		static readonly Regex linkValidationExpression;
+    using Re2.Net;
 
-		static readonly Regex whitespaceExpression;
+    class LinkParser : ILinkParser
+    {
+        static readonly Regex linkValidationExpression;
 
-		readonly IAsyncFilter asyncFilter;
+        readonly IAsyncFilter asyncFilter;
+        readonly IDomainNameResolver domainNameResolver;
+        readonly IFileTypeInterpreter fileTypeInterpreter;
+        readonly IPerformanceHandleFactory performanceHandleFactory;
 
-		readonly IDomainNameResolver domainNameResolver;
+        static LinkParser()
+        {
+            linkValidationExpression =
+                new Regex(
+                    @"^(?:(?:http|https):\/\/)?((?:.+\.)*\w+)(?:\/.+)?(?:\?.+)?$",
+                    RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        }
 
-		readonly IFileTypeInterpreter fileTypeInterpreter;
+        public LinkParser(
+            IFileTypeInterpreter fileTypeInterpreter,
+            IDomainNameResolver domainNameResolver,
+            IAsyncFilter asyncFilter,
+            IPerformanceHandleFactory performanceHandleFactory)
+        {
+            this.fileTypeInterpreter = fileTypeInterpreter;
+            this.domainNameResolver = domainNameResolver;
+            this.asyncFilter = asyncFilter;
+            this.performanceHandleFactory = performanceHandleFactory;
+        }
 
-		readonly IPerformanceHandleFactory performanceHandleFactory;
+        public async Task<IReadOnlyCollection<string>> ExtractLinksFromTextAsync(string text)
+        {
+            return await Task.Run(
+                async () =>
+                {
+                    var words = GetWords(text);
+                    return await asyncFilter.FilterAsync(words, IsValidLinkAsync);
+                });
+        }
 
-		static LinkParser()
-		{
-			linkValidationExpression =
-				new Regex(
-					@"^(?:(?:https?|ftp):\/\/)?((?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00A1-\uFFFF0-9]+-?)*[a-z\u00A1-\uFFFF0-9]+)(?:\.(?:[a-z\u00A1-\uFFFF0-9]+-?)*[a-z\u00A1-\uFFFF0-9]+)*(?:\.(?:[a-z\u00A1-\uFFFF]{2,})))(?::\d{2,5})?)(?:\/?[^\s]*)?$",
-					RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline |
-					RegexOptions.CultureInvariant,
-					TimeSpan.FromMilliseconds(25));
-			whitespaceExpression = new Regex(@"\s", RegexOptions.Compiled);
-		}
+        static string[] GetWords(string text)
+        {
+            return text.Split(new[] { '\n', '\r', '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        }
 
-		public LinkParser(
-			IFileTypeInterpreter fileTypeInterpreter,
-			IDomainNameResolver domainNameResolver,
-			IAsyncFilter asyncFilter,
-			IPerformanceHandleFactory performanceHandleFactory)
-		{
-			this.fileTypeInterpreter = fileTypeInterpreter;
-			this.domainNameResolver = domainNameResolver;
-			this.asyncFilter = asyncFilter;
-			this.performanceHandleFactory = performanceHandleFactory;
-		}
+        static IEnumerable<string> ExtractSuspiciousWords(string[] words)
+        {
+            foreach (var word in words)
+            {
+                if (IsSuspiciousWord(word))
+                {
+                    yield return word;
+                }
+            }
+        }
 
-		public async Task<IReadOnlyCollection<string>> ExtractLinksFromTextAsync(string text)
-		{
-			return await Task.Run(
-				async () => {
-					var words = GetWords(text);
-					return await asyncFilter.FilterAsync(words, IsValidLinkAsync);
-				});
-		}
+        static IEnumerable<string> ExtractNonSuspiciousWords(string[] words)
+        {
+            foreach (var word in words)
+            {
+                if (!IsSuspiciousWord(word))
+                {
+                    yield return word;
+                }
+            }
+        }
 
-		static string[] GetWords(string text)
-		{
-			return whitespaceExpression.Split(text);
-		}
+        static bool IsSuspiciousWord(string word)
+        {
+            return
+                word.StartsWith("www.", StringComparison.OrdinalIgnoreCase) ||
+                word.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                word.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
+        }
 
-		static IEnumerable<string> ExtractSuspiciousWords(string[] words)
-		{
-			foreach (var word in words)
-			{
-				if (IsSuspiciousWord(word))
-				{
-					yield return word;
-				}
-			}
-		}
+        public LinkType GetLinkType(string link)
+        {
+            var linkType = default(LinkType);
+            if (fileTypeInterpreter.GetFileTypeFromFileName(link) == FileType.Image)
+            {
+                linkType |= LinkType.ImageFile;
+            }
 
-		static IEnumerable<string> ExtractNonSuspiciousWords(string[] words)
-		{
-			foreach (var word in words)
-			{
-				if (!IsSuspiciousWord(word))
-				{
-					yield return word;
-				}
-			}
-		}
+            if (link.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            {
+                linkType |= LinkType.Https;
+            }
+            else if (link.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
+            {
+                linkType |= LinkType.Http;
+            }
 
-		static bool IsSuspiciousWord(string word)
-		{
-			return
-				word.StartsWith("www.", StringComparison.OrdinalIgnoreCase) ||
-				word.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-				word.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
-		}
+            return linkType;
+        }
 
-		public LinkType GetLinkType(string link)
-		{
-			var linkType = default(LinkType);
-			if (fileTypeInterpreter.GetFileTypeFromFileName(link) == FileType.Image)
-			{
-				linkType |= LinkType.ImageFile;
-			}
+        public bool IsLinkOfType(string link, LinkType type)
+        {
+            var linkType = GetLinkType(link);
+            return (linkType == type) || linkType.HasFlag(type);
+        }
 
-			if (link.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
-			{
-				linkType |= LinkType.Https;
-			}
-			else if (link.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
-			{
-				linkType |= LinkType.Http;
-			}
+        public async Task<bool> HasLinkAsync(string text)
+        {
+            using (performanceHandleFactory.StartMeasuringPerformance())
+                return await Task.Run(
+                    async () =>
+                    {
+                        var words = GetWords(text);
 
-			return linkType;
-		}
+                        var suspiciousWords = ExtractSuspiciousWords(words);
+                        if (
+                            await asyncFilter.HasMatchAsync(
+                                suspiciousWords,
+                                IsValidLinkAsync))
+                        {
+                            return true;
+                        }
 
-		public bool IsLinkOfType(string link, LinkType type)
-		{
-			var linkType = GetLinkType(link);
-			return (linkType == type) || linkType.HasFlag(type);
-		}
+                        var nonSuspiciousWords = ExtractNonSuspiciousWords(words);
+                        return await asyncFilter.HasMatchAsync(
+                            nonSuspiciousWords,
+                            IsValidLinkAsync);
+                    });
+        }
 
-		public async Task<bool> HasLinkAsync(string text)
-		{
-			using (performanceHandleFactory.StartMeasuringPerformance())
-				return await Task.Run(
-					async () => {
-						var words = GetWords(text);
+        public async Task<bool> HasLinkOfTypeAsync(string text, LinkType linkType)
+        {
+            using (performanceHandleFactory.StartMeasuringPerformance())
+            {
+                Func<string, Task<bool>> validationFunction =
+                    async word => IsLinkOfType(word, linkType) && await IsValidLinkAsync(word);
+                return await Task.Run(
+                    async () =>
+                    {
+                        var words = GetWords(text);
 
-						var suspiciousWords = ExtractSuspiciousWords(words);
-						if (
-							await asyncFilter.HasMatchAsync(
-								suspiciousWords,
-								IsValidLinkAsync))
-						{
-							return true;
-						}
+                        var suspiciousWords = ExtractSuspiciousWords(words);
+                        if (
+                            await
+                            asyncFilter.HasMatchAsync(
+                                suspiciousWords,
+                                validationFunction))
+                        {
+                            return true;
+                        }
 
-						var nonSuspiciousWords = ExtractNonSuspiciousWords(words);
-						return await asyncFilter.HasMatchAsync(
-							nonSuspiciousWords,
-							IsValidLinkAsync);
-					});
-		}
+                        var nonSuspiciousWords = ExtractNonSuspiciousWords(words);
+                        return
+                            await
+                            asyncFilter.HasMatchAsync(
+                                nonSuspiciousWords,
+                                validationFunction);
+                    });
+            }
+        }
 
-		public async Task<bool> HasLinkOfTypeAsync(string text, LinkType linkType)
-		{
-			using (performanceHandleFactory.StartMeasuringPerformance())
-			{
-				Func<string, Task<bool>> validationFunction =
-					async word => IsLinkOfType(word, linkType) && await IsValidLinkAsync(word);
-				return await Task.Run(
-					async () => {
-						var words = GetWords(text);
+        public async Task<bool> IsValidLinkAsync(string link)
+        {
+            var match = linkValidationExpression.Match(link);
+            if (!match.Success)
+                return false;
 
-						var suspiciousWords = ExtractSuspiciousWords(words);
-						if (
-							await
-							asyncFilter.HasMatchAsync(
-								suspiciousWords,
-								validationFunction))
-						{
-							return true;
-						}
-
-						var nonSuspiciousWords = ExtractNonSuspiciousWords(words);
-						return
-							await
-							asyncFilter.HasMatchAsync(
-								nonSuspiciousWords,
-								validationFunction);
-					});
-			}
-		}
-
-		public async Task<bool> IsValidLinkAsync(string link)
-		{
-			try
-			{
-				var match = linkValidationExpression.Match(link);
-				if (!match.Success)
-				{
-					return false;
-				}
-
-				var domain = match.Groups[1].Value;
-				return linkValidationExpression.IsMatch(link) &&
-					   await domainNameResolver.IsValidDomainAsync(domain);
-			}
-			catch (RegexMatchTimeoutException)
-			{
-				return false;
-			}
-		}
-	}
+            var domain = match.Groups[1].Value;
+            return linkValidationExpression.IsMatch(link) &&
+                   await domainNameResolver.IsValidDomainAsync(domain);
+        }
+    }
 }

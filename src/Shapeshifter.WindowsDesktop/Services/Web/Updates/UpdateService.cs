@@ -4,7 +4,6 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Net.Http;
-	using System.Text.RegularExpressions;
 	using System.Threading.Tasks;
 
 	using Controls.Window.Interfaces;
@@ -22,6 +21,8 @@
 	using Processes.Interfaces;
 	
 	using Infrastructure.Environment.Interfaces;
+
+	using Re2.Net;
 
 	using Serilog;
 	using Shapeshifter.WindowsDesktop.Services.Interfaces;
