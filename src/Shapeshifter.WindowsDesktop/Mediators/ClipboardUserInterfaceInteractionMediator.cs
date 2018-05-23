@@ -65,6 +65,7 @@
 		public void Cancel()
 		{
 			pasteCombinationDurationMediator.CancelCombinationRegistration();
+			pasteHotkeyInterceptor.SkipNext();
 		}
 
 		public ClipboardUserInterfaceInteractionMediator(
