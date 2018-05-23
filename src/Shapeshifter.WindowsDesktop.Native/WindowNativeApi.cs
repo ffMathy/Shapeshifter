@@ -10,6 +10,12 @@
     [ExcludeFromCodeCoverage]
     public class WindowNativeApi: IWindowNativeApi
     {
+		public struct WINDOWINFO
+		{
+			public uint ownerpid;
+			public uint childpid;
+		}
+
         IntPtr IWindowNativeApi.GetClassLongPtr(IntPtr hWnd, int nIndex)
         {
             return GetClassLongPtr(hWnd, nIndex);
@@ -35,7 +41,12 @@
             return LoadIcon(hInstance, lpIconName);
         }
 
-        IntPtr IWindowNativeApi.SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam)
+		bool IWindowNativeApi.EnumChildWindows(IntPtr hWndParent, EnumWindowProc lpEnumFunc, IntPtr lParam)
+		{
+			return EnumChildWindows(hWndParent, lpEnumFunc, lParam);
+		}
+
+		IntPtr IWindowNativeApi.SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam)
         {
             return SendMessage(hWnd, Msg, wParam, lParam);
         }
@@ -83,6 +94,12 @@
 
         public const uint WINEVENT_OUTOFCONTEXT = 0;
         public const uint EVENT_SYSTEM_FOREGROUND = 3;
+
+		public delegate bool EnumWindowProc(IntPtr hWnd, IntPtr parameter);
+
+		[DllImport("user32", SetLastError = true)]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		internal static extern bool EnumChildWindows(IntPtr hWndParent, EnumWindowProc lpEnumFunc, IntPtr lParam);
 
         [DllImport("user32.dll")]
         internal static extern IntPtr GetForegroundWindow();

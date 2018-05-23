@@ -2,8 +2,6 @@
 
 namespace Shapeshifter.WindowsDesktop.Services.Window
 {
-	using Information;
-
 	using Infrastructure.Threading.Interfaces;
 
 	using Interfaces;

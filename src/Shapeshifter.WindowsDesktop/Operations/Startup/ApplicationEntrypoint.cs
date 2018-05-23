@@ -7,8 +7,6 @@
     using Interfaces;
 	using Serilog;
 
-	using Services.Interfaces;
-
 	public class ApplicationEntrypoint: ISingleInstance
     {
         readonly IStartupPreparationOperation startupPreparationOperation;

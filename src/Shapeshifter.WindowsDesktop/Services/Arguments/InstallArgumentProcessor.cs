@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.IO;
 	using System.Linq;
@@ -251,7 +252,14 @@
 
 		void LaunchInstalledExecutable(string currentExecutableFile)
 		{
-			processManager.LaunchFileWithAdministrativeRights(InstallationInformation.TargetExecutableFile, $"postinstall \"{currentExecutableFile}\"");
+			try
+			{
+				processManager.LaunchFileWithAdministrativeRights(InstallationInformation.TargetExecutableFile, $"postinstall \"{currentExecutableFile}\"");
+			}
+			catch (Win32Exception)
+			{
+				processManager.CloseCurrentProcess();
+			}
 		}
 
 		async Task WriteExecutableAsync()

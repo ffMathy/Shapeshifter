@@ -1,8 +1,9 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
     using System;
+	using System.Diagnostics;
 
-    using Data;
+	using Data;
     using Data.Interfaces;
     using Images.Interfaces;
     using Infrastructure.Dependencies.Interfaces;
@@ -12,14 +13,14 @@
 	using System.Windows.Interop;
 	using System.Windows.Media.Imaging;
 
+	using Windows.Management.Deployment;
+
 	using Infrastructure.Caching.Interfaces;
 
 	using Messages;
 
 	using Native;
 	using Native.Interfaces;
-
-	using Services.Interfaces;
 
 	using Window.Interfaces;
 
@@ -55,10 +56,9 @@
 			{
                 var activeWindowHandle = activeWindowService.ActiveWindowHandle;
 
-                var processName = activeWindowService.
-					GetProcessFromWindowHandle(activeWindowHandle)
-					.ProcessName + ".exe";
-
+				var process = activeWindowService.GetProcessFromWindowHandle(activeWindowHandle);
+				var processName = process.ProcessName + ".exe";
+				new PackageManager().
                 var iconBytesBig = dataSourceIconCacheLarge.Get(activeWindowHandle);
                 if (iconBytesBig == null)
                 {

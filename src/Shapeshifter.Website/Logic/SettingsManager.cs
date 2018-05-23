@@ -1,10 +1,6 @@
 ﻿namespace Shapeshifter.Website.Logic
 {
-	using System.Diagnostics;
 	using System.IO;
-	using System.Linq;
-
-	using Microsoft.Win32;
 
 	using Newtonsoft.Json;
 

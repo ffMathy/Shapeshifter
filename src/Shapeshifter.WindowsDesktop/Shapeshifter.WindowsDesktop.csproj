@@ -7,6 +7,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C8AFEB5B-5197-4F7D-90F1-DC1DCD795BE1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
+    <TargetPlatformVersion>8.0</TargetPlatformVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Shapeshifter.WindowsDesktop</RootNamespace>
     <AssemblyName>Shapeshifter</AssemblyName>
@@ -256,6 +257,8 @@
       <Private>True</Private>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Windows.ApplicationModel" />
+    <Reference Include="Windows.Management" />
     <Reference Include="WindowsBase">
       <Private>True</Private>
       <EmbedInteropTypes>False</EmbedInteropTypes>

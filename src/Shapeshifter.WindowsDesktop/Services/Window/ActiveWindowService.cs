@@ -1,31 +1,32 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Window
 {
-	using System;
-	using System.Diagnostics;
+    using System;
+    using System.Diagnostics;
+    using System.Runtime.InteropServices;
 
 	using Information;
 
-	using Infrastructure.Caching.Interfaces;
+    using Infrastructure.Caching.Interfaces;
 
-	using Interfaces;
+    using Interfaces;
 
-	using Native;
-	using Native.Interfaces;
+    using Native;
+    using Native.Interfaces;
 
-	using Processes.Interfaces;
+    using Processes.Interfaces;
 
-	public class ActiveWindowService: IActiveWindowService
+    public class ActiveWindowService : IActiveWindowService
     {
         readonly IWindowNativeApi windowNativeApi;
-		readonly IWindowThreadMerger windowThreadMerger;
-		readonly IProcessManager processManager;
+        readonly IWindowThreadMerger windowThreadMerger;
+        readonly IProcessManager processManager;
 
-		readonly IKeyValueCache<IntPtr, Process> windowProcessCache;
+        readonly IKeyValueCache<IntPtr, Process> windowProcessCache;
 
-		readonly WindowNativeApi.WinEventDelegate callbackPointer;
+        readonly WindowNativeApi.WinEventDelegate callbackPointer;
 
         IntPtr hookHandle;
-        
+
         public event EventHandler ActiveWindowChanged;
         public event EventHandler ActiveWindowProcessChanged;
 
@@ -35,40 +36,84 @@
 
         public ActiveWindowService(
             IWindowNativeApi windowNativeApi,
-			IWindowThreadMerger windowThreadMerger,
-			IProcessManager processManager,
-			IKeyValueCache<IntPtr, Process> windowProcessCache)
+            IWindowThreadMerger windowThreadMerger,
+            IProcessManager processManager,
+            IKeyValueCache<IntPtr, Process> windowProcessCache)
         {
             this.windowNativeApi = windowNativeApi;
-			this.windowThreadMerger = windowThreadMerger;
-			this.processManager = processManager;
-			this.windowProcessCache = windowProcessCache;
+            this.windowThreadMerger = windowThreadMerger;
+            this.processManager = processManager;
+            this.windowProcessCache = windowProcessCache;
 
-			callbackPointer = OnWindowChanged;
-			GC.KeepAlive(callbackPointer);
+            callbackPointer = OnWindowChanged;
+            GC.KeepAlive(callbackPointer);
         }
 
-		public Process GetProcessFromWindowHandle(IntPtr handle)
+        public Process GetProcessFromWindowHandle(IntPtr handle)
         {
-			var process = windowProcessCache.Get(handle);
-			if (process != default) 
-				return process;
+            var process = windowProcessCache.Get(handle);
+            if (process != default)
+                return process;
 
-			windowNativeApi.GetWindowThreadProcessId(handle, out var processId);
-			if (processId == CurrentProcessInformation.CurrentProcess.Id)
-				return CurrentProcessInformation.CurrentProcess;
+            windowNativeApi.GetWindowThreadProcessId(handle, out var processId);
+            if (processId == CurrentProcessInformation.CurrentProcess.Id)
+                return CurrentProcessInformation.CurrentProcess;
 
-			process = Process.GetProcessById((int) processId);
-			windowProcessCache.Set(handle, process);
+            process = Process.GetProcessById((int)processId);
+            if (process.ProcessName == "ApplicationFrameHost")
+                process = GetProcessFromUniversalWindowsApplication(handle, process);
 
-			return process;
+            windowProcessCache.Set(handle, process);
+
+            return process;
+        }
+
+        Process GetProcessFromUniversalWindowsApplication(IntPtr windowHandle, Process process)
+        {
+            var windowinfo = new WindowNativeApi.WINDOWINFO
+            {
+                ownerpid = (uint)process.Id,
+                childpid = (uint)process.Id
+            };
+
+            var pWindowinfo = Marshal.AllocHGlobal(Marshal.SizeOf(windowinfo));
+			try
+			{
+				Marshal.StructureToPtr(windowinfo, pWindowinfo, false);
+
+				var lpEnumFunc = new WindowNativeApi.EnumWindowProc(EnumChildWindowsCallback);
+				windowNativeApi.EnumChildWindows(windowHandle, lpEnumFunc, pWindowinfo);
+
+				windowinfo = (WindowNativeApi.WINDOWINFO) Marshal.PtrToStructure(pWindowinfo, typeof(WindowNativeApi.WINDOWINFO));
+
+				return Process.GetProcessById((int) windowinfo.childpid);
+			}
+			finally
+			{
+				Marshal.FreeHGlobal(pWindowinfo);
+			}
+        }
+
+		bool EnumChildWindowsCallback(IntPtr hWnd, IntPtr lParam)
+		{
+			var info = (WindowNativeApi.WINDOWINFO)Marshal.PtrToStructure(lParam, typeof(WindowNativeApi.WINDOWINFO));
+
+			windowNativeApi.GetWindowThreadProcessId(hWnd, out var processId);
+
+            var process = Process.GetProcessById((int)processId);
+			if (process.Id != info.ownerpid)
+				info.childpid = (uint)process.Id;
+
+			Marshal.StructureToPtr(info, lParam, true);
+
+			return true;
 		}
 
         public string GetWindowTitleFromWindowHandle(IntPtr handle)
         {
-			var windowTitle = windowNativeApi.GetWindowTitle(handle);
-			return windowTitle;
-		}
+            var windowTitle = windowNativeApi.GetWindowTitle(handle);
+            return windowTitle;
+        }
 
         public void Disconnect()
         {
@@ -88,37 +133,37 @@
 
             hookHandle = windowNativeApi.SetWinEventHook(
                 WindowNativeApi.EVENT_SYSTEM_FOREGROUND,
-                WindowNativeApi.EVENT_SYSTEM_FOREGROUND, 
-                IntPtr.Zero, callbackPointer, 0, 0, 
+                WindowNativeApi.EVENT_SYSTEM_FOREGROUND,
+                IntPtr.Zero, callbackPointer, 0, 0,
                 WindowNativeApi.WINEVENT_OUTOFCONTEXT);
 
             IsConnected = true;
         }
 
         void OnWindowChanged(IntPtr hwineventhook, uint eventtype, IntPtr hwnd, int idobject, int idchild, uint dweventthread, uint dwmseventtime)
-		{
-			var newProcess = GetProcessFromWindowHandle(hwnd);
-			if (newProcess == CurrentProcessInformation.CurrentProcess)
-				return;
+        {
+            var newProcess = GetProcessFromWindowHandle(hwnd);
+            if (newProcess == CurrentProcessInformation.CurrentProcess)
+                return;
 
-			var oldProcess = GetProcessFromWindowHandle(ActiveWindowHandle);
+            var oldProcess = GetProcessFromWindowHandle(ActiveWindowHandle);
             var previousThreadId = GetProcessActiveWindowUserInterfaceThreadId(oldProcess);
-			if(previousThreadId != null)
-				windowThreadMerger.UnmergeThread(previousThreadId.Value);
+            if (previousThreadId != null)
+                windowThreadMerger.UnmergeThread(previousThreadId.Value);
 
             ActiveWindowHandle = hwnd;
 
-			var currentThreadId = GetProcessActiveWindowUserInterfaceThreadId(newProcess);
-			if (currentThreadId != null)
+            var currentThreadId = GetProcessActiveWindowUserInterfaceThreadId(newProcess);
+            if (currentThreadId != null)
                 windowThreadMerger.MergeThread(currentThreadId.Value);
 
             OnActiveWindowChanged();
         }
 
         int? GetProcessActiveWindowUserInterfaceThreadId(Process process)
-		{
+        {
             var thread = processManager.GetUserInterfaceThreadOfProcess(process);
-			return thread?.Id;
+            return thread?.Id;
         }
 
         protected virtual void OnActiveWindowChanged()
