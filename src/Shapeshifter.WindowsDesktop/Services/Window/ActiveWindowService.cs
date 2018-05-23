@@ -3,6 +3,8 @@
 	using System;
 	using System.Diagnostics;
 
+	using Information;
+
 	using Infrastructure.Caching.Interfaces;
 
 	using Interfaces;
@@ -107,8 +109,11 @@
 
         int? GetActiveWindowUserInterfaceThreadId()
 		{
-			var thread = processManager.GetUserInterfaceThreadOfProcess(
-				GetProcessFromWindowHandle(ActiveWindowHandle));
+			var process = GetProcessFromWindowHandle(ActiveWindowHandle);
+			if (process.Id == CurrentProcessInformation.CurrentProcess.Id)
+				return null;
+
+            var thread = processManager.GetUserInterfaceThreadOfProcess(process);
 			return thread?.Id;
         }
 
