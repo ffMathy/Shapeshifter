@@ -64,8 +64,8 @@
 				if (processThread.Id == processThreadId)
 					return processThread;
 			}
-			
-			throw new InvalidOperationException($"Could not fetch the UI thread of process {process.ProcessName}.exe.");
+
+			return null;
 		}
 
 		public void CloseAllDuplicateProcessesExceptCurrent()
