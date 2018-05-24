@@ -58,7 +58,7 @@
 
 				var process = activeWindowService.GetProcessFromWindowHandle(activeWindowHandle);
 				var processName = process.ProcessName + ".exe";
-				new PackageManager().
+				//new PackageManager().
                 var iconBytesBig = dataSourceIconCacheLarge.Get(activeWindowHandle);
                 if (iconBytesBig == null)
                 {
