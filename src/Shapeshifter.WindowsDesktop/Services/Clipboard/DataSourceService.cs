@@ -13,7 +13,7 @@
 	using System.Windows.Interop;
 	using System.Windows.Media.Imaging;
 
-	using Windows.Management.Deployment;
+	//using Windows.Management.Deployment;
 
 	using Infrastructure.Caching.Interfaces;
 
