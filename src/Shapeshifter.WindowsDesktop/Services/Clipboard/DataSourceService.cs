@@ -1,7 +1,9 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
     using System;
-	using System.Diagnostics;
+	using System.Collections;
+	using System.Collections.Generic;
+	using System.Linq;
 
 	using Data;
     using Data.Interfaces;
@@ -13,7 +15,8 @@
 	using System.Windows.Interop;
 	using System.Windows.Media.Imaging;
 
-	//using Windows.Management.Deployment;
+	using Windows.ApplicationModel;
+	using Windows.Management.Deployment;
 
 	using Infrastructure.Caching.Interfaces;
 
@@ -35,7 +38,9 @@
 		readonly IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheLarge;
         readonly IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheSmall;
 
-        public DataSourceService(
+		readonly PackageManager packageManager;
+
+		public DataSourceService(
             IImagePersistenceService imagePersistenceService,
             IActiveWindowService activeWindowService,
 			IWindowNativeApi windowNativeApi,
@@ -48,7 +53,9 @@
 
 			this.dataSourceIconCacheLarge = dataSourceIconCacheLarge;
             this.dataSourceIconCacheSmall = dataSourceIconCacheSmall;
-        }
+
+			this.packageManager = new PackageManager();
+		}
 
         public IDataSource GetDataSource()
         {
@@ -57,8 +64,14 @@
                 var activeWindowHandle = activeWindowService.ActiveWindowHandle;
 
 				var process = activeWindowService.GetProcessFromWindowHandle(activeWindowHandle);
+				if (process.Id != 0)
+				{
+					var package = packageManager.FindPackageForUser(string.Empty, process.MainModule.ModuleName);
+					if (package != null)
+						return GetDataSourceFromUniversalWindowsApplication(package);
+				}
+
 				var processName = process.ProcessName + ".exe";
-				//new PackageManager().
                 var iconBytesBig = dataSourceIconCacheLarge.Get(activeWindowHandle);
                 if (iconBytesBig == null)
                 {
@@ -85,6 +98,11 @@
                 return dataSource;
             }
         }
+
+		IDataSource GetDataSourceFromUniversalWindowsApplication(Package package)
+		{
+			throw new NotImplementedException();
+		}
 
 		BitmapSource GetWindowIcon(IntPtr windowHandle, bool bigIconSize = true)
 		{

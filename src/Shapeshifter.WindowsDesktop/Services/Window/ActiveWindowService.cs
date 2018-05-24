@@ -51,8 +51,10 @@
 
         public Process GetProcessFromWindowHandle(IntPtr handle)
         {
+			const string applicationFrameHostName = "ApplicationFrameHost";
+
             var process = windowProcessCache.Get(handle);
-            if (process != default)
+            if (process != default && process.ProcessName != applicationFrameHostName)
                 return process;
 
             windowNativeApi.GetWindowThreadProcessId(handle, out var processId);
@@ -60,7 +62,7 @@
                 return CurrentProcessInformation.CurrentProcess;
 
             process = Process.GetProcessById((int)processId);
-            if (process.ProcessName == "ApplicationFrameHost")
+			if (process.ProcessName == applicationFrameHostName)
                 process = GetProcessFromUniversalWindowsApplication(handle, process);
 
             windowProcessCache.Set(handle, process);
