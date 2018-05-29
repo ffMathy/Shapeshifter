@@ -63,7 +63,7 @@
 				AppDomain.CurrentDomain.FirstChanceException += (sender, e) => {
 					if (Debugger.IsAttached)
 					{
-						//Log.Debug(e.Exception, "First chance exception occured.");
+						Log.Debug(e.Exception, "First chance exception occured.");
 					}
 				};
 

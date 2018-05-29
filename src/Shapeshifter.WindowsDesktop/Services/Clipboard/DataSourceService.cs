@@ -5,9 +5,9 @@
     using System.IO;
     using System.Linq;
     using System.Runtime.InteropServices.WindowsRuntime;
-	using System.Threading.Tasks;
+    using System.Threading.Tasks;
 
-	using Data;
+    using Data;
     using Data.Interfaces;
     using Images.Interfaces;
     using Infrastructure.Dependencies.Interfaces;
@@ -15,14 +15,15 @@
 
     using System.Windows;
     using System.Windows.Interop;
-	using System.Windows.Media;
-	using System.Windows.Media.Imaging;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
 
     using Windows.ApplicationModel;
     using Windows.Management.Deployment;
     using Windows.Storage.Streams;
 
     using Infrastructure.Caching.Interfaces;
+    using Infrastructure.Threading.Interfaces;
 
     using Messages;
 
@@ -38,6 +39,7 @@
         readonly IImagePersistenceService imagePersistenceService;
         readonly IActiveWindowService activeWindowService;
         readonly IWindowNativeApi windowNativeApi;
+        readonly IMainThreadInvoker mainThreadInvoker;
 
         readonly IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheLarge;
         readonly IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheSmall;
@@ -48,12 +50,14 @@
             IImagePersistenceService imagePersistenceService,
             IActiveWindowService activeWindowService,
             IWindowNativeApi windowNativeApi,
+            IMainThreadInvoker mainThreadInvoker,
             IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheSmall,
             IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheLarge)
         {
             this.imagePersistenceService = imagePersistenceService;
             this.activeWindowService = activeWindowService;
             this.windowNativeApi = windowNativeApi;
+            this.mainThreadInvoker = mainThreadInvoker;
 
             this.dataSourceIconCacheLarge = dataSourceIconCacheLarge;
             this.dataSourceIconCacheSmall = dataSourceIconCacheSmall;
@@ -64,7 +68,7 @@
         public async Task<IDataSource> GetDataSourceAsync()
         {
             var activeWindowHandle = activeWindowService.ActiveWindowHandle;
-			var activeWindowTitle = activeWindowService.GetWindowTitleFromWindowHandle(activeWindowHandle);
+            var activeWindowTitle = activeWindowService.GetWindowTitleFromWindowHandle(activeWindowHandle);
 
             var process = activeWindowService.GetProcessFromWindowHandle(activeWindowHandle);
             var processName = process.ProcessName + ".exe";
@@ -96,23 +100,23 @@
         }
 
         async Task<BitmapSource> GetWindowIconAsync(
-			Process process, 
-			IntPtr windowHandle, 
-			bool bigIconSize = true)
+            Process process,
+            IntPtr windowHandle,
+            bool bigIconSize = true)
         {
-			if (process.Id != 0)
-			{
-				var processDirectoryName = Path.GetFileName(Path.GetDirectoryName(process.MainModule.FileName));
-				Debug.Assert(processDirectoryName != null, nameof(processDirectoryName) + " != null");
+            if (process.Id != 0)
+            {
+                var processDirectoryName = Path.GetFileName(Path.GetDirectoryName(process.MainModule.FileName));
+                Debug.Assert(processDirectoryName != null, nameof(processDirectoryName) + " != null");
 
-				var universalWindowsApplicationPackage = packageManager.FindPackageForUser(string.Empty, processDirectoryName);
-				if (universalWindowsApplicationPackage != null)
-					return await GetIconFromUniversalWindowsApplicationAsync(
-						universalWindowsApplicationPackage, 
-						bigIconSize ? new Size(256, 256) : new Size(24, 24));
-			}
+                var universalWindowsApplicationPackage = packageManager.FindPackageForUser(string.Empty, processDirectoryName);
+                if (universalWindowsApplicationPackage != null)
+                    return await GetIconFromUniversalWindowsApplicationAsync(
+                        universalWindowsApplicationPackage,
+                        bigIconSize ? new Size(256, 256) : new Size(24, 24));
+            }
 
-			var hIcon = windowNativeApi.SendMessage(
+            var hIcon = windowNativeApi.SendMessage(
                 windowHandle,
                 (int)Message.WM_GETICON,
                 bigIconSize ? WindowNativeApi.ICON_LARGE : WindowNativeApi.ICON_SMALL,
@@ -137,24 +141,37 @@
 
         async Task<BitmapSource> GetIconFromUniversalWindowsApplicationAsync(Package package, Size size)
         {
-			var activeWindowTitle = activeWindowService.ActiveWindowTitle;
-			var titleRegions = activeWindowTitle.Split(new[] {" - "}, StringSplitOptions.None);
+            var activeWindowTitle = activeWindowService.ActiveWindowTitle;
+            var titleRegions = activeWindowTitle.Split(new[] { " - " }, StringSplitOptions.None);
 
-            var appListEntries = (await package.GetAppListEntriesAsync().AsTask()).ToArray();
-            var appListEntry = appListEntries.FirstOrDefault(x => x
-				.DisplayInfo
-				.DisplayName
-				.EndsWith(titleRegions.Last())) ?? appListEntries.First();
+            var appListEntries = (await package.GetAppListEntriesAsync()
+                .AsTask()).ToArray();
+            var appListEntry = appListEntries.FirstOrDefault(
+                x => x
+                    .DisplayInfo
+                    .DisplayName
+                    .EndsWith(titleRegions.Last())) ?? appListEntries.First();
 
             var resource = appListEntry.DisplayInfo.GetLogo(new Windows.Foundation.Size(size.Width, size.Height));
-            var readStream = await resource.OpenReadAsync().AsTask();
 
-			var image = new BitmapImage();
-			image.SetSource
+            Windows.UI.Xaml.Media.Imaging.BitmapImage image = null;
 
-            var bytes = new byte[readStream.Size];
-            var buffer = await readStream.ReadAsync(bytes.AsBuffer(), (uint)bytes.Length, InputStreamOptions.None);
-			return imagePersistenceService.ConvertByteArrayToBitmapSource(buffer.ToArray());
-		}
+            await mainThreadInvoker.InvokeAsync(
+                async () =>
+                {
+                    using (var stream = await resource
+                        .OpenReadAsync()
+                        .AsTask())
+                    {
+                        Debug.Assert(stream != null, nameof(stream) + " != null");
+                        var bitmapImage = new Windows.UI.Xaml.Media.Imaging.BitmapImage();
+                        await bitmapImage.SetSourceAsync(stream);
+
+                        image = bitmapImage;
+                    }
+                });
+
+            return null;
+        }
     }
 }
