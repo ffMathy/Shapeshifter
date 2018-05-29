@@ -2,6 +2,7 @@
 {
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Threading.Tasks;
 
 	using Clipboard.Interfaces;
 
@@ -30,9 +31,9 @@
 			this.mainThreadInvoker = mainThreadInvoker;
 		}
 
-		public IClipboardDataControlPackage CreateFromCurrentClipboardData()
+		public async Task<IClipboardDataControlPackage> CreateFromCurrentClipboardDataAsync()
 		{
-			var dataPackage = dataPackageFactory.CreateFromCurrentClipboardData();			
+			var dataPackage = await dataPackageFactory.CreateFromCurrentClipboardDataAsync();			
 			return CreateFromDataPackage(dataPackage);
 		}
 

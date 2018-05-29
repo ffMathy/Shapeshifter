@@ -13,6 +13,13 @@
 
         public const int GMEM_ZEROINIT = 0x0040;
 
+		[DllImport("kernel32.dll", SetLastError = true)]
+		static extern int GetPackageId(
+			IntPtr hProcess,
+			ref int bufferLength,
+			IntPtr pBuffer
+		);
+
         [DllImport("dwmapi.dll", PreserveSig = false)]
         public static extern void DwmGetColorizationColor(out uint ColorizationColor, [MarshalAs(UnmanagedType.Bool)]out bool ColorizationOpaqueBlend);
 
@@ -50,7 +57,12 @@
             return GlobalSize(hMem);
         }
 
-        bool IGeneralNativeApi.GlobalUnlock(IntPtr hMem)
+		int IGeneralNativeApi.GetPackageId(IntPtr hProcess, ref int bufferLength, IntPtr pBuffer)
+		{
+			return GetPackageId(hProcess, ref bufferLength, pBuffer);
+		}
+
+		bool IGeneralNativeApi.GlobalUnlock(IntPtr hMem)
         {
             return GlobalUnlock(hMem);
         }

@@ -33,6 +33,7 @@
         public bool IsConnected { get; private set; }
 
         public IntPtr ActiveWindowHandle { get; private set; }
+		public string ActiveWindowTitle { get; private set; }
 
         public ActiveWindowService(
             IWindowNativeApi windowNativeApi,
@@ -154,6 +155,7 @@
                 windowThreadMerger.UnmergeThread(previousThreadId.Value);
 
             ActiveWindowHandle = hwnd;
+			ActiveWindowTitle = GetWindowTitleFromWindowHandle(hwnd);
 
             var currentThreadId = GetProcessActiveWindowUserInterfaceThreadId(newProcess);
             if (currentThreadId != null)

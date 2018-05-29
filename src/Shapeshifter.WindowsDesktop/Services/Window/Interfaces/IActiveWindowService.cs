@@ -11,6 +11,7 @@
         event EventHandler ActiveWindowProcessChanged;
 
 		IntPtr ActiveWindowHandle { get; }
+		string ActiveWindowTitle { get; }
 
         Process GetProcessFromWindowHandle(IntPtr handle);
 

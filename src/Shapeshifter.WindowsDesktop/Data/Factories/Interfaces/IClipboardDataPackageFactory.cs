@@ -1,13 +1,14 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Factories.Interfaces
 {
 	using System;
+	using System.Threading.Tasks;
 
 	using Data.Interfaces;
 
 	public interface IClipboardDataPackageFactory
     {
-        IClipboardDataPackage CreateFromCurrentClipboardData();
+        Task<IClipboardDataPackage> CreateFromCurrentClipboardDataAsync();
 
-        IClipboardDataPackage CreateFromFormatsAndData(Guid packageId, params FormatDataPair[] formatsAndData);
+        Task<IClipboardDataPackage> CreateFromFormatsAndDataAsync(Guid packageId, params FormatDataPair[] formatsAndData);
     }
 }

@@ -1,6 +1,8 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Clipboard.Designer.Services
 {
-    using Controls.Designer.Services;
+	using System.Threading.Tasks;
+
+	using Controls.Designer.Services;
     using Data.Interfaces;
     using Facades;
     using Interfaces;
@@ -19,7 +21,7 @@
             this.designerImageConverterService = designerImageConverterService;
         }
 
-        public IDataSource GetDataSource()
+        public async Task<IDataSource> GetDataSourceAsync()
         {
             return new DesignerDataSourceFacade(designerImageConverterService)
             {

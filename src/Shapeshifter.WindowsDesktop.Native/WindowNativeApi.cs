@@ -1,13 +1,13 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Native
 {
-    using System;
-    using System.Runtime.InteropServices;
-    using System.Text;
+	using System;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Runtime.InteropServices;
+	using System.Text;
 
-    using Interfaces;
-    using System.Diagnostics.CodeAnalysis;
+	using Interfaces;
 
-    [ExcludeFromCodeCoverage]
+	[ExcludeFromCodeCoverage]
     public class WindowNativeApi: IWindowNativeApi
     {
 		public struct WINDOWINFO
@@ -28,7 +28,7 @@
 
         int IWindowNativeApi.GetWindowText(IntPtr hWnd, StringBuilder text, int count)
         {
-            return GetWindowText(hWnd, text, count);
+            return GetWindowTextW(hWnd, text, count);
         }
 
         string IWindowNativeApi.GetWindowTitle(IntPtr windowHandle)
@@ -104,8 +104,10 @@
         [DllImport("user32.dll")]
         internal static extern IntPtr GetForegroundWindow();
 
-        [DllImport("user32.dll")]
-        internal static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+		[DllImport("user32.dll", EntryPoint = "GetWindowTextW")]
+		public static extern int GetWindowTextW([In]
+			IntPtr hWnd, [Out, MarshalAs(UnmanagedType.LPWStr)]
+			StringBuilder lpString, int nMaxCount);
 
         [DllImport("user32.dll")]
         internal static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
@@ -155,10 +157,11 @@
             const int numberOfCharacters = 512;
             var buffer = new StringBuilder(numberOfCharacters);
 
-            if (GetWindowText(windowHandle, buffer, numberOfCharacters) > 0)
-            {
-                return buffer.ToString();
-            }
+            if (GetWindowTextW(windowHandle, buffer, numberOfCharacters) > 0)
+                return buffer
+					.ToString()
+					.Replace(char.ConvertFromUtf32(8206), "");
+
             return null;
         }
     }
