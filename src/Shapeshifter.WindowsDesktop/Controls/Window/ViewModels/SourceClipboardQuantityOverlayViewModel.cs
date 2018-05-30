@@ -80,7 +80,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 
 		async void UserInterfaceViewModel_UserInterfaceDataControlAdded(object sender, UserInterfaceDataControlAddedEventArgument e)
 		{
-			if (settingsViewModel.QuietMode)
+			if (settingsViewModel.IsQuietModeEnabled)
 				return;
 
 			ActiveScreen = screenManager.GetActiveScreen();

@@ -9,7 +9,7 @@
     {
         bool StartWithWindows { get; set; }
 
-		bool QuietMode { get; set; }
+		bool IsQuietModeEnabled { get; set; }
 
         int PasteDurationBeforeUserInterfaceShowsInMilliseconds { get; set; }
 

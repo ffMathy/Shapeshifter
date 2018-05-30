@@ -37,7 +37,7 @@
             this.keyboardManager = keyboardManager;
 
 			quietMode = settingsManager.LoadSetting(
-				nameof(QuietMode),
+				nameof(IsQuietModeEnabled),
 				false);
 
             pasteDurationBeforeUserInterfaceShowsInMilliseconds = settingsManager.LoadSetting(
@@ -86,7 +86,7 @@
             }
         }
 
-		public bool QuietMode
+		public bool IsQuietModeEnabled
 		{
 			get
 			{
@@ -94,10 +94,10 @@
 			}
 			set
 			{
-				if (value == QuietMode) return;
+				if (value == IsQuietModeEnabled) return;
 
 				settingsManager.SaveSetting(
-					nameof(QuietMode),
+					nameof(IsQuietModeEnabled),
 					quietMode = value);
 
 				OnPropertyChanged();
