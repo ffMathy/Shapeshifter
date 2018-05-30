@@ -10,8 +10,8 @@ namespace Shapeshifter.WindowsDesktop.Information
 		{
 			get
 			{
-				var programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-				return Path.Combine(programFilesPath, nameof(Shapeshifter));
+				var rootPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+				return Path.Combine(rootPath, nameof(Shapeshifter));
 			}
 		}
 

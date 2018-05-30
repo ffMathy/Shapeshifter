@@ -60,7 +60,7 @@
 		async Task InstallAsync()
 		{
 			maintenanceWindow.Show("Installing ...");
-
+			
 			PrepareInstallDirectory();
 			await InstallToInstallDirectoryAsync();
 
@@ -127,8 +127,6 @@
 
 		void WriteDependencies()
 		{
-			WriteEasyHookDependencies();
-
 			var document = new XmlDocument();
 			document.LoadXml(Resources.ProjectFile);
 
@@ -148,6 +146,9 @@
 				string reference;
 				if (include.StartsWith("..\\"))
 				{
+					if (Path.GetExtension(include) == ".winmd")
+						continue;
+
 					reference = Path.GetFileNameWithoutExtension(include);
 				}
 				else
@@ -161,8 +162,10 @@
 						.First();
 				}
 
-				EmitCosturaResourceToDisk(reference + ".dll");
+				EmitCosturaResourceToDisk(reference);
 			}
+
+			WriteEasyHookDependencies();
 		}
 
 		void WriteEasyHookDependencies()
@@ -184,24 +187,35 @@
 			}
 		}
 
-		void EmitCosturaResourceToDisk(string targetFile)
+		void EmitCosturaResourceToDisk(string targetFileWithoutExtension)
 		{
-			EmitEmbeddedResourceToDisk("costura." + targetFile.ToLower(), targetFile);
+			var possibleExtensions = new[]
+			{
+				".dll",
+				".winmd"
+			};
+
+			EmitEmbeddedResourceToDisk("costura." + targetFileWithoutExtension.ToLower(), targetFileWithoutExtension, possibleExtensions);
 		}
 
-		void EmitEmbeddedResourceToDisk(string targetResourceName, string targetFile)
+		void EmitEmbeddedResourceToDisk(string targetResourceName, string targetFileWithoutExtension, string[] possibleExtensions = null)
 		{
-			var stream = Application.ResourceAssembly.GetManifestResourceStream(targetResourceName);
+			if (possibleExtensions == null)
+				possibleExtensions = new[] {".dll"};
+
+			var stream = possibleExtensions
+				.Select(extension => Application.ResourceAssembly.GetManifestResourceStream(targetResourceName + extension))
+				.FirstOrDefault(x => x != null);
 			if (stream == null)
 			{
-				if(!targetFile.StartsWith(nameof(System) + "."))
-					throw new Exception("Could not load emit embedded resource " + targetResourceName + " as " + targetFile + ".");
+				if(!targetFileWithoutExtension.StartsWith(nameof(System) + "."))
+					throw new Exception("Could not load emit embedded resource " + targetResourceName + " as " + targetFileWithoutExtension + ".");
 
-				logger.Verbose("Embedded system assembly {name} resource was not found.", targetFile);
+				logger.Verbose("Embedded system assembly {name} resource was not found.", targetFileWithoutExtension);
 				return;
 			}
 
-			logger.Verbose("Attempting to write resource {resourceName} to {embeddedFile}.", targetResourceName, targetFile);
+			logger.Verbose("Attempting to write resource {resourceName} to {embeddedFile}.", targetResourceName, targetFileWithoutExtension);
 			using (stream)
 			{
 				Debug.Assert(stream != null, nameof(stream) + " != null");
@@ -209,11 +223,11 @@
 				var bytes = new byte[stream.Length];
 				stream.Read(bytes, 0, bytes.Length);
 
-				logger.Verbose("Resource {resourceName} of {length} bytes written to {embeddedFile}.", targetResourceName, bytes.Length, targetFile);
+				logger.Verbose("Resource {resourceName} of {length} bytes written to {embeddedFile}.", targetResourceName, bytes.Length, targetFileWithoutExtension);
 				File.WriteAllBytes(
 					Path.Combine(
 						InstallationInformation.TargetDirectory,
-						targetFile),
+						targetFileWithoutExtension),
 					bytes);
 			}
 		}
