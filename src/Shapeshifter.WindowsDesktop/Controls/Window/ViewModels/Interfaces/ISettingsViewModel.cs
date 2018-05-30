@@ -9,6 +9,8 @@
     {
         bool StartWithWindows { get; set; }
 
+		bool QuietMode { get; set; }
+
         int PasteDurationBeforeUserInterfaceShowsInMilliseconds { get; set; }
 
         string HotkeyString { get; }

@@ -16,6 +16,7 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 		readonly IScreenManager screenManager;
 		readonly IThreadDeferrer threadDeferrer;
 		readonly IMainViewModel mainViewModel;
+		readonly ISettingsViewModel settingsViewModel;
 
 		public event EventHandler<DataSourceClipboardQuantityShownEventArgument> ClipboardQuantityShown;
 		public event EventHandler<DataSourceClipboardQuantityHiddenEventArgument> ClipboardQuantityHidden;
@@ -61,11 +62,13 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 		public SourceClipboardQuantityOverlayViewModel(
 			IScreenManager screenManager,
 			IThreadDeferrer threadDeferrer,
-			IMainViewModel mainViewModel)
+			IMainViewModel mainViewModel,
+			ISettingsViewModel settingsViewModel)
 		{
 			this.screenManager = screenManager;
 			this.threadDeferrer = threadDeferrer;
 			this.mainViewModel = mainViewModel;
+			this.settingsViewModel = settingsViewModel;
 
 			SetupEvents();
 		}
@@ -77,6 +80,9 @@ namespace Shapeshifter.WindowsDesktop.Controls.Window.ViewModels
 
 		async void UserInterfaceViewModel_UserInterfaceDataControlAdded(object sender, UserInterfaceDataControlAddedEventArgument e)
 		{
+			if (settingsViewModel.QuietMode)
+				return;
+
 			ActiveScreen = screenManager.GetActiveScreen();
 			Source = e.Package.Data.Source;
 			Count = mainViewModel
