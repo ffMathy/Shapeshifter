@@ -16,13 +16,22 @@
             Assert.AreEqual("foobar", setting);
         }
 
-        [TestMethod]
-        public void CanPersistAndFetchIntegers()
-        {
-            SystemUnderTest.SaveSetting("integer", 1337);
+		[TestMethod]
+		public void CanPersistAndFetchIntegers()
+		{
+			SystemUnderTest.SaveSetting("integer", 1337);
 
-            var setting = SystemUnderTest.LoadSetting<int>("integer");
-            Assert.AreEqual(1337, setting);
-        }
+			var setting = SystemUnderTest.LoadSetting<int>("integer");
+			Assert.AreEqual(1337, setting);
+		}
+
+		[TestMethod]
+		public void CanPersistAndFetchBooleans()
+		{
+			SystemUnderTest.SaveSetting("boolean", true);
+
+			var setting = SystemUnderTest.LoadSetting<bool>("boolean");
+			Assert.AreEqual(true, setting);
+		}
     }
 }
