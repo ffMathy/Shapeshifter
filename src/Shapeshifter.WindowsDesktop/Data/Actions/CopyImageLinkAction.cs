@@ -63,9 +63,12 @@
 
         async Task<bool> CanPerformAsync(IClipboardData data)
         {
-			return data is IClipboardTextData textData &&
-                   await linkParser.HasLinkOfTypeAsync(textData.Text, LinkType.ImageFile)
-                                   .ConfigureAwait(false);
+	    // Until implemented
+	    return false;
+	    
+		//	return data is IClipboardTextData textData &&
+                //   await linkParser.HasLinkOfTypeAsync(textData.Text, LinkType.ImageFile)
+                //                   .ConfigureAwait(false);
         }
 
         public async Task PerformAsync(IClipboardDataPackage package)

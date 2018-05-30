@@ -1,22 +1,36 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Infrastructure.Threading
 {
     using System;
-    using System.Windows.Threading;
+	using System.Threading.Tasks;
+	using System.Windows.Threading;
 
-    using Interfaces;
+	using Windows.UI.Core;
 
-    class MainThreadInvoker: IMainThreadInvoker
+	using Interfaces;
+	
+	class MainThreadInvoker: IMainThreadInvoker
     {
-        readonly Dispatcher dispatcher;
+		readonly Dispatcher wpfDispatcher;
 
-        public MainThreadInvoker()
+		public MainThreadInvoker()
         {
-            dispatcher = Dispatcher.CurrentDispatcher;
-        }
+			wpfDispatcher = Dispatcher.CurrentDispatcher;
+            wpfDispatcher.UnhandledException += WpfDispatcherUnhandledException;
+		}
+
+		static void WpfDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+		{
+			Program.OnGlobalErrorOccured(e.Exception);
+		}
 
         public void Invoke(Action action)
         {
-            dispatcher.Invoke(action);
+            wpfDispatcher.Invoke(action);
         }
-    }
+
+		public T Invoke<T>(Func<T> action)
+		{
+			return wpfDispatcher.Invoke(action);
+        }
+	}
 }

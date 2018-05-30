@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Threading.Tasks;
 
 	using Data.Interfaces;
 
@@ -43,7 +44,7 @@
 			this.dataSourceService = dataSourceService;
 		}
 
-		public IClipboardDataPackage CreateFromCurrentClipboardData()
+		public async Task<IClipboardDataPackage> CreateFromCurrentClipboardDataAsync()
 		{
 			using (var session = clipboardSessionFactory.StartNewSession())
 			{
@@ -51,13 +52,13 @@
 				if (formats.Count == 0)
 					return null;
 
-				return ConstructPackageFromFormats(formats);
+				return await ConstructPackageFromFormatsAsync(formats);
 			}
 		}
 
-		public IClipboardDataPackage CreateFromFormatsAndData(Guid packageId, params FormatDataPair[] formatsAndData)
+		public async Task<IClipboardDataPackage> CreateFromFormatsAndDataAsync(Guid packageId, params FormatDataPair[] formatsAndData)
 		{
-			var package = CreateDataPackage(packageId);
+			var package = await CreateDataPackageAsync(packageId);
 			foreach (var pair in formatsAndData)
 			{
 				DecoratePackageWithClipboardDataFromRawDataAndFormat(package, pair.Format, pair.Data);
@@ -66,21 +67,21 @@
 			return package;
 		}
 
-		ClipboardDataPackage CreateDataPackage(Guid packageId = default)
+		async Task<ClipboardDataPackage> CreateDataPackageAsync(Guid packageId = default)
 		{
 			if (packageId == default)
 				packageId = Guid.NewGuid();
 
 			return new ClipboardDataPackage() {
-				Source = dataSourceService.GetDataSource(),
+				Source = await dataSourceService.GetDataSourceAsync(),
 				Id = packageId
 			};
 		}
 
-		IClipboardDataPackage ConstructPackageFromFormats(
+		async Task<IClipboardDataPackage> ConstructPackageFromFormatsAsync(
 			IEnumerable<IClipboardFormat> formats)
 		{
-			var package = CreateDataPackage();
+			var package = await CreateDataPackageAsync();
 			DecoratePackageWithClipboardData(formats, package);
 
 			return package;

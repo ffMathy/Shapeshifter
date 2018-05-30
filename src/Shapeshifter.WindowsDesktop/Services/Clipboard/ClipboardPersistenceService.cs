@@ -93,7 +93,7 @@
 					data));
             }
 
-            return clipboardDataPackageFactory.CreateFromFormatsAndData(
+            return await clipboardDataPackageFactory.CreateFromFormatsAndDataAsync(
 				Guid.Parse(Path.GetFileName(directory)),
 				dataPairs.ToArray());
         }

@@ -2,8 +2,9 @@
 {
     using System;
     using System.Linq;
+	using System.Threading.Tasks;
 
-    using Autofac;
+	using Autofac;
 
     using Controls.Clipboard.Factories.Interfaces;
     using Controls.Clipboard.Interfaces;
@@ -89,8 +90,8 @@
             fakePackage.Control.Returns(fakeControl);
 
             Container.Resolve<IClipboardDataControlPackageFactory>()
-                     .CreateFromCurrentClipboardData()
-                     .Returns(fakePackage);
+                     .CreateFromCurrentClipboardDataAsync()
+                     .Returns(Task.FromResult(fakePackage));
 
             var mediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
             mediator.Connect();
@@ -158,7 +159,7 @@
                 });
 
             Container.Resolve<IClipboardDataControlPackageFactory>()
-             .CreateFromCurrentClipboardData()
+             .CreateFromCurrentClipboardDataAsync()
              .Returns(fakePackage);
             
             SystemUnderTest.Connect();
@@ -189,7 +190,7 @@
             fakePackage.Control.Returns(fakeControl);
 
             Container.Resolve<IClipboardDataControlPackageFactory>()
-             .CreateFromCurrentClipboardData()
+             .CreateFromCurrentClipboardDataAsync()
              .Returns(fakePackage);
             
             SystemUnderTest.Connect();

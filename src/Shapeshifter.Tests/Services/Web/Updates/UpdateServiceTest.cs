@@ -20,8 +20,7 @@
 
     using Processes.Interfaces;
 
-    using Web.Interfaces;
-    using Infrastructure.Environment.Interfaces;
+	using Infrastructure.Environment.Interfaces;
 
     [TestClass]
     public class UpdateServiceTest: UnitTestFor<IUpdateService>

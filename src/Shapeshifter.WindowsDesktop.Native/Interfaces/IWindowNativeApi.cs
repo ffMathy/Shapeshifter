@@ -23,7 +23,7 @@
         string GetWindowTitle(IntPtr windowHandle);
 
         IntPtr LoadIcon(IntPtr hInstance, IntPtr lpIconName);
-
+		bool EnumChildWindows(IntPtr hWndParent, WindowNativeApi.EnumWindowProc lpEnumFunc, IntPtr lParam);
         IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
 
         IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WindowNativeApi.WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);

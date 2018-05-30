@@ -17,6 +17,12 @@
 
         UIntPtr GlobalSize(IntPtr hMem);
 
+		int GetPackageId(
+			IntPtr hProcess,
+			ref int bufferLength,
+			IntPtr pBuffer
+		);
+
         bool GlobalUnlock(IntPtr hMem);
 
         byte[] StructureToByteArray<T>(T structure);

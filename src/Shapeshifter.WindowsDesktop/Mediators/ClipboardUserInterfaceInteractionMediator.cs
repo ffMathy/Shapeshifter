@@ -189,12 +189,12 @@
 			object sender,
 			DataCopiedEventArgument e)
 		{
-			AppendPackagesWithDataFromClipboard();
+			AppendPackagesWithDataFromClipboardAsync();
 		}
 
-		void AppendPackagesWithDataFromClipboard()
+		async void AppendPackagesWithDataFromClipboardAsync()
 		{
-			var controlPackage = clipboardDataControlPackageFactory.CreateFromCurrentClipboardData();
+			var controlPackage = await clipboardDataControlPackageFactory.CreateFromCurrentClipboardDataAsync();
 			if (controlPackage == null) return;
 
 			AddControlPackage(controlPackage);
@@ -281,7 +281,7 @@
 		void LoadInitialClipboardData()
 		{
 			LoadPersistedPackagesAsync();
-			AppendPackagesWithDataFromClipboard();
+			AppendPackagesWithDataFromClipboardAsync();
 		}
 
 		void InstallPasteCombinationDurationMediator()

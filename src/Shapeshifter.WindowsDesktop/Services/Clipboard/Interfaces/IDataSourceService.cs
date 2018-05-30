@@ -1,9 +1,11 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard.Interfaces
 {
-    using Data.Interfaces;
+	using System.Threading.Tasks;
+
+	using Data.Interfaces;
 
     public interface IDataSourceService
     {
-        IDataSource GetDataSource();
+        Task<IDataSource> GetDataSourceAsync();
     }
 }
