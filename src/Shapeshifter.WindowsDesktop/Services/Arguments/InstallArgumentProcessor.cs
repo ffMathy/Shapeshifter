@@ -1,298 +1,277 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Arguments
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Diagnostics;
-	using System.IO;
-	using System.Linq;
-	using System.Threading.Tasks;
-	using System.Windows;
-	using System.Xml;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Xml;
 
-	using Controls.Window.Interfaces;
-	using Controls.Window.ViewModels.Interfaces;
+    using Controls.Window.Interfaces;
+    using Controls.Window.ViewModels.Interfaces;
 
-	using Files.Interfaces;
+    using Files.Interfaces;
 
-	using Information;
+    using Information;
 
-	using Interfaces;
+    using Interfaces;
 
-	using Processes.Interfaces;
+    using Processes.Interfaces;
 
-	using Properties;
+    using Properties;
 
-	using Serilog;
+    using Serilog;
 
-	class InstallArgumentProcessor : IInstallArgumentProcessor
-	{
-		readonly IProcessManager processManager;
-		readonly IFileManager fileManager;
-		readonly ISettingsViewModel settingsViewModel;
-		readonly IMaintenanceWindow maintenanceWindow;
-		readonly ILogger logger;
+    class InstallArgumentProcessor : IInstallArgumentProcessor
+    {
+        readonly IProcessManager processManager;
+        readonly IFileManager fileManager;
+        readonly ISettingsViewModel settingsViewModel;
+        readonly IMaintenanceWindow maintenanceWindow;
+        readonly ILogger logger;
 
-		public InstallArgumentProcessor(
-			IProcessManager processManager,
-			IFileManager fileManager,
-			ISettingsViewModel settingsViewModel,
-			IMaintenanceWindow maintenanceWindow,
-			ILogger logger)
-		{
-			this.processManager = processManager;
-			this.fileManager = fileManager;
-			this.settingsViewModel = settingsViewModel;
-			this.maintenanceWindow = maintenanceWindow;
-			this.logger = logger;
-		}
+        public InstallArgumentProcessor(
+            IProcessManager processManager,
+            IFileManager fileManager,
+            ISettingsViewModel settingsViewModel,
+            IMaintenanceWindow maintenanceWindow,
+            ILogger logger)
+        {
+            this.processManager = processManager;
+            this.fileManager = fileManager;
+            this.settingsViewModel = settingsViewModel;
+            this.maintenanceWindow = maintenanceWindow;
+            this.logger = logger;
+        }
 
-		public bool Terminates => true;
+        public bool Terminates => true;
 
-		public bool CanProcess(string[] arguments) => arguments.Contains("install");
+        public bool CanProcess(string[] arguments) => arguments.Contains("install");
 
-		public async Task ProcessAsync(string[] arguments)
-		{
-			logger.Information("Running installation procedure.");
-			await InstallAsync();
-		}
+        public async Task ProcessAsync(string[] arguments)
+        {
+            logger.Information("Running installation procedure.");
+            await InstallAsync();
+        }
 
-		async Task InstallAsync()
-		{
-			maintenanceWindow.Show("Installing ...");
-			
-			PrepareInstallDirectory();
-			await InstallToInstallDirectoryAsync();
+        async Task InstallAsync()
+        {
+            maintenanceWindow.Show("Installing ...");
 
-			ConfigureDefaultSettings();
+            PrepareInstallDirectory();
+            await InstallToInstallDirectoryAsync();
 
-			logger.Information("Default settings have been configured.");
+            ConfigureDefaultSettings();
 
-			LaunchInstalledExecutable(
-				CurrentProcessInformation.GetCurrentProcessFilePath());
+            logger.Information("Default settings have been configured.");
 
-			logger.Information("Launched installed executable.");
-		}
+            LaunchInstalledExecutable(
+                CurrentProcessInformation.GetCurrentProcessFilePath());
 
-		async Task InstallToInstallDirectoryAsync()
-		{
-			await WriteExecutableAsync();
-			WriteDependencies();
-			WriteApplicationConfiguration();
-			WriteApplicationManifest();
-			WriteApplicationDebugInformation();
+            logger.Information("Launched installed executable.");
+        }
 
-			var exitCode = await RunNativeGenerationAsync();
-			if (exitCode != 0)
-				throw new Exception("Could not generate a native image of the installed executable.");
+        async Task InstallToInstallDirectoryAsync()
+        {
+            await WriteExecutableAsync();
+            WriteDependencies();
+            WriteApplicationConfiguration();
+            WriteApplicationManifest();
+            WriteApplicationDebugInformation();
 
-			logger.Information("Executable, configuration and manifest written to install directory.");
-		}
+            var exitCode = await RunNativeGenerationAsync();
+            if (exitCode != 0)
+                throw new Exception("Could not generate a native image of the installed executable.");
 
-		Task<int> RunNativeGenerationAsync()
-		{
-			var process = processManager.LaunchFile(
-				@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe",
-				@"install """ + InstallationInformation.TargetExecutableFile + @""" /ExeConfig:""" + InstallationInformation.TargetExecutableFile + @""" /nologo",
-				ProcessWindowStyle.Hidden);
+            logger.Information("Executable, configuration and manifest written to install directory.");
+        }
 
-			var taskCompletionSource = new TaskCompletionSource<int>();
-			process.EnableRaisingEvents = true;
-			process.Exited += (sender, args) => taskCompletionSource.TrySetResult(process.ExitCode);
+        Task<int> RunNativeGenerationAsync()
+        {
+            var process = processManager.LaunchFile(
+                @"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe",
+                @"install """ + InstallationInformation.TargetExecutableFile + @""" /ExeConfig:""" + InstallationInformation.TargetExecutableFile + @""" /nologo",
+                ProcessWindowStyle.Hidden);
 
-			process.Refresh();
+            var taskCompletionSource = new TaskCompletionSource<int>();
+            process.EnableRaisingEvents = true;
+            process.Exited += (sender, args) => taskCompletionSource.TrySetResult(process.ExitCode);
 
-			var linesOutput = process
-				.StandardOutput
-				.ReadToEnd()
-				.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
-				.ToArray();
-			foreach (var line in linesOutput)
-			{
-				if (line.StartsWith("Failed"))
-				{
-					logger.Error(line);
-				}
-				else
-				{
-					logger.Verbose(line);
-				}
-			}
+            process.Refresh();
 
-			if (process.HasExited)
-				return Task.FromResult(process.ExitCode);
+            var linesOutput = process
+                .StandardOutput
+                .ReadToEnd()
+                .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                .ToArray();
+            foreach (var line in linesOutput)
+            {
+                if (line.StartsWith("Failed"))
+                {
+                    logger.Error(line);
+                }
+                else
+                {
+                    logger.Verbose(line);
+                }
+            }
 
-			return taskCompletionSource.Task;
-		}
+            if (process.HasExited)
+                return Task.FromResult(process.ExitCode);
 
-		void WriteDependencies()
-		{
-			var document = new XmlDocument();
-			document.LoadXml(Resources.ProjectFile);
+            return taskCompletionSource.Task;
+        }
 
-			var namespaceManager = new XmlNamespaceManager(document.NameTable);
-			namespaceManager.AddNamespace("default", "http://schemas.microsoft.com/developer/msbuild/2003");
+        void WriteDependencies()
+        {
+            var document = new XmlDocument();
+            document.LoadXml(Resources.ProjectFile);
 
-			var references = document.SelectNodes("//default:Reference", namespaceManager).OfType<XmlNode>().ToArray();
-			var projectReferences = document.SelectNodes("//default:ProjectReference", namespaceManager).OfType<XmlNode>().ToArray();
+            var namespaceManager = new XmlNamespaceManager(document.NameTable);
+            namespaceManager.AddNamespace("default", "http://schemas.microsoft.com/developer/msbuild/2003");
 
-			var allReferences = references.Union(projectReferences).ToArray();
-			foreach (var referenceNode in allReferences)
-			{
-				Debug.Assert(referenceNode.Attributes != null, "referenceNode.Attributes != null");
+            var references = document.SelectNodes("//default:Reference", namespaceManager).OfType<XmlNode>().ToArray();
+            var projectReferences = document.SelectNodes("//default:ProjectReference", namespaceManager).OfType<XmlNode>().ToArray();
+
+            var allReferences = references.Union(projectReferences).ToArray();
+            foreach (var referenceNode in allReferences)
+            {
+                var hintPath = referenceNode.SelectSingleNode("./default:HintPath", namespaceManager)?.InnerText;
+                if (string.IsNullOrEmpty(hintPath))
+                    continue;
+
+                //ignore windows SDK files because they are not supported in Costura.
+                if (Path.GetExtension(hintPath) == ".winmd")
+                    continue;
 
 				var include = referenceNode.Attributes["Include"].Value;
+                var reference = include
+                    .Split(',')
+                    .First();
+                EmitCosturaResourceToDisk(reference);
+            }
 
-				string reference;
-				if (include.StartsWith("..\\"))
-				{
-					if (Path.GetExtension(include) == ".winmd")
-						continue;
+            WriteEasyHookDependencies();
+        }
 
-					reference = Path.GetFileNameWithoutExtension(include);
-				}
-				else
-				{
-					var hintPath = referenceNode.SelectSingleNode("./default:HintPath", namespaceManager);
-					if (string.IsNullOrEmpty(hintPath?.InnerText))
-						continue;
+        void WriteEasyHookDependencies()
+        {
+            var dependencyPrefix = $"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.";
+            var dependenciesToSave = new List<string>
+            {
+                dependencyPrefix + "EasyHook64Svc.exe",
+                dependencyPrefix + "EasyHook64.dll",
+                dependencyPrefix + "EasyLoad64.dll"
+            };
 
-					reference = include
-						.Split(',')
-						.First();
-				}
+            foreach (var dependency in dependenciesToSave)
+            {
+                EmitEmbeddedResourceToDisk(
+                    dependency,
+                    dependency.Substring(
+                        dependencyPrefix.Length));
+            }
+        }
 
-				EmitCosturaResourceToDisk(reference);
-			}
+        void EmitCosturaResourceToDisk(string targetFileWithoutExtension)
+        {
+            EmitEmbeddedResourceToDisk("costura." + targetFileWithoutExtension.ToLower(), targetFileWithoutExtension);
+        }
 
-			WriteEasyHookDependencies();
-		}
+        void EmitEmbeddedResourceToDisk(string targetResourceName, string targetFileWithoutExtension)
+        {
 
-		void WriteEasyHookDependencies()
-		{
-			var dependencyPrefix = $"{nameof(Shapeshifter)}.{nameof(WindowsDesktop)}.";
-			var dependenciesToSave = new List<string>
-			{
-				dependencyPrefix + $"EasyHook64Svc.exe",
-				dependencyPrefix + $"EasyHook64.dll",
-				dependencyPrefix + $"EasyLoad64.dll"
-			};
+            var stream = Application.ResourceAssembly.GetManifestResourceStream(targetResourceName + ".dll");
+            if (stream == null)
+            {
+                if (!targetFileWithoutExtension.StartsWith(nameof(System) + "."))
+                    throw new Exception("Could not emit embedded resource " + targetResourceName + " as " + targetFileWithoutExtension + ".");
 
-			foreach (var dependency in dependenciesToSave)
-			{
-				EmitEmbeddedResourceToDisk(
-					dependency,
-					dependency.Substring(
-						dependencyPrefix.Length));
-			}
-		}
+                logger.Verbose("Embedded system assembly {name} resource was not found.", targetFileWithoutExtension);
+                return;
+            }
 
-		void EmitCosturaResourceToDisk(string targetFileWithoutExtension)
-		{
-			var possibleExtensions = new[]
-			{
-				".dll",
-				".winmd"
-			};
+            logger.Verbose("Attempting to write resource {resourceName} to {embeddedFile}.", targetResourceName, targetFileWithoutExtension);
+            using (stream)
+            {
+                Debug.Assert(stream != null, nameof(stream) + " != null");
 
-			EmitEmbeddedResourceToDisk("costura." + targetFileWithoutExtension.ToLower(), targetFileWithoutExtension, possibleExtensions);
-		}
+                var bytes = new byte[stream.Length];
+                stream.Read(bytes, 0, bytes.Length);
 
-		void EmitEmbeddedResourceToDisk(string targetResourceName, string targetFileWithoutExtension, string[] possibleExtensions = null)
-		{
-			if (possibleExtensions == null)
-				possibleExtensions = new[] {".dll"};
+                logger.Verbose("Resource {resourceName} of {length} bytes written to {embeddedFile}.", targetResourceName, bytes.Length, targetFileWithoutExtension);
+                File.WriteAllBytes(
+                    Path.Combine(
+                        InstallationInformation.TargetDirectory,
+                        targetFileWithoutExtension),
+                    bytes);
+            }
+        }
 
-			var stream = possibleExtensions
-				.Select(extension => Application.ResourceAssembly.GetManifestResourceStream(targetResourceName + extension))
-				.FirstOrDefault(x => x != null);
-			if (stream == null)
-			{
-				if(!targetFileWithoutExtension.StartsWith(nameof(System) + "."))
-					throw new Exception("Could not load emit embedded resource " + targetResourceName + " as " + targetFileWithoutExtension + ".");
+        static void WriteApplicationManifest()
+        {
+            File.WriteAllBytes(
+                Path.Combine(
+                    InstallationInformation.TargetDirectory,
+                    $"{nameof(Shapeshifter)}.exe.manifest"),
+                Resources.AppManifest);
+        }
 
-				logger.Verbose("Embedded system assembly {name} resource was not found.", targetFileWithoutExtension);
-				return;
-			}
+        static void WriteApplicationDebugInformation()
+        {
+            File.WriteAllBytes(
+                Path.Combine(
+                    InstallationInformation.TargetDirectory,
+                    $"{nameof(Shapeshifter)}.pdb"),
+                Resources.AppDebugFile);
+        }
 
-			logger.Verbose("Attempting to write resource {resourceName} to {embeddedFile}.", targetResourceName, targetFileWithoutExtension);
-			using (stream)
-			{
-				Debug.Assert(stream != null, nameof(stream) + " != null");
+        static void WriteApplicationConfiguration()
+        {
+            File.WriteAllText(
+                Path.Combine(
+                    InstallationInformation.TargetDirectory,
+                    $"{nameof(Shapeshifter)}.exe.config"),
+                Resources.AppConfiguration);
+        }
 
-				var bytes = new byte[stream.Length];
-				stream.Read(bytes, 0, bytes.Length);
+        void ConfigureDefaultSettings()
+        {
+            settingsViewModel.StartWithWindows = true;
+        }
 
-				logger.Verbose("Resource {resourceName} of {length} bytes written to {embeddedFile}.", targetResourceName, bytes.Length, targetFileWithoutExtension);
-				File.WriteAllBytes(
-					Path.Combine(
-						InstallationInformation.TargetDirectory,
-						targetFileWithoutExtension),
-					bytes);
-			}
-		}
+        void LaunchInstalledExecutable(string currentExecutableFile)
+        {
+            try
+            {
+                processManager.LaunchFileWithAdministrativeRights(InstallationInformation.TargetExecutableFile, $"postinstall \"{currentExecutableFile}\"");
+            }
+            catch (Win32Exception)
+            {
+                processManager.CloseCurrentProcess();
+            }
+        }
 
-		static void WriteApplicationManifest()
-		{
-			File.WriteAllBytes(
-				Path.Combine(
-					InstallationInformation.TargetDirectory,
-					$"{nameof(Shapeshifter)}.exe.manifest"),
-				Resources.AppManifest);
-		}
+        async Task WriteExecutableAsync()
+        {
+            await fileManager.CopyFileAsync(
+                CurrentProcessInformation.GetCurrentProcessFilePath(),
+                InstallationInformation.TargetExecutableFile);
+        }
 
-		static void WriteApplicationDebugInformation()
-		{
-			File.WriteAllBytes(
-				Path.Combine(
-					InstallationInformation.TargetDirectory,
-					$"{nameof(Shapeshifter)}.pdb"),
-				Resources.AppDebugFile);
-		}
+        void PrepareInstallDirectory()
+        {
+            logger.Information("Target install directory is " + InstallationInformation.TargetDirectory + ".");
 
-		static void WriteApplicationConfiguration()
-		{
-			File.WriteAllText(
-				Path.Combine(
-					InstallationInformation.TargetDirectory,
-					$"{nameof(Shapeshifter)}.exe.config"),
-				Resources.AppConfiguration);
-		}
+            if (Directory.Exists(InstallationInformation.TargetDirectory))
+                Directory.Delete(InstallationInformation.TargetDirectory, true);
 
-		void ConfigureDefaultSettings()
-		{
-			settingsViewModel.StartWithWindows = true;
-		}
+            Directory.CreateDirectory(InstallationInformation.TargetDirectory);
 
-		void LaunchInstalledExecutable(string currentExecutableFile)
-		{
-			try
-			{
-				processManager.LaunchFileWithAdministrativeRights(InstallationInformation.TargetExecutableFile, $"postinstall \"{currentExecutableFile}\"");
-			}
-			catch (Win32Exception)
-			{
-				processManager.CloseCurrentProcess();
-			}
-		}
-
-		async Task WriteExecutableAsync()
-		{
-			await fileManager.CopyFileAsync(
-				CurrentProcessInformation.GetCurrentProcessFilePath(),
-				InstallationInformation.TargetExecutableFile);
-		}
-
-		void PrepareInstallDirectory()
-		{
-			logger.Information("Target install directory is " + InstallationInformation.TargetDirectory + ".");
-
-			if (Directory.Exists(InstallationInformation.TargetDirectory))
-				Directory.Delete(InstallationInformation.TargetDirectory, true);
-
-			Directory.CreateDirectory(InstallationInformation.TargetDirectory);
-
-			logger.Information("Install directory prepared.");
-		}
-	}
+            logger.Information("Install directory prepared.");
+        }
+    }
 }
