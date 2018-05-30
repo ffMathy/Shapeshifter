@@ -65,17 +65,17 @@
             Assert.IsFalse(canPerform);
         }
 
-        [TestMethod]
-        public async Task CanPerformIsTrueForTextTypesWithImageLink()
-        {
-            Container.Resolve<ILinkParser>()
-                .HasLinkOfTypeAsync(
-                    Arg.Any<string>(),
-                    LinkType.ImageFile)
-                .Returns(Task.FromResult(true));
+        //[TestMethod]
+        //public async Task CanPerformIsTrueForTextTypesWithImageLink()
+        //{
+        //    Container.Resolve<ILinkParser>()
+        //        .HasLinkOfTypeAsync(
+        //            Arg.Any<string>(),
+        //            LinkType.ImageFile)
+        //        .Returns(Task.FromResult(true));
             
-            Assert.IsTrue(await SystemUnderTest.CanPerformAsync(CreateClipboardDataPackageContaining<IClipboardTextData>()));
-        }
+        //    Assert.IsTrue(await SystemUnderTest.CanPerformAsync(CreateClipboardDataPackageContaining<IClipboardTextData>()));
+        //}
 
     //    [TestMethod]
     //    public async Task PerformTriggersImageDownload()
