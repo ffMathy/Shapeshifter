@@ -180,7 +180,7 @@
 
         void EmitCosturaResourceToDisk(string targetFile)
         {
-            EmitEmbeddedResourceToDisk("costura." + targetFile.ToLower(), targetFile + ".dll");
+            EmitEmbeddedResourceToDisk("costura." + targetFile.ToLower() + ".dll", targetFile + ".dll");
         }
 
         void EmitEmbeddedResourceToDisk(string targetResourceName, string targetFile)

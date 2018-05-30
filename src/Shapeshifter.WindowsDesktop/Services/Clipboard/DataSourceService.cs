@@ -39,7 +39,6 @@
         readonly IImagePersistenceService imagePersistenceService;
         readonly IActiveWindowService activeWindowService;
         readonly IWindowNativeApi windowNativeApi;
-        readonly IMainThreadInvoker mainThreadInvoker;
 
         readonly IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheLarge;
         readonly IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheSmall;
@@ -50,14 +49,12 @@
             IImagePersistenceService imagePersistenceService,
             IActiveWindowService activeWindowService,
             IWindowNativeApi windowNativeApi,
-            IMainThreadInvoker mainThreadInvoker,
             IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheSmall,
             IKeyValueCache<IntPtr, byte[]> dataSourceIconCacheLarge)
         {
             this.imagePersistenceService = imagePersistenceService;
             this.activeWindowService = activeWindowService;
             this.windowNativeApi = windowNativeApi;
-            this.mainThreadInvoker = mainThreadInvoker;
 
             this.dataSourceIconCacheLarge = dataSourceIconCacheLarge;
             this.dataSourceIconCacheSmall = dataSourceIconCacheSmall;
@@ -158,7 +155,9 @@
 			{
 				var bitmap = new BitmapImage();
 				bitmap.BeginInit();
-				bitmap.CacheOption = BitmapCacheOption.OnLoad;
+				bitmap.DecodePixelWidth = (int)size.Width;
+				bitmap.DecodePixelHeight = (int)size.Height;
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
 				bitmap.StreamSource = stream;
 				bitmap.EndInit();
 
