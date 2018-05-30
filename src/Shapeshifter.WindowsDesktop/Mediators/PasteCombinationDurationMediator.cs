@@ -94,7 +94,7 @@
                 return;
 
             logger.Information("Firing " + nameof(PasteCombinationReleased) + " event.");
-            mainThreadInvoker.InvokeOnWindowsPresentationFoundationThread(
+            mainThreadInvoker.Invoke(
                 () =>
                 PasteCombinationReleased(
                     this,
@@ -108,7 +108,7 @@
                 return;
 
             logger.Information("Firing " + nameof(AfterPasteCombinationReleased) + " event.");
-            mainThreadInvoker.InvokeOnWindowsPresentationFoundationThread(
+            mainThreadInvoker.Invoke(
                 () =>
                 AfterPasteCombinationReleased(
                     this,
@@ -139,7 +139,7 @@
                 return;
 
 			logger.Information("Raising paste duration passed event.");
-			mainThreadInvoker.InvokeOnWindowsPresentationFoundationThread(
+			mainThreadInvoker.Invoke(
                 () => {
                     PasteCombinationDurationPassed?.Invoke(
                         this,

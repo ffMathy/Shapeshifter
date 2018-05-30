@@ -50,7 +50,7 @@
 		public IClipboardDataControlPackage CreateFromDataPackage(IClipboardDataPackage dataPackage)
 		{
 			ClipboardDataControlPackage package = null;
-			mainThreadInvoker.InvokeOnWindowsPresentationFoundationThread(
+			mainThreadInvoker.Invoke(
 				() => package = CreateDataControlPackageFromDataPackage(dataPackage));
 
 			return package;

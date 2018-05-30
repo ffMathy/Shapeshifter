@@ -113,7 +113,7 @@
                 if (universalWindowsApplicationPackage != null)
                     return await GetIconFromUniversalWindowsApplicationAsync(
                         universalWindowsApplicationPackage,
-                        bigIconSize ? new Size(256, 256) : new Size(24, 24));
+                        new Size(1024, 1024));
             }
 
             var hIcon = windowNativeApi.SendMessage(
@@ -146,32 +146,24 @@
 
             var appListEntries = (await package.GetAppListEntriesAsync()
                 .AsTask()).ToArray();
-            var appListEntry = appListEntries.FirstOrDefault(
-                x => x
-                    .DisplayInfo
-                    .DisplayName
-                    .EndsWith(titleRegions.Last())) ?? appListEntries.First();
+            var appListEntry = appListEntries.FirstOrDefault(x => x
+				.DisplayInfo
+                .DisplayName
+                .EndsWith(titleRegions.Last())) ?? appListEntries.First();
 
             var resource = appListEntry.DisplayInfo.GetLogo(new Windows.Foundation.Size(size.Width, size.Height));
+			
+			using (var randomAccessStream = await resource.OpenReadAsync().AsTask())
+			using (var stream = randomAccessStream.AsStream())
+			{
+				var bitmap = new BitmapImage();
+				bitmap.BeginInit();
+				bitmap.CacheOption = BitmapCacheOption.OnLoad;
+				bitmap.StreamSource = stream;
+				bitmap.EndInit();
 
-            Windows.UI.Xaml.Media.Imaging.BitmapImage image = null;
-
-            await mainThreadInvoker.InvokeOnUniversalWindowsApplicationThreadAsync(
-                async () =>
-                {
-                    using (var stream = await resource
-                        .OpenReadAsync()
-                        .AsTask())
-                    {
-                        Debug.Assert(stream != null, nameof(stream) + " != null");
-                        var bitmapImage = new Windows.UI.Xaml.Media.Imaging.BitmapImage();
-                        await bitmapImage.SetSourceAsync(stream);
-
-                        image = bitmapImage;
-                    }
-                });
-
-            return null;
+				return bitmap;
+			}
         }
     }
 }

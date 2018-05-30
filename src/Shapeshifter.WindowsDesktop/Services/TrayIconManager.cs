@@ -64,22 +64,22 @@
 
 		public void UpdateHoverText(string text)
 		{
-			mainThreadInvoker.InvokeOnWindowsPresentationFoundationThread(() => trayIcon.Text = text);
+			mainThreadInvoker.Invoke(() => trayIcon.Text = text);
 		}
 
 		public void DisplayInformation(string title, string text)
 		{
-			mainThreadInvoker.InvokeOnWindowsPresentationFoundationThread(() => trayIcon.ShowBalloonTip(int.MaxValue, title, text, ToolTipIcon.Info));
+			mainThreadInvoker.Invoke(() => trayIcon.ShowBalloonTip(int.MaxValue, title, text, ToolTipIcon.Info));
 		}
 
 		public void DisplayWarning(string title, string text)
 		{
-			mainThreadInvoker.InvokeOnWindowsPresentationFoundationThread(() => trayIcon.ShowBalloonTip(int.MaxValue, title, text, ToolTipIcon.Warning));
+			mainThreadInvoker.Invoke(() => trayIcon.ShowBalloonTip(int.MaxValue, title, text, ToolTipIcon.Warning));
 		}
 
 		public void DisplayError(string title, string text)
 		{
-			mainThreadInvoker.InvokeOnWindowsPresentationFoundationThread(() => trayIcon.ShowBalloonTip(int.MaxValue, title, text, ToolTipIcon.Error));
+			mainThreadInvoker.Invoke(() => trayIcon.ShowBalloonTip(int.MaxValue, title, text, ToolTipIcon.Error));
 		}
 	}
 }

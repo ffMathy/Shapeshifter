@@ -11,14 +11,11 @@
 	class MainThreadInvoker: IMainThreadInvoker
     {
 		readonly Dispatcher wpfDispatcher;
-        readonly CoreDispatcher uwpDispatcher;
 
 		public MainThreadInvoker()
         {
 			wpfDispatcher = Dispatcher.CurrentDispatcher;
             wpfDispatcher.UnhandledException += WpfDispatcherUnhandledException;
-
-			uwpDispatcher = null;
 		}
 
 		static void WpfDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
@@ -26,21 +23,14 @@
 			Program.OnGlobalErrorOccured(e.Exception);
 		}
 
-        public void InvokeOnWindowsPresentationFoundationThread(Action action)
+        public void Invoke(Action action)
         {
             wpfDispatcher.Invoke(action);
         }
 
-		public T InvokeOnWindowsPresentationFoundationThread<T>(Func<T> action)
+		public T Invoke<T>(Func<T> action)
 		{
 			return wpfDispatcher.Invoke(action);
         }
-
-		public Task InvokeOnUniversalWindowsApplicationThreadAsync(Action action)
-		{
-			return uwpDispatcher
-				.RunAsync(CoreDispatcherPriority.Normal, () => action())
-				.AsTask();
-		}
 	}
 }

@@ -7,9 +7,7 @@
 
     public interface IMainThreadInvoker: ISingleInstance
     {
-        void InvokeOnWindowsPresentationFoundationThread(Action action);
-		T InvokeOnWindowsPresentationFoundationThread<T>(Func<T> action);
-		
-		Task InvokeOnUniversalWindowsApplicationThreadAsync(Action action);
+        void Invoke(Action action);
+		T Invoke<T>(Func<T> action);
     }
 }
