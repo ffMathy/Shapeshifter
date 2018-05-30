@@ -139,20 +139,32 @@
             var allReferences = references.Union(projectReferences).ToArray();
             foreach (var referenceNode in allReferences)
             {
-                var hintPath = referenceNode.SelectSingleNode("./default:HintPath", namespaceManager)?.InnerText;
-                if (string.IsNullOrEmpty(hintPath))
-                    continue;
-
-				logger.Verbose("Analyzing reference with hint path {hintPath}.", hintPath);
-
-                //ignore windows SDK files because they are not supported in Costura.
-                if (Path.GetExtension(hintPath) == ".winmd")
-                    continue;
+				Debug.Assert(referenceNode.Attributes != null, "referenceNode.Attributes != null");
 
 				var include = referenceNode.Attributes["Include"].Value;
-                var reference = include
-                    .Split(',')
-                    .First();
+
+				string reference;
+				if (include.StartsWith("..\\"))
+				{
+					reference = Path.GetFileNameWithoutExtension(include);
+				}
+				else
+				{
+					var hintPath = referenceNode.SelectSingleNode("./default:HintPath", namespaceManager)?.InnerText;
+					if (string.IsNullOrEmpty(hintPath))
+						continue;
+
+					//ignore windows SDK files because they are not supported in Costura.
+					if (Path.GetExtension(hintPath) == ".winmd")
+						continue;
+
+					logger.Verbose("Analyzing reference with hint path {hintPath}.", hintPath);
+
+                    reference = include
+						.Split(',')
+						.First();
+                }
+                
                 EmitCosturaResourceToDisk(reference);
             }
 
