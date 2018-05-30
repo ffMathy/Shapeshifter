@@ -143,6 +143,8 @@
                 if (string.IsNullOrEmpty(hintPath))
                     continue;
 
+				logger.Verbose("Analyzing reference with hint path {hintPath}.", hintPath);
+
                 //ignore windows SDK files because they are not supported in Costura.
                 if (Path.GetExtension(hintPath) == ".winmd")
                     continue;
@@ -182,19 +184,18 @@
         }
 
         void EmitEmbeddedResourceToDisk(string targetResourceName, string targetFileWithoutExtension)
-        {
-
+		{
             var stream = Application.ResourceAssembly.GetManifestResourceStream(targetResourceName + ".dll");
             if (stream == null)
             {
                 if (!targetFileWithoutExtension.StartsWith(nameof(System) + "."))
-                    throw new Exception("Could not emit embedded resource " + targetResourceName + " as " + targetFileWithoutExtension + ".");
+                    throw new Exception("Could not emit embedded resource " + targetResourceName + " as " + targetFileWithoutExtension + ".dll.");
 
                 logger.Verbose("Embedded system assembly {name} resource was not found.", targetFileWithoutExtension);
                 return;
             }
 
-            logger.Verbose("Attempting to write resource {resourceName} to {embeddedFile}.", targetResourceName, targetFileWithoutExtension);
+            logger.Verbose("Attempting to write resource {resourceName} to {embeddedFile}.", targetResourceName, targetFileWithoutExtension + ".dll");
             using (stream)
             {
                 Debug.Assert(stream != null, nameof(stream) + " != null");
@@ -202,11 +203,11 @@
                 var bytes = new byte[stream.Length];
                 stream.Read(bytes, 0, bytes.Length);
 
-                logger.Verbose("Resource {resourceName} of {length} bytes written to {embeddedFile}.", targetResourceName, bytes.Length, targetFileWithoutExtension);
+                logger.Verbose("Resource {resourceName} of {length} bytes written to {embeddedFile}.", targetResourceName, bytes.Length, targetFileWithoutExtension + ".dll");
                 File.WriteAllBytes(
                     Path.Combine(
                         InstallationInformation.TargetDirectory,
-                        targetFileWithoutExtension),
+                        targetFileWithoutExtension + ".dll"),
                     bytes);
             }
         }
