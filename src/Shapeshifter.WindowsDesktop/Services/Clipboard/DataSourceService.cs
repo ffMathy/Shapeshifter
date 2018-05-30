@@ -156,7 +156,7 @@
 
             Windows.UI.Xaml.Media.Imaging.BitmapImage image = null;
 
-            await mainThreadInvoker.InvokeAsync(
+            await mainThreadInvoker.InvokeOnUniversalWindowsApplicationThreadAsync(
                 async () =>
                 {
                     using (var stream = await resource

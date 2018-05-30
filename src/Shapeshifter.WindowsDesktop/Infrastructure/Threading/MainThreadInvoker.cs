@@ -4,36 +4,43 @@
 	using System.Threading.Tasks;
 	using System.Windows.Threading;
 
-    using Interfaces;
+	using Windows.UI.Core;
+
+	using Interfaces;
 	
 	class MainThreadInvoker: IMainThreadInvoker
     {
-		readonly Dispatcher dispatcher;
+		readonly Dispatcher wpfDispatcher;
+        readonly CoreDispatcher uwpDispatcher;
 
-        public MainThreadInvoker()
+		public MainThreadInvoker()
         {
-			dispatcher = Dispatcher.CurrentDispatcher;
-            dispatcher.UnhandledException += Dispatcher_UnhandledException;
-        }
+			wpfDispatcher = Dispatcher.CurrentDispatcher;
+            wpfDispatcher.UnhandledException += WpfDispatcherUnhandledException;
 
-		static void Dispatcher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+			uwpDispatcher = null;
+		}
+
+		static void WpfDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
 		{
 			Program.OnGlobalErrorOccured(e.Exception);
 		}
 
-        public void Invoke(Action action)
+        public void InvokeOnWindowsPresentationFoundationThread(Action action)
         {
-            dispatcher.Invoke(action);
+            wpfDispatcher.Invoke(action);
         }
 
-		public T Invoke<T>(Func<T> action)
+		public T InvokeOnWindowsPresentationFoundationThread<T>(Func<T> action)
 		{
-			return dispatcher.Invoke(action);
+			return wpfDispatcher.Invoke(action);
         }
 
-		public Task InvokeAsync(Func<Task> action)
+		public Task InvokeOnUniversalWindowsApplicationThreadAsync(Action action)
 		{
-			return dispatcher.InvokeAsync(action).Task;
+			return uwpDispatcher
+				.RunAsync(CoreDispatcherPriority.Normal, () => action())
+				.AsTask();
 		}
 	}
 }
