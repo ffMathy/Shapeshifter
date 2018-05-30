@@ -21,8 +21,9 @@
 
         int pasteDurationBeforeUserInterfaceShowsInMilliseconds;
         string hotkeyString;
+		bool quietMode;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+		public event PropertyChangedEventHandler PropertyChanged;
 
         public SettingsViewModel(
             IRegistryManager registryManager,
@@ -34,6 +35,10 @@
             this.processManager = processManager;
             this.settingsManager = settingsManager;
             this.keyboardManager = keyboardManager;
+
+			quietMode = settingsManager.LoadSetting(
+				nameof(IsQuietModeEnabled),
+				false);
 
             pasteDurationBeforeUserInterfaceShowsInMilliseconds = settingsManager.LoadSetting(
                 nameof(PasteDurationBeforeUserInterfaceShowsInMilliseconds),
@@ -81,7 +86,25 @@
             }
         }
 
-        public int PasteDurationBeforeUserInterfaceShowsInMilliseconds
+		public bool IsQuietModeEnabled
+		{
+			get
+			{
+				return quietMode;
+			}
+			set
+			{
+				if (value == IsQuietModeEnabled) return;
+
+				settingsManager.SaveSetting(
+					nameof(IsQuietModeEnabled),
+					quietMode = value);
+
+				OnPropertyChanged();
+			}
+		}
+
+		public int PasteDurationBeforeUserInterfaceShowsInMilliseconds
         {
             get
             {

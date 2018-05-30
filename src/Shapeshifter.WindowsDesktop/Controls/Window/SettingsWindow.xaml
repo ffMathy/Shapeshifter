@@ -16,7 +16,8 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <CheckBox Margin="0,5" IsChecked="{Binding StartWithWindows}" Content="Start with Windows" />
-		<StackPanel Margin="0,5" Grid.Row="1">
+        <CheckBox Margin="0,5" Grid.Row="1" IsChecked="{Binding IsQuietModeEnabled}" Content="Silence copy notifications" />
+		<StackPanel Margin="0,5" Grid.Row="2">
 			<Label>Paste duration before user interface shows up (milliseconds)</Label>
 			<Slider TickFrequency="100" Minimum="0" Maximum="3000" SmallChange="100" Value="{Binding PasteDurationBeforeUserInterfaceShowsInMilliseconds}" TickPlacement="Both" IsSnapToTickEnabled="True" AutoToolTipPlacement="TopLeft" />
 			<controls:NumberTextBox Minimum="0" Maximum="3000" HorizontalAlignment="Center" Text="{Binding PasteDurationBeforeUserInterfaceShowsInMilliseconds}" FontWeight="Bold" />
