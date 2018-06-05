@@ -226,8 +226,8 @@
 			}
 
 			UninstallClipboardHook();
-			UninstallPasteHotkeyInterceptor();
 			UninstallMouseWheelHook();
+			UninstallPasteHotkeyInterceptor();
 		}
 
 		void UninstallMouseWheelHook()

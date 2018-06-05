@@ -19,7 +19,6 @@
         IntPtr mainWindowHandle;
 
         bool isInstalled;
-        bool shouldSkipNext;
 
         public event EventHandler PasteDetected;
 
@@ -89,21 +88,9 @@
                 return;
             }
 
-            if (shouldSkipNext)
-            {
-				logger.Verbose("Skipped paste hotkey message because the interceptor was instructed to skip next.");
-                shouldSkipNext = false;
-                return;
-            }
-
             logger.Information("Paste hotkey message received.");
 
             OnPasteDetected();
-        }
-
-        public void SkipNext()
-        {
-            shouldSkipNext = true;
         }
 
         protected virtual void OnPasteDetected()

@@ -16,7 +16,9 @@
     using Native;
     using Native.Interfaces;
 
-    using Services.Files.Interfaces;
+	using Properties;
+
+	using Services.Files.Interfaces;
 
     class FileClipboardDataFactory: IFileClipboardDataFactory
     {
@@ -124,7 +126,7 @@
         IClipboardFileData ConstructClipboardFileData(
             string file,
 			IClipboardFormat format,
-            byte[] rawData)
+            byte[] rawData = null)
         {
             return new ClipboardFileData()
             {
@@ -136,14 +138,7 @@
             };
         }
 
-        IClipboardFileData ConstructClipboardFileData(
-            string file,
-			IClipboardFormat format)
-        {
-            return ConstructClipboardFileData(file, format, null);
-        }
-
-        public bool CanBuildData(IClipboardFormat format)
+		public bool CanBuildData(IClipboardFormat format)
         {
             return format.Number == ClipboardNativeApi.CF_HDROP;
         }

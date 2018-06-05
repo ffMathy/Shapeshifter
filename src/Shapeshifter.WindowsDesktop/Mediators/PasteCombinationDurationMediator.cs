@@ -74,8 +74,11 @@
         }
 
         async Task MonitorClipboardCombinationStateAsync()
-        {
-            logger.Verbose("Paste combination duration loop has ticked.");
+		{
+			if (IsCancellationRequested)
+				return;
+
+			logger.Verbose("Paste combination duration loop has ticked.");
 
             await WaitForCombinationReleaseOrDurationPass();
 			if (IsCancellationRequested)
@@ -181,10 +184,11 @@
                     "The clipboard combination mediator is already disconnected.");
             }
 
-            pasteDetectionHandler.Disconnect();
+			pasteDetectionHandler.Disconnect();
             threadCancellationTokenSource.Cancel();
             UninstallPasteHotkeyInterceptor();
-        }
+			consumerLoop.Stop();
+		}
 
         protected virtual void OnPasteCombinationHeldDown()
         {

@@ -10,7 +10,5 @@
         IWindowMessageInterceptor
     {
         bool IsEnabled { get; set; }
-
-        void SkipNext();
     }
 }

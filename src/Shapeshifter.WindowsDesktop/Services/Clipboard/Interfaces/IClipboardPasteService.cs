@@ -2,7 +2,9 @@
 {
     using System.Threading.Tasks;
 
-    public interface IClipboardPasteService
+	using Infrastructure.Dependencies.Interfaces;
+
+    public interface IClipboardPasteService: ISingleInstance
     {
         Task PasteClipboardContentsAsync();
     }

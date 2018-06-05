@@ -217,10 +217,10 @@
 			object sender,
 			PastePerformedEventArgument e)
 		{
-			await PerformPaste();
+			await PerformPasteAsync();
 		}
 
-		async Task PerformPaste()
+		async Task PerformPasteAsync()
 		{
 			if (SelectedAction != null)
 			{

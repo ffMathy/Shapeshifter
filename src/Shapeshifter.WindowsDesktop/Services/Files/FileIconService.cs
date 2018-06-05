@@ -1,7 +1,8 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Files
 {
     using System;
-    using System.Runtime.InteropServices;
+	using System.IO;
+	using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Interop;
     using System.Windows.Media.Imaging;
@@ -31,14 +32,16 @@
         }
 
         public byte[] GetIcon(string path, bool allowThumbnails, int dimensions = 256)
-        {
+		{
+			if (!File.Exists(path) && !Directory.Exists(path))
+				return null;
+
             var bitmapHandle = GenerateBitmapHandle(path, allowThumbnails, dimensions);
             if (bitmapHandle != IntPtr.Zero)
-            {
                 return GenerateByteArrayFromBitmapHandle(bitmapHandle);
-            }
-            throw new InvalidOperationException("Could not fetch an icon from the given path.");
-        }
+
+			return null;
+		}
 
         byte[] GenerateByteArrayFromBitmapHandle(IntPtr bitmapHandle)
         {
@@ -117,13 +120,10 @@
         IconNativeApi.IShellItemImageFactory GenerateShellItemImageFactory(string path)
         {
             var uniqueId = new Guid("43826d1e-e718-42ee-bc55-a1e261c37bfe");
-
-            IconNativeApi.IShellItem rawFactory;
-            iconNativeApi.SHCreateItemFromParsingName(path, IntPtr.Zero, uniqueId, out rawFactory);
+			iconNativeApi.SHCreateItemFromParsingName(path, IntPtr.Zero, uniqueId, out var rawFactory);
 
             // ReSharper disable once SuspiciousTypeConversion.Global
             var factory = (IconNativeApi.IShellItemImageFactory) rawFactory;
-
             return factory;
         }
 
