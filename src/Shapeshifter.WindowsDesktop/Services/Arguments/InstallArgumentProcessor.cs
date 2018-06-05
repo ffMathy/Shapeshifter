@@ -77,6 +77,7 @@
         async Task InstallToInstallDirectoryAsync()
         {
             await WriteExecutableAsync();
+
             WriteDependencies();
             WriteApplicationConfiguration();
             WriteApplicationManifest();

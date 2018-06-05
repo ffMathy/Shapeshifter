@@ -273,15 +273,9 @@
 				throw new InvalidOperationException(
 					"The user interface mediator is already connected.");
 
-			LoadInitialClipboardData();
+			LoadPersistedPackagesAsync();
 			InstallClipboardHook();
 			InstallPasteCombinationDurationMediator();
-		}
-
-		void LoadInitialClipboardData()
-		{
-			LoadPersistedPackagesAsync();
-			AppendPackagesWithDataFromClipboardAsync();
 		}
 
 		void InstallPasteCombinationDurationMediator()
