@@ -23,6 +23,8 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 
 	using Serilog;
 
+	using Services.Interfaces;
+
 	using Shapeshifter.WindowsDesktop.Data.Wrappers.Interfaces;
 
 	class ClipboardInjectionService : IClipboardInjectionService
@@ -54,11 +56,8 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 				clipboardCopyInterceptor.SkipNext();
 
 				using (var session = clipboardHandleFactory.StartNewSession())
-				{
-					var emptyTries = 0;
-					while (!session.EmptyClipboard() && emptyTries++ < 5)
-						await threadDelay.ExecuteAsync(100);
-
+				{ 
+					session.EmptyClipboard();
 					InjectPackageContents(session, package);
 				}
 
@@ -103,7 +102,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 					clipboardData.RawFormat.Number,
 					wrapper.GetDataPointer(
 						clipboardData));
-				if (success == IntPtr.Zero)
+				if (success == IntPtr.Zero && session.OpenedSuccessfully)
 				{
 					throw new Exception(
 						"Could not set clipboard data format " + clipboardData.RawFormat + " from " + clipboardData.Package.Source.ProcessName + ".",
