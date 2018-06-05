@@ -1,7 +1,8 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 {
     using System;
-    using System.Diagnostics;
+	using System.ComponentModel;
+	using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Runtime.InteropServices.WindowsRuntime;
@@ -102,16 +103,23 @@
             bool bigIconSize = true)
         {
             if (process.Id != 0)
-            {
-                var processDirectoryName = Path.GetFileName(Path.GetDirectoryName(process.MainModule.FileName));
-                Debug.Assert(processDirectoryName != null, nameof(processDirectoryName) + " != null");
+			{
+				try
+				{
+					var processDirectoryName = Path.GetFileName(Path.GetDirectoryName(process.MainModule.FileName));
+					Debug.Assert(processDirectoryName != null, nameof(processDirectoryName) + " != null");
 
-                var universalWindowsApplicationPackage = packageManager.FindPackageForUser(string.Empty, processDirectoryName);
-                if (universalWindowsApplicationPackage != null)
-                    return await GetIconFromUniversalWindowsApplicationAsync(
-                        universalWindowsApplicationPackage,
-                        new Size(1024, 1024));
-            }
+					var universalWindowsApplicationPackage = packageManager.FindPackageForUser(string.Empty, processDirectoryName);
+					if (universalWindowsApplicationPackage != null)
+						return await GetIconFromUniversalWindowsApplicationAsync(
+							universalWindowsApplicationPackage,
+							new Size(1024, 1024));
+				}
+				catch (Win32Exception)
+				{
+					//issue #560 trying to fetch MainModule of a 32 bit process from Shapeshifter which is a 64 bit process.
+				}
+			}
 
             var hIcon = windowNativeApi.SendMessage(
                 windowHandle,
