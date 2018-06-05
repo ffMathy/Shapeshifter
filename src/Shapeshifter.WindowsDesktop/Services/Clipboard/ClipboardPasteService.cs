@@ -60,7 +60,9 @@
             await RunSecondKeyboardPhaseAsync(isCtrlDown, isVDown);
 
             EnablePasteHotkeyInterceptor();
-        }
+
+			logger.Verbose("Paste hotkey interceptor has been re-enabled.");
+		}
 
         void EnablePasteHotkeyInterceptor()
         {
@@ -93,14 +95,11 @@
         {
             var secondPhaseOperations = new List<KeyOperation>();
             if (isCtrlDown)
-            {
                 secondPhaseOperations.Add(new KeyOperation(Key.LeftCtrl, KeyDirection.Down));
-            }
 
             if (isVDown)
-            {
                 secondPhaseOperations.Add(new KeyOperation(Key.V, KeyDirection.Down));
-            }
+
             return secondPhaseOperations;
         }
 
@@ -109,14 +108,10 @@
             var operations = new List<KeyOperation>();
 
             if (!isCtrlDown)
-            {
                 operations.Add(new KeyOperation(Key.LeftCtrl, KeyDirection.Down));
-            }
 
             if (!isVDown)
-            {
                 operations.Add(new KeyOperation(Key.V, KeyDirection.Down));
-            }
 
             operations.Add(new KeyOperation(Key.V, KeyDirection.Up));
             operations.Add(new KeyOperation(Key.LeftCtrl, KeyDirection.Up));
