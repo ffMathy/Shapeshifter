@@ -11,8 +11,6 @@
 	using System.Threading;
 	using System.Threading.Tasks;
 
-	using Binders.Interfaces;
-
 	using Data.Interfaces;
 
 	using Infrastructure.Events;
@@ -82,7 +80,6 @@
 		[SuppressMessage("ReSharper", "SuggestBaseTypeForParameter")]
 		public UserInterfaceViewModel(
 			IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator,
-			IPackageToActionSwitch packageToActionSwitch,
 			ILogger logger,
 			IClipboardPersistenceService clipboardPersistenceService)
 		{
@@ -99,8 +96,6 @@
 			this.clipboardPersistenceService = clipboardPersistenceService;
 
 			SetUpClipboardUserInterfaceInteractionMediator();
-
-			packageToActionSwitch.PrepareBinder(this);
 		}
 
 		void Actions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -227,9 +222,13 @@
 				await singlePasteLock.WaitAsync();
 				try
 				{
+					clipboardUserInterfaceInteractionMediator.Disconnect();
+
 					await SelectedAction.Action.PerformAsync(SelectedElement.Data);
 					if (!await clipboardPersistenceService.IsPersistedAsync(SelectedElement.Data))
 						await MoveSelectedItemToTopAsync();
+						
+					clipboardUserInterfaceInteractionMediator.Connect();
 				}
 				finally
 				{

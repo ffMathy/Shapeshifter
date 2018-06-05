@@ -40,19 +40,6 @@
         }
 
         [TestMethod]
-        public async Task CanReadDescription()
-        {
-            FakeHasImageLinks(
-                new[]
-                {
-                    "foobar.com",
-                    "example.com"
-                });
-
-            Assert.IsNotNull(await SystemUnderTest.GetTitleAsync(CreateClipboardDataPackageContaining<IClipboardTextData>()));
-        }
-
-        [TestMethod]
         public async Task CanPerformIsFalseForTextTypesWithNoImageLink()
         {
             Container.Resolve<ILinkParser>()

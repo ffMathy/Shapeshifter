@@ -294,8 +294,6 @@
     <Compile Include="Controls\NumberTextBox.xaml.cs">
       <DependentUpon>NumberTextBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Window\Binders\Interfaces\IPackageToActionSwitch.cs" />
-    <Compile Include="Controls\Window\Binders\SelectedElementToActionsSwitchMechanism.cs" />
     <Compile Include="Controls\Window\Factories\Interfaces\ISettingsWindowFactory.cs" />
     <Compile Include="Controls\Window\Factories\SettingsWindowFactory.cs" />
     <Compile Include="Controls\Window\MaintenanceWindow.xaml.cs">
@@ -319,7 +317,6 @@
     <Compile Include="Controls\Window\UserInterfaceControl.xaml.cs">
       <DependentUpon>UserInterfaceControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Window\ViewModels\ActionViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\InstallViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\IInstallViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\ISourceClipboardQuantityOverlayViewModel.cs" />
@@ -591,11 +588,9 @@
     <Compile Include="Services\Window\Interfaces\IWindowThreadMerger.cs" />
     <Compile Include="Services\Window\ActiveWindowService.cs" />
     <Compile Include="Data\FormatDataPair.cs" />
-    <Compile Include="Controls\Window\Binders\PackageToActionBinder.cs" />
     <Compile Include="Controls\Window\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Window\Binders\Interfaces\IAsyncListDictionaryBinder.cs" />
     <Compile Include="Controls\Window\Interfaces\IMainWindow.cs" />
     <Compile Include="Controls\Window\Interfaces\IMainWindowHandleContainer.cs" />
     <Compile Include="Controls\Window\MainWindowHandleContainer.cs" />

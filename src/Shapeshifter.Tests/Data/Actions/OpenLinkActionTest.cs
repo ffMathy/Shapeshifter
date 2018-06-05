@@ -21,26 +21,6 @@
     [TestClass]
     public class OpenLinkActionTest: ActionTestBase<IOpenLinkAction>
     {
-
-        [TestMethod]
-        public async Task CanReadDescription()
-        {
-            FakeHasLinks(
-                new[]
-                {
-                    "foo.com",
-                    "bar.com"
-                });
-
-            Assert.IsNotNull(await SystemUnderTest.GetTitleAsync(Substitute
-                .For<IClipboardDataPackage>()
-                .With(x => x.Contents.Returns(
-                    new []
-                    {
-                        Substitute.For<IClipboardTextData>() 
-                    }))));
-        }
-
         [TestMethod]
         public async Task CanPerformIsFalseForNonTextTypes()
         {

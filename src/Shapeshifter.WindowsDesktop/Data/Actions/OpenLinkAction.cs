@@ -28,12 +28,9 @@
             this.linkParser = linkParser;
             this.processManager = processManager;
             this.asyncFilter = asyncFilter;
-        }
-
-        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
-		{
-			return "Open links";
 		}
+
+		public string Title => "Open links";
 
         public byte Order => 200;
 

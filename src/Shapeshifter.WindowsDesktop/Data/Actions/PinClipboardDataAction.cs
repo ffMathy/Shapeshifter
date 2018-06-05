@@ -14,13 +14,7 @@
     {
         readonly IClipboardPersistenceService clipboardPersistenceService;
 
-        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
-		{
-			if (await clipboardPersistenceService.IsPersistedAsync(package))
-				return "Unpin from clipboard";
-
-            return "Pin to clipboard";
-        }
+		public string Title => "Toggle pinning";
 
         public byte Order => byte.MaxValue;
 

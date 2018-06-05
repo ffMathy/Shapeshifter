@@ -16,7 +16,6 @@
     class UploadImageAction: IUploadImageAction
     {
         readonly IFileTypeInterpreter fileTypeInterpreter;
-
         readonly IAsyncFilter asyncFilter;
 
         public UploadImageAction(
@@ -25,12 +24,9 @@
         {
             this.fileTypeInterpreter = fileTypeInterpreter;
             this.asyncFilter = asyncFilter;
-        }
+		}
 
-        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
-        {
-            return "Upload image";
-        }
+		public string Title => "Upload image";
 
         public byte Order => 50;
 

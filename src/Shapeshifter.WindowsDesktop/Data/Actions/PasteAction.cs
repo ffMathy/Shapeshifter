@@ -12,9 +12,7 @@
 	class PasteAction: IPasteAction
     {
         readonly IClipboardInjectionService clipboardInjectionService;
-
         readonly IClipboardPasteService clipboardPasteService;
-
         readonly ILogger logger;
 
         public PasteAction(
@@ -25,12 +23,9 @@
             this.clipboardInjectionService = clipboardInjectionService;
             this.clipboardPasteService = clipboardPasteService;
             this.logger = logger;
-        }
-        
-        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
-        {
-            return "Paste";
-        }
+		}
+
+		public string Title => "Paste";
 
         public byte Order => 0;
 
