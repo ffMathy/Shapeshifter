@@ -1,6 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Services.Arguments
 {
 	using System;
+	using System.ComponentModel;
 	using System.Linq;
 	using System.Threading.Tasks;
 
@@ -40,18 +41,32 @@
 			{
 				origin = arguments[originIndex];
 			}
-			
+
 			var isOriginFromInstallPath = origin == null || origin.StartsWith(InstallationInformation.TargetDirectory);
 			if (!isOriginFromInstallPath)
 			{
 				await fileManager.DeleteFileIfExistsAsync(origin);
 				await fileManager.CopyFileAsync(CurrentProcessInformation.GetCurrentProcessFilePath(), origin);
 
-				processManager.LaunchFileWithAdministrativeRights(origin);
+				try
+				{
+					processManager.LaunchFileWithAdministrativeRights(origin);
+				}
+				catch (Win32Exception)
+				{
+					//the user cancelled the update operation.
+				}
 			}
 			else
 			{
-				processManager.LaunchFileWithAdministrativeRights(CurrentProcessInformation.GetCurrentProcessFilePath(), "install");
+				try
+				{
+					processManager.LaunchFileWithAdministrativeRights(CurrentProcessInformation.GetCurrentProcessFilePath(), "install");
+				}
+				catch (Win32Exception)
+				{
+					//the user cancelled the update operation.
+				}
 			}
 		}
 	}

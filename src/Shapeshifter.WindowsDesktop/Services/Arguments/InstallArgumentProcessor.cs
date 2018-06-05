@@ -61,7 +61,7 @@
         {
             maintenanceWindow.Show("Installing ...");
 
-            PrepareInstallDirectory();
+            await PrepareInstallDirectoryAsync();
             await InstallToInstallDirectoryAsync();
 
             ConfigureDefaultSettings();
@@ -275,13 +275,11 @@
                 InstallationInformation.TargetExecutableFile);
         }
 
-        void PrepareInstallDirectory()
+        async Task PrepareInstallDirectoryAsync()
         {
             logger.Information("Target install directory is " + InstallationInformation.TargetDirectory + ".");
 
-            if (Directory.Exists(InstallationInformation.TargetDirectory))
-                Directory.Delete(InstallationInformation.TargetDirectory, true);
-
+			await fileManager.DeleteDirectoryIfExistsAsync(InstallationInformation.TargetDirectory);
             Directory.CreateDirectory(InstallationInformation.TargetDirectory);
 
             logger.Information("Install directory prepared.");

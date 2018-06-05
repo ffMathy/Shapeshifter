@@ -15,32 +15,28 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 
 	using Infrastructure.Handles.Factories.Interfaces;
 	using Infrastructure.Handles.Interfaces;
-	using Infrastructure.Threading.Interfaces;
 
 	using Interfaces;
 
 	using Messages.Interceptors.Interfaces;
 
 	using Serilog;
-
+	
 	using Shapeshifter.WindowsDesktop.Data.Wrappers.Interfaces;
 
 	class ClipboardInjectionService : IClipboardInjectionService
 	{
-		readonly IThreadDelay threadDelay;
 		readonly IClipboardCopyInterceptor clipboardCopyInterceptor;
 		readonly IClipboardHandleFactory clipboardHandleFactory;
 		readonly ILogger logger;
 		readonly IEnumerable<IMemoryWrapper> memoryWrappers;
 
 		public ClipboardInjectionService(
-			IThreadDelay threadDelay,
 			IClipboardCopyInterceptor clipboardCopyInterceptor,
 			IClipboardHandleFactory clipboardHandleFactory,
 			ILogger logger,
 			IEnumerable<IMemoryWrapper> memoryWrappers)
 		{
-			this.threadDelay = threadDelay;
 			this.clipboardCopyInterceptor = clipboardCopyInterceptor;
 			this.clipboardHandleFactory = clipboardHandleFactory;
 			this.logger = logger;
@@ -54,11 +50,8 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 				clipboardCopyInterceptor.SkipNext();
 
 				using (var session = clipboardHandleFactory.StartNewSession())
-				{
-					var emptyTries = 0;
-					while (!session.EmptyClipboard() && emptyTries++ < 5)
-						await threadDelay.ExecuteAsync(100);
-
+				{ 
+					session.EmptyClipboard();
 					InjectPackageContents(session, package);
 				}
 
@@ -103,7 +96,7 @@ namespace Shapeshifter.WindowsDesktop.Services.Clipboard
 					clipboardData.RawFormat.Number,
 					wrapper.GetDataPointer(
 						clipboardData));
-				if (success == IntPtr.Zero)
+				if (success == IntPtr.Zero && session.OpenedSuccessfully)
 				{
 					throw new Exception(
 						"Could not set clipboard data format " + clipboardData.RawFormat + " from " + clipboardData.Package.Source.ProcessName + ".",

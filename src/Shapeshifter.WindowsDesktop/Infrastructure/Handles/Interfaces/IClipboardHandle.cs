@@ -8,8 +8,10 @@
     {
         IReadOnlyCollection<IClipboardFormat> GetClipboardFormats();
 
+		bool OpenedSuccessfully { get; }
+
         IntPtr SetClipboardData(uint uFormat, IntPtr hMem);
 
-        bool EmptyClipboard();
+        void EmptyClipboard();
     }
 }

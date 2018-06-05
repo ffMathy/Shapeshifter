@@ -27,7 +27,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 		readonly IRestClient restClient;
 		readonly IEnvironmentInformation environmentInformation;
 
-		const int logHistoryLength = 1000;
+		const int logHistoryLength = 100;
 
 		public IssueReporterSink(
 			IEnvironmentInformation environmentInformation)
@@ -41,11 +41,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 
 		void ScheduleLogEventReport(LogEvent logEvent)
 		{
-			lock (logHistory)
-			{
-				Log.Logger.Verbose("Reporting the log entry \"{entryName}\".", logEvent.MessageTemplate.Text);
-				ReportLogEvent(logEvent, logHistory);
-			}
+			Log.Logger.Verbose("Reporting the log entry {entryName}.", logEvent.MessageTemplate.Text);
+			ReportLogEvent(logEvent, logHistory);
 		}
 
 		async void ReportLogEvent(LogEvent logEvent, IEnumerable<string> lastMessages)
@@ -60,7 +57,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 				var context = GetPropertyValue(logEvent, "SourceContext");
 				context = context?.Trim('\"') ?? "";
 
-				var issueReport = new IssueReport() {
+				var issueReport = new IssueReport()
+				{
 					Exception = ConvertExceptionToSerializableException(logEvent),
 					OffendingLogLine = StripSensitiveInformation(logEvent.RenderMessage()),
 					OffendingLogMessage = StripSensitiveInformation(logEvent.MessageTemplate.Text),
@@ -80,7 +78,8 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 			{
 				//don't allow errors here to ruin everything.
 			}
-			finally {
+			finally
+			{
 				reportingSemaphore.Release();
 			}
 		}
@@ -92,7 +91,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 					GetFolderPath(SpecialFolder.UserProfile),
 					"%USERPROFILE%")
 				.Replace(
-					UserName, 
+					UserName,
 					"%USERNAME%");
 		}
 
@@ -109,13 +108,14 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 
 		static SerializableException ConvertExceptionToSerializableException(LogEvent logEvent)
 		{
-			if(logEvent.Exception == null)
+			if (logEvent.Exception == null)
 				return null;
 
-			return new SerializableException() {
+			return new SerializableException()
+			{
 				Message = StripSensitiveInformation(logEvent.Exception.Message),
 				Name = logEvent.Exception.GetType().Name,
-				StackTrace = StripSensitiveInformation(logEvent.Exception.StackTrace)
+				StackTrace = StripSensitiveInformation(logEvent.Exception.ToString())
 			};
 		}
 
@@ -129,11 +129,18 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 
 			var level = GetPropertyValue(logEvent, "Level");
 			var message = StripSensitiveInformation($"{level} {logEvent.RenderMessage()}");
-			lock (logHistory)
+
+			try
 			{
+				reportingSemaphore.Wait();
+
 				logHistory.AddLast(message);
-				if(logHistory.Count > logHistoryLength)
+				if (logHistory.Count > logHistoryLength)
 					logHistory.RemoveFirst();
+			}
+			finally
+			{
+				reportingSemaphore.Release();
 			}
 		}
 	}
