@@ -37,11 +37,12 @@
 						deviceMousePosition.X,
 						deviceMousePosition.Y));
 
-			var activeScreen = screens.First(screen =>
+			var activeScreen = screens.FirstOrDefault(screen =>
 				screen.Bounds.X <= deviceIndependentMousePosition.X &&
 				screen.Bounds.Y <= deviceIndependentMousePosition.Y &&
 				screen.Bounds.X + screen.Bounds.Width >= deviceIndependentMousePosition.X &&
-				screen.Bounds.Y + screen.Bounds.Height >= deviceIndependentMousePosition.Y);
+				screen.Bounds.Y + screen.Bounds.Height >= deviceIndependentMousePosition.Y) ??
+				GetScreenInformationFromScreen(Screen.PrimaryScreen);
 			return activeScreen;
 		}
 
