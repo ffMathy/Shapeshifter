@@ -1,5 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Controls.Window
 {
+	using System.ComponentModel;
+
 	using Interfaces;
 
 	using Window = System.Windows.Window;
@@ -12,6 +14,12 @@
 		public MaintenanceWindow()
 		{
 			InitializeComponent();
+		}
+
+		protected override void OnClosing(CancelEventArgs e)
+		{
+			base.OnClosing(e);
+			e.Cancel = true;
 		}
 
 		public void Show(string progressText)
