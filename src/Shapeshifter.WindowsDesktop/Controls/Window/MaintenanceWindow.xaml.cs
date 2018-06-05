@@ -16,8 +16,19 @@
 
 		public void Show(string progressText)
 		{
-			ProgressText.Content = progressText;
-			Show();
+			lock (this)
+			{
+				ProgressText.Content = progressText;
+				Show();
+			}
+		}
+
+		void IMaintenanceWindow.Hide()
+		{
+			lock (this)
+			{
+				Hide();
+			}
 		}
 	}
 }
