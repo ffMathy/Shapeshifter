@@ -43,7 +43,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 		{
 			lock (logHistory)
 			{
-				Log.Logger.Verbose("Reporting the log entry \"{entryName}\".", logEvent.MessageTemplate.Text);
+				Log.Logger.Verbose("Reporting the log entry {entryName}.", logEvent.MessageTemplate.Text);
 				ReportLogEvent(logEvent, logHistory);
 			}
 		}
@@ -115,7 +115,7 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Logging
 			return new SerializableException() {
 				Message = StripSensitiveInformation(logEvent.Exception.Message),
 				Name = logEvent.Exception.GetType().Name,
-				StackTrace = StripSensitiveInformation(logEvent.Exception.StackTrace)
+				StackTrace = StripSensitiveInformation(logEvent.Exception.ToString())
 			};
 		}
 
