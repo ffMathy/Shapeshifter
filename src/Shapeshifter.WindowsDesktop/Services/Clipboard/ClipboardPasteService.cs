@@ -13,6 +13,8 @@
 
 	using KeyboardHookInterception;
 
+	using Mediators.Interfaces;
+
 	using Messages.Interceptors.Hotkeys.Interfaces;
 	using Serilog;
 
@@ -21,18 +23,21 @@
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
         readonly ILogger logger;
         readonly IMainWindowHandleContainer handleContainer;
-        readonly IKeyboardManager keyboardManager;
+		readonly IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator;
+		readonly IKeyboardManager keyboardManager;
 
         public ClipboardPasteService(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
             ILogger logger,
             IMainWindowHandleContainer handleContainer,
+			IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator,
             IKeyboardManager keyboardManager)
         {
             this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
             this.logger = logger;
             this.handleContainer = handleContainer;
-            this.keyboardManager = keyboardManager;
+			this.clipboardUserInterfaceInteractionMediator = clipboardUserInterfaceInteractionMediator;
+			this.keyboardManager = keyboardManager;
         }
 
         public async Task PasteClipboardContentsAsync()
@@ -53,7 +58,9 @@
             DisablePasteHotkeyInterceptor();
             UninstallPasteHotkeyInterceptor();
 
-            await RunFirstKeyboardPhase(isCtrlDown, isVDown);
+			clipboardUserInterfaceInteractionMediator.Disconnect();
+
+			await RunFirstKeyboardPhase(isCtrlDown, isVDown);
 
             InstallPasteHotkeyInterceptor();
 
@@ -61,10 +68,12 @@
 
             EnablePasteHotkeyInterceptor();
 
+			clipboardUserInterfaceInteractionMediator.Connect();
+
 			logger.Verbose("Paste hotkey interceptor has been re-enabled.");
 		}
 
-        void EnablePasteHotkeyInterceptor()
+		void EnablePasteHotkeyInterceptor()
         {
             pasteHotkeyInterceptor.IsEnabled = true;
             logger.Information("Enabled paste hotkey interceptor.");
@@ -72,7 +81,7 @@
 
         void DisablePasteHotkeyInterceptor()
         {
-            pasteHotkeyInterceptor.IsEnabled = false;
+			pasteHotkeyInterceptor.IsEnabled = false;
             logger.Information("Disabled paste hotkey interceptor.");
         }
 
