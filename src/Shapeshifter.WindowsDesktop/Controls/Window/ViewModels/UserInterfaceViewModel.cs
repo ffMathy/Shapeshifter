@@ -60,7 +60,7 @@
 
 		public IAction SelectedAction
 		{
-			get => selectedAction;
+			get => selectedAction ?? SelectedElement?.Data?.Actions?.FirstOrDefault();
 			set
 			{
 				selectedAction = value;
@@ -294,9 +294,6 @@
 
 			if (SelectedElement.Data.Actions.Count == 0)
 				return;
-
-			if (SelectedAction == null)
-				SelectedAction = SelectedElement.Data.Actions.First();
 			
 			UserInterfaceShown?.Invoke(this, e);
 		}
