@@ -10,16 +10,11 @@
 
 	public class ClipboardDataPackage : IClipboardDataPackage
 	{
-		readonly IEnumerable<IAction> allActions;
-
 		readonly List<IClipboardData> dataCollection;
 		readonly List<IAction> actions;
 
-		public ClipboardDataPackage(
-			IEnumerable<IAction> allActions)
+		public ClipboardDataPackage()
 		{
-			this.allActions = allActions;
-
 			dataCollection = new List<IClipboardData>();
 			actions = new List<IAction>();
 
@@ -27,9 +22,8 @@
 		}
 
 		public ClipboardDataPackage(
-			Guid id,
-			IEnumerable<IAction> allActions)
-			: this(allActions)
+			Guid id)
+			: this()
 		{
 			Id = id;
 		}
@@ -43,13 +37,11 @@
 		{
 			data.Package = this;
 			dataCollection.Add(data);
-			
-			UpdateActions();
 		}
 
-		async void UpdateActions()
+		public async void PopulateCompatibleActionsAsync(IEnumerable<IAction> actionCandidates)
 		{
-			var actions = allActions.OrderBy(x => x.Order);
+			var actions = actionCandidates.OrderBy(x => x.Order);
 			foreach(var action in actions)
 			{
 				if (this.actions.IndexOf(action) > -1) continue;

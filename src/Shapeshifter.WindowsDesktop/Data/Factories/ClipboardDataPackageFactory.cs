@@ -26,11 +26,9 @@
 		readonly ICustomClipboardDataFactory customClipboardDataFactory;
 
 		readonly IEnumerable<IMemoryUnwrapper> allMemoryUnwrappers;
-		readonly IEnumerable<IAction> allActions;
 		readonly IEnumerable<IClipboardDataFactory> allDataFactories;
 
 		public ClipboardDataPackageFactory(
-			IEnumerable<IAction> allActions,
 			IEnumerable<IClipboardDataFactory> allDataFactories,
 			IEnumerable<IMemoryUnwrapper> allMemoryUnwrappers,
 			ICustomClipboardDataFactory customClipboardDataFactory,
@@ -39,7 +37,6 @@
 			IClipboardHandleFactory clipboardSessionFactory,
 			IDataSourceService dataSourceService)
 		{
-			this.allActions = allActions;
 			this.allDataFactories = allDataFactories;
 			this.allMemoryUnwrappers = allMemoryUnwrappers;
 			this.customClipboardDataFactory = customClipboardDataFactory;
@@ -77,7 +74,7 @@
 			if (packageId == default)
 				packageId = Guid.NewGuid();
 				
-			return new ClipboardDataPackage(allActions) {
+			return new ClipboardDataPackage() {
 				Source = await dataSourceService.GetDataSourceAsync(),
 				Id = packageId
 			};

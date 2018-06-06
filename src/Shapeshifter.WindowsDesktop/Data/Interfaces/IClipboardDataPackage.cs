@@ -15,5 +15,7 @@
 		IReadOnlyList<IAction> Actions { get; }
 
 		IDataSource Source { get; }
+
+		void PopulateCompatibleActionsAsync(IEnumerable<IAction> actionCandidates);
 	}
 }

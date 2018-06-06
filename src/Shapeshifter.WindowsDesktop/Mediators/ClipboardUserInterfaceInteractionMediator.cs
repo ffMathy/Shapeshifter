@@ -208,7 +208,6 @@
 		void AddControlPackage(IClipboardDataControlPackage controlPackage)
 		{
 			clipboardPackages.Add(controlPackage);
-
 			FireControlAddedEvent(controlPackage);
 		}
 

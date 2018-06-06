@@ -11,6 +11,7 @@
 	using System.Threading;
 	using System.Threading.Tasks;
 
+	using Data.Actions.Interfaces;
 	using Data.Interfaces;
 
 	using Infrastructure.Events;
@@ -38,6 +39,7 @@
 		readonly IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator;
 		readonly ILogger logger;
 		readonly IClipboardPersistenceService clipboardPersistenceService;
+		readonly IEnumerable<IAction> actionCandidates;
 
 		public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
 		public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
@@ -81,7 +83,8 @@
 		public UserInterfaceViewModel(
 			IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator,
 			ILogger logger,
-			IClipboardPersistenceService clipboardPersistenceService)
+			IClipboardPersistenceService clipboardPersistenceService,
+			IEnumerable<IAction> actionCandidates)
 		{
 			Elements = new ObservableCollection<IClipboardDataControlPackage>();
 			Actions = new ObservableCollection<IActionViewModel>();
@@ -94,6 +97,7 @@
 			this.clipboardUserInterfaceInteractionMediator = clipboardUserInterfaceInteractionMediator;
 			this.logger = logger;
 			this.clipboardPersistenceService = clipboardPersistenceService;
+			this.actionCandidates = actionCandidates;
 
 			SetUpClipboardUserInterfaceInteractionMediator();
 		}
@@ -327,6 +331,8 @@
 			{
 				Elements.Insert(await GetIndexToInsertNewItemAsync(), package);
 				SelectedElement = package;
+
+				package.Data.PopulateCompatibleActionsAsync();
 			}
 			finally
 			{

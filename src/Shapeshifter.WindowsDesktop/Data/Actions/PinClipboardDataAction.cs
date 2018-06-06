@@ -14,7 +14,7 @@
     {
         readonly IClipboardPersistenceService clipboardPersistenceService;
 
-		public string Title => "Toggle pinning";
+		public string Title => "Pin to top";
 
         public byte Order => byte.MaxValue;
 
@@ -26,8 +26,7 @@
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
         {
-            return GetRelevantData(package)
-                .Any();
+            return GetRelevantData(package).Any();
         }
 
         public async Task PerformAsync(IClipboardDataPackage package)
@@ -37,8 +36,7 @@
 
         static IEnumerable<IClipboardData> GetRelevantData(IClipboardDataPackage package)
         {
-            return package.Contents
-                          .Where(x => x.RawData != null);
+            return package.Contents.Where(x => x.RawData != null);
         }
     }
 }
