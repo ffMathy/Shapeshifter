@@ -77,32 +77,6 @@
         }
 
         [TestMethod]
-        public void ConnectAddsInitialPackage()
-        {
-            var fakeData = Substitute.For<IClipboardData>();
-            var fakeControl = Substitute.For<IClipboardControl>();
-            var fakePackage = Substitute.For<IClipboardDataControlPackage>();
-            fakePackage.Data.Contents.Returns(
-                new[]
-                {
-                            fakeData
-                });
-            fakePackage.Control.Returns(fakeControl);
-
-            Container.Resolve<IClipboardDataControlPackageFactory>()
-                     .CreateFromCurrentClipboardDataAsync()
-                     .Returns(Task.FromResult(fakePackage));
-
-            var mediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
-            mediator.Connect();
-
-            var addedPackage = mediator.ClipboardElements.Single();
-            var content = addedPackage.Data.Contents.Single();
-            Assert.AreSame(fakeData, content);
-            Assert.AreSame(fakeControl, addedPackage.Control);
-        }
-
-        [TestMethod]
         public void ConnectTriggersControlAddedEvent()
         {
             object eventSender = null;
