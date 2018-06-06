@@ -153,20 +153,6 @@
         }
 
         [TestMethod]
-        public void UserInterfaceShownIsBubbledUpFromDurationMediator()
-        {
-            var showEventCount = 0;
-
-            SystemUnderTest.Elements.Add(Substitute.For<IClipboardDataControlPackage>());
-            SystemUnderTest.UserInterfaceShown += (sender, e) => showEventCount++;
-
-            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
-            fakeMediator.UserInterfaceShown += Raise.Event<EventHandler<UserInterfaceShownEventArgument>>(new object());
-
-            Assert.AreEqual(1, showEventCount);
-        }
-
-        [TestMethod]
         public void UserInterfaceHiddenIsBubbledUpFromDurationMediator()
         {
             var hideEventCount = 0;
