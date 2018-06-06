@@ -77,24 +77,6 @@
         }
 
         [TestMethod]
-        public void ConnectTriggersControlAddedEvent()
-        {
-            object eventSender = null;
-            PackageEventArgument eventArgument = null;
-            SystemUnderTest.PackageAdded += (sender, e) => {
-                eventSender = sender;
-                eventArgument = e;
-            };
-
-            SystemUnderTest.Connect();
-
-            var addedPackage = SystemUnderTest.ClipboardElements.Single();
-            Assert.IsNotNull(addedPackage);
-            Assert.AreSame(SystemUnderTest, eventSender);
-            Assert.AreSame(addedPackage, eventArgument.Package);
-        }
-
-        [TestMethod]
         public void ConnectConnectsHotkeyHook()
         {
             SystemUnderTest.Connect();
