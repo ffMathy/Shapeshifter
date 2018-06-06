@@ -1,7 +1,8 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data.Actions
 {
     using System;
-    using System.Collections.ObjectModel;
+	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
     using System.IO;
     using System.IO.Compression;
     using System.Linq;
@@ -22,8 +23,13 @@
 
     [TestClass]
     public class ZipFilesActionTest: ActionTestBase<IZipFilesAction>
-    {
-        [TestMethod]
+	{
+		static ClipboardDataPackage CreateEmptyDataPackage()
+		{
+			return new ClipboardDataPackage();
+		}
+
+		[TestMethod]
         public async Task CanPerformForFiles()
         {
             Assert.IsTrue(
@@ -38,12 +44,6 @@
         }
 
         [TestMethod]
-        public async Task CanReadDescription()
-        {
-            Assert.IsNotNull(await SystemUnderTest.GetTitleAsync(Substitute.For<IClipboardDataPackage>()));
-        }
-
-        [TestMethod]
         public void OrderIsCorrect()
         {
             Assert.AreEqual(75, SystemUnderTest.Order);
@@ -53,16 +53,16 @@
         [ExpectedException(typeof (InvalidOperationException))]
         [TestCategory("Integration")]
         public async Task ThrowsExceptionForInvalidData()
-        {
-            var fakeData = Substitute.For<IClipboardData>();
+		{
+			var fakeData = Substitute.For<IClipboardData>();
 
-            var package = new ClipboardDataPackage();
-            package.AddData(fakeData);
+			var package = CreateEmptyDataPackage();
+			package.AddData(fakeData);
 
-            await SystemUnderTest.PerformAsync(package);
-        }
+			await SystemUnderTest.PerformAsync(package);
+		}
 
-        [TestMethod]
+		[TestMethod]
         [ExpectedException(typeof (ArgumentException))]
         [TestCategory("Integration")]
         public async Task NoFilesAddedThrowsException()
@@ -72,7 +72,7 @@
                 Files = new Collection<IClipboardFileData>()
             };
 
-            var package = new ClipboardDataPackage();
+            var package = CreateEmptyDataPackage();
             package.AddData(fileCollectionData);
 
             await SystemUnderTest.PerformAsync(package);
@@ -107,7 +107,7 @@
                 }
             };
 
-            var package = new ClipboardDataPackage();
+            var package = CreateEmptyDataPackage();
             package.AddData(fileCollectionData);
 
             string zipPath = null;
@@ -155,7 +155,7 @@
                 FileName = Path.GetFileName(file)
             };
 
-            var package = new ClipboardDataPackage();
+            var package = CreateEmptyDataPackage();
             package.AddData(fileData);
 
             string zipPath = null;

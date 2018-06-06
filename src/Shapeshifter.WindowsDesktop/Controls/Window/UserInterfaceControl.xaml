@@ -54,7 +54,7 @@
         </Grid>
         <Rectangle Grid.Column="1" Fill="{DynamicResource AccentBrush}" />
         <Grid Grid.Column="0" VerticalAlignment="Top">
-            <ListBox Style="{StaticResource DefaultListBoxStyle}" SelectedItem="{Binding SelectedAction, Mode=TwoWay}" ItemsSource="{Binding Actions}">
+            <ListBox Style="{StaticResource DefaultListBoxStyle}" SelectedItem="{Binding SelectedAction, Mode=TwoWay}" ItemsSource="{Binding SelectedElement.Data.Actions}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <window:ActionControl Margin="0,-1,-1,0" />

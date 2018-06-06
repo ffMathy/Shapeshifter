@@ -6,7 +6,7 @@
 
     public interface IAction
     {
-        Task<string> GetTitleAsync(IClipboardDataPackage package);
+		string Title { get; }
 
         byte Order { get; }
 

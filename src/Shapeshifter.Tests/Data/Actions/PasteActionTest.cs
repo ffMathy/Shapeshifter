@@ -33,12 +33,6 @@
         }
 
         [TestMethod]
-        public async Task CanReadDescription()
-        {
-            Assert.IsNotNull(await SystemUnderTest.GetTitleAsync(Substitute.For<IClipboardDataPackage>()));
-        }
-
-        [TestMethod]
         public async Task PerformTriggersPaste()
         {
             var fakeData = CreateClipboardDataPackageContaining<IClipboardData>();

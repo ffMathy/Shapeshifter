@@ -13,8 +13,6 @@
 
 	using KeyboardHookInterception;
 
-	using Mediators.Interfaces;
-
 	using Messages.Interceptors.Hotkeys.Interfaces;
 	using Serilog;
 
@@ -23,20 +21,17 @@
         readonly IPasteHotkeyInterceptor pasteHotkeyInterceptor;
         readonly ILogger logger;
         readonly IMainWindowHandleContainer handleContainer;
-		readonly IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator;
 		readonly IKeyboardManager keyboardManager;
 
         public ClipboardPasteService(
             IPasteHotkeyInterceptor pasteHotkeyInterceptor,
             ILogger logger,
             IMainWindowHandleContainer handleContainer,
-			IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator,
             IKeyboardManager keyboardManager)
         {
             this.pasteHotkeyInterceptor = pasteHotkeyInterceptor;
             this.logger = logger;
             this.handleContainer = handleContainer;
-			this.clipboardUserInterfaceInteractionMediator = clipboardUserInterfaceInteractionMediator;
 			this.keyboardManager = keyboardManager;
         }
 
@@ -58,8 +53,6 @@
             DisablePasteHotkeyInterceptor();
             UninstallPasteHotkeyInterceptor();
 
-			clipboardUserInterfaceInteractionMediator.Disconnect();
-
 			await RunFirstKeyboardPhase(isCtrlDown, isVDown);
 
             InstallPasteHotkeyInterceptor();
@@ -67,8 +60,6 @@
             await RunSecondKeyboardPhaseAsync(isCtrlDown, isVDown);
 
             EnablePasteHotkeyInterceptor();
-
-			clipboardUserInterfaceInteractionMediator.Connect();
 
 			logger.Verbose("Paste hotkey interceptor has been re-enabled.");
 		}

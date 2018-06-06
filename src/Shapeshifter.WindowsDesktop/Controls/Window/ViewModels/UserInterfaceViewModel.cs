@@ -11,8 +11,7 @@
 	using System.Threading;
 	using System.Threading.Tasks;
 
-	using Binders.Interfaces;
-
+	using Data.Actions.Interfaces;
 	using Data.Interfaces;
 
 	using Infrastructure.Events;
@@ -30,7 +29,7 @@
 		IDisposable
 	{
 		IClipboardDataControlPackage selectedElement;
-		IActionViewModel selectedAction;
+		IAction selectedAction;
 
 		ScreenInformation activeScreen;
 
@@ -40,6 +39,7 @@
 		readonly IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator;
 		readonly ILogger logger;
 		readonly IClipboardPersistenceService clipboardPersistenceService;
+		readonly IEnumerable<IAction> actionCandidates;
 
 		public event EventHandler<UserInterfaceShownEventArgument> UserInterfaceShown;
 		public event EventHandler<UserInterfaceHiddenEventArgument> UserInterfaceHidden;
@@ -47,7 +47,6 @@
 		public event EventHandler<UserInterfaceDataControlAddedEventArgument> UserInterfaceDataControlAdded;
 
 		public ObservableCollection<IClipboardDataControlPackage> Elements { get; }
-		public ObservableCollection<IActionViewModel> Actions { get; }
 
 		public ScreenInformation ActiveScreen
 		{
@@ -59,9 +58,9 @@
 			}
 		}
 
-		public IActionViewModel SelectedAction
+		public IAction SelectedAction
 		{
-			get => selectedAction;
+			get => selectedAction ?? SelectedElement?.Data?.Actions?.FirstOrDefault();
 			set
 			{
 				selectedAction = value;
@@ -82,33 +81,21 @@
 		[SuppressMessage("ReSharper", "SuggestBaseTypeForParameter")]
 		public UserInterfaceViewModel(
 			IClipboardUserInterfaceInteractionMediator clipboardUserInterfaceInteractionMediator,
-			IPackageToActionSwitch packageToActionSwitch,
 			ILogger logger,
-			IClipboardPersistenceService clipboardPersistenceService)
+			IClipboardPersistenceService clipboardPersistenceService,
+			IEnumerable<IAction> actionCandidates)
 		{
 			Elements = new ObservableCollection<IClipboardDataControlPackage>();
-			Actions = new ObservableCollection<IActionViewModel>();
 
 			singlePasteLock = new SemaphoreSlim(1);
 			elementsModificationLock = new SemaphoreSlim(1);
 
-			Actions.CollectionChanged += Actions_CollectionChanged;
-
 			this.clipboardUserInterfaceInteractionMediator = clipboardUserInterfaceInteractionMediator;
 			this.logger = logger;
 			this.clipboardPersistenceService = clipboardPersistenceService;
+			this.actionCandidates = actionCandidates;
 
 			SetUpClipboardUserInterfaceInteractionMediator();
-
-			packageToActionSwitch.PrepareBinder(this);
-		}
-
-		void Actions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-		{
-			if ((SelectedAction == null) && (Actions.Count > 0))
-			{
-				SelectedAction = Actions.First();
-			}
 		}
 
 		void SetUpClipboardUserInterfaceInteractionMediator()
@@ -178,7 +165,7 @@
 			switch (clipboardUserInterfaceInteractionMediator.CurrentPane)
 			{
 				case ClipboardUserInterfacePane.Actions:
-					SelectedAction = GetNewSelectedElementAfterHandlingUpKey(Actions, SelectedAction);
+					SelectedAction = GetNewSelectedElementAfterHandlingUpKey(SelectedElement.Data.Actions.ToList(), SelectedAction);
 					break;
 
 				case ClipboardUserInterfacePane.ClipboardPackages:
@@ -198,7 +185,7 @@
 			switch (clipboardUserInterfaceInteractionMediator.CurrentPane)
 			{
 				case ClipboardUserInterfacePane.Actions:
-					SelectedAction = GetNewSelectedElementAfterHandlingDownKey(Actions, SelectedAction);
+					SelectedAction = GetNewSelectedElementAfterHandlingDownKey(SelectedElement.Data.Actions.ToList(), SelectedAction);
 					break;
 
 				case ClipboardUserInterfacePane.ClipboardPackages:
@@ -227,9 +214,13 @@
 				await singlePasteLock.WaitAsync();
 				try
 				{
-					await SelectedAction.Action.PerformAsync(SelectedElement.Data);
+					clipboardUserInterfaceInteractionMediator.Disconnect();
+
+					await SelectedAction.PerformAsync(SelectedElement.Data);
 					if (!await clipboardPersistenceService.IsPersistedAsync(SelectedElement.Data))
 						await MoveSelectedItemToTopAsync();
+						
+					clipboardUserInterfaceInteractionMediator.Connect();
 				}
 				finally
 				{
@@ -300,6 +291,9 @@
 				logger.Information("Did not show the UI because there are no clipboard elements in the list.");
 				return;
 			}
+
+			if (SelectedElement.Data.Actions.Count == 0)
+				return;
 			
 			UserInterfaceShown?.Invoke(this, e);
 		}
@@ -328,6 +322,8 @@
 			{
 				Elements.Insert(await GetIndexToInsertNewItemAsync(), package);
 				SelectedElement = package;
+
+				package.Data.PopulateCompatibleActionsAsync(actionCandidates);
 			}
 			finally
 			{

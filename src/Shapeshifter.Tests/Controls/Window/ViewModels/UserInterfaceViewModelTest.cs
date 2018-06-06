@@ -2,10 +2,12 @@
 {
     using System;
     using System.Linq;
+	using System.Threading.Tasks;
 
-    using Autofac;
+	using Autofac;
 
-    using Data.Interfaces;
+	using Data.Actions.Interfaces;
+	using Data.Interfaces;
 
     using Infrastructure.Events;
 
@@ -152,80 +154,6 @@
         }
 
         [TestMethod]
-        public void SelectedActionChangesToTheSecondWhenFirstIsSelectedAndDownIsPressed()
-        {
-            var fakeAction1 = Substitute.For<IActionViewModel>();
-            var fakeAction2 = Substitute.For<IActionViewModel>();
-            var fakeAction3 = Substitute.For<IActionViewModel>();
-
-            SystemUnderTest.Actions.Add(fakeAction1);
-            SystemUnderTest.Actions.Add(fakeAction2);
-            SystemUnderTest.Actions.Add(fakeAction3);
-
-            SystemUnderTest.SelectedAction = fakeAction1;
-
-            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
-            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
-            fakeMediator.SelectedNextItem += Raise.Event();
-
-            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction2);
-        }
-
-        [TestMethod]
-        public void SelectedActionChangesToTheThirdWhenSecondIsSelectedAndDownIsPressed()
-        {
-            var fakeAction1 = Substitute.For<IActionViewModel>();
-            var fakeAction2 = Substitute.For<IActionViewModel>();
-            var fakeAction3 = Substitute.For<IActionViewModel>();
-
-            SystemUnderTest.Actions.Add(fakeAction1);
-            SystemUnderTest.Actions.Add(fakeAction2);
-            SystemUnderTest.Actions.Add(fakeAction3);
-
-            SystemUnderTest.SelectedAction = fakeAction2;
-
-            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
-            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
-            fakeMediator.SelectedNextItem += Raise.Event();
-
-            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction3);
-        }
-
-        [TestMethod]
-        public void WhenPasteIsRequestedSelectedActionIsInvoked()
-        {
-            var fakeAction = Substitute.For<IActionViewModel>();
-            SystemUnderTest.SelectedAction = fakeAction;
-
-            var fakeElement = Substitute.For<IClipboardDataControlPackage>();
-            SystemUnderTest.SelectedElement = fakeElement;
-
-            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
-            fakeMediator.PastePerformed +=
-                Raise.Event<EventHandler
-                    <PastePerformedEventArgument>>(new object());
-
-            fakeAction
-                .Received()
-                .Action
-                .PerformAsync(Arg.Any<IClipboardDataPackage>());
-        }
-
-        [TestMethod]
-        public void UserInterfaceShownIsBubbledUpFromDurationMediator()
-        {
-            var showEventCount = 0;
-
-            SystemUnderTest.Elements.Add(Substitute.For<IClipboardDataControlPackage>());
-            SystemUnderTest.UserInterfaceShown += (sender, e) => showEventCount++;
-
-            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
-            fakeMediator.UserInterfaceShown += Raise.Event<EventHandler<UserInterfaceShownEventArgument>>(new object());
-
-            Assert.AreEqual(1, showEventCount);
-        }
-
-        [TestMethod]
         public void UserInterfaceHiddenIsBubbledUpFromDurationMediator()
         {
             var hideEventCount = 0;
@@ -236,86 +164,6 @@
             fakeMediator.UserInterfaceHidden += Raise.Event<EventHandler<UserInterfaceHiddenEventArgument>>(new object());
 
             Assert.AreEqual(1, hideEventCount);
-        }
-
-        [TestMethod]
-        public void SelectedActionChangesToTheFirstWhenThirdIsSelectedAndDownIsPressed()
-        {
-            var fakeAction1 = Substitute.For<IActionViewModel>();
-            var fakeAction2 = Substitute.For<IActionViewModel>();
-            var fakeAction3 = Substitute.For<IActionViewModel>();
-
-            SystemUnderTest.Actions.Add(fakeAction1);
-            SystemUnderTest.Actions.Add(fakeAction2);
-            SystemUnderTest.Actions.Add(fakeAction3);
-
-            SystemUnderTest.SelectedAction = fakeAction3;
-
-            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
-            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
-            fakeMediator.SelectedNextItem += Raise.Event();
-
-            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction1);
-        }
-
-        [TestMethod]
-        public void SelectedActionChangesToTheThirdWhenFirstIsSelectedAndUpIsPressed()
-        {
-            var fakeAction1 = Substitute.For<IActionViewModel>();
-            var fakeAction2 = Substitute.For<IActionViewModel>();
-            var fakeAction3 = Substitute.For<IActionViewModel>();
-
-            SystemUnderTest.Actions.Add(fakeAction1);
-            SystemUnderTest.Actions.Add(fakeAction2);
-            SystemUnderTest.Actions.Add(fakeAction3);
-
-            SystemUnderTest.SelectedAction = fakeAction1;
-
-            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
-            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
-            fakeMediator.SelectedPreviousItem += Raise.Event();
-
-            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction3);
-        }
-
-        [TestMethod]
-        public void SelectedActionChangesToTheSecondWhenThirdIsSelectedAndUpIsPressed()
-        {
-            var fakeAction1 = Substitute.For<IActionViewModel>();
-            var fakeAction2 = Substitute.For<IActionViewModel>();
-            var fakeAction3 = Substitute.For<IActionViewModel>();
-
-            SystemUnderTest.Actions.Add(fakeAction1);
-            SystemUnderTest.Actions.Add(fakeAction2);
-            SystemUnderTest.Actions.Add(fakeAction3);
-
-            SystemUnderTest.SelectedAction = fakeAction3;
-
-            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
-            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
-            fakeMediator.SelectedPreviousItem += Raise.Event();
-
-            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction2);
-        }
-
-        [TestMethod]
-        public void SelectedActionChangesToTheFirstWhenSecondIsSelectedAndUpIsPressed()
-        {
-            var fakeAction1 = Substitute.For<IActionViewModel>();
-            var fakeAction2 = Substitute.For<IActionViewModel>();
-            var fakeAction3 = Substitute.For<IActionViewModel>();
-
-            SystemUnderTest.Actions.Add(fakeAction1);
-            SystemUnderTest.Actions.Add(fakeAction2);
-            SystemUnderTest.Actions.Add(fakeAction3);
-
-            SystemUnderTest.SelectedAction = fakeAction2;
-
-            var fakeMediator = Container.Resolve<IClipboardUserInterfaceInteractionMediator>();
-            fakeMediator.CurrentPane = ClipboardUserInterfacePane.Actions;
-            fakeMediator.SelectedPreviousItem += Raise.Event();
-
-            Assert.AreSame(SystemUnderTest.SelectedAction, fakeAction1);
         }
 
         [TestMethod]

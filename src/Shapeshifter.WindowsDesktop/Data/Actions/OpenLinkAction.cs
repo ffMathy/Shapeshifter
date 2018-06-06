@@ -28,12 +28,9 @@
             this.linkParser = linkParser;
             this.processManager = processManager;
             this.asyncFilter = asyncFilter;
-        }
-
-        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
-		{
-			return "Open links";
 		}
+
+		public string Title => "Open links";
 
         public byte Order => 200;
 
@@ -52,13 +49,9 @@
 
         async Task<bool> CanPerformAsync(IClipboardData data)
         {
-	    // Until implemented
-	    return false;
-	    
-            //var textData = data as IClipboardTextData;
-            //return (textData != null) && await linkParser.HasLinkAsync(textData.Text)
-            //                                             .ConfigureAwait(false);
-        }
+			return data is IClipboardTextData textData && 
+				await linkParser.HasLinkAsync(textData.Text).ConfigureAwait(false);
+		}
 
         public async Task PerformAsync(
             IClipboardDataPackage package)

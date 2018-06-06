@@ -14,13 +14,7 @@
     {
         readonly IClipboardPersistenceService clipboardPersistenceService;
 
-        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
-		{
-			if (await clipboardPersistenceService.IsPersistedAsync(package))
-				return "Unpin from clipboard";
-
-            return "Pin to clipboard";
-        }
+		public string Title => "Pin to top";
 
         public byte Order => byte.MaxValue;
 
@@ -31,9 +25,8 @@
         }
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
-        {
-            return GetRelevantData(package)
-                .Any();
+		{
+            return GetRelevantData(package).Any();
         }
 
         public async Task PerformAsync(IClipboardDataPackage package)
@@ -43,8 +36,7 @@
 
         static IEnumerable<IClipboardData> GetRelevantData(IClipboardDataPackage package)
         {
-            return package.Contents
-                          .Where(x => x.RawData != null);
+            return package.Contents.Where(x => x.RawData != null);
         }
     }
 }

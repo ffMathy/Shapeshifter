@@ -5,6 +5,8 @@
 	using System.Linq;
 	using System.Threading.Tasks;
 
+	using Actions.Interfaces;
+
 	using Data.Interfaces;
 
 	using Infrastructure.Handles.Factories.Interfaces;
@@ -71,7 +73,7 @@
 		{
 			if (packageId == default)
 				packageId = Guid.NewGuid();
-
+				
 			return new ClipboardDataPackage() {
 				Source = await dataSourceService.GetDataSourceAsync(),
 				Id = packageId
@@ -144,7 +146,9 @@
 
 			var clipboardData = factory.BuildData(format, rawData);
 			if (clipboardData != null)
+			{
 				package.AddData(clipboardData);
+			}
 		}
 	}
 }

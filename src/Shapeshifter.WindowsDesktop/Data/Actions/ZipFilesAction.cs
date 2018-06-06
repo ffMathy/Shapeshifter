@@ -19,9 +19,7 @@
     class ZipFilesAction: IZipFilesAction
     {
         readonly IAsyncFilter asyncFilter;
-
         readonly IFileManager fileManager;
-
         readonly IClipboardInjectionService clipboardInjectionService;
 
         public ZipFilesAction(
@@ -32,12 +30,9 @@
             this.asyncFilter = asyncFilter;
             this.fileManager = fileManager;
             this.clipboardInjectionService = clipboardInjectionService;
-        }
+		}
 
-        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
-        {
-            return "Copy as compressed folder";
-        }
+		public string Title => "Copy as compressed folder";
 
         public byte Order => 75;
 

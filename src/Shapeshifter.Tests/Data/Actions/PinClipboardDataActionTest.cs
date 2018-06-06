@@ -22,12 +22,6 @@
         }
 
         [TestMethod]
-        public async Task CanReadDescription()
-        {
-            Assert.IsNotNull(await SystemUnderTest.GetTitleAsync(Substitute.For<IClipboardDataPackage>()));
-        }
-
-        [TestMethod]
         public void OrderIsCorrect()
         {
             Assert.AreEqual(byte.MaxValue, SystemUnderTest.Order);

@@ -16,11 +16,8 @@
     {
         readonly IFileManager fileManager;
         readonly IClipboardInjectionService clipboardInjectionService;
-		
-        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
-        {
-            return "Copy as file";
-        }
+
+		public string Title => "Copy as file";
 
         public byte Order
             => 20;

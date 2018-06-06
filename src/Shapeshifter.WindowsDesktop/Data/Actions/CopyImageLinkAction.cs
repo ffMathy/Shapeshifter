@@ -39,14 +39,11 @@
             this.downloader = downloader;
             this.imageFileInterpreter = imageFileInterpreter;
             this.clipboardInjectionService = clipboardInjectionService;
-        }
+		}
 
-        public async Task<string> GetTitleAsync(IClipboardDataPackage package)
-        {
-			return "Copy images from links";
-        }
+		public string Title => "Copy images from links";
 
-        public byte Order => 100;
+		public byte Order => 100;
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
         {
@@ -63,13 +60,10 @@
 
         async Task<bool> CanPerformAsync(IClipboardData data)
         {
-	    // Until implemented
-	    return false;
-	    
-		//	return data is IClipboardTextData textData &&
-                //   await linkParser.HasLinkOfTypeAsync(textData.Text, LinkType.ImageFile)
-                //                   .ConfigureAwait(false);
-        }
+			return data is IClipboardTextData textData &&
+				   await linkParser.HasLinkOfTypeAsync(textData.Text, LinkType.ImageFile)
+								   .ConfigureAwait(false);
+		}
 
         public async Task PerformAsync(IClipboardDataPackage package)
         {
