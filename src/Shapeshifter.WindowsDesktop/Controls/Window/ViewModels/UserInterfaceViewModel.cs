@@ -29,7 +29,7 @@
 		IDisposable
 	{
 		IClipboardDataControlPackage selectedElement;
-		IActionViewModel selectedAction;
+		IAction selectedAction;
 
 		ScreenInformation activeScreen;
 
@@ -47,7 +47,6 @@
 		public event EventHandler<UserInterfaceDataControlAddedEventArgument> UserInterfaceDataControlAdded;
 
 		public ObservableCollection<IClipboardDataControlPackage> Elements { get; }
-		public ObservableCollection<IActionViewModel> Actions { get; }
 
 		public ScreenInformation ActiveScreen
 		{
@@ -59,7 +58,7 @@
 			}
 		}
 
-		public IActionViewModel SelectedAction
+		public IAction SelectedAction
 		{
 			get => selectedAction;
 			set
@@ -87,12 +86,9 @@
 			IEnumerable<IAction> actionCandidates)
 		{
 			Elements = new ObservableCollection<IClipboardDataControlPackage>();
-			Actions = new ObservableCollection<IActionViewModel>();
 
 			singlePasteLock = new SemaphoreSlim(1);
 			elementsModificationLock = new SemaphoreSlim(1);
-
-			Actions.CollectionChanged += Actions_CollectionChanged;
 
 			this.clipboardUserInterfaceInteractionMediator = clipboardUserInterfaceInteractionMediator;
 			this.logger = logger;
@@ -100,14 +96,6 @@
 			this.actionCandidates = actionCandidates;
 
 			SetUpClipboardUserInterfaceInteractionMediator();
-		}
-
-		void Actions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-		{
-			if ((SelectedAction == null) && (Actions.Count > 0))
-			{
-				SelectedAction = Actions.First();
-			}
 		}
 
 		void SetUpClipboardUserInterfaceInteractionMediator()
@@ -177,7 +165,7 @@
 			switch (clipboardUserInterfaceInteractionMediator.CurrentPane)
 			{
 				case ClipboardUserInterfacePane.Actions:
-					SelectedAction = GetNewSelectedElementAfterHandlingUpKey(Actions, SelectedAction);
+					SelectedAction = GetNewSelectedElementAfterHandlingUpKey(SelectedElement.Data.Actions.ToList(), SelectedAction);
 					break;
 
 				case ClipboardUserInterfacePane.ClipboardPackages:
@@ -197,7 +185,7 @@
 			switch (clipboardUserInterfaceInteractionMediator.CurrentPane)
 			{
 				case ClipboardUserInterfacePane.Actions:
-					SelectedAction = GetNewSelectedElementAfterHandlingDownKey(Actions, SelectedAction);
+					SelectedAction = GetNewSelectedElementAfterHandlingDownKey(SelectedElement.Data.Actions.ToList(), SelectedAction);
 					break;
 
 				case ClipboardUserInterfacePane.ClipboardPackages:
@@ -228,7 +216,7 @@
 				{
 					clipboardUserInterfaceInteractionMediator.Disconnect();
 
-					await SelectedAction.Action.PerformAsync(SelectedElement.Data);
+					await SelectedAction.PerformAsync(SelectedElement.Data);
 					if (!await clipboardPersistenceService.IsPersistedAsync(SelectedElement.Data))
 						await MoveSelectedItemToTopAsync();
 						
@@ -303,6 +291,12 @@
 				logger.Information("Did not show the UI because there are no clipboard elements in the list.");
 				return;
 			}
+
+			if (SelectedElement.Data.Actions.Count == 0)
+				return;
+
+			if (SelectedAction == null)
+				SelectedAction = SelectedElement.Data.Actions.First();
 			
 			UserInterfaceShown?.Invoke(this, e);
 		}
@@ -332,7 +326,7 @@
 				Elements.Insert(await GetIndexToInsertNewItemAsync(), package);
 				SelectedElement = package;
 
-				package.Data.PopulateCompatibleActionsAsync();
+				package.Data.PopulateCompatibleActionsAsync(actionCandidates);
 			}
 			finally
 			{

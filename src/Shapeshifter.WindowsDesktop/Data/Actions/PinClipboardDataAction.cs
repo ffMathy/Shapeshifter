@@ -25,7 +25,7 @@
         }
 
         public async Task<bool> CanPerformAsync(IClipboardDataPackage package)
-        {
+		{
             return GetRelevantData(package).Any();
         }
 

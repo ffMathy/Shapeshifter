@@ -26,7 +26,7 @@
 	{
 		static ClipboardDataPackage CreateEmptyDataPackage()
 		{
-			return new ClipboardDataPackage(new List<IAction>());
+			return new ClipboardDataPackage();
 		}
 
 		[TestMethod]

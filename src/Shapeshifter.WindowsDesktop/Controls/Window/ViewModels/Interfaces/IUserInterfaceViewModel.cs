@@ -4,6 +4,7 @@
 	using System.Collections.ObjectModel;
 	using System.ComponentModel;
 
+	using Data.Actions.Interfaces;
 	using Data.Interfaces;
 
 	using Infrastructure.Events;
@@ -18,11 +19,10 @@
 		event EventHandler<UserInterfaceDataControlAddedEventArgument> UserInterfaceDataControlAdded;
 
 		IClipboardDataControlPackage SelectedElement { get; set; }
-		IActionViewModel SelectedAction { get; set; }
+		IAction SelectedAction { get; set; }
 
 		ScreenInformation ActiveScreen { get; set; }
 
 		ObservableCollection<IClipboardDataControlPackage> Elements { get; }
-		ObservableCollection<IActionViewModel> Actions { get; }
 	}
 }

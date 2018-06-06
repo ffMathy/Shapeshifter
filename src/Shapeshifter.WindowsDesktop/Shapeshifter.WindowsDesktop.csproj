@@ -321,7 +321,6 @@
     <Compile Include="Controls\Window\ViewModels\Interfaces\IInstallViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\ISourceClipboardQuantityOverlayViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\IMainViewModel.cs" />
-    <Compile Include="Controls\Window\ViewModels\Interfaces\IActionViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\Interfaces\ISettingsViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\MainViewModel.cs" />
     <Compile Include="Controls\Window\ViewModels\SettingsViewModel.cs" />

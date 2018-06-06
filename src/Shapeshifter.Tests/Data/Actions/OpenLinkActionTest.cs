@@ -48,29 +48,29 @@
             Assert.AreEqual(200, SystemUnderTest.Order);
         }
 
-        //[TestMethod]
-        //public async Task PerformLaunchesDefaultBrowsersForEachLink()
-        //{
-        //    ExcludeFakeFor<IAsyncFilter>();
+		[TestMethod]
+		public async Task PerformLaunchesDefaultBrowsersForEachLink()
+		{
+			ExcludeFakeFor<IAsyncFilter>();
 
-        //    FakeHasLinks(
-        //        new[]
-        //        {
-        //            "foo.com",
-        //            "bar.com"
-        //        });
+			FakeHasLinks(
+				new[]
+				{
+					"foo.com",
+					"bar.com"
+				});
 
-        //    await SystemUnderTest.PerformAsync(
-        //        CreateClipboardDataPackageContaining<IClipboardTextData>());
+			await SystemUnderTest.PerformAsync(
+				CreateClipboardDataPackageContaining<IClipboardTextData>());
 
-        //    var fakeProcessManager = Container.Resolve<IProcessManager>();
-        //    fakeProcessManager.Received(1)
-        //                      .LaunchCommand("foo.com");
-        //    fakeProcessManager.Received(1)
-        //                      .LaunchCommand("bar.com");
-        //}
+			var fakeProcessManager = Container.Resolve<IProcessManager>();
+			fakeProcessManager.Received(1)
+							  .LaunchCommand("foo.com");
+			fakeProcessManager.Received(1)
+							  .LaunchCommand("bar.com");
+		}
 
-        void FakeHasLinks(string[] links)
+		void FakeHasLinks(string[] links)
         {
             Container.Resolve<ILinkParser>()
                      .HasLinkAsync(Arg.Any<string>())

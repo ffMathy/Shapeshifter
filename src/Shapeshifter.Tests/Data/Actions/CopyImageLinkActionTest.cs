@@ -52,68 +52,68 @@
             Assert.IsFalse(canPerform);
         }
 
-        //[TestMethod]
-        //public async Task CanPerformIsTrueForTextTypesWithImageLink()
-        //{
-        //    Container.Resolve<ILinkParser>()
-        //        .HasLinkOfTypeAsync(
-        //            Arg.Any<string>(),
-        //            LinkType.ImageFile)
-        //        .Returns(Task.FromResult(true));
-            
-        //    Assert.IsTrue(await SystemUnderTest.CanPerformAsync(CreateClipboardDataPackageContaining<IClipboardTextData>()));
-        //}
+		[TestMethod]
+		public async Task CanPerformIsTrueForTextTypesWithImageLink()
+		{
+			Container.Resolve<ILinkParser>()
+				.HasLinkOfTypeAsync(
+					Arg.Any<string>(),
+					LinkType.ImageFile)
+				.Returns(Task.FromResult(true));
 
-    //    [TestMethod]
-    //    public async Task PerformTriggersImageDownload()
-    //    {
-    //        var firstFakeDownloadedImageBytes = new byte[]
-    //        {
-    //            1
-    //        };
-    //        var secondFakeDownloadedImageBytes = new byte[]
-    //        {
-    //            2
-    //        };
-            
-    //        Container.Resolve<IDownloader>()
-    //         .DownloadBytesAsync(Arg.Any<Uri>())
-    //         .Returns(
-    //             Task.FromResult(
-    //                 firstFakeDownloadedImageBytes),
-    //             Task.FromResult(
-    //                 secondFakeDownloadedImageBytes));
+			Assert.IsTrue(await SystemUnderTest.CanPerformAsync(CreateClipboardDataPackageContaining<IClipboardTextData>()));
+		}
 
-    //        FakeHasImageLinks(
-    //            new[]
-    //            {
-    //                "http://foobar.com",
-				//	"http://example.com"
-				//});
+		[TestMethod]
+		public async Task PerformTriggersImageDownload()
+		{
+			var firstFakeDownloadedImageBytes = new byte[]
+			{
+				1
+			};
+			var secondFakeDownloadedImageBytes = new byte[]
+			{
+				2
+			};
 
-    //        await SystemUnderTest.PerformAsync(CreateClipboardDataPackageContaining<IClipboardTextData>());
+			Container.Resolve<IDownloader>()
+			 .DownloadBytesAsync(Arg.Any<Uri>())
+			 .Returns(
+				 Task.FromResult(
+					 firstFakeDownloadedImageBytes),
+				 Task.FromResult(
+					 secondFakeDownloadedImageBytes));
 
-    //        var fakeClipboardInjectionService = Container.Resolve<IClipboardInjectionService>();
-    //        fakeClipboardInjectionService.Received(2)
-    //                                     .InjectImageAsync(Arg.Any<BitmapSource>())
-    //                                     .IgnoreAwait();
+			FakeHasImageLinks(
+				new[]
+				{
+					"http://foobar.com",
+					"http://example.com"
+				});
 
-    //        var fakeImageFileInterpreter = Container.Resolve<IImageFileInterpreter>();
-    //        fakeImageFileInterpreter.Received(1)
-    //                                .Interpret(firstFakeDownloadedImageBytes);
-    //        fakeImageFileInterpreter.Received(1)
-    //                                .Interpret(secondFakeDownloadedImageBytes);
+			await SystemUnderTest.PerformAsync(CreateClipboardDataPackageContaining<IClipboardTextData>());
 
-    //        var fakeDownloader = Container.Resolve<IDownloader>();
-    //        fakeDownloader.Received(1)
-    //                      .DownloadBytesAsync(new Uri("http://foobar.com"))
-    //                      .IgnoreAwait();
-    //        fakeDownloader.Received(1)
-    //                      .DownloadBytesAsync(new Uri("http://example.com"))
-    //                      .IgnoreAwait();
-    //    }
+			var fakeClipboardInjectionService = Container.Resolve<IClipboardInjectionService>();
+			fakeClipboardInjectionService.Received(2)
+										 .InjectImageAsync(Arg.Any<BitmapSource>())
+										 .IgnoreAwait();
 
-        void FakeHasImageLinks(string[] linkUrls)
+			var fakeImageFileInterpreter = Container.Resolve<IImageFileInterpreter>();
+			fakeImageFileInterpreter.Received(1)
+									.Interpret(firstFakeDownloadedImageBytes);
+			fakeImageFileInterpreter.Received(1)
+									.Interpret(secondFakeDownloadedImageBytes);
+
+			var fakeDownloader = Container.Resolve<IDownloader>();
+			fakeDownloader.Received(1)
+						  .DownloadBytesAsync(new Uri("http://foobar.com"))
+						  .IgnoreAwait();
+			fakeDownloader.Received(1)
+						  .DownloadBytesAsync(new Uri("http://example.com"))
+						  .IgnoreAwait();
+		}
+
+		void FakeHasImageLinks(string[] linkUrls)
         {
             Container.Resolve<ILinkParser>()
                      .HasLinkOfTypeAsync(
