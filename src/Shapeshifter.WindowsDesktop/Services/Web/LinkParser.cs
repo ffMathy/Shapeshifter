@@ -112,14 +112,6 @@
 			if (link.Contains(".."))
 				return false;
 
-			var hasProtocol = link.StartsWith("http://") || link.StartsWith("https://");
-			var hasPath = link.Contains("/");
-			var hasQuery = link.Contains("?") || link.Contains("&");
-			var hasDomain = link.Contains("www.");
-
-			if (!hasProtocol && !hasPath && !hasQuery && !hasDomain) 
-				return false;
-
 			var domain = link;
 
 			if (domain.StartsWith("http://"))
