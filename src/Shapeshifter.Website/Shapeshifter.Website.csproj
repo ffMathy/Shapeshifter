@@ -36,7 +36,6 @@
 
   <ItemGroup>
     <PackageReference Include="FluffySpoon.Extensions.MicrosoftDependencyInjection" Version="1.0.5" />
-    <PackageReference Include="FluffySpoon.Http" Version="1.0.21" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.0" />
