@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace Shapeshifter.Website
 {
 	using Logic;
+	using Microsoft.AspNetCore.HttpOverrides;
 
 	public class Startup
 	{
@@ -37,11 +38,19 @@ namespace Shapeshifter.Website
 				.AllowAnyMethod()
 				.AllowAnyOrigin());
 
+			app.UseHttpsRedirection();
 			app.UseDefaultFiles();
 			app.UseStaticFiles();
 
+			// Listen for forwarded headers from Nginx
+			app.UseForwardedHeaders(new ForwardedHeadersOptions
+			{
+				ForwardedHeaders = ForwardedHeaders.All
+			});
+
 			app.UseMvc(
-				routes => {
+				routes =>
+				{
 					routes.MapRoute(
 						name: "default",
 						template: "{controller=Home}/{action=Index}/{id?}");

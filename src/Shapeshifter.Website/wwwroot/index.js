@@ -12,7 +12,7 @@ $.getJSON("https://api.github.com/repos/ffMathy/Shapeshifter/releases/latest").d
 	$("#download-version").text(version);
 });
 
-$.getJSON("https://shapeshifter.azurewebsites.net/api/patreon/supporters").done(function (json) {
+$.getJSON("/api/patreon/supporters").done(function (json) {
 	var goal = 100;
 
 	var supporters = json.sort((a, b) => b.amount - a.amount);
