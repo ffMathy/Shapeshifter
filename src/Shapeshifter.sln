@@ -21,8 +21,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shapeshifter.Website", "Shapeshifter.Website\Shapeshifter.Website.csproj", "{E2A47969-CF84-470E-9C89-B24508607957}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shapeshifter.Website.Models", "Shapeshifter.Website.Models\Shapeshifter.Website.Models.csproj", "{8E163449-154B-44B2-94D6-DE67715B1627}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{C9D0F0F8-B6FC-46AA-B650-3B586E75E0A1}"
 	ProjectSection(SolutionItems) = preProject
 		..\build\pad.xml = ..\build\pad.xml
@@ -62,10 +60,6 @@ Global
 		{E2A47969-CF84-470E-9C89-B24508607957}.Debug|x64.Build.0 = Debug|x64
 		{E2A47969-CF84-470E-9C89-B24508607957}.Release|x64.ActiveCfg = Release|x64
 		{E2A47969-CF84-470E-9C89-B24508607957}.Release|x64.Build.0 = Release|x64
-		{8E163449-154B-44B2-94D6-DE67715B1627}.Debug|x64.ActiveCfg = Debug|x64
-		{8E163449-154B-44B2-94D6-DE67715B1627}.Debug|x64.Build.0 = Debug|x64
-		{8E163449-154B-44B2-94D6-DE67715B1627}.Release|x64.ActiveCfg = Release|x64
-		{8E163449-154B-44B2-94D6-DE67715B1627}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

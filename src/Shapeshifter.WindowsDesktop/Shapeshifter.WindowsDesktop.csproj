@@ -181,16 +181,12 @@
       <Private>True</Private>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+    <Reference Include="System.IO">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.IO.Compression.FileSystem">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.1\System.IO.Compression.FileSystem.dll</HintPath>
       <Private>True</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System.Management">
       <Private>True</Private>
@@ -215,7 +211,7 @@
     </Reference>
     <Reference Include="System.Runtime.WindowsRuntime, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5\System.Runtime.WindowsRuntime.dll</HintPath>
+      <HintPath>c:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5\System.Runtime.WindowsRuntime.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -264,7 +260,7 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="Windows">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.17134.0\Windows.winmd</HintPath>
+      <HintPath>c:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.17134.0\Windows.winmd</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WindowsBase">
@@ -278,6 +274,10 @@
     <Reference Include="PresentationFramework">
       <Private>True</Private>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\Microsoft.NET.Build.Extensions\net461\lib\netstandard.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -378,6 +378,9 @@
     <Compile Include="Infrastructure\Threading\RetryingThreadLoopJob.cs" />
     <Compile Include="Infrastructure\Threading\ThreadDeferrer.cs" />
     <Compile Include="Mediators\Interfaces\ClipboardUserInterfacePane.cs" />
+    <Compile Include="Models\GitHub\Request\IssueReport.cs" />
+    <Compile Include="Models\GitHub\Request\SerializableException.cs" />
+    <Compile Include="Models\GitHub\Response\ReportResponse.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -727,11 +730,6 @@
     <EmbeddedResource Include="Controls\Clipboard\Designer\Resources\FileImageSample.dat" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Shapeshifter.Website.Models\Shapeshifter.Website.Models.csproj">
-      <Project>{8e163449-154b-44b2-94d6-de67715b1627}</Project>
-      <Name>Shapeshifter.Website.Models</Name>
-      <Private>True</Private>
-    </ProjectReference>
     <ProjectReference Include="..\Shapeshifter.WindowsDesktop.KeyboardHookInterception\Shapeshifter.WindowsDesktop.KeyboardHookInterception.csproj">
       <Project>{9A7B5B69-AB84-4906-B65A-EE5581568C5E}</Project>
       <Name>Shapeshifter.WindowsDesktop.KeyboardHookInterception</Name>
