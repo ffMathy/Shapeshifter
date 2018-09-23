@@ -184,6 +184,9 @@
     <Reference Include="System.IO">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.IO.Compression.FileSystem">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Management">
       <Private>True</Private>
     </Reference>
