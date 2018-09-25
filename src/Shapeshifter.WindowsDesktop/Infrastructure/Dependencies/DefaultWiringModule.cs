@@ -45,11 +45,11 @@ namespace Shapeshifter.WindowsDesktop.Infrastructure.Dependencies
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			AssemblyRegistrationHelper
-				.RegisterAssemblyTypes(builder, typeof(DefaultWiringModule).Assembly, this.environmentInformation.GetIsInDesignTime());
+			//AssemblyRegistrationHelper
+			//	.RegisterAssemblyTypes(builder, typeof(DefaultWiringModule).Assembly, this.environmentInformation.GetIsInDesignTime());
 
-			AssemblyRegistrationHelper
-				.RegisterAssemblyTypes(builder, NativeAssemblyHelper.Assembly, this.environmentInformation.GetIsInDesignTime());
+			//AssemblyRegistrationHelper
+			//	.RegisterAssemblyTypes(builder, NativeAssemblyHelper.Assembly, this.environmentInformation.GetIsInDesignTime());
 			
 			RegisterHttp(builder);
 
