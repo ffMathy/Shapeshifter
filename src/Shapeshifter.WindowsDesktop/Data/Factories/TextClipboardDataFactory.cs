@@ -107,7 +107,7 @@
 			{
 				return Rtf.ToHtml(rtfCode);
 			}
-			catch (RtfException)
+			catch (Exception)
 			{
 				return null;
 			}

@@ -33,8 +33,8 @@
 #pragma warning disable 4014
 		protected override void OnStartup(StartupEventArgs e)
 		{
-			//var main = container.Resolve<ApplicationEntrypoint>();
-			//main.Start(e.Args);
+			var main = container.Resolve<ApplicationEntrypoint>();
+			main.Start(e.Args);
 		}
 #pragma warning restore 4014
 	}
