@@ -32,8 +32,8 @@
 
 		static Program()
 		{
-			if(InstallationInformation.TargetExecutableFile != CurrentProcessInformation.GetCurrentProcessFilePath())
-				CosturaUtility.Initialize();
+			//if(InstallationInformation.TargetExecutableFile != CurrentProcessInformation.GetCurrentProcessFilePath())
+			//	CosturaUtility.Initialize();
 		}
 
 		public static void CreateContainer(Action<ContainerBuilder> callback = null)
@@ -116,9 +116,9 @@
 			return false;
 		}
 
-		public static void Void()
-		{
-			//this method exists to force the static constructor to load and initialize assemblies via costura fody.
-		}
+		//public static void Void()
+		//{
+		//	//this method exists to force the static constructor to load and initialize assemblies via costura fody.
+		//}
 	}
 }

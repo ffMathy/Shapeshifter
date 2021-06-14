@@ -17,19 +17,25 @@
             Assembly assembly,
             bool isInDesignerMode)
         {
-            var types = assembly.GetTypes();
+
+			System.Type[] types = null;
+			try
+			{
+				types = assembly.GetTypes();
+			}
+			catch (System.Exception)
+			{
+				return;
+			}
+            
             foreach (var type in types)
             {
                 if (!type.IsClass || type.IsAbstract)
-                {
                     continue;
-                }
 
                 var interfaces = type.GetInterfaces();
                 if (interfaces.Contains(typeof (IDesignerService)) && !isInDesignerMode)
-                {
                     continue;
-                }
 
                 IRegistrationBuilder<object, ReflectionActivatorData, object> registration;
                 if (type.IsGenericType)
