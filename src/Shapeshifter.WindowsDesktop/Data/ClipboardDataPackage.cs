@@ -13,6 +13,17 @@
 		readonly List<IClipboardData> dataCollection;
 		readonly List<IAction> actions;
 
+		public IReadOnlyList<IClipboardData> Contents =>
+			dataCollection;
+
+		public IReadOnlyList<IAction> Actions => actions;
+
+		public Guid Id { get; set; }
+
+		public IDataSource Source { get; set; }
+
+		public string ContentHash { get; private set; }
+
 		public ClipboardDataPackage()
 		{
 			dataCollection = new List<IClipboardData>();
@@ -28,15 +39,23 @@
 			Id = id;
 		}
 
-		public IReadOnlyList<IClipboardData> Contents =>
-			dataCollection;
-
-		public IReadOnlyList<IAction> Actions => actions;
-
 		public void AddData(IClipboardData data)
 		{
 			data.Package = this;
 			dataCollection.Add(data);
+
+			RecomputeHash();
+		}
+
+		void RecomputeHash()
+		{
+			var hash = string.Empty;
+			foreach (var data in dataCollection)
+			{
+				hash += data.ContentHash + "/" + data.RawFormat + "/" + data.RawData.Length + "\n";
+			}
+
+			ContentHash = hash;
 		}
 
 		public async void PopulateCompatibleActionsAsync(IEnumerable<IAction> actionCandidates)
@@ -50,8 +69,9 @@
 			}
 		}
 
-		public Guid Id { get; set; }
-
-		public IDataSource Source { get; set; }
+		public override int GetHashCode()
+		{
+			return ContentHash.GetHashCode();
+		}
 	}
 }

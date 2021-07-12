@@ -12,5 +12,19 @@
 
         public IClipboardFormat RawFormat { get; set; }
 		public IClipboardDataPackage Package { get; set; }
+
+		public string ContentHash
+		{
+			get
+			{
+				var hash = string.Empty;
+				foreach (var file in Files)
+				{
+					hash += file.FullPath + "/" + file.FileIcon.Length;
+				}
+
+				return hash;
+			}
+		}
 	}
 }

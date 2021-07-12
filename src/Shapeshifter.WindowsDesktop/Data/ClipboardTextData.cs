@@ -10,5 +10,7 @@
 
 		public IClipboardFormat RawFormat { get; set; }
 		public IClipboardDataPackage Package { get; set; }
+
+		public string ContentHash => Text + "/" + RawData.Length;
 	}
 }

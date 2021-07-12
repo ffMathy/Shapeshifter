@@ -3,14 +3,12 @@
     using Data;
     using Data.Interfaces;
 
-    using Services.Interfaces;
-
-    class DesignerClipboardTextDataFacade
+	class DesignerClipboardTextDataFacade
         : ClipboardTextData,
           IClipboardTextData
     {
         public DesignerClipboardTextDataFacade(
-            IDesignerImageConverterService designerImageConverterService)
+		)
             :
                 base()
         {

@@ -16,6 +16,8 @@
 
 		IDataSource Source { get; }
 
+		string ContentHash { get; }
+
 		void PopulateCompatibleActionsAsync(IEnumerable<IAction> actionCandidates);
 	}
 }
