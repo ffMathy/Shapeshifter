@@ -6,5 +6,7 @@
 
 		IClipboardFormat RawFormat { get; }
 		IClipboardDataPackage Package { get; set; }
-    }
+
+		string ContentHash { get; }
+	}
 }

@@ -1,5 +1,7 @@
 ﻿namespace Shapeshifter.WindowsDesktop.Data
 {
+	using System;
+
 	using Interfaces;
 
 	public class ClipboardImageData : IClipboardImageData
@@ -10,5 +12,7 @@
 
 		public IClipboardFormat RawFormat { get; set; }
 		public IClipboardDataPackage Package { get; set; }
+
+		public string ContentHash => Guid.NewGuid().ToString();
 	}
 }
