@@ -19,7 +19,7 @@ if [[ -z "${DISPLAY:-}" ]] || ! xdpyinfo >/dev/null 2>&1; then
 fi
 
 # A window manager is required for keyboard focus to move between windows.
-if ! xprop -root _NET_SUPPORTING_WM_CHECK 2>/dev/null | grep -q window; then
+if ! xprop -root _NET_SUPPORTING_WM_CHECK 2>/dev/null | grep -q "window id #"; then
   openbox &
   pids+=($!)
   sleep 1
