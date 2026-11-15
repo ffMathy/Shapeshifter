@@ -7,40 +7,40 @@
 	public class UserAttributes
   {
     [JsonProperty("first_name")]
-    public string FirstName { get; set; }
+    public string? FirstName { get; set; }
 
     [JsonProperty("last_name")]
-    public string LastName { get; set; }
+    public string? LastName { get; set; }
 
     [JsonProperty("full_name")]
-    public string FullName { get; set; }
+    public string? FullName { get; set; }
 
     [JsonProperty("gender")]
     public int Gender { get; set; }
 
     [JsonProperty("vanity")]
-    public string Vanity { get; set; }
+    public string? Vanity { get; set; }
 
     [JsonProperty("about")]
-    public string About { get; set; }
+    public string? About { get; set; }
 
     [JsonProperty("facebook_id")]
-    public string FacebookId { get; set; }
+    public string? FacebookId { get; set; }
 
     [JsonProperty("image_url")]
-    public string ImageUrl { get; set; }
+    public string? ImageUrl { get; set; }
 
     [JsonProperty("thumb_url")]
-    public string ThumbUrl { get; set; }
+    public string? ThumbUrl { get; set; }
 
     [JsonProperty("youtube")]
-    public string YouTubeUrl { get; set; }
+    public string? YouTubeUrl { get; set; }
 
     [JsonProperty("twitter")]
-    public string TwitterUrl { get; set; }
+    public string? TwitterUrl { get; set; }
 
     [JsonProperty("facebook")]
-    public string FacebookUrl { get; set; }
+    public string? FacebookUrl { get; set; }
 
     [JsonProperty("is_suspended")]
     public bool IsSuspended { get; set; }
@@ -55,6 +55,6 @@
     public DateTime Created { get; set; }
 
     [JsonProperty("url")]
-    public string Url { get; set; }
+    public string? Url { get; set; }
   }
 }

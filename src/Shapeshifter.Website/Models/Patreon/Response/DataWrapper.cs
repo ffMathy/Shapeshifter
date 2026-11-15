@@ -6,9 +6,9 @@
 	public class DataWrapper<T>
     {
 		[JsonProperty("data")]
-		public T Data { get; set; }
+		public T? Data { get; set; }
 		
 		[JsonProperty("included")]
-		public JArray Included { get; set; }
+		public JArray? Included { get; set; }
 	}
 }

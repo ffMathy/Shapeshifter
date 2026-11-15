@@ -1,70 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <!-- TargetFramework (net11.0), nullable and analyzer settings come from Directory.Build.props. -->
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Platforms>AnyCPU;x64</Platforms>
-  </PropertyGroup>
-   
-  <PropertyGroup>
-    <EnableMSDeployAppOffline>true</EnableMSDeployAppOffline>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath></OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutputPath />
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath></OutputPath>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutputPath></OutputPath>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UserSecretsId>shapeshifter-website-6f1c2b9e-4d1a-4c47-9a63-2f0d6e7b8a51</UserSecretsId>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\node_modules\**" />
-    <Content Remove="wwwroot\node_modules\**" />
-    <EmbeddedResource Remove="wwwroot\node_modules\**" />
-    <None Remove="wwwroot\node_modules\**" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="Octokit" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FluffySpoon.Extensions.MicrosoftDependencyInjection" Version="1.0.5" />
-    <PackageReference Include="FluffySpoon.Http" Version="1.0.21" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.3" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.5" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.1.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Win32" Version="1.0.0" />
-    <PackageReference Include="newtonsoft.json" Version="11.0.2" />
-    <PackageReference Include="octokit" Version="0.29.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Update="secrets.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="wwwroot\index.css" />
-    <None Include="wwwroot\index.html" />
-    <None Include="wwwroot\index.js" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shapeshifter.Website.Models\Shapeshifter.Website.Models.csproj" />
   </ItemGroup>

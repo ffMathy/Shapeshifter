@@ -2,6 +2,6 @@
 {
 	public class ReportResponse
 	{
-		public string IssueUrl { get; set; }
+		public string? IssueUrl { get; set; }
 	}
 }

@@ -1,15 +1,36 @@
+(function () {
+	// Highlight the download that matches the visitor's operating system.
+	var platform = ((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent || "").toLowerCase();
+	var os = platform.indexOf("win") !== -1 ? "windows" :
+		(platform.indexOf("mac") !== -1 || platform.indexOf("iphone") !== -1 || platform.indexOf("ipad") !== -1) ? "mac" :
+		platform.indexOf("linux") !== -1 ? "linux" :
+		null;
+
+	$(".download-asset").each(function () {
+		var button = $(this);
+		if (button.data("os") === os) {
+			button.removeClass("btn-outline-primary").addClass("btn-primary");
+		}
+	});
+})();
+
+// Each button already links to the latest release page; point it straight at the asset when it exists.
 $.getJSON("https://api.github.com/repos/ffMathy/Shapeshifter/releases/latest").done(function (json) {
-	var version = json.name.split("-")[1];
-	var asset = json.assets.filter(x => x.name === "Shapeshifter.exe")[0];
-	var sizeInMegabytes = (asset.size / 1024 / 1024).toFixed(1);
+	var assets = json.assets || [];
 
-	$("#download-button")
-		.attr("href", asset.browser_download_url)
-		.removeClass("disabled");
+	$(".download-asset").each(function () {
+		var button = $(this);
+		var asset = assets.filter(x => x.name === button.data("asset"))[0];
+		if (!asset) {
+			return;
+		}
 
-	$("#download-size").text(sizeInMegabytes + " MB");
+		var sizeInMegabytes = (asset.size / 1024 / 1024).toFixed(1);
+		button.attr("href", asset.browser_download_url);
+		button.append($("<span />").addClass("size").text(sizeInMegabytes + " MB"));
+	});
 
-	$("#download-version").text(version);
+	$("#download-version").text(json.tag_name || json.name || "");
 });
 
 $.getJSON("/api/patreon/supporters").done(function (json) {

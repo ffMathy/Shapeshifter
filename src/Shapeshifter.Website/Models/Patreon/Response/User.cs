@@ -5,15 +5,15 @@
 	public class User
 	{
 		[JsonProperty("id")]
-		public string Id { get; set; }
+		public string? Id { get; set; }
 
 		[JsonProperty("attributes")]
-		public UserAttributes Attributes { get; set; }
+		public UserAttributes? Attributes { get; set; }
 
 		[JsonProperty("relationships")]
-		public UserRelationships Relationships { get; set; }
+		public UserRelationships? Relationships { get; set; }
 
 		[JsonProperty("data")]
-		public Relationship Data { get; set; }
+		public Relationship? Data { get; set; }
 	}
 }
