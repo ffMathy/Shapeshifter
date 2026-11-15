@@ -199,6 +199,33 @@ public sealed class LinkParserTests
         Assert.Equal(["https://example.com/", "https://www.example.com/"], links.Select(l => l.AbsoluteUri));
     }
 
+    /// <summary>
+    /// Regression test for issue #349: copying a large text full of dotted words and repeated links used to take
+    /// close to a minute (DNS lookups for every candidate and a regular expression that timed out).
+    /// </summary>
+    [Fact]
+    public void ExtractLinks_LargeTextWithManyCandidates_IsFast_Deduplicated_AndOnlyScansTheStart()
+    {
+        const string chunk = "System.Net.Sockets.SocketException at foo.bar.baz(x.y) https://example.com/page 1.2.3 ";
+        var builder = new System.Text.StringBuilder();
+        while (builder.Length + chunk.Length <= LinkParser.MaxScannedLength)
+        {
+            builder.Append(chunk);
+        }
+
+        // Pad to exactly the scanned length so the cut-off cannot split a link into a different one.
+        builder.Append(' ', LinkParser.MaxScannedLength - builder.Length);
+        builder.Append("https://after-the-scanned-part.example.com");
+        var text = builder.ToString();
+
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        var links = LinkParser.ExtractLinks(text);
+        stopwatch.Stop();
+
+        Assert.Equal(["https://example.com/page"], links.Select(l => l.AbsoluteUri));
+        Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(2), $"Link extraction took {stopwatch.Elapsed}.");
+    }
+
     [Fact]
     public void ExtractLinks_HttpAndHttpsAreDistinct()
     {
