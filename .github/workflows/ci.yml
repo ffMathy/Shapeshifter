@@ -22,8 +22,8 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
       - name: Build
@@ -35,8 +35,8 @@ jobs:
     name: End-to-end (Linux, X11)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
       - name: Install X server and window manager
@@ -49,7 +49,7 @@ jobs:
         run: scripts/run-e2e-linux.sh -c Release --no-build
       - name: Upload logs
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: e2e-linux-logs
           path: ${{ runner.temp }}/e2e
@@ -59,8 +59,8 @@ jobs:
     name: End-to-end (Windows)
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
       - name: Build
@@ -72,7 +72,7 @@ jobs:
         run: dotnet test --project tests/Shapeshifter.EndToEnd.Tests -c Release --no-build
       - name: Upload logs
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: e2e-windows-logs
           path: ${{ runner.temp }}/e2e
@@ -93,8 +93,8 @@ jobs:
           - { rid: linux-arm64, os: ubuntu-latest, archive: tar.gz }
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
       - name: Publish self-contained single-file build
@@ -106,7 +106,7 @@ jobs:
       - name: Archive (tar.gz)
         if: matrix.archive == 'tar.gz'
         run: tar -czf Shapeshifter-${{ matrix.rid }}.tar.gz -C publish Shapeshifter
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         with:
           name: Shapeshifter-${{ matrix.rid }}
           path: Shapeshifter-${{ matrix.rid }}.${{ matrix.archive }}

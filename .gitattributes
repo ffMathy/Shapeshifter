@@ -1,7 +1,7 @@
 * text=auto
 
-*.yml text eol=crlf
-*.sln text eol=crlf
+*.yml text eol=lf
+*.sh text eol=lf
 
 *.png binary
 *.jpg binary
