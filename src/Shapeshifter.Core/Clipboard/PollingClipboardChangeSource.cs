@@ -13,6 +13,7 @@ public sealed class PollingClipboardChangeSource : IClipboardChangeSource
     private readonly ILogger logger;
     private readonly CancellationTokenSource cancellation = new();
     private Task? loop;
+    private int disposed;
 
     public PollingClipboardChangeSource(Func<CancellationToken, Task<string>> tokenProvider, TimeSpan interval, ILogger? logger = null)
     {
@@ -23,10 +24,19 @@ public sealed class PollingClipboardChangeSource : IClipboardChangeSource
 
     public event EventHandler? Changed;
 
-    public void Start() => loop ??= Task.Run(() => PollAsync(cancellation.Token));
+    public void Start()
+    {
+        ObjectDisposedException.ThrowIf(Volatile.Read(ref disposed) != 0, this);
+        loop ??= Task.Run(() => PollAsync(cancellation.Token));
+    }
 
     public void Dispose()
     {
+        if (Interlocked.Exchange(ref disposed, 1) != 0)
+        {
+            return;
+        }
+
         cancellation.Cancel();
         try
         {

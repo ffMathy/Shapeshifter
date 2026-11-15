@@ -187,6 +187,13 @@ public sealed class PasteGestureStateMachine
 
     private GestureResult OnTriggerDown(TimeSpan now)
     {
+        if (triggerDown && !active)
+        {
+            // Auto-repeat of a V press that started a gesture which has since ended (pasted or cancelled):
+            // its key-down was suppressed, so its repeats must not reach the application or restart a gesture.
+            return GestureResult.Swallow;
+        }
+
         if (!modifierDown)
         {
             return GestureResult.PassThrough;
@@ -366,9 +373,9 @@ public sealed class PasteGestureStateMachine
 
     private void Reset()
     {
+        // triggerDown tracks the physical key and is only cleared by its key-up.
         active = false;
         pickerVisible = false;
-        triggerDown = false;
         selectionChanged = false;
         items = [];
         selectedIndex = 0;
