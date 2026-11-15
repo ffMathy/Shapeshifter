@@ -17,7 +17,12 @@ public sealed class ShapeshifterSession : IAsyncLifetime
     public const string EnableVariable = "SHAPESHIFTER_E2E";
     private static readonly TimeSpan StartupTimeout = TimeSpan.FromSeconds(60);
 
-    private readonly string home = Path.Combine(Path.GetTempPath(), "shapeshifter-e2e-" + Guid.NewGuid().ToString("N")[..8]);
+    /// <summary>When set, the session's settings, history and logs are kept in this folder (for CI artifacts).</summary>
+    public const string ArtifactsVariable = "SHAPESHIFTER_E2E_ARTIFACTS";
+
+    private readonly string home = Path.Combine(
+        Environment.GetEnvironmentVariable(ArtifactsVariable) is { Length: > 0 } artifacts ? artifacts : Path.GetTempPath(),
+        "shapeshifter-e2e-" + Guid.NewGuid().ToString("N")[..8]);
     private TestProcess? shapeshifter;
     private TestProcess? target;
     private EventSimulator? simulator;
@@ -66,6 +71,12 @@ public sealed class ShapeshifterSession : IAsyncLifetime
         if (shapeshifter is not null)
         {
             await shapeshifter.DisposeAsync();
+        }
+
+        if (Environment.GetEnvironmentVariable(ArtifactsVariable) is { Length: > 0 })
+        {
+            await File.WriteAllTextAsync(Path.Combine(home, "processes.log"), Logs);
+            return;
         }
 
         try

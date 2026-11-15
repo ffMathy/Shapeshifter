@@ -1,0 +1,112 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build:
+    name: Build and unit tests (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+      - name: Build
+        run: dotnet build Shapeshifter.slnx -c Release
+      - name: Unit tests
+        run: dotnet test --project tests/Shapeshifter.Core.Tests -c Release --no-build
+
+  e2e-linux:
+    name: End-to-end (Linux, X11)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+      - name: Install X server and window manager
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends xvfb openbox x11-utils
+      - name: Build
+        run: dotnet build tests/Shapeshifter.EndToEnd.Tests -c Release
+      - name: Copy and paste between real applications
+        env:
+          SHAPESHIFTER_E2E_ARTIFACTS: ${{ runner.temp }}/e2e
+        run: scripts/run-e2e-linux.sh -c Release --no-build
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: e2e-linux-logs
+          path: ${{ runner.temp }}/e2e
+          if-no-files-found: ignore
+
+  e2e-windows:
+    name: End-to-end (Windows)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+      - name: Build
+        run: dotnet build tests/Shapeshifter.EndToEnd.Tests -c Release
+      - name: Copy and paste between real applications
+        env:
+          SHAPESHIFTER_E2E: '1'
+          SHAPESHIFTER_E2E_ARTIFACTS: ${{ runner.temp }}/e2e
+        run: dotnet test --project tests/Shapeshifter.EndToEnd.Tests -c Release --no-build
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: e2e-windows-logs
+          path: ${{ runner.temp }}/e2e
+          if-no-files-found: ignore
+
+  publish:
+    name: Publish ${{ matrix.rid }}
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { rid: win-x64, os: windows-latest, archive: zip }
+          - { rid: win-arm64, os: windows-latest, archive: zip }
+          - { rid: osx-arm64, os: macos-latest, archive: zip }
+          - { rid: osx-x64, os: macos-latest, archive: zip }
+          - { rid: linux-x64, os: ubuntu-latest, archive: tar.gz }
+          - { rid: linux-arm64, os: ubuntu-latest, archive: tar.gz }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+      - name: Publish self-contained single-file build
+        run: dotnet publish src/Shapeshifter.Desktop -c Release -r ${{ matrix.rid }} -o publish/Shapeshifter
+      - name: Archive (zip)
+        if: matrix.archive == 'zip'
+        shell: pwsh
+        run: Compress-Archive -Path publish/Shapeshifter -DestinationPath Shapeshifter-${{ matrix.rid }}.zip
+      - name: Archive (tar.gz)
+        if: matrix.archive == 'tar.gz'
+        run: tar -czf Shapeshifter-${{ matrix.rid }}.tar.gz -C publish Shapeshifter
+      - uses: actions/upload-artifact@v5
+        with:
+          name: Shapeshifter-${{ matrix.rid }}
+          path: Shapeshifter-${{ matrix.rid }}.${{ matrix.archive }}
