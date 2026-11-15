@@ -1,0 +1,24 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Shapeshifter.Desktop.Views.ToastWindow"
+        Title="Shapeshifter"
+        WindowDecorations="None"
+        ShowActivated="False"
+        ShowInTaskbar="False"
+        Topmost="True"
+        CanResize="False"
+        Focusable="False"
+        IsHitTestVisible="False"
+        SizeToContent="WidthAndHeight"
+        Background="#E6000000">
+  <Border BorderBrush="#EE000000" BorderThickness="1" Padding="20,14">
+    <StackPanel Orientation="Horizontal" Spacing="14">
+      <PathIcon Foreground="White" Width="24" Height="24"
+                Data="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+      <StackPanel VerticalAlignment="Center">
+        <TextBlock x:Name="CountText" Foreground="White" FontSize="22" FontWeight="ExtraLight" />
+        <TextBlock x:Name="PreviewText" Foreground="#CCFFFFFF" FontSize="11" MaxWidth="280" TextTrimming="CharacterEllipsis" />
+      </StackPanel>
+    </StackPanel>
+  </Border>
+</Window>

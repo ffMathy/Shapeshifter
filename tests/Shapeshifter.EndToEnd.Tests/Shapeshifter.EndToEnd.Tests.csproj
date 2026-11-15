@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <Description>
+      Real end-to-end tests: start Shapeshifter and a separate target application, copy through the operating
+      system clipboard and paste with real (simulated) keystrokes. Enabled with SHAPESHIFTER_E2E=1 on a desktop
+      session (on Linux, an X server such as Xvfb).
+    </Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="SharpHook" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Built first; launched as separate processes. -->
+    <ProjectReference Include="..\..\src\Shapeshifter.Desktop\Shapeshifter.Desktop.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\Shapeshifter.EndToEnd.TargetApp\Shapeshifter.EndToEnd.TargetApp.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+  <ItemGroup>
+    <AssemblyMetadata Include="ShapeshifterAssembly" Value="$(MSBuildThisFileDirectory)..\..\src\Shapeshifter.Desktop\bin\$(Configuration)\$(TargetFramework)\Shapeshifter.dll" />
+    <AssemblyMetadata Include="TargetAppAssembly" Value="$(MSBuildThisFileDirectory)..\Shapeshifter.EndToEnd.TargetApp\bin\$(Configuration)\$(TargetFramework)\Shapeshifter.EndToEnd.TargetApp.dll" />
+  </ItemGroup>
+</Project>

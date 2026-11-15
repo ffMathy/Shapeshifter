@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>Shapeshifter.Core</RootNamespace>
+    <Description>Platform-independent logic of Shapeshifter: clipboard history, paste gesture, actions, persistence and settings.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" />
+    <PackageReference Include="Serilog" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Shapeshifter.Core.Tests" />
+  </ItemGroup>
+</Project>

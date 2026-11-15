@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="README.md" />
+    <File Path=".github/workflows/ci.yml" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Shapeshifter.Core/Shapeshifter.Core.csproj" />
+    <Project Path="src/Shapeshifter.Platform/Shapeshifter.Platform.csproj" />
+    <Project Path="src/Shapeshifter.Desktop/Shapeshifter.Desktop.csproj" />
+    <Project Path="src/Shapeshifter.Website/Shapeshifter.Website.csproj" />
+    <Project Path="src/Shapeshifter.Website.Models/Shapeshifter.Website.Models.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <File Path="tests/Directory.Build.props" />
+    <Project Path="tests/Shapeshifter.Core.Tests/Shapeshifter.Core.Tests.csproj" />
+    <Project Path="tests/Shapeshifter.EndToEnd.Tests/Shapeshifter.EndToEnd.Tests.csproj" />
+    <Project Path="tests/Shapeshifter.EndToEnd.TargetApp/Shapeshifter.EndToEnd.TargetApp.csproj" />
+  </Folder>
+</Solution>

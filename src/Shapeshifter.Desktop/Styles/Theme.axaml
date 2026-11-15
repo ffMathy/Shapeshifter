@@ -1,0 +1,100 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Styles.Resources>
+    <!-- The original Shapeshifter palette. -->
+    <SolidColorBrush x:Key="AccentBrush" Color="#3399FF" />
+    <SolidColorBrush x:Key="AccentDarkBrush" Color="#236BB2" />
+    <SolidColorBrush x:Key="AccentDarkerBrush" Color="#1E5B99" />
+    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FEFEFE" />
+    <SolidColorBrush x:Key="WindowDarkBackgroundBrush" Color="#F0F0F0" />
+    <SolidColorBrush x:Key="ControlBorderBrush" Color="#DDDDDD" />
+  </Styles.Resources>
+
+  <!-- Picker: history items -->
+  <Style Selector="ListBox.items">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Padding" Value="0" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem">
+    <Setter Property="Height" Value="92" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="Background" Value="{StaticResource WindowDarkBackgroundBrush}" />
+    <Setter Property="BorderBrush" Value="{StaticResource ControlBorderBrush}" />
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource WindowDarkBackgroundBrush}" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource WindowDarkBackgroundBrush}" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected:focus /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem TextBlock.title">
+    <Setter Property="Foreground" Value="#222222" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem TextBlock.subtitle">
+    <Setter Property="Foreground" Value="#666666" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem PathIcon">
+    <Setter Property="Foreground" Value="{StaticResource AccentBrush}" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected TextBlock.title, ListBox.items > ListBoxItem:selected TextBlock.subtitle">
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected PathIcon">
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem Border.iconArea">
+    <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected Border.iconArea">
+    <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
+  </Style>
+
+  <!-- Picker: actions -->
+  <Style Selector="ListBox.actions">
+    <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
+    <Setter Property="Padding" Value="0" />
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem">
+    <Setter Property="Height" Value="40" />
+    <Setter Property="Padding" Value="12,0" />
+    <Setter Property="BorderBrush" Value="{StaticResource AccentDarkerBrush}" />
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+  </Style>
+
+  <!-- The inactive pane is shaded, as in the original design. -->
+  <Style Selector="Rectangle.veil">
+    <Setter Property="IsHitTestVisible" Value="False" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.25" />
+      </Transitions>
+    </Setter>
+  </Style>
+</Styles>

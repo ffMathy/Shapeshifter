@@ -1,0 +1,163 @@
+using SharpHook.Data;
+
+namespace Shapeshifter.EndToEnd.Tests;
+
+/// <summary>
+/// Copies through the real OS clipboard and pastes into a separate process with real keystrokes.
+/// Every assertion checks the exact text that arrived in the target, so a paste that leaked through
+/// unsuppressed (the target pasting by itself as well) shows up as duplicated text.
+/// </summary>
+[Collection(nameof(EndToEndCollection))]
+public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
+{
+    [Fact]
+    public async Task QuickPastePastesTheCurrentClipboard()
+    {
+        SkipUnlessEnabled();
+        await session.CopyTextAsync("alpha " + Unique());
+        var expected = session.ReadState().Previews[0];
+        await session.PrepareTargetAsync();
+
+        await session.PressModifierAsync();
+        await session.TapAsync(KeyCode.VcV);
+        await session.ReleaseModifierAsync();
+
+        Assert.Equal(expected, await session.WaitForTargetTextAsync(expected));
+        await session.WaitForIdleAsync();
+    }
+
+    [Fact]
+    public async Task PressingVAgainPastesTheOlderItem()
+    {
+        SkipUnlessEnabled();
+        var id = Unique();
+        await session.CopyTextAsync($"one {id}");
+        await session.CopyTextAsync($"two {id}");
+        await session.CopyTextAsync($"three {id}");
+        await session.PrepareTargetAsync();
+
+        await session.PressModifierAsync();
+        await session.TapAsync(KeyCode.VcV);
+        await session.TapAsync(KeyCode.VcV);
+        await session.WaitForStateAsync(state => state.PickerVisible && state.SelectedIndex == 1, "picker on the second item");
+        await session.ReleaseModifierAsync();
+
+        Assert.Equal($"two {id}", await session.WaitForTargetTextAsync($"two {id}"));
+        var state = await session.WaitForStateAsync(s => !s.PickerVisible && s.Previews[0] == $"two {id}", "picker hidden and pasted item moved to the top");
+        Assert.Equal($"three {id}", state.Previews[1]);
+        await session.WaitForIdleAsync();
+    }
+
+    [Fact]
+    public async Task HoldingShowsThePickerAndArrowKeysNavigate()
+    {
+        SkipUnlessEnabled();
+        var id = Unique();
+        await session.CopyTextAsync($"red {id}");
+        await session.CopyTextAsync($"green {id}");
+        await session.CopyTextAsync($"blue {id}");
+        await session.PrepareTargetAsync();
+
+        await session.PressModifierAsync();
+        await session.KeyAsync(KeyCode.VcV, down: true);
+        await session.WaitForStateAsync(state => state.PickerVisible && state.SelectedIndex == 0, "picker after holding");
+        await session.KeyAsync(KeyCode.VcV, down: false);
+        await session.TapAsync(KeyCode.VcDown);
+        await session.TapAsync(KeyCode.VcDown);
+        await session.TapAsync(KeyCode.VcUp);
+        await session.WaitForStateAsync(state => state.SelectedIndex == 1, "selection moved to the second item");
+        await session.ReleaseModifierAsync();
+
+        Assert.Equal($"green {id}", await session.WaitForTargetTextAsync($"green {id}"));
+        await session.WaitForIdleAsync();
+    }
+
+    [Fact]
+    public async Task EscapeCancelsWithoutPasting()
+    {
+        SkipUnlessEnabled();
+        var id = Unique();
+        await session.CopyTextAsync($"keep {id}");
+        await session.CopyTextAsync($"latest {id}");
+        await session.PrepareTargetAsync();
+
+        await session.PressModifierAsync();
+        await session.TapAsync(KeyCode.VcV);
+        await session.TapAsync(KeyCode.VcV);
+        await session.WaitForStateAsync(state => state.PickerVisible, "picker visible");
+        await session.TapAsync(KeyCode.VcEscape);
+        await session.WaitForStateAsync(state => !state.PickerVisible, "picker hidden after Escape");
+        await session.ReleaseModifierAsync();
+        await session.WaitForIdleAsync();
+        await Task.Delay(500, TestContext.Current.CancellationToken);
+
+        Assert.Equal(string.Empty, await session.GetTargetTextAsync());
+    }
+
+    [Fact]
+    public async Task TypingWithoutTheModifierIsNotIntercepted()
+    {
+        SkipUnlessEnabled();
+        await session.PrepareTargetAsync();
+
+        await session.TapAsync(KeyCode.VcV);
+        await session.TapAsync(KeyCode.VcV);
+
+        Assert.Equal("vv", await session.WaitForTargetTextAsync("vv"));
+    }
+
+    [Fact]
+    public async Task PastingRestoresRichTextFormats()
+    {
+        SkipUnlessEnabled();
+        var id = Unique();
+        await session.CopyHtmlAsync($"Rich {id}", $"<b>Rich</b> <i>{id}</i>");
+        await session.CopyTextAsync($"plain {id}");
+        await session.PrepareTargetAsync();
+
+        await session.PressModifierAsync();
+        await session.TapAsync(KeyCode.VcV);
+        await session.TapAsync(KeyCode.VcV);
+        await session.WaitForStateAsync(state => state.PickerVisible && state.SelectedIndex == 1, "rich item selected");
+        await session.ReleaseModifierAsync();
+
+        Assert.Equal($"Rich {id}", await session.WaitForTargetTextAsync($"Rich {id}"));
+        await session.WaitForIdleAsync();
+        var formats = await session.GetClipboardFormatsAsync();
+        Assert.Contains(formats, format => format.Contains("html", StringComparison.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public async Task PasteAsPlainTextDropsFormatting()
+    {
+        SkipUnlessEnabled();
+        var id = Unique();
+        await session.CopyHtmlAsync($"Styled {id}", $"<u>Styled</u> {id}");
+        await session.CopyTextAsync($"newest {id}");
+        await session.PrepareTargetAsync();
+
+        await session.PressModifierAsync();
+        await session.TapAsync(KeyCode.VcV);
+        await session.TapAsync(KeyCode.VcV);
+        await session.WaitForStateAsync(state => state.PickerVisible && state.SelectedIndex == 1, "styled item selected");
+        await session.TapAsync(KeyCode.VcLeft);
+        await session.TapAsync(KeyCode.VcDown);
+        await Task.Delay(200, TestContext.Current.CancellationToken);
+        await session.ReleaseModifierAsync();
+
+        Assert.Equal($"Styled {id}", await session.WaitForTargetTextAsync($"Styled {id}"));
+        await session.WaitForIdleAsync();
+        var formats = await session.GetClipboardFormatsAsync();
+        Assert.DoesNotContain(formats, format => format.Contains("html", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static void SkipUnlessEnabled()
+    {
+        if (!ShapeshifterSession.IsEnabled)
+        {
+            Assert.Skip(ShapeshifterSession.SkipReason);
+        }
+    }
+
+    private static string Unique() => Guid.NewGuid().ToString("N")[..6];
+}

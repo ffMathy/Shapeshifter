@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <!-- CA1515/CA1848 etc. are noisy for an application; keep the useful ones. -->
+    <NoWarn>$(NoWarn);CA1515;CA1848;CA1716;CA1031;CA1063;CA1816;CA2007;CA1002;CA1034;CA1062;CA1303;CA1805;CA1822;CA1859;CA1873;CA1027;CA1711;CA1819;CA1003</NoWarn>
+    <Authors>Shapeshifter contributors</Authors>
+    <Product>Shapeshifter</Product>
+    <Version>7.0.0</Version>
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,70 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Shapeshifter.Desktop.ViewModels"
+        xmlns:local="using:Shapeshifter.Desktop"
+        x:Class="Shapeshifter.Desktop.Views.PickerWindow"
+        x:DataType="vm:PickerViewModel"
+        Title="Shapeshifter"
+        WindowDecorations="None"
+        ShowActivated="False"
+        ShowInTaskbar="False"
+        Topmost="True"
+        CanResize="False"
+        Focusable="False"
+        Width="706"
+        Background="{StaticResource WindowBackgroundBrush}">
+  <Border BorderBrush="{StaticResource AccentDarkerBrush}" BorderThickness="1">
+    <Grid RowDefinitions="*,Auto" ColumnDefinitions="250,4,*">
+      <!-- Actions of the selected item -->
+      <Panel Grid.Column="0">
+        <ListBox Classes="actions" Focusable="False"
+                 ItemsSource="{Binding Actions}"
+                 SelectedIndex="{Binding SelectedActionIndex}"
+                 ScrollViewer.VerticalScrollBarVisibility="Hidden">
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="x:String">
+              <TextBlock Text="{Binding}" FontSize="15" FontWeight="Light" VerticalAlignment="Center" />
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+        <Rectangle Classes="veil" Fill="#50000000" Opacity="{Binding IsItemsPaneActive, Converter={x:Static local:OpacityConverters.FromBool}}" />
+      </Panel>
+
+      <Rectangle Grid.Column="1" Fill="{StaticResource AccentBrush}" />
+
+      <!-- History -->
+      <Panel Grid.Column="2">
+        <ListBox x:Name="ItemList" Classes="items" Focusable="False"
+                 ItemsSource="{Binding Items}"
+                 SelectedIndex="{Binding SelectedIndex}"
+                 AutoScrollToSelectedItem="True"
+                 ScrollViewer.VerticalScrollBarVisibility="Hidden">
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="vm:PickerItemViewModel">
+              <Grid ColumnDefinitions="88,*">
+                <Border Classes="iconArea" Grid.Column="0" Width="88" Height="92">
+                  <Panel>
+                    <PathIcon Data="{Binding Icon}" Width="40" Height="40" IsVisible="{Binding HasNoThumbnail}" />
+                    <Image Source="{Binding Thumbnail}" Stretch="UniformToFill" IsVisible="{Binding HasThumbnail}" />
+                  </Panel>
+                </Border>
+                <StackPanel Grid.Column="1" Margin="14,10,12,10" VerticalAlignment="Center" Spacing="4">
+                  <TextBlock Classes="title" Text="{Binding Title}" FontSize="14" TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis" />
+                  <StackPanel Orientation="Horizontal" Spacing="6">
+                    <TextBlock Classes="subtitle" Text="Pinned ·" FontSize="11" FontWeight="SemiBold" IsVisible="{Binding IsPinned}" />
+                    <TextBlock Classes="subtitle" Text="{Binding Subtitle}" FontSize="11" TextTrimming="CharacterEllipsis" MaxWidth="300" />
+                  </StackPanel>
+                </StackPanel>
+              </Grid>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+        <Rectangle Classes="veil" Fill="#40000000" Opacity="{Binding IsActionsPaneActive, Converter={x:Static local:OpacityConverters.FromBool}}" />
+      </Panel>
+
+      <Border Grid.Row="1" Grid.ColumnSpan="3" Background="{StaticResource AccentDarkerBrush}" Padding="10,4">
+        <TextBlock Text="{Binding Hint}" Foreground="White" FontSize="11" Opacity="0.85" />
+      </Border>
+    </Grid>
+  </Border>
+</Window>
