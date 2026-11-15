@@ -1,0 +1,194 @@
+using Serilog;
+using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Platform;
+using Shapeshifter.Platform.Common;
+using Shapeshifter.Platform.Input;
+using Shapeshifter.Platform.Linux;
+using Shapeshifter.Platform.MacOS;
+using Shapeshifter.Platform.Windows;
+using SharpHook.Data;
+using SharpHook.Providers;
+
+namespace Shapeshifter.Platform;
+
+/// <summary>All operating system services Shapeshifter needs, for the current platform.</summary>
+public sealed class PlatformServices : IAsyncDisposable
+{
+    private readonly X11Integration? x11;
+    private readonly SharpHookKeyboardService keyboard;
+    private readonly List<IDisposable> owned = [];
+
+    private PlatformServices(ILogger logger, X11Integration? x11, IReadOnlyList<string> warnings)
+    {
+        this.x11 = x11;
+        Warnings = warnings;
+        keyboard = new SharpHookKeyboardService(logger, KeyMap.ForCurrentPlatform(), x11);
+        Launcher = new Launcher(logger);
+        Autostart = CreateAutostart();
+        CursorLocator = CreateCursorLocator(x11);
+    }
+
+    public IKeyboardHook KeyboardHook => keyboard;
+
+    public IPasteSimulator PasteSimulator => keyboard;
+
+    public ILauncher Launcher { get; }
+
+    public IAutostartService Autostart { get; }
+
+    public ICursorLocator CursorLocator { get; }
+
+    /// <summary>Limitations of the current session that the user should know about.</summary>
+    public IReadOnlyList<string> Warnings { get; }
+
+    public static string PlatformName =>
+        OperatingSystem.IsWindows() ? "Windows" :
+        OperatingSystem.IsMacOS() ? "macOS" :
+        OperatingSystem.IsLinux() ? (IsWaylandSession ? "Linux (Wayland)" : "Linux (X11)") :
+        Environment.OSVersion.Platform.ToString();
+
+    private static bool IsWaylandSession =>
+        !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WAYLAND_DISPLAY"))
+        || string.Equals(Environment.GetEnvironmentVariable("XDG_SESSION_TYPE"), "wayland", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Creates and initializes the services. On Linux this must run after the UI toolkit connected to X11,
+    /// so that the X error handler is chained correctly.
+    /// </summary>
+    public static async Task<PlatformServices> CreateAsync(ILogger logger)
+    {
+        ArgumentNullException.ThrowIfNull(logger);
+        var warnings = new List<string>();
+        X11Integration? x11 = null;
+
+        if (OperatingSystem.IsLinux())
+        {
+            if (!X11Integration.IsAvailable)
+            {
+                throw new PlatformNotSupportedException(
+                    "Shapeshifter needs an X11 display (DISPLAY is not set). On Wayland, make sure XWayland is available.");
+            }
+
+            // Use the XRecord/XTest backend even on Wayland sessions: it works through XWayland without root access.
+            var mode = UioHookProvider.Instance.SetLinuxMode(LinuxMode.XRecord);
+            if (mode != UioHookResult.Success)
+            {
+                logger.Warning("Could not select the XRecord input backend: {Result}", mode);
+            }
+
+            if (IsWaylandSession)
+            {
+                warnings.Add(
+                    "This is a Wayland session. Wayland does not let applications observe or synthesize global keystrokes, " +
+                    "so the paste gesture only works while an X11 (XWayland) application is focused. Log in to an X11 session for full support.");
+            }
+
+            x11 = new X11Integration(logger);
+            await x11.StartAsync().ConfigureAwait(false);
+        }
+        else if (OperatingSystem.IsMacOS())
+        {
+            if (!UioHookProvider.Instance.IsAxApiEnabled(false))
+            {
+                warnings.Add(
+                    "Shapeshifter needs Accessibility access to see and send the Cmd+V keystroke. " +
+                    "Allow it in System Settings > Privacy & Security > Accessibility and restart Shapeshifter.");
+            }
+        }
+        else if (!OperatingSystem.IsWindows())
+        {
+            throw new PlatformNotSupportedException($"{Environment.OSVersion} is not supported.");
+        }
+
+        var services = new PlatformServices(logger, x11, warnings);
+        if (x11 is not null)
+        {
+            services.owned.Add(x11);
+        }
+
+        return services;
+    }
+
+    /// <summary>
+    /// Returns the best available clipboard change notification for this platform. Falls back to
+    /// polling <paramref name="backend"/> when there is no native mechanism.
+    /// </summary>
+    public IClipboardChangeSource CreateClipboardChangeSource(IClipboardBackend backend, ILogger logger)
+    {
+        ArgumentNullException.ThrowIfNull(backend);
+        IClipboardChangeSource source;
+#pragma warning disable CA1416 // The lambdas below are only created inside the matching OS checks.
+        if (OperatingSystem.IsWindows())
+        {
+            source = new PollingClipboardChangeSource(
+                _ => Task.FromResult(WindowsNative.GetClipboardSequenceNumber().ToString(System.Globalization.CultureInfo.InvariantCulture)),
+                TimeSpan.FromMilliseconds(150),
+                logger);
+        }
+        else if (OperatingSystem.IsMacOS())
+        {
+            source = new PollingClipboardChangeSource(
+                _ => Task.FromResult(MacNative.GetPasteboardChangeCount().ToString(System.Globalization.CultureInfo.InvariantCulture)),
+                TimeSpan.FromMilliseconds(200),
+                logger);
+        }
+#pragma warning restore CA1416
+        else if (x11 is { SupportsClipboardNotifications: true })
+        {
+            return x11;
+        }
+        else
+        {
+            source = new PollingClipboardChangeSource(backend.GetChangeTokenAsync, TimeSpan.FromMilliseconds(500), logger);
+        }
+
+        owned.Add(source);
+        return source;
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        keyboard.Dispose();
+        foreach (var disposable in Enumerable.Reverse(owned))
+        {
+            disposable.Dispose();
+        }
+
+        return ValueTask.CompletedTask;
+    }
+
+    private static IAutostartService CreateAutostart()
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            return new WindowsAutostartService();
+        }
+
+        if (OperatingSystem.IsMacOS())
+        {
+            return new LaunchAgentAutostartService();
+        }
+
+        return OperatingSystem.IsLinux() ? new XdgAutostartService() : new UnsupportedAutostartService();
+    }
+
+    private static ICursorLocator CreateCursorLocator(X11Integration? x11)
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            return new WindowsCursorLocator();
+        }
+
+        if (OperatingSystem.IsMacOS())
+        {
+            return new MacCursorLocator();
+        }
+
+        return x11 is not null ? x11 : new NoCursorLocator();
+    }
+
+    private sealed class NoCursorLocator : ICursorLocator
+    {
+        public (int X, int Y)? GetCursorPosition() => null;
+    }
+}

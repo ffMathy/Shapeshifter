@@ -1,51 +1,60 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿namespace Shapeshifter.Website.Controllers;
+
+using Logic;
+
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
-namespace Shapeshifter.Website.Controllers
+using Models.Patreon.Response;
+
+public sealed record PatreonSupporter(
+	string? Id,
+	string? FullName,
+	double Amount,
+	string? ImageUrl,
+	string? Url);
+
+[ApiController]
+[Produces("application/json")]
+[Route("api/patreon")]
+public sealed class PatreonApiController(
+	IPatreonClient client,
+	IOptions<PatreonOptions> options) : ControllerBase
 {
-	using Logic;
-
-	using Models.Patreon.Response;
-
-	[Produces("application/json")]
-	[Route("api/patreon")]
-	public class PatreonApiController : Controller
+	[HttpGet("supporters")]
+	public async Task<ActionResult<IEnumerable<PatreonSupporter>>> GetSupporters(CancellationToken cancellationToken)
 	{
-		readonly IPatreonClient client;
-
-		public PatreonApiController(
-			IPatreonClient client)
+		if (!options.Value.IsConfigured)
 		{
-			this.client = client;
+			return Problem(
+				statusCode: StatusCodes.Status503ServiceUnavailable,
+				detail: "The Patreon integration is not configured on this server.");
 		}
 
-		[HttpGet("supporters")]
-		public async Task<IEnumerable<dynamic>> GetSupporters()
+		await client.EnsureAccessTokenAsync(cancellationToken);
+
+		var pledges = await client.GetPledgesAsync(cancellationToken);
+		var users = pledges.Included?.ToObject<User[]>() ?? [];
+
+		var supporters = new List<PatreonSupporter>();
+		foreach (var pledge in pledges.Data ?? [])
 		{
-			await client.RefreshTokenAsync();
+			var patronId = pledge.Relationships?.Patron?.Data?.Id;
+			var user = users.FirstOrDefault(x => x.Id == patronId);
+			if (user?.Attributes is not { } attributes)
+				continue;
 
-			var supporters = new List<dynamic>();
+			if (attributes.IsDeleted || attributes.IsSuspended || attributes.IsNuked)
+				continue;
 
-			var pledges = await client.GetPledgesAsync();
-			var users = pledges.Included.ToObject<User[]>();
-			foreach (var pledge in pledges.Data)
-			{
-				var user = users.Single(x => x.Id == pledge.Relationships.Patron.Data.Id);
-				if (user.Attributes.IsDeleted || user.Attributes.IsSuspended || user.Attributes.IsNuked)
-					continue;
-
-				supporters.Add(new {
-					user.Id,
-					user.Attributes.FullName,
-					Amount = pledge.Attributes.AmountCents / 100.0,
-					user.Attributes.ImageUrl,
-					user.Attributes.Url
-				});
-			}
-
-			return supporters;
+			supporters.Add(new PatreonSupporter(
+				user.Id,
+				attributes.FullName,
+				(pledge.Attributes?.AmountCents ?? 0) / 100.0,
+				attributes.ImageUrl,
+				attributes.Url));
 		}
+
+		return supporters;
 	}
 }

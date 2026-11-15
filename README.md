@@ -1,21 +1,102 @@
-# Shapeshifter needs maintainers and help! The current backlog is too overwhelming.
-
-[![Join the chat at https://gitter.im/ffMathy/Shapeshifter](https://badges.gitter.im/ffMathy/Shapeshifter.svg)](https://gitter.im/ffMathy/Shapeshifter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build status](https://ci.appveyor.com/api/projects/status/hnhqpn0rwcsvccng/branch/master?svg=true)](https://ci.appveyor.com/project/ffMathy/shapeshifter/branch/master)
-[![Financial Contributors on Open Collective](https://opencollective.com/shapeshifterclipboard/all/badge.svg?label=financial+contributors)](https://opencollective.com/shapeshifterclipboard) 
-
 # Shapeshifter
-Shapeshifter is a clipboard manager that allows you to copy multiple items and select which item you want to paste later without losing any of them.
 
-<b>To get Shapeshifter or to see more information, go to the website here:</b> [https://shapeshifter.app](https://shapeshifter.app)<br />
+[![CI](https://github.com/ffMathy/Shapeshifter/actions/workflows/ci.yml/badge.svg)](https://github.com/ffMathy/Shapeshifter/actions/workflows/ci.yml)
+[![Join the chat at https://gitter.im/ffMathy/Shapeshifter](https://badges.gitter.im/ffMathy/Shapeshifter.svg)](https://gitter.im/ffMathy/Shapeshifter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Financial Contributors on Open Collective](https://opencollective.com/shapeshifterclipboard/all/badge.svg?label=financial+contributors)](https://opencollective.com/shapeshifterclipboard)
+
+Shapeshifter is a clipboard manager that lets you copy multiple items and choose which one to paste later, without losing any of them. It runs on **Windows, macOS and Linux** and is built with .NET 11 and [Avalonia](https://avaloniaui.net).
+
+<b>To get Shapeshifter or to see more information, go to the website:</b> [https://shapeshifter.app](https://shapeshifter.app). Builds for every platform are attached to the [GitHub releases](https://github.com/ffMathy/Shapeshifter/releases) and to every CI run.
+
+## How it works
+
+Copy as usual. Shapeshifter remembers what you copied, including every clipboard format (rich text, HTML, images, files and application-specific data), so an item is restored exactly when you paste it.
+
+| You do | Shapeshifter does |
+|---|---|
+| <kbd>Ctrl</kbd>+<kbd>V</kbd> (tap) | Pastes normally. |
+| Hold <kbd>Ctrl</kbd>, press <kbd>V</kbd> and keep holding <kbd>Ctrl</kbd> | Shows your clipboard history after a short delay (300 ms by default). |
+| Press <kbd>V</kbd> again, or <kbd>↑</kbd>/<kbd>↓</kbd> | Selects the next (older) or previous item. |
+| <kbd>←</kbd> / <kbd>→</kbd> | Switches between the items and the actions for the selected item. |
+| <kbd>Delete</kbd> | Removes the selected item from the history. |
+| <kbd>Esc</kbd> | Cancels; nothing is pasted. |
+| Release <kbd>Ctrl</kbd> | Pastes the selected item (or performs the selected action). |
+
+On macOS, use <kbd>Cmd</kbd> instead of <kbd>Ctrl</kbd>. Shortcuts that add another modifier, such as <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> in terminals or <kbd>AltGr</kbd>+<kbd>V</kbd>, are left to the application.
+
+Shapeshifter does not record clipboard content that password managers mark as sensitive (Windows `ExcludeClipboardContentFromMonitorProcessing` / `CanIncludeInClipboardHistory`, macOS `org.nspasteboard.ConcealedType` and related types, KDE `x-kde-passwordManagerHint`).
+
+Actions available for an item, depending on its content: **Paste**, **Paste as plain text**, **Copy as file** (saves text to a `.txt` file), **Copy as compressed folder** (zips copied files), **Copy image from link**, **Open links**, and **Pin to top / Unpin** (pinned items are kept across restarts).
+
+Settings (tray icon → Settings) include the delay before the history appears, the number of items to keep, copy notifications and starting at login.
+
+## Platform support
+
+| Platform | Status | Notes |
+|---|---|---|
+| Windows 10/11 (x64, Arm64) | Supported | No special permissions needed. |
+| macOS (Apple silicon, Intel) | Supported | Grant **Accessibility** access (System Settings → Privacy & Security → Accessibility). macOS requires it for any app that observes or sends keystrokes. |
+| Linux, X11 session (x64, Arm64) | Supported | Works on any X11 desktop. A system tray (StatusNotifierItem or XEmbed) is optional. |
+| Linux, Wayland session | Limited | Wayland does not let applications observe or send global keystrokes. Shapeshifter runs through XWayland, so the paste gesture only works while an X11 application is focused. Log in to an X11 session for full support. |
+
+Where data lives:
+
+| | Settings | Pinned items and logs |
+|---|---|---|
+| Windows | `%APPDATA%\Shapeshifter` | `%LOCALAPPDATA%\Shapeshifter` |
+| macOS | `~/Library/Application Support/Shapeshifter` | same, logs in `~/Library/Logs/Shapeshifter` |
+| Linux | `$XDG_CONFIG_HOME/shapeshifter` | `$XDG_DATA_HOME/shapeshifter` |
+
+## Building from source
+
+Install the [.NET 11 SDK](https://dotnet.microsoft.com/download), then:
+
+```bash
+dotnet build Shapeshifter.slnx
+dotnet run --project src/Shapeshifter.Desktop
+```
+
+To produce a self-contained, single-file build for a platform (`win-x64`, `win-arm64`, `osx-arm64`, `osx-x64`, `linux-x64`, `linux-arm64`):
+
+```bash
+dotnet publish src/Shapeshifter.Desktop -c Release -r linux-x64 -o publish
+```
+
+### Tests
+
+```bash
+dotnet test --project tests/Shapeshifter.Core.Tests
+```
+
+The end-to-end tests start Shapeshifter and a separate target application, copy through the real operating system clipboard and paste with real keystrokes. They need a desktop session:
+
+```bash
+# Linux (starts Xvfb and openbox when no display is available)
+scripts/run-e2e-linux.sh
+
+# Windows, or any machine with a desktop session
+SHAPESHIFTER_E2E=1 dotnet test --project tests/Shapeshifter.EndToEnd.Tests
+```
+
+On macOS the terminal running the tests needs Accessibility access.
+
+### Project layout
+
+| Project | Purpose |
+|---|---|
+| `src/Shapeshifter.Core` | Platform-independent logic: clipboard history, the paste gesture state machine, actions, persistence, settings. |
+| `src/Shapeshifter.Platform` | Operating system integration: global keyboard hook and paste simulation ([SharpHook](https://github.com/TolikPylypchuk/SharpHook)), X11 key grabs and clipboard notifications, autostart. |
+| `src/Shapeshifter.Desktop` | The Avalonia application: picker, notifications, settings, tray icon and clipboard access. |
+| `src/Shapeshifter.Website` | The ASP.NET Core website. |
+| `tests/` | Unit tests and the end-to-end suite. |
+
+See [docs/architecture.md](docs/architecture.md) for how the pieces fit together.
 
 # Contributing
-Feel free to contribute to Shapeshifter 6 development! Create a pull request, and we'll look at it. *The repository has a DotSettings ReSharper file included, which comes with the conventions we want to use for this repository. These conventions also contain a few templates for creating Unit Tests.*
+Feel free to contribute! Create a pull request, and we'll look at it.
 
 # Can Shapeshifter be trusted?
-Shapeshifter can be fully trusted, and hopefully having it 100% open-source helps showing that. Shapeshifter will not send your clipboard data to anyone, and if we collect data, it will be 100% anonymous (for instance, how many installs of Shapeshifter we have, or how many downloads).
-
-Some bright developers may have noticed that there are executable files inside the project. These files come from the [EasyHook](https://easyhook.github.io) NuGet package, which is also open source. If you still don't trust that these are the original EasyHook executables, feel free to run an MD5 hash of the ones from the source code and compare them to the originally distributed EasyHook files.
+Shapeshifter can be fully trusted, and hopefully having it 100% open-source helps showing that. Shapeshifter does not send your clipboard data anywhere. Pinned items are stored only on your own computer, in the folders listed above.
 
 ## Contributors
 

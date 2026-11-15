@@ -1,133 +1,137 @@
-﻿using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿namespace Shapeshifter.Website.Controllers;
+
+using System.Text;
+
+using Logic;
+
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+
+using Models.GitHub.Request;
+using Models.GitHub.Response;
+
 using Octokit;
 
-using Shapeshifter.Website.Models.GitHub.Request;
-
-namespace Shapeshifter.Website.Controllers
+[ApiController]
+[Produces("application/json")]
+[Route("api/github")]
+public sealed class GitHubApiController(
+	IGitHubClient client,
+	IOptions<GitHubOptions> options) : ControllerBase
 {
-	using Logic;
+	// Serializes reports so that two identical crashes reported at once do not create duplicate issues.
+	static readonly SemaphoreSlim ReportLock = new(1, 1);
 
-	using Models.GitHub.Response;
-
-	[Produces("application/json")]
-	[Route("api/github")]
-	public class GitHubApiController : Controller
+	[HttpPost("report")]
+	public async Task<ActionResult<ReportResponse>> ReportIssue(
+		[FromBody] IssueReport issueReport,
+		CancellationToken cancellationToken)
 	{
-		readonly IGitHubClient _client;
-
-		static readonly SemaphoreSlim _reportLock;
-
-		static GitHubApiController() {
-			_reportLock = new SemaphoreSlim(1);
+		var settings = options.Value;
+		if (string.IsNullOrWhiteSpace(settings.Token))
+		{
+			return Problem(
+				statusCode: StatusCodes.Status503ServiceUnavailable,
+				detail: "Issue reporting is not configured on this server.");
 		}
 
-		public GitHubApiController(
-		  IConfigurationReader configurationReader)
+		var issueTitle = BuildIssueTitle(issueReport, out var context);
+		if (issueTitle == null)
+			return BadRequest("The report must contain an exception name or an offending log message.");
+
+		await ReportLock.WaitAsync(cancellationToken);
+		try
 		{
-			_client = new GitHubClient(new ProductHeaderValue("Shapeshifter.Website"))
-			{
-				Credentials = new Credentials(configurationReader.Read("github.token"))
-			};
-		}
+			var existingIssues = await client.Issue.GetAllForRepository(
+				settings.Owner,
+				settings.Repository,
+				new RepositoryIssueRequest
+				{
+					State = ItemStateFilter.All,
+					Filter = IssueFilter.Created
+				});
 
-		[HttpPost("report")]
-		public async Task<ReportResponse> ReportIssue([FromBody] IssueReport issueReport)
-		{
-			await _reportLock.WaitAsync();
-
-			try
-			{
-				const string username = "ffMathy";
-				const string repository = "Shapeshifter";
-
-				var existingIssues = await _client.Issue.GetAllForRepository(
-					username,
-					repository,
-					new RepositoryIssueRequest() {
-						State = ItemStateFilter.All,
-						Filter = IssueFilter.Created
+			var existingIssue = existingIssues.FirstOrDefault(x => x.Title == issueTitle) ??
+				await client.Issue.Create(
+					settings.Owner,
+					settings.Repository,
+					new NewIssue(issueTitle)
+					{
+						Body = RenderIssueBody(issueReport, context)
 					});
 
-				var issueTitle = issueReport.Exception != null ? 
-					issueReport.Exception.Name : 
-					issueReport.OffendingLogMessage;
-
-				issueTitle = issueTitle.TrimEnd('.', ' ', '\n', '\r');
-
-				if(!string.IsNullOrWhiteSpace(issueReport.Context)) {
-					var nameSplit = issueReport.Context.Split('.');
-					issueReport.Context = nameSplit[nameSplit.Length - 1];
-					
-					issueTitle += " in " + issueReport.Context;
-				}
-				
-				issueTitle += " on v" + issueReport.Version;
-
-				var existingIssue = existingIssues.FirstOrDefault(x => x.Title == issueTitle) ?? 
-					await _client.Issue.Create(
-						username,
-						repository,
-						new NewIssue(issueTitle) {
-							Body = RenderIssueBody(issueReport)
-						});
-
-				return new ReportResponse() {
-					IssueUrl = existingIssue.HtmlUrl
-				};
-			} finally {
-				_reportLock.Release();
-			}
+			return new ReportResponse
+			{
+				IssueUrl = existingIssue.HtmlUrl
+			};
 		}
-
-		static string RenderIssueBody(IssueReport issueReport)
+		finally
 		{
-			var body = string.Empty;
-
-			body += $"<b>Version:</b> {issueReport.Version}\n\n";
-			
-			if(!string.IsNullOrEmpty(issueReport.Context))
-				body += $"<b>Offending class:</b> {issueReport.Context}\n\n";
-
-			if (issueReport.Exception != null)
-			{
-				body += "<h1>Exception</h1>\n";
-				body += $"<b>Type:</b> {issueReport.Exception.Name}\n\n";
-				body += $"<b>Message:</b> {issueReport.Exception.Message}\n\n";
-				body += $"```\n{issueReport.Exception.StackTrace}\n```\n\n";
-			}
-
-			if (issueReport.RecentLogLines == null || issueReport.RecentLogLines.Length <= 0) 
-				return body;
-
-			body += "<h1>Log</h1>\n\n";
-			if (issueReport.OffendingLogLine != null)
-			{
-				body += ConvertLinesIntoCodeRegion(
-					issueReport.OffendingLogLine.Split('\n', '\r'));
-			}
-
-			body += "<details><summary>Full log</summary><p>\n\n";
-			body += ConvertLinesIntoCodeRegion(issueReport.RecentLogLines);
-			body += "\n</p></details>";
-
-			return body;
+			ReportLock.Release();
 		}
+	}
 
-		static string ConvertLinesIntoCodeRegion(string[] lines)
+	static string? BuildIssueTitle(IssueReport issueReport, out string? context)
+	{
+		context = null;
+
+		var issueTitle = issueReport.Exception?.Name ?? issueReport.OffendingLogMessage;
+		if (string.IsNullOrWhiteSpace(issueTitle))
+			return null;
+
+		issueTitle = issueTitle.TrimEnd('.', ' ', '\n', '\r');
+
+		if (!string.IsNullOrWhiteSpace(issueReport.Context))
 		{
-			var body = "```\n";
-			foreach (var line in lines)
-			{
-				if (string.IsNullOrEmpty(line.Trim()))
-					continue;
-
-				body += $"{line}\n";
-			}
-			body += "```\n";
-			return body;
+			// Only the class name, not the full namespace.
+			context = issueReport.Context.Split('.')[^1];
+			issueTitle += " in " + context;
 		}
+
+		return issueTitle + " on v" + issueReport.Version;
+	}
+
+	static string RenderIssueBody(IssueReport issueReport, string? context)
+	{
+		var body = new StringBuilder();
+
+		body.Append("<b>Version:</b> ").Append(issueReport.Version).Append("\n\n");
+
+		if (!string.IsNullOrEmpty(context))
+			body.Append("<b>Offending class:</b> ").Append(context).Append("\n\n");
+
+		if (issueReport.Exception != null)
+		{
+			body.Append("<h1>Exception</h1>\n");
+			body.Append("<b>Type:</b> ").Append(issueReport.Exception.Name).Append("\n\n");
+			body.Append("<b>Message:</b> ").Append(issueReport.Exception.Message).Append("\n\n");
+			body.Append("```\n").Append(issueReport.Exception.StackTrace).Append("\n```\n\n");
+		}
+
+		if (issueReport.RecentLogLines == null || issueReport.RecentLogLines.Length <= 0)
+			return body.ToString();
+
+		body.Append("<h1>Log</h1>\n\n");
+		if (issueReport.OffendingLogLine != null)
+			AppendCodeRegion(body, issueReport.OffendingLogLine.Split('\n', '\r'));
+
+		body.Append("<details><summary>Full log</summary><p>\n\n");
+		AppendCodeRegion(body, issueReport.RecentLogLines);
+		body.Append("\n</p></details>");
+
+		return body.ToString();
+	}
+
+	static void AppendCodeRegion(StringBuilder body, string?[] lines)
+	{
+		body.Append("```\n");
+		foreach (var line in lines)
+		{
+			if (string.IsNullOrWhiteSpace(line))
+				continue;
+
+			body.Append(line).Append('\n');
+		}
+		body.Append("```\n");
 	}
 }

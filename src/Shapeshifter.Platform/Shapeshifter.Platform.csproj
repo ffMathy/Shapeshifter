@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>Shapeshifter.Platform</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Description>Operating system integration for Shapeshifter: global keyboard hooks, paste simulation, clipboard change notifications and autostart on Windows, macOS and Linux.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SharpHook" />
+    <PackageReference Include="Serilog" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shapeshifter.Core\Shapeshifter.Core.csproj" />
+  </ItemGroup>
+</Project>

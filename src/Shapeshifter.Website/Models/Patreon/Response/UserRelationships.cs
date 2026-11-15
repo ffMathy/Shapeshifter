@@ -5,6 +5,6 @@
 	public class UserRelationships
   {
     [JsonProperty("campaign")]
-    public Campaign Campaign { get; set; }
+    public Campaign? Campaign { get; set; }
   }
 }

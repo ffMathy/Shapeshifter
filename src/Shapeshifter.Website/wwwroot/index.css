@@ -39,6 +39,23 @@ h2 {
     font-size: 14px;
 }
 
+.download .downloads {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 420px;
+}
+
+.download .downloads .size {
+    font-size: 11px;
+    opacity: 0.75;
+    padding-left: 4px;
+}
+
+.download .specs a {
+    color: #AAA;
+}
+
 .download .specs {
     font-size: 12px;
     color: #AAA;

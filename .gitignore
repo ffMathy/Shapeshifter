@@ -1,9 +1,18 @@
-﻿/build/
+/build/*
+!/build/pad.xml
+!/build/signing.pfx
 
-/src/packages/
-/src/*/bin/
-/src/*/obj/
-
-.vs/
-
+bin/
+obj/
+artifacts/
+TestResults/
 *.user
+.vs/
+.vscode/
+.idea/
+
+# Website secrets must never be committed; use user-secrets or environment variables.
+src/Shapeshifter.Website/secrets.json
+
+# Local agent worktrees
+.claude/

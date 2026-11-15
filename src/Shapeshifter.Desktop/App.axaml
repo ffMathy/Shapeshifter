@@ -1,0 +1,10 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Shapeshifter.Desktop.App"
+             RequestedThemeVariant="Light"
+             Name="Shapeshifter">
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="avares://Shapeshifter/Styles/Theme.axaml" />
+  </Application.Styles>
+</Application>

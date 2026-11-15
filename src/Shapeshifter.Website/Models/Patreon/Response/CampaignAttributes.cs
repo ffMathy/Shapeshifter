@@ -7,40 +7,40 @@
 	public class CampaignAttributes
   {
     [JsonProperty("summary")]
-    public string Summary { get; set; }
+    public string? Summary { get; set; }
 
     [JsonProperty("creation_name")]
-    public string CreationName { get; set; }
+    public string? CreationName { get; set; }
 
     [JsonProperty("pay_per_name")]
-    public string PayPerName { get; set; }
+    public string? PayPerName { get; set; }
 
     [JsonProperty("one_liner")]
-    public string OneLiner { get; set; }
+    public string? OneLiner { get; set; }
 
     [JsonProperty("main_video_embed")]
-    public string MainVideoEmbed { get; set; }
+    public string? MainVideoEmbed { get; set; }
 
     [JsonProperty("main_video_url")]
-    public string MainVideoUrl { get; set; }
+    public string? MainVideoUrl { get; set; }
 
     [JsonProperty("image_small_url")]
-    public string ImageSmallUrl { get; set; }
+    public string? ImageSmallUrl { get; set; }
 
     [JsonProperty("image_url")]
-    public string ImageUrl { get; set; }
+    public string? ImageUrl { get; set; }
 
     [JsonProperty("thanks_video_url")]
-    public string ThanksVideoUrl { get; set; }
+    public string? ThanksVideoUrl { get; set; }
 
     [JsonProperty("thanks_embed")]
-    public string ThanksEmbed { get; set; }
+    public string? ThanksEmbed { get; set; }
 
     [JsonProperty("thanks_msg")]
-    public string ThanksMessage { get; set; }
+    public string? ThanksMessage { get; set; }
 
     [JsonProperty("pledge_url")]
-    public string PledgeUrl { get; set; }
+    public string? PledgeUrl { get; set; }
 
     [JsonProperty("is_monthly")]
     public bool IsMonthly { get; set; }

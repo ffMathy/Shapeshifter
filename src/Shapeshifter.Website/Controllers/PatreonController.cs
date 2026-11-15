@@ -1,50 +1,42 @@
-﻿using System.Threading.Tasks;
+﻿namespace Shapeshifter.Website.Controllers;
+
+using Logic;
+
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
-namespace Shapeshifter.Website.Controllers
+/// <summary>
+/// OAuth redirect target used once by the creator to obtain the creator tokens
+/// (to be stored as Patreon:CreatorsAccessToken / Patreon:CreatorsRefreshToken).
+/// </summary>
+public sealed class PatreonController(
+	IPatreonClient client,
+	IOptions<PatreonOptions> options) : Controller
 {
-    using System.Net;
-    using System.Net.Http;
+	[HttpGet("Patreon/Postback")]
+	public async Task<IActionResult> Postback(string? code, CancellationToken cancellationToken)
+	{
+		if (string.IsNullOrWhiteSpace(options.Value.ClientId) || string.IsNullOrWhiteSpace(options.Value.ClientSecret))
+		{
+			return Problem(
+				statusCode: StatusCodes.Status503ServiceUnavailable,
+				detail: "The Patreon integration is not configured on this server.");
+		}
 
-	using Logic;
+		if (string.IsNullOrWhiteSpace(code))
+			return BadRequest("Missing OAuth 'code' parameter.");
 
-	using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+		// The redirect URI must match the one used in the authorize request: this URL without its query string.
+		var redirectUri = new Uri(UriHelper.BuildAbsolute(
+			Request.Scheme,
+			Request.Host,
+			Request.PathBase,
+			Request.Path));
 
-    using Newtonsoft.Json;
+		var token = await client.ExchangeAuthorizationCodeAsync(code, redirectUri, cancellationToken);
 
-    public class PatreonController : Controller
-    {
-        readonly ConfigurationReader _secretReader;
-
-        public PatreonController()
-        {
-            _secretReader = new ConfigurationReader("secrets.json");
-        }
-
-        public async Task<IActionResult> Postback(
-            string code,
-            string state)
-        {
-            var clientId = _secretReader.Read("patreon:clientId");
-            var clientSecret = _secretReader.Read("patreon:clientSecret");
-
-            var redirectUri = HttpContext
-                .Request
-                .GetUri();
-            var redirectUriString = redirectUri
-                .ToString()
-                .Replace(redirectUri.Query, "");
-
-            using (var client = new HttpClient())
-            {
-                var response = await client.PostAsync("https://api.patreon.com/oauth2/token?code=" + WebUtility.UrlEncode(code) + "&grant_type=authorization_code&client_id=" + clientId + "&client_secret=" + clientSecret + "&redirect_uri=" + WebUtility.UrlEncode(redirectUriString), null);
-                var json = await response.Content.ReadAsStringAsync();
-
-                var jsonObject = JsonConvert.DeserializeObject<dynamic>(json);
-                var accessToken = jsonObject.access_token;
-
-                return accessToken;
-            }
-        }
-    }
+		Response.Headers.CacheControl = "no-store";
+		return Content(token.AccessToken ?? string.Empty, "text/plain");
+	}
 }
