@@ -26,7 +26,7 @@ public static class TextPreview
             var isSpace = char.IsWhiteSpace(character) || char.IsControl(character);
             if (isSpace)
             {
-                if (!previousWasSpace)
+                if (!previousWasSpace && builder.Length > 0)
                 {
                     builder.Append(' ');
                 }
@@ -37,6 +37,12 @@ public static class TextPreview
             }
 
             previousWasSpace = isSpace;
+        }
+
+        // Never end on half of a surrogate pair (an emoji cut at the limit).
+        if (builder.Length > 0 && char.IsHighSurrogate(builder[^1]))
+        {
+            builder.Length--;
         }
 
         return builder.ToString().TrimEnd();

@@ -97,8 +97,17 @@ internal sealed class XdgAutostartService : IAutostartService
             """);
     }
 
-    private static string Quote(string argument) =>
-        "\"" + argument.Replace("\\", "\\\\", StringComparison.Ordinal).Replace("\"", "\\\"", StringComparison.Ordinal) + "\"";
+    /// <summary>Quotes an Exec argument per the Desktop Entry spec: escape <c>\\ " ` $</c> inside quotes, then the
+    /// string-level escaping doubles backslashes again, and <c>%</c> becomes <c>%%</c>.</summary>
+    private static string Quote(string argument)
+    {
+        var inner = argument
+            .Replace("\\", "\\\\", StringComparison.Ordinal)
+            .Replace("\"", "\\\"", StringComparison.Ordinal)
+            .Replace("`", "\\`", StringComparison.Ordinal)
+            .Replace("$", "\\$", StringComparison.Ordinal);
+        return ("\"" + inner + "\"").Replace("\\", "\\\\", StringComparison.Ordinal).Replace("%", "%%", StringComparison.Ordinal);
+    }
 }
 
 /// <summary>A per-user launchd agent in <c>~/Library/LaunchAgents</c>.</summary>

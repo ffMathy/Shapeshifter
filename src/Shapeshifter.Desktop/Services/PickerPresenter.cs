@@ -135,7 +135,11 @@ internal sealed class PickerPresenter : IPickerPresenter
             return;
         }
 
-        var scaling = screen.Scaling;
+        // Factor between window size units (DIPs) and the units of Screen bounds and Window.Position.
+        // On Windows and X11 those are physical pixels, so it is the screen's scaling. On macOS Avalonia
+        // positions windows in points (DesktopScaling is 1) while Screen.Scaling is the Retina backing
+        // factor, so using the latter would make the picker half-height and off-centre on Retina displays.
+        var scaling = OperatingSystem.IsMacOS() ? picker.DesktopScaling : screen.Scaling;
         var area = screen.WorkingArea;
         var maxHeight = area.Height / scaling * 0.8;
         var height = Math.Min((Math.Max(itemCount, 1) * ItemHeight) + ChromeHeight, maxHeight);

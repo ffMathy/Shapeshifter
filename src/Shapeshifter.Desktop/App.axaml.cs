@@ -45,7 +45,9 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
         {
             desktop = lifetime;
-            lifetime.ShutdownRequested += (_, _) => Shutdown();
+            // ShutdownRequested is only raised for platform-initiated shutdowns (logout, Cmd+Q), not for
+            // lifetime.Shutdown() from the tray's Quit item; Exit is raised for every shutdown.
+            lifetime.Exit += (_, _) => Shutdown();
             Dispatcher.UIThread.Post(async () => await StartAsync().ConfigureAwait(true));
         }
 

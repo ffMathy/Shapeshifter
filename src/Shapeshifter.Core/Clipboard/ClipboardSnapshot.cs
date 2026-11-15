@@ -121,7 +121,7 @@ public sealed class ClipboardSnapshot
 
                 break;
 
-            case ClipboardContentKind.Text when Text is not null:
+            case ClipboardContentKind.Text when !string.IsNullOrEmpty(Text):
                 Append(hash, "text");
                 Append(hash, Text);
                 break;

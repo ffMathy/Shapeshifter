@@ -52,6 +52,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
     private ITimer? tickTimer;
     private Task? effectLoop;
     private bool navigationCaptured;
+    private int disposed;
 
     public ShapeshifterEngine(
         ClipboardHistory history,
@@ -124,6 +125,11 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
+        if (Interlocked.Exchange(ref disposed, 1) != 0)
+        {
+            return;
+        }
+
         keyboardHook.KeyHandler = null;
         monitor.Captured -= OnCaptured;
         if (tickTimer is not null)

@@ -23,7 +23,8 @@ public sealed class CopyAsFileAction : IClipboardAction
     {
         ArgumentNullException.ThrowIfNull(item);
         ArgumentNullException.ThrowIfNull(context);
-        var folder = Path.Combine(context.Paths.TempDirectory, "Text files");
+        // One folder per item, so items captured in the same second never overwrite each other's file.
+        var folder = Path.Combine(context.Paths.TempDirectory, "Text files", item.Id.ToString("N"));
         Directory.CreateDirectory(folder);
         var path = Path.Combine(folder, $"Text {item.CapturedAt.LocalDateTime:yyyy-MM-dd HH.mm.ss}.txt");
         await File.WriteAllTextAsync(path, item.Snapshot.Text, Encoding.UTF8, cancellationToken).ConfigureAwait(false);

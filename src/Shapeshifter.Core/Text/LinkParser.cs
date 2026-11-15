@@ -35,7 +35,7 @@ public static class LinkParser
     public static bool TryParseLink(string candidate, out Uri uri)
     {
         uri = null!;
-        var word = candidate.Trim().TrimStart(LeadingPunctuation).TrimEnd(TrailingPunctuation);
+        var word = TrimTrailing(candidate.Trim().TrimStart(LeadingPunctuation));
         if (word.Length is 0 or > MaxLinkLength)
         {
             return false;
@@ -57,6 +57,27 @@ public static class LinkParser
 
         uri = parsed;
         return true;
+    }
+
+    /// <summary>
+    /// Removes trailing punctuation, but keeps a closing bracket that balances an opening one inside the link
+    /// (for example <c>https://en.wikipedia.org/wiki/Mercury_(planet)</c>).
+    /// </summary>
+    private static string TrimTrailing(string word)
+    {
+        while (word.Length > 0 && Array.IndexOf(TrailingPunctuation, word[^1]) >= 0)
+        {
+            var last = word[^1];
+            var opening = last switch { ')' => '(', ']' => '[', '}' => '{', _ => '\0' };
+            if (opening != '\0' && word.Count(c => c == opening) >= word.Count(c => c == last))
+            {
+                break;
+            }
+
+            word = word[..^1];
+        }
+
+        return word;
     }
 
     public static bool IsImageLink(Uri uri)

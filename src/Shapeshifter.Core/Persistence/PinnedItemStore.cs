@@ -143,6 +143,13 @@ public sealed class PinnedItemStore
             return null;
         }
 
+        if (manifest.Files is null || manifest.RawFormats is null
+            || manifest.Files.Any(file => file is null)
+            || manifest.RawFormats.Any(format => format is null || string.IsNullOrEmpty(format.Name) || string.IsNullOrEmpty(format.File)))
+        {
+            throw new FormatException("The pinned item manifest is incomplete.");
+        }
+
         var raw = new List<RawClipboardFormat>();
         foreach (var format in manifest.RawFormats)
         {

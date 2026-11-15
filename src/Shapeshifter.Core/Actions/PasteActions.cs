@@ -35,7 +35,15 @@ public sealed class PasteAsPlainTextAction : IClipboardAction
     public bool CanExecute(ClipboardItem item)
     {
         ArgumentNullException.ThrowIfNull(item);
-        return item.Kind == ClipboardContentKind.Text && ClipboardFormatClassifier.FindRichText(item.Snapshot) is not null;
+        if (item.Kind != ClipboardContentKind.Text)
+        {
+            return false;
+        }
+
+        var rich = ClipboardFormatClassifier.FindRichText(item.Snapshot);
+
+        // Plain text comes from the item's own text, or is extracted from HTML. RTF-only data has no text to offer.
+        return rich is not null && (!string.IsNullOrEmpty(item.Snapshot.Text) || item.Snapshot.RawFormats.Any(f => ClipboardFormatClassifier.IsHtml(f.Name)));
     }
 
     public async Task ExecuteAsync(ClipboardItem item, ActionContext context, CancellationToken cancellationToken = default)
@@ -45,10 +53,8 @@ public sealed class PasteAsPlainTextAction : IClipboardAction
         var text = item.Snapshot.Text;
         if (string.IsNullOrEmpty(text))
         {
-            var rich = ClipboardFormatClassifier.FindRichText(item.Snapshot);
-            text = rich is not null && ClipboardFormatClassifier.IsHtml(rich.Name)
-                ? HtmlText.ToPlainText(HtmlText.Decode(rich.Data))
-                : item.PreviewText;
+            var html = item.Snapshot.RawFormats.FirstOrDefault(f => ClipboardFormatClassifier.IsHtml(f.Name));
+            text = html is not null ? HtmlText.ToPlainText(HtmlText.Decode(html.Data)) : string.Empty;
         }
 
         await context.WriteAndPasteAsync(new ClipboardSnapshot { Text = text }, cancellationToken).ConfigureAwait(false);

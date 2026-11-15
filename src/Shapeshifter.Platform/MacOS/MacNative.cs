@@ -39,7 +39,18 @@ internal static partial class MacNative
     [LibraryImport(CoreFoundation)]
     public static partial void CFRelease(IntPtr cf);
 
+    [LibraryImport(ObjC)]
+    public static partial IntPtr objc_autoreleasePoolPush();
+
+    [LibraryImport(ObjC)]
+    public static partial void objc_autoreleasePoolPop(IntPtr pool);
+
     /// <summary>Reads <c>[[NSPasteboard generalPasteboard] changeCount]</c>.</summary>
+    /// <remarks>
+    /// This is polled from thread-pool threads, which have no autorelease pool. Without a local pool, whatever
+    /// the messages autorelease lands in the thread's implicit pool, which is never drained because
+    /// thread-pool threads do not exit, so memory would grow with every poll.
+    /// </remarks>
     public static long GetPasteboardChangeCount()
     {
         var pasteboardClass = objc_getClass("NSPasteboard");
@@ -48,8 +59,16 @@ internal static partial class MacNative
             throw new PlatformNotSupportedException("AppKit is not loaded.");
         }
 
-        var pasteboard = SendIntPtr(pasteboardClass, sel_registerName("generalPasteboard"));
-        return SendNInt(pasteboard, sel_registerName("changeCount"));
+        var pool = objc_autoreleasePoolPush();
+        try
+        {
+            var pasteboard = SendIntPtr(pasteboardClass, sel_registerName("generalPasteboard"));
+            return SendNInt(pasteboard, sel_registerName("changeCount"));
+        }
+        finally
+        {
+            objc_autoreleasePoolPop(pool);
+        }
     }
 }
 

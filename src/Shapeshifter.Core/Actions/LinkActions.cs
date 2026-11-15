@@ -75,7 +75,30 @@ public sealed class CopyImageFromLinkAction : IClipboardAction
             throw new InvalidOperationException($"{link} did not return an image ({mediaType}).");
         }
 
-        var bytes = await response.Content.ReadAsByteArrayAsync(timeout.Token).ConfigureAwait(false);
+        var bytes = await ReadBoundedAsync(response.Content, link, timeout.Token).ConfigureAwait(false);
         await context.CopyNewContentAsync(new ClipboardSnapshot { Image = bytes }, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>Reads the body, failing as soon as it exceeds <see cref="MaxImageBytes"/> (servers may omit Content-Length).</summary>
+    private static async Task<byte[]> ReadBoundedAsync(HttpContent content, Uri link, CancellationToken cancellationToken)
+    {
+        var stream = await content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+        await using (stream.ConfigureAwait(false))
+        {
+            using var buffer = new MemoryStream();
+            var chunk = new byte[81920];
+            int read;
+            while ((read = await stream.ReadAsync(chunk, cancellationToken).ConfigureAwait(false)) > 0)
+            {
+                if (buffer.Length + read > MaxImageBytes)
+                {
+                    throw new InvalidOperationException($"The image at {link} is too large to copy.");
+                }
+
+                buffer.Write(chunk, 0, read);
+            }
+
+            return buffer.ToArray();
+        }
     }
 }

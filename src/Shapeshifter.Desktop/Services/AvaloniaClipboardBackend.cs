@@ -115,6 +115,15 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
                 continue;
             }
 
+            // On Windows, Avalonia names predefined formats it has no name for "Unknown_Format_<id>"
+            // (CF_LOCALE, CF_ENHMETAFILE, CF_METAFILEPICT, CF_PALETTE, ...). The GDI-handle ones are not
+            // HGLOBAL memory and so slip past the ignore list under their CF_* names, and none of them can be
+            // written back by name, so skip them instead of reading and re-registering a bogus format.
+            if (OperatingSystem.IsWindows() && format.Identifier.StartsWith("Unknown_Format_", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
             var item = data.Items.FirstOrDefault(candidate => candidate.Formats.Contains(format));
             if (item is null)
             {
