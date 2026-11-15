@@ -506,6 +506,25 @@ public sealed class PasteGestureStateMachineTests
         AssertIdle(h.Machine);
     }
 
+    /// <summary>
+    /// Regression test for issue #573: the default (first) action must be selected when the picker appears and
+    /// whenever another item is selected, and releasing the modifier must perform it.
+    /// </summary>
+    [Fact]
+    public void DefaultAction_IsSelectedWhenPickerShows_AndAfterChangingItem_AndIsPerformedOnRelease()
+    {
+        var h = GestureHarness.WithItems(3, actionCount: 4);
+        h.Down(GestureKey.Modifier);
+        h.Down(GestureKey.Trigger);
+        h.Up(GestureKey.Trigger);
+
+        AssertSelection(SingleShow(h.Advance(Delay)), 0, actionIndex: 0);
+        AssertSelection(SingleUpdate(h.Press(GestureKey.Down)), 1, actionIndex: 0);
+        AssertSelection(SingleUpdate(h.Press(GestureKey.Trigger)), 2, actionIndex: 0);
+
+        Assert.Equal(new PerformAction(Id(2), 0), h.Up(GestureKey.Modifier).Effects[^1]);
+    }
+
     [Fact]
     public void TriggerWrapsBackToDefault_ThenRelease_StillPerformsActionBecauseSelectionChanged()
     {
@@ -559,6 +578,34 @@ public sealed class PasteGestureStateMachineTests
         h.Up(GestureKey.Modifier);
 
         Assert.True(h.Up(GestureKey.Trigger).Suppress);
+    }
+
+    /// <summary>
+    /// Regression test for issue #527: releasing Ctrl before V used to emit a stream of Vs, because the auto-repeat
+    /// key-downs of the still-held V reached the focused application once the gesture had ended.
+    /// </summary>
+    [Fact]
+    public void AutoRepeatedTrigger_AfterModifierReleasedFirst_IsSuppressed_AndStartsNoNewGesture()
+    {
+        var h = GestureHarness.WithItems(3);
+        h.Down(GestureKey.Modifier);
+        Assert.True(h.Down(GestureKey.Trigger).Suppress);
+        Assert.IsType<PasteCurrentClipboard>(Assert.Single(h.Up(GestureKey.Modifier).Effects));
+
+        for (var i = 0; i < 20; i++)
+        {
+            var repeat = h.Down(GestureKey.Trigger);
+            Assert.True(repeat.Suppress);
+            Assert.Empty(repeat.Effects);
+            Assert.False(h.Machine.IsActive);
+        }
+
+        Assert.True(h.Up(GestureKey.Trigger).Suppress);
+        Assert.Equal(1, h.SessionCount);
+
+        // Once V has been released, a plain V press types normally again.
+        Assert.Equal(GestureResult.PassThrough, h.Down(GestureKey.Trigger));
+        Assert.Equal(GestureResult.PassThrough, h.Up(GestureKey.Trigger));
     }
 
     /// <summary>
