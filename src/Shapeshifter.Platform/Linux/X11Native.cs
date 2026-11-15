@@ -15,6 +15,8 @@ internal static unsafe partial class X11Native
     public const int GrabModeAsync = 1;
     public const int KeyPress = 2;
     public const int KeyRelease = 3;
+    public const int MappingNotify = 34;
+    public static readonly IntPtr CurrentTime = IntPtr.Zero;
     public const int XFixesSelectionNotify = 0;
     public const ulong XFixesSetSelectionOwnerNotifyMask = 1;
 
@@ -64,6 +66,14 @@ internal static unsafe partial class X11Native
 
     [LibraryImport(LibX11)]
     public static partial void XUngrabKey(IntPtr display, int keycode, uint modifiers, IntPtr grabWindow);
+
+    /// <summary>Ends an active keyboard grab held by this client (for example one activated by a passive key grab).</summary>
+    [LibraryImport(LibX11)]
+    public static partial void XUngrabKeyboard(IntPtr display, IntPtr time);
+
+    /// <summary>Updates Xlib's cached keyboard mapping after a MappingNotify event.</summary>
+    [LibraryImport(LibX11)]
+    public static partial void XRefreshKeyboardMapping(IntPtr mappingEvent);
 
     [LibraryImport(LibX11)]
     public static partial void XSync(IntPtr display, [MarshalAs(UnmanagedType.Bool)] bool discard);

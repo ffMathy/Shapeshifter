@@ -52,7 +52,7 @@ public sealed class ZipFilesActionTests : IDisposable
         byte[] binaryContent = [0, 1, 2, 255, 254, 0];
         File.WriteAllBytes(binary, binaryContent);
 
-        var archivePath = ZipFilesAction.CreateArchive([file, folder, binary], Path.Combine(workspace, "temp"));
+        var archivePath = ZipFilesAction.CreateArchive([file, folder, binary], Path.Combine(workspace, "temp"), TestContext.Current.CancellationToken);
 
         using var archive = ZipFile.OpenRead(archivePath);
         Assert.Equal(
@@ -71,8 +71,8 @@ public sealed class ZipFilesActionTests : IDisposable
         var file = WriteFile("a.txt", "a");
         var temporaryRoot = Path.Combine(workspace, "temp");
 
-        var first = ZipFilesAction.CreateArchive([file], temporaryRoot);
-        var second = ZipFilesAction.CreateArchive([file], temporaryRoot);
+        var first = ZipFilesAction.CreateArchive([file], temporaryRoot, TestContext.Current.CancellationToken);
+        var second = ZipFilesAction.CreateArchive([file], temporaryRoot, TestContext.Current.CancellationToken);
 
         Assert.NotEqual(first, second);
         foreach (var path in new[] { first, second })
@@ -92,7 +92,7 @@ public sealed class ZipFilesActionTests : IDisposable
         var b = WriteFile(Path.Combine("two", "report.txt"), "two");
         var c = WriteFile(Path.Combine("three", "REPORT.txt"), "three");
 
-        var archivePath = ZipFilesAction.CreateArchive([a, b, c], Path.Combine(workspace, "temp"));
+        var archivePath = ZipFilesAction.CreateArchive([a, b, c], Path.Combine(workspace, "temp"), TestContext.Current.CancellationToken);
 
         using var archive = ZipFile.OpenRead(archivePath);
         Assert.Equal(["report.txt", "report (2).txt", "REPORT (3).txt"], archive.Entries.Select(entry => entry.FullName));
@@ -109,7 +109,8 @@ public sealed class ZipFilesActionTests : IDisposable
 
         var archivePath = ZipFilesAction.CreateArchive(
             [Path.Combine(workspace, "one", "assets"), Path.Combine(workspace, "two", "assets") + Path.DirectorySeparatorChar],
-            Path.Combine(workspace, "temp"));
+            Path.Combine(workspace, "temp"),
+            TestContext.Current.CancellationToken);
 
         using var archive = ZipFile.OpenRead(archivePath);
         Assert.Equal(["assets/x.txt", "assets (2)/x.txt"], archive.Entries.Select(entry => entry.FullName));
@@ -123,7 +124,7 @@ public sealed class ZipFilesActionTests : IDisposable
         var file = WriteFile(Path.Combine("one", "data"), "file");
         WriteFile(Path.Combine("two", "data", "inner.txt"), "inner");
 
-        var archivePath = ZipFilesAction.CreateArchive([file, Path.Combine(workspace, "two", "data")], Path.Combine(workspace, "temp"));
+        var archivePath = ZipFilesAction.CreateArchive([file, Path.Combine(workspace, "two", "data")], Path.Combine(workspace, "temp"), TestContext.Current.CancellationToken);
 
         using var archive = ZipFile.OpenRead(archivePath);
         Assert.Equal(["data", "data (2)/inner.txt"], archive.Entries.Select(entry => entry.FullName));
@@ -134,7 +135,7 @@ public sealed class ZipFilesActionTests : IDisposable
     {
         var file = WriteFile("kept.txt", "kept");
 
-        var archivePath = ZipFilesAction.CreateArchive([Path.Combine(workspace, "gone.txt"), file], Path.Combine(workspace, "temp"));
+        var archivePath = ZipFilesAction.CreateArchive([Path.Combine(workspace, "gone.txt"), file], Path.Combine(workspace, "temp"), TestContext.Current.CancellationToken);
 
         using var archive = ZipFile.OpenRead(archivePath);
         Assert.Equal(["kept.txt"], archive.Entries.Select(entry => entry.FullName));
@@ -142,7 +143,7 @@ public sealed class ZipFilesActionTests : IDisposable
 
     [Fact]
     public void CreateArchive_RejectsNullPaths() =>
-        Assert.Throws<ArgumentNullException>(() => ZipFilesAction.CreateArchive(null!, workspace));
+        Assert.Throws<ArgumentNullException>(() => ZipFilesAction.CreateArchive(null!, workspace, TestContext.Current.CancellationToken));
 
     [Fact]
     public async Task Execute_CopiesTheArchiveAndMakesItTheNewestHistoryItem()

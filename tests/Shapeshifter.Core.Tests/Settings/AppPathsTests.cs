@@ -123,8 +123,42 @@ public sealed class AppPathsEnvironmentTests : IDisposable
         var paths = AppPaths.CreateDefault();
 
         Assert.True(Path.IsPathFullyQualified(paths.ConfigDirectory));
-        Assert.StartsWith(Path.GetTempPath(), paths.TempDirectory, StringComparison.Ordinal);
-        Assert.StartsWith("Shapeshifter-", Path.GetFileName(paths.TempDirectory), StringComparison.Ordinal);
+        Assert.True(Path.IsPathFullyQualified(paths.TempDirectory));
+        if (OperatingSystem.IsLinux())
+        {
+            // /tmp is shared between users on Linux; scratch files must stay in a per-user location.
+            Assert.False(paths.TempDirectory.StartsWith("/tmp/", StringComparison.Ordinal));
+        }
+        else
+        {
+            // Windows and macOS temp folders are already per user.
+            Assert.StartsWith(Path.GetTempPath(), paths.TempDirectory, StringComparison.Ordinal);
+        }
+    }
+
+    [Fact]
+    [System.Runtime.Versioning.UnsupportedOSPlatform("windows")]
+    public void EnsureCreated_OnUnix_MakesFoldersPrivate()
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            Assert.Skip("Unix permissions only.");
+        }
+
+        var root = Path.Combine(Path.GetTempPath(), "shapeshifter-paths-" + Guid.NewGuid().ToString("N"));
+        try
+        {
+            var paths = AppPaths.ForRoot(root);
+            paths.EnsureCreated();
+            foreach (var directory in new[] { paths.ConfigDirectory, paths.DataDirectory, paths.LogDirectory, paths.TempDirectory })
+            {
+                Assert.Equal(UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute, File.GetUnixFileMode(directory));
+            }
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
     }
 
     [Fact]

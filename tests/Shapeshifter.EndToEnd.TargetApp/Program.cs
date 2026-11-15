@@ -15,6 +15,7 @@ namespace Shapeshifter.EndToEnd.TargetApp;
 /// <list type="bullet">
 /// <item><c>copy-text &lt;text&gt;</c>: put plain text on the clipboard.</item>
 /// <item><c>copy-html &lt;text&gt; &lt;html&gt;</c>: put text and HTML (the platform's native HTML format) on the clipboard.</item>
+/// <item><c>copy-secret &lt;text&gt;</c>: put text marked as a password-manager secret on the clipboard.</item>
 /// <item><c>focus</c>, <c>clear</c>, <c>get</c> (answers <c>TEXT &lt;text&gt;</c>), <c>formats</c> (answers <c>FORMATS a|b</c>), <c>quit</c>.</item>
 /// </list>
 /// </summary>
@@ -90,6 +91,16 @@ internal sealed class TargetApplication : Application
                 await clipboard.SetDataAsync(transfer);
                 return "OK";
 
+            case "copy-secret":
+                // What password managers do: the text plus the platform's "do not record this" marker.
+                var secret = new DataTransferItem();
+                secret.SetText(Decode(parts[1]));
+                secret.Set(DataFormat.CreateBytesPlatformFormat(SecretMarkerFormat), SecretMarkerValue);
+                var secretTransfer = new DataTransfer();
+                secretTransfer.Add(secret);
+                await clipboard.SetDataAsync(secretTransfer);
+                return "OK";
+
             case "focus":
                 Focus();
                 return "OK";
@@ -121,6 +132,13 @@ internal sealed class TargetApplication : Application
         textBox!.Focus();
         textBox.CaretIndex = textBox.Text?.Length ?? 0;
     }
+
+    private static string SecretMarkerFormat =>
+        OperatingSystem.IsWindows() ? "ExcludeClipboardContentFromMonitorProcessing"
+        : OperatingSystem.IsMacOS() ? "org.nspasteboard.ConcealedType"
+        : "x-kde-passwordManagerHint";
+
+    private static byte[] SecretMarkerValue => OperatingSystem.IsLinux() ? Encoding.UTF8.GetBytes("secret") : [0];
 
     private static string HtmlFormatName =>
         OperatingSystem.IsWindows() ? "HTML Format" : OperatingSystem.IsMacOS() ? "public.html" : "text/html";

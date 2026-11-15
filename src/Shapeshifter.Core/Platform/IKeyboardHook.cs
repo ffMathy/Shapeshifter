@@ -16,6 +16,15 @@ public enum GestureKey
     Right,
     Delete,
     Escape,
+
+    /// <summary>Either Shift key.</summary>
+    Shift,
+
+    /// <summary>Alt / Option, including AltGr.</summary>
+    Alt,
+
+    /// <summary>The platform's remaining modifier: the Windows/Super key, or Ctrl on macOS.</summary>
+    OtherModifier,
 }
 
 public readonly record struct KeyInput(GestureKey Key, bool IsDown);

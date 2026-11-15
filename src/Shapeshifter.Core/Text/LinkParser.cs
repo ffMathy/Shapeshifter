@@ -13,6 +13,9 @@ public static class LinkParser
 
     public const int MaxLinkLength = 2048;
 
+    /// <summary>How much of a text is searched for links.</summary>
+    public const int MaxScannedLength = 64 * 1024;
+
     public static IReadOnlyList<Uri> ExtractLinks(string? text)
     {
         if (string.IsNullOrWhiteSpace(text))
@@ -20,10 +23,17 @@ public static class LinkParser
             return [];
         }
 
+        // Only the beginning of very large texts is scanned; this runs for every copied item.
+        if (text.Length > MaxScannedLength)
+        {
+            text = text[..MaxScannedLength];
+        }
+
         var links = new List<Uri>();
+        var seen = new HashSet<Uri>();
         foreach (var token in text.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries))
         {
-            if (TryParseLink(token, out var uri) && !links.Contains(uri))
+            if (TryParseLink(token, out var uri) && seen.Add(uri))
             {
                 links.Add(uri);
             }

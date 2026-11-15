@@ -104,6 +104,9 @@ public sealed class ShapeshifterSession : IAsyncLifetime
         await WaitForCaptureAsync(TextPreview(text), before);
     }
 
+    /// <summary>Copies text marked as sensitive (as password managers do) without waiting for a capture.</summary>
+    public async Task CopySecretAsync(string text) => await ExpectOkAsync($"copy-secret {Encode(text)}");
+
     /// <summary>Focuses the target's text box and clears it.</summary>
     public async Task PrepareTargetAsync()
     {

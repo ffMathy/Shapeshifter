@@ -50,8 +50,11 @@ public sealed class AppPaths
             return ForRoot(Path.GetFullPath(overrideRoot));
         }
 
-        var temp = Path.Combine(Path.GetTempPath(), "Shapeshifter-" + SanitizedUserName());
         var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+        // Windows and macOS temp folders are per user. /tmp on Linux is shared, so scratch files (which contain copied
+        // text) go to the per-user runtime directory, or else below the user's data directory.
+        var temp = Path.Combine(Path.GetTempPath(), "Shapeshifter");
 
         if (OperatingSystem.IsWindows())
         {
@@ -74,25 +77,35 @@ public sealed class AppPaths
         var data = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
         var configRoot = string.IsNullOrWhiteSpace(config) ? Path.Combine(home, ".config") : config;
         var dataRoot = string.IsNullOrWhiteSpace(data) ? Path.Combine(home, ".local", "share") : data;
+        var runtime = Environment.GetEnvironmentVariable("XDG_RUNTIME_DIR");
+        var linuxTemp = !string.IsNullOrWhiteSpace(runtime) && Directory.Exists(runtime)
+            ? Path.Combine(runtime, "shapeshifter")
+            : Path.Combine(dataRoot, "shapeshifter", "temp");
         return new AppPaths(
             Path.Combine(configRoot, "shapeshifter"),
             Path.Combine(dataRoot, "shapeshifter"),
             Path.Combine(dataRoot, "shapeshifter", "logs"),
-            temp);
+            linuxTemp);
     }
 
+    /// <summary>Creates the folders. On Unix they are private to the user (0700): they hold clipboard contents.</summary>
     public void EnsureCreated()
     {
-        Directory.CreateDirectory(ConfigDirectory);
-        Directory.CreateDirectory(DataDirectory);
-        Directory.CreateDirectory(LogDirectory);
-        Directory.CreateDirectory(TempDirectory);
+        foreach (var directory in new[] { ConfigDirectory, DataDirectory, LogDirectory, TempDirectory })
+        {
+            CreatePrivateDirectory(directory);
+        }
     }
 
-    private static string SanitizedUserName()
+    public static void CreatePrivateDirectory(string path)
     {
-        var name = Environment.UserName;
-        var invalid = Path.GetInvalidFileNameChars();
-        return new string(name.Select(c => invalid.Contains(c) ? '_' : c).ToArray());
+        if (OperatingSystem.IsWindows())
+        {
+            Directory.CreateDirectory(path);
+            return;
+        }
+
+        Directory.CreateDirectory(path, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
+        File.SetUnixFileMode(path, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
     }
 }

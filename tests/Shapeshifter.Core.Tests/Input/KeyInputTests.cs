@@ -23,7 +23,7 @@ public sealed class KeyInputTests
     public void GestureKey_DefinesAllGestureKeys()
     {
         Assert.Equal(
-            ["Other", "Modifier", "Trigger", "Up", "Down", "Left", "Right", "Delete", "Escape"],
+            ["Other", "Modifier", "Trigger", "Up", "Down", "Left", "Right", "Delete", "Escape", "Shift", "Alt", "OtherModifier"],
             Enum.GetNames<GestureKey>());
     }
 }

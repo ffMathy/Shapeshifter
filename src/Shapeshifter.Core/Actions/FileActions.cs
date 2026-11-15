@@ -51,12 +51,12 @@ public sealed class ZipFilesAction : IClipboardAction
     {
         ArgumentNullException.ThrowIfNull(item);
         ArgumentNullException.ThrowIfNull(context);
-        var archive = await Task.Run(() => CreateArchive(item.Snapshot.Files, context.Paths.TempDirectory), cancellationToken).ConfigureAwait(false);
+        var archive = await Task.Run(() => CreateArchive(item.Snapshot.Files, context.Paths.TempDirectory, cancellationToken), cancellationToken).ConfigureAwait(false);
         await context.CopyNewContentAsync(new ClipboardSnapshot { Files = [archive] }, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Creates the archive and returns its path. Folders are added recursively.</summary>
-    public static string CreateArchive(IReadOnlyList<string> paths, string temporaryRoot)
+    public static string CreateArchive(IReadOnlyList<string> paths, string temporaryRoot, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(paths);
         var name = GetArchiveName(paths);
@@ -75,8 +75,16 @@ public sealed class ZipFilesAction : IClipboardAction
             else if (Directory.Exists(path))
             {
                 var directoryName = Unique(Path.GetFileName(Path.TrimEndingDirectorySeparator(path)), usedNames);
-                foreach (var file in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
+                // Symbolic links and junctions are not followed: they can form cycles or point outside the folder.
+                var options = new EnumerationOptions
                 {
+                    RecurseSubdirectories = true,
+                    AttributesToSkip = FileAttributes.ReparsePoint,
+                    IgnoreInaccessible = true,
+                };
+                foreach (var file in Directory.EnumerateFiles(path, "*", options))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
                     var relative = Path.GetRelativePath(path, file).Replace(Path.DirectorySeparatorChar, '/');
                     archive.CreateEntryFromFile(file, directoryName + "/" + relative, CompressionLevel.Optimal);
                 }

@@ -47,6 +47,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
     private readonly Lock gestureGate = new();
     private readonly Channel<GestureEffect> effects = Channel.CreateUnbounded<GestureEffect>(new UnboundedChannelOptions { SingleReader = true });
     private readonly Dictionary<Guid, (ClipboardItem Item, IReadOnlyList<IClipboardAction> Actions)> session = [];
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<Guid, IReadOnlyList<IClipboardAction>> availableActions = new();
     private readonly long startTimestamp;
     private readonly CancellationTokenSource shutdown = new();
     private ITimer? tickTimer;
@@ -76,6 +77,11 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
         this.time = time ?? TimeProvider.System;
         startTimestamp = this.time.GetTimestamp();
         gesture = new PasteGestureStateMachine(CreateSession);
+        history.Changed += OnHistoryChanged;
+        foreach (var item in history.Items)
+        {
+            availableActions.TryAdd(item.Id, actions.GetAvailable(item));
+        }
     }
 
     /// <summary>Raised after every processed gesture effect. Useful for diagnostics and tests.</summary>
@@ -132,6 +138,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
 
         keyboardHook.KeyHandler = null;
         monitor.Captured -= OnCaptured;
+        history.Changed -= OnHistoryChanged;
         if (tickTimer is not null)
         {
             await tickTimer.DisposeAsync().ConfigureAwait(false);
@@ -157,33 +164,26 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
     /// <summary>Handles a key event. Called synchronously on the keyboard hook thread; must return quickly.</summary>
     internal bool OnKey(KeyInput input)
     {
-        GestureResult result;
-        bool active;
+        // Effects are queued inside the lock so the effect loop sees them in exactly the order the state machine
+        // produced them, even when the tick timer and the hook thread race (for example Show versus Hide).
         lock (gestureGate)
         {
-            result = gesture.Handle(input, Now());
-            active = gesture.IsActive;
+            var result = gesture.Handle(input, Now());
+            UpdateNavigationCapture(gesture.IsActive);
+            Enqueue(result);
+            return result.Suppress;
         }
-
-        UpdateNavigationCapture(active);
-        Enqueue(result);
-        return result.Suppress;
     }
 
     private void OnTick()
     {
-        GestureResult result;
         lock (gestureGate)
         {
-            if (!gesture.IsActive)
+            if (gesture.IsActive)
             {
-                return;
+                Enqueue(gesture.Tick(Now()));
             }
-
-            result = gesture.Tick(Now());
         }
-
-        Enqueue(result);
     }
 
     private void UpdateNavigationCapture(bool active)
@@ -223,7 +223,8 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
             session.Clear();
             foreach (var item in items)
             {
-                session[item.Id] = (item, actions.GetAvailable(item));
+                // Normally precomputed when the item was added; this runs on the keyboard hook thread.
+                session[item.Id] = (item, availableActions.GetOrAdd(item.Id, _ => actions.GetAvailable(item)));
             }
 
             return (items.Select(item => new GestureItem(item.Id, session[item.Id].Actions.Count)).ToArray(),
@@ -324,6 +325,31 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
                 selected.Actions.Select(action => action.GetTitle(selected.Item)).ToArray(),
                 selection.SelectedActionIndex,
                 selection.Pane);
+        }
+    }
+
+    /// <summary>
+    /// Works out each item's actions when it enters the history (content never changes afterwards), so starting a
+    /// gesture inside the keyboard hook callback does no text scanning.
+    /// </summary>
+    private void OnHistoryChanged(object? sender, HistoryChangedEventArgs e)
+    {
+        switch (e.Kind)
+        {
+            case HistoryChangeKind.Added when e.Item is not null:
+                availableActions.TryAdd(e.Item.Id, actions.GetAvailable(e.Item));
+                break;
+            case HistoryChangeKind.Removed when e.Item is not null:
+                availableActions.TryRemove(e.Item.Id, out _);
+                break;
+            case HistoryChangeKind.Reset:
+                var remaining = history.Items.Select(item => item.Id).ToHashSet();
+                foreach (var id in availableActions.Keys.Where(id => !remaining.Contains(id)).ToArray())
+                {
+                    availableActions.TryRemove(id, out _);
+                }
+
+                break;
         }
     }
 

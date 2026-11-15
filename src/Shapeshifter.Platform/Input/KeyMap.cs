@@ -28,6 +28,10 @@ internal sealed class KeyMap
     {
         KeyCode.VcLeftControl or KeyCode.VcRightControl when !UsesCommandKey => GestureKey.Modifier,
         KeyCode.VcLeftMeta or KeyCode.VcRightMeta when UsesCommandKey => GestureKey.Modifier,
+        KeyCode.VcLeftShift or KeyCode.VcRightShift => GestureKey.Shift,
+        KeyCode.VcLeftAlt or KeyCode.VcRightAlt => GestureKey.Alt,
+        KeyCode.VcLeftMeta or KeyCode.VcRightMeta => GestureKey.OtherModifier,
+        KeyCode.VcLeftControl or KeyCode.VcRightControl => GestureKey.OtherModifier,
         KeyCode.VcV => GestureKey.Trigger,
         KeyCode.VcUp => GestureKey.Up,
         KeyCode.VcDown => GestureKey.Down,

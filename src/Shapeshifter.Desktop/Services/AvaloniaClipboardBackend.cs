@@ -81,6 +81,14 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
             return ClipboardSnapshot.Empty;
         }
 
+        // Respect password managers and other applications that ask not to be recorded, before reading anything else.
+        var formatNames = data.Formats.Select(format => format.Identifier).ToArray();
+        if (await ClipboardFormatClassifier.IsExcludedFromHistoryAsync(formatNames, name => ReadMarkerAsync(data, name)).ConfigureAwait(true))
+        {
+            logger.Information("Skipping clipboard content that the source application marked as sensitive");
+            return ClipboardSnapshot.Empty;
+        }
+
         string? text = null;
         if (data.Contains(DataFormat.Text))
         {
@@ -145,6 +153,23 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
         }
 
         return new ClipboardSnapshot { Text = text, Files = files, Image = image, RawFormats = raw };
+    }
+
+    private async Task<byte[]?> ReadMarkerAsync(IAsyncDataTransfer data, string formatName)
+    {
+        var format = data.Formats.First(candidate => candidate.Identifier == formatName);
+        var item = data.Items.FirstOrDefault(candidate => candidate.Formats.Contains(format));
+        if (item is null)
+        {
+            return null;
+        }
+
+        return await TryAsync(() => item.TryGetRawAsync(format), formatName).ConfigureAwait(true) switch
+        {
+            byte[] bytes => bytes,
+            string text => Encoding.UTF8.GetBytes(text),
+            _ => null,
+        };
     }
 
     private async Task WriteCoreAsync(ClipboardSnapshot snapshot)

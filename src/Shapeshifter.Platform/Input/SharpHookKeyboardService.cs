@@ -37,6 +37,7 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
     private Task? hookTask;
     private long echoDeadline;
     private TaskCompletionSource? echoDrained;
+    private TaskCompletionSource triggerReleased = CreateReleasedSignal(released: true);
 
     internal SharpHookKeyboardService(ILogger logger, KeyMap keyMap, X11Integration? x11)
     {
@@ -123,6 +124,11 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
         {
             if (x11 is not null)
             {
+                // While V is physically held (Ctrl released first, a "rolling" release), the passive Ctrl+V grab is an
+                // active keyboard grab and would capture the synthetic keystroke. It ends when V comes up, so wait for
+                // that briefly.
+                await Task.WhenAny(Volatile.Read(ref triggerReleased).Task, Task.Delay(TriggerReleaseTimeout, cancellationToken)).ConfigureAwait(false);
+
                 // Our own grab would otherwise swallow the synthetic Ctrl+V.
                 await x11.SetTriggerGrabbedAsync(false).ConfigureAwait(false);
             }
@@ -203,6 +209,11 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
             return;
         }
 
+        if (keyCode == KeyCode.VcV)
+        {
+            TrackTrigger(isDown);
+        }
+
         var handler = KeyHandler;
         if (handler is null)
         {
@@ -223,6 +234,33 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
         if (suppress && canSuppress)
         {
             e.SuppressEvent = true;
+        }
+    }
+
+    private static readonly TimeSpan TriggerReleaseTimeout = TimeSpan.FromMilliseconds(500);
+
+    private static TaskCompletionSource CreateReleasedSignal(bool released)
+    {
+        var signal = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        if (released)
+        {
+            signal.SetResult();
+        }
+
+        return signal;
+    }
+
+    /// <summary>Tracks whether the user is physically holding V (our own synthetic V is filtered out before this).</summary>
+    private void TrackTrigger(bool isDown)
+    {
+        var current = Volatile.Read(ref triggerReleased);
+        if (isDown && current.Task.IsCompleted)
+        {
+            Volatile.Write(ref triggerReleased, CreateReleasedSignal(released: false));
+        }
+        else if (!isDown)
+        {
+            current.TrySetResult();
         }
     }
 

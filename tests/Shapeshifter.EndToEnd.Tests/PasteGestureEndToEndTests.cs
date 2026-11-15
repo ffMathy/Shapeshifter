@@ -151,6 +151,61 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
         Assert.DoesNotContain(formats, format => format.Contains("html", StringComparison.OrdinalIgnoreCase));
     }
 
+    [Fact]
+    public async Task ReleasingTheModifierBeforeVStillPastes()
+    {
+        SkipUnlessEnabled();
+        await session.CopyTextAsync("rolling " + Unique());
+        var expected = session.ReadState().Previews[0];
+        await session.PrepareTargetAsync();
+
+        // A "rolling" release: Ctrl comes up a moment before V.
+        await session.PressModifierAsync();
+        await session.KeyAsync(KeyCode.VcV, down: true, afterMilliseconds: 40);
+        await session.ReleaseModifierAsync();
+        await session.KeyAsync(KeyCode.VcV, down: false);
+
+        Assert.Equal(expected, await session.WaitForTargetTextAsync(expected));
+        await session.WaitForIdleAsync();
+    }
+
+    [Fact]
+    public async Task ShortcutsWithAnotherModifierAreLeftToTheApplication()
+    {
+        SkipUnlessEnabled();
+        await session.CopyTextAsync("unrelated " + Unique());
+        await session.PrepareTargetAsync();
+        await session.WaitForIdleAsync();
+        var before = session.ReadState();
+
+        await session.PressModifierAsync();
+        await session.KeyAsync(KeyCode.VcLeftShift, down: true);
+        await session.KeyAsync(KeyCode.VcV, down: true);
+        await Task.Delay(600, TestContext.Current.CancellationToken);
+        await session.KeyAsync(KeyCode.VcV, down: false);
+        await session.KeyAsync(KeyCode.VcLeftShift, down: false);
+        await session.ReleaseModifierAsync();
+        await Task.Delay(500, TestContext.Current.CancellationToken);
+
+        var after = session.ReadState();
+        Assert.False(after.PickerVisible);
+        Assert.Equal(before.EffectsProcessed, after.EffectsProcessed);
+    }
+
+    [Fact]
+    public async Task PasswordManagerSecretsAreNotRecorded()
+    {
+        SkipUnlessEnabled();
+        var id = Unique();
+        await session.CopyTextAsync($"visible {id}");
+        await session.CopySecretAsync($"hunter2 {id}");
+        await Task.Delay(1500, TestContext.Current.CancellationToken);
+
+        var state = session.ReadState();
+        Assert.Equal($"visible {id}", state.Previews[0]);
+        Assert.DoesNotContain(state.Previews, preview => preview.Contains("hunter2", StringComparison.Ordinal));
+    }
+
     private static void SkipUnlessEnabled()
     {
         if (!ShapeshifterSession.IsEnabled)

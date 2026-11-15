@@ -104,6 +104,11 @@ internal sealed unsafe class X11Integration : IClipboardChangeSource, ICursorLoc
         else
         {
             UngrabKey(triggerKeycode);
+
+            // While V is still physically held, the passive grab is an *active* keyboard grab that XUngrabKey does not
+            // end (for example when Ctrl was released a few milliseconds before V). Our synthetic Ctrl+V would then be
+            // delivered to us instead of the focused window, so end it explicitly.
+            X11Native.XUngrabKeyboard(display, X11Native.CurrentTime);
         }
 
         X11Native.XSync(display, false);
@@ -221,7 +226,7 @@ internal sealed unsafe class X11Integration : IClipboardChangeSource, ICursorLoc
             InstallErrorHandler(display);
             root = X11Native.XDefaultRootWindow(display);
             clipboardAtom = X11Native.XInternAtom(display, "CLIPBOARD", false);
-            triggerKeycode = X11Native.XKeysymToKeycode(display, X11Native.XK_v);
+            triggerKeycode = ResolveTriggerKeycode();
             if (X11Native.XFixesQueryExtension(display, out var eventBase, out _))
             {
                 xfixesEventBase = eventBase;
@@ -288,9 +293,31 @@ internal sealed unsafe class X11Integration : IClipboardChangeSource, ICursorLoc
         }
     }
 
+    /// <summary>
+    /// The keycode that produces "v" in the current layout. Falls back to 55, the physical V key on evdev-based
+    /// servers, because keycode 0 would mean AnyKey and grab every Ctrl shortcut.
+    /// </summary>
+    private int ResolveTriggerKeycode()
+    {
+        var keycode = X11Native.XKeysymToKeycode(display, X11Native.XK_v);
+        if (keycode != 0)
+        {
+            return keycode;
+        }
+
+        logger.Warning("The keyboard layout has no 'v' key; falling back to the physical V key");
+        return 55;
+    }
+
     private void HandleEvent(IntPtr eventBuffer)
     {
         var type = Marshal.ReadInt32(eventBuffer);
+        if (type == X11Native.MappingNotify)
+        {
+            OnKeyboardMappingChanged(eventBuffer);
+            return;
+        }
+
         if (xfixesEventBase >= 0 && type == xfixesEventBase + X11Native.XFixesSelectionNotify)
         {
             Changed?.Invoke(this, EventArgs.Empty);
@@ -299,8 +326,39 @@ internal sealed unsafe class X11Integration : IClipboardChangeSource, ICursorLoc
         // Grabbed key presses and releases are intentionally swallowed here; SharpHook reports them.
     }
 
+    private void OnKeyboardMappingChanged(IntPtr mappingEvent)
+    {
+        X11Native.XRefreshKeyboardMapping(mappingEvent);
+        var keycode = ResolveTriggerKeycode();
+        if (keycode == triggerKeycode)
+        {
+            return;
+        }
+
+        logger.Information("Keyboard layout changed; V is now keycode {Keycode}", keycode);
+        if (triggerGrabbed)
+        {
+            UngrabKey(triggerKeycode);
+            GrabKey(keycode);
+        }
+
+        if (navigationGrabbed)
+        {
+            // Navigation keysyms may have moved too.
+            navigationGrabbed = false;
+            _ = SetNavigationGrabbedAsync(true);
+        }
+
+        triggerKeycode = keycode;
+    }
+
     private void GrabKey(int keycode)
     {
+        if (keycode <= 0)
+        {
+            return;
+        }
+
         foreach (var variant in LockVariants)
         {
             lastOwnErrorCode = 0;
@@ -316,6 +374,11 @@ internal sealed unsafe class X11Integration : IClipboardChangeSource, ICursorLoc
 
     private void UngrabKey(int keycode)
     {
+        if (keycode <= 0)
+        {
+            return;
+        }
+
         foreach (var variant in LockVariants)
         {
             X11Native.XUngrabKey(display, keycode, X11Native.ControlMask | variant, root);

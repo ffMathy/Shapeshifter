@@ -61,6 +61,7 @@ public readonly record struct GestureResult(bool Suppress, IReadOnlyList<Gesture
 /// <item>Up/Down move the selection, Left switches to the actions of the selected item, Right switches back.</item>
 /// <item>Delete removes the selected item; Escape cancels.</item>
 /// <item>Releasing the modifier performs the selected action (normally "Paste") on the selected item.</item>
+/// <item>V pressed together with Shift, Alt/AltGr or another modifier is left alone (Ctrl+Shift+V, AltGr+V).</item>
 /// </list>
 /// <para>
 /// The machine is not thread-safe; the caller serializes calls. Times are monotonic offsets supplied by the caller.
@@ -71,6 +72,9 @@ public sealed class PasteGestureStateMachine
     private readonly Func<(IReadOnlyList<GestureItem> Items, int DefaultIndex)> sessionFactory;
 
     private bool modifierDown;
+    private bool shiftDown;
+    private bool altDown;
+    private bool otherModifierDown;
     private bool triggerDown;
     private bool active;
     private bool pickerVisible;
@@ -108,6 +112,15 @@ public sealed class PasteGestureStateMachine
                 return input.IsDown ? OnModifierDown() : OnModifierUp();
             case GestureKey.Trigger:
                 return input.IsDown ? OnTriggerDown(now) : OnTriggerUp();
+            case GestureKey.Shift:
+                shiftDown = input.IsDown;
+                return GestureResult.PassThrough;
+            case GestureKey.Alt:
+                altDown = input.IsDown;
+                return GestureResult.PassThrough;
+            case GestureKey.OtherModifier:
+                otherModifierDown = input.IsDown;
+                return GestureResult.PassThrough;
             case GestureKey.Up:
             case GestureKey.Down:
             case GestureKey.Left:
@@ -196,6 +209,13 @@ public sealed class PasteGestureStateMachine
 
         if (!modifierDown)
         {
+            return GestureResult.PassThrough;
+        }
+
+        if (!active && (shiftDown || altDown || otherModifierDown))
+        {
+            // Ctrl+Shift+V (paste in terminals, paste without formatting), AltGr+V (characters such as '@' on some
+            // layouts) and similar shortcuts belong to the focused application.
             return GestureResult.PassThrough;
         }
 
