@@ -3,6 +3,8 @@ name: CI
 on:
   push:
     branches: [master]
+    # Pushing a version tag such as v7.1.0 (or v7.1.0-beta.1 for a prerelease) builds, tests and publishes a release.
+    tags: ['v*']
   pull_request:
   workflow_dispatch:
 
@@ -97,8 +99,19 @@ jobs:
       - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+      - name: Version from tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Tag $GITHUB_REF_NAME is not a version tag like v7.1.0 or v7.1.0-beta.1"
+            exit 1
+          fi
+          echo "VERSION_ARGS=-p:Version=$version" >> "$GITHUB_ENV"
       - name: Publish self-contained single-file build
-        run: dotnet publish src/Shapeshifter.Desktop -c Release -r ${{ matrix.rid }} -o publish/Shapeshifter
+        shell: bash
+        run: dotnet publish src/Shapeshifter.Desktop -c Release -r ${{ matrix.rid }} -o publish/Shapeshifter $VERSION_ARGS
       - name: Archive (zip)
         if: matrix.archive == 'zip'
         shell: pwsh
@@ -110,3 +123,30 @@ jobs:
         with:
           name: Shapeshifter-${{ matrix.rid }}
           path: Shapeshifter-${{ matrix.rid }}.${{ matrix.archive }}
+
+  release:
+    name: GitHub release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [build, e2e-linux, e2e-windows, publish]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: Shapeshifter-*
+          path: dist
+          merge-multiple: true
+      - name: Create the release with the builds attached
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            # The release was created in the GitHub UI together with the tag: keep its notes, attach the builds.
+            gh release upload "$GITHUB_REF_NAME" dist/* --clobber
+          else
+            prerelease=()
+            if [[ "$GITHUB_REF_NAME" == *-* ]]; then prerelease=(--prerelease); fi
+            gh release create "$GITHUB_REF_NAME" dist/* --verify-tag --title "Shapeshifter ${GITHUB_REF_NAME#v}" --generate-notes "${prerelease[@]}"
+          fi
