@@ -1,9 +1,8 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <!--
-    "Mica Sheets": the Windows 11 look (Fluent 2). The picker is an Acrylic flyout like the shell's own (the emoji
-    panel, the clipboard history of Win+V): a light, slightly see-through layer with an 8 px radius, a 1 px stroke and
-    the flyout shadow. The accent marks only what is about to happen: a 3 × 16 pill beside the selected item of the
+    "Mica Sheets": the Windows 11 look (Fluent 2). The picker is a flyout like the shell's own (the emoji panel, the
+    clipboard history of Win+V): a light, near-opaque layer with an 8 px radius, a 1 px stroke and the flyout shadow. The accent marks only what is about to happen: a 3 × 16 pill beside the selected item of the
     pane that has the keyboard, and the icon of the chosen action. Everything else is the neutral Fluent palette:
 
       Text #1A1A1A, Text 2 #5D5D5D, Mica #F3F3F3, Layer #FFFFFF, strokes black at 6–12 %,
@@ -29,8 +28,10 @@
 
   <Style Selector="Window.picker">
     <Setter Property="FontFamily" Value="{StaticResource WindowsLookFont}" />
-    <!-- Acrylic where the compositor offers it; the surface is near-opaque, so plain transparency reads well too. -->
-    <Setter Property="TransparencyLevelHint" Value="AcrylicBlur, Transparent" />
+    <!--
+      The flyout is a near-opaque surface on a transparent window. No Acrylic or Mica: Windows would put that backdrop
+      under the whole window, the transparent shadow margin included, as a square frosted box around the flyout.
+    -->
   </Style>
   <Style Selector="Window.settings">
     <Setter Property="FontFamily" Value="{StaticResource WindowsLookFont}" />
@@ -39,8 +40,6 @@
   </Style>
   <Style Selector="Window.toast">
     <Setter Property="FontFamily" Value="{StaticResource WindowsLookFont}" />
-    <!-- The card (364) and the room for its shadow. -->
-    <Setter Property="Width" Value="396" />
   </Style>
 
   <!-- ============================================================== Picker: the flyout -->
@@ -129,8 +128,9 @@
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="CornerRadius" Value="4" />
   </Style>
+  <!-- Hover stays below every selected fill, the lighter one of the pane without the keyboard included. -->
   <Style Selector="ListBox.items > ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#09000000" />
+    <Setter Property="Background" Value="#06000000" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:pressed /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="Background" Value="#06000000" />
@@ -139,9 +139,6 @@
     <Setter Property="Background" Value="#0F000000" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#0F000000" />
-  </Style>
-  <Style Selector="ListBox.items > ListBoxItem:selected:focus /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="Background" Value="#0F000000" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected:pressed /template/ ContentPresenter#PART_ContentPresenter">
@@ -163,7 +160,7 @@
     <Setter Property="Background" Value="Transparent" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected Border.selectionMark">
-    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+    <Setter Property="Background" Value="{DynamicResource AccentTextBrush}" />
   </Style>
   <Style Selector="Border.historyPane.inactive ListBox.items > ListBoxItem:selected Border.selectionMark">
     <Setter Property="Background" Value="Transparent" />
@@ -334,29 +331,27 @@
     <Setter Property="Background" Value="Transparent" />
   </Style>
   <Style Selector="ListBox.actions > ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#09000000" />
+    <Setter Property="Background" Value="#06000000" />
   </Style>
   <Style Selector="ListBox.actions > ListBoxItem:pressed /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="Background" Value="#06000000" />
   </Style>
+  <!-- The chosen action keeps the history's fill whichever pane has the keyboard; the pill shows where that is. -->
   <Style Selector="ListBox.actions > ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#09000000" />
-  </Style>
-  <Style Selector="ListBox.actions > ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#09000000" />
-  </Style>
-  <Style Selector="ListBox.actions > ListBoxItem:selected:focus /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#09000000" />
-  </Style>
-  <Style Selector="ListBox.actions > ListBoxItem:selected:pressed /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#09000000" />
-  </Style>
-  <!-- With the keyboard here, the chosen action gets the history's fill and the accent pill. -->
-  <Style Selector="Border.actionsPane:not(.inactive) ListBox.actions > ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="Background" Value="#0F000000" />
   </Style>
+  <Style Selector="ListBox.actions > ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#0F000000" />
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem:selected:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#0F000000" />
+  </Style>
+  <!--
+    With the keyboard here, the chosen action also gets the pill. Pill, toggle and focus line use the text shade of the
+    accent, as Windows does in light mode: light accents (Gold #FFB900) are below 3:1 on these surfaces.
+  -->
   <Style Selector="Border.actionsPane:not(.inactive) ListBox.actions > ListBoxItem:selected /template/ Border#ActionMark">
-    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+    <Setter Property="Background" Value="{DynamicResource AccentTextBrush}" />
   </Style>
 
   <Style Selector="Path.actionGlyph">
@@ -551,8 +546,8 @@
   </Style>
   <!-- Compact, borderless spin buttons inside the field, as in the NumberBox. -->
   <Style Selector="NumericUpDown.rowControl /template/ ButtonSpinner /template/ RepeatButton">
-    <Setter Property="MinWidth" Value="28" />
-    <Setter Property="Width" Value="28" />
+    <Setter Property="MinWidth" Value="24" />
+    <Setter Property="Width" Value="24" />
     <Setter Property="Padding" Value="0" />
     <Setter Property="Margin" Value="0,4,2,4" />
     <Setter Property="CornerRadius" Value="4" />
@@ -560,8 +555,13 @@
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="Foreground" Value="#5D5D5D" />
   </Style>
+  <!-- The NumberBox's small chevrons, not the theme's 16 px ones. -->
+  <Style Selector="NumericUpDown.rowControl /template/ ButtonSpinner /template/ RepeatButton PathIcon">
+    <Setter Property="Width" Value="10" />
+    <Setter Property="Height" Value="10" />
+  </Style>
   <Style Selector="NumericUpDown.rowControl /template/ TextBox#PART_TextBox:focus /template/ Border#PART_BorderElement">
-    <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource AccentTextBrush}" />
   </Style>
 
   <!-- Fluent toggle switch, in the accent. -->
@@ -570,16 +570,16 @@
     <Setter Property="FontSize" Value="14" />
   </Style>
   <Style Selector="ToggleSwitch.rowControl:checked /template/ Border#SwitchKnobBounds">
-    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+    <Setter Property="Background" Value="{DynamicResource AccentTextBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource AccentTextBrush}" />
   </Style>
   <Style Selector="ToggleSwitch.rowControl:checked:pointerover /template/ Border#SwitchKnobBounds">
-    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+    <Setter Property="Background" Value="{DynamicResource AccentTextBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource AccentTextBrush}" />
   </Style>
   <Style Selector="ToggleSwitch.rowControl:checked:pressed /template/ Border#SwitchKnobBounds">
-    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+    <Setter Property="Background" Value="{DynamicResource AccentTextBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource AccentTextBrush}" />
   </Style>
 
   <Style Selector="StackPanel.commands">
@@ -610,6 +610,12 @@
 
   <!-- ============================================================== Toast: a Windows notification -->
 
+  <!--
+    The card is 364 wide; with the room for its shadow the window, which sizes to its content, is 396. The width sits in
+    the card, not on the window: a SizeToContent window measures its content unconstrained, and the preview would be
+    measured as one line. It is set on the card's body (364 less padding and stroke), which the screenshot tool also
+    leaves alone.
+  -->
   <Style Selector="Border.toastChrome">
     <Setter Property="Margin" Value="16,8,16,24" />
     <Setter Property="Padding" Value="16,12,16,16" />
@@ -618,6 +624,9 @@
     <Setter Property="BorderBrush" Value="#17000000" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="BoxShadow" Value="0 8 16 0 #24000000" />
+  </Style>
+  <Style Selector="Grid.toastBody">
+    <Setter Property="Width" Value="330" />
   </Style>
   <Style Selector="Image.toastIcon">
     <Setter Property="Width" Value="16" />

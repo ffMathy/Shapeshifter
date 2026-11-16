@@ -1,11 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
   <!--
-    The tray glyph of the Windows look: the two front sheets of the app icon as a Fluent outline glyph. White sheets
-    with a dark edge, so one image reads on both taskbars: on the dark taskbar the edge melts away and it is a white
-    glyph; on the light taskbar the white melts away and it is a dark outline glyph.
+    The tray glyph of the Windows look: the two front sheets of the app icon as a Fluent outline glyph, a 1 px stroke on
+    the 16 px grid and no fill, like the system's own tray glyphs. render.js draws it in currentColor's place as
+    TrayLight.png (#1C1C1C, for a light taskbar), TrayDark.png (#FFFFFF, for a dark one) and Tray.png, the one image
+    used while the app does not pick by taskbar theme: the white outline over a soft dark one, which reads on both.
   -->
-  <g stroke="#1C1C1C" stroke-width="1.15" stroke-linejoin="round" fill="#FFFFFF">
-    <rect x="1.5" y="1.5" width="9" height="10" rx="1.6"/>
+  <g fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
+    <path d="M10.5 4.5 V3 A1.5 1.5 0 0 0 9 1.5 H3 A1.5 1.5 0 0 0 1.5 3 V10 A1.5 1.5 0 0 0 3 11.5 H5.5"/>
     <path d="M7 4.5 H11 A3.5 3.5 0 0 1 14.5 8 V13 A1.5 1.5 0 0 1 13 14.5 H7 A1.5 1.5 0 0 1 5.5 13 V6 A1.5 1.5 0 0 1 7 4.5 Z"/>
   </g>
 </svg>

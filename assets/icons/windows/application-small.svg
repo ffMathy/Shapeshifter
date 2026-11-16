@@ -1,14 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <!-- The application icon for 16-32 px: no soft shadow (it only muddies the edge) and bolder lines. -->
+  <!--
+    The application icon for 16-32 px: no soft shadow (it only muddies the edge) and bolder lines. Laid out on the
+    16 px grid (16 units a pixel): the front sheet and the three lines sit on whole pixels, and the back sheets stand
+    out at least 2 px, so the 16 px frame stays crisp and keeps all three colours.
+  -->
   <defs>
     <linearGradient id="back" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD15C"/><stop offset="1" stop-color="#EE9008"/></linearGradient>
     <linearGradient id="mid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5FDCC6"/><stop offset="1" stop-color="#0B8F86"/></linearGradient>
     <linearGradient id="front" x1="0.1" y1="0" x2="0.9" y2="1"><stop offset="0" stop-color="#5AB6FF"/><stop offset="0.55" stop-color="#1878DA"/><stop offset="1" stop-color="#0A4FB0"/></linearGradient>
   </defs>
-  <rect x="34" y="22" width="132" height="166" rx="14" fill="url(#back)" transform="rotate(-12 100 105)"/>
-  <rect x="54" y="42" width="146" height="178" rx="34" fill="url(#mid)" transform="rotate(-5 127 131)"/>
-  <path d="M98 76 H166 A58 58 0 0 1 224 134 V222 A18 18 0 0 1 206 240 H98 A18 18 0 0 1 80 222 V94 A18 18 0 0 1 98 76 Z" fill="url(#front)"/>
-  <rect x="106" y="128" width="70" height="20" rx="10" fill="#FFFFFF"/>
-  <rect x="106" y="166" width="94" height="20" rx="10" fill="#FFFFFF"/>
-  <rect x="106" y="204" width="54" height="20" rx="10" fill="#FFFFFF"/>
+  <rect x="14" y="10" width="136" height="166" rx="18" fill="url(#back)" transform="rotate(-12 82 93)"/>
+  <rect x="44" y="40" width="148" height="180" rx="30" fill="url(#mid)" transform="rotate(-6 118 130)"/>
+  <path d="M98 80 H166 A58 58 0 0 1 224 138 V222 A18 18 0 0 1 206 240 H98 A18 18 0 0 1 80 222 V98 A18 18 0 0 1 98 80 Z" fill="url(#front)"/>
+  <rect x="112" y="128" width="64" height="16" rx="4" fill="#FFFFFF"/>
+  <rect x="112" y="160" width="96" height="16" rx="4" fill="#FFFFFF"/>
+  <rect x="112" y="192" width="48" height="16" rx="4" fill="#FFFFFF"/>
 </svg>
