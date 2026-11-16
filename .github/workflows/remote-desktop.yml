@@ -1,0 +1,96 @@
+name: Remote Desktop
+
+# Guards against issue #441 (Ctrl+V into a Remote Desktop window while Shapeshifter runs locally) on a real Windows
+# machine: the runner connects to itself over Remote Desktop as a second user, and the end-to-end test pastes into
+# that session (see tests/Shapeshifter.EndToEnd.Tests/RemoteDesktopEndToEndTests.cs). Kept apart from CI because it
+# depends on the runner image allowing Remote Desktop.
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/remote-desktop.yml'
+      - 'src/**'
+      - 'tests/Shapeshifter.EndToEnd.*/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  remote-desktop:
+    name: Paste into a Remote Desktop session
+    runs-on: windows-latest
+    timeout-minutes: 30
+    env:
+      RDP_HOME: C:\rdp-e2e
+      RDP_USER: rdpe2e
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - name: Build
+        run: dotnet build tests/Shapeshifter.EndToEnd.Tests -c Release
+
+      - name: Enable Remote Desktop and prepare a second user
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $password = 'Rdp!' + [guid]::NewGuid().ToString('N').Substring(0, 16) + 'a1'
+          New-LocalUser -Name $env:RDP_USER -Password (ConvertTo-SecureString $password -AsPlainText -Force) -PasswordNeverExpires | Out-Null
+          Add-LocalGroupMember -Group 'Remote Desktop Users' -Member $env:RDP_USER
+          Add-LocalGroupMember -Group 'Administrators' -Member $env:RDP_USER
+
+          Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name fDenyTSConnections -Value 0
+          Set-Service TermService -StartupType Manual
+          Start-Service TermService
+          # No Server Manager in the new session.
+          # Best effort: the key is protected on some images, and the target application takes the focus back anyway.
+          try {
+            Set-ItemProperty 'HKLM:\SOFTWARE\Microsoft\ServerManager' -Name DoNotOpenServerManagerAtLogon -Value 1 -Type DWord
+          } catch {
+            Write-Warning "Could not turn off Server Manager at logon: $_"
+          }
+          Get-ScheduledTask -TaskName ServerManager -ErrorAction SilentlyContinue | Disable-ScheduledTask -ErrorAction SilentlyContinue | Out-Null
+
+          # The target application runs in the remote session and mirrors its text box to a file both users can reach.
+          New-Item -ItemType Directory $env:RDP_HOME | Out-Null
+          icacls $env:RDP_HOME /grant 'Everyone:(OI)(CI)F' | Out-Null
+          Copy-Item -Recurse tests/Shapeshifter.EndToEnd.TargetApp/bin/Release/net11.0 "$env:RDP_HOME\target"
+          $launcher = "$env:RDP_HOME\start-target.cmd"
+          Set-Content $launcher "@if /i `"%USERNAME%`"==`"$env:RDP_USER`" start `"`" `"$env:RDP_HOME\target\Shapeshifter.EndToEnd.TargetApp.exe`" --mirror `"$env:RDP_HOME\remote.txt`""
+          Set-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run' -Name ShapeshifterE2ETarget -Value "cmd.exe /c `"$launcher`""
+
+          # Connect without prompts: saved credentials, and no warning about the self-signed certificate.
+          cmdkey /generic:TERMSRV/127.0.0.2 /user:$env:RDP_USER /pass:$password | Out-Null
+          New-Item 'HKCU:\Software\Microsoft\Terminal Server Client' -Force | Out-Null
+          Set-ItemProperty 'HKCU:\Software\Microsoft\Terminal Server Client' -Name AuthenticationLevelOverride -Value 0 -Type DWord
+          Get-Service TermService | Format-List Name, Status
+
+      - name: Paste into the Remote Desktop session
+        env:
+          SHAPESHIFTER_E2E: '1'
+          SHAPESHIFTER_E2E_ARTIFACTS: ${{ runner.temp }}/e2e
+          SHAPESHIFTER_E2E_RDP_MIRROR: C:\rdp-e2e\remote.txt
+        run: dotnet test --project tests/Shapeshifter.EndToEnd.Tests -c Release --no-build --filter-class Shapeshifter.EndToEnd.Tests.RemoteDesktopEndToEndTests --output Detailed
+
+      - name: Screenshot of the desktop
+        if: always()
+        shell: powershell
+        run: |
+          Add-Type -AssemblyName System.Windows.Forms, System.Drawing
+          $bounds = [System.Windows.Forms.SystemInformation]::VirtualScreen
+          $bitmap = New-Object System.Drawing.Bitmap $bounds.Width, $bounds.Height
+          [System.Drawing.Graphics]::FromImage($bitmap).CopyFromScreen($bounds.Location, [System.Drawing.Point]::Empty, $bounds.Size)
+          New-Item -ItemType Directory -Force "$env:RUNNER_TEMP\e2e" | Out-Null
+          $bitmap.Save("$env:RUNNER_TEMP\e2e\desktop.png")
+          Get-ChildItem $env:RDP_HOME -ErrorAction SilentlyContinue | Format-Table Name, Length
+          Get-Content "$env:RDP_HOME\remote.txt" -ErrorAction SilentlyContinue
+          qwinsta
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: remote-desktop-logs
+          path: ${{ runner.temp }}/e2e
+          if-no-files-found: ignore

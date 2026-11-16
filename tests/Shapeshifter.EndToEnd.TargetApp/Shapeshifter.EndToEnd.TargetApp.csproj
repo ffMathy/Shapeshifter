@@ -2,6 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <IsPackable>false</IsPackable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Description>A minimal text editor that end-to-end tests paste into. Controlled through stdin.</Description>
   </PropertyGroup>
   <ItemGroup>

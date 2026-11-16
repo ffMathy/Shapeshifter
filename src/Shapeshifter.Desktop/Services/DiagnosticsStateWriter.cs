@@ -64,7 +64,27 @@ internal sealed class DiagnosticsStateWriter
         {
             var temporary = path + ".tmp";
             File.WriteAllText(temporary, JsonSerializer.Serialize(state, JsonOptions));
-            File.Move(temporary, path, overwrite: true);
+
+            // On Windows the file cannot be replaced while a reader has it open, so try again briefly. This runs
+            // inside history and picker events: failing to describe the state must never break a capture.
+            for (var attempt = 0; ; attempt++)
+            {
+                try
+                {
+                    File.Move(temporary, path, overwrite: true);
+                    return;
+                }
+                catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
+                {
+                    if (attempt == 50)
+                    {
+                        Serilog.Log.Warning(exception, "Could not update the diagnostics state file {Path}", path);
+                        return;
+                    }
+
+                    Thread.Sleep(10);
+                }
+            }
         }
     }
 }
