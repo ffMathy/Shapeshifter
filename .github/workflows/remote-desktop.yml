@@ -1,6 +1,6 @@
 name: Remote Desktop
 
-# Reproduces issue #441 (Ctrl+V into a Remote Desktop window while Shapeshifter runs locally) on a real Windows
+# Guards against issue #441 (Ctrl+V into a Remote Desktop window while Shapeshifter runs locally) on a real Windows
 # machine: the runner connects to itself over Remote Desktop as a second user, and the end-to-end test pastes into
 # that session (see tests/Shapeshifter.EndToEnd.Tests/RemoteDesktopEndToEndTests.cs). Kept apart from CI because it
 # depends on the runner image allowing Remote Desktop.
