@@ -92,6 +92,17 @@ On macOS the terminal running the tests needs Accessibility access.
 
 See [docs/architecture.md](docs/architecture.md) for how the pieces fit together.
 
+### Releasing
+
+Push a version tag on the commit to release:
+
+```bash
+git tag v7.1.0          # or v7.1.0-beta.1 for a prerelease
+git push origin v7.1.0
+```
+
+CI builds and tests the tagged commit, publishes all six platforms with the version taken from the tag, and creates the GitHub release with the archives attached and release notes generated from the merged pull requests. A tag with a suffix (`-beta.1`, `-rc.1`) is published as a prerelease. You can also create the release in the GitHub UI with a new `v…` tag; CI then attaches the builds to it. Keep `<Version>` in `Directory.Build.props` in step with the latest release, since local builds use it.
+
 # Contributing
 Feel free to contribute! Create a pull request, and we'll look at it.
 
