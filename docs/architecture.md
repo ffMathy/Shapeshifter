@@ -62,6 +62,8 @@ The windows (`Views/*.axaml`) share one layout with semantic style classes; each
 
 `tools/Shapeshifter.ScreenshotGenerator` renders the real picker of every look headlessly, at 125 % display scaling, with sample content to produce `assets/screenshots` (`windows`, `macos` and `linux`, plus the Windows look in the accent colours the website shows; `--surfaces` also renders each look's settings window and copy notification for review) (`scripts/generate-screenshots.sh`); CI runs it on pull requests and commits changed screenshots.
 
+The headless renders have no system blur, fonts or accent colour. With `--live`, the same tool shows the real windows on the screen (through the app's own `PickerPresenter` and `CopyNotifier`), captures it, and writes `diagnostics.txt` with the transparency level granted and the fonts resolved. The **macOS screenshots** workflow (`.github/workflows/macos-screenshots.yml`) runs it on a macOS runner for pull requests that touch the looks, and on demand with a choice of runner image and light or dark appearance; the captures are uploaded as an artifact.
+
 ## Testing
 
 - `tests/Shapeshifter.Core.Tests` covers the core logic with fakes: the gesture state machine, history, monitor, actions, persistence, settings and the engine.

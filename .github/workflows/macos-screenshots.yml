@@ -1,0 +1,82 @@
+name: macOS screenshots
+
+# Takes real screenshots of the macOS look on a macOS runner: the app's own windows, shown by the native backend over
+# the runner's desktop, so the glass, the system font and the system accent colour are the real ones (the headless
+# screenshots in assets/screenshots have none of them). The captures and a diagnostics file (transparency level
+# granted, fonts resolved, screen scaling) are uploaded as the "macos-screenshots-<runner>-<appearance>" artifact.
+on:
+  pull_request:
+    paths:
+      - 'src/Shapeshifter.Desktop/Styles/MacOS.axaml'
+      - 'src/Shapeshifter.Desktop/Assets/MacOS/**'
+      - 'src/Shapeshifter.Desktop/Views/**'
+      - 'src/Shapeshifter.Desktop/ViewModels/**'
+      - 'src/Shapeshifter.Desktop/Services/**'
+      - 'tools/Shapeshifter.ScreenshotGenerator/**'
+      - '.github/workflows/macos-screenshots.yml'
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: 'macOS runner image'
+        type: choice
+        options: [macos-latest, macos-15, macos-26]
+        default: macos-latest
+      appearance:
+        description: 'System appearance to capture'
+        type: choice
+        options: [light, dark]
+        default: light
+
+permissions:
+  contents: read
+
+concurrency:
+  group: macos-screenshots-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  capture:
+    name: Capture (${{ inputs.runner || 'macos-latest' }}, ${{ inputs.appearance || 'light' }})
+    runs-on: ${{ inputs.runner || 'macos-latest' }}
+    timeout-minutes: 20
+    env:
+      SHAPESHIFTER_LOOK: macos
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - name: Build
+        run: dotnet build tools/Shapeshifter.ScreenshotGenerator -c Release
+      - name: Set the system appearance
+        # Needs the runner to allow System Events automation; if it does not, the default (light) appearance is kept.
+        continue-on-error: true
+        run: |
+          dark=false
+          if [[ "${{ inputs.appearance }}" == dark ]]; then dark=true; fi
+          osascript -e "tell application \"System Events\" to tell appearance preferences to set dark mode to $dark"
+      - name: Describe the runner
+        run: |
+          sw_vers
+          system_profiler SPDisplaysDataType | sed -n '/Displays:/,$p'
+      - name: Show the windows and capture the screen
+        run: dotnet run --project tools/Shapeshifter.ScreenshotGenerator -c Release --no-build -- "$RUNNER_TEMP/macos-screenshots" --live
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### macOS screenshots ($(sw_vers -productVersion))"
+            echo
+            echo "Download the **macos-screenshots-${{ inputs.runner || 'macos-latest' }}-${{ inputs.appearance || 'light' }}** artifact for the captures."
+            echo
+            echo '```'
+            cat "$RUNNER_TEMP/macos-screenshots/diagnostics.txt" 2>/dev/null || echo "No diagnostics were written."
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: macos-screenshots-${{ inputs.runner || 'macos-latest' }}-${{ inputs.appearance || 'light' }}
+          path: ${{ runner.temp }}/macos-screenshots
+          if-no-files-found: warn

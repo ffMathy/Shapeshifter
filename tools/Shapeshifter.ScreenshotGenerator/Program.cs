@@ -45,11 +45,17 @@ internal static class Program
     ];
 
     /// <summary>
-    /// <c>[output-folder] [--surfaces]</c>. With <c>--surfaces</c>, the settings window and the copy notification of
+    /// <c>[output-folder] [--surfaces]</c>, or <c>[output-folder] --live</c> to capture the real windows on the screen
+    /// (see <see cref="LiveCapture"/>). With <c>--surfaces</c>, the settings window and the copy notification of
     /// each look are rendered as well (<c>settings-&lt;look&gt;.PNG</c>, <c>toast-&lt;look&gt;.PNG</c>), for reviewing a look.
     /// </summary>
     public static int Main(string[] args)
     {
+        if (args.Contains("--live"))
+        {
+            return LiveCapture.Run(args);
+        }
+
         var surfaces = args.Contains("--surfaces");
         var folder = args.FirstOrDefault(arg => !arg.StartsWith("--", StringComparison.Ordinal));
         var output = Path.GetFullPath(folder ?? Path.Combine("assets", "screenshots"));
@@ -96,12 +102,11 @@ internal static class Program
         AccentPalette.Apply(application, Color.Parse(color));
     }
 
-    private static void RenderPicker(Look look, double scale, int width, int height, string path)
+    /// <summary>The picker's state in the screenshots: the sample items, the first selected, its actions.</summary>
+    internal static PickerViewModel CreateSampleViewModel(Look look, byte[] photo, Bitmap thumbnail)
     {
-        var viewModel = new PickerViewModel(look == Look.MacOS ? "Cmd" : "Ctrl") { IsOpaque = false, MaxListHeight = 10_000 };
+        var viewModel = new PickerViewModel(look == Look.MacOS ? "Cmd" : "Ctrl") { MaxListHeight = 10_000 };
         var visuals = new PickerVisuals(new SampleFileIcons(), Log.Logger);
-        var photo = SampleArt.Banner(900, 600);
-        using var thumbnail = ToBitmap(photo);
         foreach (var item in SampleItems(look, photo))
         {
             viewModel.Items.Add(new PickerItemViewModel(item, item.Kind == ClipboardContentKind.Image ? thumbnail : null, visuals));
@@ -116,6 +121,15 @@ internal static class Program
         viewModel.SelectedIndex = 0;
         viewModel.SelectedActionIndex = 0;
         viewModel.UpdateActionsHeader();
+        return viewModel;
+    }
+
+    private static void RenderPicker(Look look, double scale, int width, int height, string path)
+    {
+        var photo = SampleArt.Banner(900, 600);
+        using var thumbnail = ToBitmap(photo);
+        var viewModel = CreateSampleViewModel(look, photo, thumbnail);
+        viewModel.IsOpaque = false;
 
         // The picker's own window cannot be captured over a desktop, so its content is moved into a window that
         // also shows a desktop background behind it.
@@ -199,7 +213,7 @@ internal static class Program
         host.Close();
     }
 
-    private static SettingsWindow CreateSettingsWindow()
+    internal static SettingsWindow CreateSettingsWindow()
     {
         var root = Path.Combine(Path.GetTempPath(), "shapeshifter-screenshots");
         var paths = AppPaths.ForRoot(root);
@@ -213,7 +227,7 @@ internal static class Program
     }
 
     /// <summary>The items shown in the screenshots, copied from applications typical of the platform.</summary>
-    private static IEnumerable<ClipboardItem> SampleItems(Look look, byte[] photo)
+    internal static IEnumerable<ClipboardItem> SampleItems(Look look, byte[] photo)
     {
         const string article = "Shapeshifter is a freeware clipboard manager, originally developed by defunct Flamefusion company " +
             "and later released as open source.";
@@ -265,14 +279,14 @@ internal static class Program
         }
     }
 
-    private static Bitmap ToBitmap(byte[] png)
+    internal static Bitmap ToBitmap(byte[] png)
     {
         using var stream = new MemoryStream(png);
         return new Bitmap(stream);
     }
 
     /// <summary>Generic file icons, drawn rather than taken from an operating system.</summary>
-    private sealed class SampleFileIcons : IFileIconProvider
+    internal sealed class SampleFileIcons : IFileIconProvider
     {
         public byte[]? GetIconPng(string path, int size)
         {

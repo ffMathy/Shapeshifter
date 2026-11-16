@@ -29,21 +29,38 @@ internal sealed class CopyNotifier(SettingsStore settings) : ICopyNotifier
 
         Dispatcher.UIThread.Post(() =>
         {
-            var toast = window ??= new ToastWindow();
+            var toast = window ??= CreateWindow();
             toast.SetContent(historyCount, item.PreviewText);
             toast.Show();
-            var screen = toast.Screens.Primary ?? (toast.Screens.All.Count > 0 ? toast.Screens.All[0] : null);
-            if (screen is not null)
-            {
-                // As in PickerPresenter: on macOS windows are positioned in points, not in backing pixels.
-                var scaling = OperatingSystem.IsMacOS() ? toast.DesktopScaling : screen.Scaling;
-                var placement = PlatformLook.Resource(Application.Current!, "ToastPlacement", "BottomRight");
-                toast.Position = Place(screen.WorkingArea, toast.Bounds.Size * scaling, (int)(Margin * scaling), placement);
-            }
+            toast.UpdateLayout();
+            Position(toast);
 
             hideTimer?.Dispose();
             hideTimer = DispatcherTimer.RunOnce(() => toast.Hide(), Duration);
         });
+    }
+
+    private static ToastWindow CreateWindow()
+    {
+        var toast = new ToastWindow();
+
+        // The window sizes itself to its content, which is only final after layout: place it again once it is.
+        toast.SizeChanged += (_, _) => Position(toast);
+        return toast;
+    }
+
+    private static void Position(ToastWindow toast)
+    {
+        var screen = toast.Screens.Primary ?? (toast.Screens.All.Count > 0 ? toast.Screens.All[0] : null);
+        if (screen is null)
+        {
+            return;
+        }
+
+        // As in PickerPresenter: on macOS windows are positioned in points, not in backing pixels.
+        var scaling = OperatingSystem.IsMacOS() ? toast.DesktopScaling : screen.Scaling;
+        var placement = PlatformLook.Resource(Application.Current!, "ToastPlacement", "BottomRight");
+        toast.Position = Place(screen.WorkingArea, toast.Bounds.Size * scaling, (int)(Margin * scaling), placement);
     }
 
     internal static PixelPoint Place(PixelRect area, Size size, int margin, string placement) => placement switch
