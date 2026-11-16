@@ -2,8 +2,9 @@ name: CI
 
 on:
   push:
+    # Every merge to master is released (see the version job); pushing a version tag such as v7.1.0-beta.1 releases
+    # that version instead, which is how prereleases are made.
     branches: [master]
-    # Pushing a version tag such as v7.1.0 (or v7.1.0-beta.1 for a prerelease) builds, tests and publishes a release.
     tags: ['v*']
   pull_request:
   workflow_dispatch:
@@ -16,13 +17,43 @@ on:
 permissions:
   contents: read
 
+# Releases from master run one at a time, so each one sees the tag the previous one created.
+concurrency:
+  group: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && 'master-release' || format('ci-{0}', github.run_id) }}
+  cancel-in-progress: false
+
 env:
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
-  # The release being built: the pushed v* tag, or the version given to a manual run. Empty for ordinary CI runs.
-  RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || inputs.release_tag || '' }}
 
 jobs:
+  version:
+    name: Release version
+    runs-on: ubuntu-latest
+    outputs:
+      # The release being built, or empty for ordinary CI runs (pull requests, manual runs without a version).
+      tag: ${{ steps.version.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - id: version
+        env:
+          MANUAL_TAG: ${{ inputs.release_tag }}
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            tag="$GITHUB_REF_NAME"
+          elif [[ -n "$MANUAL_TAG" ]]; then
+            tag="$MANUAL_TAG"
+          elif [[ "$GITHUB_EVENT_NAME" == push && "$GITHUB_REF" == refs/heads/master ]]; then
+            tag=$(scripts/next-version.sh)
+          else
+            tag=""
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "Release: ${tag:-none}"
+
   build:
     name: Build and unit tests (${{ matrix.os }})
     strategy:
@@ -124,7 +155,9 @@ jobs:
 
   publish:
     name: Publish ${{ matrix.rid }}
-    needs: build
+    needs: [version, build]
+    env:
+      RELEASE_TAG: ${{ needs.version.outputs.tag }}
     strategy:
       fail-fast: false
       matrix:
@@ -172,11 +205,13 @@ jobs:
 
   release:
     name: GitHub release
-    if: startsWith(github.ref, 'refs/tags/v') || inputs.release_tag != ''
-    needs: [build, e2e-linux, e2e-windows, publish]
+    if: needs.version.outputs.tag != ''
+    needs: [version, build, e2e-linux, e2e-windows, publish]
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      RELEASE_TAG: ${{ needs.version.outputs.tag }}
     steps:
       - uses: actions/download-artifact@v8
         with:
@@ -188,13 +223,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
-          if [[ "$GITHUB_EVENT_NAME" == push ]]; then
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
             target=(--verify-tag)
           elif gh api "repos/$GH_REPO/git/ref/tags/$RELEASE_TAG" > /dev/null 2>&1; then
             echo "::error::Tag $RELEASE_TAG already exists; push the tag instead of starting a manual release"
             exit 1
           else
-            # A manual run on master: create the tag on the commit that was built and tested.
+            # A merge to master or a manual run on master: tag the commit that was built and tested.
             target=(--target "$GITHUB_SHA")
           fi
           if gh release view "$RELEASE_TAG" > /dev/null 2>&1; then

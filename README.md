@@ -104,14 +104,18 @@ See [docs/architecture.md](docs/architecture.md) for how the pieces fit together
 
 ### Releasing
 
-Push a version tag on the commit to release:
+Every merge to `master` is released. CI builds and tests the merge, publishes all six platforms and creates a GitHub release with the archives attached and release notes generated from the merged pull requests.
+
+The version is worked out by `scripts/next-version.sh`: the newest `v*` tag with its patch number increased (v7.1.0 → v7.1.1), or the `<Version>` in `Directory.Build.props` when that is newer. To release a new minor or major version, raise `<Version>` in the pull request (for example to `7.2.0` or `8.0.0`).
+
+For a prerelease, push a tag with a suffix instead:
 
 ```bash
-git tag v7.1.0          # or v7.1.0-beta.1 for a prerelease
-git push origin v7.1.0
+git tag v7.2.0-beta.1
+git push origin v7.2.0-beta.1
 ```
 
-CI builds and tests the tagged commit, publishes all six platforms with the version taken from the tag, and creates the GitHub release with the archives attached and release notes generated from the merged pull requests. A tag with a suffix (`-beta.1`, `-rc.1`) is published as a prerelease. You can also create the release in the GitHub UI with a new `v…` tag; CI then attaches the builds to it. Or, without creating a tag yourself, start the CI workflow manually on `master` (Actions → CI → Run workflow) with **release_tag** set to the version, such as `v7.1.0`; CI creates the tag on the commit it built and tested. Keep `<Version>` in `Directory.Build.props` in step with the latest release, since local builds use it.
+You can also start the CI workflow manually on `master` (Actions → CI → Run workflow) with **release_tag** set to a version, such as `v7.2.0`.
 
 # Contributing
 Feel free to contribute! Create a pull request, and we'll look at it.
