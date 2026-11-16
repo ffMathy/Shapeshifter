@@ -104,7 +104,7 @@ See [docs/architecture.md](docs/architecture.md) for how the pieces fit together
 
 ### Releasing
 
-Every merge to `master` is released. CI builds and tests the merge, publishes all six platforms and creates a GitHub release with the archives attached and release notes generated from the merged pull requests.
+Every merge to `master` is released (merges that land while a release is being built are released together). CI builds and tests the merge, publishes all six platforms and creates a GitHub release with the archives attached and release notes generated from the merged pull requests.
 
 The version is worked out by `scripts/next-version.sh`: the newest `v*` tag with its patch number increased (v7.1.0 → v7.1.1), or the `<Version>` in `Directory.Build.props` when that is newer. To release a new minor or major version, raise `<Version>` in the pull request (for example to `7.2.0` or `8.0.0`).
 

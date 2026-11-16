@@ -17,7 +17,8 @@ on:
 permissions:
   contents: read
 
-# Releases from master run one at a time, so each one sees the tag the previous one created.
+# Releases from master run one at a time, so each one sees the tag the previous one created. GitHub keeps at most one
+# run waiting: merges that land while a release is being built are released together, by the newest one.
 concurrency:
   group: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && 'master-release' || format('ci-{0}', github.run_id) }}
   cancel-in-progress: false

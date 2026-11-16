@@ -11,8 +11,8 @@ namespace Shapeshifter.Desktop.Controls;
 /// </summary>
 /// <remarks>
 /// Ported from the opacity mask of the WPF version's <c>ClipboardImageDataControl.xaml</c>: eighteen 15-unit-wide lines
-/// from (19 + 20i, 0) to (67 + 20i, 110), right-aligned in a row 92 units high and moved 11.5 % of the row's width to
-/// the right and 5 % of its height up. Everything scales with the row's height.
+/// from (19 + 20i, 0) to (67 + 20i, 110), aligned to the top right of the 92-high image and moved 11.5 % of its width to
+/// the right and 5 % of its height up.
 /// </remarks>
 public sealed class StripedImage : Avalonia.Controls.Control
 {
@@ -44,22 +44,28 @@ public sealed class StripedImage : Avalonia.Controls.Control
         set => SetValue(SourceProperty, value);
     }
 
-    /// <summary>The strips for a row of the given size, in the row's coordinates.</summary>
+    /// <summary>The strips for an image of the given size (the row's width, 92 high), in the image's coordinates.</summary>
+    /// <remarks>
+    /// The original brush was not scaled (Stretch=None): its stroked bounds (x 12.1 … 413.9, y -3 … 113) were aligned to
+    /// the top right of the image, the 92-high viewport was cut out, and that was moved right by 11.5 % of the width and
+    /// up by 5 % of the height. What was moved past the bottom stays white, as does everything left of the strips.
+    /// </remarks>
     public static Geometry CreateStrips(Size size)
     {
-        var scale = size.Height / DesignHeight;
-        var width = size.Width / scale;
+        var width = size.Width;
 
-        // The mask's lines span x = 19 - 7.5 … 407 + 7.5; right-aligned, then moved right by 11.5 % and up by 5 %.
-        var maskRight = TopStart + ((StripCount - 1) * StripSpacing) + (BottomStart - TopStart) + (StripWidth / 2);
-        var offsetX = width - maskRight + (0.115 * width);
-        var offsetY = -0.05 * DesignHeight;
-
-        // Half the line width, perpendicular to the lines.
+        // Half the pen, perpendicular to the lines.
         var dx = BottomStart - TopStart;
         var length = Math.Sqrt((dx * dx) + (MaskHeight * MaskHeight));
         var nx = MaskHeight / length * (StripWidth / 2);
-        var ny = -dx / length * (StripWidth / 2);
+        var ny = dx / length * (StripWidth / 2);
+
+        var strokedRight = TopStart + ((StripCount - 1) * StripSpacing) + dx + nx;
+        var strokedTop = -ny;
+        var shiftX = 0.115 * width;
+        var shiftY = -0.05 * DesignHeight;
+        var offsetX = width - strokedRight + shiftX;
+        var offsetY = -strokedTop + shiftY;
 
         var strips = new StreamGeometry();
         using (var geometry = strips.Open())
@@ -68,17 +74,17 @@ public sealed class StripedImage : Avalonia.Controls.Control
             {
                 var top = new Point(TopStart + (i * StripSpacing) + offsetX, offsetY);
                 var bottom = new Point(BottomStart + (i * StripSpacing) + offsetX, MaskHeight + offsetY);
-                geometry.BeginFigure(Scale(new Point(top.X - nx, top.Y - ny)), isFilled: true);
-                geometry.LineTo(Scale(new Point(top.X + nx, top.Y + ny)));
-                geometry.LineTo(Scale(new Point(bottom.X + nx, bottom.Y + ny)));
-                geometry.LineTo(Scale(new Point(bottom.X - nx, bottom.Y - ny)));
+                geometry.BeginFigure(new Point(top.X - nx, top.Y + ny), isFilled: true);
+                geometry.LineTo(new Point(top.X + nx, top.Y - ny));
+                geometry.LineTo(new Point(bottom.X + nx, bottom.Y - ny));
+                geometry.LineTo(new Point(bottom.X - nx, bottom.Y + ny));
                 geometry.EndFigure(isClosed: true);
             }
         }
 
-        return strips;
-
-        Point Scale(Point point) => new(point.X * scale, point.Y * scale);
+        // The brush only covered its own viewport, which the translation moved; below it the image is not shown.
+        var viewport = new RectangleGeometry(new Rect(shiftX, shiftY, width, DesignHeight));
+        return new CombinedGeometry(GeometryCombineMode.Intersect, strips, viewport);
     }
 
     public override void Render(DrawingContext context)

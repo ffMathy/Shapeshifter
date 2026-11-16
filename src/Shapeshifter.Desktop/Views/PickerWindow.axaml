@@ -108,7 +108,8 @@
                 </Grid>
 
                 <!-- An image is shown over the whole row, through tilted strips -->
-                <controls:StripedImage Classes="thumbnail" Source="{Binding Thumbnail}" Margin="-1" IsVisible="{Binding IsImageLayout}" />
+                <controls:StripedImage Classes="thumbnail" Source="{Binding Thumbnail}" Height="92" Margin="-1,-1,-1,0" VerticalAlignment="Top"
+                                       IsVisible="{Binding IsImageLayout}" />
               </Panel>
             </DataTemplate>
           </ListBox.ItemTemplate>
