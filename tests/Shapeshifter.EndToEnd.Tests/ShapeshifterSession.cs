@@ -188,7 +188,9 @@ public sealed class ShapeshifterSession : IAsyncLifetime
         {
             try
             {
-                using var document = JsonDocument.Parse(File.ReadAllText(StateFile));
+                // Share delete access, so Shapeshifter can replace the file while it is being read (Windows).
+                using var stream = new FileStream(StateFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                using var document = JsonDocument.Parse(stream);
                 var root = document.RootElement;
                 return new AppState(
                     root.GetProperty("historyCount").GetInt32(),
