@@ -1,36 +1,45 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Shapeshifter.Desktop.Controls">
+  <!--
+    The picker's look, ported from the original WPF version (Resources/Dictionaries/Styles/Clipboard.xaml,
+    Themes/Shared.xaml and the controls under Controls/Clipboard and Controls/Window), deleted in commit 97d080d.
+  -->
   <Styles.Resources>
     <!--
-      Fallback palette. AccentPalette replaces the accent brushes with ones derived from the operating system's
-      accent colour at startup, as the original Shapeshifter did, so these only show where there is none.
+      Fallback palette (the original "Aero" theme). AccentPalette replaces the accent brushes with ones derived from
+      the operating system's accent colour at startup, as the original did, so these only show where there is none.
     -->
     <SolidColorBrush x:Key="AccentBrush" Color="#3399FF" />
     <SolidColorBrush x:Key="AccentDarkBrush" Color="#236BB2" />
     <SolidColorBrush x:Key="AccentDarkerBrush" Color="#1E5B99" />
     <SolidColorBrush x:Key="ActionsBackgroundBrush" Color="#F0236BB2" />
-    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FEFEFE" />
     <SolidColorBrush x:Key="WindowDarkBackgroundBrush" Color="#F0F0F0" />
     <SolidColorBrush x:Key="ControlBorderBrush" Color="#DDDDDD" />
   </Styles.Resources>
 
-  <!-- Picker: history items -->
+  <!-- History rows: 450 × 92, a grey icon area, a 1-wide splitter and a white content area. -->
   <Style Selector="ListBox.items">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="Padding" Value="0" />
+    <Setter Property="Width" Value="450" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem">
-    <Setter Property="Height" Value="114" />
+    <Setter Property="Height" Value="92" />
     <Setter Property="Padding" Value="0" />
     <Setter Property="Margin" Value="0" />
     <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
     <Setter Property="BorderThickness" Value="0,0,0,1" />
   </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected">
+    <Setter Property="BorderBrush" Value="{DynamicResource AccentDarkBrush}" />
+  </Style>
   <Style Selector="ListBox.items > ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource WindowDarkBackgroundBrush}" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource WindowDarkBackgroundBrush}" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
@@ -41,96 +50,133 @@
   <Style Selector="ListBox.items > ListBoxItem:selected:focus /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
   </Style>
-  <Style Selector="ListBox.items > ListBoxItem TextBlock.title">
-    <Setter Property="Foreground" Value="#222222" />
-    <Setter Property="FontSize" Value="15" />
-    <Setter Property="LineHeight" Value="23" />
+
+  <!-- Unselected rows are muted: the icon and the content at 75 %, an image at 50 %. -->
+  <Style Selector="ListBox.items > ListBoxItem Panel.iconArea">
+    <Setter Property="Opacity" Value="0.75" />
   </Style>
-  <Style Selector="ListBox.items > ListBoxItem TextBlock.fileName">
-    <Setter Property="Foreground" Value="#444444" />
-    <Setter Property="FontSize" Value="26" />
-    <Setter Property="FontWeight" Value="Light" />
+  <Style Selector="ListBox.items > ListBoxItem Panel.contentArea">
+    <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}" />
   </Style>
-  <Style Selector="ListBox.items > ListBoxItem TextBlock.subtitle">
-    <Setter Property="Foreground" Value="#666666" />
-    <Setter Property="FontSize" Value="13" />
-    <Setter Property="VerticalAlignment" Value="Center" />
+  <Style Selector="ListBox.items > ListBoxItem Panel.contentInner">
+    <Setter Property="Opacity" Value="0.75" />
   </Style>
-  <!-- The line at the bottom of a row: the source window, or the folder of copied files. -->
-  <Style Selector="ListBox.items > ListBoxItem :is(Control).sourceLine">
-    <Setter Property="Margin" Value="20,0,18,15" />
-    <Setter Property="HorizontalAlignment" Value="Left" />
-    <Setter Property="VerticalAlignment" Value="Bottom" />
+  <Style Selector="ListBox.items > ListBoxItem controls|StripedImage.thumbnail">
+    <Setter Property="Opacity" Value="0.5" />
   </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected Panel.iconArea">
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected Panel.contentArea">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected Panel.contentInner">
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected controls|StripedImage.thumbnail">
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+
+  <Style Selector="ListBox.items > ListBoxItem Rectangle.splitter">
+    <Setter Property="Width" Value="1" />
+    <Setter Property="Opacity" Value="0.3" />
+    <Setter Property="Fill" Value="{DynamicResource ControlBorderBrush}" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected Rectangle.splitter">
+    <Setter Property="Fill" Value="{DynamicResource AccentDarkBrush}" />
+  </Style>
+
   <Style Selector="ListBox.items > ListBoxItem Path.glyph">
     <Setter Property="Fill" Value="{DynamicResource AccentBrush}" />
   </Style>
-  <Style Selector="ListBox.items > ListBoxItem Path.fileGlyph">
-    <Setter Property="Fill" Value="#C8C8C8" />
-  </Style>
-  <Style Selector="ListBox.items > ListBoxItem Path.folderGlyph">
-    <Setter Property="Fill" Value="#E8B94A" />
+  <Style Selector="ListBox.items > ListBoxItem:selected Path.glyph">
+    <Setter Property="Fill" Value="{DynamicResource WindowBackgroundBrush}" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem TextBlock.fileCount">
     <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
-    <Setter Property="FontSize" Value="64" />
-    <Setter Property="FontWeight" Value="Light" />
+    <Setter Property="FontSize" Value="60" />
+    <Setter Property="FontWeight" Value="ExtraLight" />
+    <Setter Property="Width" Value="64" />
+    <Setter Property="Margin" Value="12,7,11,10" />
+    <Setter Property="TextAlignment" Value="Center" />
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
-  <Style Selector="ListBox.items > ListBoxItem Border.badge">
-    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
-    <Setter Property="MinWidth" Value="18" />
-    <Setter Property="Height" Value="18" />
-    <Setter Property="Padding" Value="3,0" />
-  </Style>
-  <Style Selector="ListBox.items > ListBoxItem Border.badge > TextBlock">
-    <Setter Property="Foreground" Value="White" />
-    <Setter Property="FontSize" Value="11" />
-    <Setter Property="HorizontalAlignment" Value="Center" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
-  <Style Selector="ListBox.items > ListBoxItem:selected TextBlock.title">
-    <Setter Property="Foreground" Value="White" />
-  </Style>
-  <Style Selector="ListBox.items > ListBoxItem:selected TextBlock.fileName">
-    <Setter Property="Foreground" Value="White" />
-  </Style>
-  <Style Selector="ListBox.items > ListBoxItem:selected TextBlock.subtitle">
-    <Setter Property="Foreground" Value="#E6FFFFFF" />
-  </Style>
-  <Style Selector="ListBox.items > ListBoxItem:selected Path.glyph">
-    <Setter Property="Fill" Value="White" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected TextBlock.fileCount">
     <Setter Property="Foreground" Value="White" />
   </Style>
-  <Style Selector="ListBox.items > ListBoxItem:selected Border.badge">
-    <Setter Property="Background" Value="{DynamicResource AccentDarkerBrush}" />
+
+  <Style Selector="ListBox.items > ListBoxItem TextBlock.title">
+    <Setter Property="Foreground" Value="Black" />
+    <Setter Property="FontSize" Value="14" />
   </Style>
-  <Style Selector="ListBox.items > ListBoxItem Border.iconArea">
-    <Setter Property="Background" Value="{DynamicResource WindowDarkBackgroundBrush}" />
+  <Style Selector="ListBox.items > ListBoxItem TextBlock.fileName">
+    <Setter Property="Foreground" Value="Black" />
+    <Setter Property="FontSize" Value="24" />
+    <Setter Property="FontWeight" Value="Thin" />
   </Style>
-  <Style Selector="ListBox.items > ListBoxItem:selected Border.iconArea">
-    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+  <Style Selector="ListBox.items > ListBoxItem:selected TextBlock.title, ListBox.items > ListBoxItem:selected TextBlock.fileName">
+    <Setter Property="Foreground" Value="White" />
   </Style>
 
+  <!-- Where the item came from: a 16 × 16 icon and, except for images, the window title. -->
+  <Style Selector="ListBox.items > ListBoxItem StackPanel.source">
+    <Setter Property="Orientation" Value="Horizontal" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem StackPanel.source > Image">
+    <Setter Property="Width" Value="16" />
+    <Setter Property="Height" Value="16" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem StackPanel.source > TextBlock">
+    <Setter Property="Foreground" Value="Black" />
+    <Setter Property="Opacity" Value="0.8" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontWeight" Value="Light" />
+    <Setter Property="Padding" Value="5,0,0,0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    <Setter Property="MaxWidth" Value="320" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected StackPanel.source > TextBlock">
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem Path.folderGlyph">
+    <Setter Property="Fill" Value="#E8B94A" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem Path.fileGlyph">
+    <Setter Property="Fill" Value="#C8C8C8" />
+  </Style>
+
+  <!-- How many files share an icon, on an accent-coloured badge in the icon's corner. -->
+  <Style Selector="ListBox.items > ListBoxItem Border.badge">
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem Border.badge > TextBlock">
+    <Setter Property="Foreground" Value="#CCFFFFFF" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontWeight" Value="Light" />
+    <Setter Property="Padding" Value="6,1" />
+  </Style>
+
+  <!-- The 5-wide divider between the history and the actions. -->
   <Style Selector="Border.historyPane">
     <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
-    <Setter Property="BorderThickness" Value="0,0,6,0" />
+    <Setter Property="BorderThickness" Value="0,0,5,0" />
     <Setter Property="VerticalAlignment" Value="Top" />
   </Style>
   <!-- Without a compositor, nothing below a short history may be left unpainted (it would show black). -->
   <Style Selector="Border.historyPane.fill">
     <Setter Property="VerticalAlignment" Value="Stretch" />
-    <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource WindowDarkBackgroundBrush}" />
   </Style>
 
-  <!-- Picker: actions -->
+  <!-- Actions: a 300-wide column of titles with descriptions, in the dark accent colour. -->
   <Style Selector="Border.actionsPane">
     <Setter Property="Background" Value="{DynamicResource ActionsBackgroundBrush}" />
     <Setter Property="BorderBrush" Value="{DynamicResource AccentDarkerBrush}" />
-    <Setter Property="BorderThickness" Value="1,0,1,1" />
+    <Setter Property="BorderThickness" Value="0,0,1,0" />
     <Setter Property="VerticalAlignment" Value="Top" />
   </Style>
   <!-- Without a compositor the window cannot be see-through, so the pane fills the column instead of leaving black. -->
@@ -142,11 +188,13 @@
     <Setter Property="Padding" Value="0" />
   </Style>
   <Style Selector="ListBox.actions > ListBoxItem">
-    <Setter Property="MinHeight" Value="64" />
-    <Setter Property="Padding" Value="8,8,14,10" />
+    <Setter Property="Padding" Value="7,5,7,7" />
     <Setter Property="VerticalContentAlignment" Value="Top" />
     <Setter Property="BorderBrush" Value="{DynamicResource AccentDarkerBrush}" />
     <Setter Property="BorderThickness" Value="0,0,0,1" />
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem:selected">
+    <Setter Property="BorderBrush" Value="{DynamicResource AccentDarkBrush}" />
   </Style>
   <Style Selector="ListBox.actions > ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="Background" Value="Transparent" />
@@ -165,15 +213,17 @@
   </Style>
   <Style Selector="ListBox.actions TextBlock.actionTitle">
     <Setter Property="Foreground" Value="White" />
-    <Setter Property="FontSize" Value="19" />
-    <Setter Property="FontWeight" Value="Light" />
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="FontWeight" Value="ExtraLight" />
   </Style>
   <Style Selector="ListBox.actions TextBlock.actionDescription">
-    <Setter Property="Foreground" Value="#DDFFFFFF" />
-    <Setter Property="FontSize" Value="12.5" />
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="Opacity" Value="0.8" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontWeight" Value="ExtraLight" />
   </Style>
 
-  <!-- The history is shaded while the actions pane has the keyboard. -->
+  <!-- The pane that does not have the keyboard is shaded towards its outer edge. -->
   <Style Selector="Rectangle.veil">
     <Setter Property="IsHitTestVisible" Value="False" />
     <Setter Property="Transitions">

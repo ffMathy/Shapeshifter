@@ -23,7 +23,7 @@ public sealed class ClipboardItem
     public DateTimeOffset CapturedAt { get; }
 
     /// <summary>The application the item was copied from, when known.</summary>
-    public ClipboardSource? Source { get; }
+    public ClipboardSource? Source { get; internal set; }
 
     /// <summary>Pinned items are persisted to disk, survive restarts and stay at the top of the history.</summary>
     public bool IsPinned { get; internal set; }

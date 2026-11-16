@@ -56,7 +56,7 @@ internal static class SampleArt
         return Render(canvas, width, height);
     }
 
-    /// <summary>A sunny green banner crossed by white stripes, standing in for a copied photo.</summary>
+    /// <summary>A sunny forest, standing in for a copied photo.</summary>
     public static byte[] Banner(int width, int height)
     {
         var canvas = new Canvas
@@ -98,17 +98,6 @@ internal static class SampleArt
                 Height = height,
                 Fill = new SolidColorBrush(Color.FromArgb(70, 40, 60, 20)),
                 [Canvas.LeftProperty] = x,
-            });
-        }
-
-        // Diagonal white stripes over the right two thirds, fading in from the left.
-        for (var x = -height; x < width; x += 34)
-        {
-            var opacity = Math.Clamp((x - (width * 0.1)) / (width * 0.4), 0, 1);
-            canvas.Children.Add(new Path
-            {
-                Data = Geometry.Parse($"M{x},{height} L{x + height},0 L{x + height + 9},0 L{x + 9},{height} Z"),
-                Fill = new SolidColorBrush(Color.FromArgb((byte)(235 * opacity), 255, 255, 255)),
             });
         }
 

@@ -1,4 +1,5 @@
 using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Platform;
 
 namespace Shapeshifter.Core.Tests.Clipboard;
 
@@ -89,6 +90,21 @@ public sealed class ClipboardHistoryTests
         Assert.Same(first, result);
         Assert.Equal(["a", "c", "b"], Texts(history));
         Assert.Equal(3, history.Count);
+    }
+
+    [Fact]
+    public void Add_DuplicateWithoutSource_TakesTheSourceOfTheNewCopy()
+    {
+        var history = new ClipboardHistory();
+        var item = history.Add(Text("a"), source: null, out _);
+        var first = new ClipboardSource("Browser", "Page – Browser", null);
+        var second = new ClipboardSource("Editor", "File – Editor", null);
+
+        history.Add(Text("a"), first, out var isNew);
+        history.Add(Text("a"), second, out _);
+
+        Assert.False(isNew);
+        Assert.Same(first, item.Source);
     }
 
     [Fact]

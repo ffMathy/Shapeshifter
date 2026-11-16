@@ -18,7 +18,7 @@ namespace Shapeshifter.Desktop.Services;
 /// </summary>
 internal sealed class PickerPresenter : IPickerPresenter
 {
-    private const double ItemHeight = 114;
+    private const double ItemHeight = 92;
 
     private readonly ICursorLocator cursorLocator;
     private readonly ILogger logger;

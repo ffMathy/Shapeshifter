@@ -36,10 +36,10 @@ public static class AccentPalette
     {
         ArgumentNullException.ThrowIfNull(application);
         accent = Color.FromRgb(accent.R, accent.G, accent.B);
-        var dark = Darken(accent, 0.72);
+        var dark = Darken(accent, 0.7);
         application.Resources["AccentBrush"] = new SolidColorBrush(accent);
         application.Resources["AccentDarkBrush"] = new SolidColorBrush(dark);
-        application.Resources["AccentDarkerBrush"] = new SolidColorBrush(Darken(accent, 0.55));
+        application.Resources["AccentDarkerBrush"] = new SolidColorBrush(Darken(accent, 0.6));
 
         // Slightly see-through, so the desktop shows faintly behind the actions as in the original design.
         application.Resources["ActionsBackgroundBrush"] = new SolidColorBrush(Color.FromArgb(0xF0, dark.R, dark.G, dark.B));
