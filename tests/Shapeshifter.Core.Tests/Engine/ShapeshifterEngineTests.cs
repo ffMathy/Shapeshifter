@@ -165,6 +165,30 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task EmptyHistory_ShowsAnEmptyPicker_ThenStillPastes()
+    {
+        await h.StartAsync();
+
+        h.Down(GestureKey.Modifier);
+        h.Tap(GestureKey.Trigger);
+        h.Tap(GestureKey.Trigger);
+        h.Up(GestureKey.Modifier);
+
+        var effects = await h.WaitForEffectsAsync(3);
+
+        Assert.Collection(
+            effects,
+            effect => Assert.IsType<ShowPicker>(effect),
+            effect => Assert.IsType<HidePicker>(effect),
+            effect => Assert.IsType<PasteCurrentClipboard>(effect));
+        var shown = h.Picker.Calls[0].State!;
+        Assert.Empty(shown.Items);
+        Assert.Empty(shown.Actions);
+        Assert.Equal(1, h.Paste.Count);
+        Assert.Empty(h.Backend.Written);
+    }
+
+    [Fact]
     public async Task QuickTap_PassesTheShutdownTokenToThePasteSimulator()
     {
         h.Seed("a");
@@ -536,19 +560,25 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task HoldingWithEmptyHistory_NeverShowsThePicker()
+    public async Task HoldingWithEmptyHistory_ShowsAnEmptyPicker()
     {
         await h.StartAsync();
 
         h.Down(GestureKey.Modifier);
         h.Tap(GestureKey.Trigger);
         h.Time.Advance(TimeSpan.FromSeconds(2));
+        await h.WaitForEffectsAsync(1);
         h.Up(GestureKey.Modifier);
 
-        var effects = await h.WaitForEffectsAsync(1);
+        var effects = await h.WaitForEffectsAsync(3);
 
-        Assert.IsType<PasteCurrentClipboard>(Assert.Single(effects));
-        Assert.Empty(h.Picker.Calls);
+        Assert.Collection(
+            effects,
+            effect => Assert.IsType<ShowPicker>(effect),
+            effect => Assert.IsType<HidePicker>(effect),
+            effect => Assert.IsType<PasteCurrentClipboard>(effect));
+        Assert.Equal(["Show", "Hide"], h.Picker.Calls.Select(call => call.Method));
+        Assert.Empty(h.Picker.Calls[0].State!.Items);
     }
 
     [Fact]

@@ -186,7 +186,15 @@ public sealed class PasteGestureStateMachinePropertyTests
 
     private static void AssertSelectionValid(PickerSelection selection, Dictionary<Guid, GestureItem> known, HashSet<Guid> deleted)
     {
-        Assert.NotEmpty(selection.ItemIds);
+        if (selection.IsEmpty)
+        {
+            // Only an empty history shows an empty picker; deleting the last item ends the gesture instead.
+            Assert.Empty(known);
+            Assert.Equal(0, selection.SelectedIndex);
+            Assert.Equal(PickerPane.Items, selection.Pane);
+            return;
+        }
+
         Assert.InRange(selection.SelectedIndex, 0, selection.ItemIds.Count - 1);
         Assert.Equal(selection.ItemIds.Count, selection.ItemIds.Distinct().Count());
         foreach (var id in selection.ItemIds)

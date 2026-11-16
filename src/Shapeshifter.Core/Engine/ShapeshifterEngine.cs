@@ -318,6 +318,11 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
 
     private PickerViewState CreateViewState(PickerSelection selection)
     {
+        if (selection.IsEmpty)
+        {
+            return new PickerViewState([], 0, [], 0, PickerPane.Items);
+        }
+
         lock (session)
         {
             var items = selection.ItemIds.Select(id => session[id].Item).ToArray();
