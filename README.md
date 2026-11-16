@@ -1,6 +1,7 @@
 # Shapeshifter
 
 [![CI](https://github.com/ffMathy/Shapeshifter/actions/workflows/ci.yml/badge.svg)](https://github.com/ffMathy/Shapeshifter/actions/workflows/ci.yml)
+[![Website](https://github.com/ffMathy/Shapeshifter/actions/workflows/website.yml/badge.svg)](https://github.com/ffMathy/Shapeshifter/actions/workflows/website.yml)
 [![Join the chat at https://gitter.im/ffMathy/Shapeshifter](https://badges.gitter.im/ffMathy/Shapeshifter.svg)](https://gitter.im/ffMathy/Shapeshifter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Financial Contributors on Open Collective](https://opencollective.com/shapeshifterclipboard/all/badge.svg?label=financial+contributors)](https://opencollective.com/shapeshifterclipboard)
 
@@ -96,6 +97,16 @@ SHAPESHIFTER_E2E=1 dotnet test --project tests/Shapeshifter.EndToEnd.Tests
 
 On macOS the terminal running the tests needs Accessibility access.
 
+### Website
+
+The website, [shapeshifter.app](https://shapeshifter.app), is the static site in `website/`: plain HTML, CSS and a little JavaScript, with no build step. The [Website workflow](.github/workflows/website.yml) deploys it to GitHub Pages whenever it, the screenshots or the app icons change on `master`. At build time the workflow copies `assets/screenshots` and the app icons into the site, renders each look's settings window and notification with the screenshot generator, checks that every local link and image exists (`scripts/check-website.py`) and deploys the result, so the site always shows the current app.
+
+To preview it locally (renders the settings and notification screenshots too when the .NET SDK is installed):
+
+```bash
+website/preview.sh    # then open http://localhost:8000
+```
+
 ### Project layout
 
 | Project | Purpose |
@@ -103,7 +114,7 @@ On macOS the terminal running the tests needs Accessibility access.
 | `src/Shapeshifter.Core` | Platform-independent logic: clipboard history, the paste gesture state machine, actions, persistence, settings. |
 | `src/Shapeshifter.Platform` | Operating system integration: global keyboard hook and paste simulation ([SharpHook](https://github.com/TolikPylypchuk/SharpHook)), X11 key grabs and clipboard notifications, autostart. |
 | `src/Shapeshifter.Desktop` | The Avalonia application: picker, notifications, settings, tray icon and clipboard access. |
-| `src/Shapeshifter.Website` | The ASP.NET Core website. |
+| `website/` | The static website, [shapeshifter.app](https://shapeshifter.app) (see [Website](#website)). |
 | `tests/` | Unit tests and the end-to-end suite. |
 
 See [docs/architecture.md](docs/architecture.md) for how the pieces fit together.
