@@ -279,14 +279,73 @@ public sealed class PasteGestureStateMachineTests
     }
 
     [Fact]
-    public void Tick_WithEmptyHistory_NeverShowsPicker()
+    public void Tick_WithEmptyHistory_ShowsAnEmptyPickerThatExplainsItself()
     {
+        // Issue #144: with nothing copied yet, holding the gesture explains how Shapeshifter works.
         var h = GestureHarness.WithItems(0);
         h.Start();
 
-        Assert.Empty(h.Advance(TimeSpan.FromSeconds(5)).Effects);
-        Assert.False(h.Machine.IsPickerVisible);
+        Assert.Empty(h.Advance(Delay - TimeSpan.FromMilliseconds(1)).Effects);
+        var selection = SingleShow(h.Advance(TimeSpan.FromMilliseconds(1)));
+
+        Assert.True(selection.IsEmpty);
+        Assert.Empty(selection.ItemIds);
+        Assert.True(h.Machine.IsPickerVisible);
+        Assert.Null(h.Machine.CurrentSelection);
     }
+
+    [Fact]
+    public void EmptyPicker_ReleasingTheModifier_HidesItAndPastesTheCurrentClipboard()
+    {
+        var h = GestureHarness.WithItems(0);
+        h.Start();
+        SingleShow(h.Advance(Delay));
+
+        var release = h.Up(GestureKey.Modifier);
+
+        Assert.Collection(release.Effects, e => Assert.IsType<HidePicker>(e), e => Assert.IsType<PasteCurrentClipboard>(e));
+        AssertIdle(h.Machine);
+    }
+
+    [Fact]
+    public void EmptyHistory_PressingVAgain_ShowsTheEmptyPickerRightAway_AndNavigationIsSwallowed()
+    {
+        var h = GestureHarness.WithItems(0);
+        h.Start();
+        h.Up(GestureKey.Trigger);
+
+        var again = h.Down(GestureKey.Trigger);
+        Assert.True(again.Suppress);
+        Assert.True(SingleShow(again).IsEmpty);
+        h.Up(GestureKey.Trigger);
+
+        foreach (var key in new[] { GestureKey.Up, GestureKey.Down, GestureKey.Left, GestureKey.Right, GestureKey.Delete })
+        {
+            var result = h.Down(key);
+            Assert.True(result.Suppress);
+            Assert.Empty(result.Effects);
+            h.Up(key);
+        }
+
+        var third = h.Down(GestureKey.Trigger);
+        Assert.True(third.Suppress);
+        Assert.Empty(third.Effects);
+        Assert.True(h.Machine.IsPickerVisible);
+    }
+
+    [Fact]
+    public void EmptyPicker_Escape_HidesItAndCancels()
+    {
+        var h = GestureHarness.WithItems(0);
+        h.Start();
+        SingleShow(h.Advance(Delay));
+
+        var escape = h.Down(GestureKey.Escape);
+
+        Assert.Collection(escape.Effects, e => Assert.IsType<HidePicker>(e), e => Assert.IsType<GestureCancelled>(e));
+        Assert.Empty(h.Up(GestureKey.Modifier).Effects);
+    }
+
 
     [Fact]
     public void ShowDelay_IsMeasuredFromTheFirstTriggerPress()
@@ -347,7 +406,7 @@ public sealed class PasteGestureStateMachineTests
     }
 
     [Fact]
-    public void ShowDelayZero_WithEmptyHistory_DoesNotShowPicker()
+    public void ShowDelayZero_WithEmptyHistory_ShowsTheEmptyPickerImmediately()
     {
         var h = GestureHarness.WithItems(0, showDelay: TimeSpan.Zero);
         h.Down(GestureKey.Modifier);
@@ -355,9 +414,8 @@ public sealed class PasteGestureStateMachineTests
         var result = h.Down(GestureKey.Trigger);
 
         Assert.True(result.Suppress);
-        Assert.Empty(result.Effects);
-        Assert.False(h.Machine.IsPickerVisible);
-        Assert.IsType<PasteCurrentClipboard>(Assert.Single(h.Up(GestureKey.Modifier).Effects));
+        Assert.True(SingleShow(result).IsEmpty);
+        Assert.Collection(h.Up(GestureKey.Modifier).Effects, e => Assert.IsType<HidePicker>(e), e => Assert.IsType<PasteCurrentClipboard>(e));
     }
 
     [Fact]
@@ -462,7 +520,7 @@ public sealed class PasteGestureStateMachineTests
     }
 
     [Fact]
-    public void ExtraTrigger_WithEmptyHistory_IsSuppressedWithoutEffects()
+    public void ExtraTrigger_WithEmptyHistory_ShowsTheEmptyPicker()
     {
         var h = GestureHarness.WithItems(0);
         h.Start();
@@ -470,9 +528,9 @@ public sealed class PasteGestureStateMachineTests
         var result = h.Press(GestureKey.Trigger);
 
         Assert.True(result.Suppress);
-        Assert.Empty(result.Effects);
-        Assert.False(h.Machine.IsPickerVisible);
-        Assert.IsType<PasteCurrentClipboard>(Assert.Single(h.Up(GestureKey.Modifier).Effects));
+        Assert.True(SingleShow(result).IsEmpty);
+        Assert.True(h.Machine.IsPickerVisible);
+        Assert.Collection(h.Up(GestureKey.Modifier).Effects, e => Assert.IsType<HidePicker>(e), e => Assert.IsType<PasteCurrentClipboard>(e));
     }
 
     [Fact]
@@ -949,9 +1007,9 @@ public sealed class PasteGestureStateMachineTests
         var h = GestureHarness.WithItems(0, defaultIndex: defaultIndex);
         h.Start();
         h.Press(GestureKey.Down);
-        h.Advance(TimeSpan.FromSeconds(1));
+        Assert.True(SingleShow(h.Advance(TimeSpan.FromSeconds(1))).IsEmpty);
 
-        Assert.IsType<PasteCurrentClipboard>(Assert.Single(h.Up(GestureKey.Modifier).Effects));
+        Assert.Collection(h.Up(GestureKey.Modifier).Effects, e => Assert.IsType<HidePicker>(e), e => Assert.IsType<PasteCurrentClipboard>(e));
     }
 
     [Fact]

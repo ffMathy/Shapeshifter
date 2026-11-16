@@ -27,7 +27,13 @@
     <!-- History, with the accent-coloured divider along its right side -->
     <Border Grid.Column="0" Classes="historyPane" Classes.fill="{Binding ActionsFillHeight}">
       <Panel>
-        <ListBox x:Name="ItemList" Classes="items" Focusable="False"
+        <!-- Nothing copied yet: explain how Shapeshifter works instead of showing an empty list -->
+        <StackPanel Classes="emptyState" IsVisible="{Binding IsEmpty}">
+          <TextBlock Classes="emptyTitle" Text="Nothing copied yet" />
+          <TextBlock Classes="emptyText" Text="{Binding EmptyHint}" />
+        </StackPanel>
+
+        <ListBox x:Name="ItemList" Classes="items" Focusable="False" IsVisible="{Binding HasItems}"
                  ItemsSource="{Binding Items}"
                  SelectedIndex="{Binding SelectedIndex}"
                  MaxHeight="{Binding MaxListHeight}"
@@ -110,6 +116,15 @@
                 <!-- An image is shown over the whole row, through tilted strips -->
                 <controls:StripedImage Classes="thumbnail" Source="{Binding Thumbnail}" Height="92" Margin="-1,-1,-1,0" VerticalAlignment="Top"
                                        IsVisible="{Binding IsImageLayout}" />
+
+                <!-- When it was copied, and a pin when it is pinned, in the bottom-right corner (over an image too) -->
+                <Border Classes="stamp">
+                  <StackPanel Orientation="Horizontal">
+                    <Path Classes="pin" Data="{x:Static vm:PickerItemViewModel.PinGlyph}" Stretch="Uniform" Width="9" Height="12"
+                          IsVisible="{Binding IsPinned}" />
+                    <TextBlock Text="{Binding CopiedAgo}" />
+                  </StackPanel>
+                </Border>
               </Panel>
             </DataTemplate>
           </ListBox.ItemTemplate>
@@ -126,7 +141,7 @@
     </Border>
 
     <!-- Actions of the selected item -->
-    <Border Grid.Column="1" Classes="actionsPane" Classes.fill="{Binding ActionsFillHeight}">
+    <Border Grid.Column="1" Classes="actionsPane" Classes.fill="{Binding ActionsFillHeight}" IsVisible="{Binding HasItems}">
       <Panel>
         <ListBox Classes="actions" Focusable="False"
                  ItemsSource="{Binding Actions}"

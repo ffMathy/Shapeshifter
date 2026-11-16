@@ -134,6 +134,7 @@ public sealed class ClipboardHistory
                     return existing;
                 }
 
+                existing.CapturedAt = DateTimeOffset.UtcNow;
                 items.Remove(existing);
                 items.Insert(PinnedCountLocked(), existing);
                 kind = HistoryChangeKind.Moved;

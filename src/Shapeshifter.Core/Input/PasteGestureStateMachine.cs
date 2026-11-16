@@ -12,8 +12,12 @@ public enum PickerPane
 public readonly record struct GestureItem(Guid Id, int ActionCount);
 
 /// <summary>What the picker should currently display.</summary>
+/// <remarks>With an empty history the picker is shown without items (<see cref="IsEmpty"/>), to explain how to use it.</remarks>
 public sealed record PickerSelection(IReadOnlyList<Guid> ItemIds, int SelectedIndex, int SelectedActionIndex, PickerPane Pane)
 {
+    public bool IsEmpty => ItemIds.Count == 0;
+
+    /// <summary>The selected item. Not available when <see cref="IsEmpty"/>.</summary>
     public Guid SelectedItemId => ItemIds[SelectedIndex];
 }
 
@@ -56,7 +60,10 @@ public readonly record struct GestureResult(bool Suppress, IReadOnlyList<Gesture
 /// <para>Hold the modifier (Ctrl, or Cmd on macOS) and press V:</para>
 /// <list type="bullet">
 /// <item>Releasing the modifier right away pastes the current clipboard, just like a normal paste.</item>
-/// <item>Keeping the modifier held for <see cref="ShowDelay"/> shows the picker with the history.</item>
+/// <item>
+/// Keeping the modifier held for <see cref="ShowDelay"/> shows the picker with the history. With nothing in the
+/// history yet, the picker is shown empty, so it can explain how to use it; releasing still pastes normally.
+/// </item>
 /// <item>Each further press of V (with the modifier still held) selects the next, older item and shows the picker.</item>
 /// <item>Up/Down move the selection, Right switches to the actions of the selected item, Left switches back.</item>
 /// <item>Delete removes the selected item; Escape cancels.</item>
@@ -136,7 +143,7 @@ public sealed class PasteGestureStateMachine
     /// <summary>Advances time; shows the picker once the modifier has been held long enough.</summary>
     public GestureResult Tick(TimeSpan now)
     {
-        if (!active || pickerVisible || items.Count == 0 || now - startedAt < ShowDelay)
+        if (!active || pickerVisible || now - startedAt < ShowDelay)
         {
             return GestureResult.PassThrough;
         }
@@ -223,7 +230,7 @@ public sealed class PasteGestureStateMachine
         {
             Begin(now);
             triggerDown = true;
-            if (ShowDelay <= TimeSpan.Zero && items.Count > 0)
+            if (ShowDelay <= TimeSpan.Zero)
             {
                 return new GestureResult(true, [ShowOrUpdate()]);
             }
@@ -240,7 +247,8 @@ public sealed class PasteGestureStateMachine
         triggerDown = true;
         if (items.Count == 0)
         {
-            return GestureResult.Swallow;
+            // Nothing to select: just make sure the (empty) picker explains itself.
+            return pickerVisible ? GestureResult.Swallow : new GestureResult(true, [ShowOrUpdate()]);
         }
 
         pane = PickerPane.Items;
