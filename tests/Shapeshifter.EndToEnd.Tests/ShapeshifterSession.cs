@@ -6,7 +6,11 @@ using SharpHook.Simulation;
 namespace Shapeshifter.EndToEnd.Tests;
 
 /// <summary>Snapshot of the diagnostics state file that Shapeshifter writes.</summary>
-internal sealed record AppState(int HistoryCount, IReadOnlyList<string> Previews, bool PickerVisible, int SelectedIndex, int EffectsProcessed);
+internal sealed record AppState(int HistoryCount, IReadOnlyList<string> Previews, bool PickerVisible, int SelectedIndex, int EffectsProcessed)
+{
+    /// <summary>The kind of each item (Text, Image, File, ...), in the same order as <see cref="Previews"/>.</summary>
+    public IReadOnlyList<string> Kinds { get; init; } = [];
+}
 
 /// <summary>
 /// One running Shapeshifter (with isolated settings and history) plus one target application, shared by the tests
@@ -107,6 +111,31 @@ public sealed class ShapeshifterSession : IAsyncLifetime
     /// <summary>Copies text marked as sensitive (as password managers do) without waiting for a capture.</summary>
     public async Task CopySecretAsync(string text) => await ExpectOkAsync($"copy-secret {Encode(text)}");
 
+    /// <summary>
+    /// Puts an image on the clipboard the way a real application does (Windows only; see the target's
+    /// <c>copy-image</c> command) and waits until Shapeshifter captured something that is not text.
+    /// </summary>
+    internal async Task<AppState> CopyImageAsync(string scenario)
+    {
+        await ExpectOkAsync($"copy-image {scenario}");
+        return await WaitForStateAsync(state => state.Kinds.Count > 0 && state.Kinds[0] != "Text", $"capture of the '{scenario}' image");
+    }
+
+    /// <summary>Deletes the temporary file of the <c>firefox</c> image scenario.</summary>
+    public async Task DeleteTemporaryImageAsync() => await ExpectOkAsync("delete-temp");
+
+    /// <summary>Every format on the clipboard, and the pixels of CF_DIB, CF_DIBV5 and PNG, keyed by format.</summary>
+    public async Task<IReadOnlyDictionary<string, string>> DescribeImageAsync()
+    {
+        var response = await target!.SendAsync("describe-image");
+        if (!response.StartsWith("IMAGE ", StringComparison.Ordinal))
+        {
+            throw new InvalidOperationException(response);
+        }
+
+        return response[6..].Split(';').Select(part => part.Split('=', 2)).ToDictionary(pair => pair[0], pair => pair[1]);
+    }
+
     /// <summary>Focuses the target's text box and clears it.</summary>
     public async Task PrepareTargetAsync()
     {
@@ -166,7 +195,10 @@ public sealed class ShapeshifterSession : IAsyncLifetime
                     root.GetProperty("items").EnumerateArray().Select(item => item.GetProperty("preview").GetString() ?? string.Empty).ToArray(),
                     root.GetProperty("pickerVisible").GetBoolean(),
                     root.GetProperty("selectedIndex").GetInt32(),
-                    root.GetProperty("effectsProcessed").GetInt32());
+                    root.GetProperty("effectsProcessed").GetInt32())
+                {
+                    Kinds = root.GetProperty("items").EnumerateArray().Select(item => item.GetProperty("kind").GetString() ?? string.Empty).ToArray(),
+                };
             }
             catch (Exception exception) when ((exception is IOException or JsonException or KeyNotFoundException) && attempt < 50)
             {
