@@ -659,4 +659,23 @@
     <Setter Property="MaxLines" Value="3" />
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
   </Style>
+
+  <!-- ============================================================================================================
+       On the system's material (NativeMaterial, Windows 11): the window is the flyout, with Acrylic behind it and
+       DWM's rounded corners (8, as the flyout) and shadow, so the flyout loses its margin and drawn shadow and lets the
+       Acrylic through. The settings window on Mica ("mica") shows it around its cards, as the Settings app does.
+       ============================================================================================================ -->
+  <Style Selector="Border.chrome.nativeMaterial">
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="BoxShadow" Value="0 0 0 0 Transparent" />
+    <Setter Property="Background" Value="#80F9F9F9" />
+  </Style>
+  <Style Selector="Border.toastChrome.nativeMaterial">
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="BoxShadow" Value="0 0 0 0 Transparent" />
+    <Setter Property="Background" Value="#99FAFAFA" />
+  </Style>
+  <Style Selector="Window.settings.mica">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
 </Styles>

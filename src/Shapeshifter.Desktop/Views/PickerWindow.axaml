@@ -21,7 +21,7 @@
     the selected item side by side, and a footer with the keys. "chrome.opaque" is set when the window cannot be
     see-through (no compositor): the panel then has to fill the window, without rounded corners or a shadow.
   -->
-  <Border Classes="chrome" Classes.opaque="{Binding IsOpaque}">
+  <Border x:Name="Chrome" Classes="chrome" Classes.opaque="{Binding IsOpaque}">
     <Border Classes="surface">
       <Grid RowDefinitions="Auto,Auto,Auto">
         <!-- Header: the app's icon and name, how many items there are, and how to paste -->

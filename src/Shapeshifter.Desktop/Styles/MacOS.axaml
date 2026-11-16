@@ -9,10 +9,12 @@
     desktop, and the system accent (Prism Indigo #3A5CF0 by default), which AccentPalette provides as AccentBrush,
     AccentTextBrush (the accent, darkened where needed so white text on it reads at 4.5:1) and AccentSoftBrush.
 
-    The glass: Avalonia's macOS blur fills the whole (rectangular) window, shadow margin included, so the picker does
-    not ask for it. Confirmed on macOS 26 by the macOS screenshots workflow (picker-blur-experiment.png): the blur is
-    granted, but as a grey box around the rounded sheet. Its panel is a near-opaque white instead (90 % at the top, 82 % at the bottom), which keeps text
-    readable over any desktop while still letting a hint of it through; the edges carry the 1 px specular highlight.
+    The glass: the picker and the notification sit on the system's own frosted material (NativeMaterial and
+    MacWindowMaterial: an always-active popover material, or Liquid Glass, behind the sheet, with the system shadow),
+    so on macOS they have the "nativeMaterial" class at the end of this file: no margin, no drawn shadow, a light tint.
+    Avalonia's own AcrylicBlur is not used: it frosts the whole rectangular window as a flat grey box (seen on macOS 26
+    with the live screenshots workflow). Where the material cannot be had, the sheet below is a near-opaque white
+    (90 % at the top, 82 % at the bottom) with a drawn shadow; the edges carry the 1 px specular highlight.
   -->
   <Styles.Resources>
     <!-- Where the copy notification appears (CopyNotifier): BottomRight, TopRight or BottomCenter. -->
@@ -26,7 +28,7 @@
     <SolidColorBrush x:Key="AccentSoftBrush" Color="#243A5CF0" />
     <!--
       The system font (SF Pro) is not installed under its own name: macOS only exposes it as ".AppleSystemUIFont"
-      (on a macOS 26 runner, "SF Pro Text, SF Pro" resolved to Helvetica Neue; see the macOS screenshots workflow).
+      (on a macOS 26 runner, "SF Pro Text, SF Pro" resolved to Helvetica Neue; see the live screenshots workflow).
     -->
     <FontFamily x:Key="MacFont">.AppleSystemUIFont, SF Pro Text, SF Pro, $Default, Helvetica Neue</FontFamily>
   </Styles.Resources>
@@ -789,5 +791,30 @@
     <Setter Property="Foreground" Value="#3A3A40" />
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
     <Setter Property="MaxLines" Value="1" />
+  </Style>
+
+  <!-- ============================================================================================================
+       On the system's material (NativeMaterial): the window is the sheet, macOS frosts what is behind it and draws
+       the shadow, so the sheet loses its margin and drawn shadow and only lightens the frost a little.
+       ============================================================================================================ -->
+  <Style Selector="Border.chrome.nativeMaterial">
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="BoxShadow" Value="inset 0 1 0 0 #FFFFFFFF, inset 0 -1 0 0 #59FFFFFF" />
+    <Setter Property="Background">
+      <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+        <GradientStop Offset="0" Color="#66FFFFFF" />
+        <GradientStop Offset="1" Color="#40FBFBFD" />
+      </LinearGradientBrush>
+    </Setter>
+  </Style>
+  <Style Selector="Border.toastChrome.nativeMaterial">
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="BoxShadow" Value="inset 0 1 0 0 #FFFFFFFF" />
+    <Setter Property="Background">
+      <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+        <GradientStop Offset="0" Color="#73FFFFFF" />
+        <GradientStop Offset="1" Color="#4DFBFBFD" />
+      </LinearGradientBrush>
+    </Setter>
   </Style>
 </Styles>

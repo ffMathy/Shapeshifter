@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Shapeshifter.Desktop.Services;
 
 namespace Shapeshifter.Desktop.Views;
 
@@ -7,6 +8,7 @@ public partial class ToastWindow : Window
     public ToastWindow()
     {
         InitializeComponent();
+        NativeMaterial.Prepare(this, Chrome);
 
         // As the picker's "chrome.opaque": without a compositor the toast has to fill its window.
         Opened += (_, _) => Chrome.Classes.Set("opaque", ActualTransparencyLevel == WindowTransparencyLevel.None);

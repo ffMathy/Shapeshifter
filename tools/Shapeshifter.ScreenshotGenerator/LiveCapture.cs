@@ -7,6 +7,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using Serilog;
 using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Engine;
@@ -23,10 +24,12 @@ namespace Shapeshifter.ScreenshotGenerator;
 /// system fonts and the system accent colour, none of which the headless renderer has), and captures the screen.
 /// </summary>
 /// <remarks>
-/// Run on a desktop session, such as a macOS GitHub Actions runner (<c>.github/workflows/macos-screenshots.yml</c>):
+/// Run on a desktop session, such as a macOS or Windows GitHub Actions runner (<c>.github/workflows/live-screenshots.yml</c>):
 /// <c>dotnet run --project tools/Shapeshifter.ScreenshotGenerator -- &lt;output-folder&gt; --live</c>. The picker and the
 /// copy notification are shown by the app's own <see cref="PickerPresenter"/> and <see cref="CopyNotifier"/>, so their
-/// placement is captured too. <c>picker-blur-experiment.png</c> shows the picker asking for the system's blur. Captures use <c>screencapture</c> on macOS and <c>import</c> (ImageMagick) elsewhere.
+/// placement is captured too. Set <c>SHAPESHIFTER_NATIVE_MATERIAL</c> (see <see cref="NativeMaterial"/>) to capture the
+/// windows without the system's material, or with Liquid Glass on macOS. Captures use <c>screencapture</c> on macOS,
+/// PowerShell on Windows and <c>import</c> (ImageMagick) elsewhere.
 /// <c>diagnostics.txt</c> records what was resolved at run time: the transparency level, the fonts, the accent colour
 /// and the screen.
 /// </remarks>
@@ -144,17 +147,6 @@ internal static class LiveCapture
         await Task.Delay(Settle).ConfigureAwait(true);
         await CaptureAsync("picker-actions").ConfigureAwait(true);
 
-        // An experiment for deciding the material: the same picker asking the system for a blur behind it. On macOS
-        // this shows whether the blur fills the whole (rectangular) window, shadow margin included, or follows the sheet.
-        await presenter.UpdateAsync(new PickerViewState(items, 0, actions, 0, PickerPane.Items)).ConfigureAwait(true);
-        if (FindWindow<PickerWindow>() is { } picker)
-        {
-            picker.TransparencyLevelHint = [WindowTransparencyLevel.AcrylicBlur, WindowTransparencyLevel.Blur, WindowTransparencyLevel.Transparent];
-            await Task.Delay(Settle).ConfigureAwait(true);
-            DescribeOpenWindows("Picker with blur (experiment)");
-            await CaptureAsync("picker-blur-experiment").ConfigureAwait(true);
-        }
-
         await presenter.HideAsync().ConfigureAwait(true);
 
         var settings = Program.CreateSettingsWindow();
@@ -201,9 +193,6 @@ internal static class LiveCapture
         };
     }
 
-    private static T? FindWindow<T>()
-        where T : Window => (Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Windows.OfType<T>().FirstOrDefault();
-
     private static void DescribeOpenWindows(string label)
     {
         if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
@@ -219,15 +208,19 @@ internal static class LiveCapture
                 : "(not resolved)";
             Note(label, $"{window.GetType().Name}: position {window.Position}, size {window.Bounds.Size}, " +
                 $"transparency {window.ActualTransparencyLevel} (asked {string.Join(", ", window.TransparencyLevelHint)}), " +
-                $"font \"{font}\" resolves to \"{resolved}\"");
+                $"font \"{font}\" resolves to \"{resolved}\", " +
+                $"system material {(UsesNativeMaterial(window) ? "on" : "off")}");
         }
     }
+
+    private static bool UsesNativeMaterial(Window window) =>
+        window.GetVisualDescendants().OfType<Border>().Any(border => border.Classes.Contains(NativeMaterial.ClassName));
 
     private static async Task CaptureAsync(string name)
     {
         var path = Path.Combine(output, name + ".png");
-        var (tool, arguments) = OperatingSystem.IsMacOS()
-            ? ("screencapture", new[] { "-x", path })
+        var (tool, arguments) = OperatingSystem.IsMacOS() ? ("screencapture", new[] { "-x", path })
+            : OperatingSystem.IsWindows() ? ("powershell", new[] { "-NoProfile", "-NonInteractive", "-Command", WindowsCapture(path) })
             : ("import", new[] { "-window", "root", path });
         using var process = Process.Start(new ProcessStartInfo(tool, arguments) { RedirectStandardError = true })
             ?? throw new InvalidOperationException($"Could not start {tool}.");
@@ -240,6 +233,15 @@ internal static class LiveCapture
 
         Note("Captured", path);
     }
+
+    /// <summary>A PowerShell command that saves the whole virtual screen (all monitors) as a PNG.</summary>
+    private static string WindowsCapture(string path) =>
+        "Add-Type -AssemblyName System.Windows.Forms, System.Drawing; " +
+        "$b = [System.Windows.Forms.SystemInformation]::VirtualScreen; " +
+        "$bmp = New-Object System.Drawing.Bitmap $b.Width, $b.Height; " +
+        "$g = [System.Drawing.Graphics]::FromImage($bmp); " +
+        "$g.CopyFromScreen($b.Left, $b.Top, 0, 0, $bmp.Size); " +
+        $"$bmp.Save('{path.Replace("'", "''", StringComparison.Ordinal)}', [System.Drawing.Imaging.ImageFormat]::Png)";
 
     private static void Note(string label, string text)
     {
