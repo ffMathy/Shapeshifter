@@ -1,13 +1,651 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <!-- Placeholder: the Windows look is written next. -->
+  <!--
+    "Mica Sheets": the Windows 11 look (Fluent 2). The picker is an Acrylic flyout like the shell's own (the emoji
+    panel, the clipboard history of Win+V): a light, slightly see-through layer with an 8 px radius, a 1 px stroke and
+    the flyout shadow. The accent marks only what is about to happen: a 3 × 16 pill beside the selected item of the
+    pane that has the keyboard, and the icon of the chosen action. Everything else is the neutral Fluent palette:
+
+      Text #1A1A1A, Text 2 #5D5D5D, Mica #F3F3F3, Layer #FFFFFF, strokes black at 6–12 %,
+      subtle fills black at 3.5–6 %, Segoe UI Variable (Inter where it is missing).
+
+    The settings window is the Settings app: a 28 px title and white cards on Mica; the copy notification is a
+    Windows notification card.
+  -->
   <Styles.Resources>
     <x:String x:Key="PickerTitle">Clipboard history</x:String>
-    <x:Double x:Key="PickerRowHeight">58</x:Double>
+    <!-- A row is 60 high with a 2 gap below it (the presenter fits whole rows of this height). -->
+    <x:Double x:Key="PickerRowHeight">62</x:Double>
     <x:String x:Key="LookDefaultAccent">#0067C0</x:String>
+    <FontFamily x:Key="WindowsLookFont">Segoe UI Variable Text, Segoe UI, Inter</FontFamily>
+
+    <!-- Only used where the operating system reports no accent colour; AccentPalette replaces them otherwise. -->
     <SolidColorBrush x:Key="AccentBrush" Color="#0067C0" />
+    <SolidColorBrush x:Key="AccentTextBrush" Color="#0067C0" />
+    <Color x:Key="AccentColor">#0067C0</Color>
   </Styles.Resources>
-  <Style Selector="Border.surface"><Setter Property="Background" Value="White" /><Setter Property="CornerRadius" Value="8" /></Style>
-  <Style Selector="ListBox.items"><Setter Property="Width" Value="420" /></Style>
-  <Style Selector="Border.actionsPane"><Setter Property="Width" Value="280" /></Style>
+
+  <!-- ============================================================== Windows -->
+
+  <Style Selector="Window.picker">
+    <Setter Property="FontFamily" Value="{StaticResource WindowsLookFont}" />
+    <!-- Acrylic where the compositor offers it; the surface is near-opaque, so plain transparency reads well too. -->
+    <Setter Property="TransparencyLevelHint" Value="AcrylicBlur, Transparent" />
+  </Style>
+  <Style Selector="Window.settings">
+    <Setter Property="FontFamily" Value="{StaticResource WindowsLookFont}" />
+    <Setter Property="Background" Value="#F3F3F3" />
+    <Setter Property="Width" Value="660" />
+  </Style>
+  <Style Selector="Window.toast">
+    <Setter Property="FontFamily" Value="{StaticResource WindowsLookFont}" />
+    <!-- The card (364) and the room for its shadow. -->
+    <Setter Property="Width" Value="396" />
+  </Style>
+
+  <!-- ============================================================== Picker: the flyout -->
+
+  <!-- The flyout, with room around it for its shadow (the window sizes to its content). -->
+  <Style Selector="Border.chrome">
+    <Setter Property="Margin" Value="32,16,32,48" />
+    <Setter Property="Background" Value="#F2F7F7F7" />
+    <Setter Property="BorderBrush" Value="#1A000000" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="BoxShadow" Value="0 16 32 0 #2E000000, 0 2 8 0 #14000000" />
+  </Style>
+  <!-- No compositor: the flyout fills the window, square and fully opaque. -->
+  <Style Selector="Border.chrome.opaque">
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="Background" Value="#F3F3F3" />
+    <Setter Property="BorderBrush" Value="#C4C4C4" />
+    <Setter Property="CornerRadius" Value="0" />
+    <Setter Property="BoxShadow" Value="0 0 0 0 Transparent" />
+  </Style>
+  <Style Selector="Border.surface">
+    <Setter Property="CornerRadius" Value="7" />
+    <Setter Property="ClipToBounds" Value="True" />
+  </Style>
+  <Style Selector="Border.chrome.opaque > Border.surface">
+    <Setter Property="CornerRadius" Value="0" />
+  </Style>
+
+  <!-- Header: icon, "Clipboard history" and the count on the right. -->
+  <Style Selector="Border.header">
+    <Setter Property="Height" Value="44" />
+    <Setter Property="Padding" Value="16,0" />
+    <Setter Property="BorderBrush" Value="#0F000000" />
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+  </Style>
+  <Style Selector="Image.appIcon">
+    <Setter Property="Width" Value="16" />
+    <Setter Property="Height" Value="16" />
+    <Setter Property="Margin" Value="0,0,10,0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBlock.headerTitle">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <!-- The count sits on the right: it spans the free column (the hint, after it, is hidden). -->
+  <Style Selector="Border.countPill">
+    <Setter Property="Grid.ColumnSpan" Value="3" />
+    <Setter Property="HorizontalAlignment" Value="Right" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBlock.headerCount">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Foreground" Value="#5D5D5D" />
+  </Style>
+  <Style Selector="TextBlock.headerHint">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+
+  <!-- ============================================================== Picker: history -->
+
+  <Style Selector="Border.historyPane">
+    <Setter Property="Padding" Value="4,4,4,2" />
+    <Setter Property="VerticalAlignment" Value="Top" />
+  </Style>
+  <Style Selector="ListBox.items">
+    <Setter Property="Width" Value="432" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem">
+    <Setter Property="Height" Value="60" />
+    <Setter Property="Margin" Value="0,0,0,2" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <!-- Only the design shows: a subtle fill on hover and on the selected row, never the theme's accent fill. -->
+  <Style Selector="ListBox.items > ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="CornerRadius" Value="4" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#09000000" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#06000000" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#0F000000" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#0F000000" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected:focus /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#0F000000" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#0F000000" />
+  </Style>
+  <!-- While the actions have the keyboard, the chosen item keeps a lighter fill. -->
+  <Style Selector="Border.historyPane.inactive ListBox.items > ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#08000000" />
+  </Style>
+
+  <Style Selector="Grid.row">
+    <Setter Property="Margin" Value="0,0,12,0" />
+  </Style>
+  <Style Selector="Border.selectionMark">
+    <Setter Property="Width" Value="3" />
+    <Setter Property="Height" Value="16" />
+    <Setter Property="CornerRadius" Value="1.5" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected Border.selectionMark">
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+  </Style>
+  <Style Selector="Border.historyPane.inactive ListBox.items > ListBoxItem:selected Border.selectionMark">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+
+  <!-- The tile: a 40 × 40 card with a line icon, file icons or the image itself. -->
+  <Style Selector="Border.tile">
+    <Setter Property="Width" Value="40" />
+    <Setter Property="Height" Value="40" />
+    <Setter Property="Margin" Value="9,0,0,0" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="Background" Value="#FFFFFF" />
+    <Setter Property="BorderBrush" Value="#14000000" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="ClipToBounds" Value="True" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Path.glyph">
+    <Setter Property="Width" Value="20" />
+    <Setter Property="Height" Value="20" />
+    <Setter Property="Stroke" Value="#1A1A1A" />
+    <Setter Property="StrokeThickness" Value="1.3" />
+    <Setter Property="StrokeLineCap" Value="Round" />
+    <Setter Property="StrokeJoin" Value="Round" />
+    <Setter Property="Fill" Value="Transparent" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Image.fileIcon">
+    <Setter Property="Width" Value="28" />
+    <Setter Property="Height" Value="28" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ItemsControl.filePreviews">
+    <Setter Property="Margin" Value="3" />
+  </Style>
+  <Style Selector="Panel.filePreview">
+    <Setter Property="Width" Value="14" />
+    <Setter Property="Height" Value="14" />
+    <Setter Property="Margin" Value="1" />
+  </Style>
+  <Style Selector="Panel.filePreview > Path">
+    <Setter Property="Stroke" Value="#5D5D5D" />
+    <Setter Property="StrokeThickness" Value="1" />
+    <Setter Property="StrokeJoin" Value="Round" />
+    <Setter Property="Fill" Value="Transparent" />
+  </Style>
+  <!-- An image fills its tile, inside the tile's stroke. -->
+  <Style Selector="Border.thumbnail">
+    <Setter Property="CornerRadius" Value="3" />
+    <Setter Property="ClipToBounds" Value="True" />
+  </Style>
+
+  <!-- The content: one or two lines, and where it came from. -->
+  <Style Selector="StackPanel.text">
+    <Setter Property="Margin" Value="12,0,0,0" />
+    <Setter Property="Spacing" Value="2" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBlock.title">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LineHeight" Value="19" />
+    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    <Setter Property="TextWrapping" Value="NoWrap" />
+  </Style>
+  <Style Selector="Grid.row.textItem TextBlock.title">
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="MaxLines" Value="2" />
+  </Style>
+  <Style Selector="StackPanel.source">
+    <Setter Property="Orientation" Value="Horizontal" />
+    <Setter Property="Spacing" Value="6" />
+  </Style>
+  <Style Selector="StackPanel.source > Image">
+    <Setter Property="Width" Value="12" />
+    <Setter Property="Height" Value="12" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="StackPanel.source > Path">
+    <Setter Property="Width" Value="12" />
+    <Setter Property="Height" Value="12" />
+    <Setter Property="Stroke" Value="#5D5D5D" />
+    <Setter Property="StrokeThickness" Value="1" />
+    <Setter Property="StrokeJoin" Value="Round" />
+    <Setter Property="Fill" Value="Transparent" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="StackPanel.source > TextBlock">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    <Setter Property="MaxWidth" Value="330" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
+  <Style Selector="StackPanel.pinned">
+    <Setter Property="Orientation" Value="Horizontal" />
+    <Setter Property="Spacing" Value="4" />
+    <Setter Property="Margin" Value="8,0,0,0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="StackPanel.pinned > Path">
+    <Setter Property="Width" Value="12" />
+    <Setter Property="Height" Value="12" />
+    <Setter Property="Stroke" Value="#5D5D5D" />
+    <Setter Property="StrokeThickness" Value="1" />
+    <Setter Property="StrokeJoin" Value="Round" />
+    <Setter Property="StrokeLineCap" Value="Round" />
+    <Setter Property="Fill" Value="Transparent" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="StackPanel.pinned > TextBlock">
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
+  <!-- ============================================================== Picker: actions -->
+
+  <Style Selector="Border.actionsPane">
+    <Setter Property="Width" Value="300" />
+    <Setter Property="Padding" Value="4" />
+    <Setter Property="Background" Value="#8CFFFFFF" />
+    <Setter Property="BorderBrush" Value="#12000000" />
+    <Setter Property="BorderThickness" Value="1,0,0,0" />
+  </Style>
+  <Style Selector="Border.chrome.opaque Border.actionsPane">
+    <Setter Property="Background" Value="#F9F9F9" />
+  </Style>
+  <Style Selector="TextBlock.actionsHeader">
+    <Setter Property="Margin" Value="12,9,12,7" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="#5D5D5D" />
+  </Style>
+  <Style Selector="ListBox.actions">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+  </Style>
+  <!-- An action is a rounded row with room for the pill that shows the keyboard is here. -->
+  <Style Selector="ListBox.actions > ListBoxItem">
+    <Setter Property="Margin" Value="0,0,0,2" />
+    <Setter Property="Padding" Value="12,9,12,10" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Padding="{TemplateBinding Padding}"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+          <Border Name="ActionMark" Width="3" Height="16" CornerRadius="1.5" Margin="0,11,0,0"
+                  HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#09000000" />
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#06000000" />
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#09000000" />
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#09000000" />
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem:selected:focus /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#09000000" />
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem:selected:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#09000000" />
+  </Style>
+  <!-- With the keyboard here, the chosen action gets the history's fill and the accent pill. -->
+  <Style Selector="Border.actionsPane:not(.inactive) ListBox.actions > ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#0F000000" />
+  </Style>
+  <Style Selector="Border.actionsPane:not(.inactive) ListBox.actions > ListBoxItem:selected /template/ Border#ActionMark">
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+  </Style>
+
+  <Style Selector="Path.actionGlyph">
+    <Setter Property="Width" Value="16" />
+    <Setter Property="Height" Value="16" />
+    <Setter Property="Margin" Value="0,2,12,0" />
+    <Setter Property="VerticalAlignment" Value="Top" />
+    <Setter Property="Stroke" Value="#3B3B3B" />
+    <Setter Property="StrokeThickness" Value="1.2" />
+    <Setter Property="StrokeLineCap" Value="Round" />
+    <Setter Property="StrokeJoin" Value="Round" />
+    <Setter Property="Fill" Value="Transparent" />
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem:selected Path.actionGlyph">
+    <Setter Property="Stroke" Value="{DynamicResource AccentTextBrush}" />
+  </Style>
+  <Style Selector="TextBlock.actionTitle">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LineHeight" Value="20" />
+    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem:selected TextBlock.actionTitle">
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+  <Style Selector="TextBlock.actionDescription">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="LineHeight" Value="16" />
+    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="Margin" Value="0,1,0,0" />
+  </Style>
+  <Style Selector="Border.defaultBadge">
+    <Setter Property="VerticalAlignment" Value="Top" />
+    <Setter Property="Margin" Value="8,3,0,0" />
+  </Style>
+  <Style Selector="Border.defaultBadge > TextBlock">
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Foreground" Value="#5D5D5D" />
+  </Style>
+
+  <!-- ============================================================== Picker: footer -->
+
+  <Style Selector="Border.footer">
+    <Setter Property="MinHeight" Value="40" />
+    <Setter Property="Padding" Value="16,8" />
+    <Setter Property="Background" Value="#8CEEEEEE" />
+    <Setter Property="BorderBrush" Value="#0F000000" />
+    <Setter Property="BorderThickness" Value="0,1,0,0" />
+  </Style>
+  <Style Selector="Border.chrome.opaque Border.footer">
+    <Setter Property="Background" Value="#EEEEEE" />
+  </Style>
+  <Style Selector="WrapPanel.hints">
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="StackPanel.hint">
+    <Setter Property="Orientation" Value="Horizontal" />
+    <Setter Property="Spacing" Value="6" />
+    <Setter Property="Margin" Value="0,2,18,2" />
+  </Style>
+  <Style Selector="StackPanel.hint > TextBlock">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Border.key">
+    <Setter Property="Padding" Value="6,1,6,1" />
+    <Setter Property="MinWidth" Value="22" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="Background" Value="#FFFFFF" />
+    <Setter Property="BorderBrush" Value="#29000000" />
+    <Setter Property="BorderThickness" Value="1,1,1,2" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Border.key > TextBlock">
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+  </Style>
+
+  <!-- ============================================================== Settings: the Settings app -->
+
+  <Style Selector="StackPanel.page">
+    <Setter Property="Margin" Value="28,24,28,28" />
+  </Style>
+  <Style Selector="Grid.hero">
+    <Setter Property="Margin" Value="0,0,0,4" />
+  </Style>
+  <Style Selector="Image.heroIcon">
+    <Setter Property="Width" Value="48" />
+    <Setter Property="Height" Value="48" />
+    <Setter Property="Margin" Value="0,0,16,0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="StackPanel.heroText">
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBlock.heroTitle">
+    <Setter Property="FontSize" Value="28" />
+    <Setter Property="LineHeight" Value="36" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="#1A1A1A" />
+  </Style>
+  <Style Selector="TextBlock.heroVersion">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Foreground" Value="#5D5D5D" />
+  </Style>
+  <Style Selector="TextBlock.usage">
+    <Setter Property="Margin" Value="0,16,0,0" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LineHeight" Value="20" />
+    <Setter Property="Foreground" Value="#3B3B3B" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <!-- An InfoBar of the "caution" severity. -->
+  <Style Selector="Border.warning">
+    <Setter Property="Margin" Value="0,16,0,0" />
+    <Setter Property="Padding" Value="16,12" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="Background" Value="#FFF4CE" />
+    <Setter Property="BorderBrush" Value="#0F000000" />
+    <Setter Property="BorderThickness" Value="1" />
+  </Style>
+  <Style Selector="Border.warning > TextBlock">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LineHeight" Value="20" />
+    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="TextBlock.groupHeader">
+    <Setter Property="Margin" Value="1,28,0,8" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="#1A1A1A" />
+  </Style>
+  <Style Selector="Border.group">
+    <Setter Property="Background" Value="#FFFFFF" />
+    <Setter Property="BorderBrush" Value="#0F000000" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="4" />
+  </Style>
+  <Style Selector="Grid.settingRow">
+    <Setter Property="MinHeight" Value="44" />
+    <Setter Property="Margin" Value="16,11,16,11" />
+  </Style>
+  <Style Selector="Path.rowIcon">
+    <Setter Property="Width" Value="20" />
+    <Setter Property="Height" Value="20" />
+    <Setter Property="Margin" Value="0,0,16,0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Stroke" Value="#1A1A1A" />
+    <Setter Property="StrokeThickness" Value="1.2" />
+    <Setter Property="StrokeLineCap" Value="Round" />
+    <Setter Property="StrokeJoin" Value="Round" />
+    <Setter Property="Fill" Value="Transparent" />
+  </Style>
+  <Style Selector="StackPanel.rowText">
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Spacing" Value="1" />
+  </Style>
+  <Style Selector="TextBlock.rowTitle">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LineHeight" Value="20" />
+    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="TextBlock.rowDescription">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="LineHeight" Value="16" />
+    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="Border.rowDivider">
+    <Setter Property="Height" Value="1" />
+    <Setter Property="Background" Value="#0F000000" />
+  </Style>
+  <Style Selector=":is(Control).rowControl">
+    <Setter Property="Margin" Value="16,0,0,0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
+  <!-- Fluent number box: white field, hairline stroke, accent underline when focused. -->
+  <Style Selector="NumericUpDown.rowControl">
+    <Setter Property="Width" Value="140" />
+    <Setter Property="MinHeight" Value="32" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="Background" Value="#FFFFFF" />
+    <Setter Property="BorderBrush" Value="#0F000000" />
+    <Setter Property="CornerRadius" Value="4" />
+  </Style>
+  <!-- Compact, borderless spin buttons inside the field, as in the NumberBox. -->
+  <Style Selector="NumericUpDown.rowControl /template/ ButtonSpinner /template/ RepeatButton">
+    <Setter Property="MinWidth" Value="28" />
+    <Setter Property="Width" Value="28" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Margin" Value="0,4,2,4" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="#5D5D5D" />
+  </Style>
+  <Style Selector="NumericUpDown.rowControl /template/ TextBox#PART_TextBox:focus /template/ Border#PART_BorderElement">
+    <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+  </Style>
+
+  <!-- Fluent toggle switch, in the accent. -->
+  <Style Selector="ToggleSwitch.rowControl">
+    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="FontSize" Value="14" />
+  </Style>
+  <Style Selector="ToggleSwitch.rowControl:checked /template/ Border#SwitchKnobBounds">
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+  </Style>
+  <Style Selector="ToggleSwitch.rowControl:checked:pointerover /template/ Border#SwitchKnobBounds">
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+  </Style>
+  <Style Selector="ToggleSwitch.rowControl:checked:pressed /template/ Border#SwitchKnobBounds">
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+  </Style>
+
+  <Style Selector="StackPanel.commands">
+    <Setter Property="Orientation" Value="Horizontal" />
+    <Setter Property="Spacing" Value="8" />
+    <Setter Property="Margin" Value="0,28,0,0" />
+  </Style>
+  <Style Selector="Button.command">
+    <Setter Property="MinHeight" Value="32" />
+    <Setter Property="Padding" Value="12,5,12,6" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="Background" Value="#FBFBFB" />
+    <Setter Property="BorderBrush" Value="#17000000" />
+    <Setter Property="BorderThickness" Value="1,1,1,1" />
+  </Style>
+  <Style Selector="Path.commandIcon">
+    <Setter Property="Width" Value="16" />
+    <Setter Property="Height" Value="16" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Stroke" Value="#1A1A1A" />
+    <Setter Property="StrokeThickness" Value="1.2" />
+    <Setter Property="StrokeLineCap" Value="Round" />
+    <Setter Property="StrokeJoin" Value="Round" />
+    <Setter Property="Fill" Value="Transparent" />
+  </Style>
+
+  <!-- ============================================================== Toast: a Windows notification -->
+
+  <Style Selector="Border.toastChrome">
+    <Setter Property="Margin" Value="16,8,16,24" />
+    <Setter Property="Padding" Value="16,12,16,16" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Background" Value="#FAFAFA" />
+    <Setter Property="BorderBrush" Value="#17000000" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BoxShadow" Value="0 8 16 0 #24000000" />
+  </Style>
+  <Style Selector="Image.toastIcon">
+    <Setter Property="Width" Value="16" />
+    <Setter Property="Height" Value="16" />
+    <Setter Property="Margin" Value="0,0,8,0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBlock.toastApp">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBlock.toastTitle">
+    <!-- Not indented under the app's name, as in Windows' own notifications. -->
+    <Setter Property="Margin" Value="-24,14,0,2" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LineHeight" Value="20" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+  </Style>
+  <Style Selector="TextBlock.toastPreview">
+    <Setter Property="Margin" Value="-24,0,0,0" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="LineHeight" Value="16" />
+    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="MaxLines" Value="3" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+  </Style>
 </Styles>
