@@ -25,6 +25,11 @@ namespace Shapeshifter.EndToEnd.TargetApp;
 /// </item>
 /// <item><c>delete-temp</c>: delete the temporary file of the <c>firefox</c> scenario, as Firefox does later.</item>
 /// <item><c>describe-image</c> (Windows): answers <c>IMAGE &lt;description&gt;</c>, see <see cref="WindowsClipboard.Describe"/>.</item>
+/// <item>
+/// With <c>--mirror &lt;file&gt;</c> the application takes no commands; it keeps its window in front, writes
+/// <c>&lt;file&gt;.ready</c> once it is shown and mirrors the text box to <c>&lt;file&gt;</c> on every change. This
+/// is how a test reads what arrives in a copy running inside a Remote Desktop session.
+/// </item>
 /// <item><c>focus</c>, <c>clear</c>, <c>get</c> (answers <c>TEXT &lt;text&gt;</c>), <c>formats</c> (answers <c>FORMATS a|b</c>), <c>quit</c>.</item>
 /// </list>
 /// </summary>
@@ -48,6 +53,14 @@ internal sealed class TargetApplication : Application
             Content = textBox,
         };
         lifetime.MainWindow = window;
+        var mirror = MirrorPath(lifetime.Args ?? []);
+        if (mirror is not null)
+        {
+            StartMirroring(mirror);
+            base.OnFrameworkInitializationCompleted();
+            return;
+        }
+
         window.Opened += (_, _) =>
         {
             Focus();
@@ -55,6 +68,37 @@ internal sealed class TargetApplication : Application
             new Thread(ReadCommands) { IsBackground = true }.Start();
         };
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private static string? MirrorPath(string[] args)
+    {
+        var index = Array.IndexOf(args, "--mirror");
+        return index >= 0 && index + 1 < args.Length ? args[index + 1] : null;
+    }
+
+    private void StartMirroring(string path)
+    {
+        window!.WindowState = WindowState.Maximized;
+        window.Topmost = true;
+        textBox!.TextChanged += (_, _) => File.WriteAllText(path, textBox.Text ?? string.Empty);
+        window.Opened += (_, _) =>
+        {
+            Focus();
+            File.WriteAllText(path, string.Empty);
+            File.WriteAllText(path + ".ready", Environment.UserName);
+        };
+
+        // Nothing else should take the focus in the remote session, but a freshly created profile can show
+        // first-logon windows, so take it back now and then.
+        var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+        timer.Tick += (_, _) =>
+        {
+            if (!window.IsActive)
+            {
+                Focus();
+            }
+        };
+        timer.Start();
     }
 
     private void ReadCommands()
