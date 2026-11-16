@@ -10,7 +10,8 @@
     AccentTextBrush (the accent, darkened where needed so white text on it reads at 4.5:1) and AccentSoftBrush.
 
     The glass: Avalonia's macOS blur fills the whole (rectangular) window, shadow margin included, so the picker does
-    not ask for it. Its panel is a near-opaque white instead (90 % at the top, 82 % at the bottom), which keeps text
+    not ask for it. Confirmed on macOS 26 by the macOS screenshots workflow (picker-blur-experiment.png): the blur is
+    granted, but as a grey box around the rounded sheet. Its panel is a near-opaque white instead (90 % at the top, 82 % at the bottom), which keeps text
     readable over any desktop while still letting a hint of it through; the edges carry the 1 px specular highlight.
   -->
   <Styles.Resources>
@@ -23,7 +24,11 @@
     <SolidColorBrush x:Key="AccentBrush" Color="#3A5CF0" />
     <SolidColorBrush x:Key="AccentTextBrush" Color="#3A5CF0" />
     <SolidColorBrush x:Key="AccentSoftBrush" Color="#243A5CF0" />
-    <FontFamily x:Key="MacFont">SF Pro Text, SF Pro, Helvetica Neue, $Default</FontFamily>
+    <!--
+      The system font (SF Pro) is not installed under its own name: macOS only exposes it as ".AppleSystemUIFont"
+      (on a macOS 26 runner, "SF Pro Text, SF Pro" resolved to Helvetica Neue; see the macOS screenshots workflow).
+    -->
+    <FontFamily x:Key="MacFont">.AppleSystemUIFont, SF Pro Text, SF Pro, $Default, Helvetica Neue</FontFamily>
   </Styles.Resources>
 
   <!-- ============================================================================================================

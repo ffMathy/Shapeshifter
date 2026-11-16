@@ -96,6 +96,14 @@ internal static class LiveCapture
         var colors = application.PlatformSettings?.GetColorValues();
         Note("System accent", colors is null ? "(none)" : colors.AccentColor1.ToString());
         Note("System theme", colors is null ? "(none)" : colors.ThemeVariant.ToString());
+        Note("Default font", $"\"{FontManager.Current.DefaultFontFamily}\"");
+        foreach (var family in new[] { ".AppleSystemUIFont", "SF Pro Text", "SF Pro", "Segoe UI Variable Text", "Adwaita Sans", "Cantarell" })
+        {
+            Note("Font lookup", FontManager.Current.TryGetGlyphTypeface(new Typeface(family), out var found)
+                ? $"\"{family}\" -> \"{found.FamilyName}\""
+                : $"\"{family}\" -> (not found)");
+        }
+
 
         // A document window behind the left half of the picker, so the capture shows the material over a busy
         // window as well as over the wallpaper.
