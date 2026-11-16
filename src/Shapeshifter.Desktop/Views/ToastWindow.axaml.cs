@@ -7,6 +7,9 @@ public partial class ToastWindow : Window
     public ToastWindow()
     {
         InitializeComponent();
+
+        // As the picker's "chrome.opaque": without a compositor the toast has to fill its window.
+        Opened += (_, _) => Chrome.Classes.Set("opaque", ActualTransparencyLevel == WindowTransparencyLevel.None);
     }
 
     public void SetContent(int count, string preview)

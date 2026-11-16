@@ -1,9 +1,10 @@
-// node render.js <svg-dir> <out-dir>: rasterizes the Linux look's icons with Chromium.
+// node render.js <svg-dir> <out-dir>: rasterizes the Linux look's icons with Chromium (the tray glyph at the 24 px
+// it is drawn for, so the panel does not resample a larger image into blur).
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 const [src, out] = process.argv.slice(2);
-const jobs = [['application.svg', 256, 'Application.png'], ['tray.svg', 32, 'Tray.png']];
+const jobs = [['application.svg', 256, 'Application.png'], ['tray.svg', 24, 'Tray.png']];
 (async () => {
   const browser = await chromium.launch();
   const page = await browser.newPage();

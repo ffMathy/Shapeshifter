@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
   <!-- Shapeshifter, GNOME app icon (Adwaita grid): a blue clipboard with a 4 px darker bottom edge, a grey clip,
        and a stack of sheets whose corners turn from square to round. -->
-  <rect x="18" y="20" width="92" height="102" rx="11" fill="#1A5FB4"/>
+  <rect x="18" y="20" width="92" height="100" rx="11" fill="#1A5FB4"/>
   <rect x="18" y="16" width="92" height="100" rx="11" fill="#3584E4"/>
   <clipPath id="board"><rect x="18" y="16" width="92" height="100" rx="11"/></clipPath>
   <rect x="18" y="16" width="92" height="3" fill="#62A0EA" clip-path="url(#board)"/>

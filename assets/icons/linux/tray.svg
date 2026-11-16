@@ -1,7 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-  <!-- Symbolic icon for the top bar / system tray, light (#F6F5F4) because status icons sit on dark panels
-       (GNOME's top bar, KDE's and most others by default). -->
-  <rect x="2.75" y="3.25" width="10.5" height="11.5" rx="2" fill="none" stroke="#F6F5F4" stroke-width="1.5"/>
-  <rect x="5" y="1" width="6" height="3.5" rx="1.25" fill="#F6F5F4"/>
-  <path d="M5.5 7 H9 A2 2 0 0 1 11 9 V12.5 H5.5 Z" fill="#F6F5F4"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <!-- Symbolic icon for the top bar / system tray, drawn on the 24 px grid it is shown at (2 px strokes on whole
+       pixels). A light (#F6F5F4) glyph for dark panels (GNOME's top bar) over a dark keyline, so it still reads on
+       light panels (KDE's default Breeze) without theming at run time. -->
+  <g fill="#241F31" fill-opacity="0.6">
+    <rect x="4" y="4" width="16" height="19" rx="3.5"/>
+    <rect x="7" y="1" width="10" height="7" rx="2"/>
+  </g>
+  <rect x="6" y="6" width="12" height="15" rx="2" fill="none" stroke="#F6F5F4" stroke-width="2"/>
+  <rect x="9" y="3" width="6" height="3" rx="1" fill="#F6F5F4"/>
+  <path d="M9 10 H13 A2 2 0 0 1 15 12 V17 H9 Z" fill="#F6F5F4"/>
 </svg>

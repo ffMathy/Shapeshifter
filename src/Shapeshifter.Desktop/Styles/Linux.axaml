@@ -27,6 +27,7 @@
     <SolidColorBrush x:Key="AccentSoftBrush" Color="#243584E4" />
     <SolidColorBrush x:Key="AccentFaintBrush" Color="#143584E4" />
     <SolidColorBrush x:Key="AccentTextBrush" Color="#1C71D8" />
+    <SolidColorBrush x:Key="AccentDarkBrush" Color="#255C9F" />
     <Color x:Key="AccentColor">#3584E4</Color>
   </Styles.Resources>
 
@@ -34,9 +35,6 @@
 
   <Style Selector="Window.picker">
     <Setter Property="FontFamily" Value="{StaticResource LinuxLookFont}" />
-    <!-- An opaque sheet: GNOME blurs nothing behind client windows, so only the rounded corners and the shadow need
-         transparency. -->
-    <Setter Property="TransparencyLevelHint" Value="Transparent" />
   </Style>
   <Style Selector="Window.settings">
     <Setter Property="FontFamily" Value="{StaticResource LinuxLookFont}" />
@@ -61,7 +59,6 @@
   <!-- No compositor: the sheet fills the window, square and fully opaque. -->
   <Style Selector="Border.chrome.opaque">
     <Setter Property="Margin" Value="0" />
-    <Setter Property="Background" Value="#FAFAFB" />
     <Setter Property="BorderBrush" Value="#C0BFBC" />
     <Setter Property="CornerRadius" Value="0" />
     <Setter Property="BoxShadow" Value="0 0 0 0 Transparent" />
@@ -205,7 +202,8 @@
     <Setter Property="IsHitTestVisible" Value="False" />
   </Style>
 
-  <!-- A row: its content, the hairline under it, and the accent ring of the selection. -->
+  <!-- A row: its content, the hairline over it, and the accent ring of the selection. The ring is inset (as
+       libadwaita's focus outline is), so the card's rounded clip never cuts into it wherever the row is scrolled to. -->
   <Style Selector="ListBox.items > ListBoxItem, ListBox.actions > ListBoxItem">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -221,9 +219,9 @@
                             ContentTemplate="{TemplateBinding ContentTemplate}"
                             HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-          <Border Name="Hairline" Height="1" VerticalAlignment="Bottom" Background="#12000006" />
-          <Border Name="Ring" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2"
-                  BorderBrush="{DynamicResource AccentBrush}" Opacity="0" IsHitTestVisible="False" />
+          <Border Name="Hairline" Height="1" VerticalAlignment="Top" Background="#12000006" />
+          <Border Name="Ring" Margin="2" CornerRadius="8" BorderThickness="2"
+                  BorderBrush="{DynamicResource AccentTextBrush}" Opacity="0" IsHitTestVisible="False" />
         </Panel>
       </ControlTemplate>
     </Setter>
@@ -237,17 +235,9 @@
     <Setter Property="Padding" Value="12,11,12,12" />
     <Setter Property="VerticalContentAlignment" Value="Top" />
   </Style>
-  <!-- The ring follows the card's corners on the first and last rows; the last row needs no hairline. -->
-  <Style Selector="ListBox.items > ListBoxItem:nth-child(1), ListBox.actions > ListBoxItem:nth-child(1)">
-    <Setter Property="CornerRadius" Value="12,12,0,0" />
-  </Style>
-  <Style Selector="ListBox.items > ListBoxItem:nth-last-child(1), ListBox.actions > ListBoxItem:nth-last-child(1)">
-    <Setter Property="CornerRadius" Value="0,0,12,12" />
-  </Style>
-  <Style Selector="ListBox.items > ListBoxItem:nth-child(1):nth-last-child(1), ListBox.actions > ListBoxItem:nth-child(1):nth-last-child(1)">
-    <Setter Property="CornerRadius" Value="12" />
-  </Style>
-  <Style Selector="ListBox.items > ListBoxItem:nth-last-child(1) /template/ Border#Hairline, ListBox.actions > ListBoxItem:nth-last-child(1) /template/ Border#Hairline">
+  <!-- The first row needs no hairline. (The card's clip rounds the tint of the first and last rows; nothing depends
+       on which row is last, which a removal at the end of the list would not update.) -->
+  <Style Selector="ListBox.items > ListBoxItem:nth-child(1) /template/ Border#Hairline, ListBox.actions > ListBoxItem:nth-child(1) /template/ Border#Hairline">
     <Setter Property="IsVisible" Value="False" />
   </Style>
 
@@ -289,17 +279,14 @@
   <!-- The list with the keyboard rings its selected row in the accent; the other keeps only the tint (the history)
        or the accent title (the actions). -->
   <Style Selector="Border.historyPane:not(.inactive) ListBox.items > ListBoxItem:selected /template/ Border#Ring">
-    <Setter Property="Opacity" Value="0.6" />
+    <Setter Property="Opacity" Value="1" />
   </Style>
   <Style Selector="Border.historyPane.inactive ListBox.items > ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="Background" Value="{DynamicResource AccentFaintBrush}" />
   </Style>
-  <!-- (A fainter tint than the history's: the accent title on it keeps 4.5:1.) -->
-  <Style Selector="Border.actionsPane:not(.inactive) ListBox.actions > ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{DynamicResource AccentFaintBrush}" />
-  </Style>
+  <!-- The selected action stays white: its accent title only keeps 4.5:1 on plain white. -->
   <Style Selector="Border.actionsPane:not(.inactive) ListBox.actions > ListBoxItem:selected /template/ Border#Ring">
-    <Setter Property="Opacity" Value="0.6" />
+    <Setter Property="Opacity" Value="1" />
   </Style>
 
   <!-- ============================================================== Picker: history rows -->
@@ -363,8 +350,10 @@
   </Style>
 
   <!-- The content: a title and where it came from. -->
+  <!-- Clipped, so a wide title or source never paints into the "Pinned" column. -->
   <Style Selector="StackPanel.text">
     <Setter Property="Margin" Value="12,0,0,0" />
+    <Setter Property="ClipToBounds" Value="True" />
     <Setter Property="Spacing" Value="2" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
@@ -401,7 +390,8 @@
     <Setter Property="FontSize" Value="12.5" />
     <Setter Property="Foreground" Value="#5E5C64" />
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-    <Setter Property="MaxWidth" Value="310" />
+    <!-- The source line is a horizontal stack, so its text gets no width from the column: 250 fits beside "Pinned". -->
+    <Setter Property="MaxWidth" Value="250" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected StackPanel.source > TextBlock">
@@ -429,6 +419,14 @@
     <Setter Property="FontWeight" Value="SemiBold" />
     <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}" />
     <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
+  <!-- On the selected row's tint the accent text would drop under 4.5:1; the darker accent keeps it over 5:1. -->
+  <Style Selector="ListBox.items > ListBoxItem:selected StackPanel.pinned > TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource AccentDarkBrush}" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected StackPanel.pinned > Path">
+    <Setter Property="Stroke" Value="{DynamicResource AccentDarkBrush}" />
   </Style>
 
   <!-- ============================================================== Picker: action rows -->
@@ -591,8 +589,9 @@
     <Setter Property="CornerRadius" Value="12" />
     <Setter Property="BoxShadow" Value="0 1 3 0 #12000006" />
   </Style>
+  <!-- 58 high, its margins included. -->
   <Style Selector="Grid.settingRow">
-    <Setter Property="MinHeight" Value="58" />
+    <Setter Property="MinHeight" Value="46" />
     <Setter Property="Margin" Value="12,6,8,6" />
   </Style>
   <!-- libadwaita rows have no leading icon here. -->
@@ -806,12 +805,35 @@
     <Setter Property="Fill" Value="Transparent" />
   </Style>
 
+  <!-- Keyboard focus: a soft accent outline that follows the round controls, not Fluent's square box. -->
+  <Style Selector="RepeatButton.spin">
+    <Setter Property="FocusAdorner">
+      <FocusAdornerTemplate>
+        <Border Margin="-3" CornerRadius="23" BorderThickness="2" BorderBrush="{DynamicResource AccentBrush}" Opacity="0.6" />
+      </FocusAdornerTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="Button.command">
+    <Setter Property="FocusAdorner">
+      <FocusAdornerTemplate>
+        <Border Margin="-3" CornerRadius="20" BorderThickness="2" BorderBrush="{DynamicResource AccentBrush}" Opacity="0.6" />
+      </FocusAdornerTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="ToggleSwitch.rowControl">
+    <Setter Property="FocusAdorner">
+      <FocusAdornerTemplate>
+        <Border Margin="-3" CornerRadius="16" BorderThickness="2" BorderBrush="{DynamicResource AccentBrush}" Opacity="0.6" />
+      </FocusAdornerTemplate>
+    </Setter>
+  </Style>
+
   <!-- ============================================================== Toast: AdwToast -->
 
-  <!-- A compact dark pill: the app's icon and "Copied · 5 items in your history". -->
+  <!-- A compact dark pill of text, "Copied · 5 items in your history", as an AdwToast has no icon. -->
   <Style Selector="Border.toastChrome">
     <Setter Property="Margin" Value="18,10,18,22" />
-    <Setter Property="Padding" Value="12,0,18,0" />
+    <Setter Property="Padding" Value="20,0" />
     <Setter Property="MinHeight" Value="42" />
     <Setter Property="CornerRadius" Value="21" />
     <Setter Property="Background" Value="#2E2E33" />
@@ -820,12 +842,14 @@
   <Style Selector="Grid.toastBody">
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
+  <!-- No compositor: the pill fills its window, square, rather than sitting in a black box. -->
+  <Style Selector="Border.toastChrome.opaque">
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="CornerRadius" Value="0" />
+    <Setter Property="BoxShadow" Value="0 0 0 0 Transparent" />
+  </Style>
   <Style Selector="Image.toastIcon">
-    <Setter Property="Grid.RowSpan" Value="3" />
-    <Setter Property="Width" Value="20" />
-    <Setter Property="Height" Value="20" />
-    <Setter Property="Margin" Value="0,0,10,0" />
-    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="IsVisible" Value="False" />
   </Style>
   <Style Selector="TextBlock.toastApp">
     <Setter Property="IsVisible" Value="False" />
