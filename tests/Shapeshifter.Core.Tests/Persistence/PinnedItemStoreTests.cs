@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Persistence;
+using Shapeshifter.Core.Platform;
 
 namespace Shapeshifter.Core.Tests.Persistence;
 
@@ -49,6 +50,28 @@ public sealed class PinnedItemStoreTests : IDisposable
         Assert.Equal(item.Id.ToString("N"), Path.GetFileName(folder));
         Assert.True(File.Exists(Path.Combine(folder, "manifest.json")));
         Assert.Empty(Directory.GetDirectories(root, "*.saving"));
+    }
+
+    [Fact]
+    public async Task RoundTrip_Source_IsKept()
+    {
+        var source = new ClipboardSource("Google Chrome", "Shapeshifter - Wikipedia – Google Chrome", [0x89, 0x50, 0x4E, 0x47]);
+        var item = new ClipboardItem(new ClipboardSnapshot { Text = "x" }, source: source);
+
+        await store.SaveAsync(item, Ct);
+        var loaded = Assert.Single(await store.LoadAllAsync(Ct));
+
+        Assert.Equal(source.ApplicationName, loaded.Source?.ApplicationName);
+        Assert.Equal(source.WindowTitle, loaded.Source?.WindowTitle);
+        Assert.Equal(source.IconPng, loaded.Source?.IconPng);
+    }
+
+    [Fact]
+    public async Task RoundTrip_WithoutSource_HasNoSource()
+    {
+        await store.SaveAsync(new ClipboardItem(new ClipboardSnapshot { Text = "x" }), Ct);
+
+        Assert.Null(Assert.Single(await store.LoadAllAsync(Ct)).Source);
     }
 
     [Fact]

@@ -1,3 +1,4 @@
+using Shapeshifter.Core.Platform;
 using Shapeshifter.Core.Text;
 
 namespace Shapeshifter.Core.Clipboard;
@@ -5,10 +6,11 @@ namespace Shapeshifter.Core.Clipboard;
 /// <summary>One entry of the clipboard history.</summary>
 public sealed class ClipboardItem
 {
-    public ClipboardItem(ClipboardSnapshot snapshot, Guid? id = null, DateTimeOffset? capturedAt = null)
+    public ClipboardItem(ClipboardSnapshot snapshot, Guid? id = null, DateTimeOffset? capturedAt = null, ClipboardSource? source = null)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
         Snapshot = snapshot;
+        Source = source;
         Id = id ?? Guid.NewGuid();
         CapturedAt = capturedAt ?? DateTimeOffset.UtcNow;
         PreviewText = CreatePreviewText(snapshot);
@@ -19,6 +21,9 @@ public sealed class ClipboardItem
     public ClipboardSnapshot Snapshot { get; }
 
     public DateTimeOffset CapturedAt { get; }
+
+    /// <summary>The application the item was copied from, when known.</summary>
+    public ClipboardSource? Source { get; }
 
     /// <summary>Pinned items are persisted to disk, survive restarts and stay at the top of the history.</summary>
     public bool IsPinned { get; internal set; }

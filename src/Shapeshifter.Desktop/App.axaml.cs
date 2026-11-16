@@ -74,7 +74,7 @@ public partial class App : Application
             }
 
             var changes = platform.CreateClipboardChangeSource(backend, logger);
-            monitor = new ClipboardMonitor(backend, changes, history, logger);
+            monitor = new ClipboardMonitor(backend, changes, history, logger, platform.SourceLocator);
             var pins = new PinnedItemStore(Paths.PinnedDirectory, logger);
             foreach (var pinned in await pins.LoadAllAsync().ConfigureAwait(true))
             {

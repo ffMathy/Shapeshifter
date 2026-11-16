@@ -26,6 +26,8 @@ public sealed class PlatformServices : IAsyncDisposable
         Launcher = new Launcher(logger);
         Autostart = CreateAutostart();
         CursorLocator = CreateCursorLocator(x11);
+        SourceLocator = CreateSourceLocator(logger);
+        FileIcons = CreateFileIconProvider(logger);
     }
 
     public IKeyboardHook KeyboardHook => keyboard;
@@ -37,6 +39,12 @@ public sealed class PlatformServices : IAsyncDisposable
     public IAutostartService Autostart { get; }
 
     public ICursorLocator CursorLocator { get; }
+
+    /// <summary>Which application a copy came from, or <see langword="null"/> where that cannot be known.</summary>
+    public IClipboardSourceLocator? SourceLocator { get; }
+
+    /// <summary>The operating system's icons for files and folders, or <see langword="null"/> where unavailable.</summary>
+    public IFileIconProvider? FileIcons { get; }
 
     /// <summary>Limitations of the current session that the user should know about.</summary>
     public IReadOnlyList<string> Warnings { get; }
@@ -185,6 +193,36 @@ public sealed class PlatformServices : IAsyncDisposable
         }
 
         return x11 is not null ? x11 : new NoCursorLocator();
+    }
+
+    private IClipboardSourceLocator? CreateSourceLocator(ILogger logger)
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            return new WindowsClipboardSourceLocator(logger);
+        }
+
+        if (OperatingSystem.IsMacOS())
+        {
+            return new MacClipboardSourceLocator(logger);
+        }
+
+        return x11 is not null ? new X11ClipboardSourceLocator(logger) : null;
+    }
+
+    private static IFileIconProvider? CreateFileIconProvider(ILogger logger)
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            return new WindowsFileIconProvider(logger);
+        }
+
+        if (OperatingSystem.IsMacOS())
+        {
+            return new MacFileIconProvider(logger);
+        }
+
+        return OperatingSystem.IsLinux() ? new FreedesktopFileIconProvider(logger) : null;
     }
 
     private sealed class NoCursorLocator : ICursorLocator

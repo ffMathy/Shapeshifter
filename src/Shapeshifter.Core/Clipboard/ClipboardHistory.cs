@@ -1,3 +1,5 @@
+using Shapeshifter.Core.Platform;
+
 namespace Shapeshifter.Core.Clipboard;
 
 public enum HistoryChangeKind
@@ -104,7 +106,11 @@ public sealed class ClipboardHistory
     /// Adds a captured snapshot as the newest item. If an item with the same content already exists, that
     /// item is moved to the top instead (pinned duplicates stay where they are) and returned.
     /// </summary>
-    public ClipboardItem Add(ClipboardSnapshot snapshot, out bool isNew)
+    public ClipboardItem Add(ClipboardSnapshot snapshot, out bool isNew) => Add(snapshot, source: null, out isNew);
+
+    /// <inheritdoc cref="Add(ClipboardSnapshot, out bool)"/>
+    /// <param name="source">Where the snapshot was copied from; kept only when a new item is created.</param>
+    public ClipboardItem Add(ClipboardSnapshot snapshot, ClipboardSource? source, out bool isNew)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
         ClipboardItem result;
@@ -130,7 +136,7 @@ public sealed class ClipboardHistory
             else
             {
                 isNew = true;
-                result = new ClipboardItem(snapshot);
+                result = new ClipboardItem(snapshot, source: source);
                 items.Insert(PinnedCountLocked(), result);
                 kind = HistoryChangeKind.Added;
                 removed = TrimLocked();
