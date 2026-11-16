@@ -1,5 +1,6 @@
+using System.Buffers.Binary;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Shapeshifter.Core.Clipboard;
 
@@ -54,10 +55,19 @@ public sealed class ClipboardSnapshot
     /// The primary kind. Files win over text, and text wins over images: office suites and browsers
     /// commonly put a rendered picture of copied text on the clipboard, which should still read as text.
     /// </summary>
+    /// <remarks>
+    /// One exception: an image together with a single image file in the temporary directory is an image. That is
+    /// how Firefox copies images on Windows; the file is a temporary copy that Firefox deletes later (issue #606).
+    /// </remarks>
     public ClipboardContentKind Kind
     {
         get
         {
+            if (Image is not null && Files.Count == 1 && IsTemporaryImageFile(Files[0]))
+            {
+                return ClipboardContentKind.Image;
+            }
+
             if (Files.Count > 1)
             {
                 return ClipboardContentKind.FileCollection;
@@ -86,6 +96,29 @@ public sealed class ClipboardSnapshot
             }
 
             return ClipboardContentKind.Empty;
+        }
+    }
+
+    private static readonly string[] ImageFileExtensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp", ".tif", ".tiff", ".avif"];
+
+    /// <summary>Whether <paramref name="path"/> is an image file directly or indirectly inside the temporary directory.</summary>
+    public static bool IsTemporaryImageFile(string path)
+    {
+        ArgumentNullException.ThrowIfNull(path);
+        if (!ImageFileExtensions.Contains(Path.GetExtension(path), StringComparer.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        try
+        {
+            var temporary = Path.TrimEndingDirectorySeparator(Path.GetFullPath(Path.GetTempPath())) + Path.DirectorySeparatorChar;
+            var comparison = OperatingSystem.IsLinux() ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+            return Path.GetFullPath(path).StartsWith(temporary, comparison);
+        }
+        catch (Exception exception) when (exception is ArgumentException or NotSupportedException or System.Security.SecurityException or PathTooLongException)
+        {
+            return false;
         }
     }
 
@@ -128,7 +161,7 @@ public sealed class ClipboardSnapshot
 
             case ClipboardContentKind.Image when Image is not null:
                 Append(hash, "image");
-                hash.AppendData(Image);
+                Append(hash, Image);
                 break;
 
             default:
@@ -136,7 +169,7 @@ public sealed class ClipboardSnapshot
                 foreach (var format in RawFormats)
                 {
                     Append(hash, format.Name);
-                    hash.AppendData(format.Data);
+                    Append(hash, format.Data);
                 }
 
                 break;
@@ -145,9 +178,16 @@ public sealed class ClipboardSnapshot
         return Convert.ToHexString(hash.GetHashAndReset());
     }
 
-    private static void Append(IncrementalHash hash, string value)
+    // Every part is prefixed with its length so that no two different sequences of parts produce the same
+    // bytes. Strings are hashed as their UTF-16 code units, which avoids copying large texts.
+    private static void Append(IncrementalHash hash, string value) =>
+        Append(hash, MemoryMarshal.AsBytes(value.AsSpan()));
+
+    private static void Append(IncrementalHash hash, ReadOnlySpan<byte> value)
     {
-        hash.AppendData(Encoding.UTF8.GetBytes(value));
-        hash.AppendData([0]);
+        Span<byte> length = stackalloc byte[sizeof(long)];
+        BinaryPrimitives.WriteInt64LittleEndian(length, value.Length);
+        hash.AppendData(length);
+        hash.AppendData(value);
     }
 }

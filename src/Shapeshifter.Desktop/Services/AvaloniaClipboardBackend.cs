@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using System.Text;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -49,18 +48,11 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
                 return string.Empty;
             }
 
-            var builder = new StringBuilder();
-            foreach (var format in data.Formats)
-            {
-                builder.Append(format.Identifier).Append('|');
-            }
-
-            if (data.Contains(DataFormat.Text))
-            {
-                builder.Append(await data.TryGetTextAsync().ConfigureAwait(true));
-            }
-
-            return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(builder.ToString())));
+            // The poller only compares tokens for equality, so the content itself is a cheaper and exact token:
+            // a string comparison stops at the first difference, while hashing reads and copies all of it.
+            var formats = string.Join('|', data.Formats.Select(format => format.Identifier));
+            var text = data.Contains(DataFormat.Text) ? await data.TryGetTextAsync().ConfigureAwait(true) : null;
+            return string.Concat(formats, "|", text);
         });
 
     private static async Task<T> OnUiThread<T>(Func<Task<T>> work)

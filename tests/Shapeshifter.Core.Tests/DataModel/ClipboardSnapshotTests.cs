@@ -84,6 +84,33 @@ public sealed class ClipboardSnapshotTests
     }
 
     [Fact]
+    public void Kind_ImageWithATemporaryCopyOfItself_IsImage()
+    {
+        // Firefox's "Copy Image" on Windows: the bitmap plus a temporary file that Firefox deletes later (issue #606).
+        var snapshot = new ClipboardSnapshot
+        {
+            Files = [Path.Combine(Path.GetTempPath(), "Firefox", "picture.png")],
+            Image = PngBytes,
+        };
+
+        Assert.Equal(ClipboardContentKind.Image, snapshot.Kind);
+    }
+
+    [Theory]
+    [InlineData("notes.txt")]
+    [InlineData("picture.png")]
+    public void Kind_ImageWithAFileOutsideTheTemporaryDirectoryOrNotAnImage_IsFile(string name)
+    {
+        // A copied file (for example with its icon as a picture) stays a file, unless it is a temporary image.
+        var folder = name.EndsWith(".png", StringComparison.Ordinal)
+            ? Path.Combine(Path.GetPathRoot(Path.GetTempPath())!, "shapeshifter-not-temp")
+            : Path.GetTempPath();
+        var snapshot = new ClipboardSnapshot { Files = [Path.Combine(folder, name)], Image = PngBytes };
+
+        Assert.Equal(ClipboardContentKind.File, snapshot.Kind);
+    }
+
+    [Fact]
     public void Kind_TextWinsOverImage()
     {
         // Office suites put a rendered bitmap of copied text on the clipboard; it should still read as text.
@@ -236,6 +263,17 @@ public sealed class ClipboardSnapshotTests
         var merged = new ClipboardSnapshot { Files = ["/tmp/a", "b/tmp/c"] };
 
         Assert.NotEqual(split.Fingerprint, merged.Fingerprint);
+    }
+
+    [Fact]
+    public void Fingerprint_RawFormatBoundariesAreUnambiguous()
+    {
+        // Without length prefixes, name "A" + data "1" followed by name "B" + data "2" hashes the same
+        // bytes as a single format "A" whose data happens to contain the rest.
+        var two = new ClipboardSnapshot { RawFormats = [new RawClipboardFormat("A", [(byte)'1']), new RawClipboardFormat("B", [(byte)'2'])] };
+        var one = new ClipboardSnapshot { RawFormats = [new RawClipboardFormat("A", [(byte)'1', (byte)'B', 0, (byte)'2'])] };
+
+        Assert.NotEqual(two.Fingerprint, one.Fingerprint);
     }
 
     [Fact]

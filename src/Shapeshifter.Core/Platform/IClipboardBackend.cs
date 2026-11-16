@@ -13,7 +13,7 @@ public interface IClipboardBackend
 
     /// <summary>
     /// A cheap value that changes whenever the clipboard changes. Used for polling where the OS offers no
-    /// notification. Implementations may return a content hash.
+    /// notification. It is only compared for equality, so it can be the content itself or a hash of it.
     /// </summary>
     Task<string> GetChangeTokenAsync(CancellationToken cancellationToken = default);
 }

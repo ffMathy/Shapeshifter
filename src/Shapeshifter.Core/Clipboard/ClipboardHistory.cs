@@ -113,12 +113,15 @@ public sealed class ClipboardHistory
     public ClipboardItem Add(ClipboardSnapshot snapshot, ClipboardSource? source, out bool isNew)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
+
+        // Hash before taking the lock: a large image can take a few milliseconds.
+        var fingerprint = snapshot.Fingerprint;
         ClipboardItem result;
         List<ClipboardItem> removed;
         HistoryChangeKind kind;
         lock (gate)
         {
-            var existing = items.Find(item => item.Snapshot.Fingerprint == snapshot.Fingerprint);
+            var existing = items.Find(item => item.Snapshot.Fingerprint == fingerprint);
             if (existing is not null)
             {
                 isNew = false;

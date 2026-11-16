@@ -48,7 +48,9 @@ public sealed class ZipFilesAction : IClipboardAction
     public bool CanExecute(ClipboardItem item)
     {
         ArgumentNullException.ThrowIfNull(item);
-        return item.Snapshot.Files.Count > 0;
+
+        // Not for an image that merely comes with a temporary copy of itself (Firefox), which is gone soon.
+        return item.Kind is ClipboardContentKind.File or ClipboardContentKind.FileCollection;
     }
 
     public async Task ExecuteAsync(ClipboardItem item, ActionContext context, CancellationToken cancellationToken = default)
