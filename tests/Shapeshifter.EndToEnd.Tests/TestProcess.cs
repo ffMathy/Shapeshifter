@@ -102,7 +102,8 @@ internal sealed class TestProcess : IAsyncDisposable
         await process.StandardInput.WriteLineAsync(command);
         await process.StandardInput.FlushAsync();
         return await WaitForLineAsync(line => line == "OK" || line.StartsWith("TEXT ", StringComparison.Ordinal)
-            || line.StartsWith("FORMATS ", StringComparison.Ordinal) || line.StartsWith("ERROR", StringComparison.Ordinal), timeout ?? TimeSpan.FromSeconds(10));
+            || line.StartsWith("FORMATS ", StringComparison.Ordinal) || line.StartsWith("IMAGE ", StringComparison.Ordinal)
+            || line.StartsWith("ERROR", StringComparison.Ordinal), timeout ?? TimeSpan.FromSeconds(10));
     }
 
     public async ValueTask DisposeAsync()
