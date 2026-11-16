@@ -118,7 +118,7 @@ git push origin v7.2.0-beta.1
 You can also start the CI workflow manually on `master` (Actions → CI → Run workflow) with **release_tag** set to a version, such as `v7.2.0`.
 
 # Contributing
-Feel free to contribute! Create a pull request, and we'll look at it.
+Feel free to contribute! See [CONTRIBUTING.md](CONTRIBUTING.md) for how to build, test and send a pull request, and look for issues labelled [`good first issue`](https://github.com/ffMathy/Shapeshifter/labels/good%20first%20issue) to get started.
 
 # Can Shapeshifter be trusted?
 Shapeshifter can be fully trusted, and hopefully having it 100% open-source helps showing that. Shapeshifter does not send your clipboard data anywhere. Pinned items are stored only on your own computer, in the folders listed above.
