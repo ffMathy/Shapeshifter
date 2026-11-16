@@ -8,7 +8,7 @@ namespace Shapeshifter.Desktop.Services;
 /// Colours the picker with the operating system's accent colour, as the original Shapeshifter did, and follows it
 /// when the user changes it. Where the platform reports no accent colour the palette in Theme.axaml stays.
 /// </summary>
-internal static class AccentPalette
+public static class AccentPalette
 {
     public static void Attach(Application application)
     {
@@ -25,12 +25,16 @@ internal static class AccentPalette
 
     internal static void Apply(Application application, PlatformColorValues values)
     {
-        var accent = values.AccentColor1;
-        if (accent.A == 0)
+        if (values.AccentColor1.A != 0)
         {
-            return;
+            Apply(application, values.AccentColor1);
         }
+    }
 
+    /// <summary>Colours the picker with <paramref name="accent"/> (its alpha is ignored).</summary>
+    public static void Apply(Application application, Color accent)
+    {
+        ArgumentNullException.ThrowIfNull(application);
         accent = Color.FromRgb(accent.R, accent.G, accent.B);
         var dark = Darken(accent, 0.72);
         application.Resources["AccentBrush"] = new SolidColorBrush(accent);

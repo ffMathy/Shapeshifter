@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Shapeshifter.ScreenshotGenerator</RootNamespace>
+    <Description>Renders the picker with sample content to regenerate the screenshots in assets/screenshots.</Description>
+    <IsPackable>false</IsPackable>
+    <!-- A build tool, not shipped: allow the conveniences of a script. -->
+    <NoWarn>$(NoWarn);CA2000;CA1305;CA1307</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Headless" />
+    <PackageReference Include="Avalonia.Skia" />
+    <PackageReference Include="Avalonia.Fonts.Inter" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Shapeshifter.Desktop\Shapeshifter.Desktop.csproj" />
+  </ItemGroup>
+</Project>

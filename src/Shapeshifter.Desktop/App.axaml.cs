@@ -95,7 +95,7 @@ public partial class App : Application
                 Logger = logger,
             };
 
-            var picker = new PickerPresenter(platform.CursorLocator, logger);
+            var picker = new PickerPresenter(platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), logger);
             engine = new ShapeshifterEngine(
                 history, monitor, platform.KeyboardHook, ActionCatalog.CreateDefault(), context, picker, new CopyNotifier(settings), logger)
             {

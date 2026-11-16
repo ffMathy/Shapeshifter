@@ -22,13 +22,15 @@ internal sealed class PickerPresenter : IPickerPresenter
 
     private readonly ICursorLocator cursorLocator;
     private readonly ILogger logger;
+    private readonly PickerVisuals visuals;
     private readonly PickerViewModel viewModel = new();
     private readonly Dictionary<Guid, Bitmap?> thumbnails = [];
     private PickerWindow? window;
 
-    public PickerPresenter(ICursorLocator cursorLocator, ILogger logger)
+    public PickerPresenter(ICursorLocator cursorLocator, PickerVisuals visuals, ILogger logger)
     {
         this.cursorLocator = cursorLocator;
+        this.visuals = visuals;
         this.logger = logger.ForContext<PickerPresenter>();
     }
 
@@ -73,7 +75,7 @@ internal sealed class PickerPresenter : IPickerPresenter
             viewModel.Items.Clear();
             foreach (var item in state.Items)
             {
-                viewModel.Items.Add(new PickerItemViewModel(item, GetThumbnail(item)));
+                viewModel.Items.Add(new PickerItemViewModel(item, GetThumbnail(item), visuals));
             }
 
             foreach (var stale in thumbnails.Keys.Except(ids).ToArray())

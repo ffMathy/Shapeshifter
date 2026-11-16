@@ -13,6 +13,9 @@
     <Project Path="src/Shapeshifter.Website/Shapeshifter.Website.csproj" />
     <Project Path="src/Shapeshifter.Website.Models/Shapeshifter.Website.Models.csproj" />
   </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/Shapeshifter.ScreenshotGenerator/Shapeshifter.ScreenshotGenerator.csproj" />
+  </Folder>
   <Folder Name="/tests/">
     <File Path="tests/Directory.Build.props" />
     <Project Path="tests/Shapeshifter.Core.Tests/Shapeshifter.Core.Tests.csproj" />

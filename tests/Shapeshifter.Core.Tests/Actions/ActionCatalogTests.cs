@@ -7,7 +7,7 @@ public sealed class ActionCatalogTests
 {
     private static readonly string[] DefaultOrder =
     [
-        "paste", "paste-plain-text", "copy-as-file", "copy-as-zip", "copy-image-from-link", "open-links", "toggle-pin",
+        "paste", "copy-as-file", "paste-plain-text", "copy-as-zip", "copy-image-from-link", "open-links", "toggle-pin",
     ];
 
     [Fact]
@@ -82,7 +82,7 @@ public sealed class ActionCatalogTests
     {
         { "plain", ["paste", "copy-as-file", "toggle-pin"] },
         { "whitespace", ["paste", "copy-as-file", "toggle-pin"] },
-        { "text+html", ["paste", "paste-plain-text", "copy-as-file", "toggle-pin"] },
+        { "text+html", ["paste", "copy-as-file", "paste-plain-text", "toggle-pin"] },
         { "html-only", ["paste", "paste-plain-text", "toggle-pin"] },
         { "empty-text+html", ["paste", "paste-plain-text", "toggle-pin"] },
         { "rtf-only", ["paste", "toggle-pin"] },  // RTF without text has no plain text to offer

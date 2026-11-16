@@ -44,53 +44,75 @@
   <Style Selector="ListBox.items > ListBoxItem TextBlock.title">
     <Setter Property="Foreground" Value="#222222" />
     <Setter Property="FontSize" Value="15" />
+    <Setter Property="LineHeight" Value="23" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem TextBlock.fileName">
+    <Setter Property="Foreground" Value="#444444" />
+    <Setter Property="FontSize" Value="26" />
+    <Setter Property="FontWeight" Value="Light" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem TextBlock.subtitle">
-    <Setter Property="Foreground" Value="#707070" />
+    <Setter Property="Foreground" Value="#666666" />
     <Setter Property="FontSize" Value="13" />
+    <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
-  <Style Selector="ListBox.items > ListBoxItem PathIcon">
-    <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+  <!-- The line at the bottom of a row: the source window, or the folder of copied files. -->
+  <Style Selector="ListBox.items > ListBoxItem :is(Control).sourceLine">
+    <Setter Property="Margin" Value="20,0,18,15" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="VerticalAlignment" Value="Bottom" />
   </Style>
-  <Style Selector="ListBox.items > ListBoxItem TextBlock.iconText">
+  <Style Selector="ListBox.items > ListBoxItem Path.glyph">
+    <Setter Property="Fill" Value="{DynamicResource AccentBrush}" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem Path.fileGlyph">
+    <Setter Property="Fill" Value="#C8C8C8" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem Path.folderGlyph">
+    <Setter Property="Fill" Value="#E8B94A" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem TextBlock.fileCount">
     <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
-    <Setter Property="FontSize" Value="60" />
+    <Setter Property="FontSize" Value="64" />
     <Setter Property="FontWeight" Value="Light" />
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
-  <Style Selector="ListBox.items > ListBoxItem:selected TextBlock.title, ListBox.items > ListBoxItem:selected TextBlock.subtitle">
+  <Style Selector="ListBox.items > ListBoxItem Border.badge">
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+    <Setter Property="MinWidth" Value="18" />
+    <Setter Property="Height" Value="18" />
+    <Setter Property="Padding" Value="3,0" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem Border.badge > TextBlock">
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected TextBlock.title">
     <Setter Property="Foreground" Value="White" />
   </Style>
-  <Style Selector="ListBox.items > ListBoxItem:selected PathIcon">
+  <Style Selector="ListBox.items > ListBoxItem:selected TextBlock.fileName">
     <Setter Property="Foreground" Value="White" />
   </Style>
-  <Style Selector="ListBox.items > ListBoxItem:selected TextBlock.iconText">
+  <Style Selector="ListBox.items > ListBoxItem:selected TextBlock.subtitle">
+    <Setter Property="Foreground" Value="#E6FFFFFF" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected Path.glyph">
+    <Setter Property="Fill" Value="White" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected TextBlock.fileCount">
     <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected Border.badge">
+    <Setter Property="Background" Value="{DynamicResource AccentDarkerBrush}" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem Border.iconArea">
     <Setter Property="Background" Value="{DynamicResource WindowDarkBackgroundBrush}" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected Border.iconArea">
     <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
-  </Style>
-  <Style Selector="ListBox.items > ListBoxItem Border.thumbnailCaption">
-    <Setter Property="Background" Value="#B0FFFFFF" />
-    <Setter Property="Padding" Value="8,3" />
-    <Setter Property="Margin" Value="12,0,12,10" />
-    <Setter Property="HorizontalAlignment" Value="Left" />
-    <Setter Property="VerticalAlignment" Value="Bottom" />
-  </Style>
-  <Style Selector="ListBox.items > ListBoxItem Border.thumbnailCaption > TextBlock">
-    <Setter Property="Foreground" Value="#444444" />
-    <Setter Property="FontSize" Value="12" />
-  </Style>
-  <!-- A selected image keeps its picture, framed in the accent colour. -->
-  <Style Selector="ListBox.items > ListBoxItem:selected Border.thumbnailCaption">
-    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
-  </Style>
-  <Style Selector="ListBox.items > ListBoxItem:selected Border.thumbnailCaption > TextBlock">
-    <Setter Property="Foreground" Value="White" />
   </Style>
 
   <Style Selector="Border.historyPane">

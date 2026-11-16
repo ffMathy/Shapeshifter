@@ -26,7 +26,7 @@ On macOS, use <kbd>Cmd</kbd> instead of <kbd>Ctrl</kbd>. Shortcuts that add anot
 
 Shapeshifter does not record clipboard content that password managers mark as sensitive (Windows `ExcludeClipboardContentFromMonitorProcessing` / `CanIncludeInClipboardHistory`, macOS `org.nspasteboard.ConcealedType` and related types, KDE `x-kde-passwordManagerHint`).
 
-Actions available for an item, depending on its content: **Paste**, **Paste as plain text**, **Copy as file** (saves text to a `.txt` file), **Copy as compressed folder** (zips copied files), **Copy image from link**, **Open links**, and **Pin to top / Unpin** (pinned items are kept across restarts).
+Actions available for an item, depending on its content: **Paste**, **Copy as file** (saves text to a `.txt` file), **Paste as plain text**, **Copy as compressed folder** (zips copied files), **Copy image from link**, **Open links**, and **Pin to clipboard / Unpin from clipboard** (pinned items are kept across restarts).
 
 Settings (tray icon → Settings) include the delay before the history appears, the number of items to keep, copy notifications and starting at login.
 
@@ -61,6 +61,16 @@ To produce a self-contained, single-file build for a platform (the output folder
 ```bash
 dotnet publish src/Shapeshifter.Desktop -c Release -r linux-x64 -o publish
 ```
+
+### Screenshots
+
+The screenshots in `assets/screenshots` (also used by the website) are rendered from the real picker with sample content. After changing how the picker looks, regenerate them with:
+
+```bash
+scripts/generate-screenshots.sh
+```
+
+CI does the same on every pull request and commits changed screenshots to the pull request's branch.
 
 ### Tests
 

@@ -56,7 +56,7 @@ public sealed class CopyImageFromLinkAction : IClipboardAction
 
     public string GetTitle(ClipboardItem item) => "Copy image from link";
 
-    public string GetDescription(ClipboardItem item) => "Downloads the linked image and copies the image itself.";
+    public string GetDescription(ClipboardItem item) => "Downloads the linked image and copies the image itself to the clipboard.";
 
     public bool CanExecute(ClipboardItem item)
     {
