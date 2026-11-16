@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <!-- Symbolic tray icon, drawn on the 24 px grid it is shown at (2 px strokes on whole pixels). A light (#F6F5F4) glyph for dark panels: GNOME's top bar, dark KDE and XFCE panels.
+       The faint keyline in the opposite tone only matters when the panel's tone is guessed wrong. -->
+  <g fill="none" stroke="#000000" stroke-opacity="0.4" stroke-width="1" stroke-linejoin="round">
+    <rect x="4.5" y="4.5" width="15" height="18" rx="3"/>
+  </g>
+  <rect x="6" y="6" width="12" height="15" rx="2" fill="none" stroke="#F6F5F4" stroke-width="2"/>
+  <rect x="9" y="3" width="6" height="3" rx="1" fill="#F6F5F4"/>
+  <path d="M9 10 H13 A2 2 0 0 1 15 12 V17 H9 Z" fill="#F6F5F4"/>
+</svg>

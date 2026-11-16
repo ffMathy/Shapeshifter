@@ -4,7 +4,8 @@ const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 const [src, out] = process.argv.slice(2);
-const jobs = [['application.svg', 256, 'Application.png'], ['tray.svg', 24, 'Tray.png']];
+// TrayDark.png is for dark panels, TrayLight.png for light ones (named after the panel, as on Windows).
+const jobs = [['application.svg', 256, 'Application.png'], ['tray-dark-panel.svg', 24, 'TrayDark.png'], ['tray-light-panel.svg', 24, 'TrayLight.png']];
 (async () => {
   const browser = await chromium.launch();
   const page = await browser.newPage();

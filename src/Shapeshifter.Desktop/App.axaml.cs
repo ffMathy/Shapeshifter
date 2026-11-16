@@ -154,7 +154,7 @@ public partial class App : Application
             MacOSProperties.SetIsTemplateIcon(trayIcon, PlatformLook.Current == Look.MacOS);
             trayIcon.Clicked += (_, _) => ShowSettings();
 
-            // Windows draws the taskbar light or dark independently of apps; follow it with the matching glyph.
+            // Follow the taskbar or panel when the user switches between light and dark.
             if (PlatformSettings is { } platformSettings)
             {
                 platformSettings.ColorValuesChanged += (_, _) => Dispatcher.UIThread.Post(UpdateTrayIcon);
@@ -170,25 +170,48 @@ public partial class App : Application
     }
 
     /// <summary>
-    /// The tray icon of the look. On Windows, a dark glyph for a light taskbar and a white one for a dark taskbar
-    /// (the taskbar follows "Windows mode", which apps cannot see through the theme variant).
+    /// The tray icon of the look, in the tone that reads on the panel: a dark glyph on a light taskbar or panel and a
+    /// light glyph on a dark one (<c>TrayLight.png</c> and <c>TrayDark.png</c>, named after the panel).
     /// </summary>
-    private static string TrayIconName()
+    private string TrayIconName()
     {
-        if (PlatformLook.Current != Look.Windows || !OperatingSystem.IsWindows())
+        if (PlatformLook.Current == Look.Windows && OperatingSystem.IsWindows())
         {
-            return "Tray.png";
+            // The taskbar follows "Windows mode", which apps cannot see through the theme variant.
+            try
+            {
+                using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+                return key?.GetValue("SystemUsesLightTheme") is int and not 0 ? "TrayLight.png" : "TrayDark.png";
+            }
+            catch (Exception exception) when (exception is System.Security.SecurityException or UnauthorizedAccessException or IOException)
+            {
+                return "Tray.png";
+            }
         }
 
-        try
+        if (PlatformLook.Current == Look.Linux)
         {
-            using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
-            return key?.GetValue("SystemUsesLightTheme") is int and not 0 ? "TrayLight.png" : "TrayDark.png";
+            var variant = PlatformSettings?.GetColorValues().ThemeVariant ?? PlatformThemeVariant.Light;
+            return LinuxPanelIsDark(Environment.GetEnvironmentVariable("XDG_CURRENT_DESKTOP"), variant) ? "TrayDark.png" : "TrayLight.png";
         }
-        catch (Exception exception) when (exception is System.Security.SecurityException or UnauthorizedAccessException or IOException)
+
+        return "Tray.png";
+    }
+
+    /// <summary>
+    /// Guesses the tone of the Linux panel that shows the tray icon. GNOME Shell (also Ubuntu's) and Pantheon keep
+    /// their top bar dark in light mode too; other desktops (KDE Plasma, XFCE, Cinnamon, MATE, LXQt) theme their panel
+    /// with the light or dark colour scheme, which the desktop portal reports as the theme variant.
+    /// </summary>
+    internal static bool LinuxPanelIsDark(string? currentDesktop, PlatformThemeVariant variant)
+    {
+        var desktops = (currentDesktop ?? string.Empty).Split(':', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        if (desktops.Any(desktop => desktop.Equals("GNOME", StringComparison.OrdinalIgnoreCase) || desktop.Equals("Pantheon", StringComparison.OrdinalIgnoreCase)))
         {
-            return "Tray.png";
+            return true;
         }
+
+        return variant == PlatformThemeVariant.Dark;
     }
 
     private void UpdateTrayIcon()
