@@ -84,6 +84,33 @@ public sealed class ClipboardSnapshotTests
     }
 
     [Fact]
+    public void Kind_ImageWithATemporaryCopyOfItself_IsImage()
+    {
+        // Firefox's "Copy Image" on Windows: the bitmap plus a temporary file that Firefox deletes later (issue #606).
+        var snapshot = new ClipboardSnapshot
+        {
+            Files = [Path.Combine(Path.GetTempPath(), "Firefox", "picture.png")],
+            Image = PngBytes,
+        };
+
+        Assert.Equal(ClipboardContentKind.Image, snapshot.Kind);
+    }
+
+    [Theory]
+    [InlineData("notes.txt")]
+    [InlineData("picture.png")]
+    public void Kind_ImageWithAFileOutsideTheTemporaryDirectoryOrNotAnImage_IsFile(string name)
+    {
+        // A copied file (for example with its icon as a picture) stays a file, unless it is a temporary image.
+        var folder = name.EndsWith(".png", StringComparison.Ordinal)
+            ? Path.Combine(Path.GetPathRoot(Path.GetTempPath())!, "shapeshifter-not-temp")
+            : Path.GetTempPath();
+        var snapshot = new ClipboardSnapshot { Files = [Path.Combine(folder, name)], Image = PngBytes };
+
+        Assert.Equal(ClipboardContentKind.File, snapshot.Kind);
+    }
+
+    [Fact]
     public void Kind_TextWinsOverImage()
     {
         // Office suites put a rendered bitmap of copied text on the clipboard; it should still read as text.

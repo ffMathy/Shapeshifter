@@ -54,10 +54,19 @@ public sealed class ClipboardSnapshot
     /// The primary kind. Files win over text, and text wins over images: office suites and browsers
     /// commonly put a rendered picture of copied text on the clipboard, which should still read as text.
     /// </summary>
+    /// <remarks>
+    /// One exception: an image together with a single image file in the temporary directory is an image. That is
+    /// how Firefox copies images on Windows; the file is a temporary copy that Firefox deletes later (issue #606).
+    /// </remarks>
     public ClipboardContentKind Kind
     {
         get
         {
+            if (Image is not null && Files.Count == 1 && IsTemporaryImageFile(Files[0]))
+            {
+                return ClipboardContentKind.Image;
+            }
+
             if (Files.Count > 1)
             {
                 return ClipboardContentKind.FileCollection;
@@ -86,6 +95,29 @@ public sealed class ClipboardSnapshot
             }
 
             return ClipboardContentKind.Empty;
+        }
+    }
+
+    private static readonly string[] ImageFileExtensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp", ".tif", ".tiff", ".avif"];
+
+    /// <summary>Whether <paramref name="path"/> is an image file directly or indirectly inside the temporary directory.</summary>
+    public static bool IsTemporaryImageFile(string path)
+    {
+        ArgumentNullException.ThrowIfNull(path);
+        if (!ImageFileExtensions.Contains(Path.GetExtension(path), StringComparer.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        try
+        {
+            var temporary = Path.TrimEndingDirectorySeparator(Path.GetFullPath(Path.GetTempPath())) + Path.DirectorySeparatorChar;
+            var comparison = OperatingSystem.IsLinux() ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+            return Path.GetFullPath(path).StartsWith(temporary, comparison);
+        }
+        catch (Exception exception) when (exception is ArgumentException or NotSupportedException or System.Security.SecurityException or PathTooLongException)
+        {
+            return false;
         }
     }
 
