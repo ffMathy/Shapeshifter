@@ -123,6 +123,9 @@ public sealed class ClipboardHistory
             {
                 isNew = false;
                 result = existing;
+
+                // Content already on the clipboard at startup has no known source; a later copy of it does.
+                existing.Source ??= source;
                 if (existing.IsPinned)
                 {
                     return existing;

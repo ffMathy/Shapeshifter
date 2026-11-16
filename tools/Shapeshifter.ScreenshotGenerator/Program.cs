@@ -27,14 +27,17 @@ namespace Shapeshifter.ScreenshotGenerator;
 /// </remarks>
 internal static class Program
 {
-    /// <summary>Screenshot name, accent colour and scale (the PAD screenshot is a smaller rendition).</summary>
+    /// <summary>
+    /// Screenshot name, accent colour and display scaling. The original screenshots were taken at 125 %; the PAD one is
+    /// a smaller rendition.
+    /// </summary>
     private static readonly (string Name, string Accent, double Scale, int Width, int Height)[] Screenshots =
     [
-        ("blue", "#0063B1", 1.0, 1000, 650),
-        ("green", "#107C10", 1.0, 1000, 650),
-        ("purple", "#881798", 1.0, 1000, 650),
-        ("red", "#D41124", 1.0, 1000, 650),
-        ("pad", "#0063B1", 0.73, 800, 540),
+        ("blue", "#0063B1", 1.25, 1000, 650),
+        ("green", "#107C10", 1.25, 1000, 650),
+        ("purple", "#881798", 1.25, 1000, 650),
+        ("red", "#D41124", 1.25, 1000, 650),
+        ("pad", "#0063B1", 0.9, 800, 540),
     ];
 
     public static int Main(string[] args)
@@ -92,6 +95,7 @@ internal static class Program
             Width = width,
             Height = height,
             WindowDecorations = WindowDecorations.None,
+            FontFamily = picker.FontFamily,
             Content = new Panel
             {
                 Children =
@@ -108,6 +112,9 @@ internal static class Program
             },
         };
 
+        // Greyscale antialiasing: subpixel (LCD) antialiasing would tint thin text, and depends on the screen.
+        TextOptions.SetTextRenderingMode(host, TextRenderingMode.Antialias);
+        RenderOptions.SetBitmapInterpolationMode(host, BitmapInterpolationMode.HighQuality);
         host.Show();
         for (var i = 0; i < 10; i++)
         {
@@ -159,14 +166,14 @@ internal static class Program
         {
             if (path.EndsWith('/') || string.IsNullOrEmpty(Path.GetExtension(path)))
             {
-                return SampleArt.Folder(size);
+                return SampleArt.Folder(size * 2);
             }
 
             return Path.GetExtension(path).ToUpperInvariant() switch
             {
-                ".MP4" => SampleArt.Document(size, SampleArt.DocumentBadge.Video),
-                ".PNG" => SampleArt.Document(size, SampleArt.DocumentBadge.Picture),
-                _ => SampleArt.Document(size, SampleArt.DocumentBadge.Lines),
+                ".MP4" => SampleArt.Document(size * 2, SampleArt.DocumentBadge.Video),
+                ".PNG" => SampleArt.Document(size * 2, SampleArt.DocumentBadge.Picture),
+                _ => SampleArt.Document(size * 2, SampleArt.DocumentBadge.Lines),
             };
         }
     }
