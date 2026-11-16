@@ -7,6 +7,11 @@ on:
     tags: ['v*']
   pull_request:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Version to release from master, such as v7.1.0 (leave empty for a normal CI run)'
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -14,6 +19,8 @@ permissions:
 env:
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
+  # The release being built: the pushed v* tag, or the version given to a manual run. Empty for ordinary CI runs.
+  RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || inputs.release_tag || '' }}
 
 jobs:
   build:
@@ -99,13 +106,17 @@ jobs:
       - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
-      - name: Version from tag
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Version from release tag
+        if: env.RELEASE_TAG != ''
         shell: bash
         run: |
-          version="${GITHUB_REF_NAME#v}"
-          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
-            echo "::error::Tag $GITHUB_REF_NAME is not a version tag like v7.1.0 or v7.1.0-beta.1"
+          if [[ "$GITHUB_EVENT_NAME" == workflow_dispatch && "$GITHUB_REF" != refs/heads/master ]]; then
+            echo "::error::Manual releases must be run on master, not $GITHUB_REF"
+            exit 1
+          fi
+          version="${RELEASE_TAG#v}"
+          if [[ "$RELEASE_TAG" != v* || ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::$RELEASE_TAG is not a version tag like v7.1.0 or v7.1.0-beta.1"
             exit 1
           fi
           echo "VERSION_ARGS=-p:Version=$version" >> "$GITHUB_ENV"
@@ -126,7 +137,7 @@ jobs:
 
   release:
     name: GitHub release
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') || inputs.release_tag != ''
     needs: [build, e2e-linux, e2e-windows, publish]
     runs-on: ubuntu-latest
     permissions:
@@ -142,11 +153,20 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
-          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+          if [[ "$GITHUB_EVENT_NAME" == push ]]; then
+            target=(--verify-tag)
+          elif gh api "repos/$GH_REPO/git/ref/tags/$RELEASE_TAG" > /dev/null 2>&1; then
+            echo "::error::Tag $RELEASE_TAG already exists; push the tag instead of starting a manual release"
+            exit 1
+          else
+            # A manual run on master: create the tag on the commit that was built and tested.
+            target=(--target "$GITHUB_SHA")
+          fi
+          if gh release view "$RELEASE_TAG" > /dev/null 2>&1; then
             # The release was created in the GitHub UI together with the tag: keep its notes, attach the builds.
-            gh release upload "$GITHUB_REF_NAME" dist/* --clobber
+            gh release upload "$RELEASE_TAG" dist/* --clobber
           else
             prerelease=()
-            if [[ "$GITHUB_REF_NAME" == *-* ]]; then prerelease=(--prerelease); fi
-            gh release create "$GITHUB_REF_NAME" dist/* --verify-tag --title "Shapeshifter ${GITHUB_REF_NAME#v}" --generate-notes "${prerelease[@]}"
+            if [[ "$RELEASE_TAG" == *-* ]]; then prerelease=(--prerelease); fi
+            gh release create "$RELEASE_TAG" dist/* "${target[@]}" --title "Shapeshifter ${RELEASE_TAG#v}" --generate-notes "${prerelease[@]}"
           fi
