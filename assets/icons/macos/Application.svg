@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!--
+    Shapeshifter's macOS app icon ("Refraction"): three glass sheets that soften from square to circle, on an indigo
+    squircle lit from above. The 200-unit artwork sits on Apple's 824/1024 app icon grid. Rendered to
+    src/Shapeshifter.Desktop/Assets/MacOS/Application.png (256 × 256).
+  -->
+  <defs>
+    <linearGradient id="plate" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7C92FF"/><stop offset="0.5" stop-color="#4459EC"/><stop offset="1" stop-color="#2B2DA6"/></linearGradient>
+    <radialGradient id="sheen" cx="0.5" cy="0" r="0.75"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0.5"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></radialGradient>
+    <linearGradient id="back" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC08A"/><stop offset="1" stop-color="#FF5A86"/></linearGradient>
+    <linearGradient id="mid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8CF5E2"/><stop offset="1" stop-color="#1AA9D2"/></linearGradient>
+    <linearGradient id="front" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0.8"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0.26"/></linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0.95"/><stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.12"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0.4"/></linearGradient>
+    <clipPath id="lens"><circle cx="118" cy="122" r="46"/></clipPath>
+    <clipPath id="plateClip"><path d="M0 100 C0 6 6 0 100 0 C194 0 200 6 200 100 C200 194 194 200 100 200 C6 200 0 194 0 100 Z"/></clipPath>
+    <filter id="sheetShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#14156B" flood-opacity="0.35"/></filter>
+    <filter id="iconShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2.5" stdDeviation="4" flood-color="#2B2DA6" flood-opacity="0.32"/>
+      <feDropShadow dx="0" dy="0.5" stdDeviation="0.8" flood-color="#2B2DA6" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <g transform="translate(100 96) scale(4.12)">
+    <path d="M0 100 C0 6 6 0 100 0 C194 0 200 6 200 100 C200 194 194 200 100 200 C6 200 0 194 0 100 Z" fill="url(#plate)" filter="url(#iconShadow)"/>
+    <g clip-path="url(#plateClip)"><ellipse cx="100" cy="4" rx="130" ry="74" fill="url(#sheen)"/></g>
+    <g filter="url(#sheetShadow)"><rect x="40" y="38" width="88" height="88" rx="10" transform="rotate(-12 84 82)" fill="url(#back)" stroke="#FFFFFF" stroke-opacity="0.55" stroke-width="1.2"/></g>
+    <g filter="url(#sheetShadow)"><rect x="60" y="58" width="88" height="88" rx="28" transform="rotate(-4 104 102)" fill="url(#mid)" fill-opacity="0.94" stroke="#FFFFFF" stroke-opacity="0.55" stroke-width="1.2"/></g>
+    <g filter="url(#sheetShadow)"><circle cx="118" cy="122" r="46" fill="url(#front)"/></g>
+    <g clip-path="url(#lens)">
+      <rect x="60" y="58" width="88" height="88" rx="28" transform="translate(-8 -7) rotate(-4 104 102)" fill="#C8FFF6" fill-opacity="0.5"/>
+      <rect x="40" y="38" width="88" height="88" rx="10" transform="translate(-9 -7) rotate(-12 84 82)" fill="#FFE1CC" fill-opacity="0.55"/>
+    </g>
+    <circle cx="118" cy="122" r="45.25" fill="none" stroke="url(#edge)" stroke-width="1.5"/>
+    <path d="M85.2 99.1 A40 40 0 0 1 131.7 84.4" fill="none" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M0 100 C0 6 6 0 100 0 C194 0 200 6 200 100 C200 194 194 200 100 200 C6 200 0 194 0 100 Z" fill="none" stroke="url(#edge)" stroke-width="2" stroke-opacity="0.7"/>
+  </g>
+</svg>
