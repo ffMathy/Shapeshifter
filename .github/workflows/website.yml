@@ -1,0 +1,73 @@
+name: Website
+
+# Builds the static website in website/ and deploys it to GitHub Pages (https://shapeshifter.app). The screenshots
+# and app icons are copied in at build time, so the site always shows the current ones.
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'website/**'
+      - 'assets/screenshots/**'
+      - 'assets/icons/**'
+      # The settings and notification screenshots are rendered from the app, and the app icons come from it.
+      - 'src/Shapeshifter.Desktop/**'
+      - 'tools/Shapeshifter.ScreenshotGenerator/**'
+      - 'scripts/check-website.py'
+      - '.github/workflows/website.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time; a newer push waits rather than cancelling one that is under way.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build:
+    name: Build the website
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - name: Render the settings and notification screenshots
+        run: dotnet run --project tools/Shapeshifter.ScreenshotGenerator -c Release -- "$RUNNER_TEMP/surfaces" --surfaces
+      - name: Assemble the site
+        run: |
+          mkdir -p _site
+          cp -R website/. _site/
+          rm -f _site/preview.sh
+          mkdir -p _site/screenshots _site/app-icons
+          cp assets/screenshots/*.PNG _site/screenshots/
+          cp "$RUNNER_TEMP"/surfaces/settings-*.PNG "$RUNNER_TEMP"/surfaces/toast-*.PNG _site/screenshots/
+          for look in Windows MacOS Linux; do
+            cp "src/Shapeshifter.Desktop/Assets/$look/Application.png" "_site/app-icons/${look,,}.png"
+          done
+          find _site -type f | sort
+      - name: Check links and images
+        run: python3 scripts/check-website.py _site
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

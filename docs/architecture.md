@@ -46,9 +46,25 @@ Shapeshifter's own clipboard writes go through `ClipboardMonitor.WriteAsync`. Th
 - On Linux, the trigger grab is released while the synthetic keystroke is sent.
 - The hook recognises the echo of its own keystrokes by matching the exact sequence it sent, because XRecord does not flag simulated events.
 
-The picker window is created with `ShowActivated=false` and `Topmost=true`. It never takes keyboard focus, so the paste always lands in the application the user was working in. It opens in the top-left corner of the screen that contains the pointer, with the history on the left and the selected item's actions (title and description) on the right, coloured with the operating system's accent colour. Each row is laid out by kind, as in the original design: text shows two lines and the window it was copied from (`IClipboardSourceLocator`, asked when the clipboard change is noticed); an image fills the row; copied files show their system icons (`IFileIconProvider`) with counts and their folder. Every row also shows when it was last copied ("5 min ago", `RelativeTime`) and a pin when it is pinned. With nothing copied yet, holding the gesture shows the picker without items, explaining how to use it (the selection is `IsEmpty`); releasing still pastes normally.
+The picker window is created with `ShowActivated=false` and `Topmost=true`. It never takes keyboard focus, so the paste always lands in the application the user was working in. It opens centred near the top of the screen that contains the pointer: a header, the history on the left, the selected item's actions (icon, title and description) on the right, and the keys in a footer. Each row has a tile showing what kind of item it is (a thumbnail of an image, the system icon of a file or up to four of several files (`IFileIconProvider`), or a line icon), the content, and the window it was copied from (`IClipboardSourceLocator`, asked when the clipboard change is noticed) or the folder of copied files. On the right, every row shows when it was last copied ("5 min ago", `RelativeTime`) and a pin when it is pinned. With nothing copied yet, holding the gesture shows the picker without items, explaining how to use it (`IsEmpty`); releasing still pastes normally.
 
-`tools/Shapeshifter.ScreenshotGenerator` renders (at the 125 % display scaling the original screenshots were taken at) the real picker headlessly with sample content to produce `assets/screenshots` (`scripts/generate-screenshots.sh`); CI runs it on pull requests and commits changed screenshots.
+## Looks
+
+Shapeshifter matches the design language of the operating system it runs on. `PlatformLook` picks a look at startup (the `SHAPESHIFTER_LOOK` environment variable overrides it: `windows`, `macos` or `linux`):
+
+| Look | Platform | Style |
+|---|---|---|
+| Mica Sheets | Windows 11 | Fluent 2: an Acrylic flyout, the accent as a pill on the selected row |
+| Refraction | macOS | Liquid Glass: a translucent sheet, a capsule selection, a template menu-bar icon |
+| Boxed Sheet | Linux (every desktop) | GNOME libadwaita: boxed lists, Adwaita spacing and switches, a symbolic tray icon |
+
+The windows (`Views/*.axaml`) share one layout with semantic style classes; each look is a style file (`Styles/<Look>.axaml`) over that layout plus its icons (`Assets/<Look>`). Every look takes the operating system's accent colour (`AccentPalette`) and falls back to its own default.
+
+`tools/Shapeshifter.ScreenshotGenerator` renders the real picker of every look headlessly, at 125 % display scaling, with sample content to produce `assets/screenshots` (`windows`, `macos` and `linux`, plus the Windows look in four accent colours; `--surfaces` also renders each look's settings window and copy notification for review) (`scripts/generate-screenshots.sh`); CI runs it on pull requests and commits changed screenshots.
+
+The headless renders have no system blur, fonts or accent colour. With `--live`, the same tool shows the real windows on the screen (through the app's own `PickerPresenter` and `CopyNotifier`), captures it, and writes `diagnostics.txt` with the transparency level granted, whether the system material is on and the fonts resolved. The **Live screenshots** workflow (`.github/workflows/live-screenshots.yml`) runs it on macOS and Windows runners for pull requests that touch the looks, and on demand with a choice of runner images and the macOS appearance; it captures each look as it ships, without the system material, and on macOS with Liquid Glass, and uploads the captures as artifacts.
+
+The picker and the copy notification sit on the operating system's own material where it can be had (`NativeMaterial`): Acrylic with DWM's rounded corners and shadow on Windows 11, and on macOS a frosted popover material (or, with `SHAPESHIFTER_NATIVE_MATERIAL=glass`, Liquid Glass on macOS 26) inserted behind the sheet by `MacWindowMaterial`. Both systems put the material under the whole window, so the window is then exactly the panel. The settings window gets Mica on Windows 11. `SHAPESHIFTER_NATIVE_MATERIAL=off` turns this off.
 
 ## Testing
 

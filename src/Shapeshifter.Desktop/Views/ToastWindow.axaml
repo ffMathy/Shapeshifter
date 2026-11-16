@@ -1,6 +1,8 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:services="using:Shapeshifter.Desktop.Services"
         x:Class="Shapeshifter.Desktop.Views.ToastWindow"
+        Classes="toast"
         Title="Shapeshifter"
         WindowDecorations="None"
         ShowActivated="False"
@@ -10,15 +12,15 @@
         Focusable="False"
         IsHitTestVisible="False"
         SizeToContent="WidthAndHeight"
-        Background="#E6000000">
-  <Border BorderBrush="#EE000000" BorderThickness="1" Padding="20,14">
-    <StackPanel Orientation="Horizontal" Spacing="14">
-      <PathIcon Foreground="White" Width="24" Height="24"
-                Data="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
-      <StackPanel VerticalAlignment="Center">
-        <TextBlock x:Name="CountText" Foreground="White" FontSize="22" FontWeight="ExtraLight" />
-        <TextBlock x:Name="PreviewText" Foreground="#CCFFFFFF" FontSize="11" MaxWidth="280" TextTrimming="CharacterEllipsis" />
-      </StackPanel>
-    </StackPanel>
+        TransparencyLevelHint="Transparent"
+        Background="Transparent">
+  <!-- The "copied" notification; Styles/<Look>.axaml styles it as the platform's own notifications look. -->
+  <Border x:Name="Chrome" Classes="toastChrome">
+    <Grid Classes="toastBody" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto">
+      <Image Grid.Row="0" Grid.Column="0" Classes="toastIcon" Source="{x:Static services:PlatformLook.ApplicationIcon}" />
+      <TextBlock Grid.Row="0" Grid.Column="1" Classes="toastApp" Text="Shapeshifter" />
+      <TextBlock x:Name="CountText" Grid.Row="1" Grid.Column="1" Classes="toastTitle" />
+      <TextBlock x:Name="PreviewText" Grid.Row="2" Grid.Column="1" Classes="toastPreview" />
+    </Grid>
   </Border>
 </Window>

@@ -1,11 +1,10 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Shapeshifter.Desktop.ViewModels"
-        xmlns:engine="using:Shapeshifter.Core.Engine"
-        xmlns:local="using:Shapeshifter.Desktop"
-        xmlns:controls="using:Shapeshifter.Desktop.Controls"
+        xmlns:services="using:Shapeshifter.Desktop.Services"
         x:Class="Shapeshifter.Desktop.Views.PickerWindow"
         x:DataType="vm:PickerViewModel"
+        Classes="picker"
         Title="Shapeshifter"
         WindowDecorations="None"
         ShowActivated="False"
@@ -13,158 +12,157 @@
         Topmost="True"
         CanResize="False"
         Focusable="False"
-        SizeToContent="Height"
-        Width="755"
+        SizeToContent="WidthAndHeight"
         TransparencyLevelHint="Transparent"
-        FontFamily="Segoe UI, fonts:Inter#Inter"
         Background="Transparent">
   <!--
-    The original Shapeshifter design, with the sizes of the WPF version (UserInterfaceControl.xaml and the
-    Clipboard*DataControl.xaml files): the history (450 wide, rows 92 high) from the top-left corner of the screen,
-    a 5-wide accent-coloured divider, and the actions of the selected item to its right, only as tall as they need to be.
+    The layout shared by every look; Styles/Windows.axaml, MacOS.axaml and Linux.axaml give it its material, sizes,
+    colours and type through the classes used here. A panel ("chrome") with a header, the history and the actions of
+    the selected item side by side, and a footer with the keys. "chrome.opaque" is set when the window cannot be
+    see-through (no compositor): the panel then has to fill the window, without rounded corners or a shadow.
+    "chrome.empty" is set while nothing has been copied yet.
   -->
-  <Grid ColumnDefinitions="455,300" VerticalAlignment="Top">
-    <!-- History, with the accent-coloured divider along its right side -->
-    <Border Grid.Column="0" Classes="historyPane" Classes.fill="{Binding ActionsFillHeight}">
-      <Panel>
-        <!-- Nothing copied yet: explain how Shapeshifter works instead of showing an empty list -->
-        <StackPanel Classes="emptyState" IsVisible="{Binding IsEmpty}">
-          <TextBlock Classes="emptyTitle" Text="Nothing copied yet" />
-          <TextBlock Classes="emptyText" Text="{Binding EmptyHint}" />
-        </StackPanel>
+  <Border x:Name="Chrome" Classes="chrome" Classes.opaque="{Binding IsOpaque}" Classes.empty="{Binding IsEmpty}">
+    <Border Classes="surface">
+      <Grid RowDefinitions="Auto,Auto,Auto">
+        <!-- Header: the app's icon and name, how many items there are, and how to paste -->
+        <Border Grid.Row="0" Classes="header">
+          <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto">
+            <Image Grid.Column="0" Classes="appIcon" Source="{x:Static services:PlatformLook.ApplicationIcon}" />
+            <TextBlock Grid.Column="1" Classes="headerTitle" Text="{DynamicResource PickerTitle}" />
+            <Border Grid.Column="2" Classes="countPill">
+              <TextBlock Classes="headerCount" Text="{Binding ItemCountText}" />
+            </Border>
+            <TextBlock Grid.Column="4" Classes="headerHint" Text="{Binding ReleaseHint}" />
+          </Grid>
+        </Border>
 
-        <ListBox x:Name="ItemList" Classes="items" Focusable="False" IsVisible="{Binding HasItems}"
-                 ItemsSource="{Binding Items}"
-                 SelectedIndex="{Binding SelectedIndex}"
-                 MaxHeight="{Binding MaxListHeight}"
-                 AutoScrollToSelectedItem="True"
-                 ScrollViewer.VerticalScrollBarVisibility="Hidden">
-          <ListBox.ItemTemplate>
-            <DataTemplate x:DataType="vm:PickerItemViewModel">
-              <Panel>
-                <Grid ColumnDefinitions="87,1,*">
-                  <!-- Left: what kind of item it is -->
-                  <Panel Grid.Column="0" Classes="iconArea">
-                    <Path Classes="glyph" Data="{Binding Glyph}" Stretch="Uniform" Width="50" Height="60" Margin="19,12,0,0"
-                          HorizontalAlignment="Left" VerticalAlignment="Top" IsVisible="{Binding ShowsGlyph}" />
-                    <Image Source="{Binding FileIcon}" Width="64" Height="64" Margin="10,10,13,10" IsVisible="{Binding HasFileIcon}" />
-                    <TextBlock Classes="fileCount" Text="{Binding FileCount}" IsVisible="{Binding IsFilesLayout}" />
-                  </Panel>
+        <Grid Grid.Row="1" Classes="body" ColumnDefinitions="Auto,Auto">
+          <!-- History -->
+          <Border Grid.Column="0" Classes="historyPane" Classes.inactive="{Binding IsActionsPaneActive}">
+            <Panel>
+              <!-- Nothing copied yet: explain how Shapeshifter works instead of showing an empty list (issue #144) -->
+              <StackPanel Classes="emptyState" IsVisible="{Binding IsEmpty}">
+                <TextBlock Classes="emptyTitle" Text="Nothing copied yet" />
+                <TextBlock Classes="emptyText" Text="{Binding EmptyHint}" />
+              </StackPanel>
 
-                  <Rectangle Grid.Column="1" Classes="splitter" />
+              <ListBox x:Name="ItemList" Classes="items" Focusable="False" IsVisible="{Binding HasItems}"
+                       ItemsSource="{Binding Items}"
+                       SelectedIndex="{Binding SelectedIndex}"
+                       MaxHeight="{Binding MaxListHeight}"
+                       AutoScrollToSelectedItem="True"
+                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                <ListBox.ItemTemplate>
+                  <DataTemplate x:DataType="vm:PickerItemViewModel">
+                    <Grid Classes="row" ColumnDefinitions="Auto,Auto,*,Auto"
+                          Classes.textItem="{Binding IsTextLayout}" Classes.imageItem="{Binding IsImageLayout}"
+                          Classes.filesItem="{Binding IsFilesLayout}" Classes.fileItem="{Binding IsFileLayout}">
+                      <!-- Marks the selected row in looks that use a pill or bar rather than a filled row -->
+                      <Border Grid.Column="0" Classes="selectionMark" />
 
-                  <Panel Grid.Column="2" Classes="contentArea">
-                    <Panel Classes="contentInner" Margin="15,10,10,10">
-                      <!-- Text: up to two lines, then the window it was copied from -->
-                      <Grid RowDefinitions="Auto,*" IsVisible="{Binding IsTextLayout}">
-                        <TextBlock Classes="title" Text="{Binding Title}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
-                                   MaxHeight="40" VerticalAlignment="Bottom" />
-                        <StackPanel Grid.Row="1" Classes="source" Margin="0,10,0,1" VerticalAlignment="Bottom">
+                      <!-- What kind of item it is: a thumbnail, file icons or a line icon -->
+                      <Border Grid.Column="1" Classes="tile">
+                        <Panel>
+                          <Path Classes="glyph" Data="{Binding Glyph}" Stretch="Uniform" IsVisible="{Binding ShowsGlyph}" />
+                          <Image Classes="fileIcon" Source="{Binding FileIcon}" IsVisible="{Binding HasFileIcon}" />
+                          <ItemsControl Classes="filePreviews" ItemsSource="{Binding FilePreviews}" IsVisible="{Binding HasFilePreviews}">
+                            <ItemsControl.ItemsPanel>
+                              <ItemsPanelTemplate>
+                                <UniformGrid Columns="2" />
+                              </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                              <DataTemplate x:DataType="vm:PickerFilePreviewViewModel">
+                                <Panel Classes="filePreview">
+                                  <Image Source="{Binding Icon}" IsVisible="{Binding HasIcon}" />
+                                  <Path Data="{x:Static vm:PickerFilePreviewViewModel.FallbackGlyph}" Stretch="Uniform" IsVisible="{Binding HasNoIcon}" />
+                                </Panel>
+                              </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                          </ItemsControl>
+                          <Border Classes="thumbnail" IsVisible="{Binding HasThumbnail}">
+                            <Image Source="{Binding Thumbnail}" Stretch="UniformToFill" />
+                          </Border>
+                        </Panel>
+                      </Border>
+
+                      <!-- The content and where it came from -->
+                      <StackPanel Grid.Column="2" Classes="text">
+                        <TextBlock Classes="title" Text="{Binding Title}" />
+                        <StackPanel Classes="source" IsVisible="{Binding HasSourceText}">
                           <Image Source="{Binding SourceIcon}" IsVisible="{Binding HasSourceIcon}" />
-                          <TextBlock Text="{Binding SourceText}" IsVisible="{Binding HasSourceText}" />
+                          <Path Data="{Binding SourceGlyph}" Stretch="Uniform" IsVisible="{Binding ShowsSourceGlyph}" />
+                          <TextBlock Text="{Binding SourceText}" />
                         </StackPanel>
-                      </Grid>
-
-                      <!-- Image: only the source application's icon here; the picture is drawn over the row below -->
-                      <StackPanel Classes="source" VerticalAlignment="Bottom" IsVisible="{Binding IsImageLayout}">
-                        <Image Source="{Binding SourceIcon}" IsVisible="{Binding HasSourceIcon}" />
                       </StackPanel>
 
-                      <!-- Several files: each kind of file with how many there are, then where they came from -->
-                      <Grid RowDefinitions="*,Auto" IsVisible="{Binding IsFilesLayout}">
-                        <ItemsControl ItemsSource="{Binding FileGroups}">
-                          <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                              <StackPanel Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                          </ItemsControl.ItemsPanel>
-                          <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="vm:PickerFileGroupViewModel">
-                              <Panel Margin="0,0,10,0">
-                                <Image Source="{Binding Icon}" Width="32" Height="32" IsVisible="{Binding HasIcon}" />
-                                <Path Classes="fileGlyph" Data="{x:Static vm:PickerFileGroupViewModel.FallbackGlyph}" Stretch="Uniform"
-                                      Width="32" Height="32" IsVisible="{Binding HasNoIcon}" />
-                                <Border Classes="badge" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                                  <TextBlock Text="{Binding CountText}" />
-                                </Border>
-                              </Panel>
-                            </DataTemplate>
-                          </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                        <StackPanel Grid.Row="1" Classes="source" Margin="0,7,0,0" VerticalAlignment="Bottom">
-                          <Image Source="{Binding SourceIcon}" IsVisible="{Binding HasSourceIcon}" />
-                          <Path Classes="folderGlyph" Data="{x:Static vm:PickerItemViewModel.FallbackFolderGlyph}" Width="16" Height="12"
-                                Stretch="Uniform" IsVisible="{Binding ShowsFolderGlyph}" />
-                          <TextBlock Text="{Binding SourceText}" IsVisible="{Binding HasSourceText}" />
-                        </StackPanel>
-                      </Grid>
+                      <!-- When it was copied, and a pin when it is pinned -->
+                      <StackPanel Grid.Column="3" Classes="pinned">
+                        <Path Data="{x:Static services:Glyphs.Pin}" Stretch="Uniform" IsVisible="{Binding IsPinned}" />
+                        <TextBlock Text="{Binding CopiedAgo}" />
+                      </StackPanel>
+                    </Grid>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+            </Panel>
+          </Border>
 
-                      <!-- One file: its name in large type, then where it came from -->
-                      <Grid RowDefinitions="*,*" IsVisible="{Binding IsFileLayout}">
-                        <TextBlock Classes="fileName" Text="{Binding Title}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
-                        <StackPanel Grid.Row="1" Classes="source">
-                          <Image Source="{Binding SourceIcon}" IsVisible="{Binding HasSourceIcon}" />
-                          <Path Classes="folderGlyph" Data="{x:Static vm:PickerItemViewModel.FallbackFolderGlyph}" Width="16" Height="12"
-                                Stretch="Uniform" IsVisible="{Binding ShowsFolderGlyph}" />
-                          <TextBlock Text="{Binding SourceText}" IsVisible="{Binding HasSourceText}" />
-                        </StackPanel>
-                      </Grid>
-                    </Panel>
-                  </Panel>
-                </Grid>
+          <!-- Actions of the selected item -->
+          <Border Grid.Column="1" Classes="actionsPane" Classes.inactive="{Binding IsItemsPaneActive}" IsVisible="{Binding HasItems}">
+            <StackPanel>
+              <TextBlock Classes="actionsHeader" Text="{Binding ActionsHeader}" />
+              <ListBox Classes="actions" Focusable="False"
+                       ItemsSource="{Binding Actions}"
+                       SelectedIndex="{Binding SelectedActionIndex}"
+                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                <ListBox.ItemTemplate>
+                  <DataTemplate x:DataType="vm:PickerActionViewModel">
+                    <Grid Classes="action" ColumnDefinitions="Auto,*,Auto">
+                      <Path Grid.Column="0" Classes="actionGlyph" Data="{Binding Glyph}" Stretch="Uniform" />
+                      <StackPanel Grid.Column="1">
+                        <TextBlock Classes="actionTitle" Text="{Binding Title}" />
+                        <TextBlock Classes="actionDescription" Text="{Binding Description}" />
+                      </StackPanel>
+                      <Border Grid.Column="2" Classes="defaultBadge" IsVisible="{Binding IsDefault}">
+                        <TextBlock Text="Default" />
+                      </Border>
+                    </Grid>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+            </StackPanel>
+          </Border>
+        </Grid>
 
-                <!-- An image is shown over the whole row, through tilted strips -->
-                <controls:StripedImage Classes="thumbnail" Source="{Binding Thumbnail}" Height="92" Margin="-1,-1,-1,0" VerticalAlignment="Top"
-                                       IsVisible="{Binding IsImageLayout}" />
-
-                <!-- When it was copied, and a pin when it is pinned, in the bottom-right corner (over an image too) -->
-                <Border Classes="stamp">
-                  <StackPanel Orientation="Horizontal">
-                    <Path Classes="pin" Data="{x:Static vm:PickerItemViewModel.PinGlyph}" Stretch="Uniform" Width="9" Height="12"
-                          IsVisible="{Binding IsPinned}" />
-                    <TextBlock Text="{Binding CopiedAgo}" />
-                  </StackPanel>
-                </Border>
-              </Panel>
-            </DataTemplate>
-          </ListBox.ItemTemplate>
-        </ListBox>
-        <Rectangle Classes="veil" IsHitTestVisible="False" Opacity="{Binding IsActionsPaneActive, Converter={x:Static local:OpacityConverters.FromBool}}">
-          <Rectangle.Fill>
-            <LinearGradientBrush StartPoint="0%,50%" EndPoint="40%,50%">
-              <GradientStop Color="#40000000" Offset="0" />
-              <GradientStop Color="#00000000" Offset="1" />
-            </LinearGradientBrush>
-          </Rectangle.Fill>
-        </Rectangle>
-      </Panel>
+        <!-- Footer: the keys -->
+        <Border Grid.Row="2" Classes="footer">
+          <WrapPanel Classes="hints">
+            <StackPanel Classes="hint">
+              <Border Classes="key"><TextBlock Text="{Binding ModifierKey}" /></Border>
+              <TextBlock Text="Release to paste" />
+            </StackPanel>
+            <StackPanel Classes="hint">
+              <Border Classes="key"><TextBlock Text="V" /></Border>
+              <Border Classes="key"><TextBlock Text="↑↓" /></Border>
+              <TextBlock Text="Move" />
+            </StackPanel>
+            <StackPanel Classes="hint">
+              <Border Classes="key"><TextBlock Text="←→" /></Border>
+              <TextBlock Text="Actions" />
+            </StackPanel>
+            <StackPanel Classes="hint">
+              <Border Classes="key"><TextBlock Text="Del" /></Border>
+              <TextBlock Text="Remove" />
+            </StackPanel>
+            <StackPanel Classes="hint">
+              <Border Classes="key"><TextBlock Text="Esc" /></Border>
+              <TextBlock Text="Cancel" />
+            </StackPanel>
+          </WrapPanel>
+        </Border>
+      </Grid>
     </Border>
-
-    <!-- Actions of the selected item -->
-    <Border Grid.Column="1" Classes="actionsPane" Classes.fill="{Binding ActionsFillHeight}" IsVisible="{Binding HasItems}">
-      <Panel>
-        <ListBox Classes="actions" Focusable="False"
-                 ItemsSource="{Binding Actions}"
-                 SelectedIndex="{Binding SelectedActionIndex}"
-                 ScrollViewer.VerticalScrollBarVisibility="Hidden">
-          <ListBox.ItemTemplate>
-            <DataTemplate x:DataType="engine:PickerActionView">
-              <StackPanel>
-                <TextBlock Classes="actionTitle" Text="{Binding Title}" />
-                <TextBlock Classes="actionDescription" Text="{Binding Description}" TextWrapping="Wrap" />
-              </StackPanel>
-            </DataTemplate>
-          </ListBox.ItemTemplate>
-        </ListBox>
-        <Rectangle Classes="veil" IsHitTestVisible="False" Opacity="{Binding IsItemsPaneActive, Converter={x:Static local:OpacityConverters.FromBool}}">
-          <Rectangle.Fill>
-            <LinearGradientBrush StartPoint="100%,50%" EndPoint="50%,50%">
-              <GradientStop Color="#30000000" Offset="0" />
-              <GradientStop Color="#00000000" Offset="1" />
-            </LinearGradientBrush>
-          </Rectangle.Fill>
-        </Rectangle>
-      </Panel>
-    </Border>
-  </Grid>
+  </Border>
 </Window>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+  <!--
+    Shapeshifter's macOS menu bar extra, a template image: a square sheet behind a round one, pure black on
+    transparent so macOS can tint it. Designed at 18 pt; rendered at 2x to
+    src/Shapeshifter.Desktop/Assets/MacOS/Tray.png (36 × 36).
+  -->
+  <defs><mask id="cut"><rect width="18" height="18" fill="#FFFFFF"/><circle cx="11.5" cy="11.5" r="7" fill="#000000"/></mask></defs>
+  <rect x="1.75" y="1.75" width="9.5" height="9.5" rx="2" fill="none" stroke="#000000" stroke-width="1.5" mask="url(#cut)"/>
+  <circle cx="11.5" cy="11.5" r="5.25" fill="#000000"/>
+</svg>

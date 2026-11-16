@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shapeshifter: a clipboard manager for the 21st century</title>
+  <meta name="description" content="Shapeshifter is a free, open-source clipboard manager for Windows, macOS and Linux. Copy multiple items and choose which one to paste later, without losing any of them.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e1013" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Shapeshifter: a clipboard manager for the 21st century">
+  <meta property="og:description" content="Copy multiple items and choose which one to paste later, on Windows, macOS and Linux.">
+  <meta property="og:url" content="https://shapeshifter.app/">
+  <meta property="og:image" content="https://shapeshifter.app/screenshots/windows.PNG">
+  <link rel="canonical" href="https://shapeshifter.app/">
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+  <script>document.documentElement.classList.replace('no-js', 'js');</script>
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="Shapeshifter, back to top">
+        <img src="icons/favicon.svg" alt="" width="28" height="28">
+        <span>Shapeshifter</span>
+      </a>
+      <nav class="site-nav" aria-label="Sections">
+        <ul>
+          <li class="nav-optional"><a href="#how-it-works">How it works</a></li>
+          <li class="nav-optional"><a href="#features">Features</a></li>
+          <li class="nav-optional"><a href="#screenshots">Screenshots</a></li>
+          <li class="nav-optional"><a href="#privacy">Privacy</a></li>
+          <li class="nav-optional"><a href="#platforms">Platforms</a></li>
+          <li><a href="#download">Download</a></li>
+          <li>
+            <a class="nav-icon" href="https://github.com/ffMathy/Shapeshifter">
+              <svg aria-hidden="true" viewBox="0 0 16 16" width="20" height="20"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+              <span class="visually-hidden">Shapeshifter on GitHub</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-heading">
+            <p class="eyebrow">Free and open source · Windows, macOS and Linux</p>
+            <h1 id="hero-title">Shapeshifter</h1>
+            <p class="tagline">A clipboard manager for the 21st&nbsp;century.</p>
+          </div>
+          <div class="hero-body">
+            <p class="lede">Copy as many things as you like, then choose which one to paste, without losing any of them. Hold <kbd data-mod>Ctrl</kbd>&#8202;+&#8202;<kbd>V</kbd> and your clipboard history appears right where you are typing.</p>
+
+            <div class="cta" id="primary-cta">
+              <a class="button button-primary" id="primary-download" href="https://github.com/ffMathy/Shapeshifter/releases/latest/download/Shapeshifter-win-x64.zip">
+                <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12"/></svg>
+                <span class="button-label"><span id="primary-label">Download for Windows</span><small id="primary-detail">x64 · .zip</small></span>
+              </a>
+              <a class="button button-secondary" href="#download" id="secondary-download">Other platforms</a>
+            </div>
+            <p class="cta-meta" id="cta-meta">
+              <span id="latest-version" hidden></span>
+              <span id="cta-note">Also for Windows on Arm, macOS and Linux.</span>
+            </p>
+          </div>
+        </div>
+
+        <figure class="hero-shot">
+          <img id="hero-image" src="screenshots/windows.PNG" width="1400" height="820"
+               alt="The Shapeshifter picker on Windows: a list of five copied items on the left, including text, an image and files, and the actions for the selected item on the right, with keyboard hints along the bottom.">
+        </figure>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section" id="how-it-works" aria-labelledby="how-title">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">How it works</p>
+          <h2 id="how-title">The paste shortcut you already use, held a little longer.</h2>
+          <p class="section-lede">Shapeshifter does not change your habits. A quick <kbd data-mod>Ctrl</kbd>&#8202;+&#8202;<kbd>V</kbd> still pastes normally. Keep holding <kbd data-mod>Ctrl</kbd> and you get your whole history.</p>
+        </header>
+
+        <ol class="steps">
+          <li class="step">
+            <div class="step-keys" aria-hidden="true">
+              <span class="keycap" data-mod>Ctrl</span><span class="plus">+</span><span class="keycap">C</span>
+            </div>
+            <h3><span class="step-number">1</span><span>Copy as usual</span></h3>
+            <p>Shapeshifter remembers what you copy, in every clipboard format: rich text, HTML, images, files and application-specific data. Each item is restored exactly when you paste it.</p>
+          </li>
+          <li class="step">
+            <div class="step-keys" aria-hidden="true">
+              <span class="keycap keycap-held" data-mod>Ctrl</span><span class="plus">+</span><span class="keycap">V</span>
+            </div>
+            <h3><span class="step-number">2</span><span>Hold <span data-mod>Ctrl</span>, press V</span></h3>
+            <p>Keep holding <span data-mod>Ctrl</span>. After a short delay (300&nbsp;ms by default) your clipboard history appears.</p>
+          </li>
+          <li class="step">
+            <div class="step-keys" aria-hidden="true">
+              <span class="keycap">V</span><span class="or">or</span><span class="keycap">&#8593;</span><span class="keycap">&#8595;</span>
+            </div>
+            <h3><span class="step-number">3</span><span>Pick an item</span></h3>
+            <p>Press <kbd>V</kbd> again, or <kbd>&#8595;</kbd>, to move to an older item and <kbd>&#8593;</kbd> to go back. <kbd>&#8592;</kbd>&#8202;/&#8202;<kbd>&#8594;</kbd> switch between the items and the actions for the selected item.</p>
+          </li>
+          <li class="step">
+            <div class="step-keys" aria-hidden="true">
+              <span class="keycap keycap-release" data-mod>Ctrl</span>
+            </div>
+            <h3><span class="step-number">4</span><span>Release <span data-mod>Ctrl</span></span></h3>
+            <p>The selected item is pasted, or the selected action runs. Changed your mind? Press <kbd>Esc</kbd> and nothing is pasted.</p>
+          </li>
+        </ol>
+
+        <div class="reference">
+          <h3 class="reference-title">Every key, at a glance</h3>
+          <table class="key-table">
+            <caption class="visually-hidden">What each key does in Shapeshifter</caption>
+            <thead>
+              <tr><th scope="col">You do</th><th scope="col">Shapeshifter does</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><kbd data-mod>Ctrl</kbd>&#8202;+&#8202;<kbd>V</kbd> (tap)</td><td>Pastes normally.</td></tr>
+              <tr><td>Hold <kbd data-mod>Ctrl</kbd>, press <kbd>V</kbd>, keep holding <kbd data-mod>Ctrl</kbd></td><td>Shows your clipboard history after a short delay (300&nbsp;ms by default).</td></tr>
+              <tr><td><kbd>V</kbd> again, or <kbd>&#8593;</kbd>&#8202;/&#8202;<kbd>&#8595;</kbd></td><td>Selects the next (older) or previous item.</td></tr>
+              <tr><td><kbd>&#8592;</kbd>&#8202;/&#8202;<kbd>&#8594;</kbd></td><td>Switches between the items and the actions for the selected item.</td></tr>
+              <tr><td><kbd>Delete</kbd></td><td>Removes the selected item from the history.</td></tr>
+              <tr><td><kbd>Esc</kbd></td><td>Cancels; nothing is pasted.</td></tr>
+              <tr><td>Release <kbd data-mod>Ctrl</kbd></td><td>Pastes the selected item, or performs the selected action.</td></tr>
+            </tbody>
+          </table>
+          <p class="fine-print">On macOS, use <kbd>Cmd</kbd> instead of <kbd>Ctrl</kbd>. Shortcuts that add another modifier, such as <kbd>Ctrl</kbd>&#8202;+&#8202;<kbd>Shift</kbd>&#8202;+&#8202;<kbd>V</kbd> in terminals or <kbd>AltGr</kbd>&#8202;+&#8202;<kbd>V</kbd>, are left to the application.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section section-alt" id="features" aria-labelledby="features-title">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Features</p>
+          <h2 id="features-title">Everything you copy, ready when you need it.</h2>
+        </header>
+
+        <ul class="features">
+          <li class="feature">
+            <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="3.5" width="12" height="15" rx="2.5"/><path d="M8 21h9.5a2.5 2.5 0 0 0 2.5-2.5V8"/><path d="M7.5 8.5h5M7.5 12h5M7.5 15.5h3"/></svg>
+            <h3>Every format, exactly</h3>
+            <p>Rich text, HTML, images, files and application-specific data are all kept, so an item comes back exactly as you copied it.</p>
+          </li>
+          <li class="feature">
+            <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h.01M11 10h.01M15 10h.01M8 14h8"/></svg>
+            <h3>No new habits</h3>
+            <p>A tap of the paste shortcut pastes as always. Shortcuts with another modifier, like <kbd>Ctrl</kbd>&#8202;+&#8202;<kbd>Shift</kbd>&#8202;+&#8202;<kbd>V</kbd>, are left to the application.</p>
+          </li>
+          <li class="feature">
+            <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3.5 14.2 8l4.8.6-3.5 3.3.9 4.7L12 14.4l-4.4 2.2.9-4.7L5 8.6 9.8 8 12 3.5Z"/><path d="M5 20.5h14"/></svg>
+            <h3>At home on every platform</h3>
+            <p>Fluent 2 on Windows, Liquid Glass on macOS and GNOME's libadwaita on Linux. Each look follows your system accent colour.</p>
+          </li>
+          <li class="feature">
+            <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m14.5 3.5 6 6-3 1-3.5 3.5-.5 4-3-3-5 5M9.5 10.5l-3-3 4-.5 3.5-3.5 1-3"/></svg>
+            <h3>Pin what matters</h3>
+            <p>Pinned items stay in your history and are kept across restarts.</p>
+          </li>
+          <li class="feature">
+            <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 5 6v5.5c0 4.3 2.9 8 7 9.5 4.1-1.5 7-5.2 7-9.5V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+            <h3>Respects your passwords</h3>
+            <p>Content that password managers mark as sensitive is never recorded.</p>
+          </li>
+          <li class="feature">
+            <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+            <h3>Yours to tune</h3>
+            <p>From the tray icon, choose the delay before the history appears, how many items to keep, copy notifications and starting at login.</p>
+          </li>
+        </ul>
+
+        <div class="actions-block">
+          <div class="actions-intro">
+            <h3>Actions for every item</h3>
+            <p>Press <kbd>&#8594;</kbd> while the history is open to do more than paste. The actions on offer depend on what the item contains.</p>
+          </div>
+          <dl class="actions">
+            <div><dt>Paste</dt><dd>Pastes clipboard contents as-is.</dd></div>
+            <div><dt>Paste as plain text</dt><dd>Pastes clipboard contents as plain text with no formatting.</dd></div>
+            <div><dt>Copy as file</dt><dd>Saves the text to a <code>.txt</code> file and copies that file to the clipboard.</dd></div>
+            <div><dt>Copy as compressed folder</dt><dd>Copies the copied files to the clipboard as a compressed (<code>.zip</code>) folder.</dd></div>
+            <div><dt>Copy image from link</dt><dd>Downloads the linked image and copies the image itself to the clipboard.</dd></div>
+            <div><dt>Open links</dt><dd>Opens the links in your browser.</dd></div>
+            <div><dt>Pin to clipboard / Unpin</dt><dd>Pinned items stay at the top and are kept across restarts.</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screenshots -->
+    <section class="section" id="screenshots" aria-labelledby="screens-title">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Screenshots</p>
+          <h2 id="screens-title">One app, three native looks.</h2>
+          <p class="section-lede">Shapeshifter picks the look of the platform it runs on, so it feels like part of your desktop.</p>
+        </header>
+
+        <div class="tabs" data-tabs>
+          <div class="tab-list" role="tablist" aria-label="Platform" hidden>
+            <button type="button" role="tab" id="tab-windows" aria-controls="panel-windows" data-look="windows">
+              <img src="app-icons/windows.png" alt="" width="24" height="24"> Windows
+            </button>
+            <button type="button" role="tab" id="tab-macos" aria-controls="panel-macos" data-look="macos">
+              <img src="app-icons/macos.png" alt="" width="24" height="24"> macOS
+            </button>
+            <button type="button" role="tab" id="tab-linux" aria-controls="panel-linux" data-look="linux">
+              <img src="app-icons/linux.png" alt="" width="24" height="24"> Linux
+            </button>
+          </div>
+
+          <div class="tab-panel" role="tabpanel" id="panel-windows" aria-labelledby="tab-windows" data-look="windows">
+            <div class="panel-head">
+              <h3><img src="app-icons/windows.png" alt="" width="32" height="32"> Windows <span class="look-name">“Mica Sheets”</span></h3>
+              <p>Fluent 2, as on Windows 11. Every look follows your system accent colour.</p>
+            </div>
+            <figure class="shot shot-main">
+              <img src="screenshots/windows.PNG" width="1400" height="820" loading="lazy"
+                   alt="The picker on Windows, in the Fluent 2 look: five history items on the left, actions for the selected text on the right.">
+            </figure>
+            <div class="shot-row">
+              <figure class="shot">
+                <img src="screenshots/settings-windows.PNG" width="975" height="854" loading="lazy"
+                     alt="The settings window on Windows: the delay before the history appears, items to remember, copy notifications and start at login.">
+                <figcaption>Settings</figcaption>
+              </figure>
+              <div class="shot-aside">
+              <figure class="shot">
+                <img src="screenshots/toast-windows.PNG" width="575" height="263" loading="lazy"
+                     alt="A Windows copy notification: “Copied, 5 items in your history”, followed by the copied text.">
+                <figcaption>Copy notification</figcaption>
+              </figure>
+              <p class="shot-note">Settings open from the tray icon: the delay before the history appears, how many items to keep, copy notifications and starting at login.</p>
+            </div>
+            </div>
+          </div>
+
+          <div class="tab-panel" role="tabpanel" id="panel-macos" aria-labelledby="tab-macos" data-look="macos">
+            <div class="panel-head">
+              <h3><img src="app-icons/macos.png" alt="" width="32" height="32"> macOS <span class="look-name">“Refraction”</span></h3>
+              <p>Liquid Glass, as on current macOS.</p>
+            </div>
+            <figure class="shot shot-main">
+              <img src="screenshots/macos.PNG" width="1400" height="820" loading="lazy"
+                   alt="The picker on macOS, in the Liquid Glass look: a translucent panel with five history items and the actions for the selected text.">
+            </figure>
+            <div class="shot-row">
+              <figure class="shot">
+                <img src="screenshots/settings-macos.PNG" width="730" height="659" loading="lazy"
+                     alt="The settings window on macOS: the delay before the history appears, items to remember, copy notifications and start at login.">
+                <figcaption>Settings</figcaption>
+              </figure>
+              <div class="shot-aside">
+              <figure class="shot">
+                <img src="screenshots/toast-macos.PNG" width="555" height="222" loading="lazy"
+                     alt="A macOS copy notification: “Copied, 5 items in your history”, followed by the copied text.">
+                <figcaption>Copy notification</figcaption>
+              </figure>
+              <p class="shot-note">Settings open from the tray icon: the delay before the history appears, how many items to keep, copy notifications and starting at login.</p>
+            </div>
+            </div>
+          </div>
+
+          <div class="tab-panel" role="tabpanel" id="panel-linux" aria-labelledby="tab-linux" data-look="linux">
+            <div class="panel-head">
+              <h3><img src="app-icons/linux.png" alt="" width="32" height="32"> Linux <span class="look-name">“Boxed Sheet”</span></h3>
+              <p>GNOME's libadwaita, used on every Linux desktop.</p>
+            </div>
+            <figure class="shot shot-main">
+              <img src="screenshots/linux.PNG" width="1400" height="820" loading="lazy"
+                   alt="The picker on Linux, in the libadwaita look: boxed lists of history items and actions under a centred title.">
+            </figure>
+            <div class="shot-row">
+              <figure class="shot">
+                <img src="screenshots/settings-linux.PNG" width="800" height="783" loading="lazy"
+                     alt="The settings window on Linux: the delay before the history appears, items to remember, copy notifications and start at login.">
+                <figcaption>Settings</figcaption>
+              </figure>
+              <div class="shot-aside">
+              <figure class="shot">
+                <img src="screenshots/toast-linux.PNG" width="433" height="173" loading="lazy"
+                     alt="A Linux copy notification: “Copied, 5 items in your history”, followed by the copied text.">
+                <figcaption>Copy notification</figcaption>
+              </figure>
+              <p class="shot-note">Settings open from the tray icon: the delay before the history appears, how many items to keep, copy notifications and starting at login.</p>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy -->
+    <section class="section section-alt" id="privacy" aria-labelledby="privacy-title">
+      <div class="container">
+        <div class="split">
+          <header class="section-head">
+            <p class="eyebrow">Privacy</p>
+            <h2 id="privacy-title">Your clipboard stays on your computer.</h2>
+            <p class="section-lede">Shapeshifter does not send your clipboard data anywhere. Pinned items are stored only on your own computer, and the code is open for anyone to check.</p>
+          </header>
+          <div class="privacy-points">
+            <div class="privacy-point">
+              <h3>Passwords are not recorded</h3>
+              <p>Clipboard content that password managers mark as sensitive is skipped, using each platform's convention:</p>
+              <ul class="plain-list">
+                <li><strong>Windows</strong> <span><code>ExcludeClipboardContentFromMonitorProcessing</code> and <code>CanIncludeInClipboardHistory</code></span></li>
+                <li><strong>macOS</strong> <span><code>org.nspasteboard.ConcealedType</code> and related types</span></li>
+                <li><strong>KDE</strong> <span><code>x-kde-passwordManagerHint</code></span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="privacy-point privacy-data">
+          <h3>Where your data lives</h3>
+          <div class="table-scroll" tabindex="0" role="region" aria-label="Where Shapeshifter stores data">
+            <table class="data-table">
+              <thead>
+                <tr><th scope="col">Platform</th><th scope="col">Settings</th><th scope="col">Pinned items and logs</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Windows</th><td data-label="Settings"><code>%APPDATA%\Shapeshifter</code></td><td data-label="Pinned items and logs"><code>%LOCALAPPDATA%\Shapeshifter</code></td></tr>
+                <tr><th scope="row">macOS</th><td data-label="Settings"><code>~/Library/Application Support/Shapeshifter</code></td><td data-label="Pinned items and logs">Same; logs in <code>~/Library/Logs/Shapeshifter</code></td></tr>
+                <tr><th scope="row">Linux</th><td data-label="Settings"><code>$XDG_CONFIG_HOME/shapeshifter</code></td><td data-label="Pinned items and logs"><code>$XDG_DATA_HOME/shapeshifter</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Platforms -->
+    <section class="section" id="platforms" aria-labelledby="platforms-title">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Platform support</p>
+          <h2 id="platforms-title">What you need.</h2>
+          <p class="section-lede">Builds are self-contained: there is no .NET runtime or anything else to install first.</p>
+        </header>
+
+        <ul class="platforms">
+          <li class="platform">
+            <div class="platform-head">
+              <img src="app-icons/windows.png" alt="" width="40" height="40">
+              <div>
+                <h3>Windows 10 and 11</h3>
+                <p class="platform-arch">x64 and Arm64</p>
+              </div>
+              <span class="status status-ok">Supported</span>
+            </div>
+            <p>No special permissions needed.</p>
+          </li>
+          <li class="platform">
+            <div class="platform-head">
+              <img src="app-icons/macos.png" alt="" width="40" height="40">
+              <div>
+                <h3>macOS</h3>
+                <p class="platform-arch">Apple silicon and Intel</p>
+              </div>
+              <span class="status status-ok">Supported</span>
+            </div>
+            <p>Grant <strong>Accessibility</strong> access in System Settings → Privacy &amp; Security → Accessibility. macOS requires it for any app that observes or sends keystrokes.</p>
+          </li>
+          <li class="platform">
+            <div class="platform-head">
+              <img src="app-icons/linux.png" alt="" width="40" height="40">
+              <div>
+                <h3>Linux on X11</h3>
+                <p class="platform-arch">x64 and Arm64</p>
+              </div>
+              <span class="status status-ok">Supported</span>
+            </div>
+            <p>Works on any X11 desktop. A system tray (StatusNotifierItem or XEmbed) is optional.</p>
+          </li>
+          <li class="platform platform-limited">
+            <div class="platform-head">
+              <img src="app-icons/linux.png" alt="" width="40" height="40">
+              <div>
+                <h3>Linux on Wayland</h3>
+                <p class="platform-arch">x64 and Arm64</p>
+              </div>
+              <span class="status status-limited">Limited</span>
+            </div>
+            <p>Wayland does not let applications observe or send global keystrokes. Shapeshifter runs through XWayland, so the paste gesture only works while an X11 application is focused. Log in to an X11 session for full support.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Downloads -->
+    <section class="section section-alt" id="download" aria-labelledby="download-title">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Download</p>
+          <h2 id="download-title">Get Shapeshifter.</h2>
+          <p class="section-lede">Every download is the latest release from GitHub. Extract the archive and run Shapeshifter. <span id="download-version" hidden></span></p>
+        </header>
+
+        <div class="downloads">
+          <section class="download-group" data-os="windows" aria-labelledby="dl-windows">
+            <h3 id="dl-windows"><img src="app-icons/windows.png" alt="" width="28" height="28"> Windows</h3>
+            <ul>
+              <li><a class="download-link" data-asset="Shapeshifter-win-x64.zip" href="https://github.com/ffMathy/Shapeshifter/releases/latest/download/Shapeshifter-win-x64.zip"><span>x64</span><small>Most PCs · .zip</small></a></li>
+              <li><a class="download-link" data-asset="Shapeshifter-win-arm64.zip" href="https://github.com/ffMathy/Shapeshifter/releases/latest/download/Shapeshifter-win-arm64.zip"><span>Arm64</span><small>Windows on Arm · .zip</small></a></li>
+            </ul>
+            <p class="download-note">Windows 10 and 11. No special permissions needed.</p>
+          </section>
+          <section class="download-group" data-os="macos" aria-labelledby="dl-macos">
+            <h3 id="dl-macos"><img src="app-icons/macos.png" alt="" width="28" height="28"> macOS</h3>
+            <ul>
+              <li><a class="download-link" data-asset="Shapeshifter-osx-arm64.zip" href="https://github.com/ffMathy/Shapeshifter/releases/latest/download/Shapeshifter-osx-arm64.zip"><span>Apple silicon</span><small>M-series Macs · .zip</small></a></li>
+              <li><a class="download-link" data-asset="Shapeshifter-osx-x64.zip" href="https://github.com/ffMathy/Shapeshifter/releases/latest/download/Shapeshifter-osx-x64.zip"><span>Intel</span><small>Intel Macs · .zip</small></a></li>
+            </ul>
+            <p class="download-note">Needs Accessibility access: System Settings → Privacy &amp; Security → Accessibility.</p>
+          </section>
+          <section class="download-group" data-os="linux" aria-labelledby="dl-linux">
+            <h3 id="dl-linux"><img src="app-icons/linux.png" alt="" width="28" height="28"> Linux</h3>
+            <ul>
+              <li><a class="download-link" data-asset="Shapeshifter-linux-x64.tar.gz" href="https://github.com/ffMathy/Shapeshifter/releases/latest/download/Shapeshifter-linux-x64.tar.gz"><span>x64</span><small>Most PCs · .tar.gz</small></a></li>
+              <li><a class="download-link" data-asset="Shapeshifter-linux-arm64.tar.gz" href="https://github.com/ffMathy/Shapeshifter/releases/latest/download/Shapeshifter-linux-arm64.tar.gz"><span>Arm64</span><small>.tar.gz</small></a></li>
+            </ul>
+            <p class="download-note">Full support on X11. On Wayland, the paste gesture only works in X11 applications.</p>
+          </section>
+        </div>
+
+        <p class="downloads-more">
+          <a href="https://github.com/ffMathy/Shapeshifter/releases">All releases and release notes</a>
+          <span aria-hidden="true">·</span>
+          <a href="https://github.com/ffMathy/Shapeshifter#building-from-source">Build from source</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- Open source -->
+    <section class="section" id="open-source" aria-labelledby="oss-title">
+      <div class="container">
+        <div class="oss">
+          <div class="oss-text">
+            <p class="eyebrow">Open source</p>
+            <h2 id="oss-title">Made in the open, by the people who use it.</h2>
+            <p>Shapeshifter is 100% open source and built with .NET 11 and <a href="https://avaloniaui.net">Avalonia</a>. Found a bug or have an idea? Open an issue. Want to fix it yourself? Create a pull request, and we'll look at it.</p>
+            <div class="oss-actions">
+              <a class="button button-primary" href="https://github.com/ffMathy/Shapeshifter">
+                <svg aria-hidden="true" viewBox="0 0 16 16" width="18" height="18"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                <span>View on GitHub</span>
+              </a>
+              <a class="button button-secondary" href="https://github.com/ffMathy/Shapeshifter/issues">Report an issue</a>
+            </div>
+          </div>
+          <div class="oss-card">
+            <h3>Support the project</h3>
+            <p>Become a financial contributor on Open Collective and help sustain Shapeshifter and its community.</p>
+            <a class="text-link" href="https://opencollective.com/shapeshifterclipboard">Contribute on Open Collective <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a class="brand" href="#top">
+          <img src="icons/favicon.svg" alt="" width="24" height="24">
+          <span>Shapeshifter</span>
+        </a>
+        <p>A clipboard manager for the 21st century.</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer">
+        <ul>
+          <li><a href="https://github.com/ffMathy/Shapeshifter">Source code</a></li>
+          <li><a href="https://github.com/ffMathy/Shapeshifter/releases">Releases</a></li>
+          <li><a href="https://github.com/ffMathy/Shapeshifter/issues">Issues</a></li>
+          <li><a href="https://opencollective.com/shapeshifterclipboard">Open Collective</a></li>
+        </ul>
+      </nav>
+      <p class="footer-license">Free for personal use under the <a href="https://tldrlegal.com/license/creative-commons-attribution-noncommercial-(cc-nc)">Creative Commons Attribution NonCommercial</a> license. For commercial use, <a href="https://github.com/ffMathy">get in touch</a>.</p>
+    </div>
+  </footer>
+</body>
+</html>

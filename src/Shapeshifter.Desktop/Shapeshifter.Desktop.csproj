@@ -3,7 +3,7 @@
     <OutputType>WinExe</OutputType>
     <AssemblyName>Shapeshifter</AssemblyName>
     <RootNamespace>Shapeshifter.Desktop</RootNamespace>
-    <ApplicationIcon>Assets\Application.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\Windows\Application.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
@@ -23,6 +23,10 @@
       <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.pdb'" />
     </ItemGroup>
   </Target>
+  <ItemGroup>
+    <!-- The screenshot tool drives the real picker presenter and notifier in its live mode. -->
+    <InternalsVisibleTo Include="Shapeshifter.ScreenshotGenerator" />
+  </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>

@@ -11,8 +11,9 @@ TestResults/
 .vscode/
 .idea/
 
-# Website secrets must never be committed; use user-secrets or environment variables.
-src/Shapeshifter.Website/secrets.json
+# Copied in by website/preview.sh (the Pages workflow does the same at build time).
+website/screenshots/
+website/app-icons/
 
 # Local agent worktrees
 .claude/

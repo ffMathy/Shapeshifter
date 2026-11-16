@@ -5,6 +5,6 @@
              Name="Shapeshifter">
   <Application.Styles>
     <FluentTheme />
-    <StyleInclude Source="avares://Shapeshifter/Styles/Theme.axaml" />
+    <!-- The look of the operating system (Styles/Windows.axaml, MacOS.axaml or Linux.axaml) is added by PlatformLook. -->
   </Application.Styles>
 </Application>

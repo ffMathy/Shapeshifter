@@ -10,8 +10,6 @@
     <Project Path="src/Shapeshifter.Core/Shapeshifter.Core.csproj" />
     <Project Path="src/Shapeshifter.Platform/Shapeshifter.Platform.csproj" />
     <Project Path="src/Shapeshifter.Desktop/Shapeshifter.Desktop.csproj" />
-    <Project Path="src/Shapeshifter.Website/Shapeshifter.Website.csproj" />
-    <Project Path="src/Shapeshifter.Website.Models/Shapeshifter.Website.Models.csproj" />
   </Folder>
   <Folder Name="/tools/">
     <Project Path="tools/Shapeshifter.ScreenshotGenerator/Shapeshifter.ScreenshotGenerator.csproj" />

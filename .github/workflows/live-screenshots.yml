@@ -1,0 +1,153 @@
+name: Live screenshots
+
+# Takes real screenshots of the macOS and Windows looks on macOS and Windows runners: the app's own windows, shown by
+# the native backend over the runner's desktop, so the system material (frosted glass, Acrylic, Mica), the system font
+# and the system accent colour are the real ones; the headless screenshots in assets/screenshots have none of them.
+#
+# Each runner captures the windows as they ship ("default"), without the system's material ("no-material"), and on
+# macOS with Liquid Glass ("liquid-glass"). Every pass writes diagnostics.txt: the transparency level granted, whether
+# the system material is on, the fonts resolved and the screen. Everything is uploaded as one artifact per runner.
+on:
+  pull_request:
+    paths:
+      - 'src/Shapeshifter.Desktop/Styles/**'
+      - 'src/Shapeshifter.Desktop/Assets/**'
+      - 'src/Shapeshifter.Desktop/Views/**'
+      - 'src/Shapeshifter.Desktop/ViewModels/**'
+      - 'src/Shapeshifter.Desktop/Services/**'
+      - 'src/Shapeshifter.Platform/MacOS/MacWindowMaterial.cs'
+      - 'src/Shapeshifter.Platform/Windows/WindowsWindowMaterial.cs'
+      - 'tools/Shapeshifter.ScreenshotGenerator/**'
+      - '.github/workflows/live-screenshots.yml'
+  workflow_dispatch:
+    inputs:
+      macos_runner:
+        description: 'macOS runner image'
+        type: choice
+        options: [macos-latest, macos-15, macos-26]
+        default: macos-latest
+      windows_runner:
+        description: 'Windows runner image'
+        type: choice
+        options: [windows-latest, windows-2025]
+        default: windows-latest
+      appearance:
+        description: 'System appearance (macOS)'
+        type: choice
+        options: [light, dark]
+        default: light
+
+permissions:
+  contents: read
+
+concurrency:
+  group: live-screenshots-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+
+jobs:
+  macos:
+    name: macOS (${{ inputs.macos_runner || 'macos-latest' }}, ${{ inputs.appearance || 'light' }})
+    runs-on: ${{ inputs.macos_runner || 'macos-latest' }}
+    timeout-minutes: 25
+    env:
+      SHAPESHIFTER_LOOK: macos
+      OUT: ${{ github.workspace }}/live-screenshots
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - name: Build
+        run: dotnet build tools/Shapeshifter.ScreenshotGenerator -c Release
+      - name: Set the system appearance
+        # Needs the runner to allow System Events automation; if it does not, the default (light) appearance is kept.
+        continue-on-error: true
+        run: |
+          dark=false
+          if [[ "${{ inputs.appearance }}" == dark ]]; then dark=true; fi
+          osascript -e "tell application \"System Events\" to tell appearance preferences to set dark mode to $dark"
+      - name: Describe the runner
+        run: |
+          sw_vers
+          system_profiler SPDisplaysDataType | sed -n '/Displays:/,$p'
+      - name: Capture as it ships
+        run: dotnet run --project tools/Shapeshifter.ScreenshotGenerator -c Release --no-build -- "$OUT/default" --live
+      - name: Capture with Liquid Glass
+        env:
+          SHAPESHIFTER_NATIVE_MATERIAL: glass
+        run: dotnet run --project tools/Shapeshifter.ScreenshotGenerator -c Release --no-build -- "$OUT/liquid-glass" --live
+      - name: Capture without the system material
+        env:
+          SHAPESHIFTER_NATIVE_MATERIAL: 'off'
+        run: dotnet run --project tools/Shapeshifter.ScreenshotGenerator -c Release --no-build -- "$OUT/no-material" --live
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### macOS $(sw_vers -productVersion)"
+            for pass in default liquid-glass no-material; do
+              echo; echo "**$pass**"; echo '```'
+              cat "$OUT/$pass/diagnostics.txt" 2>/dev/null || echo "No diagnostics were written."
+              echo '```'
+            done
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: live-screenshots-${{ inputs.macos_runner || 'macos-latest' }}-${{ inputs.appearance || 'light' }}
+          path: live-screenshots
+          if-no-files-found: warn
+
+  windows:
+    name: Windows (${{ inputs.windows_runner || 'windows-latest' }})
+    runs-on: ${{ inputs.windows_runner || 'windows-latest' }}
+    timeout-minutes: 25
+    env:
+      SHAPESHIFTER_LOOK: windows
+      OUT: ${{ github.workspace }}\live-screenshots
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - name: Build
+        run: dotnet build tools/Shapeshifter.ScreenshotGenerator -c Release
+      - name: Turn on transparency effects
+        # Acrylic and Mica are only drawn when "Transparency effects" is on (Settings > Personalisation > Colours).
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name EnableTransparency -Value 1 -Type DWord
+          Get-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize
+      - name: Describe the runner
+        shell: pwsh
+        run: |
+          [System.Environment]::OSVersion.VersionString
+          (Get-CimInstance Win32_OperatingSystem).Caption
+      - name: Capture as it ships
+        run: dotnet run --project tools/Shapeshifter.ScreenshotGenerator -c Release --no-build -- "${{ env.OUT }}\default" --live
+      - name: Capture without the system material
+        env:
+          SHAPESHIFTER_NATIVE_MATERIAL: 'off'
+        run: dotnet run --project tools/Shapeshifter.ScreenshotGenerator -c Release --no-build -- "${{ env.OUT }}\no-material" --live
+      - name: Summary
+        if: always()
+        shell: pwsh
+        run: |
+          $summary = @("### $((Get-CimInstance Win32_OperatingSystem).Caption)")
+          foreach ($pass in 'default', 'no-material') {
+            $summary += '', "**$pass**", '```'
+            $file = Join-Path $env:OUT "$pass\diagnostics.txt"
+            if (Test-Path $file) { $summary += Get-Content $file } else { $summary += 'No diagnostics were written.' }
+            $summary += '```'
+          }
+          $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: live-screenshots-${{ inputs.windows_runner || 'windows-latest' }}
+          path: live-screenshots
+          if-no-files-found: warn

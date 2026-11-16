@@ -17,9 +17,15 @@ internal static class SampleArt
         Picture,
     }
 
-    /// <summary>A dark blue desktop with soft beams of light.</summary>
-    public static byte[] Desktop(int width, int height)
+    /// <summary>A wallpaper in the spirit of the platform's default one: soft colour fields, no real artwork.</summary>
+    public static byte[] Desktop(Shapeshifter.Desktop.Services.Look look, int width, int height)
     {
+        var (from, to, glowA, glowB) = look switch
+        {
+            Shapeshifter.Desktop.Services.Look.MacOS => ("#5B6CF2", "#F28CA0", "#F7B26A", "#7FD3E6"),
+            Shapeshifter.Desktop.Services.Look.Linux => ("#2A64C2", "#1A3F86", "#4F8FE8", "#3E78D8"),
+            _ => ("#D7E6F7", "#9FC3EC", "#3D7FD9", "#B9D4F2"),
+        };
         var canvas = new Canvas
         {
             Width = width,
@@ -28,30 +34,25 @@ internal static class SampleArt
             {
                 StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
                 EndPoint = new RelativePoint(1, 1, RelativeUnit.Relative),
-                GradientStops = { new GradientStop(Color.Parse("#0A3D7A"), 0), new GradientStop(Color.Parse("#052A5C"), 0.55), new GradientStop(Color.Parse("#021333"), 1) },
+                GradientStops = { new GradientStop(Color.Parse(from), 0), new GradientStop(Color.Parse(to), 1) },
             },
         };
 
-        for (var i = 0; i < 4; i++)
+        foreach (var (color, x, y, w, h) in new[] { (glowA, 0.45, 0.35, 0.9, 0.9), (glowB, -0.2, -0.3, 0.8, 0.8) })
         {
-            canvas.Children.Add(new Path
+            var c = Color.Parse(color);
+            canvas.Children.Add(new Ellipse
             {
-                Data = Geometry.Parse($"M{width * (0.45 + (i * 0.12))},0 L{width},{height * (0.15 + (i * 0.1))} L{width},{height * (0.3 + (i * 0.1))} L{width * (0.35 + (i * 0.12))},0 Z"),
-                Fill = new SolidColorBrush(Color.FromArgb((byte)(28 - (i * 5)), 140, 200, 255)),
+                Width = width * w,
+                Height = height * h,
+                Fill = new RadialGradientBrush
+                {
+                    GradientStops = { new GradientStop(Color.FromArgb(200, c.R, c.G, c.B), 0), new GradientStop(Color.FromArgb(0, c.R, c.G, c.B), 1) },
+                },
+                [Canvas.LeftProperty] = width * x,
+                [Canvas.TopProperty] = height * y,
             });
         }
-
-        canvas.Children.Add(new Ellipse
-        {
-            Width = width * 0.9,
-            Height = height * 0.5,
-            Fill = new RadialGradientBrush
-            {
-                GradientStops = { new GradientStop(Color.FromArgb(70, 60, 140, 230), 0), new GradientStop(Color.FromArgb(0, 60, 140, 230), 1) },
-            },
-            [Canvas.LeftProperty] = width * 0.35,
-            [Canvas.TopProperty] = height * 0.25,
-        });
 
         return Render(canvas, width, height);
     }

@@ -1,51 +1,96 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Shapeshifter.Desktop.ViewModels"
+        xmlns:services="using:Shapeshifter.Desktop.Services"
         x:Class="Shapeshifter.Desktop.Views.SettingsWindow"
         x:DataType="vm:SettingsViewModel"
-        Title="Shapeshifter settings"
-        Width="460"
+        Classes="settings"
+        Title="Shapeshifter Settings"
         SizeToContent="Height"
         CanResize="False"
-        WindowStartupLocation="CenterScreen"
-        Icon="avares://Shapeshifter/Assets/Application.png">
-  <StackPanel Margin="24" Spacing="16">
-    <StackPanel Orientation="Horizontal" Spacing="12">
-      <Image Source="avares://Shapeshifter/Assets/Application.png" Width="40" Height="40" />
-      <StackPanel VerticalAlignment="Center">
-        <TextBlock Text="Shapeshifter" FontSize="20" FontWeight="Light" />
-        <TextBlock Text="{Binding Version}" FontSize="11" Opacity="0.6" />
+        WindowStartupLocation="CenterScreen">
+  <!--
+    The layout shared by every look (Styles/<Look>.axaml styles it): the app's name, how to use it, then groups of
+    rows. Each row is an icon, a title with a description, and its control on the right.
+  -->
+  <StackPanel Classes="page">
+    <Grid Classes="hero" ColumnDefinitions="Auto,*">
+      <Image Grid.Column="0" Classes="heroIcon" Source="{x:Static services:PlatformLook.ApplicationIcon}" />
+      <StackPanel Grid.Column="1" Classes="heroText">
+        <TextBlock Classes="heroTitle" Text="Shapeshifter" />
+        <TextBlock Classes="heroVersion" Text="{Binding Version}" />
       </StackPanel>
-    </StackPanel>
+    </Grid>
 
-    <TextBlock Text="{Binding Usage}" TextWrapping="Wrap" FontSize="12" Opacity="0.8" />
+    <TextBlock Classes="usage" Text="{Binding Usage}" />
 
-    <Border IsVisible="{Binding HasWarnings}" Background="#FFF4CE" BorderBrush="#E0C060" BorderThickness="1" CornerRadius="4" Padding="10">
-      <TextBlock Text="{Binding Warnings}" TextWrapping="Wrap" FontSize="12" />
+    <Border Classes="warning" IsVisible="{Binding HasWarnings}">
+      <TextBlock Text="{Binding Warnings}" />
     </Border>
 
-    <StackPanel Spacing="6">
-      <TextBlock Text="Delay before the history appears (milliseconds)" />
-      <Grid ColumnDefinitions="*,120" ColumnSpacing="12">
-        <Slider Minimum="0" Maximum="3000" TickFrequency="100" IsSnapToTickEnabled="True" SmallChange="100" LargeChange="500"
-                Value="{Binding PasteDelayMilliseconds}" />
-        <NumericUpDown Grid.Column="1" Minimum="0" Maximum="3000" Increment="100" FormatString="0"
-                       Value="{Binding PasteDelayMilliseconds}" />
-      </Grid>
-    </StackPanel>
+    <TextBlock Classes="groupHeader" Text="History" />
+    <Border Classes="group">
+      <StackPanel>
+        <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto">
+          <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Clock}" Stretch="Uniform" />
+          <StackPanel Grid.Column="1" Classes="rowText">
+            <TextBlock Classes="rowTitle" Text="Delay before the history appears" />
+            <TextBlock Classes="rowDescription" Text="{Binding DelayDescription}" />
+          </StackPanel>
+          <NumericUpDown Grid.Column="2" Classes="rowControl" Minimum="0" Maximum="3000" Increment="50" FormatString="0"
+                         Value="{Binding PasteDelayMilliseconds}" AutomationProperties.Name="Delay before the history appears, in milliseconds" />
+        </Grid>
+        <Border Classes="rowDivider" />
+        <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto">
+          <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Stack}" Stretch="Uniform" />
+          <StackPanel Grid.Column="1" Classes="rowText">
+            <TextBlock Classes="rowTitle" Text="Items to remember" />
+            <TextBlock Classes="rowDescription" Text="Pinned items are kept in addition" />
+          </StackPanel>
+          <NumericUpDown Grid.Column="2" Classes="rowControl" Minimum="1" Maximum="1000" Increment="5" FormatString="0"
+                         Value="{Binding MaxHistoryItems}" AutomationProperties.Name="Items to remember" />
+        </Grid>
+      </StackPanel>
+    </Border>
 
-    <StackPanel Spacing="6">
-      <TextBlock Text="Number of items to remember (pinned items are kept in addition)" />
-      <NumericUpDown Minimum="1" Maximum="1000" Increment="10" FormatString="0" Width="120" HorizontalAlignment="Left"
-                     Value="{Binding MaxHistoryItems}" />
-    </StackPanel>
+    <TextBlock Classes="groupHeader" Text="Behaviour" />
+    <Border Classes="group">
+      <StackPanel>
+        <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto">
+          <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Bell}" Stretch="Uniform" />
+          <StackPanel Grid.Column="1" Classes="rowText">
+            <TextBlock Classes="rowTitle" Text="Copy notifications" />
+            <TextBlock Classes="rowDescription" Text="Show a notification each time something is copied" />
+          </StackPanel>
+          <ToggleSwitch Grid.Column="2" Classes="rowControl" IsChecked="{Binding ShowCopyNotifications}"
+                        AutomationProperties.Name="Copy notifications" />
+        </Grid>
+        <Border Classes="rowDivider" />
+        <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto">
+          <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Power}" Stretch="Uniform" />
+          <StackPanel Grid.Column="1" Classes="rowText">
+            <TextBlock Classes="rowTitle" Text="Start at login" />
+            <TextBlock Classes="rowDescription" Text="Shapeshifter waits in the background after you sign in" />
+          </StackPanel>
+          <ToggleSwitch Grid.Column="2" Classes="rowControl" IsChecked="{Binding StartAtLogin}" IsEnabled="{Binding IsAutostartSupported}"
+                        AutomationProperties.Name="Start at login" />
+        </Grid>
+      </StackPanel>
+    </Border>
 
-    <CheckBox IsChecked="{Binding QuietMode}" Content="Don't show a notification after copying" />
-    <CheckBox IsChecked="{Binding StartAtLogin}" IsEnabled="{Binding IsAutostartSupported}" Content="Start Shapeshifter when I log in" />
-
-    <StackPanel Orientation="Horizontal" Spacing="8">
-      <Button Content="Clear history" Command="{Binding ClearHistoryCommand}" />
-      <Button Content="Open log folder" Command="{Binding OpenLogFolderCommand}" />
+    <StackPanel Classes="commands">
+      <Button Classes="command" Command="{Binding ClearHistoryCommand}">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Path Classes="commandIcon" Data="{x:Static services:Glyphs.Trash}" Stretch="Uniform" />
+          <TextBlock Text="Clear history" VerticalAlignment="Center" />
+        </StackPanel>
+      </Button>
+      <Button Classes="command" Command="{Binding OpenLogFolderCommand}">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Path Classes="commandIcon" Data="{x:Static services:Glyphs.Folder}" Stretch="Uniform" />
+          <TextBlock Text="Open log folder" VerticalAlignment="Center" />
+        </StackPanel>
+      </Button>
     </StackPanel>
   </StackPanel>
 </Window>

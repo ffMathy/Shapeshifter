@@ -45,6 +45,7 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
         {
             desktop = lifetime;
+            PlatformLook.Apply(this);
             AccentPalette.Attach(this);
             // ShutdownRequested is only raised for platform-initiated shutdowns (logout, Cmd+Q), not for
             // lifetime.Shutdown() from the tray's Quit item; Exit is raised for every shutdown.
@@ -95,7 +96,7 @@ public partial class App : Application
                 Logger = logger,
             };
 
-            var picker = new PickerPresenter(platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), logger);
+            var picker = new PickerPresenter(platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), platform.KeyboardHook.ModifierName, logger);
             engine = new ShapeshifterEngine(
                 history, monitor, platform.KeyboardHook, ActionCatalog.CreateDefault(), context, picker, new CopyNotifier(settings), logger)
             {
@@ -132,7 +133,7 @@ public partial class App : Application
     {
         try
         {
-            using var iconStream = AssetLoader.Open(new Uri("avares://Shapeshifter/Assets/Tray.png"));
+            using var iconStream = AssetLoader.Open(PlatformLook.Asset(TrayIconName()));
             var menu = new NativeMenu();
             menu.Items.Add(MenuItem("Settings…", ShowSettings));
             menu.Items.Add(MenuItem("Open log folder", () => platform?.Launcher.OpenFolder(Paths.LogDirectory)));
@@ -148,13 +149,86 @@ public partial class App : Application
                 Menu = menu,
                 IsVisible = true,
             };
+
+            // The menu bar draws a template icon in its own colour, light or dark, as it does for system icons.
+            MacOSProperties.SetIsTemplateIcon(trayIcon, PlatformLook.Current == Look.MacOS);
             trayIcon.Clicked += (_, _) => ShowSettings();
+
+            // Follow the taskbar or panel when the user switches between light and dark.
+            if (PlatformSettings is { } platformSettings)
+            {
+                platformSettings.ColorValuesChanged += (_, _) => Dispatcher.UIThread.Post(UpdateTrayIcon);
+            }
+
             TrayIcon.SetIcons(this, [trayIcon]);
         }
         catch (Exception exception)
         {
             // Some Linux desktops have no system tray; Shapeshifter keeps working without it.
             logger.Warning(exception, "Could not create the tray icon");
+        }
+    }
+
+    /// <summary>
+    /// The tray icon of the look, in the tone that reads on the panel: a dark glyph on a light taskbar or panel and a
+    /// light glyph on a dark one (<c>TrayLight.png</c> and <c>TrayDark.png</c>, named after the panel).
+    /// </summary>
+    private string TrayIconName()
+    {
+        if (PlatformLook.Current == Look.Windows && OperatingSystem.IsWindows())
+        {
+            // The taskbar follows "Windows mode", which apps cannot see through the theme variant.
+            try
+            {
+                using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+                return key?.GetValue("SystemUsesLightTheme") is int and not 0 ? "TrayLight.png" : "TrayDark.png";
+            }
+            catch (Exception exception) when (exception is System.Security.SecurityException or UnauthorizedAccessException or IOException)
+            {
+                return "Tray.png";
+            }
+        }
+
+        if (PlatformLook.Current == Look.Linux)
+        {
+            var variant = PlatformSettings?.GetColorValues().ThemeVariant ?? PlatformThemeVariant.Light;
+            return LinuxPanelIsDark(Environment.GetEnvironmentVariable("XDG_CURRENT_DESKTOP"), variant) ? "TrayDark.png" : "TrayLight.png";
+        }
+
+        return "Tray.png";
+    }
+
+    /// <summary>
+    /// Guesses the tone of the Linux panel that shows the tray icon. GNOME Shell (also Ubuntu's) and Pantheon keep
+    /// their top bar dark in light mode too; other desktops (KDE Plasma, XFCE, Cinnamon, MATE, LXQt) theme their panel
+    /// with the light or dark colour scheme, which the desktop portal reports as the theme variant.
+    /// </summary>
+    internal static bool LinuxPanelIsDark(string? currentDesktop, PlatformThemeVariant variant)
+    {
+        var desktops = (currentDesktop ?? string.Empty).Split(':', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        if (desktops.Any(desktop => desktop.Equals("GNOME", StringComparison.OrdinalIgnoreCase) || desktop.Equals("Pantheon", StringComparison.OrdinalIgnoreCase)))
+        {
+            return true;
+        }
+
+        return variant == PlatformThemeVariant.Dark;
+    }
+
+    private void UpdateTrayIcon()
+    {
+        if (trayIcon is null)
+        {
+            return;
+        }
+
+        try
+        {
+            using var stream = AssetLoader.Open(PlatformLook.Asset(TrayIconName()));
+            trayIcon.Icon = new WindowIcon(new Bitmap(stream));
+        }
+        catch (Exception exception)
+        {
+            logger.Debug(exception, "Could not update the tray icon");
         }
     }
 
@@ -180,6 +254,7 @@ public partial class App : Application
 
         settingsWindow = new SettingsWindow
         {
+            Icon = new WindowIcon(AssetLoader.Open(PlatformLook.Asset("Application.png"))),
             DataContext = new SettingsViewModel(
                 settings, platform.Autostart, history, platform.Launcher, Paths, platform.KeyboardHook.ModifierName, platform.Warnings),
         };

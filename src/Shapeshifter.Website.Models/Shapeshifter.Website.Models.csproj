@@ -1,8 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <!-- TargetFramework (net11.0), nullable and analyzer settings come from Directory.Build.props. -->
-  <PropertyGroup>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
-
-</Project>

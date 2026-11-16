@@ -43,6 +43,33 @@ public static class AccentPalette
 
         // Slightly see-through, so the desktop shows faintly behind the actions as in the original design.
         application.Resources["ActionsBackgroundBrush"] = new SolidColorBrush(Color.FromArgb(0xF0, dark.R, dark.G, dark.B));
+
+        // For the looks: a faint tint for selected rows, and the accent darkened until it reads as text on white
+        // (4.5:1) and as a fill under white text.
+        application.Resources["AccentSoftBrush"] = new SolidColorBrush(Color.FromArgb(0x24, accent.R, accent.G, accent.B));
+        application.Resources["AccentFaintBrush"] = new SolidColorBrush(Color.FromArgb(0x14, accent.R, accent.G, accent.B));
+        var text = accent;
+        while (ContrastWithWhite(text) < 4.5)
+        {
+            text = Darken(text, 0.92);
+        }
+
+        application.Resources["AccentTextBrush"] = new SolidColorBrush(text);
+        application.Resources["AccentTextColor"] = text;
+        application.Resources["AccentColor"] = accent;
+    }
+
+    /// <summary>The WCAG contrast ratio of <paramref name="color"/> against white.</summary>
+    internal static double ContrastWithWhite(Color color)
+    {
+        static double Channel(byte value)
+        {
+            var c = value / 255.0;
+            return c <= 0.03928 ? c / 12.92 : Math.Pow((c + 0.055) / 1.055, 2.4);
+        }
+
+        var luminance = (0.2126 * Channel(color.R)) + (0.7152 * Channel(color.G)) + (0.0722 * Channel(color.B));
+        return 1.05 / (luminance + 0.05);
     }
 
     internal static Color Darken(Color color, double factor) => Color.FromRgb(
