@@ -9,7 +9,7 @@ namespace Shapeshifter.Core.Tests.Engine;
 
 public sealed class ShapeshifterEngineTests : IAsyncLifetime
 {
-    private static readonly string[] DefaultTextActions = ["Paste", "Copy as file", "Pin to top"];
+    private static readonly string[] DefaultTextActions = ["Paste", "Copy as file", "Pin to clipboard"];
 
     private EngineHarness h = new();
 
@@ -207,7 +207,7 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
         var shown = calls[0].State!;
         Assert.Equal(Ids(seeded), Ids(shown.Items));
         Assert.Equal(1, shown.SelectedIndex);
-        Assert.Equal(DefaultTextActions, shown.Actions);
+        Assert.Equal(DefaultTextActions, shown.Actions.Select(action => action.Title));
         Assert.Equal(0, shown.SelectedActionIndex);
         Assert.Equal(PickerPane.Items, shown.Pane);
 
@@ -262,7 +262,7 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
         var shown = h.Picker.Calls[0].State!;
         Assert.Equal(1, shown.SelectedIndex);
         Assert.Equal("see https://example.com/page", shown.Items[1].Snapshot.Text);
-        Assert.Equal(["Paste", "Copy as file", "Open link", "Pin to top"], shown.Actions);
+        Assert.Equal(["Paste", "Copy as file", "Open link", "Pin to clipboard"], shown.Actions.Select(action => action.Title));
     }
 
     [Fact]
@@ -344,7 +344,7 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
         var shown = h.Picker.Calls[0].State!;
         Assert.Equal(Ids(seeded), Ids(shown.Items));
         Assert.Equal(2, shown.SelectedIndex);
-        Assert.Equal(["Paste", "Copy as file", "Pin to top"], shown.Actions);
+        Assert.Equal(["Paste", "Copy as file", "Pin to clipboard"], shown.Actions.Select(action => action.Title));
         Assert.Equal(new PerformAction(seeded[2].Id, 0), effects[2]);
         Assert.Equal(["pinned", "a", "b"], Texts(h.History.Items));
         Assert.True(h.History.Find(pinned.Id)!.IsPinned);
@@ -366,7 +366,7 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
 
         var shown = h.Picker.Calls[0].State!;
         Assert.Equal(0, shown.SelectedIndex);
-        Assert.Equal(["Paste", "Copy as file", "Unpin"], shown.Actions);
+        Assert.Equal(["Paste", "Copy as file", "Unpin from clipboard"], shown.Actions.Select(action => action.Title));
         Assert.Equal(new PerformAction(pinned.Id, 0), effects[2]);
         Assert.Same(pinned.Snapshot, Assert.Single(h.Backend.Written));
         Assert.Equal(["pinned", "a"], Texts(h.History.Items));
@@ -385,7 +385,7 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
         h.Down(GestureKey.Modifier);
         h.Tap(GestureKey.Trigger);
         h.Tap(GestureKey.Trigger);
-        Assert.True(h.Tap(GestureKey.Left));
+        Assert.True(h.Tap(GestureKey.Right));
         Assert.True(h.Tap(GestureKey.Down));
         h.Up(GestureKey.Modifier);
 
@@ -394,7 +394,7 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
         Assert.Equal(new PerformAction(seeded[1].Id, 1), effects[4]);
         var calls = h.Picker.Calls;
         Assert.Equal(["Show", "Update", "Update", "Hide"], calls.Select(call => call.Method));
-        Assert.Equal(["Paste", "Record"], calls[0].State!.Actions);
+        Assert.Equal(["Paste", "Record"], calls[0].State!.Actions.Select(action => action.Title));
         Assert.Equal(PickerPane.Actions, calls[1].State!.Pane);
         Assert.Equal(0, calls[1].State!.SelectedActionIndex);
         Assert.Equal(PickerPane.Actions, calls[2].State!.Pane);
@@ -426,7 +426,7 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
         h.Up(GestureKey.Modifier);
         await h.WaitForEffectsAsync(3);
 
-        Assert.Equal(["Paste", "Early", "Late"], h.Picker.Calls[0].State!.Actions);
+        Assert.Equal(["Paste", "Early", "Late"], h.Picker.Calls[0].State!.Actions.Select(action => action.Title));
     }
 
     [Fact]
@@ -498,7 +498,7 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
         Assert.Equal("Show", h.Picker.Calls[0].Method);
         Assert.Equal(Ids(seeded), Ids(shown.Items));
         Assert.Equal(0, shown.SelectedIndex);
-        Assert.Equal(DefaultTextActions, shown.Actions);
+        Assert.Equal(DefaultTextActions, shown.Actions.Select(action => action.Title));
 
         // More ticks do not show it again.
         h.Time.Advance(TimeSpan.FromMilliseconds(500));

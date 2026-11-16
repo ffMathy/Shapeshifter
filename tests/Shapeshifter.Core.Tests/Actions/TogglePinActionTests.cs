@@ -17,9 +17,9 @@ public sealed class TogglePinActionTests
         var item = history.Add(new ClipboardSnapshot { Text = "x" });
         var action = new TogglePinAction();
 
-        Assert.Equal("Pin to top", action.GetTitle(item));
+        Assert.Equal("Pin to clipboard", action.GetTitle(item));
         history.SetPinned(item.Id, pinned: true);
-        Assert.Equal("Unpin", action.GetTitle(item));
+        Assert.Equal("Unpin from clipboard", action.GetTitle(item));
     }
 
     [Fact]

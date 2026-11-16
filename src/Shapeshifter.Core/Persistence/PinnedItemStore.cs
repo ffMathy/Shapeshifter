@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using Serilog;
 using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Platform;
 
 namespace Shapeshifter.Core.Persistence;
 
@@ -42,7 +43,15 @@ public sealed class PinnedItemStore
             Id = item.Id,
             CapturedAt = item.CapturedAt,
             Files = [.. snapshot.Files],
+            SourceApplication = item.Source?.ApplicationName,
+            SourceWindowTitle = item.Source?.WindowTitle,
         };
+
+        if (item.Source?.IconPng is { } icon)
+        {
+            manifest.SourceIconFile = "source-icon.png";
+            await File.WriteAllBytesAsync(Path.Combine(staging, manifest.SourceIconFile), icon, cancellationToken).ConfigureAwait(false);
+        }
 
         if (snapshot.Text is not null)
         {
@@ -164,7 +173,16 @@ public sealed class PinnedItemStore
             RawFormats = raw,
         };
 
-        return new ClipboardItem(snapshot, manifest.Id, manifest.CapturedAt);
+        ClipboardSource? source = null;
+        if (manifest.SourceApplication is not null || manifest.SourceWindowTitle is not null || manifest.SourceIconFile is not null)
+        {
+            var icon = manifest.SourceIconFile is null
+                ? null
+                : await File.ReadAllBytesAsync(Resolve(folder, manifest.SourceIconFile), cancellationToken).ConfigureAwait(false);
+            source = new ClipboardSource(manifest.SourceApplication, manifest.SourceWindowTitle, icon);
+        }
+
+        return new ClipboardItem(snapshot, manifest.Id, manifest.CapturedAt, source);
     }
 
     private string GetFolder(Guid id) => Path.Combine(root, id.ToString("N"));
@@ -197,6 +215,12 @@ public sealed class PinnedItemStore
         public List<string> Files { get; set; } = [];
 
         public List<ManifestFormat> RawFormats { get; set; } = [];
+
+        public string? SourceApplication { get; set; }
+
+        public string? SourceWindowTitle { get; set; }
+
+        public string? SourceIconFile { get; set; }
     }
 
     private sealed class ManifestFormat

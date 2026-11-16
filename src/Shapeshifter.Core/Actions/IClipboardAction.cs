@@ -15,6 +15,9 @@ public interface IClipboardAction
     /// <summary>Title shown in the actions pane. May depend on the item (e.g. "Pin" vs "Unpin").</summary>
     string GetTitle(ClipboardItem item);
 
+    /// <summary>One sentence shown below the title in the actions pane, describing what the action does.</summary>
+    string GetDescription(ClipboardItem item);
+
     /// <summary>Lower values are listed first. The first action is the default.</summary>
     int Order { get; }
 

@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Shapeshifter.Desktop.ViewModels"
+        xmlns:engine="using:Shapeshifter.Core.Engine"
         xmlns:local="using:Shapeshifter.Desktop"
         x:Class="Shapeshifter.Desktop.Views.PickerWindow"
         x:DataType="vm:PickerViewModel"
@@ -11,60 +12,114 @@
         Topmost="True"
         CanResize="False"
         Focusable="False"
-        Width="706"
-        Background="{StaticResource WindowBackgroundBrush}">
-  <Border BorderBrush="{StaticResource AccentDarkerBrush}" BorderThickness="1">
-    <Grid RowDefinitions="*,Auto" ColumnDefinitions="250,4,*">
-      <!-- Actions of the selected item -->
-      <Panel Grid.Column="0">
-        <ListBox Classes="actions" Focusable="False"
-                 ItemsSource="{Binding Actions}"
-                 SelectedIndex="{Binding SelectedActionIndex}"
-                 ScrollViewer.VerticalScrollBarVisibility="Hidden">
-          <ListBox.ItemTemplate>
-            <DataTemplate x:DataType="x:String">
-              <TextBlock Text="{Binding}" FontSize="15" FontWeight="Light" VerticalAlignment="Center" />
-            </DataTemplate>
-          </ListBox.ItemTemplate>
-        </ListBox>
-        <Rectangle Classes="veil" Fill="#50000000" Opacity="{Binding IsItemsPaneActive, Converter={x:Static local:OpacityConverters.FromBool}}" />
-      </Panel>
-
-      <Rectangle Grid.Column="1" Fill="{StaticResource AccentBrush}" />
-
-      <!-- History -->
-      <Panel Grid.Column="2">
+        SizeToContent="Height"
+        Width="938"
+        TransparencyLevelHint="Transparent"
+        Background="Transparent">
+  <!--
+    The original Shapeshifter layout: the history fills the left of the window from the top-left corner of the
+    screen, and the actions of the selected item float to its right, only as tall as they need to be.
+  -->
+  <Grid ColumnDefinitions="566,372" VerticalAlignment="Top">
+    <!-- History, with the accent-coloured edge along its right side -->
+    <Border Grid.Column="0" Classes="historyPane" Classes.fill="{Binding ActionsFillHeight}">
+      <Panel Background="{DynamicResource WindowBackgroundBrush}">
         <ListBox x:Name="ItemList" Classes="items" Focusable="False"
                  ItemsSource="{Binding Items}"
                  SelectedIndex="{Binding SelectedIndex}"
+                 MaxHeight="{Binding MaxListHeight}"
                  AutoScrollToSelectedItem="True"
                  ScrollViewer.VerticalScrollBarVisibility="Hidden">
           <ListBox.ItemTemplate>
             <DataTemplate x:DataType="vm:PickerItemViewModel">
-              <Grid ColumnDefinitions="88,*">
-                <Border Classes="iconArea" Grid.Column="0" Width="88" Height="92">
+              <Grid ColumnDefinitions="110,*">
+                <!-- Left: what kind of item it is -->
+                <Border Classes="iconArea" Grid.Column="0">
                   <Panel>
-                    <PathIcon Data="{Binding Icon}" Width="40" Height="40" IsVisible="{Binding HasNoThumbnail}" />
-                    <Image Source="{Binding Thumbnail}" Stretch="UniformToFill" IsVisible="{Binding HasThumbnail}" />
+                    <Path Classes="glyph" Data="{Binding Glyph}" Stretch="Uniform" Width="62" Height="72" IsVisible="{Binding ShowsGlyph}" />
+                    <Image Source="{Binding FileIcon}" Width="64" Height="64" IsVisible="{Binding HasFileIcon}" />
+                    <TextBlock Classes="fileCount" Text="{Binding FileCount}" IsVisible="{Binding IsFilesLayout}" />
                   </Panel>
                 </Border>
-                <StackPanel Grid.Column="1" Margin="14,10,12,10" VerticalAlignment="Center" Spacing="4">
-                  <TextBlock Classes="title" Text="{Binding Title}" FontSize="14" TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis" />
-                  <StackPanel Orientation="Horizontal" Spacing="6">
-                    <TextBlock Classes="subtitle" Text="Pinned ·" FontSize="11" FontWeight="SemiBold" IsVisible="{Binding IsPinned}" />
-                    <TextBlock Classes="subtitle" Text="{Binding Subtitle}" FontSize="11" TextTrimming="CharacterEllipsis" MaxWidth="300" />
-                  </StackPanel>
-                </StackPanel>
+
+                <Panel Grid.Column="1" ClipToBounds="True">
+                  <!-- Text: two lines, then the window it was copied from -->
+                  <Panel IsVisible="{Binding IsTextLayout}">
+                    <TextBlock Classes="title" Text="{Binding Title}" Margin="20,15,18,0" VerticalAlignment="Top"
+                               TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis" />
+                    <StackPanel Classes="sourceLine" Orientation="Horizontal" Spacing="10">
+                      <Image Source="{Binding SourceIcon}" Width="16" Height="16" IsVisible="{Binding HasSourceIcon}" />
+                      <TextBlock Classes="subtitle" Text="{Binding SourceText}" TextTrimming="CharacterEllipsis" MaxWidth="410" />
+                    </StackPanel>
+                  </Panel>
+
+                  <!-- Image: the picture fills the row, with the source application's icon in the corner -->
+                  <Panel IsVisible="{Binding IsImageLayout}">
+                    <Image Source="{Binding Thumbnail}" Stretch="UniformToFill" />
+                    <Image Classes="sourceLine" Source="{Binding SourceIcon}" Width="16" Height="16" IsVisible="{Binding HasSourceIcon}" />
+                  </Panel>
+
+                  <!-- Several files: each kind of file with how many there are, then the folder -->
+                  <Panel IsVisible="{Binding IsFilesLayout}">
+                    <ItemsControl ItemsSource="{Binding FileGroups}" Margin="20,14,0,0" VerticalAlignment="Top">
+                      <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                          <StackPanel Orientation="Horizontal" Spacing="23" />
+                        </ItemsPanelTemplate>
+                      </ItemsControl.ItemsPanel>
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:PickerFileGroupViewModel">
+                          <Panel Width="57" Height="56">
+                            <Image Source="{Binding Icon}" Width="48" Height="48" HorizontalAlignment="Left" VerticalAlignment="Top" IsVisible="{Binding HasIcon}" />
+                            <Path Classes="fileGlyph" Data="{x:Static vm:PickerFileGroupViewModel.FallbackGlyph}" Stretch="Uniform" Width="40" Height="48"
+                                  Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsVisible="{Binding HasNoIcon}" />
+                            <Border Classes="badge" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                              <TextBlock Text="{Binding CountText}" />
+                            </Border>
+                          </Panel>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <StackPanel Classes="sourceLine" Orientation="Horizontal" Spacing="8">
+                      <Image Source="{Binding FolderIcon}" Width="16" Height="16" IsVisible="{Binding HasFolderIcon}" />
+                      <Path Classes="folderGlyph" Data="{x:Static vm:PickerItemViewModel.FallbackFolderGlyph}" Width="16" Height="12" Stretch="Uniform" IsVisible="{Binding HasNoFolderIcon}" />
+                      <TextBlock Classes="subtitle" Text="{Binding FolderName}" TextTrimming="CharacterEllipsis" MaxWidth="400" />
+                    </StackPanel>
+                  </Panel>
+
+                  <!-- One file: its name in large type, then the folder -->
+                  <Panel IsVisible="{Binding IsFileLayout}">
+                    <TextBlock Classes="fileName" Text="{Binding Title}" Margin="20,20,18,0" VerticalAlignment="Top" TextTrimming="CharacterEllipsis" />
+                    <StackPanel Classes="sourceLine" Orientation="Horizontal" Spacing="8">
+                      <Image Source="{Binding FolderIcon}" Width="16" Height="16" IsVisible="{Binding HasFolderIcon}" />
+                      <Path Classes="folderGlyph" Data="{x:Static vm:PickerItemViewModel.FallbackFolderGlyph}" Width="16" Height="12" Stretch="Uniform" IsVisible="{Binding HasNoFolderIcon}" />
+                      <TextBlock Classes="subtitle" Text="{Binding FolderName}" TextTrimming="CharacterEllipsis" MaxWidth="400" />
+                    </StackPanel>
+                  </Panel>
+                </Panel>
               </Grid>
             </DataTemplate>
           </ListBox.ItemTemplate>
         </ListBox>
-        <Rectangle Classes="veil" Fill="#40000000" Opacity="{Binding IsActionsPaneActive, Converter={x:Static local:OpacityConverters.FromBool}}" />
-      </Panel>
+        <Rectangle Classes="veil" Fill="#38000000" Opacity="{Binding IsActionsPaneActive, Converter={x:Static local:OpacityConverters.FromBool}}" />
+    </Panel>
+    </Border>
 
-      <Border Grid.Row="1" Grid.ColumnSpan="3" Background="{StaticResource AccentDarkerBrush}" Padding="10,4">
-        <TextBlock Text="{Binding Hint}" Foreground="White" FontSize="11" Opacity="0.85" />
-      </Border>
-    </Grid>
-  </Border>
+    <!-- Actions of the selected item -->
+    <Border Grid.Column="1" Classes="actionsPane" Classes.fill="{Binding ActionsFillHeight}">
+      <ListBox Classes="actions" Focusable="False"
+               ItemsSource="{Binding Actions}"
+               SelectedIndex="{Binding SelectedActionIndex}"
+               ScrollViewer.VerticalScrollBarVisibility="Hidden">
+        <ListBox.ItemTemplate>
+          <DataTemplate x:DataType="engine:PickerActionView">
+            <StackPanel Spacing="2">
+              <TextBlock Classes="actionTitle" Text="{Binding Title}" />
+              <TextBlock Classes="actionDescription" Text="{Binding Description}" TextWrapping="Wrap" />
+            </StackPanel>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </Border>
+  </Grid>
 </Window>

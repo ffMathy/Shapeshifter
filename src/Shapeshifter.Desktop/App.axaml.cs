@@ -45,6 +45,7 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
         {
             desktop = lifetime;
+            AccentPalette.Attach(this);
             // ShutdownRequested is only raised for platform-initiated shutdowns (logout, Cmd+Q), not for
             // lifetime.Shutdown() from the tray's Quit item; Exit is raised for every shutdown.
             lifetime.Exit += (_, _) => Shutdown();
@@ -73,7 +74,7 @@ public partial class App : Application
             }
 
             var changes = platform.CreateClipboardChangeSource(backend, logger);
-            monitor = new ClipboardMonitor(backend, changes, history, logger);
+            monitor = new ClipboardMonitor(backend, changes, history, logger, platform.SourceLocator);
             var pins = new PinnedItemStore(Paths.PinnedDirectory, logger);
             foreach (var pinned in await pins.LoadAllAsync().ConfigureAwait(true))
             {
@@ -94,7 +95,7 @@ public partial class App : Application
                 Logger = logger,
             };
 
-            var picker = new PickerPresenter(platform.CursorLocator, platform.KeyboardHook.ModifierName, logger);
+            var picker = new PickerPresenter(platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), logger);
             engine = new ShapeshifterEngine(
                 history, monitor, platform.KeyboardHook, ActionCatalog.CreateDefault(), context, picker, new CopyNotifier(settings), logger)
             {

@@ -13,6 +13,16 @@
     <SelfContained Condition="'$(RuntimeIdentifier)' != ''">true</SelfContained>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
   </PropertyGroup>
+  <!--
+    Keep the published folder down to the executable alone. Debug symbols of our own assemblies are embedded in
+    them (DebugType, Directory.Build.props), so stack traces in the logs keep their line numbers; the native
+    SkiaSharp/HarfBuzz symbol files that their packages ship (over 100 MB) are of no use to users.
+  -->
+  <Target Name="ExcludeSymbolFilesFromPublish" AfterTargets="ComputeResolvedFilesToPublishList">
+    <ItemGroup>
+      <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.pdb'" />
+    </ItemGroup>
+  </Target>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>

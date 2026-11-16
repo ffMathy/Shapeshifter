@@ -7,7 +7,7 @@ public sealed class ActionCatalogTests
 {
     private static readonly string[] DefaultOrder =
     [
-        "paste", "paste-plain-text", "copy-as-file", "copy-as-zip", "copy-image-from-link", "open-links", "toggle-pin",
+        "paste", "copy-as-file", "paste-plain-text", "copy-as-zip", "copy-image-from-link", "open-links", "toggle-pin",
     ];
 
     [Fact]
@@ -82,7 +82,7 @@ public sealed class ActionCatalogTests
     {
         { "plain", ["paste", "copy-as-file", "toggle-pin"] },
         { "whitespace", ["paste", "copy-as-file", "toggle-pin"] },
-        { "text+html", ["paste", "paste-plain-text", "copy-as-file", "toggle-pin"] },
+        { "text+html", ["paste", "copy-as-file", "paste-plain-text", "toggle-pin"] },
         { "html-only", ["paste", "paste-plain-text", "toggle-pin"] },
         { "empty-text+html", ["paste", "paste-plain-text", "toggle-pin"] },
         { "rtf-only", ["paste", "toggle-pin"] },  // RTF without text has no plain text to offer
@@ -161,6 +161,38 @@ public sealed class ActionCatalogTests
         Assert.Equal("Copy image from link", new CopyImageFromLinkAction().GetTitle(item));
     }
 
+    [Theory]
+    [InlineData("plain")]
+    [InlineData("link")]
+    [InlineData("text+html")]
+    [InlineData("text+image")]
+    [InlineData("file")]
+    [InlineData("files")]
+    [InlineData("image")]
+    public void Descriptions_AreSentences_ForEveryAvailableAction(string kind)
+    {
+        var item = Items.ByName(kind);
+
+        Assert.All(ActionCatalog.CreateDefault().GetAvailable(item), action =>
+        {
+            var description = action.GetDescription(item);
+            Assert.False(string.IsNullOrWhiteSpace(description));
+            Assert.EndsWith(".", description, StringComparison.Ordinal);
+        });
+    }
+
+    [Fact]
+    public void Descriptions_FollowPinState()
+    {
+        var item = Items.ByName("plain");
+        var action = new TogglePinAction();
+
+        var unpinned = action.GetDescription(item);
+        item.IsPinned = true;
+
+        Assert.NotEqual(unpinned, action.GetDescription(item));
+    }
+
     private sealed class StubAction(string id, int order, bool canExecute = true) : IClipboardAction
     {
         public string Id => id;
@@ -168,6 +200,8 @@ public sealed class ActionCatalogTests
         public int Order => order;
 
         public string GetTitle(ClipboardItem item) => id;
+
+        public string GetDescription(ClipboardItem item) => id;
 
         public bool CanExecute(ClipboardItem item) => canExecute;
 

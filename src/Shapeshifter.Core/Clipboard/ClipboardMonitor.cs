@@ -25,6 +25,7 @@ public sealed class ClipboardMonitor : IDisposable
     private readonly IClipboardChangeSource changeSource;
     private readonly ClipboardHistory history;
     private readonly ILogger logger;
+    private readonly IClipboardSourceLocator? sourceLocator;
     private readonly SemaphoreSlim captureLock = new(1, 1);
     private readonly Lock gate = new();
     private CancellationTokenSource? pendingCapture;
@@ -37,12 +38,14 @@ public sealed class ClipboardMonitor : IDisposable
         IClipboardBackend backend,
         IClipboardChangeSource changeSource,
         ClipboardHistory history,
-        ILogger? logger = null)
+        ILogger? logger = null,
+        IClipboardSourceLocator? sourceLocator = null)
     {
         this.backend = backend;
         this.changeSource = changeSource;
         this.history = history;
         this.logger = logger ?? Log.Logger;
+        this.sourceLocator = sourceLocator;
     }
 
     public event EventHandler<ClipboardCapturedEventArgs>? Captured;
@@ -93,7 +96,11 @@ public sealed class ClipboardMonitor : IDisposable
     }
 
     /// <summary>Captures the current clipboard immediately (also used once at startup).</summary>
-    public async Task<ClipboardItem?> CaptureNowAsync(CancellationToken cancellationToken = default)
+    public Task<ClipboardItem?> CaptureNowAsync(CancellationToken cancellationToken = default) => CaptureNowAsync(source: null, cancellationToken);
+
+    /// <summary>Captures the current clipboard immediately, recording where it was copied from.</summary>
+    /// <param name="source">Where the content came from, if known.</param>
+    public async Task<ClipboardItem?> CaptureNowAsync(ClipboardSource? source, CancellationToken cancellationToken = default)
     {
         await captureLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
@@ -116,7 +123,7 @@ public sealed class ClipboardMonitor : IDisposable
                 selfWrittenFingerprint = null;
             }
 
-            var item = history.Add(snapshot, out var isNew);
+            var item = history.Add(snapshot, source, out var isNew);
             logger.Information("Captured {Kind} item ({State}, {Size} bytes)", item.Kind, isNew ? "new" : "existing", snapshot.ApproximateSize);
             Captured?.Invoke(this, new ClipboardCapturedEventArgs(item, isNew));
             return item;
@@ -171,12 +178,35 @@ public sealed class ClipboardMonitor : IDisposable
         _ = CaptureAfterDebounceAsync(cancellation.Token);
     }
 
+    /// <summary>
+    /// Asks which application is in front right when the change is noticed, before the debounce, so that the user
+    /// has had the least time to switch away from the application they copied from.
+    /// </summary>
+    private ClipboardSource? LocateSource()
+    {
+        if (sourceLocator is null)
+        {
+            return null;
+        }
+
+        try
+        {
+            return sourceLocator.GetCurrentSource();
+        }
+        catch (Exception exception)
+        {
+            logger.Debug(exception, "Could not determine the source application of a copy");
+            return null;
+        }
+    }
+
     private async Task CaptureAfterDebounceAsync(CancellationToken cancellationToken)
     {
         try
         {
+            var source = LocateSource();
             await Task.Delay(Debounce, cancellationToken).ConfigureAwait(false);
-            await CaptureNowAsync(cancellationToken).ConfigureAwait(false);
+            await CaptureNowAsync(source, cancellationToken).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {

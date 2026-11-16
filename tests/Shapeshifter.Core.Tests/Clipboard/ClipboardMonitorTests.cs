@@ -73,6 +73,42 @@ public sealed class ClipboardMonitorTests : IDisposable
     }
 
     [Fact]
+    public async Task Change_RecordsTheSourceApplication()
+    {
+        var source = new ClipboardSource("Editor", "notes.txt - Editor", [1, 2, 3]);
+        var locator = Substitute.For<IClipboardSourceLocator>();
+        locator.GetCurrentSource().Returns(source);
+        using var withSource = new ClipboardMonitor(backend, changeSource, history, logger, locator) { Debounce = TimeSpan.FromMilliseconds(30) };
+        var tcs = new TaskCompletionSource<ClipboardItem>(TaskCreationOptions.RunContinuationsAsynchronously);
+        withSource.Captured += (_, e) => tcs.TrySetResult(e.Item);
+        withSource.Start();
+        backend.Current = Text("hello");
+
+        changeSource.Raise();
+        var item = await tcs.Task.WaitAsync(Timeout, Ct);
+
+        Assert.Same(source, item.Source);
+        Assert.Equal("notes.txt - Editor", item.Source!.DisplayText);
+    }
+
+    [Fact]
+    public async Task Change_WhenTheSourceLocatorThrows_StillCaptures()
+    {
+        var locator = Substitute.For<IClipboardSourceLocator>();
+        locator.GetCurrentSource().Returns(_ => throw new InvalidOperationException("boom"));
+        using var withSource = new ClipboardMonitor(backend, changeSource, history, logger, locator) { Debounce = TimeSpan.FromMilliseconds(30) };
+        var tcs = new TaskCompletionSource<ClipboardItem>(TaskCreationOptions.RunContinuationsAsynchronously);
+        withSource.Captured += (_, e) => tcs.TrySetResult(e.Item);
+        withSource.Start();
+        backend.Current = Text("hello");
+
+        changeSource.Raise();
+        var item = await tcs.Task.WaitAsync(Timeout, Ct);
+
+        Assert.Null(item.Source);
+    }
+
+    [Fact]
     public async Task ChangeBeforeStart_IsIgnored()
     {
         backend.Current = Text("a");

@@ -58,7 +58,7 @@ public readonly record struct GestureResult(bool Suppress, IReadOnlyList<Gesture
 /// <item>Releasing the modifier right away pastes the current clipboard, just like a normal paste.</item>
 /// <item>Keeping the modifier held for <see cref="ShowDelay"/> shows the picker with the history.</item>
 /// <item>Each further press of V (with the modifier still held) selects the next, older item and shows the picker.</item>
-/// <item>Up/Down move the selection, Left switches to the actions of the selected item, Right switches back.</item>
+/// <item>Up/Down move the selection, Right switches to the actions of the selected item, Left switches back.</item>
 /// <item>Delete removes the selected item; Escape cancels.</item>
 /// <item>Releasing the modifier performs the selected action (normally "Paste") on the selected item.</item>
 /// <item>V pressed together with Shift, Alt/AltGr or another modifier is left alone (Ctrl+Shift+V, AltGr+V).</item>
@@ -286,14 +286,15 @@ public sealed class PasteGestureStateMachine
             case GestureKey.Down:
                 Move(+1);
                 break;
-            case GestureKey.Left:
+            case GestureKey.Right:
+                // The actions are to the right of the history.
                 if (items[selectedIndex].ActionCount > 0)
                 {
                     pane = PickerPane.Actions;
                 }
 
                 break;
-            case GestureKey.Right:
+            case GestureKey.Left:
                 pane = PickerPane.Items;
                 break;
             case GestureKey.Delete:

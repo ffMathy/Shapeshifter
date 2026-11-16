@@ -87,6 +87,41 @@ jobs:
           path: ${{ runner.temp }}/e2e
           if-no-files-found: ignore
 
+  screenshots:
+    name: Screenshots
+    # Renders the picker with sample content (scripts/generate-screenshots.sh) so assets/screenshots always shows the
+    # current design. On pull requests from this repository, changed screenshots are committed to the branch.
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - name: Render the picker
+        run: scripts/generate-screenshots.sh
+      - uses: actions/upload-artifact@v7
+        with:
+          name: screenshots
+          path: assets/screenshots
+      - name: Commit changed screenshots
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          if [[ -z "$(git status --porcelain -- assets/screenshots)" ]]; then
+            echo "The screenshots are up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/screenshots
+          git commit -m "Update screenshots"
+          git push
+
   publish:
     name: Publish ${{ matrix.rid }}
     needs: build

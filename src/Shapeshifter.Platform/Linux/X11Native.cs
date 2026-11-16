@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace Shapeshifter.Platform.Linux;
 
-/// <summary>Minimal libX11 / libXfixes bindings.</summary>
+/// <summary>Minimal libX11 / libXfixes / libxcb bindings.</summary>
 internal static unsafe partial class X11Native
 {
     private const string LibX11 = "libX11.so.6";
@@ -106,6 +106,89 @@ internal static unsafe partial class X11Native
 
     [LibraryImport(LibXfixes)]
     public static partial void XFixesSelectSelectionInput(IntPtr display, IntPtr window, IntPtr selection, ulong eventMask);
+
+    // libxcb: used where errors must come back per request (for example BadWindow for a window that just closed)
+    // instead of through Xlib's process-wide error handler. XCB connections are independent of Xlib's and thread-safe.
+    private const string LibXcb = "libxcb.so.1";
+
+    public const uint XcbAtomNone = 0;
+    public const uint XcbAtomAny = 0;
+    public const uint XcbAtomCardinal = 6;
+    public const uint XcbAtomString = 31;
+    public const uint XcbAtomWindow = 33;
+    public const uint XcbAtomWmName = 39;
+    public const uint XcbAtomWmClass = 67;
+
+    /// <summary>xcb_*_cookie_t: the sequence number of a request whose reply is still to be read.</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    public struct XcbCookie
+    {
+        public uint Sequence;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct XcbScreenIterator
+    {
+        /// <summary>xcb_screen_t*; its first field is the root window.</summary>
+        public IntPtr Data;
+        public int Rem;
+        public int Index;
+    }
+
+    /// <summary>The fixed part of xcb_get_property_reply_t (32 bytes); the value follows it.</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    public struct XcbGetPropertyReply
+    {
+        public byte ResponseType;
+        public byte Format;
+        public ushort Sequence;
+        public uint Length;
+        public uint Type;
+        public uint BytesAfter;
+        public uint ValueLength;
+    }
+
+    [LibraryImport(LibXcb, EntryPoint = "xcb_connect")]
+    public static partial IntPtr XcbConnect(IntPtr displayName, out int screen);
+
+    [LibraryImport(LibXcb, EntryPoint = "xcb_connection_has_error")]
+    public static partial int XcbConnectionHasError(IntPtr connection);
+
+    [LibraryImport(LibXcb, EntryPoint = "xcb_disconnect")]
+    public static partial void XcbDisconnect(IntPtr connection);
+
+    [LibraryImport(LibXcb, EntryPoint = "xcb_get_setup")]
+    public static partial IntPtr XcbGetSetup(IntPtr connection);
+
+    [LibraryImport(LibXcb, EntryPoint = "xcb_setup_roots_iterator")]
+    public static partial XcbScreenIterator XcbSetupRootsIterator(IntPtr setup);
+
+    [LibraryImport(LibXcb, EntryPoint = "xcb_screen_next")]
+    public static partial void XcbScreenNext(XcbScreenIterator* iterator);
+
+    [LibraryImport(LibXcb, EntryPoint = "xcb_intern_atom")]
+    public static partial XcbCookie XcbInternAtom(IntPtr connection, byte onlyIfExists, ushort nameLength, byte* name);
+
+    /// <summary>Returns a malloc'd xcb_intern_atom_reply_t (the atom is the uint at offset 8), or null with a malloc'd error.</summary>
+    [LibraryImport(LibXcb, EntryPoint = "xcb_intern_atom_reply")]
+    public static partial IntPtr XcbInternAtomReply(IntPtr connection, XcbCookie cookie, out IntPtr error);
+
+    [LibraryImport(LibXcb, EntryPoint = "xcb_get_property")]
+    public static partial XcbCookie XcbGetProperty(IntPtr connection, byte delete, uint window, uint property, uint type, uint longOffset, uint longLength);
+
+    /// <summary>Returns a malloc'd <see cref="XcbGetPropertyReply"/>, or null with a malloc'd error.</summary>
+    [LibraryImport(LibXcb, EntryPoint = "xcb_get_property_reply")]
+    public static partial IntPtr XcbGetPropertyReplyFor(IntPtr connection, XcbCookie cookie, out IntPtr error);
+
+    [LibraryImport(LibXcb, EntryPoint = "xcb_get_property_value")]
+    public static partial IntPtr XcbGetPropertyValue(IntPtr reply);
+
+    [LibraryImport(LibXcb, EntryPoint = "xcb_get_property_value_length")]
+    public static partial int XcbGetPropertyValueLength(IntPtr reply);
+
+    /// <summary>Releases replies and errors returned by XCB.</summary>
+    [LibraryImport("libc", EntryPoint = "free")]
+    public static partial void Free(IntPtr pointer);
 
     [StructLayout(LayoutKind.Sequential)]
     public struct PollFd

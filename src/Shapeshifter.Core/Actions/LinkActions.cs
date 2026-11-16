@@ -18,6 +18,14 @@ public sealed class OpenLinksAction : IClipboardAction
         return LinkParser.ExtractLinks(item.Snapshot.Text).Count == 1 ? "Open link" : "Open links";
     }
 
+    public string GetDescription(ClipboardItem item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+        return LinkParser.ExtractLinks(item.Snapshot.Text).Count == 1
+            ? "Opens the link in your browser."
+            : $"Opens the links in your browser (at most {MaxLinks}).";
+    }
+
     public bool CanExecute(ClipboardItem item)
     {
         ArgumentNullException.ThrowIfNull(item);
@@ -47,6 +55,8 @@ public sealed class CopyImageFromLinkAction : IClipboardAction
     public int Order => 100;
 
     public string GetTitle(ClipboardItem item) => "Copy image from link";
+
+    public string GetDescription(ClipboardItem item) => "Downloads the linked image and copies the image itself to the clipboard.";
 
     public bool CanExecute(ClipboardItem item)
     {

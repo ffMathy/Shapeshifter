@@ -12,6 +12,8 @@ public sealed class PasteAction : IClipboardAction
 
     public string GetTitle(ClipboardItem item) => "Paste";
 
+    public string GetDescription(ClipboardItem item) => "Pastes clipboard contents as-is.";
+
     public bool CanExecute(ClipboardItem item) => true;
 
     public async Task ExecuteAsync(ClipboardItem item, ActionContext context, CancellationToken cancellationToken = default)
@@ -28,9 +30,11 @@ public sealed class PasteAsPlainTextAction : IClipboardAction
 {
     public string Id => "paste-plain-text";
 
-    public int Order => 10;
+    public int Order => 20;
 
     public string GetTitle(ClipboardItem item) => "Paste as plain text";
+
+    public string GetDescription(ClipboardItem item) => "Pastes clipboard contents as plain text with no formatting.";
 
     public bool CanExecute(ClipboardItem item)
     {

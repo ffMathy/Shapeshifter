@@ -9,9 +9,11 @@ public sealed class CopyAsFileAction : IClipboardAction
 {
     public string Id => "copy-as-file";
 
-    public int Order => 20;
+    public int Order => 10;
 
     public string GetTitle(ClipboardItem item) => "Copy as file";
+
+    public string GetDescription(ClipboardItem item) => "Copy this text to the clipboard as a file.";
 
     public bool CanExecute(ClipboardItem item)
     {
@@ -40,6 +42,8 @@ public sealed class ZipFilesAction : IClipboardAction
     public int Order => 75;
 
     public string GetTitle(ClipboardItem item) => "Copy as compressed folder";
+
+    public string GetDescription(ClipboardItem item) => "Copy these files to the clipboard as a compressed (.zip) folder.";
 
     public bool CanExecute(ClipboardItem item)
     {
