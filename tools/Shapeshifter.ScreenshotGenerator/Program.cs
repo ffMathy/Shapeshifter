@@ -158,7 +158,8 @@ internal static class Program
         var content = (Control)window.Content!;
         window.Content = null;
         content.DataContext = window.DataContext;
-        content.Width = window.Width;
+        if (!double.IsNaN(window.Width))
+            content.Width = window.Width - (content.Margin.Left + content.Margin.Right);
         var host = new Window
         {
             SizeToContent = SizeToContent.WidthAndHeight,

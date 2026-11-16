@@ -21,7 +21,7 @@
     <SolidColorBrush x:Key="AccentBrush" Color="#3A5CF0" />
     <SolidColorBrush x:Key="AccentTextBrush" Color="#3A5CF0" />
     <SolidColorBrush x:Key="AccentSoftBrush" Color="#243A5CF0" />
-    <FontFamily x:Key="MacFont">SF Pro Text, .AppleSystemUIFont, Helvetica Neue, $Default</FontFamily>
+    <FontFamily x:Key="MacFont">SF Pro Text, SF Pro, Helvetica Neue, $Default</FontFamily>
   </Styles.Resources>
 
   <!-- ============================================================================================================
@@ -117,7 +117,7 @@
     <Setter Property="Margin" Value="0,0,10,0" />
   </Style>
   <Style Selector="ListBox.items">
-    <Setter Property="Width" Value="410" />
+    <Setter Property="Width" Value="414" />
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="Padding" Value="0" />
@@ -131,7 +131,8 @@
     <Setter Property="VerticalContentAlignment" Value="Center" />
     <Setter Property="Template">
       <ControlTemplate>
-        <Panel Margin="0,2">
+        <!-- 2 px all round: room for the capsule's shadow inside the list's clip -->
+        <Panel Margin="2,2">
           <Border Name="capsule" CornerRadius="16" />
           <ContentPresenter Name="PART_ContentPresenter"
                             Background="Transparent"
@@ -164,7 +165,7 @@
   <Style Selector="ListBox.items > ListBoxItem:selected /template/ Border#capsule">
     <Setter Property="CornerRadius" Value="30" />
     <Setter Property="Background" Value="{DynamicResource AccentTextBrush}" />
-    <Setter Property="BoxShadow" Value="inset 0 1 0 0 #59FFFFFF, 0 3 8 -2 #4D1B1F5C" />
+    <Setter Property="BoxShadow" Value="inset 0 1 0 0 #59FFFFFF, 0 1 2 -1 #591B1F5C" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected /template/ Path#chevron">
     <Setter Property="IsVisible" Value="True" />
@@ -265,7 +266,7 @@
     <Setter Property="Foreground" Value="White" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected StackPanel.source > TextBlock">
-    <Setter Property="Foreground" Value="#EBFFFFFF" />
+    <Setter Property="Foreground" Value="White" />
   </Style>
 
   <Style Selector="Grid.row StackPanel.pinned">
@@ -317,10 +318,10 @@
     <Setter Property="Stroke" Value="{DynamicResource AccentTextBrush}" />
   </Style>
   <Style Selector="Border.historyPane.inactive ListBox.items > ListBoxItem:selected StackPanel.pinned > Path">
-    <Setter Property="Stroke" Value="#55555C" />
+    <Setter Property="Stroke" Value="#4A4A52" />
   </Style>
   <Style Selector="Border.historyPane.inactive ListBox.items > ListBoxItem:selected StackPanel.pinned > TextBlock">
-    <Setter Property="Foreground" Value="#55555C" />
+    <Setter Property="Foreground" Value="#4A4A52" />
   </Style>
 
   <!-- ============================================================================================================
@@ -330,7 +331,7 @@
     <Setter Property="Width" Value="250" />
     <Setter Property="Padding" Value="8" />
     <Setter Property="CornerRadius" Value="18" />
-    <Setter Property="Background" Value="#8CFFFFFF" />
+    <Setter Property="Background" Value="#80F7F7FB" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="BorderBrush" Value="#B3FFFFFF" />
     <Setter Property="BoxShadow" Value="inset 0 1 0 0 #F2FFFFFF, 0 1 2 0 #0F281E5A" />
@@ -339,7 +340,7 @@
     <Setter Property="FontSize" Value="11" />
     <Setter Property="FontWeight" Value="SemiBold" />
     <Setter Property="Foreground" Value="#4A4A52" />
-    <Setter Property="Margin" Value="8,4,8,6" />
+    <Setter Property="Margin" Value="10,4,10,6" />
   </Style>
   <Style Selector="ListBox.actions">
     <Setter Property="Background" Value="Transparent" />
@@ -431,14 +432,20 @@
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
     <Setter Property="MaxLines" Value="3" />
   </Style>
+  <!-- The pill floats over the top right of the text, beside the title, so it never narrows the description:
+       the shared template puts it in its own Auto column (as a local value, which a style cannot move), so a
+       negative left margin as wide as the pill makes that column take no width and lets it overhang leftwards -->
   <Style Selector="Grid.action Border.defaultBadge">
-    <Setter Property="Margin" Value="6,1,0,0" />
-    <Setter Property="Padding" Value="6,1" />
+    <Setter Property="HorizontalAlignment" Value="Right" />
+    <Setter Property="Width" Value="54" />
+    <Setter Property="Margin" Value="-54,1,0,0" />
+    <Setter Property="Padding" Value="0,1" />
     <Setter Property="CornerRadius" Value="999" />
     <Setter Property="Background" Value="#0F000000" />
     <Setter Property="VerticalAlignment" Value="Top" />
   </Style>
   <Style Selector="Grid.action Border.defaultBadge > TextBlock">
+    <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="FontSize" Value="10" />
     <Setter Property="FontWeight" Value="SemiBold" />
     <Setter Property="Foreground" Value="#3A3A40" />
@@ -459,7 +466,7 @@
     <Setter Property="Margin" Value="0,0,16,0" />
   </Style>
   <Style Selector="StackPanel.hint > TextBlock">
-    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontSize" Value="11.5" />
     <Setter Property="Foreground" Value="#3A3A40" />
     <Setter Property="Margin" Value="2,0,0,0" />
     <Setter Property="VerticalAlignment" Value="Center" />
@@ -468,8 +475,8 @@
     <Setter Property="MinWidth" Value="20" />
     <Setter Property="Height" Value="20" />
     <Setter Property="Padding" Value="5,0" />
-    <Setter Property="CornerRadius" Value="5" />
-    <Setter Property="Background" Value="White" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="Background" Value="#D9FFFFFF" />
     <Setter Property="BoxShadow" Value="0 0 0 0.5 #29000000, 0 1 0 0 #1A000000" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
@@ -536,11 +543,12 @@
   </Style>
   <Style Selector="Border.group">
     <Setter Property="Background" Value="White" />
-    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="CornerRadius" Value="14" />
     <Setter Property="BoxShadow" Value="0 0 0 1 #0D000000" />
   </Style>
   <Style Selector="Grid.settingRow">
-    <Setter Property="MinHeight" Value="44" />
+    <!-- 30 + 7 + 7: a row is at least 44 tall -->
+    <Setter Property="MinHeight" Value="30" />
     <Setter Property="Margin" Value="14,7,12,7" />
   </Style>
   <Style Selector="Grid.settingRow Path.rowIcon">
@@ -589,9 +597,9 @@
                               ContentTemplate="{TemplateBinding ContentTemplate}"
                               HorizontalContentAlignment="Stretch"
                               VerticalContentAlignment="Center" />
-            <StackPanel Grid.Column="1" Margin="0,0,9,0" VerticalAlignment="Center" Spacing="1"
+            <StackPanel Grid.Column="1" Margin="0,0,6,0" VerticalAlignment="Center" Spacing="0"
                         IsVisible="{TemplateBinding ShowButtonSpinner}">
-              <RepeatButton Name="PART_IncreaseButton" Focusable="False" Width="14" Height="9">
+              <RepeatButton Name="PART_IncreaseButton" Focusable="False" Width="22" Height="13">
                 <RepeatButton.Template>
                   <ControlTemplate>
                     <Border Background="Transparent">
@@ -601,7 +609,7 @@
                   </ControlTemplate>
                 </RepeatButton.Template>
               </RepeatButton>
-              <RepeatButton Name="PART_DecreaseButton" Focusable="False" Width="14" Height="9">
+              <RepeatButton Name="PART_DecreaseButton" Focusable="False" Width="22" Height="13">
                 <RepeatButton.Template>
                   <ControlTemplate>
                     <Border Background="Transparent">
@@ -635,6 +643,11 @@
   <!-- A switch: a capsule track in the accent, with a pill knob -->
   <Style Selector="ToggleSwitch.rowControl">
     <Setter Property="Margin" Value="12,0,0,0" />
+    <Setter Property="FocusAdorner">
+      <FocusAdornerTemplate>
+        <Border CornerRadius="15" BorderThickness="3" BorderBrush="{DynamicResource AccentSoftBrush}" Margin="-3" />
+      </FocusAdornerTemplate>
+    </Setter>
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="Template">
       <ControlTemplate TargetType="ToggleSwitch">
@@ -688,6 +701,11 @@
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="CornerRadius" Value="14" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FocusAdorner">
+      <FocusAdornerTemplate>
+        <Border CornerRadius="17" BorderThickness="3" BorderBrush="{DynamicResource AccentSoftBrush}" Margin="-3" />
+      </FocusAdornerTemplate>
+    </Setter>
   </Style>
   <Style Selector="Button.command /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="Background" Value="White" />
@@ -721,7 +739,7 @@
        Copy notification: a macOS notification banner of glass
        ============================================================================================================ -->
   <Style Selector="Border.toastChrome">
-    <Setter Property="Margin" Value="24,14,24,30" />
+    <Setter Property="Margin" Value="24,14,16,30" />
     <Setter Property="Width" Value="340" />
     <Setter Property="Padding" Value="11,11,14,11" />
     <Setter Property="CornerRadius" Value="22" />
