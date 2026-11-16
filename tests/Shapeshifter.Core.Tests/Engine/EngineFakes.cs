@@ -315,6 +315,8 @@ internal sealed class RecordingAction(string id, int order, string title, CallLo
 
     public string GetTitle(ClipboardItem item) => title;
 
+    public string GetDescription(ClipboardItem item) => title;
+
     public bool CanExecute(ClipboardItem item) => true;
 
     public Task ExecuteAsync(ClipboardItem item, ActionContext context, CancellationToken cancellationToken = default)

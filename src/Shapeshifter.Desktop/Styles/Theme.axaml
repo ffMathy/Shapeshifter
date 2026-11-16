@@ -1,11 +1,15 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <Styles.Resources>
-    <!-- The original Shapeshifter palette. -->
+    <!--
+      Fallback palette. AccentPalette replaces the accent brushes with ones derived from the operating system's
+      accent colour at startup, as the original Shapeshifter did, so these only show where there is none.
+    -->
     <SolidColorBrush x:Key="AccentBrush" Color="#3399FF" />
     <SolidColorBrush x:Key="AccentDarkBrush" Color="#236BB2" />
     <SolidColorBrush x:Key="AccentDarkerBrush" Color="#1E5B99" />
-    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FEFEFE" />
+    <SolidColorBrush x:Key="ActionsBackgroundBrush" Color="#F0236BB2" />
+    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FFFFFF" />
     <SolidColorBrush x:Key="WindowDarkBackgroundBrush" Color="#F0F0F0" />
     <SolidColorBrush x:Key="ControlBorderBrush" Color="#DDDDDD" />
   </Styles.Resources>
@@ -16,36 +20,44 @@
     <Setter Property="Padding" Value="0" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem">
-    <Setter Property="Height" Value="92" />
+    <Setter Property="Height" Value="114" />
     <Setter Property="Padding" Value="0" />
     <Setter Property="Margin" Value="0" />
-    <Setter Property="Background" Value="{StaticResource WindowDarkBackgroundBrush}" />
-    <Setter Property="BorderBrush" Value="{StaticResource ControlBorderBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
     <Setter Property="BorderThickness" Value="0,0,0,1" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{StaticResource WindowDarkBackgroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{StaticResource WindowDarkBackgroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected:focus /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem TextBlock.title">
     <Setter Property="Foreground" Value="#222222" />
+    <Setter Property="FontSize" Value="15" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem TextBlock.subtitle">
-    <Setter Property="Foreground" Value="#666666" />
+    <Setter Property="Foreground" Value="#707070" />
+    <Setter Property="FontSize" Value="13" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem PathIcon">
-    <Setter Property="Foreground" Value="{StaticResource AccentBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem TextBlock.iconText">
+    <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+    <Setter Property="FontSize" Value="60" />
+    <Setter Property="FontWeight" Value="Light" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected TextBlock.title, ListBox.items > ListBoxItem:selected TextBlock.subtitle">
     <Setter Property="Foreground" Value="White" />
@@ -53,42 +65,82 @@
   <Style Selector="ListBox.items > ListBoxItem:selected PathIcon">
     <Setter Property="Foreground" Value="White" />
   </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected TextBlock.iconText">
+    <Setter Property="Foreground" Value="White" />
+  </Style>
   <Style Selector="ListBox.items > ListBoxItem Border.iconArea">
-    <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource WindowDarkBackgroundBrush}" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected Border.iconArea">
-    <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem Border.thumbnailCaption">
+    <Setter Property="Background" Value="#B0FFFFFF" />
+    <Setter Property="Padding" Value="8,3" />
+    <Setter Property="Margin" Value="12,0,12,10" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="VerticalAlignment" Value="Bottom" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem Border.thumbnailCaption > TextBlock">
+    <Setter Property="Foreground" Value="#444444" />
+    <Setter Property="FontSize" Value="12" />
+  </Style>
+  <!-- A selected image keeps its picture, framed in the accent colour. -->
+  <Style Selector="ListBox.items > ListBoxItem:selected Border.thumbnailCaption">
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected Border.thumbnailCaption > TextBlock">
+    <Setter Property="Foreground" Value="White" />
   </Style>
 
   <!-- Picker: actions -->
+  <Style Selector="Border.actionsPane">
+    <Setter Property="Background" Value="{DynamicResource ActionsBackgroundBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource AccentDarkerBrush}" />
+    <Setter Property="BorderThickness" Value="1,0,1,1" />
+    <Setter Property="VerticalAlignment" Value="Top" />
+  </Style>
+  <!-- Without a compositor the window cannot be see-through, so the pane fills the column instead of leaving black. -->
+  <Style Selector="Border.actionsPane.fill">
+    <Setter Property="VerticalAlignment" Value="Stretch" />
+  </Style>
   <Style Selector="ListBox.actions">
-    <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
+    <Setter Property="Background" Value="Transparent" />
     <Setter Property="Padding" Value="0" />
   </Style>
   <Style Selector="ListBox.actions > ListBoxItem">
-    <Setter Property="Height" Value="40" />
-    <Setter Property="Padding" Value="12,0" />
-    <Setter Property="BorderBrush" Value="{StaticResource AccentDarkerBrush}" />
+    <Setter Property="MinHeight" Value="64" />
+    <Setter Property="Padding" Value="8,8,14,10" />
+    <Setter Property="VerticalContentAlignment" Value="Top" />
+    <Setter Property="BorderBrush" Value="{DynamicResource AccentDarkerBrush}" />
     <Setter Property="BorderThickness" Value="0,0,0,1" />
-    <Setter Property="Foreground" Value="White" />
   </Style>
   <Style Selector="ListBox.actions > ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
-    <Setter Property="Foreground" Value="White" />
+    <Setter Property="Background" Value="Transparent" />
   </Style>
   <Style Selector="ListBox.actions > ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{StaticResource AccentDarkBrush}" />
-    <Setter Property="Foreground" Value="White" />
+    <Setter Property="Background" Value="Transparent" />
   </Style>
   <Style Selector="ListBox.actions > ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{StaticResource AccentBrush}" />
-    <Setter Property="Foreground" Value="White" />
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
   </Style>
   <Style Selector="ListBox.actions > ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+  </Style>
+  <Style Selector="ListBox.actions > ListBoxItem:selected:focus /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+  </Style>
+  <Style Selector="ListBox.actions TextBlock.actionTitle">
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="FontSize" Value="19" />
+    <Setter Property="FontWeight" Value="Light" />
+  </Style>
+  <Style Selector="ListBox.actions TextBlock.actionDescription">
+    <Setter Property="Foreground" Value="#DDFFFFFF" />
+    <Setter Property="FontSize" Value="12.5" />
   </Style>
 
-  <!-- The inactive pane is shaded, as in the original design. -->
+  <!-- The history is shaded while the actions pane has the keyboard. -->
   <Style Selector="Rectangle.veil">
     <Setter Property="IsHitTestVisible" Value="False" />
     <Setter Property="Transitions">

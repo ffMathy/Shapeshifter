@@ -46,7 +46,7 @@ Shapeshifter's own clipboard writes go through `ClipboardMonitor.WriteAsync`. Th
 - On Linux, the trigger grab is released while the synthetic keystroke is sent.
 - The hook recognises the echo of its own keystrokes by matching the exact sequence it sent, because XRecord does not flag simulated events.
 
-The picker window is created with `ShowActivated=false` and `Topmost=true`. It never takes keyboard focus, so the paste always lands in the application the user was working in.
+The picker window is created with `ShowActivated=false` and `Topmost=true`. It never takes keyboard focus, so the paste always lands in the application the user was working in. It opens in the top-left corner of the screen that contains the pointer, with the history on the left and the selected item's actions (title and description) on the right, coloured with the operating system's accent colour.
 
 ## Testing
 

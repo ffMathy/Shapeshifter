@@ -15,6 +15,14 @@ public sealed class TogglePinAction : IClipboardAction
         return item.IsPinned ? "Unpin" : "Pin to top";
     }
 
+    public string GetDescription(ClipboardItem item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+        return item.IsPinned
+            ? "Lets the item move down the history again and stops keeping it after a restart."
+            : "Keeps the item at the top of the history and saves it, so it is still there after a restart.";
+    }
+
     public bool CanExecute(ClipboardItem item) => true;
 
     public async Task ExecuteAsync(ClipboardItem item, ActionContext context, CancellationToken cancellationToken = default)

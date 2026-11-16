@@ -56,7 +56,7 @@ dotnet build Shapeshifter.slnx
 dotnet run --project src/Shapeshifter.Desktop
 ```
 
-To produce a self-contained, single-file build for a platform (`win-x64`, `win-arm64`, `osx-arm64`, `osx-x64`, `linux-x64`, `linux-arm64`):
+To produce a self-contained, single-file build for a platform (the output folder holds only the executable; debug symbols are embedded) (`win-x64`, `win-arm64`, `osx-arm64`, `osx-x64`, `linux-x64`, `linux-arm64`):
 
 ```bash
 dotnet publish src/Shapeshifter.Desktop -c Release -r linux-x64 -o publish

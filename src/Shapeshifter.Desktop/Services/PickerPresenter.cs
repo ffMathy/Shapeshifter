@@ -13,11 +13,12 @@ using Shapeshifter.Desktop.Views;
 
 namespace Shapeshifter.Desktop.Services;
 
-/// <summary>Shows the picker on the screen that contains the pointer, without activating it.</summary>
+/// <summary>
+/// Shows the picker in the top-left corner of the screen that contains the pointer, without activating it.
+/// </summary>
 internal sealed class PickerPresenter : IPickerPresenter
 {
-    private const double ItemHeight = 92;
-    private const double ChromeHeight = 26;
+    private const double ItemHeight = 114;
 
     private readonly ICursorLocator cursorLocator;
     private readonly ILogger logger;
@@ -25,11 +26,10 @@ internal sealed class PickerPresenter : IPickerPresenter
     private readonly Dictionary<Guid, Bitmap?> thumbnails = [];
     private PickerWindow? window;
 
-    public PickerPresenter(ICursorLocator cursorLocator, string modifierName, ILogger logger)
+    public PickerPresenter(ICursorLocator cursorLocator, ILogger logger)
     {
         this.cursorLocator = cursorLocator;
         this.logger = logger.ForContext<PickerPresenter>();
-        viewModel.Hint = $"V or ↑↓: choose · ←→: actions · Delete: remove · Esc: cancel · release {modifierName} to paste";
     }
 
     public event EventHandler<bool>? VisibilityChanged;
@@ -42,21 +42,18 @@ internal sealed class PickerPresenter : IPickerPresenter
     {
         Apply(state);
         var picker = window ??= new PickerWindow { DataContext = viewModel };
-        Position(picker, state.Items.Count);
+        Position(picker);
         picker.Show();
+
+        // Only known once the window exists; without a compositor the window cannot be see-through.
+        viewModel.ActionsFillHeight = picker.ActualTransparencyLevel == WindowTransparencyLevel.None;
         IsVisible = true;
         VisibilityChanged?.Invoke(this, true);
     }).GetTask();
 
     public Task UpdateAsync(PickerViewState state) => Dispatcher.UIThread.InvokeAsync(() =>
     {
-        var countChanged = state.Items.Count != viewModel.Items.Count;
         Apply(state);
-        if (countChanged && window is not null)
-        {
-            Position(window, state.Items.Count);
-        }
-
         VisibilityChanged?.Invoke(this, true);
     }).GetTask();
 
@@ -112,7 +109,7 @@ internal sealed class PickerPresenter : IPickerPresenter
             try
             {
                 using var stream = new MemoryStream(item.Snapshot.Image);
-                bitmap = Bitmap.DecodeToHeight(stream, (int)ItemHeight * 2);
+                bitmap = Bitmap.DecodeToHeight(stream, (int)ItemHeight * 3);
             }
             catch (Exception exception)
             {
@@ -126,28 +123,25 @@ internal sealed class PickerPresenter : IPickerPresenter
         return bitmap;
     }
 
-    private void Position(Window picker, int itemCount)
+    private void Position(Window picker)
     {
+        // The window sizes itself to its content (SizeToContent), so only the history needs a limit.
         var screen = FindScreen(picker.Screens);
         if (screen is null)
         {
-            picker.Height = Math.Min(itemCount * ItemHeight + ChromeHeight, 600);
+            viewModel.MaxListHeight = 600;
             return;
         }
 
         // Factor between window size units (DIPs) and the units of Screen bounds and Window.Position.
         // On Windows and X11 those are physical pixels, so it is the screen's scaling. On macOS Avalonia
         // positions windows in points (DesktopScaling is 1) while Screen.Scaling is the Retina backing
-        // factor, so using the latter would make the picker half-height and off-centre on Retina displays.
+        // factor, so using the latter would make the picker twice as tall as the screen allows on Retina displays.
         var scaling = OperatingSystem.IsMacOS() ? picker.DesktopScaling : screen.Scaling;
         var area = screen.WorkingArea;
-        var maxHeight = area.Height / scaling * 0.8;
-        var height = Math.Min((Math.Max(itemCount, 1) * ItemHeight) + ChromeHeight, maxHeight);
-        picker.Height = height;
-        var width = picker.Width;
-        var x = area.X + (int)((area.Width - (width * scaling)) / 2);
-        var y = area.Y + (int)((area.Height - (height * scaling)) / 3);
-        picker.Position = new PixelPoint(x, y);
+        var rows = Math.Max(1, Math.Floor(area.Height / scaling / ItemHeight));
+        viewModel.MaxListHeight = rows * ItemHeight;
+        picker.Position = new PixelPoint(area.X, area.Y);
     }
 
     private Screen? FindScreen(Screens screens)

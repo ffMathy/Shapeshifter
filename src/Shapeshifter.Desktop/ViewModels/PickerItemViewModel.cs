@@ -22,6 +22,11 @@ public sealed class PickerItemViewModel
         Subtitle = CreateSubtitle(item);
         Thumbnail = thumbnail;
         IsPinned = item.IsPinned;
+
+        // Several files show how many there are, as the original design did, rather than a generic icon.
+        IconText = item.Kind == ClipboardContentKind.FileCollection
+            ? item.Snapshot.Files.Count.ToString(System.Globalization.CultureInfo.CurrentCulture)
+            : null;
         Icon = item.Kind switch
         {
             ClipboardContentKind.Text => TextIcon,
@@ -48,13 +53,18 @@ public sealed class PickerItemViewModel
 
     public bool IsPinned { get; }
 
+    /// <summary>Shown instead of <see cref="Icon"/> when set.</summary>
+    public string? IconText { get; }
+
+    public bool HasIconText => IconText is not null;
+
     public Geometry Icon { get; }
 
     private static string CreateSubtitle(ClipboardItem item)
     {
         var snapshot = item.Snapshot;
         var age = FormatAge(DateTimeOffset.UtcNow - item.CapturedAt);
-        return item.Kind switch
+        var subtitle = item.Kind switch
         {
             ClipboardContentKind.Text when ClipboardFormatClassifier.FindRichText(snapshot) is not null => $"Formatted text · {age}",
             ClipboardContentKind.Text => $"{CountLines(snapshot.Text)} · {age}",
@@ -63,6 +73,7 @@ public sealed class PickerItemViewModel
             ClipboardContentKind.FileCollection => $"{string.Join(", ", snapshot.Files.Take(3).Select(Path.GetFileName))}{(snapshot.Files.Count > 3 ? ", …" : string.Empty)} · {age}",
             _ => $"Other data · {age}",
         };
+        return item.IsPinned ? $"Pinned · {subtitle}" : subtitle;
     }
 
     private static string CountLines(string? text)

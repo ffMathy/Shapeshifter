@@ -13,6 +13,8 @@ public sealed class CopyAsFileAction : IClipboardAction
 
     public string GetTitle(ClipboardItem item) => "Copy as file";
 
+    public string GetDescription(ClipboardItem item) => "Saves the text to a .txt file and copies the file.";
+
     public bool CanExecute(ClipboardItem item)
     {
         ArgumentNullException.ThrowIfNull(item);
@@ -40,6 +42,8 @@ public sealed class ZipFilesAction : IClipboardAction
     public int Order => 75;
 
     public string GetTitle(ClipboardItem item) => "Copy as compressed folder";
+
+    public string GetDescription(ClipboardItem item) => "Compresses the files into a .zip archive and copies the archive.";
 
     public bool CanExecute(ClipboardItem item)
     {

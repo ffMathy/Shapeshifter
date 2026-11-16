@@ -161,6 +161,38 @@ public sealed class ActionCatalogTests
         Assert.Equal("Copy image from link", new CopyImageFromLinkAction().GetTitle(item));
     }
 
+    [Theory]
+    [InlineData("plain")]
+    [InlineData("link")]
+    [InlineData("text+html")]
+    [InlineData("text+image")]
+    [InlineData("file")]
+    [InlineData("files")]
+    [InlineData("image")]
+    public void Descriptions_AreSentences_ForEveryAvailableAction(string kind)
+    {
+        var item = Items.ByName(kind);
+
+        Assert.All(ActionCatalog.CreateDefault().GetAvailable(item), action =>
+        {
+            var description = action.GetDescription(item);
+            Assert.False(string.IsNullOrWhiteSpace(description));
+            Assert.EndsWith(".", description, StringComparison.Ordinal);
+        });
+    }
+
+    [Fact]
+    public void Descriptions_FollowPinState()
+    {
+        var item = Items.ByName("plain");
+        var action = new TogglePinAction();
+
+        var unpinned = action.GetDescription(item);
+        item.IsPinned = true;
+
+        Assert.NotEqual(unpinned, action.GetDescription(item));
+    }
+
     private sealed class StubAction(string id, int order, bool canExecute = true) : IClipboardAction
     {
         public string Id => id;
@@ -168,6 +200,8 @@ public sealed class ActionCatalogTests
         public int Order => order;
 
         public string GetTitle(ClipboardItem item) => id;
+
+        public string GetDescription(ClipboardItem item) => id;
 
         public bool CanExecute(ClipboardItem item) => canExecute;
 
