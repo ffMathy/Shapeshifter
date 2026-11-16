@@ -45,9 +45,13 @@ jobs:
           Set-Service TermService -StartupType Manual
           Start-Service TermService
           # No Server Manager in the new session.
-          New-Item 'HKLM:\SOFTWARE\Microsoft\ServerManager' -Force | Out-Null
-          Set-ItemProperty 'HKLM:\SOFTWARE\Microsoft\ServerManager' -Name DoNotOpenServerManagerAtLogon -Value 1 -Type DWord
-          Get-ScheduledTask -TaskName ServerManager -ErrorAction SilentlyContinue | Disable-ScheduledTask | Out-Null
+          # Best effort: the key is protected on some images, and the target application takes the focus back anyway.
+          try {
+            Set-ItemProperty 'HKLM:\SOFTWARE\Microsoft\ServerManager' -Name DoNotOpenServerManagerAtLogon -Value 1 -Type DWord
+          } catch {
+            Write-Warning "Could not turn off Server Manager at logon: $_"
+          }
+          Get-ScheduledTask -TaskName ServerManager -ErrorAction SilentlyContinue | Disable-ScheduledTask -ErrorAction SilentlyContinue | Out-Null
 
           # The target application runs in the remote session and mirrors its text box to a file both users can reach.
           New-Item -ItemType Directory $env:RDP_HOME | Out-Null
