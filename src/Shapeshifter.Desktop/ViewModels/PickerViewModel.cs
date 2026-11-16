@@ -44,10 +44,15 @@ public sealed partial class PickerViewModel : ObservableObject
     /// <param name="modifierName">The key held to keep the picker open: "Ctrl", or "Cmd" on macOS.</param>
     public PickerViewModel(string modifierName)
     {
+        ArgumentNullException.ThrowIfNull(modifierName);
         ModifierKey = modifierName == "Cmd" ? "⌘" : modifierName;
-        Items.CollectionChanged += (_, _) => ItemCountText = Items.Count == 1
-            ? "1 item"
-            : string.Create(CultureInfo.CurrentCulture, $"{Items.Count} items");
+        EmptyHint = CreateEmptyHint(modifierName);
+        Items.CollectionChanged += (_, _) =>
+        {
+            ItemCountText = Items.Count == 1 ? "1 item" : string.Create(CultureInfo.CurrentCulture, $"{Items.Count} items");
+            OnPropertyChanged(nameof(HasItems));
+            OnPropertyChanged(nameof(IsEmpty));
+        };
     }
 
     /// <summary>The key cap of the modifier in the footer: "Ctrl" or "⌘".</summary>
@@ -57,6 +62,19 @@ public sealed partial class PickerViewModel : ObservableObject
     public string ReleaseHint => $"Release {ModifierKey} to paste";
 
     public ObservableCollection<PickerItemViewModel> Items { get; } = [];
+
+    public bool HasItems => Items.Count > 0;
+
+    /// <summary>Nothing has been copied yet, so the picker explains how to use it (issue #144).</summary>
+    public bool IsEmpty => Items.Count == 0;
+
+    /// <summary>How to use Shapeshifter, shown in place of the history while it is empty.</summary>
+    public string EmptyHint { get; }
+
+    public static string CreateEmptyHint(string modifier) =>
+        "Copy as usual, and Shapeshifter keeps everything you copy.\n\n" +
+        $"To paste something you copied earlier, hold {modifier} and press V. Keep holding {modifier} to see the history, " +
+        $"press V or the arrow keys to choose, and release {modifier} to paste.";
 
     public ObservableCollection<PickerActionViewModel> Actions { get; } = [];
 

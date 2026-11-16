@@ -2,7 +2,9 @@ using System.Buffers.Binary;
 using System.Globalization;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Text;
 using Shapeshifter.Desktop.Services;
 
 namespace Shapeshifter.Desktop.ViewModels;
@@ -12,8 +14,9 @@ namespace Shapeshifter.Desktop.ViewModels;
 /// The tile shows what kind of item it is: a thumbnail for an image, the system icon of a single file, up to four
 /// file icons for several files, and otherwise a line icon. The title is the text itself, the file name, "Image ·
 /// 1920 × 1080" or "4 items · …"; the line below names the window it was copied from, or the folder of copied files.
+/// On the right, every row shows when it was copied and, when it is pinned, a pin.
 /// </remarks>
-public sealed class PickerItemViewModel
+public sealed partial class PickerItemViewModel : ObservableObject
 {
     /// <summary>Size of the file icons that are requested from the operating system.</summary>
     public const int FileIconSize = 32;
@@ -27,6 +30,8 @@ public sealed class PickerItemViewModel
         Id = item.Id;
         Kind = item.Kind;
         IsPinned = item.IsPinned;
+        this.item = item;
+        copiedAgo = RelativeTime.Describe(CapturedAt, DateTimeOffset.Now);
         Thumbnail = thumbnail;
         var files = item.Snapshot.Files;
 
@@ -93,6 +98,18 @@ public sealed class PickerItemViewModel
     public ClipboardContentKind Kind { get; }
 
     public bool IsPinned { get; }
+
+    private readonly ClipboardItem item;
+
+    /// <summary>When the item was last copied (copying it again updates this, so it is read from the item).</summary>
+    public DateTimeOffset CapturedAt => item.CapturedAt;
+
+    /// <summary><see cref="CapturedAt"/> as "Just now", "5 min ago" and so on; see <see cref="RefreshCopiedAgo"/>.</summary>
+    [ObservableProperty]
+    private string copiedAgo;
+
+    /// <summary>Updates <see cref="CopiedAgo"/>, since the picker reuses its rows each time it is shown.</summary>
+    public void RefreshCopiedAgo(DateTimeOffset now) => CopiedAgo = RelativeTime.Describe(CapturedAt, now);
 
     public PickerItemLayout Layout { get; }
 

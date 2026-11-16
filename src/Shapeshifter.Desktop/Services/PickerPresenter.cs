@@ -51,6 +51,12 @@ internal sealed class PickerPresenter : IPickerPresenter
     public Task ShowAsync(PickerViewState state) => Dispatcher.UIThread.InvokeAsync(() =>
     {
         Apply(state);
+        var now = DateTimeOffset.Now;
+        foreach (var item in viewModel.Items)
+        {
+            item.RefreshCopiedAgo(now);
+        }
+
         var picker = window ??= new PickerWindow { DataContext = viewModel };
         SetMaxListHeight(picker);
         picker.Show();

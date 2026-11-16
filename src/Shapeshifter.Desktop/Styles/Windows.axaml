@@ -679,4 +679,27 @@
   <Style Selector="Window.settings.mica">
     <Setter Property="Background" Value="Transparent" />
   </Style>
+
+  <!-- Nothing copied yet: how to use Shapeshifter, in the history's place (the actions are hidden) -->
+  <Style Selector="StackPanel.emptyState">
+    <Setter Property="Width" Value="400" />
+    <Setter Property="Spacing" Value="8" />
+    <Setter Property="Margin" Value="16,20,16,20" />
+  </Style>
+  <Style Selector="StackPanel.emptyState TextBlock.emptyTitle">
+    <Setter Property="FontSize" Value="20" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="#1A1A1A" />
+  </Style>
+  <Style Selector="StackPanel.emptyState TextBlock.emptyText">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LineHeight" Value="20" />
+    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+
+  <!-- An empty history has no count to show -->
+  <Style Selector="Border.chrome.empty Border.countPill">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
 </Styles>

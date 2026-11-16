@@ -416,16 +416,16 @@
     <Setter Property="Fill" Value="Transparent" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
+  <!-- When it was copied, dim as on the board ("2 min"); the pin keeps the accent -->
   <Style Selector="StackPanel.pinned > TextBlock">
     <Setter Property="FontSize" Value="12" />
-    <Setter Property="FontWeight" Value="SemiBold" />
-    <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}" />
+    <Setter Property="Foreground" Value="#5E5C64" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
 
   <!-- On the selected row's tint the accent text would drop under 4.5:1; the darker accent keeps it over 5:1. -->
   <Style Selector="ListBox.items > ListBoxItem:selected StackPanel.pinned > TextBlock">
-    <Setter Property="Foreground" Value="{DynamicResource AccentDarkBrush}" />
+    <Setter Property="Foreground" Value="#46454C" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected StackPanel.pinned > Path">
     <Setter Property="Stroke" Value="{DynamicResource AccentDarkBrush}" />
@@ -865,5 +865,23 @@
   </Style>
   <Style Selector="TextBlock.toastPreview">
     <Setter Property="IsVisible" Value="False" />
+  </Style>
+
+  <!-- Nothing copied yet: how to use Shapeshifter, in the history's place (the actions are hidden) -->
+  <Style Selector="StackPanel.emptyState">
+    <Setter Property="Width" Value="392" />
+    <Setter Property="Spacing" Value="8" />
+    <Setter Property="Margin" Value="12,18,12,18" />
+  </Style>
+  <Style Selector="StackPanel.emptyState TextBlock.emptyTitle">
+    <Setter Property="FontSize" Value="17" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="#2E2E33" />
+  </Style>
+  <Style Selector="StackPanel.emptyState TextBlock.emptyText">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LineHeight" Value="20" />
+    <Setter Property="Foreground" Value="#5E5C64" />
+    <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
 </Styles>

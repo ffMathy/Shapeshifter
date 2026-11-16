@@ -47,7 +47,8 @@ internal static class Program
     /// <summary>
     /// <c>[output-folder] [--surfaces]</c>, or <c>[output-folder] --live</c> to capture the real windows on the screen
     /// (see <see cref="LiveCapture"/>). With <c>--surfaces</c>, the settings window and the copy notification of
-    /// each look are rendered as well (<c>settings-&lt;look&gt;.PNG</c>, <c>toast-&lt;look&gt;.PNG</c>), for reviewing a look.
+    /// each look are rendered as well (<c>settings-&lt;look&gt;.PNG</c>, <c>toast-&lt;look&gt;.PNG</c>), and its picker with an empty
+    /// history (<c>empty-&lt;look&gt;.PNG</c>), for reviewing a look.
     /// </summary>
     public static int Main(string[] args)
     {
@@ -83,6 +84,9 @@ internal static class Program
                 var settings = Path.Combine(output, $"settings-{look.ToString().ToLowerInvariant()}.PNG");
                 RenderWindow(CreateSettingsWindow(), look, settings);
                 Console.WriteLine($"Wrote {settings}");
+                var emptyPicker = Path.Combine(output, $"empty-{look.ToString().ToLowerInvariant()}.PNG");
+                RenderPicker(look, 1.25, 1400, 820, emptyPicker, empty: true);
+                Console.WriteLine($"Wrote {emptyPicker}");
                 var toast = Path.Combine(output, $"toast-{look.ToString().ToLowerInvariant()}.PNG");
                 var toastWindow = new ToastWindow();
                 toastWindow.SetContent(5, "Shapeshifter is a freeware clipboard manager, originally developed by defunct Flamefusion company");
@@ -124,11 +128,13 @@ internal static class Program
         return viewModel;
     }
 
-    private static void RenderPicker(Look look, double scale, int width, int height, string path)
+    private static void RenderPicker(Look look, double scale, int width, int height, string path, bool empty = false)
     {
         var photo = SampleArt.Banner(900, 600);
         using var thumbnail = ToBitmap(photo);
-        var viewModel = CreateSampleViewModel(look, photo, thumbnail);
+        var viewModel = empty
+            ? new PickerViewModel(look == Look.MacOS ? "Cmd" : "Ctrl") { MaxListHeight = 10_000 }
+            : CreateSampleViewModel(look, photo, thumbnail);
         viewModel.IsOpaque = false;
 
         // The picker's own window cannot be captured over a desktop, so its content is moved into a window that
@@ -226,9 +232,12 @@ internal static class Program
         };
     }
 
-    /// <summary>The items shown in the screenshots, copied from applications typical of the platform.</summary>
+    /// <summary>
+    /// The items shown in the screenshots, copied a few minutes apart from applications typical of the platform.
+    /// </summary>
     internal static IEnumerable<ClipboardItem> SampleItems(Look look, byte[] photo)
     {
+        var now = DateTimeOffset.Now;
         const string article = "Shapeshifter is a freeware clipboard manager, originally developed by defunct Flamefusion company " +
             "and later released as open source.";
         var browser = SampleArt.BrowserIcon();
@@ -247,15 +256,23 @@ internal static class Program
         };
         var newFile = look switch { Look.MacOS => "Untitled.txt", Look.Linux => "notes.txt", _ => "New Text Document.txt" };
 
-        yield return new ClipboardItem(new ClipboardSnapshot { Text = article }, source: new ClipboardSource(browserName, page, browser));
-        yield return new ClipboardItem(new ClipboardSnapshot { Image = photo }, source: new ClipboardSource(browserName, page, browser));
-        yield return new ClipboardItem(new ClipboardSnapshot
-        {
-            Files = [desktop + "Projects", desktop + "Notes.txt", desktop + "Holiday.mp4", desktop + "Sunset.png"],
-        });
-        yield return new ClipboardItem(new ClipboardSnapshot { Files = [desktop + newFile] });
+        // The first item is pinned, as pinned items are kept at the top. All are copied within the hour, so the times
+        // read the same whenever this runs.
+        var pinned = new ClipboardItem(
+            new ClipboardSnapshot { Text = article },
+            capturedAt: now - TimeSpan.FromMinutes(47),
+            source: new ClipboardSource(browserName, page, browser));
+        new ClipboardHistory().AddPinned(pinned);
+        yield return pinned;
+        yield return new ClipboardItem(
+            new ClipboardSnapshot { Image = photo }, capturedAt: now, source: new ClipboardSource(browserName, page, browser));
+        yield return new ClipboardItem(
+            new ClipboardSnapshot { Files = [desktop + "Projects", desktop + "Notes.txt", desktop + "Holiday.mp4", desktop + "Sunset.png"] },
+            capturedAt: now - TimeSpan.FromMinutes(2));
+        yield return new ClipboardItem(new ClipboardSnapshot { Files = [desktop + newFile] }, capturedAt: now - TimeSpan.FromMinutes(9));
         yield return new ClipboardItem(
             new ClipboardSnapshot { Text = "dotnet run --project src/Shapeshifter.Desktop" },
+            capturedAt: now - TimeSpan.FromMinutes(25),
             source: new ClipboardSource("Terminal", "Terminal — shapeshifter", editor));
     }
 

@@ -93,6 +93,36 @@ public sealed class ClipboardHistoryTests
     }
 
     [Fact]
+    public void Add_DuplicateContent_UpdatesWhenItWasCopied()
+    {
+        // The picker shows when each item was last copied (issue #444).
+        var history = new ClipboardHistory();
+        var item = history.Add(Text("a"));
+        var firstCopy = item.CapturedAt;
+        Thread.Sleep(30);
+        var beforeSecondCopy = DateTimeOffset.UtcNow;
+
+        history.Add(Text("a"));
+
+        Assert.True(item.CapturedAt >= beforeSecondCopy);
+        Assert.True(item.CapturedAt > firstCopy);
+    }
+
+    [Fact]
+    public void Add_DuplicateOfPinnedItem_KeepsWhenItWasCopied()
+    {
+        var history = new ClipboardHistory();
+        var item = history.Add(Text("a"));
+        history.SetPinned(item.Id, true);
+        var pinnedAt = item.CapturedAt;
+        Thread.Sleep(30);
+
+        history.Add(Text("a"));
+
+        Assert.Equal(pinnedAt, item.CapturedAt);
+    }
+
+    [Fact]
     public void Add_DuplicateWithoutSource_TakesTheSourceOfTheNewCopy()
     {
         var history = new ClipboardHistory();

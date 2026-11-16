@@ -46,7 +46,7 @@ Shapeshifter's own clipboard writes go through `ClipboardMonitor.WriteAsync`. Th
 - On Linux, the trigger grab is released while the synthetic keystroke is sent.
 - The hook recognises the echo of its own keystrokes by matching the exact sequence it sent, because XRecord does not flag simulated events.
 
-The picker window is created with `ShowActivated=false` and `Topmost=true`. It never takes keyboard focus, so the paste always lands in the application the user was working in. It opens centred near the top of the screen that contains the pointer: a header, the history on the left, the selected item's actions (icon, title and description) on the right, and the keys in a footer. Each row has a tile showing what kind of item it is (a thumbnail of an image, the system icon of a file or up to four of several files (`IFileIconProvider`), or a line icon), the content, and the window it was copied from (`IClipboardSourceLocator`, asked when the clipboard change is noticed) or the folder of copied files.
+The picker window is created with `ShowActivated=false` and `Topmost=true`. It never takes keyboard focus, so the paste always lands in the application the user was working in. It opens centred near the top of the screen that contains the pointer: a header, the history on the left, the selected item's actions (icon, title and description) on the right, and the keys in a footer. Each row has a tile showing what kind of item it is (a thumbnail of an image, the system icon of a file or up to four of several files (`IFileIconProvider`), or a line icon), the content, and the window it was copied from (`IClipboardSourceLocator`, asked when the clipboard change is noticed) or the folder of copied files. On the right, every row shows when it was last copied ("5 min ago", `RelativeTime`) and a pin when it is pinned. With nothing copied yet, holding the gesture shows the picker without items, explaining how to use it (`IsEmpty`); releasing still pastes normally.
 
 ## Looks
 
@@ -73,5 +73,6 @@ The picker and the copy notification sit on the operating system's own material 
   - It copies through the OS clipboard and drives real keystrokes with SharpHook's simulator.
   - It then checks the exact text that arrived in the target. A paste that leaks through unsuppressed would show up as duplicated text.
   - Shapeshifter reports its state for these tests through the file named by `SHAPESHIFTER_STATE_FILE`.
-- On Linux CI the end-to-end tests run under Xvfb with openbox, because a window manager is needed for keyboard focus. They also run on the Windows runner.
+- On Linux CI the end-to-end tests run under Xvfb with openbox, because a window manager is needed for keyboard focus. They also run on the Windows runner, where the target application also puts exact native image formats on the clipboard (as Snipping Tool and Firefox do) and compares every image format after a paste.
+- `.github/workflows/remote-desktop.yml` connects the Windows runner to itself over Remote Desktop and checks that pasting into the remote session works.
 - macOS runners cannot grant Accessibility access, so macOS CI runs the build and the unit tests only.

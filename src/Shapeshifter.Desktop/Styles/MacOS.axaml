@@ -292,9 +292,10 @@
     <Setter Property="Fill" Value="Transparent" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
+  <!-- When it was copied: a quiet timestamp (and a pin on pinned items) -->
   <Style Selector="Grid.row StackPanel.pinned > TextBlock">
     <Setter Property="FontSize" Value="11" />
-    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="FontWeight" Value="Normal" />
     <Setter Property="Foreground" Value="#55555C" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
@@ -816,5 +817,28 @@
         <GradientStop Offset="1" Color="#4DFBFBFD" />
       </LinearGradientBrush>
     </Setter>
+  </Style>
+
+  <!-- Nothing copied yet: how to use Shapeshifter, in the history's place (the actions are hidden) -->
+  <Style Selector="StackPanel.emptyState">
+    <Setter Property="Width" Value="390" />
+    <Setter Property="Spacing" Value="8" />
+    <Setter Property="Margin" Value="12,16,12,16" />
+  </Style>
+  <Style Selector="StackPanel.emptyState TextBlock.emptyTitle">
+    <Setter Property="FontSize" Value="17" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="#1D1D1F" />
+  </Style>
+  <Style Selector="StackPanel.emptyState TextBlock.emptyText">
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="LineHeight" Value="18" />
+    <Setter Property="Foreground" Value="#55555C" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+
+  <!-- An empty history has no count to show -->
+  <Style Selector="Border.chrome.empty Border.countPill">
+    <Setter Property="IsVisible" Value="False" />
   </Style>
 </Styles>
