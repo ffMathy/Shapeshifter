@@ -3,7 +3,7 @@
     <OutputType>WinExe</OutputType>
     <AssemblyName>Shapeshifter</AssemblyName>
     <RootNamespace>Shapeshifter.Desktop</RootNamespace>
-    <ApplicationIcon>Assets\Application.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\Windows\Application.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <BuiltInComInteropSupport>false</BuiltInComInteropSupport>

@@ -11,7 +11,7 @@ public partial class ToastWindow : Window
 
     public void SetContent(int count, string preview)
     {
-        CountText.Text = count == 1 ? "1 item" : $"{count} items";
+        CountText.Text = count == 1 ? "Copied · 1 item in your history" : $"Copied · {count} items in your history";
         PreviewText.Text = preview;
     }
 }

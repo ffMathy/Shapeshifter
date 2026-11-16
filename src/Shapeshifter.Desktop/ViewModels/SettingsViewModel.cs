@@ -18,6 +18,7 @@ public sealed partial class SettingsViewModel : ObservableObject
     private int pasteDelayMilliseconds;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ShowCopyNotifications))]
     private bool quietMode;
 
     [ObservableProperty]
@@ -47,6 +48,7 @@ public sealed partial class SettingsViewModel : ObservableObject
         quietMode = current.QuietMode;
         maxHistoryItems = current.MaxHistoryItems;
         startAtLogin = autostart.IsSupported && autostart.IsEnabled;
+        DelayDescription = $"How long to hold {modifierName}+V before the history appears";
         Warnings = string.Join(Environment.NewLine + Environment.NewLine, warnings);
         Usage =
             $"Copy as usual. To paste an older item, hold {modifierName} and press V: keep {modifierName} held to see " +
@@ -55,6 +57,16 @@ public sealed partial class SettingsViewModel : ObservableObject
     }
 
     public string Usage { get; }
+
+    /// <summary>The inverse of <see cref="QuietMode"/>, for a switch that reads "Copy notifications: on".</summary>
+    public bool ShowCopyNotifications
+    {
+        get => !QuietMode;
+        set => QuietMode = !value;
+    }
+
+    /// <summary>"Hold Ctrl+V this long before the history appears".</summary>
+    public string DelayDescription { get; private set; } = string.Empty;
 
     public string Warnings { get; }
 

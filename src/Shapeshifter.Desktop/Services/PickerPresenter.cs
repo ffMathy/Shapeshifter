@@ -14,21 +14,29 @@ using Shapeshifter.Desktop.Views;
 namespace Shapeshifter.Desktop.Services;
 
 /// <summary>
-/// Shows the picker in the top-left corner of the screen that contains the pointer, without activating it.
+/// Shows the picker centred near the top of the screen that contains the pointer, without activating it.
 /// </summary>
 internal sealed class PickerPresenter : IPickerPresenter
 {
-    private const double ItemHeight = 92;
+    /// <summary>Height at which thumbnails of copied images are decoded: sharp on the tiles at 200 % scaling.</summary>
+    private const int ThumbnailHeight = 128;
+
+    /// <summary>The picker's top edge, as a fraction of the screen's working area below its top.</summary>
+    private const double TopFraction = 0.16;
+
+    /// <summary>The history may use this fraction of the working area's height.</summary>
+    private const double HeightFraction = 0.62;
 
     private readonly ICursorLocator cursorLocator;
     private readonly ILogger logger;
     private readonly PickerVisuals visuals;
-    private readonly PickerViewModel viewModel = new();
+    private readonly PickerViewModel viewModel;
     private readonly Dictionary<Guid, Bitmap?> thumbnails = [];
     private PickerWindow? window;
 
-    public PickerPresenter(ICursorLocator cursorLocator, PickerVisuals visuals, ILogger logger)
+    public PickerPresenter(ICursorLocator cursorLocator, PickerVisuals visuals, string modifierName, ILogger logger)
     {
+        viewModel = new PickerViewModel(modifierName);
         this.cursorLocator = cursorLocator;
         this.visuals = visuals;
         this.logger = logger.ForContext<PickerPresenter>();
@@ -44,11 +52,15 @@ internal sealed class PickerPresenter : IPickerPresenter
     {
         Apply(state);
         var picker = window ??= new PickerWindow { DataContext = viewModel };
-        Position(picker);
+        SetMaxListHeight(picker);
         picker.Show();
 
         // Only known once the window exists; without a compositor the window cannot be see-through.
-        viewModel.ActionsFillHeight = picker.ActualTransparencyLevel == WindowTransparencyLevel.None;
+        viewModel.IsOpaque = picker.ActualTransparencyLevel == WindowTransparencyLevel.None;
+
+        // The window sizes itself to its content, so it is placed once its size is known.
+        picker.UpdateLayout();
+        Position(picker);
         IsVisible = true;
         VisibilityChanged?.Invoke(this, true);
     }).GetTask();
@@ -56,6 +68,12 @@ internal sealed class PickerPresenter : IPickerPresenter
     public Task UpdateAsync(PickerViewState state) => Dispatcher.UIThread.InvokeAsync(() =>
     {
         Apply(state);
+        if (window is not null)
+        {
+            window.UpdateLayout();
+            Position(window);
+        }
+
         VisibilityChanged?.Invoke(this, true);
     }).GetTask();
 
@@ -85,16 +103,17 @@ internal sealed class PickerPresenter : IPickerPresenter
             }
         }
 
-        if (!viewModel.Actions.SequenceEqual(state.Actions))
+        if (!viewModel.Actions.Select(action => action.View).SequenceEqual(state.Actions))
         {
             viewModel.Actions.Clear();
-            foreach (var action in state.Actions)
+            for (var i = 0; i < state.Actions.Count; i++)
             {
-                viewModel.Actions.Add(action);
+                viewModel.Actions.Add(new PickerActionViewModel(state.Actions[i], isDefault: i == 0));
             }
         }
 
         viewModel.SelectedIndex = state.SelectedIndex;
+        viewModel.UpdateActionsHeader();
         viewModel.SelectedActionIndex = state.SelectedActionIndex;
         viewModel.IsActionsPaneActive = state.Pane == PickerPane.Actions;
     }
@@ -111,7 +130,7 @@ internal sealed class PickerPresenter : IPickerPresenter
             try
             {
                 using var stream = new MemoryStream(item.Snapshot.Image);
-                bitmap = Bitmap.DecodeToHeight(stream, (int)ItemHeight * 3);
+                bitmap = Bitmap.DecodeToHeight(stream, ThumbnailHeight);
             }
             catch (Exception exception)
             {
@@ -125,9 +144,8 @@ internal sealed class PickerPresenter : IPickerPresenter
         return bitmap;
     }
 
-    private void Position(Window picker)
+    private void SetMaxListHeight(Window picker)
     {
-        // The window sizes itself to its content (SizeToContent), so only the history needs a limit.
         var screen = FindScreen(picker.Screens);
         if (screen is null)
         {
@@ -135,16 +153,34 @@ internal sealed class PickerPresenter : IPickerPresenter
             return;
         }
 
-        // Factor between window size units (DIPs) and the units of Screen bounds and Window.Position.
-        // On Windows and X11 those are physical pixels, so it is the screen's scaling. On macOS Avalonia
-        // positions windows in points (DesktopScaling is 1) while Screen.Scaling is the Retina backing
-        // factor, so using the latter would make the picker twice as tall as the screen allows on Retina displays.
-        var scaling = OperatingSystem.IsMacOS() ? picker.DesktopScaling : screen.Scaling;
-        var area = screen.WorkingArea;
-        var rows = Math.Max(1, Math.Floor(area.Height / scaling / ItemHeight));
-        viewModel.MaxListHeight = rows * ItemHeight;
-        picker.Position = new PixelPoint(area.X, area.Y);
+        // Whole rows only, so the last visible row is never cut in half.
+        var rowHeight = PlatformLook.Resource(Avalonia.Application.Current!, "PickerRowHeight", 64.0);
+        var available = screen.WorkingArea.Height / GetScaling(picker, screen) * HeightFraction;
+        viewModel.MaxListHeight = Math.Max(1, Math.Floor(available / rowHeight)) * rowHeight;
     }
+
+    private void Position(Window picker)
+    {
+        var screen = FindScreen(picker.Screens);
+        if (screen is null)
+        {
+            return;
+        }
+
+        var scaling = GetScaling(picker, screen);
+        var area = screen.WorkingArea;
+        var width = picker.Bounds.Width * scaling;
+        picker.Position = new PixelPoint(
+            area.X + (int)Math.Max(0, (area.Width - width) / 2),
+            area.Y + (int)(area.Height * TopFraction));
+    }
+
+    /// <summary>
+    /// Factor between window size units (DIPs) and the units of Screen bounds and Window.Position. On Windows and X11
+    /// those are physical pixels, so it is the screen's scaling. On macOS Avalonia positions windows in points
+    /// (DesktopScaling is 1) while Screen.Scaling is the Retina backing factor.
+    /// </summary>
+    private static double GetScaling(Window picker, Screen screen) => OperatingSystem.IsMacOS() ? picker.DesktopScaling : screen.Scaling;
 
     private Screen? FindScreen(Screens screens)
     {

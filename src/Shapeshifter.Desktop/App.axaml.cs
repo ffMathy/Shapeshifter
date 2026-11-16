@@ -45,6 +45,7 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
         {
             desktop = lifetime;
+            PlatformLook.Apply(this);
             AccentPalette.Attach(this);
             // ShutdownRequested is only raised for platform-initiated shutdowns (logout, Cmd+Q), not for
             // lifetime.Shutdown() from the tray's Quit item; Exit is raised for every shutdown.
@@ -95,7 +96,7 @@ public partial class App : Application
                 Logger = logger,
             };
 
-            var picker = new PickerPresenter(platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), logger);
+            var picker = new PickerPresenter(platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), platform.KeyboardHook.ModifierName, logger);
             engine = new ShapeshifterEngine(
                 history, monitor, platform.KeyboardHook, ActionCatalog.CreateDefault(), context, picker, new CopyNotifier(settings), logger)
             {
@@ -132,7 +133,7 @@ public partial class App : Application
     {
         try
         {
-            using var iconStream = AssetLoader.Open(new Uri("avares://Shapeshifter/Assets/Tray.png"));
+            using var iconStream = AssetLoader.Open(PlatformLook.Asset("Tray.png"));
             var menu = new NativeMenu();
             menu.Items.Add(MenuItem("Settings…", ShowSettings));
             menu.Items.Add(MenuItem("Open log folder", () => platform?.Launcher.OpenFolder(Paths.LogDirectory)));
@@ -148,6 +149,9 @@ public partial class App : Application
                 Menu = menu,
                 IsVisible = true,
             };
+
+            // The menu bar draws a template icon in its own colour, light or dark, as it does for system icons.
+            MacOSProperties.SetIsTemplateIcon(trayIcon, PlatformLook.Current == Look.MacOS);
             trayIcon.Clicked += (_, _) => ShowSettings();
             TrayIcon.SetIcons(this, [trayIcon]);
         }
@@ -180,6 +184,7 @@ public partial class App : Application
 
         settingsWindow = new SettingsWindow
         {
+            Icon = new WindowIcon(AssetLoader.Open(PlatformLook.Asset("Application.png"))),
             DataContext = new SettingsViewModel(
                 settings, platform.Autostart, history, platform.Launcher, Paths, platform.KeyboardHook.ModifierName, platform.Warnings),
         };
