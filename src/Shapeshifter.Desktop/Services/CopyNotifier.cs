@@ -7,10 +7,16 @@ using Shapeshifter.Desktop.Views;
 
 namespace Shapeshifter.Desktop.Services;
 
-/// <summary>Shows a small, non-activating "copied" toast in the bottom-right corner for 1.5 seconds.</summary>
+/// <summary>
+/// Shows a small, non-activating "copied" notification for 1.5 seconds where the platform shows its own: bottom right
+/// on Windows, top right under the menu bar on macOS, bottom centre on Linux (the look's <c>ToastPlacement</c>).
+/// </summary>
 internal sealed class CopyNotifier(SettingsStore settings) : ICopyNotifier
 {
     private static readonly TimeSpan Duration = TimeSpan.FromSeconds(1.5);
+
+    /// <summary>Distance from the edges of the working area; the looks' shadow margins add to it.</summary>
+    private const int Margin = 8;
     private ToastWindow? window;
     private IDisposable? hideTimer;
 
@@ -29,15 +35,21 @@ internal sealed class CopyNotifier(SettingsStore settings) : ICopyNotifier
             var screen = toast.Screens.Primary ?? (toast.Screens.All.Count > 0 ? toast.Screens.All[0] : null);
             if (screen is not null)
             {
-                var size = toast.Bounds.Size * screen.Scaling;
-                var margin = (int)(40 * screen.Scaling);
-                toast.Position = new PixelPoint(
-                    screen.WorkingArea.Right - (int)size.Width - margin,
-                    screen.WorkingArea.Bottom - (int)size.Height - margin);
+                // As in PickerPresenter: on macOS windows are positioned in points, not in backing pixels.
+                var scaling = OperatingSystem.IsMacOS() ? toast.DesktopScaling : screen.Scaling;
+                var placement = PlatformLook.Resource(Application.Current!, "ToastPlacement", "BottomRight");
+                toast.Position = Place(screen.WorkingArea, toast.Bounds.Size * scaling, (int)(Margin * scaling), placement);
             }
 
             hideTimer?.Dispose();
             hideTimer = DispatcherTimer.RunOnce(() => toast.Hide(), Duration);
         });
     }
+
+    internal static PixelPoint Place(PixelRect area, Size size, int margin, string placement) => placement switch
+    {
+        "TopRight" => new PixelPoint(area.Right - (int)size.Width - margin, area.Y + margin),
+        "BottomCenter" => new PixelPoint(area.X + (int)((area.Width - size.Width) / 2), area.Bottom - (int)size.Height - margin),
+        _ => new PixelPoint(area.Right - (int)size.Width - margin, area.Bottom - (int)size.Height - margin),
+    };
 }

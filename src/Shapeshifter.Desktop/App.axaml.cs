@@ -133,7 +133,7 @@ public partial class App : Application
     {
         try
         {
-            using var iconStream = AssetLoader.Open(PlatformLook.Asset("Tray.png"));
+            using var iconStream = AssetLoader.Open(PlatformLook.Asset(TrayIconName()));
             var menu = new NativeMenu();
             menu.Items.Add(MenuItem("Settings…", ShowSettings));
             menu.Items.Add(MenuItem("Open log folder", () => platform?.Launcher.OpenFolder(Paths.LogDirectory)));
@@ -153,12 +153,59 @@ public partial class App : Application
             // The menu bar draws a template icon in its own colour, light or dark, as it does for system icons.
             MacOSProperties.SetIsTemplateIcon(trayIcon, PlatformLook.Current == Look.MacOS);
             trayIcon.Clicked += (_, _) => ShowSettings();
+
+            // Windows draws the taskbar light or dark independently of apps; follow it with the matching glyph.
+            if (PlatformSettings is { } platformSettings)
+            {
+                platformSettings.ColorValuesChanged += (_, _) => Dispatcher.UIThread.Post(UpdateTrayIcon);
+            }
+
             TrayIcon.SetIcons(this, [trayIcon]);
         }
         catch (Exception exception)
         {
             // Some Linux desktops have no system tray; Shapeshifter keeps working without it.
             logger.Warning(exception, "Could not create the tray icon");
+        }
+    }
+
+    /// <summary>
+    /// The tray icon of the look. On Windows, a dark glyph for a light taskbar and a white one for a dark taskbar
+    /// (the taskbar follows "Windows mode", which apps cannot see through the theme variant).
+    /// </summary>
+    private static string TrayIconName()
+    {
+        if (PlatformLook.Current != Look.Windows || !OperatingSystem.IsWindows())
+        {
+            return "Tray.png";
+        }
+
+        try
+        {
+            using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+            return key?.GetValue("SystemUsesLightTheme") is int and not 0 ? "TrayLight.png" : "TrayDark.png";
+        }
+        catch (Exception exception) when (exception is System.Security.SecurityException or UnauthorizedAccessException or IOException)
+        {
+            return "Tray.png";
+        }
+    }
+
+    private void UpdateTrayIcon()
+    {
+        if (trayIcon is null)
+        {
+            return;
+        }
+
+        try
+        {
+            using var stream = AssetLoader.Open(PlatformLook.Asset(TrayIconName()));
+            trayIcon.Icon = new WindowIcon(new Bitmap(stream));
+        }
+        catch (Exception exception)
+        {
+            logger.Debug(exception, "Could not update the tray icon");
         }
     }
 

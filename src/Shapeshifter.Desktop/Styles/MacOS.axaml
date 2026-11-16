@@ -14,6 +14,8 @@
     readable over any desktop while still letting a hint of it through; the edges carry the 1 px specular highlight.
   -->
   <Styles.Resources>
+    <!-- Where the copy notification appears (CopyNotifier): BottomRight, TopRight or BottomCenter. -->
+    <x:String x:Key="ToastPlacement">TopRight</x:String>
     <x:String x:Key="PickerTitle">Clipboard</x:String>
     <!-- 60 for the row and 2 above and below it: the 4 between capsules -->
     <x:Double x:Key="PickerRowHeight">64</x:Double>

@@ -8,6 +8,12 @@ Shapeshifter is a clipboard manager that lets you copy multiple items and choose
 
 <b>To get Shapeshifter or to see more information, go to the website:</b> [https://shapeshifter.app](https://shapeshifter.app). Builds for every platform are attached to the [GitHub releases](https://github.com/ffMathy/Shapeshifter/releases) and to every CI run.
 
+Shapeshifter looks at home on each platform: Fluent 2 on Windows, Liquid Glass on macOS, and GNOME's libadwaita on Linux. Each look follows your system accent colour.
+
+| Windows | macOS | Linux |
+|---|---|---|
+| ![The picker on Windows](assets/screenshots/windows.PNG) | ![The picker on macOS](assets/screenshots/macos.PNG) | ![The picker on Linux](assets/screenshots/linux.PNG) |
+
 ## How it works
 
 Copy as usual. Shapeshifter remembers what you copied, including every clipboard format (rich text, HTML, images, files and application-specific data), so an item is restored exactly when you paste it.
@@ -64,7 +70,7 @@ dotnet publish src/Shapeshifter.Desktop -c Release -r linux-x64 -o publish
 
 ### Screenshots
 
-The screenshots in `assets/screenshots` (also used by the website) are rendered from the real picker with sample content. After changing how the picker looks, regenerate them with:
+The screenshots in `assets/screenshots` (also used by the website) are rendered from the real picker of each look with sample content. To run the app in another platform's look, set `SHAPESHIFTER_LOOK` to `windows`, `macos` or `linux`. After changing how the picker looks, regenerate them with:
 
 ```bash
 scripts/generate-screenshots.sh
