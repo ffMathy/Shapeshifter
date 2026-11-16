@@ -136,7 +136,7 @@
     <Setter Property="Padding" Value="5,0,0,0" />
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-    <Setter Property="MaxWidth" Value="320" />
+    <Setter Property="MaxWidth" Value="240" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected StackPanel.source > TextBlock">
     <Setter Property="Foreground" Value="White" />
@@ -158,6 +158,55 @@
     <Setter Property="FontSize" Value="12" />
     <Setter Property="FontWeight" Value="Light" />
     <Setter Property="Padding" Value="6,1" />
+  </Style>
+
+  <!-- When the item was copied (and a pin if it is pinned), on a small chip so it reads over images too. -->
+  <Style Selector="ListBox.items > ListBoxItem Border.stamp">
+    <Setter Property="Background" Value="#D9FFFFFF" />
+    <Setter Property="CornerRadius" Value="3" />
+    <Setter Property="Padding" Value="5,1" />
+    <Setter Property="Margin" Value="0,0,8,9" />
+    <Setter Property="HorizontalAlignment" Value="Right" />
+    <Setter Property="VerticalAlignment" Value="Bottom" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected Border.stamp">
+    <Setter Property="Background" Value="#33000000" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem Border.stamp TextBlock">
+    <Setter Property="Foreground" Value="#666666" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected Border.stamp TextBlock">
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem Border.stamp Path.pin">
+    <Setter Property="Fill" Value="{DynamicResource AccentBrush}" />
+    <Setter Property="Margin" Value="0,0,4,0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ListBox.items > ListBoxItem:selected Border.stamp Path.pin">
+    <Setter Property="Fill" Value="White" />
+  </Style>
+
+  <!-- The empty history: a short explanation in the history's place. -->
+  <Style Selector="StackPanel.emptyState">
+    <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}" />
+    <Setter Property="Width" Value="450" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+  </Style>
+  <Style Selector="StackPanel.emptyState TextBlock.emptyTitle">
+    <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+    <Setter Property="FontSize" Value="24" />
+    <Setter Property="FontWeight" Value="Light" />
+    <Setter Property="Margin" Value="20,18,20,8" />
+  </Style>
+  <Style Selector="StackPanel.emptyState TextBlock.emptyText">
+    <Setter Property="Foreground" Value="Black" />
+    <Setter Property="Opacity" Value="0.8" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="Margin" Value="20,0,20,20" />
   </Style>
 
   <!-- The 5-wide divider between the history and the actions. -->

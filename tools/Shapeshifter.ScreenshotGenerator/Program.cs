@@ -128,28 +128,39 @@ internal static class Program
         picker.Close();
     }
 
-    /// <summary>The items shown in the original screenshots.</summary>
+    /// <summary>
+    /// The items shown in the original screenshots, copied a few minutes apart (all within the hour, so the times read
+    /// the same whenever this runs). The first one is pinned, as pinned items are kept at the top.
+    /// </summary>
     private static IEnumerable<ClipboardItem> SampleItems()
     {
+        var now = DateTimeOffset.Now;
         const string article = "Shapeshifter is a freeware clipboard manager, originally developed by defunct Flamefusion company " +
             "and later released as open source.";
         var browser = SampleArt.BrowserIcon();
         var editor = SampleArt.EditorIcon();
         const string desktop = "C:/Users/Shapeshifter/Desktop/";
 
-        yield return new ClipboardItem(
+        var pinned = new ClipboardItem(
             new ClipboardSnapshot { Text = article },
+            capturedAt: now - TimeSpan.FromMinutes(47),
             source: new ClipboardSource("Google Chrome", "Shapeshifter (software) - Wikipedia – Google Chrome", browser));
+        new ClipboardHistory().AddPinned(pinned);
+        yield return pinned;
         yield return new ClipboardItem(
             new ClipboardSnapshot { Image = SampleArt.Banner(900, 228) },
+            capturedAt: now,
             source: new ClipboardSource("Google Chrome", "Shapeshifter (software) - Wikipedia – Google Chrome", browser));
-        yield return new ClipboardItem(new ClipboardSnapshot
-        {
-            Files = [desktop + "Projects", desktop + "Notes.txt", desktop + "Holiday.mp4", desktop + "Sunset.png"],
-        });
-        yield return new ClipboardItem(new ClipboardSnapshot { Files = [desktop + "New Text Document.txt"] });
+        yield return new ClipboardItem(
+            new ClipboardSnapshot
+            {
+                Files = [desktop + "Projects", desktop + "Notes.txt", desktop + "Holiday.mp4", desktop + "Sunset.png"],
+            },
+            capturedAt: now - TimeSpan.FromMinutes(2));
+        yield return new ClipboardItem(new ClipboardSnapshot { Files = [desktop + "New Text Document.txt"] }, capturedAt: now - TimeSpan.FromMinutes(9));
         yield return new ClipboardItem(
             new ClipboardSnapshot { Text = article + " " },
+            capturedAt: now - TimeSpan.FromMinutes(25),
             source: new ClipboardSource("Microsoft Visual Studio", "Shapeshifter (Running) - Microsoft Visual Studio", editor));
     }
 

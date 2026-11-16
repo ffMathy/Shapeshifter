@@ -20,7 +20,8 @@ public sealed class ClipboardItem
 
     public ClipboardSnapshot Snapshot { get; }
 
-    public DateTimeOffset CapturedAt { get; }
+    /// <summary>When the content was last copied (copying the same content again moves the item up and updates this).</summary>
+    public DateTimeOffset CapturedAt { get; internal set; }
 
     /// <summary>The application the item was copied from, when known.</summary>
     public ClipboardSource? Source { get; internal set; }

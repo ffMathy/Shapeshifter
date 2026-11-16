@@ -1,6 +1,8 @@
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Text;
 using Shapeshifter.Desktop.Services;
 
 namespace Shapeshifter.Desktop.ViewModels;
@@ -10,9 +12,10 @@ namespace Shapeshifter.Desktop.ViewModels;
 /// Each kind of content has its own layout, ported from the original Shapeshifter (the WPF version's
 /// <c>Clipboard*DataControl.xaml</c>): text shows two lines and the window it was copied from; an image is shown
 /// through tilted strips with the source icon on the white area beside them; several files show each kind of file's
-/// icon with a count; one file shows its icon and its name in large type.
+/// icon with a count; one file shows its icon and its name in large type. Every row also shows when it was copied
+/// and, when it is pinned, a pin.
 /// </remarks>
-public sealed class PickerItemViewModel
+public sealed partial class PickerItemViewModel : ObservableObject
 {
     // The original icons (Templarian's Modern UI icons, as used by the WPF version), drawn 50 × 60.
     private static readonly Geometry TextGlyph = Geometry.Parse(
@@ -35,6 +38,9 @@ public sealed class PickerItemViewModel
     private static readonly Geometry OtherGlyph = Geometry.Parse(
         "F0 M4,8 H22 C22,3 26,0 31,0 C36,0 40,3 40,8 H58 V72 H4 Z M10,14 V66 H52 V14 Z M27,8 C27,10 29,11 31,11 C33,11 35,10 35,8 C35,6 33,5 31,5 C29,5 27,6 27,8 Z");
 
+    // A pin (Material Design Icons "pin", 24 × 24), marking pinned items.
+    private static readonly Geometry PinShape = Geometry.Parse("M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z");
+
     // A folder (16 × 12), for the folder of copied files when the system has no icon for it.
     private static readonly Geometry FolderGlyph = Geometry.Parse("M0,1 C0,0.4 0.4,0 1,0 H6 L8,2 H15 C15.6,2 16,2.4 16,3 V11 C16,11.6 15.6,12 15,12 H1 C0.4,12 0,11.6 0,11 Z");
 
@@ -50,6 +56,8 @@ public sealed class PickerItemViewModel
         Id = item.Id;
         Kind = item.Kind;
         IsPinned = item.IsPinned;
+        this.item = item;
+        copiedAgo = RelativeTime.Describe(CapturedAt, DateTimeOffset.Now);
         Thumbnail = thumbnail;
         Title = string.IsNullOrWhiteSpace(item.PreviewText) ? "(empty)" : item.PreviewText;
         var files = item.Snapshot.Files;
@@ -102,11 +110,6 @@ public sealed class PickerItemViewModel
         {
             SourceText = CreateFallbackSubtitle(item);
         }
-
-        if (IsPinned)
-        {
-            SourceText = string.IsNullOrEmpty(SourceText) ? "Pinned" : $"Pinned · {SourceText}";
-        }
     }
 
     public Guid Id { get; }
@@ -114,6 +117,20 @@ public sealed class PickerItemViewModel
     public ClipboardContentKind Kind { get; }
 
     public bool IsPinned { get; }
+
+    public static Geometry PinGlyph => PinShape;
+
+    private readonly ClipboardItem item;
+
+    /// <summary>When the item was last copied (copying it again updates this, so it is read from the item).</summary>
+    public DateTimeOffset CapturedAt => item.CapturedAt;
+
+    /// <summary><see cref="CapturedAt"/> as "Just now", "5 min ago" and so on; see <see cref="RefreshCopiedAgo"/>.</summary>
+    [ObservableProperty]
+    private string copiedAgo;
+
+    /// <summary>Updates <see cref="CopiedAgo"/>, since the picker reuses its rows each time it is shown.</summary>
+    public void RefreshCopiedAgo(DateTimeOffset now) => CopiedAgo = RelativeTime.Describe(CapturedAt, now);
 
     public PickerItemLayout Layout { get; }
 
