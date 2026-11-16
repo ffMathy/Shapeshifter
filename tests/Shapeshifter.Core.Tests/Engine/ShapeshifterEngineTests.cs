@@ -385,7 +385,7 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
         h.Down(GestureKey.Modifier);
         h.Tap(GestureKey.Trigger);
         h.Tap(GestureKey.Trigger);
-        Assert.True(h.Tap(GestureKey.Left));
+        Assert.True(h.Tap(GestureKey.Right));
         Assert.True(h.Tap(GestureKey.Down));
         h.Up(GestureKey.Modifier);
 

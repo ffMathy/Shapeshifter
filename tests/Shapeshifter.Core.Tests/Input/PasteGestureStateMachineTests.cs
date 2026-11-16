@@ -480,7 +480,7 @@ public sealed class PasteGestureStateMachineTests
     {
         var h = GestureHarness.WithItems(3, actionCount: 4);
         h.StartAndShow();
-        h.Press(GestureKey.Left);
+        h.Press(GestureKey.Right);
         h.Press(GestureKey.Down);
         AssertSelection(h.Machine.CurrentSelection!, 0, actionIndex: 1, pane: PickerPane.Actions);
 
@@ -633,10 +633,10 @@ public sealed class PasteGestureStateMachineTests
     // ---- navigation keys when idle ----
 
     public static TheoryData<GestureKey> NavigationKeys =>
-        [GestureKey.Up, GestureKey.Down, GestureKey.Left, GestureKey.Right, GestureKey.Delete, GestureKey.Escape];
+        [GestureKey.Up, GestureKey.Down, GestureKey.Right, GestureKey.Left, GestureKey.Delete, GestureKey.Escape];
 
     public static TheoryData<GestureKey> MovementKeys =>
-        [GestureKey.Up, GestureKey.Down, GestureKey.Left, GestureKey.Right, GestureKey.Delete];
+        [GestureKey.Up, GestureKey.Down, GestureKey.Right, GestureKey.Left, GestureKey.Delete];
 
     [Theory]
     [MemberData(nameof(NavigationKeys))]
@@ -767,32 +767,32 @@ public sealed class PasteGestureStateMachineTests
     // ---- Left / Right and the actions pane ----
 
     [Fact]
-    public void Left_OnItemWithActions_SwitchesToActionsPane()
+    public void Right_OnItemWithActions_SwitchesToActionsPane()
     {
         var h = GestureHarness.WithItems(3, actionCount: 3);
         h.StartAndShow();
 
-        var result = h.Down(GestureKey.Left);
+        var result = h.Down(GestureKey.Right);
 
         Assert.True(result.Suppress);
         AssertSelection(SingleUpdate(result), 0, actionIndex: 0, pane: PickerPane.Actions);
     }
 
     [Fact]
-    public void Left_OnItemWithoutActions_StaysInItemsPane()
+    public void Right_OnItemWithoutActions_StaysInItemsPane()
     {
         var items = new List<GestureItem> { new(Id(0), 0), new(Id(1), 2) };
         var h = new GestureHarness(items);
         h.StartAndShow();
 
-        var result = h.Down(GestureKey.Left);
+        var result = h.Down(GestureKey.Right);
 
         Assert.True(result.Suppress);
         AssertSelection(SingleUpdate(result), 0, pane: PickerPane.Items);
 
-        // Moving to an item that has actions makes Left work.
+        // Moving to an item that has actions makes Right work.
         h.Press(GestureKey.Down);
-        AssertSelection(SingleUpdate(h.Down(GestureKey.Left)), 1, pane: PickerPane.Actions);
+        AssertSelection(SingleUpdate(h.Down(GestureKey.Right)), 1, pane: PickerPane.Actions);
     }
 
     [Theory]
@@ -808,7 +808,7 @@ public sealed class PasteGestureStateMachineTests
         var h = GestureHarness.WithItems(3, actionCount: actionCount);
         h.StartAndShow();
         h.Press(GestureKey.Down); // item 1
-        h.Press(GestureKey.Left);
+        h.Press(GestureKey.Right);
         for (var i = 0; i < startAction; i++)
         {
             h.Press(GestureKey.Down);
@@ -828,7 +828,7 @@ public sealed class PasteGestureStateMachineTests
         var h = new GestureHarness(items);
         h.StartAndShow();
         h.Press(GestureKey.Down);
-        h.Press(GestureKey.Left);
+        h.Press(GestureKey.Right);
 
         for (var i = 0; i < 4; i++)
         {
@@ -840,26 +840,26 @@ public sealed class PasteGestureStateMachineTests
     }
 
     [Fact]
-    public void Right_SwitchesBackToItemsPane_KeepingTheChosenAction()
+    public void Left_SwitchesBackToItemsPane_KeepingTheChosenAction()
     {
         var h = GestureHarness.WithItems(3, actionCount: 3);
         h.StartAndShow();
-        h.Press(GestureKey.Left);
+        h.Press(GestureKey.Right);
         h.Press(GestureKey.Down);
 
-        var result = h.Down(GestureKey.Right);
+        var result = h.Down(GestureKey.Left);
 
         Assert.True(result.Suppress);
         AssertSelection(SingleUpdate(result), 0, actionIndex: 1, pane: PickerPane.Items);
     }
 
     [Fact]
-    public void Right_InItemsPane_StaysInItemsPane()
+    public void Left_InItemsPane_StaysInItemsPane()
     {
         var h = GestureHarness.WithItems(3);
         h.StartAndShow();
 
-        AssertSelection(SingleUpdate(h.Down(GestureKey.Right)), 0, pane: PickerPane.Items);
+        AssertSelection(SingleUpdate(h.Down(GestureKey.Left)), 0, pane: PickerPane.Items);
     }
 
     [Fact]
@@ -867,10 +867,10 @@ public sealed class PasteGestureStateMachineTests
     {
         var h = GestureHarness.WithItems(3, actionCount: 3);
         h.StartAndShow();
-        h.Press(GestureKey.Left);
-        h.Press(GestureKey.Down);
-        h.Press(GestureKey.Down);
         h.Press(GestureKey.Right);
+        h.Press(GestureKey.Down);
+        h.Press(GestureKey.Down);
+        h.Press(GestureKey.Left);
         AssertSelection(h.Machine.CurrentSelection!, 0, 2, PickerPane.Items);
 
         AssertSelection(SingleUpdate(h.Down(GestureKey.Down)), 1, 0, PickerPane.Items);
@@ -881,9 +881,9 @@ public sealed class PasteGestureStateMachineTests
     {
         var h = GestureHarness.WithItems(1, actionCount: 3);
         h.StartAndShow();
-        h.Press(GestureKey.Left);
-        h.Press(GestureKey.Down);
         h.Press(GestureKey.Right);
+        h.Press(GestureKey.Down);
+        h.Press(GestureKey.Left);
 
         // Down wraps onto the same item, so the item did not change and the action stays.
         AssertSelection(SingleUpdate(h.Down(GestureKey.Down)), 0, 1, PickerPane.Items);
@@ -894,7 +894,7 @@ public sealed class PasteGestureStateMachineTests
     {
         var h = GestureHarness.WithItems(3, actionCount: 3);
         h.StartAndShow();
-        h.Press(GestureKey.Left);
+        h.Press(GestureKey.Right);
         h.Press(GestureKey.Down);
         h.Press(GestureKey.Down);
 
@@ -915,7 +915,7 @@ public sealed class PasteGestureStateMachineTests
         h.StartAndShow();
         h.Press(GestureKey.Down);
         h.Press(GestureKey.Down);
-        h.Press(GestureKey.Left);
+        h.Press(GestureKey.Right);
         h.Press(GestureKey.Up); // wraps to the last action
 
         var release = h.Up(GestureKey.Modifier);
@@ -1048,7 +1048,7 @@ public sealed class PasteGestureStateMachineTests
     {
         var h = GestureHarness.WithItems(3, actionCount: 3);
         h.StartAndShow();
-        h.Press(GestureKey.Left);
+        h.Press(GestureKey.Right);
         h.Press(GestureKey.Down);
 
         var result = h.Down(GestureKey.Delete);
@@ -1335,7 +1335,7 @@ public sealed class PasteGestureStateMachineTests
         var h = GestureHarness.WithItems(4, actionCount: 3);
         h.StartAndShow();
         h.Press(GestureKey.Down);
-        h.Press(GestureKey.Left);
+        h.Press(GestureKey.Right);
         h.Press(GestureKey.Down);
         h.Up(GestureKey.Modifier);
 

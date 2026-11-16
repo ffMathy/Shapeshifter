@@ -140,7 +140,9 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
         await session.TapAsync(KeyCode.VcV);
         await session.TapAsync(KeyCode.VcV);
         await session.WaitForStateAsync(state => state.PickerVisible && state.SelectedIndex == 1, "styled item selected");
-        await session.TapAsync(KeyCode.VcLeft);
+        // Actions: Paste, Copy as file, Paste as plain text.
+        await session.TapAsync(KeyCode.VcRight);
+        await session.TapAsync(KeyCode.VcDown);
         await session.TapAsync(KeyCode.VcDown);
         await Task.Delay(200, TestContext.Current.CancellationToken);
         await session.ReleaseModifierAsync();
