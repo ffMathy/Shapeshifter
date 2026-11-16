@@ -93,6 +93,17 @@
     <Setter Property="Foreground" Value="White" />
   </Style>
 
+  <Style Selector="Border.historyPane">
+    <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+    <Setter Property="BorderThickness" Value="0,0,6,0" />
+    <Setter Property="VerticalAlignment" Value="Top" />
+  </Style>
+  <!-- Without a compositor, nothing below a short history may be left unpainted (it would show black). -->
+  <Style Selector="Border.historyPane.fill">
+    <Setter Property="VerticalAlignment" Value="Stretch" />
+    <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}" />
+  </Style>
+
   <!-- Picker: actions -->
   <Style Selector="Border.actionsPane">
     <Setter Property="Background" Value="{DynamicResource ActionsBackgroundBrush}" />

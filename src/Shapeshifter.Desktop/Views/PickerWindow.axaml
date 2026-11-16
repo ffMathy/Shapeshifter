@@ -22,7 +22,7 @@
   -->
   <Grid ColumnDefinitions="566,372" VerticalAlignment="Top">
     <!-- History, with the accent-coloured edge along its right side -->
-    <Border Grid.Column="0" VerticalAlignment="Top" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="0,0,6,0">
+    <Border Grid.Column="0" Classes="historyPane" Classes.fill="{Binding ActionsFillHeight}">
       <Panel Background="{DynamicResource WindowBackgroundBrush}">
         <ListBox x:Name="ItemList" Classes="items" Focusable="False"
                  ItemsSource="{Binding Items}"

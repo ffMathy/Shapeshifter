@@ -22,8 +22,8 @@ public sealed partial class PickerViewModel : ObservableObject
     private double maxListHeight = 600;
 
     /// <summary>
-    /// True when the window cannot be see-through (no compositor), so the actions pane fills its column rather than
-    /// leaving an opaque black area below it.
+    /// True when the window cannot be see-through (no compositor), so both panes fill the window height rather than
+    /// leaving an opaque black area below the shorter one.
     /// </summary>
     [ObservableProperty]
     private bool actionsFillHeight = true;
