@@ -362,7 +362,7 @@ internal sealed class FreedesktopFileIconProvider(ILogger logger) : IFileIconPro
                 return null;
             }
 
-            var isFolder = Path.EndsInDirectorySeparator(path) || Directory.Exists(path);
+            var isFolder = FileSystemProbe.IsDirectory(path);
             var mimeType = isFolder ? FolderMimeType : MimeDatabase.GetMimeType(Path.GetFileName(path));
             return FreedesktopIconTheme.FindPng(MimeDatabase.GetIconNames(mimeType), size);
         }
@@ -452,47 +452,94 @@ internal static class IniReader
 internal static class DesktopEntryIndex
 {
     private static readonly TimeSpan RefreshInterval = TimeSpan.FromMinutes(2);
-    private static readonly Lock Gate = new();
-    private static Dictionary<string, DesktopEntry> byWindowClass = new(StringComparer.OrdinalIgnoreCase);
-    private static Dictionary<string, DesktopEntry> byFileName = new(StringComparer.OrdinalIgnoreCase);
-    private static DateTime loadedAt = DateTime.MinValue;
+    private static Snapshot? current;
+    private static int loading;
 
     public sealed record DesktopEntry(string Name, string? Icon);
 
-    /// <summary>Finds the entry for the first candidate that matches a StartupWMClass or a .desktop file name.</summary>
+    private sealed record Snapshot(
+        Dictionary<string, DesktopEntry> ByWindowClass,
+        Dictionary<string, DesktopEntry> ByFileName,
+        DateTime LoadedAt);
+
+    /// <summary>
+    /// Starts reading the installed .desktop files in the background (there are often hundreds), so that the first
+    /// copy does not wait for it.
+    /// </summary>
+    public static void Warm() => RefreshInBackgroundIfStale();
+
+    /// <summary>
+    /// Finds the entry for the first candidate that matches a StartupWMClass or a .desktop file name. Never reads the
+    /// disk: until the index has been built in the background, nothing is found.
+    /// </summary>
     public static DesktopEntry? Find(params ReadOnlySpan<string?> candidates)
     {
-        lock (Gate)
+        RefreshInBackgroundIfStale();
+        var snapshot = Volatile.Read(ref current);
+        if (snapshot is null)
         {
-            if (DateTime.UtcNow - loadedAt > RefreshInterval)
-            {
-                Load();
-            }
-
-            foreach (var candidate in candidates)
-            {
-                if (!string.IsNullOrEmpty(candidate) && byWindowClass.TryGetValue(candidate, out var entry))
-                {
-                    return entry;
-                }
-            }
-
-            foreach (var candidate in candidates)
-            {
-                if (!string.IsNullOrEmpty(candidate) && byFileName.TryGetValue(candidate, out var entry))
-                {
-                    return entry;
-                }
-            }
-
             return null;
         }
+
+        foreach (var candidate in candidates)
+        {
+            if (!string.IsNullOrEmpty(candidate) && snapshot.ByWindowClass.TryGetValue(candidate, out var entry))
+            {
+                return entry;
+            }
+        }
+
+        foreach (var candidate in candidates)
+        {
+            if (!string.IsNullOrEmpty(candidate) && snapshot.ByFileName.TryGetValue(candidate, out var entry))
+            {
+                return entry;
+            }
+        }
+
+        return null;
     }
 
-    private static void Load()
+    private static void RefreshInBackgroundIfStale()
+    {
+        var snapshot = Volatile.Read(ref current);
+        if (snapshot is not null && DateTime.UtcNow - snapshot.LoadedAt <= RefreshInterval)
+        {
+            return;
+        }
+
+        if (Interlocked.CompareExchange(ref loading, 1, 0) != 0)
+        {
+            return;
+        }
+
+        _ = Task.Run(() =>
+        {
+            try
+            {
+                Volatile.Write(ref current, Load());
+            }
+            catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
+            {
+                // Try again on the next lookup after the interval.
+                Volatile.Write(ref current, new Snapshot(new(StringComparer.OrdinalIgnoreCase), new(StringComparer.OrdinalIgnoreCase), DateTime.UtcNow));
+            }
+            finally
+            {
+                Volatile.Write(ref loading, 0);
+            }
+        });
+    }
+
+    private static Snapshot Load()
     {
         var windowClasses = new Dictionary<string, DesktopEntry>(StringComparer.OrdinalIgnoreCase);
         var fileNames = new Dictionary<string, DesktopEntry>(StringComparer.OrdinalIgnoreCase);
+
+        // Desktop-file IDs (and window classes) already decided by an earlier data directory, including entries the
+        // user deleted with Hidden=true, which must keep hiding the same entry in later directories.
+        var seenFileNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var seenWindowClasses = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var dataDirectory in XdgDirectories.DataDirectories)
         {
             var applications = Path.Combine(dataDirectory, "applications");
@@ -535,23 +582,28 @@ internal static class DesktopEntryIndex
                 }
 
                 // Earlier data directories take precedence; Hidden=true marks an entry the user deleted.
+                var fileName = Path.GetFileNameWithoutExtension(file);
+                var firstForFile = seenFileNames.Add(fileName);
+                var firstForClass = !string.IsNullOrWhiteSpace(windowClass) && seenWindowClasses.Add(windowClass);
                 if (hidden || string.IsNullOrWhiteSpace(name))
                 {
                     continue;
                 }
 
                 var entry = new DesktopEntry(name, string.IsNullOrWhiteSpace(icon) ? null : icon);
-                fileNames.TryAdd(Path.GetFileNameWithoutExtension(file), entry);
-                if (!string.IsNullOrWhiteSpace(windowClass))
+                if (firstForFile)
                 {
-                    windowClasses.TryAdd(windowClass, entry);
+                    fileNames[fileName] = entry;
+                }
+
+                if (firstForClass)
+                {
+                    windowClasses[windowClass!] = entry;
                 }
             }
         }
 
-        byWindowClass = windowClasses;
-        byFileName = fileNames;
-        loadedAt = DateTime.UtcNow;
+        return new Snapshot(windowClasses, fileNames, DateTime.UtcNow);
     }
 }
 
@@ -731,7 +783,7 @@ internal static class FreedesktopIconTheme
     private static readonly byte[] PngSignature = [0x89, (byte)'P', (byte)'N', (byte)'G', 0x0D, 0x0A, 0x1A, 0x0A];
     private static readonly Lock Gate = new();
     private static readonly Dictionary<string, byte[]?> Cache = new(StringComparer.Ordinal);
-    private static List<Theme>? themes;
+    private static readonly Lazy<List<Theme>> Themes = new(LoadThemeChain, LazyThreadSafetyMode.ExecutionAndPublication);
 
     private enum DirectoryType
     {
@@ -767,16 +819,21 @@ internal static class FreedesktopIconTheme
             {
                 return cached;
             }
+        }
 
-            var result = Lookup(iconNames, size);
+        // Looked up outside the lock, so a slow lookup on the clipboard thread never holds up the UI thread's.
+        var result = Lookup(iconNames, size);
+        lock (Gate)
+        {
             if (Cache.Count >= MaxCacheEntries)
             {
                 Cache.Clear();
             }
 
             Cache[key] = result;
-            return result;
         }
+
+        return result;
     }
 
     private static byte[]? Lookup(IReadOnlyList<string> iconNames, int size)
@@ -793,8 +850,7 @@ internal static class FreedesktopIconTheme
             }
         }
 
-        themes ??= LoadThemeChain();
-        foreach (var theme in themes)
+        foreach (var theme in Themes.Value)
         {
             foreach (var name in iconNames)
             {

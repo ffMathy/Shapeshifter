@@ -207,7 +207,13 @@ public sealed class PlatformServices : IAsyncDisposable
             return new MacClipboardSourceLocator(logger);
         }
 
-        return x11 is not null ? new X11ClipboardSourceLocator(logger) : null;
+        if (x11 is null)
+        {
+            return null;
+        }
+
+        DesktopEntryIndex.Warm();
+        return new X11ClipboardSourceLocator(logger);
     }
 
     private static IFileIconProvider? CreateFileIconProvider(ILogger logger)

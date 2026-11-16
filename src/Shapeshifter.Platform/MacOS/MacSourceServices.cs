@@ -262,12 +262,12 @@ internal sealed class MacFileIconProvider(ILogger logger) : IFileIconProvider
     private static (string CacheKey, string Lookup, bool IsFileType) Classify(string path)
     {
         var trimmed = Path.TrimEndingDirectorySeparator(path);
-        var isDirectory = Path.EndsInDirectorySeparator(path) || Directory.Exists(trimmed);
+        var isDirectory = FileSystemProbe.IsDirectory(path);
         var extension = Path.GetExtension(trimmed).TrimStart('.');
 
         if (isDirectory)
         {
-            return extension.Length > 0 && Directory.Exists(trimmed)
+            return extension.Length > 0 && !FileSystemProbe.IsNetworkPath(trimmed) && Directory.Exists(trimmed)
                 ? ("path:" + trimmed, trimmed, false)
                 : ("folder", FolderType, true);
         }

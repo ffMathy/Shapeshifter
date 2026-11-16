@@ -364,7 +364,7 @@ internal sealed class WindowsFileIconProvider(ILogger logger) : IFileIconProvide
 
         try
         {
-            var isDirectory = Path.EndsInDirectorySeparator(path) || Directory.Exists(path);
+            var isDirectory = FileSystemProbe.IsDirectory(path);
             var extension = isDirectory ? string.Empty : Path.GetExtension(path);
             var perPath = !isDirectory && PerPathExtensions.Contains(extension);
             var imageList = size <= 16 ? WindowsNative.ShilSmall : size <= 48 ? WindowsNative.ShilExtraLarge : WindowsNative.ShilJumbo;
@@ -380,7 +380,7 @@ internal sealed class WindowsFileIconProvider(ILogger logger) : IFileIconProvide
                 }
             }
 
-            var useRealFile = perPath && File.Exists(path);
+            var useRealFile = perPath && FileSystemProbe.IsLocalFile(path);
             var shellPath = useRealFile ? path : isDirectory ? "folder" : "file" + extension;
             var png = LoadIcon(shellPath, isDirectory, useRealFile, imageList, size);
 

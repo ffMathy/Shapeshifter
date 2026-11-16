@@ -79,7 +79,7 @@ public sealed class PickerVisuals
     public static string GetIconKey(string path)
     {
         ArgumentNullException.ThrowIfNull(path);
-        if (path.EndsWith(Path.DirectorySeparatorChar) || path.EndsWith(Path.AltDirectorySeparatorChar) || Directory.Exists(path))
+        if (path.EndsWith(Path.AltDirectorySeparatorChar) || FileSystemProbe.IsDirectory(path))
         {
             return "<folder>";
         }
