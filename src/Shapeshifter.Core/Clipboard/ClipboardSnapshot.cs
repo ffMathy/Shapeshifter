@@ -1,5 +1,6 @@
+using System.Buffers.Binary;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Shapeshifter.Core.Clipboard;
 
@@ -128,7 +129,7 @@ public sealed class ClipboardSnapshot
 
             case ClipboardContentKind.Image when Image is not null:
                 Append(hash, "image");
-                hash.AppendData(Image);
+                Append(hash, Image);
                 break;
 
             default:
@@ -136,7 +137,7 @@ public sealed class ClipboardSnapshot
                 foreach (var format in RawFormats)
                 {
                     Append(hash, format.Name);
-                    hash.AppendData(format.Data);
+                    Append(hash, format.Data);
                 }
 
                 break;
@@ -145,9 +146,16 @@ public sealed class ClipboardSnapshot
         return Convert.ToHexString(hash.GetHashAndReset());
     }
 
-    private static void Append(IncrementalHash hash, string value)
+    // Every part is prefixed with its length so that no two different sequences of parts produce the same
+    // bytes. Strings are hashed as their UTF-16 code units, which avoids copying large texts.
+    private static void Append(IncrementalHash hash, string value) =>
+        Append(hash, MemoryMarshal.AsBytes(value.AsSpan()));
+
+    private static void Append(IncrementalHash hash, ReadOnlySpan<byte> value)
     {
-        hash.AppendData(Encoding.UTF8.GetBytes(value));
-        hash.AppendData([0]);
+        Span<byte> length = stackalloc byte[sizeof(long)];
+        BinaryPrimitives.WriteInt64LittleEndian(length, value.Length);
+        hash.AppendData(length);
+        hash.AppendData(value);
     }
 }

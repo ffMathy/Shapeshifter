@@ -239,6 +239,17 @@ public sealed class ClipboardSnapshotTests
     }
 
     [Fact]
+    public void Fingerprint_RawFormatBoundariesAreUnambiguous()
+    {
+        // Without length prefixes, name "A" + data "1" followed by name "B" + data "2" hashes the same
+        // bytes as a single format "A" whose data happens to contain the rest.
+        var two = new ClipboardSnapshot { RawFormats = [new RawClipboardFormat("A", [(byte)'1']), new RawClipboardFormat("B", [(byte)'2'])] };
+        var one = new ClipboardSnapshot { RawFormats = [new RawClipboardFormat("A", [(byte)'1', (byte)'B', 0, (byte)'2'])] };
+
+        Assert.NotEqual(two.Fingerprint, one.Fingerprint);
+    }
+
+    [Fact]
     public void Fingerprint_TextAndFileWithSameValue_AreDifferent()
     {
         var text = new ClipboardSnapshot { Text = "/tmp/a" };
