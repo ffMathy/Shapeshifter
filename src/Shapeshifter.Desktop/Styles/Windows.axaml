@@ -665,15 +665,16 @@
        DWM's rounded corners (8, as the flyout) and shadow, so the flyout loses its margin and drawn shadow and lets the
        Acrylic through. The settings window on Mica ("mica") shows it around its cards, as the Settings app does.
        ============================================================================================================ -->
+  <!-- The light tint of Fluent's flyout Acrylic (about 85 % over the blur): lighter tints read grey over dark windows. -->
   <Style Selector="Border.chrome.nativeMaterial">
     <Setter Property="Margin" Value="0" />
     <Setter Property="BoxShadow" Value="0 0 0 0 Transparent" />
-    <Setter Property="Background" Value="#80F9F9F9" />
+    <Setter Property="Background" Value="#D9F9F9F9" />
   </Style>
   <Style Selector="Border.toastChrome.nativeMaterial">
     <Setter Property="Margin" Value="0" />
     <Setter Property="BoxShadow" Value="0 0 0 0 Transparent" />
-    <Setter Property="Background" Value="#99FAFAFA" />
+    <Setter Property="Background" Value="#E6FAFAFA" />
   </Style>
   <Style Selector="Window.settings.mica">
     <Setter Property="Background" Value="Transparent" />

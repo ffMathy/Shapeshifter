@@ -95,7 +95,6 @@ internal static class NativeMaterial
                 Logger.Information("No Acrylic for {Window} ({Level}); using the look's own panel", window.GetType().Name, window.ActualTransparencyLevel);
                 panel.Classes.Remove(ClassName);
                 window.WindowDecorations = WindowDecorations.None;
-                window.TransparencyLevelHint = [WindowTransparencyLevel.Transparent];
                 return;
             }
 
@@ -116,8 +115,9 @@ internal static class NativeMaterial
     [System.Runtime.Versioning.SupportedOSPlatform("macos")]
     private static void PrepareMac(Window window, Border panel, MacWindowMaterial.Kind kind)
     {
+        // The window keeps the Transparent level its XAML asks for. Do not set the hint again: Avalonia 12.1 (Avalonia.Native
+        // SetTransparencyLevelHint) skips a level equal to the current one and falls through to an opaque window.
         panel.Classes.Add(ClassName);
-        window.TransparencyLevelHint = [WindowTransparencyLevel.Transparent];
         window.Opened += (_, _) =>
         {
             // The panel has dropped its margin by now, so after layout the window is the panel.
