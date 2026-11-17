@@ -14,7 +14,8 @@
         TransparencyLevelHint="Transparent"
         Background="Transparent">
   <!--
-    The "copied" notification; Styles/<Look>.axaml styles it as the platform's own notifications look. It gets out of
+    The "copied" notification, and with the "tip" class on the chrome a coaching tip (#284, #310) whose preview is a
+    sentence that wraps; Styles/<Look>.axaml styles it as the platform's own notifications look. It gets out of
     the way as soon as the pointer moves onto it or clicks it (issue #340), so it never covers anything for long.
   -->
   <Border x:Name="Chrome" Classes="toastChrome">

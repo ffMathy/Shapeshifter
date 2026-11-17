@@ -430,4 +430,64 @@ To paste something you copied earlier, hold {0} and press V. Keep holding {0} to
     <value>Off</value>
     <comment>Label beside a switch that is off (settings window). One short word, as in the OS settings.</comment>
   </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Saves this image to a .{0} file and pastes the file.</value>
+    <comment>Action description for 'Paste as file' on an image; {0} is a file extension such as png or jpg.</comment>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Upload and paste link</value>
+    <comment>Action title: upload the copied image to an image host and paste a link to it.</comment>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Uploads this image to {0} and pastes a public link to it.</value>
+    <comment>Action description; {0} is the name of the image host (Catbox).</comment>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Tips</value>
+    <comment>Setting title (toggle): show coaching tips.</comment>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Suggest when the history could have saved you a copy</value>
+    <comment>Description of the Tips toggle: Shapeshifter points out when the user copied something that the clipboard history already had.</comment>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Already in your history</value>
+    <comment>Title of a tip notification shown when the user copies something that is already in the history.</comment>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>No need to copy it again: hold {0}+V to pick it from your history.</value>
+    <comment>Tip notification text; {0} is the modifier key (Ctrl or Cmd).</comment>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>Did you know?</value>
+    <comment>Title of a tip notification.</comment>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>You can copy several things from {0} first, then hold {1}+V in {2} to pick each one from your history.</value>
+    <comment>Tip shown when the user switches back and forth between two apps to copy and paste; {0} and {2} are application names, {1} is the modifier key (Ctrl or Cmd).</comment>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Upload to {0}?</value>
+    <comment>Title of a dialog that asks before an image is uploaded; {0} is the image host (Catbox).</comment>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Upload this image to {0}?</value>
+    <comment>Heading of the dialog; {0} is the image host (Catbox).</comment>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>The image is sent to {0} (catbox.moe), a free image host without ads, and anyone with the link can see it. Uploads can't be deleted. Nothing else you copy ever leaves your computer.</value>
+    <comment>Body of the dialog; {0} is the image host (Catbox). Keep catbox.moe as is.</comment>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter won't ask again. This time the link is copied: press {0}+V to paste it.</value>
+    <comment>Note in the dialog; {0} is the modifier key (Ctrl or Cmd).</comment>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Upload to {0}</value>
+    <comment>Button that agrees to the upload; {0} is the image host (Catbox).</comment>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>Button that closes a dialog without doing anything.</comment>
+  </data>
 </root>

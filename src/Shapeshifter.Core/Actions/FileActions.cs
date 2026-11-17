@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.IO.Compression;
 using System.Text;
 using Shapeshifter.Core.Clipboard;
@@ -5,7 +6,10 @@ using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Core.Actions;
 
-/// <summary>Saves copied text to a .txt file and pastes that file, as if the file had been copied.</summary>
+/// <summary>
+/// Saves copied text to a .txt file, or a copied image to an image file, and pastes that file as if the file had been
+/// copied.
+/// </summary>
 public sealed class PasteAsFileAction : IClipboardAction
 {
     public string Id => "paste-as-file";
@@ -14,25 +18,48 @@ public sealed class PasteAsFileAction : IClipboardAction
 
     public string GetTitle(ClipboardItem item) => Strings.ActionPasteAsFile;
 
-    public string GetDescription(ClipboardItem item) => Strings.ActionPasteAsFileDescription;
+    public string GetDescription(ClipboardItem item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+        return IsImage(item)
+            ? Localizer.Format(Strings.ActionPasteAsImageFileDescription, ImageFormat.GetExtension(item.Snapshot.Image!))
+            : Strings.ActionPasteAsFileDescription;
+    }
 
     public bool CanExecute(ClipboardItem item)
     {
         ArgumentNullException.ThrowIfNull(item);
-        return item.Kind == ClipboardContentKind.Text && !string.IsNullOrEmpty(item.Snapshot.Text);
+        return IsImage(item) || (item.Kind == ClipboardContentKind.Text && !string.IsNullOrEmpty(item.Snapshot.Text));
     }
 
     public async Task ExecuteAsync(ClipboardItem item, ActionContext context, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(item);
         ArgumentNullException.ThrowIfNull(context);
+        var image = IsImage(item);
+
         // One folder per item, so items captured in the same second never overwrite each other's file.
-        var folder = Path.Combine(context.Paths.TempDirectory, "Text files", item.Id.ToString("N"));
+        var folder = Path.Combine(context.Paths.TempDirectory, image ? "Image files" : "Text files", item.Id.ToString("N"));
         Directory.CreateDirectory(folder);
-        var path = Path.Combine(folder, $"Text {item.CapturedAt.LocalDateTime:yyyy-MM-dd HH.mm.ss}.txt");
-        await File.WriteAllTextAsync(path, item.Snapshot.Text, Encoding.UTF8, cancellationToken).ConfigureAwait(false);
+        var time = item.CapturedAt.LocalDateTime.ToString("yyyy-MM-dd HH.mm.ss", CultureInfo.InvariantCulture);
+        string path;
+        if (image)
+        {
+            var bytes = item.Snapshot.Image!;
+            path = Path.Combine(folder, $"Image {time}.{ImageFormat.GetExtension(bytes)}");
+            await File.WriteAllBytesAsync(path, bytes, cancellationToken).ConfigureAwait(false);
+        }
+        else
+        {
+            path = Path.Combine(folder, $"Text {time}.txt");
+            await File.WriteAllTextAsync(path, item.Snapshot.Text, Encoding.UTF8, cancellationToken).ConfigureAwait(false);
+        }
+
         await context.WriteAndPasteAsync(new ClipboardSnapshot { Files = [path] }, cancellationToken).ConfigureAwait(false);
     }
+
+    private static bool IsImage(ClipboardItem item) =>
+        item.Kind == ClipboardContentKind.Image && item.Snapshot.Image is { Length: > 0 };
 }
 
 /// <summary>Compresses the copied files and folders into a .zip archive and copies the archive.</summary>

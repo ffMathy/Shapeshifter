@@ -30,6 +30,8 @@ public static class Glyphs
 
     public static Geometry Link { get; } = Geometry.Parse("M8.5,11.5 L11.5,8.5 M9.5,5.5 L11,4 C12.4,2.6 14.6,2.6 16,4 C17.4,5.4 17.4,7.6 16,9 L14.5,10.5 M10.5,14.5 L9,16 C7.6,17.4 5.4,17.4 4,16 C2.6,14.6 2.6,12.4 4,11 L5.5,9.5");
 
+    public static Geometry Upload { get; } = Geometry.Parse("M6,15.5 H5.5 C3.6,15.5 2.5,14.2 2.5,12.5 C2.5,10.9 3.7,9.6 5.3,9.5 C5.7,6.9 7.6,5 10,5 C12.4,5 14.3,6.9 14.7,9.5 C16.3,9.6 17.5,10.9 17.5,12.5 C17.5,14.2 16.4,15.5 14.5,15.5 H14 M10,17.5 V10.5 M7.75,12.75 L10,10.5 L12.25,12.75");
+
     public static Geometry Other { get; } = Clipboard;
 
     public static Geometry Clock { get; } = Geometry.Parse("M10,2.5 A7.5,7.5 0 1 1 9.99,2.5 M10,6 V10 L12.75,11.75");
@@ -37,6 +39,8 @@ public static class Glyphs
     public static Geometry Stack { get; } = Geometry.Parse("M4,7.5 H16 V17 H4 Z M5.5,5 H14.5 M7,2.5 H13");
 
     public static Geometry Bell { get; } = Geometry.Parse("M5,13.5 V9 C5,6.2 7.2,4 10,4 C12.8,4 15,6.2 15,9 V13.5 L16.5,15 H3.5 Z M8.25,17 C8.6,17.8 9.25,18 10,18 C10.75,18 11.4,17.8 11.75,17 M10,2.5 V4");
+
+    public static Geometry Lightbulb { get; } = Geometry.Parse("M7.5,14 C7.5,12.25 5,11 5,7.75 C5,5 7.2,2.75 10,2.75 C12.8,2.75 15,5 15,7.75 C15,11 12.5,12.25 12.5,14 Z M7.75,16.25 H12.25 M8.75,18 H11.25");
 
     public static Geometry Power { get; } = Geometry.Parse("M10,2.5 V9.5 M6,5.25 C4.4,6.5 3.5,8.2 3.5,10.25 C3.5,13.8 6.4,16.75 10,16.75 C13.6,16.75 16.5,13.8 16.5,10.25 C16.5,8.2 15.6,6.5 14,5.25");
 
@@ -58,6 +62,7 @@ public static class Glyphs
             "toggle-pin" => unpins ? Unpin : Pin,
             "paste-plain-text" => PlainText,
             "copy-as-zip" => Archive,
+            "upload-image" => Upload,
             "paste-as-file" => PasteAsFile,
             "copy-image-from-link" => Image,
             "open-links" => Link,
