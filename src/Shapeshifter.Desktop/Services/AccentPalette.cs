@@ -1,6 +1,8 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Platform;
+using Avalonia.Styling;
 
 namespace Shapeshifter.Desktop.Services;
 
@@ -8,8 +10,23 @@ namespace Shapeshifter.Desktop.Services;
 /// Colours the picker with the operating system's accent colour, as the original Shapeshifter did, and follows it
 /// when the user changes it. Where the platform reports no accent colour the palette in Theme.axaml stays.
 /// </summary>
+/// <remarks>
+/// The shade of the accent used for text, strokes and the toggle (<c>AccentTextBrush</c>) depends on the theme: darkened
+/// until it reads on white in light, lightened until it reads on the dark surfaces in dark (only the Windows look has a
+/// dark variant). It therefore goes into the theme dictionaries of the application's resources, never at their top
+/// level: a top-level entry would win over every theme dictionary.
+/// </remarks>
 public static class AccentPalette
 {
+    private const string TextBrushKey = "AccentTextBrush";
+    private const string TextColorKey = "AccentTextColor";
+
+    /// <summary>The darkest surface accent text is drawn on in dark: Fluent's dark flyout tint.</summary>
+    private static readonly Color DarkSurface = Color.FromRgb(0x2C, 0x2C, 0x2C);
+
+    /// <summary>The lightest dark surface accent strokes are drawn on: the selected action over a white desktop.</summary>
+    private static readonly Color DarkSurfaceOverLight = Color.FromRgb(0x57, 0x57, 0x57);
+
     public static void Attach(Application application)
     {
         ArgumentNullException.ThrowIfNull(application);
@@ -44,23 +61,73 @@ public static class AccentPalette
         // Slightly see-through, so the desktop shows faintly behind the actions as in the original design.
         application.Resources["ActionsBackgroundBrush"] = new SolidColorBrush(Color.FromArgb(0xF0, dark.R, dark.G, dark.B));
 
-        // For the looks: a faint tint for selected rows, and the accent darkened until it reads as text on white
-        // (4.5:1) and as a fill under white text.
+        // For the looks: a faint tint for selected rows, and the accent in a shade that reads as text and strokes in each
+        // theme (and as a fill under white text in light).
         application.Resources["AccentSoftBrush"] = new SolidColorBrush(Color.FromArgb(0x24, accent.R, accent.G, accent.B));
         application.Resources["AccentFaintBrush"] = new SolidColorBrush(Color.FromArgb(0x14, accent.R, accent.G, accent.B));
-        var text = accent;
+        application.Resources.Remove(TextBrushKey);
+        application.Resources.Remove(TextColorKey);
+        SetThemed(application, ThemeVariant.Default, LightThemeAccentText(accent));
+        SetThemed(application, ThemeVariant.Dark, DarkThemeAccentText(accent));
+        application.Resources["AccentColor"] = accent;
+    }
+
+    /// <summary>Sets the accent text shade for <paramref name="theme"/> (Default: light, and every look without a dark variant).</summary>
+    private static void SetThemed(Application application, ThemeVariant theme, Color text)
+    {
+        var themes = application.Resources.ThemeDictionaries;
+        if (!themes.TryGetValue(theme, out var provider) || provider is not ResourceDictionary dictionary)
+        {
+            dictionary = new ResourceDictionary();
+            themes[theme] = dictionary;
+        }
+
+        dictionary[TextBrushKey] = new SolidColorBrush(text);
+        dictionary[TextColorKey] = text;
+    }
+
+    /// <summary>The accent darkened until it reads as text on white (4.5:1), as Windows does in light mode.</summary>
+    internal static Color LightThemeAccentText(Color accent)
+    {
+        var text = Color.FromRgb(accent.R, accent.G, accent.B);
         while (ContrastWithWhite(text) < 4.5)
         {
             text = Darken(text, 0.92);
         }
 
-        application.Resources["AccentTextBrush"] = new SolidColorBrush(text);
-        application.Resources["AccentTextColor"] = text;
-        application.Resources["AccentColor"] = accent;
+        return text;
+    }
+
+    /// <summary>
+    /// The accent for text and strokes in dark: Fluent's "Light 2" shade of it (the shade Windows uses in dark mode),
+    /// mixed further toward white until it reads as text on the dark surfaces (4.5:1) and as a stroke where they are
+    /// lightest (3:1).
+    /// </summary>
+    internal static Color DarkThemeAccentText(Color accent)
+    {
+        var hsl = Color.FromRgb(accent.R, accent.G, accent.B).ToHsl();
+        var text = new HslColor(1, hsl.H, hsl.S, Math.Min(1, hsl.L + (70 / 255d))).ToRgb();
+        text = Color.FromRgb(text.R, text.G, text.B);
+        while (ContrastRatio(text, DarkSurface) < 4.5 || ContrastRatio(text, DarkSurfaceOverLight) < 3)
+        {
+            text = Mix(text, Colors.White, 0.08);
+        }
+
+        return text;
     }
 
     /// <summary>The WCAG contrast ratio of <paramref name="color"/> against white.</summary>
-    internal static double ContrastWithWhite(Color color)
+    internal static double ContrastWithWhite(Color color) => ContrastRatio(color, Colors.White);
+
+    /// <summary>The WCAG contrast ratio of two opaque colours.</summary>
+    internal static double ContrastRatio(Color first, Color second)
+    {
+        var a = Luminance(first);
+        var b = Luminance(second);
+        return (Math.Max(a, b) + 0.05) / (Math.Min(a, b) + 0.05);
+    }
+
+    private static double Luminance(Color color)
     {
         static double Channel(byte value)
         {
@@ -68,12 +135,16 @@ public static class AccentPalette
             return c <= 0.03928 ? c / 12.92 : Math.Pow((c + 0.055) / 1.055, 2.4);
         }
 
-        var luminance = (0.2126 * Channel(color.R)) + (0.7152 * Channel(color.G)) + (0.0722 * Channel(color.B));
-        return 1.05 / (luminance + 0.05);
+        return (0.2126 * Channel(color.R)) + (0.7152 * Channel(color.G)) + (0.0722 * Channel(color.B));
     }
 
     internal static Color Darken(Color color, double factor) => Color.FromRgb(
         (byte)Math.Round(color.R * factor),
         (byte)Math.Round(color.G * factor),
         (byte)Math.Round(color.B * factor));
+
+    private static Color Mix(Color color, Color with, double amount) => Color.FromRgb(
+        (byte)Math.Round(color.R + ((with.R - color.R) * amount)),
+        (byte)Math.Round(color.G + ((with.G - color.G) * amount)),
+        (byte)Math.Round(color.B + ((with.B - color.B) * amount)));
 }

@@ -26,6 +26,12 @@ public static class PlatformLook
     /// <summary>Overrides the look, for development and screenshots: <c>windows</c>, <c>macos</c> or <c>linux</c>.</summary>
     public const string Variable = "SHAPESHIFTER_LOOK";
 
+    /// <summary>
+    /// Overrides the theme of the Windows look, for development and screenshots: <c>light</c> or <c>dark</c>. Without it the
+    /// Windows look follows the app mode of Windows (Settings, Personalisation, Colours), live.
+    /// </summary>
+    public const string ThemeVariable = "SHAPESHIFTER_THEME";
+
     private static StyleInclude? applied;
 
     /// <summary>The look that is applied, once <see cref="Apply(Application)"/> has run.</summary>
@@ -51,7 +57,15 @@ public static class PlatformLook
     public static void Apply(Application application) => Apply(application, Detect());
 
     /// <summary>Applies <paramref name="look"/>, replacing the look applied before.</summary>
-    public static void Apply(Application application, Look look)
+    public static void Apply(Application application, Look look) => Apply(application, look, null);
+
+    /// <summary>
+    /// Applies <paramref name="look"/>, replacing the look applied before, in <paramref name="theme"/>. Only the Windows look
+    /// has a dark variant: without a theme it follows the system's (<see cref="ThemeVariant.Default"/>, which Avalonia
+    /// updates live from the app mode of Windows), unless <see cref="ThemeVariable"/> names one. The macOS and Linux looks
+    /// are always light.
+    /// </summary>
+    public static void Apply(Application application, Look look, ThemeVariant? theme)
     {
         ArgumentNullException.ThrowIfNull(application);
         if (applied is not null)
@@ -61,9 +75,17 @@ public static class PlatformLook
 
         applied = new StyleInclude(new Uri("avares://Shapeshifter/")) { Source = new Uri($"avares://Shapeshifter/Styles/{look}.axaml") };
         application.Styles.Add(applied);
-        application.RequestedThemeVariant = ThemeVariant.Light;
+        application.RequestedThemeVariant = look == Look.Windows ? theme ?? RequestedTheme() : ThemeVariant.Light;
         Current = look;
     }
+
+    /// <summary>The theme <see cref="ThemeVariable"/> asks for, or <see cref="ThemeVariant.Default"/>: the system's.</summary>
+    private static ThemeVariant RequestedTheme() => Environment.GetEnvironmentVariable(ThemeVariable)?.Trim().ToUpperInvariant() switch
+    {
+        "LIGHT" => ThemeVariant.Light,
+        "DARK" => ThemeVariant.Dark,
+        _ => ThemeVariant.Default,
+    };
 
     /// <summary>The application icon of the current look, as shown in the windows' headers.</summary>
     public static Avalonia.Media.Imaging.Bitmap ApplicationIcon

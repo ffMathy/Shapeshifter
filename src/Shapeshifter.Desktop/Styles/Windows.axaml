@@ -1,47 +1,171 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <!--
-    "Mica Sheets": the Windows 11 look (Fluent 2). The picker is a flyout like the shell's own (the emoji panel, the
-    clipboard history of Win+V): a light, near-opaque layer with an 8 px radius, a 1 px stroke and the flyout shadow. The accent marks only what is about to happen: a 3 × 16 pill beside the selected item of the
-    pane that has the keyboard, and the icon of the chosen action. Everything else is the neutral Fluent palette:
+    "Mica Sheets": the Windows 11 look (Fluent 2), in light and dark: it follows the app mode of Windows (PlatformLook).
+    The picker is a flyout like the shell's own (the emoji panel, the clipboard history of Win+V): a near-opaque layer
+    with an 8 px radius, a 1 px stroke and the flyout shadow, or the window itself on Acrylic (NativeMaterial). The accent
+    marks only what is about to happen: a 3 × 16 pill beside the selected item of the pane that has the keyboard, and the
+    icon of the chosen action. Everything else is the neutral Fluent palette, in the theme dictionaries below:
 
-      Text #1A1A1A, Text 2 #5D5D5D, Mica #F3F3F3, Layer #FFFFFF, strokes black at 6–12 %,
-      subtle fills black at 3.5–6 %, Segoe UI Variable (Inter where it is missing).
+      light: text #1A1A1A, text 2 #5D5D5D, Mica #F3F3F3, layer #FFFFFF, strokes black at 6–12 %, subtle fills black
+             at 2–6 %, the flyout's Acrylic tint #F9F9F9;
+      dark:  text #FFFFFF, text 2 white at 78 %, Mica #202020, cards #2B2B2B (white at 5 % on Mica), strokes and subtle
+             fills white at 4–12 %, the flyout's Acrylic tint #2C2C2C;
 
-    The settings window is the Settings app: a 28 px title and white cards on Mica; the copy notification is a
-    Windows notification card.
+    and Segoe UI Variable (Inter where it is missing). Every colour is a DynamicResource, so a change of the app mode
+    restyles open windows; the accent's text shade comes from AccentPalette, per theme.
+
+    The settings window is the Settings app: a 28 px title and cards on Mica; the copy notification is a Windows
+    notification card.
   -->
   <Styles.Resources>
-    <!-- Where the copy notification appears (CopyNotifier): BottomRight, TopRight or BottomCenter. -->
-    <x:String x:Key="ToastPlacement">BottomRight</x:String>
-    <x:String x:Key="PickerTitle">Clipboard history</x:String>
-    <!-- A row is 60 high with a 2 gap below it (the presenter fits whole rows of this height). -->
-    <x:Double x:Key="PickerRowHeight">62</x:Double>
-    <x:String x:Key="LookDefaultAccent">#0067C0</x:String>
-    <FontFamily x:Key="WindowsLookFont">Segoe UI Variable Text, Segoe UI, Inter</FontFamily>
+    <ResourceDictionary>
+      <!-- Where the copy notification appears (CopyNotifier): BottomRight, TopRight or BottomCenter. -->
+      <x:String x:Key="ToastPlacement">BottomRight</x:String>
+      <x:String x:Key="PickerTitle">Clipboard history</x:String>
+      <!-- A row is 60 high with a 2 gap below it (the presenter fits whole rows of this height). -->
+      <x:Double x:Key="PickerRowHeight">62</x:Double>
+      <x:String x:Key="LookDefaultAccent">#0067C0</x:String>
+      <FontFamily x:Key="WindowsLookFont">Segoe UI Variable Text, Segoe UI, Inter</FontFamily>
 
-    <!-- Only used where the operating system reports no accent colour; AccentPalette replaces them otherwise. -->
-    <SolidColorBrush x:Key="AccentBrush" Color="#0067C0" />
-    <SolidColorBrush x:Key="AccentTextBrush" Color="#0067C0" />
-    <Color x:Key="AccentColor">#0067C0</Color>
+      <!-- Only used where the operating system reports no accent colour; AccentPalette replaces them otherwise. -->
+      <SolidColorBrush x:Key="AccentBrush" Color="#0067C0" />
+      <Color x:Key="AccentColor">#0067C0</Color>
+
+      <!-- "Default" rather than "Light", as in FluentTheme: any other variant falls back to light. -->
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+          <!-- Fluent 2 light. -->
+          <!-- Text -->
+          <SolidColorBrush x:Key="MicaTextPrimaryBrush" Color="#1A1A1A" />
+          <SolidColorBrush x:Key="MicaTextSecondaryBrush" Color="#5D5D5D" />
+          <SolidColorBrush x:Key="MicaTextBodyBrush" Color="#3B3B3B" />
+          <SolidColorBrush x:Key="MicaGlyphPrimaryBrush" Color="#1A1A1A" />
+          <SolidColorBrush x:Key="MicaGlyphSecondaryBrush" Color="#5D5D5D" />
+          <SolidColorBrush x:Key="MicaActionGlyphBrush" Color="#3B3B3B" />
+          <SolidColorBrush x:Key="MicaTextOnAccentBrush" Color="#FFFFFF" />
+
+          <!-- Picker: the flyout (drawn; on Acrylic, its tint) and its opaque fallback -->
+          <SolidColorBrush x:Key="MicaFlyoutFillBrush" Color="#F2F7F7F7" />
+          <SolidColorBrush x:Key="MicaFlyoutAcrylicTintBrush" Color="#D9F9F9F9" />
+          <SolidColorBrush x:Key="MicaFlyoutStrokeBrush" Color="#1A000000" />
+          <SolidColorBrush x:Key="MicaOpaqueBaseBrush" Color="#F3F3F3" />
+          <SolidColorBrush x:Key="MicaOpaqueStrokeBrush" Color="#C4C4C4" />
+          <SolidColorBrush x:Key="MicaDividerStrokeBrush" Color="#0F000000" />
+
+          <!-- Picker: rows, tiles, actions, footer and keycaps -->
+          <SolidColorBrush x:Key="MicaSubtleHoverBrush" Color="#06000000" />
+          <SolidColorBrush x:Key="MicaSubtleSelectedBrush" Color="#0F000000" />
+          <SolidColorBrush x:Key="MicaSubtleSelectedInactiveBrush" Color="#08000000" />
+          <SolidColorBrush x:Key="MicaTileFillBrush" Color="#FFFFFF" />
+          <SolidColorBrush x:Key="MicaTileStrokeBrush" Color="#14000000" />
+          <SolidColorBrush x:Key="MicaActionsPaneFillBrush" Color="#8CFFFFFF" />
+          <SolidColorBrush x:Key="MicaActionsPaneOpaqueBrush" Color="#F9F9F9" />
+          <SolidColorBrush x:Key="MicaActionsPaneStrokeBrush" Color="#12000000" />
+          <SolidColorBrush x:Key="MicaFooterFillBrush" Color="#8CEEEEEE" />
+          <SolidColorBrush x:Key="MicaFooterOpaqueBrush" Color="#EEEEEE" />
+          <SolidColorBrush x:Key="MicaKeycapFillBrush" Color="#FFFFFF" />
+          <SolidColorBrush x:Key="MicaKeycapStrokeBrush" Color="#29000000" />
+
+          <!-- Settings: Mica (or its opaque fallback), cards, controls, the caution InfoBar -->
+          <SolidColorBrush x:Key="MicaSettingsBackgroundBrush" Color="#F3F3F3" />
+          <SolidColorBrush x:Key="MicaCardFillBrush" Color="#FFFFFF" />
+          <SolidColorBrush x:Key="MicaCardOnMicaFillBrush" Color="#B3FFFFFF" />
+          <SolidColorBrush x:Key="MicaCardStrokeBrush" Color="#0F000000" />
+          <SolidColorBrush x:Key="MicaControlFillBrush" Color="#FFFFFF" />
+          <SolidColorBrush x:Key="MicaControlStrokeBrush" Color="#0F000000" />
+          <SolidColorBrush x:Key="MicaButtonFillBrush" Color="#FBFBFB" />
+          <SolidColorBrush x:Key="MicaButtonStrokeBrush" Color="#17000000" />
+          <SolidColorBrush x:Key="MicaCautionFillBrush" Color="#FFF4CE" />
+          <SolidColorBrush x:Key="MicaCautionStrokeBrush" Color="#0F000000" />
+
+          <!-- Toast: a notification card (drawn; on Acrylic, its tint) -->
+          <SolidColorBrush x:Key="MicaToastFillBrush" Color="#FAFAFA" />
+          <SolidColorBrush x:Key="MicaToastAcrylicTintBrush" Color="#E6FAFAFA" />
+          <SolidColorBrush x:Key="MicaToastStrokeBrush" Color="#17000000" />
+
+          <!-- Only used where the operating system reports no accent colour; AccentPalette replaces it otherwise -->
+          <SolidColorBrush x:Key="AccentTextBrush" Color="#0067C0" />
+        </ResourceDictionary>
+
+        <ResourceDictionary x:Key="Dark">
+          <!-- Fluent 2 dark: the Settings app and the shell's flyouts. -->
+          <!-- Text -->
+          <SolidColorBrush x:Key="MicaTextPrimaryBrush" Color="#FFFFFF" />
+          <SolidColorBrush x:Key="MicaTextSecondaryBrush" Color="#C8FFFFFF" />
+          <SolidColorBrush x:Key="MicaTextBodyBrush" Color="#DEFFFFFF" />
+          <SolidColorBrush x:Key="MicaGlyphPrimaryBrush" Color="#FFFFFF" />
+          <SolidColorBrush x:Key="MicaGlyphSecondaryBrush" Color="#C8FFFFFF" />
+          <SolidColorBrush x:Key="MicaActionGlyphBrush" Color="#DEFFFFFF" />
+          <SolidColorBrush x:Key="MicaTextOnAccentBrush" Color="#000000" />
+
+          <!-- Picker: the flyout (drawn; on Acrylic, its tint) and its opaque fallback -->
+          <SolidColorBrush x:Key="MicaFlyoutFillBrush" Color="#F22C2C2C" />
+          <SolidColorBrush x:Key="MicaFlyoutAcrylicTintBrush" Color="#E62C2C2C" />
+          <SolidColorBrush x:Key="MicaFlyoutStrokeBrush" Color="#1FFFFFFF" />
+          <SolidColorBrush x:Key="MicaOpaqueBaseBrush" Color="#202020" />
+          <SolidColorBrush x:Key="MicaOpaqueStrokeBrush" Color="#454545" />
+          <SolidColorBrush x:Key="MicaDividerStrokeBrush" Color="#15FFFFFF" />
+
+          <!-- Picker: rows, tiles, actions, footer and keycaps -->
+          <SolidColorBrush x:Key="MicaSubtleHoverBrush" Color="#0AFFFFFF" />
+          <SolidColorBrush x:Key="MicaSubtleSelectedBrush" Color="#15FFFFFF" />
+          <SolidColorBrush x:Key="MicaSubtleSelectedInactiveBrush" Color="#0EFFFFFF" />
+          <SolidColorBrush x:Key="MicaTileFillBrush" Color="#0FFFFFFF" />
+          <SolidColorBrush x:Key="MicaTileStrokeBrush" Color="#14FFFFFF" />
+          <SolidColorBrush x:Key="MicaActionsPaneFillBrush" Color="#0AFFFFFF" />
+          <SolidColorBrush x:Key="MicaActionsPaneOpaqueBrush" Color="#282828" />
+          <SolidColorBrush x:Key="MicaActionsPaneStrokeBrush" Color="#15FFFFFF" />
+          <SolidColorBrush x:Key="MicaFooterFillBrush" Color="#8C1C1C1C" />
+          <SolidColorBrush x:Key="MicaFooterOpaqueBrush" Color="#1C1C1C" />
+          <SolidColorBrush x:Key="MicaKeycapFillBrush" Color="#17FFFFFF" />
+          <SolidColorBrush x:Key="MicaKeycapStrokeBrush" Color="#1FFFFFFF" />
+
+          <!-- Settings: Mica (or its opaque fallback), cards, controls, the caution InfoBar -->
+          <SolidColorBrush x:Key="MicaSettingsBackgroundBrush" Color="#202020" />
+          <SolidColorBrush x:Key="MicaCardFillBrush" Color="#0DFFFFFF" />
+          <SolidColorBrush x:Key="MicaCardOnMicaFillBrush" Color="#0DFFFFFF" />
+          <SolidColorBrush x:Key="MicaCardStrokeBrush" Color="#19000000" />
+          <SolidColorBrush x:Key="MicaControlFillBrush" Color="#0FFFFFFF" />
+          <SolidColorBrush x:Key="MicaControlStrokeBrush" Color="#12FFFFFF" />
+          <SolidColorBrush x:Key="MicaButtonFillBrush" Color="#0FFFFFFF" />
+          <SolidColorBrush x:Key="MicaButtonStrokeBrush" Color="#18FFFFFF" />
+          <SolidColorBrush x:Key="MicaCautionFillBrush" Color="#433519" />
+          <SolidColorBrush x:Key="MicaCautionStrokeBrush" Color="#19000000" />
+
+          <!-- Toast: a notification card (drawn; on Acrylic, its tint) -->
+          <SolidColorBrush x:Key="MicaToastFillBrush" Color="#2B2B2B" />
+          <SolidColorBrush x:Key="MicaToastAcrylicTintBrush" Color="#E62C2C2C" />
+          <SolidColorBrush x:Key="MicaToastStrokeBrush" Color="#1FFFFFFF" />
+
+          <!-- Only used where the operating system reports no accent colour; AccentPalette replaces it otherwise -->
+          <SolidColorBrush x:Key="AccentTextBrush" Color="#5BB3FF" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
   </Styles.Resources>
 
   <!-- ============================================================== Windows -->
 
   <Style Selector="Window.picker">
     <Setter Property="FontFamily" Value="{StaticResource WindowsLookFont}" />
+    <Setter Property="TransparencyBackgroundFallback" Value="{DynamicResource MicaOpaqueBaseBrush}" />
     <!--
-      The flyout is a near-opaque surface on a transparent window. No Acrylic or Mica: Windows would put that backdrop
-      under the whole window, the transparent shadow margin included, as a square frosted box around the flyout.
+      The flyout is a near-opaque surface on a transparent window. On Windows 11 the window is the flyout instead, on
+      Acrylic (NativeMaterial and the "nativeMaterial" styles below): a backdrop always fills the whole window, so a
+      transparent shadow margin around the flyout would show as a square frosted box.
     -->
   </Style>
   <Style Selector="Window.settings">
     <Setter Property="FontFamily" Value="{StaticResource WindowsLookFont}" />
-    <Setter Property="Background" Value="#F3F3F3" />
+    <Setter Property="Background" Value="{DynamicResource MicaSettingsBackgroundBrush}" />
+    <!-- Where Windows grants no transparency at all, not white (Avalonia's default) in dark. -->
+    <Setter Property="TransparencyBackgroundFallback" Value="{DynamicResource MicaSettingsBackgroundBrush}" />
     <Setter Property="Width" Value="660" />
   </Style>
   <Style Selector="Window.toast">
     <Setter Property="FontFamily" Value="{StaticResource WindowsLookFont}" />
+    <Setter Property="TransparencyBackgroundFallback" Value="{DynamicResource MicaOpaqueBaseBrush}" />
   </Style>
 
   <!-- ============================================================== Picker: the flyout -->
@@ -49,8 +173,8 @@
   <!-- The flyout, with room around it for its shadow (the window sizes to its content). -->
   <Style Selector="Border.chrome">
     <Setter Property="Margin" Value="32,16,32,48" />
-    <Setter Property="Background" Value="#F2F7F7F7" />
-    <Setter Property="BorderBrush" Value="#1A000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaFlyoutFillBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MicaFlyoutStrokeBrush}" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="CornerRadius" Value="8" />
     <Setter Property="BoxShadow" Value="0 16 32 0 #2E000000, 0 2 8 0 #14000000" />
@@ -58,8 +182,8 @@
   <!-- No compositor: the flyout fills the window, square and fully opaque. -->
   <Style Selector="Border.chrome.opaque">
     <Setter Property="Margin" Value="0" />
-    <Setter Property="Background" Value="#F3F3F3" />
-    <Setter Property="BorderBrush" Value="#C4C4C4" />
+    <Setter Property="Background" Value="{DynamicResource MicaOpaqueBaseBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MicaOpaqueStrokeBrush}" />
     <Setter Property="CornerRadius" Value="0" />
     <Setter Property="BoxShadow" Value="0 0 0 0 Transparent" />
   </Style>
@@ -75,7 +199,7 @@
   <Style Selector="Border.header">
     <Setter Property="Height" Value="44" />
     <Setter Property="Padding" Value="16,0" />
-    <Setter Property="BorderBrush" Value="#0F000000" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MicaDividerStrokeBrush}" />
     <Setter Property="BorderThickness" Value="0,0,0,1" />
   </Style>
   <Style Selector="Image.appIcon">
@@ -87,7 +211,7 @@
   <Style Selector="TextBlock.headerTitle">
     <Setter Property="FontSize" Value="14" />
     <Setter Property="FontWeight" Value="SemiBold" />
-    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextPrimaryBrush}" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
   <!-- The count sits on the right: it spans the free column (the hint, after it, is hidden). -->
@@ -98,7 +222,7 @@
   </Style>
   <Style Selector="TextBlock.headerCount">
     <Setter Property="FontSize" Value="12" />
-    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextSecondaryBrush}" />
   </Style>
   <Style Selector="TextBlock.headerHint">
     <Setter Property="IsVisible" Value="False" />
@@ -132,23 +256,23 @@
   </Style>
   <!-- Hover stays below every selected fill, the lighter one of the pane without the keyboard included. -->
   <Style Selector="ListBox.items > ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#06000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaSubtleHoverBrush}" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:pressed /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#06000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaSubtleHoverBrush}" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#0F000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaSubtleSelectedBrush}" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#0F000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaSubtleSelectedBrush}" />
   </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected:pressed /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#0F000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaSubtleSelectedBrush}" />
   </Style>
   <!-- While the actions have the keyboard, the chosen item keeps a lighter fill. -->
   <Style Selector="Border.historyPane.inactive ListBox.items > ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#08000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaSubtleSelectedInactiveBrush}" />
   </Style>
 
   <Style Selector="Grid.row">
@@ -174,8 +298,8 @@
     <Setter Property="Height" Value="40" />
     <Setter Property="Margin" Value="9,0,0,0" />
     <Setter Property="CornerRadius" Value="4" />
-    <Setter Property="Background" Value="#FFFFFF" />
-    <Setter Property="BorderBrush" Value="#14000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaTileFillBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MicaTileStrokeBrush}" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="ClipToBounds" Value="True" />
     <Setter Property="VerticalAlignment" Value="Center" />
@@ -183,7 +307,7 @@
   <Style Selector="Path.glyph">
     <Setter Property="Width" Value="20" />
     <Setter Property="Height" Value="20" />
-    <Setter Property="Stroke" Value="#1A1A1A" />
+    <Setter Property="Stroke" Value="{DynamicResource MicaGlyphPrimaryBrush}" />
     <Setter Property="StrokeThickness" Value="1.3" />
     <Setter Property="StrokeLineCap" Value="Round" />
     <Setter Property="StrokeJoin" Value="Round" />
@@ -206,7 +330,7 @@
     <Setter Property="Margin" Value="1" />
   </Style>
   <Style Selector="Panel.filePreview > Path">
-    <Setter Property="Stroke" Value="#5D5D5D" />
+    <Setter Property="Stroke" Value="{DynamicResource MicaGlyphSecondaryBrush}" />
     <Setter Property="StrokeThickness" Value="1" />
     <Setter Property="StrokeJoin" Value="Round" />
     <Setter Property="Fill" Value="Transparent" />
@@ -226,7 +350,7 @@
   <Style Selector="TextBlock.title">
     <Setter Property="FontSize" Value="14" />
     <Setter Property="LineHeight" Value="19" />
-    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextPrimaryBrush}" />
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
     <Setter Property="TextWrapping" Value="NoWrap" />
   </Style>
@@ -246,7 +370,7 @@
   <Style Selector="StackPanel.source > Path">
     <Setter Property="Width" Value="12" />
     <Setter Property="Height" Value="12" />
-    <Setter Property="Stroke" Value="#5D5D5D" />
+    <Setter Property="Stroke" Value="{DynamicResource MicaGlyphSecondaryBrush}" />
     <Setter Property="StrokeThickness" Value="1" />
     <Setter Property="StrokeJoin" Value="Round" />
     <Setter Property="Fill" Value="Transparent" />
@@ -254,7 +378,7 @@
   </Style>
   <Style Selector="StackPanel.source > TextBlock">
     <Setter Property="FontSize" Value="12" />
-    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextSecondaryBrush}" />
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
     <Setter Property="MaxWidth" Value="330" />
     <Setter Property="VerticalAlignment" Value="Center" />
@@ -269,7 +393,7 @@
   <Style Selector="StackPanel.pinned > Path">
     <Setter Property="Width" Value="12" />
     <Setter Property="Height" Value="12" />
-    <Setter Property="Stroke" Value="#5D5D5D" />
+    <Setter Property="Stroke" Value="{DynamicResource MicaGlyphSecondaryBrush}" />
     <Setter Property="StrokeThickness" Value="1" />
     <Setter Property="StrokeJoin" Value="Round" />
     <Setter Property="StrokeLineCap" Value="Round" />
@@ -278,7 +402,7 @@
   </Style>
   <Style Selector="StackPanel.pinned > TextBlock">
     <Setter Property="FontSize" Value="11" />
-    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextSecondaryBrush}" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
 
@@ -287,18 +411,18 @@
   <Style Selector="Border.actionsPane">
     <Setter Property="Width" Value="300" />
     <Setter Property="Padding" Value="4" />
-    <Setter Property="Background" Value="#8CFFFFFF" />
-    <Setter Property="BorderBrush" Value="#12000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaActionsPaneFillBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MicaActionsPaneStrokeBrush}" />
     <Setter Property="BorderThickness" Value="1,0,0,0" />
   </Style>
   <Style Selector="Border.chrome.opaque Border.actionsPane">
-    <Setter Property="Background" Value="#F9F9F9" />
+    <Setter Property="Background" Value="{DynamicResource MicaActionsPaneOpaqueBrush}" />
   </Style>
   <Style Selector="TextBlock.actionsHeader">
     <Setter Property="Margin" Value="12,9,12,7" />
     <Setter Property="FontSize" Value="12" />
     <Setter Property="FontWeight" Value="SemiBold" />
-    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextSecondaryBrush}" />
   </Style>
   <Style Selector="ListBox.actions">
     <Setter Property="Background" Value="Transparent" />
@@ -333,20 +457,20 @@
     <Setter Property="Background" Value="Transparent" />
   </Style>
   <Style Selector="ListBox.actions > ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#06000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaSubtleHoverBrush}" />
   </Style>
   <Style Selector="ListBox.actions > ListBoxItem:pressed /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#06000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaSubtleHoverBrush}" />
   </Style>
   <!-- The chosen action keeps the history's fill whichever pane has the keyboard; the pill shows where that is. -->
   <Style Selector="ListBox.actions > ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#0F000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaSubtleSelectedBrush}" />
   </Style>
   <Style Selector="ListBox.actions > ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#0F000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaSubtleSelectedBrush}" />
   </Style>
   <Style Selector="ListBox.actions > ListBoxItem:selected:pressed /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="#0F000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaSubtleSelectedBrush}" />
   </Style>
   <!--
     With the keyboard here, the chosen action also gets the pill. Pill, toggle and focus line use the text shade of the
@@ -361,7 +485,7 @@
     <Setter Property="Height" Value="16" />
     <Setter Property="Margin" Value="0,2,12,0" />
     <Setter Property="VerticalAlignment" Value="Top" />
-    <Setter Property="Stroke" Value="#3B3B3B" />
+    <Setter Property="Stroke" Value="{DynamicResource MicaActionGlyphBrush}" />
     <Setter Property="StrokeThickness" Value="1.2" />
     <Setter Property="StrokeLineCap" Value="Round" />
     <Setter Property="StrokeJoin" Value="Round" />
@@ -373,7 +497,7 @@
   <Style Selector="TextBlock.actionTitle">
     <Setter Property="FontSize" Value="14" />
     <Setter Property="LineHeight" Value="20" />
-    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextPrimaryBrush}" />
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
   </Style>
   <Style Selector="ListBox.actions > ListBoxItem:selected TextBlock.actionTitle">
@@ -382,7 +506,7 @@
   <Style Selector="TextBlock.actionDescription">
     <Setter Property="FontSize" Value="12" />
     <Setter Property="LineHeight" Value="16" />
-    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextSecondaryBrush}" />
     <Setter Property="TextWrapping" Value="Wrap" />
     <Setter Property="Margin" Value="0,1,0,0" />
   </Style>
@@ -392,7 +516,7 @@
   </Style>
   <Style Selector="Border.defaultBadge > TextBlock">
     <Setter Property="FontSize" Value="11" />
-    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextSecondaryBrush}" />
   </Style>
 
   <!-- ============================================================== Picker: footer -->
@@ -400,12 +524,12 @@
   <Style Selector="Border.footer">
     <Setter Property="MinHeight" Value="40" />
     <Setter Property="Padding" Value="16,8" />
-    <Setter Property="Background" Value="#8CEEEEEE" />
-    <Setter Property="BorderBrush" Value="#0F000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaFooterFillBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MicaDividerStrokeBrush}" />
     <Setter Property="BorderThickness" Value="0,1,0,0" />
   </Style>
   <Style Selector="Border.chrome.opaque Border.footer">
-    <Setter Property="Background" Value="#EEEEEE" />
+    <Setter Property="Background" Value="{DynamicResource MicaFooterOpaqueBrush}" />
   </Style>
   <Style Selector="WrapPanel.hints">
     <Setter Property="VerticalAlignment" Value="Center" />
@@ -417,21 +541,21 @@
   </Style>
   <Style Selector="StackPanel.hint > TextBlock">
     <Setter Property="FontSize" Value="12" />
-    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextSecondaryBrush}" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
   <Style Selector="Border.key">
     <Setter Property="Padding" Value="6,1,6,1" />
     <Setter Property="MinWidth" Value="22" />
     <Setter Property="CornerRadius" Value="4" />
-    <Setter Property="Background" Value="#FFFFFF" />
-    <Setter Property="BorderBrush" Value="#29000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaKeycapFillBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MicaKeycapStrokeBrush}" />
     <Setter Property="BorderThickness" Value="1,1,1,2" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
   <Style Selector="Border.key > TextBlock">
     <Setter Property="FontSize" Value="11" />
-    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextPrimaryBrush}" />
     <Setter Property="HorizontalAlignment" Value="Center" />
   </Style>
 
@@ -456,17 +580,17 @@
     <Setter Property="FontSize" Value="28" />
     <Setter Property="LineHeight" Value="36" />
     <Setter Property="FontWeight" Value="SemiBold" />
-    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextPrimaryBrush}" />
   </Style>
   <Style Selector="TextBlock.heroVersion">
     <Setter Property="FontSize" Value="12" />
-    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextSecondaryBrush}" />
   </Style>
   <Style Selector="TextBlock.usage">
     <Setter Property="Margin" Value="0,16,0,0" />
     <Setter Property="FontSize" Value="14" />
     <Setter Property="LineHeight" Value="20" />
-    <Setter Property="Foreground" Value="#3B3B3B" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextBodyBrush}" />
     <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
   <!-- An InfoBar of the "caution" severity. -->
@@ -474,25 +598,25 @@
     <Setter Property="Margin" Value="0,16,0,0" />
     <Setter Property="Padding" Value="16,12" />
     <Setter Property="CornerRadius" Value="4" />
-    <Setter Property="Background" Value="#FFF4CE" />
-    <Setter Property="BorderBrush" Value="#0F000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaCautionFillBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MicaCautionStrokeBrush}" />
     <Setter Property="BorderThickness" Value="1" />
   </Style>
   <Style Selector="Border.warning > TextBlock">
     <Setter Property="FontSize" Value="14" />
     <Setter Property="LineHeight" Value="20" />
-    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextPrimaryBrush}" />
     <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
   <Style Selector="TextBlock.groupHeader">
     <Setter Property="Margin" Value="1,28,0,8" />
     <Setter Property="FontSize" Value="14" />
     <Setter Property="FontWeight" Value="SemiBold" />
-    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextPrimaryBrush}" />
   </Style>
   <Style Selector="Border.group">
-    <Setter Property="Background" Value="#FFFFFF" />
-    <Setter Property="BorderBrush" Value="#0F000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaCardFillBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MicaCardStrokeBrush}" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="CornerRadius" Value="4" />
   </Style>
@@ -505,7 +629,7 @@
     <Setter Property="Height" Value="20" />
     <Setter Property="Margin" Value="0,0,16,0" />
     <Setter Property="VerticalAlignment" Value="Center" />
-    <Setter Property="Stroke" Value="#1A1A1A" />
+    <Setter Property="Stroke" Value="{DynamicResource MicaGlyphPrimaryBrush}" />
     <Setter Property="StrokeThickness" Value="1.2" />
     <Setter Property="StrokeLineCap" Value="Round" />
     <Setter Property="StrokeJoin" Value="Round" />
@@ -518,18 +642,18 @@
   <Style Selector="TextBlock.rowTitle">
     <Setter Property="FontSize" Value="14" />
     <Setter Property="LineHeight" Value="20" />
-    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextPrimaryBrush}" />
     <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
   <Style Selector="TextBlock.rowDescription">
     <Setter Property="FontSize" Value="12" />
     <Setter Property="LineHeight" Value="16" />
-    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextSecondaryBrush}" />
     <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
   <Style Selector="Border.rowDivider">
     <Setter Property="Height" Value="1" />
-    <Setter Property="Background" Value="#0F000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaDividerStrokeBrush}" />
   </Style>
   <Style Selector=":is(Control).rowControl">
     <Setter Property="Margin" Value="16,0,0,0" />
@@ -541,9 +665,9 @@
     <Setter Property="Width" Value="140" />
     <Setter Property="MinHeight" Value="32" />
     <Setter Property="FontSize" Value="14" />
-    <Setter Property="Foreground" Value="#1A1A1A" />
-    <Setter Property="Background" Value="#FFFFFF" />
-    <Setter Property="BorderBrush" Value="#0F000000" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextPrimaryBrush}" />
+    <Setter Property="Background" Value="{DynamicResource MicaControlFillBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MicaControlStrokeBrush}" />
     <Setter Property="CornerRadius" Value="4" />
   </Style>
   <!-- Compact, borderless spin buttons inside the field, as in the NumberBox. -->
@@ -555,7 +679,7 @@
     <Setter Property="CornerRadius" Value="4" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="Background" Value="Transparent" />
-    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextSecondaryBrush}" />
   </Style>
   <!-- The NumberBox's small chevrons, not the theme's 16 px ones. -->
   <Style Selector="NumericUpDown.rowControl /template/ ButtonSpinner /template/ RepeatButton PathIcon">
@@ -568,7 +692,7 @@
 
   <!-- Fluent toggle switch, in the accent. -->
   <Style Selector="ToggleSwitch.rowControl">
-    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextPrimaryBrush}" />
     <Setter Property="FontSize" Value="14" />
   </Style>
   <Style Selector="ToggleSwitch.rowControl:checked /template/ Border#SwitchKnobBounds">
@@ -583,6 +707,16 @@
     <Setter Property="Background" Value="{DynamicResource AccentTextBrush}" />
     <Setter Property="BorderBrush" Value="{DynamicResource AccentTextBrush}" />
   </Style>
+  <!-- The knob on the accent: white in light, black in dark (as in WinUI; Fluent's white knob is ~2:1 on a dark-mode accent). -->
+  <Style Selector="ToggleSwitch.rowControl:checked /template/ Ellipse#SwitchKnobOn">
+    <Setter Property="Fill" Value="{DynamicResource MicaTextOnAccentBrush}" />
+  </Style>
+  <Style Selector="ToggleSwitch.rowControl:checked:pointerover /template/ Ellipse#SwitchKnobOn">
+    <Setter Property="Fill" Value="{DynamicResource MicaTextOnAccentBrush}" />
+  </Style>
+  <Style Selector="ToggleSwitch.rowControl:checked:pressed /template/ Ellipse#SwitchKnobOn">
+    <Setter Property="Fill" Value="{DynamicResource MicaTextOnAccentBrush}" />
+  </Style>
 
   <Style Selector="StackPanel.commands">
     <Setter Property="Orientation" Value="Horizontal" />
@@ -594,16 +728,16 @@
     <Setter Property="Padding" Value="12,5,12,6" />
     <Setter Property="CornerRadius" Value="4" />
     <Setter Property="FontSize" Value="14" />
-    <Setter Property="Foreground" Value="#1A1A1A" />
-    <Setter Property="Background" Value="#FBFBFB" />
-    <Setter Property="BorderBrush" Value="#17000000" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextPrimaryBrush}" />
+    <Setter Property="Background" Value="{DynamicResource MicaButtonFillBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MicaButtonStrokeBrush}" />
     <Setter Property="BorderThickness" Value="1,1,1,1" />
   </Style>
   <Style Selector="Path.commandIcon">
     <Setter Property="Width" Value="16" />
     <Setter Property="Height" Value="16" />
     <Setter Property="VerticalAlignment" Value="Center" />
-    <Setter Property="Stroke" Value="#1A1A1A" />
+    <Setter Property="Stroke" Value="{DynamicResource MicaGlyphPrimaryBrush}" />
     <Setter Property="StrokeThickness" Value="1.2" />
     <Setter Property="StrokeLineCap" Value="Round" />
     <Setter Property="StrokeJoin" Value="Round" />
@@ -622,8 +756,8 @@
     <Setter Property="Margin" Value="16,8,16,24" />
     <Setter Property="Padding" Value="16,12,16,16" />
     <Setter Property="CornerRadius" Value="8" />
-    <Setter Property="Background" Value="#FAFAFA" />
-    <Setter Property="BorderBrush" Value="#17000000" />
+    <Setter Property="Background" Value="{DynamicResource MicaToastFillBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MicaToastStrokeBrush}" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="BoxShadow" Value="0 8 16 0 #24000000" />
   </Style>
@@ -638,7 +772,7 @@
   </Style>
   <Style Selector="TextBlock.toastApp">
     <Setter Property="FontSize" Value="12" />
-    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextPrimaryBrush}" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
   <Style Selector="TextBlock.toastTitle">
@@ -647,14 +781,14 @@
     <Setter Property="FontSize" Value="14" />
     <Setter Property="LineHeight" Value="20" />
     <Setter Property="FontWeight" Value="SemiBold" />
-    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextPrimaryBrush}" />
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
   </Style>
   <Style Selector="TextBlock.toastPreview">
     <Setter Property="Margin" Value="-24,0,0,0" />
     <Setter Property="FontSize" Value="12" />
     <Setter Property="LineHeight" Value="16" />
-    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextSecondaryBrush}" />
     <Setter Property="TextWrapping" Value="Wrap" />
     <Setter Property="MaxLines" Value="3" />
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
@@ -665,19 +799,29 @@
        DWM's rounded corners (8, as the flyout) and shadow, so the flyout loses its margin and drawn shadow and lets the
        Acrylic through. The settings window on Mica ("mica") shows it around its cards, as the Settings app does.
        ============================================================================================================ -->
-  <!-- The light tint of Fluent's flyout Acrylic (about 85 % over the blur): lighter tints read grey over dark windows. -->
+  <!--
+    The tint of Fluent's flyout Acrylic (about 85 % over the blur; lighter tints read grey over dark windows). Avalonia's
+    Acrylic is only the blurred backdrop, so this tint is the whole colour of the material: #F9F9F9 light, #2C2C2C dark.
+  -->
   <Style Selector="Border.chrome.nativeMaterial">
     <Setter Property="Margin" Value="0" />
     <Setter Property="BoxShadow" Value="0 0 0 0 Transparent" />
-    <Setter Property="Background" Value="#D9F9F9F9" />
+    <Setter Property="Background" Value="{DynamicResource MicaFlyoutAcrylicTintBrush}" />
   </Style>
   <Style Selector="Border.toastChrome.nativeMaterial">
     <Setter Property="Margin" Value="0" />
     <Setter Property="BoxShadow" Value="0 0 0 0 Transparent" />
-    <Setter Property="Background" Value="#E6FAFAFA" />
+    <Setter Property="Background" Value="{DynamicResource MicaToastAcrylicTintBrush}" />
   </Style>
+  <!--
+    On Mica the window lets the backdrop through (under the title bar too, with the system's Mica) and the cards are
+    translucent layers on it, as in the Settings app, instead of opaque white boxes on a flat sheet.
+  -->
   <Style Selector="Window.settings.mica">
     <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="Window.settings.mica Border.group">
+    <Setter Property="Background" Value="{DynamicResource MicaCardOnMicaFillBrush}" />
   </Style>
 
   <!-- Nothing copied yet: how to use Shapeshifter, in the history's place (the actions are hidden) -->
@@ -689,12 +833,12 @@
   <Style Selector="StackPanel.emptyState TextBlock.emptyTitle">
     <Setter Property="FontSize" Value="20" />
     <Setter Property="FontWeight" Value="SemiBold" />
-    <Setter Property="Foreground" Value="#1A1A1A" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextPrimaryBrush}" />
   </Style>
   <Style Selector="StackPanel.emptyState TextBlock.emptyText">
     <Setter Property="FontSize" Value="14" />
     <Setter Property="LineHeight" Value="20" />
-    <Setter Property="Foreground" Value="#5D5D5D" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextSecondaryBrush}" />
     <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
 
