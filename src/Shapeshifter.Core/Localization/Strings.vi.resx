@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Cài đặt Shapeshifter</value>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>Phiên bản {0}</value>
+  </data>
+  <data name="SettingsCopyVersion" xml:space="preserve">
+    <value>Sao chép phiên bản</value>
+  </data>
+  <data name="SettingsCopied" xml:space="preserve">
+    <value>Đã sao chép</value>
+  </data>
+  <data name="SettingsReportProblem" xml:space="preserve">
+    <value>Báo cáo sự cố</value>
+  </data>
+  <data name="SettingsProjectPage" xml:space="preserve">
+    <value>Trang dự án</value>
+  </data>
+  <data name="SettingsUsage" xml:space="preserve">
+    <value>Sao chép như bình thường. Để dán một mục cũ hơn, hãy giữ {0} và nhấn V: tiếp tục giữ {0} để xem lịch sử, nhấn V lần nữa (hoặc ↑/↓, hoặc 1–9) để chọn một mục, → để chọn thao tác với mục đó, Delete để xóa mục và Esc để hủy. Thả {0} để dán.</value>
+  </data>
+  <data name="SettingsHistoryGroup" xml:space="preserve">
+    <value>Lịch sử</value>
+  </data>
+  <data name="SettingsDelayTitle" xml:space="preserve">
+    <value>Độ trễ trước khi hiện lịch sử</value>
+  </data>
+  <data name="SettingsDelayDescription" xml:space="preserve">
+    <value>Thời gian giữ {0}+V trước khi lịch sử hiện ra</value>
+  </data>
+  <data name="SettingsDelayAccessibleName" xml:space="preserve">
+    <value>Độ trễ trước khi hiện lịch sử, tính bằng mili giây</value>
+  </data>
+  <data name="SettingsItemsTitle" xml:space="preserve">
+    <value>Số mục cần ghi nhớ</value>
+  </data>
+  <data name="SettingsItemsDescription" xml:space="preserve">
+    <value>Các mục đã ghim được giữ thêm ngoài số này</value>
+  </data>
+  <data name="SettingsRememberTitle" xml:space="preserve">
+    <value>Ghi nhớ lịch sử sau khi khởi động lại</value>
+  </data>
+  <data name="SettingsRememberDescription" xml:space="preserve">
+    <value>Lưu lịch sử trên ổ đĩa của máy tính này, không chỉ các mục đã ghim</value>
+  </data>
+  <data name="SettingsBehaviourGroup" xml:space="preserve">
+    <value>Hành vi</value>
+  </data>
+  <data name="SettingsNotificationsTitle" xml:space="preserve">
+    <value>Thông báo sao chép</value>
+  </data>
+  <data name="SettingsNotificationsDescription" xml:space="preserve">
+    <value>Hiện thông báo mỗi khi có nội dung được sao chép</value>
+  </data>
+  <data name="SettingsStartAtLoginTitle" xml:space="preserve">
+    <value>Khởi động khi đăng nhập</value>
+  </data>
+  <data name="SettingsStartAtLoginDescription" xml:space="preserve">
+    <value>Shapeshifter chờ trong nền sau khi bạn đăng nhập</value>
+  </data>
+  <data name="SettingsUpdatesTitle" xml:space="preserve">
+    <value>Cập nhật tự động</value>
+  </data>
+  <data name="SettingsClearHistory" xml:space="preserve">
+    <value>Xóa lịch sử</value>
+  </data>
+  <data name="SettingsCheckForUpdates" xml:space="preserve">
+    <value>Kiểm tra bản cập nhật</value>
+  </data>
+  <data name="SettingsOpenLogFolder" xml:space="preserve">
+    <value>Mở thư mục nhật ký</value>
+  </data>
+  <data name="PickerTitleWindows" xml:space="preserve">
+    <value>Lịch sử bảng tạm</value>
+  </data>
+  <data name="PickerTitleMacOS" xml:space="preserve">
+    <value>Bảng nhớ tạm</value>
+  </data>
+  <data name="PickerItemCountOne" xml:space="preserve">
+    <value>1 mục</value>
+  </data>
+  <data name="PickerItemCountOther" xml:space="preserve">
+    <value>{0} mục</value>
+  </data>
+  <data name="PickerReleaseHint" xml:space="preserve">
+    <value>Thả {0} để dán</value>
+  </data>
+  <data name="PickerNothingCopied" xml:space="preserve">
+    <value>Chưa sao chép gì</value>
+  </data>
+  <data name="PickerEmptyHint" xml:space="preserve">
+    <value>Sao chép như bình thường, Shapeshifter sẽ giữ lại mọi thứ bạn sao chép.
+
+Để dán nội dung đã sao chép trước đó, hãy giữ {0} và nhấn V. Tiếp tục giữ {0} để xem lịch sử, nhấn V hoặc các phím mũi tên để chọn, rồi thả {0} để dán.</value>
+  </data>
+  <data name="PickerActions" xml:space="preserve">
+    <value>Thao tác</value>
+  </data>
+  <data name="PickerActionsForText" xml:space="preserve">
+    <value>Thao tác cho văn bản này</value>
+  </data>
+  <data name="PickerActionsForImage" xml:space="preserve">
+    <value>Thao tác cho hình ảnh này</value>
+  </data>
+  <data name="PickerActionsForFile" xml:space="preserve">
+    <value>Thao tác cho tệp này</value>
+  </data>
+  <data name="PickerActionsForFiles" xml:space="preserve">
+    <value>Thao tác cho các tệp này</value>
+  </data>
+  <data name="PickerDefault" xml:space="preserve">
+    <value>Mặc định</value>
+  </data>
+  <data name="PickerHintRelease" xml:space="preserve">
+    <value>Thả để dán</value>
+  </data>
+  <data name="PickerHintMove" xml:space="preserve">
+    <value>Di chuyển</value>
+  </data>
+  <data name="PickerHintJump" xml:space="preserve">
+    <value>Nhảy</value>
+  </data>
+  <data name="PickerHintRemove" xml:space="preserve">
+    <value>Xóa</value>
+  </data>
+  <data name="PickerHintCancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="KeyControl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="KeyEscape" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="ItemEmpty" xml:space="preserve">
+    <value>(trống)</value>
+  </data>
+  <data name="ItemImage" xml:space="preserve">
+    <value>Hình ảnh</value>
+  </data>
+  <data name="ItemImageWithSize" xml:space="preserve">
+    <value>Hình ảnh · {0} × {1}</value>
+  </data>
+  <data name="ItemFilesWithNames" xml:space="preserve">
+    <value>{0} mục · {1}</value>
+  </data>
+  <data name="ItemFileCount" xml:space="preserve">
+    <value>{0} tệp</value>
+  </data>
+  <data name="ItemFormattedText" xml:space="preserve">
+    <value>Văn bản có định dạng</value>
+  </data>
+  <data name="ItemOtherData" xml:space="preserve">
+    <value>Dữ liệu khác</value>
+  </data>
+  <data name="ItemCharacterCount" xml:space="preserve">
+    <value>{0} ký tự</value>
+  </data>
+  <data name="ItemLineCount" xml:space="preserve">
+    <value>{0} dòng</value>
+  </data>
+  <data name="ToastCopiedOne" xml:space="preserve">
+    <value>Đã sao chép · 1 mục trong lịch sử</value>
+  </data>
+  <data name="ToastCopiedOther" xml:space="preserve">
+    <value>Đã sao chép · {0} mục trong lịch sử</value>
+  </data>
+  <data name="TraySettings" xml:space="preserve">
+    <value>Cài đặt…</value>
+  </data>
+  <data name="TrayCheckForUpdates" xml:space="preserve">
+    <value>Kiểm tra bản cập nhật…</value>
+  </data>
+  <data name="TrayReportProblem" xml:space="preserve">
+    <value>Báo cáo sự cố…</value>
+  </data>
+  <data name="TrayAbout" xml:space="preserve">
+    <value>Giới thiệu về Shapeshifter {0}</value>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>Thoát Shapeshifter</value>
+  </data>
+  <data name="StartupErrorTitle" xml:space="preserve">
+    <value>Không thể khởi động Shapeshifter</value>
+  </data>
+  <data name="StartupErrorDetails" xml:space="preserve">
+    <value>Chi tiết đã được ghi vào {0}.</value>
+  </data>
+  <data name="StartupErrorQuit" xml:space="preserve">
+    <value>Thoát</value>
+  </data>
+  <data name="ActionPaste" xml:space="preserve">
+    <value>Dán</value>
+  </data>
+  <data name="ActionPasteDescription" xml:space="preserve">
+    <value>Dán nội dung bảng tạm như nguyên bản.</value>
+  </data>
+  <data name="ActionPasteAsPlainText" xml:space="preserve">
+    <value>Dán dưới dạng văn bản thuần</value>
+  </data>
+  <data name="ActionPasteAsPlainTextDescription" xml:space="preserve">
+    <value>Dán nội dung bảng tạm dưới dạng văn bản thuần, không có định dạng.</value>
+  </data>
+  <data name="ActionPasteAsFile" xml:space="preserve">
+    <value>Dán dưới dạng tệp</value>
+  </data>
+  <data name="ActionPasteAsFileDescription" xml:space="preserve">
+    <value>Lưu văn bản này vào tệp .txt và dán tệp đó.</value>
+  </data>
+  <data name="ActionCopyAsZip" xml:space="preserve">
+    <value>Sao chép dưới dạng thư mục nén</value>
+  </data>
+  <data name="ActionCopyAsZipDescription" xml:space="preserve">
+    <value>Sao chép các tệp này vào bảng tạm dưới dạng thư mục nén (.zip).</value>
+  </data>
+  <data name="ActionCopyImageFromLink" xml:space="preserve">
+    <value>Sao chép hình ảnh từ liên kết</value>
+  </data>
+  <data name="ActionCopyImageFromLinkDescription" xml:space="preserve">
+    <value>Tải xuống hình ảnh được liên kết và sao chép chính hình ảnh đó vào bảng tạm.</value>
+  </data>
+  <data name="ActionOpenLink" xml:space="preserve">
+    <value>Mở liên kết</value>
+  </data>
+  <data name="ActionOpenLinks" xml:space="preserve">
+    <value>Mở các liên kết</value>
+  </data>
+  <data name="ActionOpenLinkDescription" xml:space="preserve">
+    <value>Mở liên kết trong trình duyệt của bạn.</value>
+  </data>
+  <data name="ActionOpenLinksDescription" xml:space="preserve">
+    <value>Mở các liên kết trong trình duyệt của bạn (tối đa {0}).</value>
+  </data>
+  <data name="ActionPin" xml:space="preserve">
+    <value>Ghim vào bảng tạm</value>
+  </data>
+  <data name="ActionPinDescription" xml:space="preserve">
+    <value>Ghim mục này để mục luôn ở trên cùng, đồng thời lưu vào máy tính của bạn để mục vẫn còn ở đó vào lần tới bạn mở Shapeshifter.</value>
+  </data>
+  <data name="ActionUnpin" xml:space="preserve">
+    <value>Bỏ ghim khỏi bảng tạm</value>
+  </data>
+  <data name="ActionUnpinDescription" xml:space="preserve">
+    <value>Bỏ ghim mục này để mục di chuyển xuống khi bạn sao chép và không còn được lưu vào máy tính của bạn.</value>
+  </data>
+  <data name="TimeJustNow" xml:space="preserve">
+    <value>Vừa xong</value>
+  </data>
+  <data name="TimeMinutesAgo" xml:space="preserve">
+    <value>{0} phút trước</value>
+  </data>
+  <data name="TimeHoursAgo" xml:space="preserve">
+    <value>{0} giờ trước</value>
+  </data>
+  <data name="TimeYesterday" xml:space="preserve">
+    <value>Hôm qua</value>
+  </data>
+  <data name="TimeDaysAgo" xml:space="preserve">
+    <value>{0} ngày trước</value>
+  </data>
+  <data name="UpdateOff" xml:space="preserve">
+    <value>Cập nhật tự động đang tắt</value>
+  </data>
+  <data name="UpdateUnsupported" xml:space="preserve">
+    <value>Bản này không thể tự cập nhật</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>Đang kiểm tra bản cập nhật…</value>
+  </data>
+  <data name="UpdateUpToDate" xml:space="preserve">
+    <value>Đã cập nhật (kiểm tra lúc {0})</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>Đang tải xuống phiên bản {0}…</value>
+  </data>
+  <data name="UpdateReadyToRestart" xml:space="preserve">
+    <value>Phiên bản {0} đã được cài đặt và sẽ chạy vào lần tới {1} khởi động</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Không thể cập nhật: {0}</value>
+  </data>
+  <data name="UpdateAutomatic" xml:space="preserve">
+    <value>Bản cập nhật được kiểm tra tự động</value>
+  </data>
+  <data name="UpdateTurnedOff" xml:space="preserve">
+    <value>Cập nhật đã bị tắt ({0})</value>
+  </data>
+  <data name="UpdateReleaseBuildsOnly" xml:space="preserve">
+    <value>Chỉ các bản phát hành chính thức mới tự cập nhật</value>
+  </data>
+  <data name="UpdateCannotWrite" xml:space="preserve">
+    <value>{0} không thể ghi vào {1}; hãy cập nhật theo cách đã cài đặt</value>
+  </data>
+  <data name="PlatformNeedsX11" xml:space="preserve">
+    <value>Shapeshifter cần màn hình X11 (chưa đặt DISPLAY). Trên Wayland, hãy đảm bảo có sẵn XWayland.</value>
+  </data>
+  <data name="PlatformWayland" xml:space="preserve">
+    <value>Đây là phiên Wayland. Wayland không cho phép ứng dụng theo dõi hoặc giả lập thao tác phím toàn cục, nên thao tác dán chỉ hoạt động khi một ứng dụng X11 (XWayland) đang được chọn. Hãy đăng nhập vào phiên X11 để được hỗ trợ đầy đủ.</value>
+  </data>
+  <data name="PlatformAccessibility" xml:space="preserve">
+    <value>Shapeshifter cần quyền Trợ năng để nhận biết và gửi tổ hợp phím Cmd+V. Hãy cho phép trong Cài đặt hệ thống &gt; Quyền riêng tư &amp; Bảo mật &gt; Trợ năng rồi khởi động lại Shapeshifter.</value>
+  </data>
+  <data name="PlatformNotSupported" xml:space="preserve">
+    <value>{0} không được hỗ trợ.</value>
+  </data>
+  <data name="ToggleOn" xml:space="preserve">
+    <value>Bật</value>
+  </data>
+  <data name="ToggleOff" xml:space="preserve">
+    <value>Tắt</value>
+  </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Lưu hình ảnh này vào tệp .{0} và dán tệp đó.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Tải lên và dán liên kết</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Tải hình ảnh này lên {0} và dán liên kết công khai đến hình ảnh.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Mẹo</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Gợi ý khi lịch sử lẽ ra đã giúp bạn khỏi phải sao chép lại</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Đã có trong lịch sử</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>Không cần sao chép lại: giữ {0}+V để chọn từ lịch sử.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>Bạn có biết?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>Bạn có thể sao chép nhiều thứ từ {0} trước, rồi giữ {1}+V trong {2} để chọn từng mục từ lịch sử.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Tải lên {0}?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Tải hình ảnh này lên {0}?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>Hình ảnh được gửi đến {0} (catbox.moe), một dịch vụ lưu trữ hình ảnh miễn phí không có quảng cáo, và bất kỳ ai có liên kết đều có thể xem. Không thể xóa nội dung đã tải lên. Mọi thứ khác bạn sao chép đều không bao giờ rời khỏi máy tính của bạn.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter sẽ không hỏi lại. Lần này liên kết đã được sao chép: nhấn {0}+V để dán.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Tải lên {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Nhấn Space để giữ lịch sử luôn mở mà không cần giữ phím, rồi nhấn Enter để dán.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Để xem lịch sử mà không cần giữ {0}, hãy nhấn Space: lịch sử sẽ luôn mở cho đến khi bạn nhấn Enter để dán hoặc Esc.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Nhấn Enter để dán</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Đóng</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Dán</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Giữ mở</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Space</value>
+  </data>
+</root>

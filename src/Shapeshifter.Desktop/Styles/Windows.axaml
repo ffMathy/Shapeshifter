@@ -22,7 +22,6 @@
     <ResourceDictionary>
       <!-- Where the copy notification appears (CopyNotifier): BottomRight, TopRight or BottomCenter. -->
       <x:String x:Key="ToastPlacement">BottomRight</x:String>
-      <x:String x:Key="PickerTitle">Clipboard history</x:String>
       <!-- A row is 60 high with a 2 gap below it (the presenter fits whole rows of this height). -->
       <x:Double x:Key="PickerRowHeight">62</x:Double>
       <x:String x:Key="LookDefaultAccent">#0067C0</x:String>
@@ -718,9 +717,10 @@
     <Setter Property="Fill" Value="{DynamicResource MicaTextOnAccentBrush}" />
   </Style>
 
-  <Style Selector="StackPanel.commands">
+  <Style Selector="WrapPanel.commands">
     <Setter Property="Orientation" Value="Horizontal" />
-    <Setter Property="Spacing" Value="8" />
+    <Setter Property="ItemSpacing" Value="8" />
+    <Setter Property="LineSpacing" Value="8" />
     <Setter Property="Margin" Value="0,28,0,0" />
   </Style>
   <Style Selector="Button.command">

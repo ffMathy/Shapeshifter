@@ -83,6 +83,16 @@ The headless renders have no system blur or accent colour. With `--live`, the sa
 
 The picker and the copy notification sit on the operating system's own material where it can be had (`NativeMaterial`): on Windows 11 Mica (Avalonia's, which unlike the system's stays translucent while the window is not active, as these never are), or Acrylic where Mica cannot be had (`SHAPESHIFTER_NATIVE_MATERIAL=acrylic` forces it), with DWM's rounded corners and shadow; and on macOS a frosted popover material (or, with `SHAPESHIFTER_NATIVE_MATERIAL=glass`, Liquid Glass on macOS 26) inserted behind the sheet by `MacWindowMaterial`. Both systems put the material under the whole window, so the window is then exactly the panel. The settings window gets Mica on Windows 11: from 22H2 (build 22621) the system's own (`DWMWA_SYSTEMBACKDROP_TYPE`, set by `WindowsWindowMaterial`), which DWM draws under the native title bar and, with the frame extended, under the transparent client area, as in the Settings app; before 22H2, or if that fails, Avalonia's emulated Mica in the client area only (also with `SHAPESHIFTER_NATIVE_MATERIAL=emulated`). The cards are then translucent layers on it. With Windows' "Transparency effects" off there is no Acrylic or Mica (Avalonia would still report them), and the windows use the look's opaque, theme-coloured surfaces. The setting is read when a window is set up and again each time the picker or the copy notification is shown (turned off, the picker keeps the opaque panel until the app restarts). Battery saver and Energy saver also turn Windows' transparency off without changing that setting: the settings window's system Mica follows them (DWM draws it), but the picker and the copy notification then show Avalonia's Acrylic as an untinted blur under the look's nearly opaque tint; this is a known limit. In a high-contrast theme there is no Acrylic or Mica either; the looks have no high-contrast colours of their own yet. In dark mode the accent shade for text and toggles is Windows' own "Light 2" (Explorer's `AccentPalette`), as in the Settings app, lightened further only where it would not read. `SHAPESHIFTER_NATIVE_MATERIAL=off` turns the system material off.
 
+## Languages
+
+All user-facing text comes from the `Strings` class generated from `src/Shapeshifter.Core/Localization/Strings.resx`
+(English) and its translations, which build into satellite assemblies (carried inside a single-file build). The text
+follows the current UI culture, the operating system's display language unless `SHAPESHIFTER_LANGUAGE` names another
+(`Localizer.ApplyLanguageOverride`, called first thing in `Program.Main`). Views use `{x:Static loc:Strings.…}`; code
+fills in format strings with `Localizer.Format`. Actions are recognised by their `Id`, never by their translated title
+(`Glyphs.ForAction`). In a right-to-left language (Arabic, Persian) the windows set `FlowDirection.RightToLeft`, which
+mirrors their layout. Log messages and the problem report stay in English.
+
 ## Testing
 
 - `tests/Shapeshifter.Core.Tests` covers the core logic with fakes: the gesture state machine, history, monitor, actions, persistence, settings and the engine.

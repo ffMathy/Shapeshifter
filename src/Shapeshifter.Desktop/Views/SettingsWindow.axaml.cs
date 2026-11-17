@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Shapeshifter.Core.Localization;
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
@@ -14,6 +15,11 @@ public partial class SettingsWindow : Window
     public SettingsWindow()
     {
         InitializeComponent();
+        if (Localizer.IsRightToLeft)
+        {
+            FlowDirection = Avalonia.Media.FlowDirection.RightToLeft;
+        }
+
         NativeMaterial.PrepareBackdrop(this);
     }
 
@@ -35,8 +41,8 @@ public partial class SettingsWindow : Window
             return;
         }
 
-        CopyVersionLink.Content = "Copied";
+        CopyVersionLink.Content = Strings.SettingsCopied;
         copiedTimer?.Dispose();
-        copiedTimer = DispatcherTimer.RunOnce(() => CopyVersionLink.Content = "Copy version", TimeSpan.FromSeconds(2));
+        copiedTimer = DispatcherTimer.RunOnce(() => CopyVersionLink.Content = Strings.SettingsCopyVersion, TimeSpan.FromSeconds(2));
     }
 }

@@ -50,20 +50,22 @@ public static class Glyphs
 
     public static Geometry Source { get; } = Geometry.Parse("M10,2.5 A7.5,7.5 0 1 1 9.99,2.5 M2.5,10 H17.5 M10,2.5 C7.5,5 7.5,15 10,17.5 C12.5,15 12.5,5 10,2.5");
 
-    /// <summary>The icon of an action, recognised by its title; a plain clipboard for actions that are not known.</summary>
-    public static Geometry ForAction(string title)
+    /// <summary>
+    /// The icon of an action, recognised by its <see cref="Shapeshifter.Core.Actions.IClipboardAction.Id"/> (and, for
+    /// the pin action, by whether it pins or unpins); a plain clipboard for actions that are not known.
+    /// </summary>
+    public static Geometry ForAction(string id, bool unpins = false)
     {
-        ArgumentNullException.ThrowIfNull(title);
-        return title switch
+        ArgumentNullException.ThrowIfNull(id);
+        return id switch
         {
-            _ when title.StartsWith("Unpin", StringComparison.OrdinalIgnoreCase) => Unpin,
-            _ when title.StartsWith("Pin", StringComparison.OrdinalIgnoreCase) => Pin,
-            _ when title.Contains("plain text", StringComparison.OrdinalIgnoreCase) => PlainText,
-            _ when title.Contains("compressed", StringComparison.OrdinalIgnoreCase) => Archive,
-            _ when title.StartsWith("Upload", StringComparison.OrdinalIgnoreCase) => Upload,
-            _ when title.Contains("as file", StringComparison.OrdinalIgnoreCase) => PasteAsFile,
-            _ when title.Contains("image", StringComparison.OrdinalIgnoreCase) => Image,
-            _ when title.Contains("link", StringComparison.OrdinalIgnoreCase) => Link,
+            "toggle-pin" => unpins ? Unpin : Pin,
+            "paste-plain-text" => PlainText,
+            "copy-as-zip" => Archive,
+            "upload-image" => Upload,
+            "paste-as-file" => PasteAsFile,
+            "copy-image-from-link" => Image,
+            "open-links" => Link,
             _ => Clipboard,
         };
     }

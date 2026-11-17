@@ -1,5 +1,6 @@
 using Shapeshifter.Core.Platform;
 using Shapeshifter.Core.Text;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Core.Clipboard;
 
@@ -43,16 +44,16 @@ public sealed class ClipboardItem
             case ClipboardContentKind.File:
                 return Path.GetFileName(snapshot.Files[0].TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
             case ClipboardContentKind.FileCollection:
-                return $"{snapshot.Files.Count} files";
+                return Localizer.Format(Strings.ItemFileCount, snapshot.Files.Count);
             case ClipboardContentKind.Image:
-                return "Image";
+                return Strings.ItemImage;
             case ClipboardContentKind.Text when !string.IsNullOrEmpty(snapshot.Text):
                 return TextPreview.Create(snapshot.Text);
             case ClipboardContentKind.Text:
                 var rich = ClipboardFormatClassifier.FindRichText(snapshot);
                 return rich is not null && ClipboardFormatClassifier.IsHtml(rich.Name)
                     ? TextPreview.Create(HtmlText.ToPlainText(HtmlText.Decode(rich.Data)))
-                    : "Formatted text";
+                    : Strings.ItemFormattedText;
             case ClipboardContentKind.Other:
                 return string.Join(", ", snapshot.RawFormats.Select(f => f.Name).Take(3));
             default:

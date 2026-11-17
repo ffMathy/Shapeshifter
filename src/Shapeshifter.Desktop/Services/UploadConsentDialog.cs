@@ -4,6 +4,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Threading;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Desktop.Services;
 
@@ -36,11 +37,12 @@ internal static class UploadConsentDialog
 
     internal static (Window Window, Button Upload, Button Cancel) Create(string serviceName, string modifierName)
     {
-        var upload = new Button { Content = $"Upload to {serviceName}", IsDefault = true };
-        var cancel = new Button { Content = "Cancel", IsCancel = true };
+        var upload = new Button { Content = Localizer.Format(Strings.UploadConsentUpload, serviceName), IsDefault = true };
+        var cancel = new Button { Content = Strings.DialogCancel, IsCancel = true };
         var window = new Window
         {
-            Title = $"Upload to {serviceName}?",
+            Title = Localizer.Format(Strings.UploadConsentTitle, serviceName),
+            FlowDirection = Localizer.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight,
             Width = 460,
             SizeToContent = SizeToContent.Height,
             CanResize = false,
@@ -55,19 +57,18 @@ internal static class UploadConsentDialog
                 {
                     new TextBlock
                     {
-                        Text = $"Upload this image to {serviceName}?",
+                        Text = Localizer.Format(Strings.UploadConsentQuestion, serviceName),
                         FontWeight = FontWeight.SemiBold,
                         TextWrapping = TextWrapping.Wrap,
                     },
                     new TextBlock
                     {
-                        Text = $"The image is sent to {serviceName} (catbox.moe), a free image host without ads, and anyone with "
-                            + "the link can see it. Uploads can't be deleted. Nothing else you copy ever leaves your computer.",
+                        Text = Localizer.Format(Strings.UploadConsentExplanation, serviceName),
                         TextWrapping = TextWrapping.Wrap,
                     },
                     new TextBlock
                     {
-                        Text = $"Shapeshifter won't ask again. This time the link is copied: press {modifierName}+V to paste it.",
+                        Text = Localizer.Format(Strings.UploadConsentAskOnce, Localizer.ModifierKey(modifierName)),
                         TextWrapping = TextWrapping.Wrap,
                         Opacity = 0.7,
                     },

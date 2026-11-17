@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>تنظیمات Shapeshifter</value>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>نسخه {0}</value>
+  </data>
+  <data name="SettingsCopyVersion" xml:space="preserve">
+    <value>کپی نسخه</value>
+  </data>
+  <data name="SettingsCopied" xml:space="preserve">
+    <value>کپی شد</value>
+  </data>
+  <data name="SettingsReportProblem" xml:space="preserve">
+    <value>گزارش مشکل</value>
+  </data>
+  <data name="SettingsProjectPage" xml:space="preserve">
+    <value>صفحه پروژه</value>
+  </data>
+  <data name="SettingsUsage" xml:space="preserve">
+    <value>مثل همیشه کپی کنید. برای چسباندن مورد قدیمی‌تر، {0} را نگه دارید و V را فشار دهید: {0} را نگه دارید تا تاریخچه را ببینید، دوباره V (یا ↑/↓ یا 1–9) را برای انتخاب مورد فشار دهید، → را برای انتخاب کاری که با آن انجام می‌شود، Delete را برای حذف آن و Esc را برای لغو. برای چسباندن، {0} را رها کنید.</value>
+  </data>
+  <data name="SettingsHistoryGroup" xml:space="preserve">
+    <value>تاریخچه</value>
+  </data>
+  <data name="SettingsDelayTitle" xml:space="preserve">
+    <value>تأخیر پیش از نمایش تاریخچه</value>
+  </data>
+  <data name="SettingsDelayDescription" xml:space="preserve">
+    <value>مدت نگه داشتن {0}+V پیش از نمایش تاریخچه</value>
+  </data>
+  <data name="SettingsDelayAccessibleName" xml:space="preserve">
+    <value>تأخیر پیش از نمایش تاریخچه، به میلی‌ثانیه</value>
+  </data>
+  <data name="SettingsItemsTitle" xml:space="preserve">
+    <value>تعداد موارد برای به خاطر سپردن</value>
+  </data>
+  <data name="SettingsItemsDescription" xml:space="preserve">
+    <value>موارد سنجاق‌شده علاوه بر این نگه داشته می‌شوند</value>
+  </data>
+  <data name="SettingsRememberTitle" xml:space="preserve">
+    <value>به خاطر سپردن تاریخچه پس از راه‌اندازی مجدد</value>
+  </data>
+  <data name="SettingsRememberDescription" xml:space="preserve">
+    <value>تاریخچه را روی دیسک این رایانه نگه می‌دارد، نه فقط موارد سنجاق‌شده را</value>
+  </data>
+  <data name="SettingsBehaviourGroup" xml:space="preserve">
+    <value>رفتار</value>
+  </data>
+  <data name="SettingsNotificationsTitle" xml:space="preserve">
+    <value>اعلان‌های کپی</value>
+  </data>
+  <data name="SettingsNotificationsDescription" xml:space="preserve">
+    <value>هر بار که چیزی کپی می‌شود، اعلانی نمایش داده شود</value>
+  </data>
+  <data name="SettingsStartAtLoginTitle" xml:space="preserve">
+    <value>شروع هنگام ورود به سیستم</value>
+  </data>
+  <data name="SettingsStartAtLoginDescription" xml:space="preserve">
+    <value>Shapeshifter پس از ورود شما در پس‌زمینه منتظر می‌ماند</value>
+  </data>
+  <data name="SettingsUpdatesTitle" xml:space="preserve">
+    <value>به‌روزرسانی خودکار</value>
+  </data>
+  <data name="SettingsClearHistory" xml:space="preserve">
+    <value>پاک کردن تاریخچه</value>
+  </data>
+  <data name="SettingsCheckForUpdates" xml:space="preserve">
+    <value>بررسی به‌روزرسانی‌ها</value>
+  </data>
+  <data name="SettingsOpenLogFolder" xml:space="preserve">
+    <value>باز کردن پوشه گزارش‌ها</value>
+  </data>
+  <data name="PickerTitleWindows" xml:space="preserve">
+    <value>تاریخچه کلیپ‌بورد</value>
+  </data>
+  <data name="PickerTitleMacOS" xml:space="preserve">
+    <value>کلیپ‌بورد</value>
+  </data>
+  <data name="PickerItemCountOne" xml:space="preserve">
+    <value>یک مورد</value>
+  </data>
+  <data name="PickerItemCountOther" xml:space="preserve">
+    <value>{0} مورد</value>
+  </data>
+  <data name="PickerReleaseHint" xml:space="preserve">
+    <value>برای چسباندن {0} را رها کنید</value>
+  </data>
+  <data name="PickerNothingCopied" xml:space="preserve">
+    <value>هنوز چیزی کپی نشده است</value>
+  </data>
+  <data name="PickerEmptyHint" xml:space="preserve">
+    <value>مثل همیشه کپی کنید؛ Shapeshifter هر چیزی را که کپی می‌کنید نگه می‌دارد.
+
+برای چسباندن چیزی که قبلاً کپی کرده‌اید، {0} را نگه دارید و V را فشار دهید. {0} را نگه دارید تا تاریخچه را ببینید، با V یا کلیدهای جهت‌نما انتخاب کنید و برای چسباندن {0} را رها کنید.</value>
+  </data>
+  <data name="PickerActions" xml:space="preserve">
+    <value>کنش‌ها</value>
+  </data>
+  <data name="PickerActionsForText" xml:space="preserve">
+    <value>کنش‌های این متن</value>
+  </data>
+  <data name="PickerActionsForImage" xml:space="preserve">
+    <value>کنش‌های این تصویر</value>
+  </data>
+  <data name="PickerActionsForFile" xml:space="preserve">
+    <value>کنش‌های این فایل</value>
+  </data>
+  <data name="PickerActionsForFiles" xml:space="preserve">
+    <value>کنش‌های این فایل‌ها</value>
+  </data>
+  <data name="PickerDefault" xml:space="preserve">
+    <value>پیش‌فرض</value>
+  </data>
+  <data name="PickerHintRelease" xml:space="preserve">
+    <value>رها کنید تا بچسبد</value>
+  </data>
+  <data name="PickerHintMove" xml:space="preserve">
+    <value>حرکت</value>
+  </data>
+  <data name="PickerHintJump" xml:space="preserve">
+    <value>پرش</value>
+  </data>
+  <data name="PickerHintRemove" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="PickerHintCancel" xml:space="preserve">
+    <value>لغو</value>
+  </data>
+  <data name="KeyControl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="KeyEscape" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="ItemEmpty" xml:space="preserve">
+    <value>(خالی)</value>
+  </data>
+  <data name="ItemImage" xml:space="preserve">
+    <value>تصویر</value>
+  </data>
+  <data name="ItemImageWithSize" xml:space="preserve">
+    <value>تصویر · {0} × {1}</value>
+  </data>
+  <data name="ItemFilesWithNames" xml:space="preserve">
+    <value>{0} مورد · {1}</value>
+  </data>
+  <data name="ItemFileCount" xml:space="preserve">
+    <value>{0} فایل</value>
+  </data>
+  <data name="ItemFormattedText" xml:space="preserve">
+    <value>متن قالب‌بندی‌شده</value>
+  </data>
+  <data name="ItemOtherData" xml:space="preserve">
+    <value>داده‌های دیگر</value>
+  </data>
+  <data name="ItemCharacterCount" xml:space="preserve">
+    <value>{0} نویسه</value>
+  </data>
+  <data name="ItemLineCount" xml:space="preserve">
+    <value>{0} خط</value>
+  </data>
+  <data name="ToastCopiedOne" xml:space="preserve">
+    <value>کپی شد · یک مورد در تاریخچه شما</value>
+  </data>
+  <data name="ToastCopiedOther" xml:space="preserve">
+    <value>کپی شد · {0} مورد در تاریخچه شما</value>
+  </data>
+  <data name="TraySettings" xml:space="preserve">
+    <value>تنظیمات…</value>
+  </data>
+  <data name="TrayCheckForUpdates" xml:space="preserve">
+    <value>بررسی به‌روزرسانی‌ها…</value>
+  </data>
+  <data name="TrayReportProblem" xml:space="preserve">
+    <value>گزارش مشکل…</value>
+  </data>
+  <data name="TrayAbout" xml:space="preserve">
+    <value>درباره Shapeshifter {0}</value>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>خروج از Shapeshifter</value>
+  </data>
+  <data name="StartupErrorTitle" xml:space="preserve">
+    <value>Shapeshifter نتوانست اجرا شود</value>
+  </data>
+  <data name="StartupErrorDetails" xml:space="preserve">
+    <value>جزئیات در {0} نوشته شد.</value>
+  </data>
+  <data name="StartupErrorQuit" xml:space="preserve">
+    <value>خروج</value>
+  </data>
+  <data name="ActionPaste" xml:space="preserve">
+    <value>چسباندن</value>
+  </data>
+  <data name="ActionPasteDescription" xml:space="preserve">
+    <value>محتوای کلیپ‌بورد را همان‌طور که هست می‌چسباند.</value>
+  </data>
+  <data name="ActionPasteAsPlainText" xml:space="preserve">
+    <value>چسباندن به‌صورت متن ساده</value>
+  </data>
+  <data name="ActionPasteAsPlainTextDescription" xml:space="preserve">
+    <value>محتوای کلیپ‌بورد را به‌صورت متن ساده و بدون قالب‌بندی می‌چسباند.</value>
+  </data>
+  <data name="ActionPasteAsFile" xml:space="preserve">
+    <value>چسباندن به‌صورت فایل</value>
+  </data>
+  <data name="ActionPasteAsFileDescription" xml:space="preserve">
+    <value>این متن را در یک فایل .txt ذخیره می‌کند و فایل را می‌چسباند.</value>
+  </data>
+  <data name="ActionCopyAsZip" xml:space="preserve">
+    <value>کپی به‌صورت پوشه فشرده</value>
+  </data>
+  <data name="ActionCopyAsZipDescription" xml:space="preserve">
+    <value>این فایل‌ها را به‌صورت پوشه فشرده (.zip) در کلیپ‌بورد کپی کنید.</value>
+  </data>
+  <data name="ActionCopyImageFromLink" xml:space="preserve">
+    <value>کپی تصویر از پیوند</value>
+  </data>
+  <data name="ActionCopyImageFromLinkDescription" xml:space="preserve">
+    <value>تصویر پیوندشده را بارگیری می‌کند و خود تصویر را در کلیپ‌بورد کپی می‌کند.</value>
+  </data>
+  <data name="ActionOpenLink" xml:space="preserve">
+    <value>باز کردن پیوند</value>
+  </data>
+  <data name="ActionOpenLinks" xml:space="preserve">
+    <value>باز کردن پیوندها</value>
+  </data>
+  <data name="ActionOpenLinkDescription" xml:space="preserve">
+    <value>پیوند را در مرورگر شما باز می‌کند.</value>
+  </data>
+  <data name="ActionOpenLinksDescription" xml:space="preserve">
+    <value>پیوندها را در مرورگر شما باز می‌کند (حداکثر {0}).</value>
+  </data>
+  <data name="ActionPin" xml:space="preserve">
+    <value>سنجاق کردن به کلیپ‌بورد</value>
+  </data>
+  <data name="ActionPinDescription" xml:space="preserve">
+    <value>این مورد را سنجاق می‌کند تا همیشه در بالا بماند، و آن را در رایانه شما ذخیره می‌کند تا دفعه بعد که Shapeshifter را باز می‌کنید همچنان وجود داشته باشد.</value>
+  </data>
+  <data name="ActionUnpin" xml:space="preserve">
+    <value>برداشتن سنجاق از کلیپ‌بورد</value>
+  </data>
+  <data name="ActionUnpinDescription" xml:space="preserve">
+    <value>سنجاق این مورد را برمی‌دارد تا با کپی‌های جدید پایین برود، و دیگر در رایانه شما ذخیره نمی‌شود.</value>
+  </data>
+  <data name="TimeJustNow" xml:space="preserve">
+    <value>همین حالا</value>
+  </data>
+  <data name="TimeMinutesAgo" xml:space="preserve">
+    <value>{0} دقیقه پیش</value>
+  </data>
+  <data name="TimeHoursAgo" xml:space="preserve">
+    <value>{0} ساعت پیش</value>
+  </data>
+  <data name="TimeYesterday" xml:space="preserve">
+    <value>دیروز</value>
+  </data>
+  <data name="TimeDaysAgo" xml:space="preserve">
+    <value>{0} روز پیش</value>
+  </data>
+  <data name="UpdateOff" xml:space="preserve">
+    <value>به‌روزرسانی خودکار خاموش است</value>
+  </data>
+  <data name="UpdateUnsupported" xml:space="preserve">
+    <value>این نسخه نمی‌تواند خودش را به‌روز کند</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>در حال بررسی به‌روزرسانی‌ها…</value>
+  </data>
+  <data name="UpdateUpToDate" xml:space="preserve">
+    <value>به‌روز است (بررسی‌شده در {0})</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>در حال بارگیری نسخه {0}…</value>
+  </data>
+  <data name="UpdateReadyToRestart" xml:space="preserve">
+    <value>نسخه {0} نصب شد و دفعه بعد که {1} اجرا شود، فعال می‌شود</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>به‌روزرسانی ناموفق بود: {0}</value>
+  </data>
+  <data name="UpdateAutomatic" xml:space="preserve">
+    <value>به‌روزرسانی‌ها به‌طور خودکار بررسی می‌شوند</value>
+  </data>
+  <data name="UpdateTurnedOff" xml:space="preserve">
+    <value>به‌روزرسانی‌ها خاموش هستند ({0})</value>
+  </data>
+  <data name="UpdateReleaseBuildsOnly" xml:space="preserve">
+    <value>فقط نسخه‌های انتشار رسمی خودشان را به‌روز می‌کنند</value>
+  </data>
+  <data name="UpdateCannotWrite" xml:space="preserve">
+    <value>{0} نمی‌تواند در {1} بنویسد؛ آن را به همان روشی که نصب شده به‌روز کنید</value>
+  </data>
+  <data name="PlatformNeedsX11" xml:space="preserve">
+    <value>Shapeshifter به نمایشگر X11 نیاز دارد (DISPLAY تنظیم نشده است). در Wayland، مطمئن شوید XWayland در دسترس است.</value>
+  </data>
+  <data name="PlatformWayland" xml:space="preserve">
+    <value>این یک نشست Wayland است. Wayland به برنامه‌ها اجازه نمی‌دهد کلیدهای سراسری را مشاهده یا شبیه‌سازی کنند، بنابراین حرکت چسباندن فقط زمانی کار می‌کند که یک برنامه X11 (XWayland) در فوکوس باشد. برای پشتیبانی کامل، وارد یک نشست X11 شوید.</value>
+  </data>
+  <data name="PlatformAccessibility" xml:space="preserve">
+    <value>Shapeshifter برای دیدن و ارسال کلیدهای Cmd+V به دسترسی Accessibility نیاز دارد. آن را در System Settings &gt; Privacy &amp; Security &gt; Accessibility مجاز کنید و Shapeshifter را دوباره راه‌اندازی کنید.</value>
+  </data>
+  <data name="PlatformNotSupported" xml:space="preserve">
+    <value>{0} پشتیبانی نمی‌شود.</value>
+  </data>
+  <data name="ToggleOn" xml:space="preserve">
+    <value>روشن</value>
+  </data>
+  <data name="ToggleOff" xml:space="preserve">
+    <value>خاموش</value>
+  </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>این تصویر را در یک فایل .{0} ذخیره می‌کند و فایل را می‌چسباند.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>بارگذاری و چسباندن پیوند</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>این تصویر را در {0} بارگذاری می‌کند و یک پیوند عمومی به آن را می‌چسباند.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>نکته‌ها</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>پیشنهاد وقتی تاریخچه می‌توانست شما را از کپی دوباره بی‌نیاز کند</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>از قبل در تاریخچه شما هست</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>نیازی به کپی دوباره نیست: {0}+V را نگه دارید تا آن را از تاریخچه انتخاب کنید.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>آیا می‌دانستید؟</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>می‌توانید ابتدا چند چیز را از {0} کپی کنید، سپس در {2} کلید {1}+V را نگه دارید تا هر کدام را از تاریخچه انتخاب کنید.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>بارگذاری در {0}؟</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>این تصویر در {0} بارگذاری شود؟</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>تصویر به {0} (catbox.moe) فرستاده می‌شود، که میزبان رایگان تصویر و بدون تبلیغات است، و هر کسی که پیوند را داشته باشد می‌تواند آن را ببیند. بارگذاری‌ها قابل حذف نیستند. هیچ چیز دیگری که کپی می‌کنید هرگز از رایانه شما خارج نمی‌شود.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter دیگر نمی‌پرسد. این بار پیوند کپی شده است: برای چسباندن آن {0}+V را فشار دهید.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>بارگذاری در {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>لغو</value>
+  </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> برای باز ماندن تاریخچه بدون نگه داشتن کلید، فاصله را فشار دهید و سپس برای چسباندن Enter را فشار دهید.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> برای مرور تاریخچه بدون نگه داشتن {0}، فاصله را فشار دهید: تا وقتی برای چسباندن Enter یا Esc را فشار ندهید، باز می‌ماند.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>برای چسباندن Enter را فشار دهید</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>بستن</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>چسباندن</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>باز نگه داشتن</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>فاصله</value>
+  </data>
+</root>

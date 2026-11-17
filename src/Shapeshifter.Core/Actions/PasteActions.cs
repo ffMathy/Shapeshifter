@@ -1,5 +1,6 @@
 using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Text;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Core.Actions;
 
@@ -10,9 +11,9 @@ public sealed class PasteAction : IClipboardAction
 
     public int Order => 0;
 
-    public string GetTitle(ClipboardItem item) => "Paste";
+    public string GetTitle(ClipboardItem item) => Strings.ActionPaste;
 
-    public string GetDescription(ClipboardItem item) => "Pastes clipboard contents as-is.";
+    public string GetDescription(ClipboardItem item) => Strings.ActionPasteDescription;
 
     public bool CanExecute(ClipboardItem item) => true;
 
@@ -32,9 +33,9 @@ public sealed class PasteAsPlainTextAction : IClipboardAction
 
     public int Order => 20;
 
-    public string GetTitle(ClipboardItem item) => "Paste as plain text";
+    public string GetTitle(ClipboardItem item) => Strings.ActionPasteAsPlainText;
 
-    public string GetDescription(ClipboardItem item) => "Pastes clipboard contents as plain text with no formatting.";
+    public string GetDescription(ClipboardItem item) => Strings.ActionPasteAsPlainTextDescription;
 
     public bool CanExecute(ClipboardItem item)
     {
