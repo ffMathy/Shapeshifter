@@ -326,4 +326,49 @@
   <data name="ToggleOff" xml:space="preserve">
     <value>オフ</value>
   </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>この画像を .{0} ファイルに保存し、そのファイルを貼り付けます。</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>アップロードしてリンクを貼り付け</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>この画像を {0} にアップロードし、その公開リンクを貼り付けます。</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>ヒント</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>履歴を使えばコピーし直さずに済んだときにお知らせします</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>すでに履歴にあります</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>もう一度コピーする必要はありません。{0}+V を押したままにすると履歴から選べます。</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>ご存じですか？</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>先に {0} で複数の項目をコピーしておき、{2} で {1}+V を押したままにすると、履歴から 1 つずつ選べます。</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>{0} にアップロードしますか？</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>この画像を {0} にアップロードしますか？</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>画像は広告のない無料の画像ホスティングサービス {0} (catbox.moe) に送信され、リンクを知っている人は誰でも見ることができます。アップロードしたものは削除できません。それ以外にコピーしたものがコンピューターの外に送られることはありません。</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter が再度確認することはありません。今回はリンクがコピーされました。{0}+V を押して貼り付けてください。</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>{0} にアップロード</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
 </root>

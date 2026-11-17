@@ -326,4 +326,49 @@ Per incollare qualcosa che hai copiato in precedenza, tieni premuto {0} e premi 
   <data name="ToggleOff" xml:space="preserve">
     <value>Disattivato</value>
   </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Salva questa immagine in un file .{0} e incolla il file.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Carica e incolla il link</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Carica questa immagine su {0} e incolla un link pubblico.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Suggerimenti</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Segnala quando la cronologia avrebbe potuto risparmiarti una copia</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Già nella cronologia</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>Non serve copiarlo di nuovo: tieni premuto {0}+V per sceglierlo dalla cronologia.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>Lo sapevi?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>Puoi prima copiare più cose da {0}, poi tenere premuto {1}+V in {2} per scegliere ciascuna dalla cronologia.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Caricare su {0}?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Caricare questa immagine su {0}?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>L’immagine viene inviata a {0} (catbox.moe), un servizio di hosting di immagini gratuito e senza pubblicità, e chiunque abbia il link può vederla. I caricamenti non possono essere eliminati. Nient’altro di ciò che copi lascia mai il tuo computer.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter non lo chiederà più. Questa volta il link viene copiato: premi {0}+V per incollarlo.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Carica su {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
 </root>

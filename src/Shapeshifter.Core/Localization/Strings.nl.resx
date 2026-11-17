@@ -326,4 +326,49 @@ Om iets te plakken dat je eerder hebt gekopieerd, houd je {0} ingedrukt en druk 
   <data name="ToggleOff" xml:space="preserve">
     <value>Uit</value>
   </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Slaat deze afbeelding op in een .{0}-bestand en plakt het bestand.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Uploaden en link plakken</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Uploadt deze afbeelding naar {0} en plakt een openbare link ernaar.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Tips</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Laten weten wanneer de geschiedenis je een kopie had kunnen besparen</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Staat al in je geschiedenis</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>Je hoeft het niet opnieuw te kopiëren: houd {0}+V ingedrukt om het uit je geschiedenis te kiezen.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>Wist je dat?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>Je kunt eerst meerdere dingen uit {0} kopiëren en daarna in {2} {1}+V ingedrukt houden om ze een voor een uit je geschiedenis te kiezen.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Uploaden naar {0}?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Deze afbeelding uploaden naar {0}?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>De afbeelding wordt naar {0} (catbox.moe) gestuurd, een gratis afbeeldingshost zonder advertenties, en iedereen met de link kan hem zien. Uploads kunnen niet worden verwijderd. Niets anders dat je kopieert verlaat ooit je computer.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter vraagt het niet opnieuw. Deze keer is de link gekopieerd: druk op {0}+V om hem te plakken.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Uploaden naar {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Annuleren</value>
+  </data>
 </root>

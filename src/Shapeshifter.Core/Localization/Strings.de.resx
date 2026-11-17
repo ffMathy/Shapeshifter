@@ -326,4 +326,49 @@ Um etwas einzufügen, das früher kopiert wurde, {0} gedrückt halten und V drü
   <data name="ToggleOff" xml:space="preserve">
     <value>Aus</value>
   </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Speichert dieses Bild in einer .{0}-Datei und fügt die Datei ein.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Hochladen und Link einfügen</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Lädt dieses Bild zu {0} hoch und fügt einen öffentlichen Link darauf ein.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Tipps</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Hinweisen, wenn der Verlauf einen Kopiervorgang hätte ersparen können</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Bereits im Verlauf</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>Erneutes Kopieren ist nicht nötig: {0}+V gedrückt halten, um es aus dem Verlauf auszuwählen.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>Schon gewusst?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>In {0} zuerst mehrere Dinge kopieren, dann in {2} {1}+V gedrückt halten und eins nach dem anderen aus dem Verlauf auswählen.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Zu {0} hochladen?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Dieses Bild zu {0} hochladen?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>Das Bild wird an {0} (catbox.moe) gesendet, einen kostenlosen Bildhoster ohne Werbung, und jeder mit dem Link kann es sehen. Uploads können nicht gelöscht werden. Nichts anderes, was kopiert wird, verlässt jemals diesen Computer.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter fragt nicht noch einmal. Diesmal wird der Link kopiert: {0}+V drücken, um ihn einzufügen.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Zu {0} hochladen</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
 </root>

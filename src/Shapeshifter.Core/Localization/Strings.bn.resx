@@ -326,4 +326,49 @@
   <data name="ToggleOff" xml:space="preserve">
     <value>বন্ধ</value>
   </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>এই ছবিটি একটি .{0} ফাইলে সংরক্ষণ করে ফাইলটি আটকায়।</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>আপলোড করে লিঙ্ক আটকান</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>এই ছবিটি {0}-এ আপলোড করে এবং এর একটি সর্বজনীন লিঙ্ক আটকায়।</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>পরামর্শ</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>ইতিহাস থেকে নিলে আবার কপি করতে হতো না, এমন হলে জানান</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>আগে থেকেই আপনার ইতিহাসে আছে</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>আবার কপি করার দরকার নেই: আপনার ইতিহাস থেকে এটি বাছতে {0}+V ধরে রাখুন।</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>আপনি কি জানেন?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>আপনি প্রথমে {0} থেকে কয়েকটি জিনিস কপি করতে পারেন, তারপর {2}-এ {1}+V ধরে রেখে আপনার ইতিহাস থেকে প্রতিটি বেছে নিতে পারেন।</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>{0}-এ আপলোড করবেন?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>এই ছবিটি {0}-এ আপলোড করবেন?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>ছবিটি {0} (catbox.moe)-এ পাঠানো হয়, যা বিজ্ঞাপনহীন একটি বিনামূল্যের ছবি হোস্ট, এবং লিঙ্কটি যার কাছে আছে সে-ই এটি দেখতে পারবে। আপলোড মোছা যায় না। আপনি আর যা কিছু কপি করেন তা কখনো আপনার কম্পিউটারের বাইরে যায় না।</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter আর জিজ্ঞাসা করবে না। এবার লিঙ্কটি কপি করা হয়েছে: আটকাতে {0}+V চাপুন।</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>{0}-এ আপলোড করুন</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>বাতিল</value>
+  </data>
 </root>

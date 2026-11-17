@@ -326,4 +326,49 @@ Aby wkleić coś skopiowanego wcześniej, przytrzymaj {0} i naciśnij V. Trzymaj
   <data name="ToggleOff" xml:space="preserve">
     <value>Wył.</value>
   </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Zapisuje ten obraz w pliku .{0} i wkleja plik.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Prześlij i wklej link</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Przesyła ten obraz do serwisu {0} i wkleja publiczny link do niego.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Wskazówki</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Podpowiadaj, kiedy historia mogła oszczędzić ci kopiowania</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Już jest w historii</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>Nie musisz kopiować ponownie: przytrzymaj {0}+V, aby wybrać to z historii.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>Czy wiesz, że…</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>Możesz najpierw skopiować kilka rzeczy w aplikacji {0}, a potem przytrzymać {1}+V w aplikacji {2}, aby wybrać każdą z nich z historii.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Przesłać do serwisu {0}?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Przesłać ten obraz do serwisu {0}?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>Obraz zostanie wysłany do serwisu {0} (catbox.moe), darmowego hostingu obrazów bez reklam, i każdy, kto ma link, będzie mógł go zobaczyć. Przesłanych plików nie można usunąć. Nic innego, co kopiujesz, nigdy nie opuszcza twojego komputera.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Aplikacja Shapeshifter nie zapyta ponownie. Tym razem link został skopiowany: naciśnij {0}+V, aby go wkleić.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Prześlij do serwisu {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
 </root>

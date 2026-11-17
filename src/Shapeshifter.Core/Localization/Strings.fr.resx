@@ -326,4 +326,49 @@ Pour coller quelque chose que vous avez copié auparavant, maintenez {0} enfonc�
   <data name="ToggleOff" xml:space="preserve">
     <value>Désactivé</value>
   </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Enregistre cette image dans un fichier .{0} et colle le fichier.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Mettre en ligne et coller le lien</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Met cette image en ligne sur {0} et colle un lien public vers celle-ci.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Astuces</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Signaler quand l’historique aurait pu vous éviter une copie</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Déjà dans votre historique</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>Inutile de le copier à nouveau : maintenez {0}+V pour le choisir dans votre historique.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>Le saviez-vous ?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>Vous pouvez d’abord copier plusieurs éléments depuis {0}, puis maintenir {1}+V dans {2} pour choisir chacun d’eux dans votre historique.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Mettre en ligne sur {0} ?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Mettre cette image en ligne sur {0} ?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>L’image est envoyée à {0} (catbox.moe), un hébergeur d’images gratuit et sans publicité, et toute personne disposant du lien peut la voir. Les images mises en ligne ne peuvent pas être supprimées. Rien d’autre de ce que vous copiez ne quitte jamais votre ordinateur.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter ne vous le demandera plus. Cette fois, le lien est copié : appuyez sur {0}+V pour le coller.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Mettre en ligne sur {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
 </root>

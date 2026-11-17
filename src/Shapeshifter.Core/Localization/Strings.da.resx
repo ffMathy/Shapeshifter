@@ -326,4 +326,49 @@ Hvis du vil indsætte noget, du har kopieret tidligere, skal du holde {0} nede o
   <data name="ToggleOff" xml:space="preserve">
     <value>Fra</value>
   </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Gemmer dette billede i en .{0}-fil og indsætter filen.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Upload og indsæt link</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Uploader dette billede til {0} og indsætter et offentligt link til det.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Tips</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Foreslå, når historikken kunne have sparet dig for en kopiering</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Allerede i din historik</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>Du behøver ikke kopiere det igen: Hold {0}+V nede for at vælge det fra din historik.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>Vidste du det?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>Du kan først kopiere flere ting fra {0} og derefter holde {1}+V nede i {2} for at vælge hver af dem fra din historik.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Upload til {0}?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Upload dette billede til {0}?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>Billedet sendes til {0} (catbox.moe), en gratis billedtjeneste uden reklamer, og alle med linket kan se det. Uploads kan ikke slettes. Intet andet, du kopierer, forlader nogensinde din computer.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter spørger ikke igen. Denne gang er linket kopieret: Tryk på {0}+V for at indsætte det.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Upload til {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Annuller</value>
+  </data>
 </root>

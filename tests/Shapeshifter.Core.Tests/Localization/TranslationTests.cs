@@ -49,7 +49,7 @@ public sealed partial class TranslationTests
             Assert.Equal(Placeholders(entry.Value), Placeholders(text));
 
             // A format string that string.Format can fill in (no stray braces).
-            _ = string.Format(culture, text, "a", "b");
+            _ = string.Format(culture, text, "a", "b", "c");
             if (entry.Value.Contains("Shapeshifter", StringComparison.Ordinal))
             {
                 Assert.Contains("Shapeshifter", text, StringComparison.Ordinal);

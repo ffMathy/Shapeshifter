@@ -326,4 +326,49 @@
   <data name="ToggleOff" xml:space="preserve">
     <value>बंद</value>
   </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>इस छवि को एक .{0} फ़ाइल में सहेजता है और फ़ाइल चिपकाता है।</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>अपलोड करें और लिंक चिपकाएँ</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>इस छवि को {0} पर अपलोड करता है और उसका एक सार्वजनिक लिंक चिपकाता है।</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>सुझाव</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>बताएँ जब इतिहास की मदद से दोबारा कॉपी करने की ज़रूरत नहीं पड़ती</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>पहले से आपके इतिहास में है</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>इसे दोबारा कॉपी करने की ज़रूरत नहीं: इसे अपने इतिहास से चुनने के लिए {0}+V दबाकर रखें।</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>क्या आप जानते हैं?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>आप पहले {0} से कई चीज़ें कॉपी कर सकते हैं, फिर {2} में {1}+V दबाकर रखें और हर एक को अपने इतिहास से चुनें।</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>{0} पर अपलोड करें?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>इस छवि को {0} पर अपलोड करें?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>छवि {0} (catbox.moe) को भेजी जाती है, जो बिना विज्ञापनों वाला एक मुफ़्त इमेज होस्ट है, और लिंक वाला कोई भी व्यक्ति इसे देख सकता है। अपलोड हटाए नहीं जा सकते। आपकी कॉपी की गई कोई और चीज़ कभी आपके कंप्यूटर से बाहर नहीं जाती।</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter दोबारा नहीं पूछेगा। इस बार लिंक कॉपी हो गया है: इसे चिपकाने के लिए {0}+V दबाएँ।</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>{0} पर अपलोड करें</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>रद्द करें</value>
+  </data>
 </root>

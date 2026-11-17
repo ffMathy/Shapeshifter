@@ -326,4 +326,49 @@
   <data name="ToggleOff" xml:space="preserve">
     <value>Tắt</value>
   </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Lưu hình ảnh này vào tệp .{0} và dán tệp đó.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Tải lên và dán liên kết</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Tải hình ảnh này lên {0} và dán liên kết công khai đến hình ảnh.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Mẹo</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Gợi ý khi lịch sử lẽ ra đã giúp bạn khỏi phải sao chép lại</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Đã có trong lịch sử</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>Không cần sao chép lại: giữ {0}+V để chọn từ lịch sử.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>Bạn có biết?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>Bạn có thể sao chép nhiều thứ từ {0} trước, rồi giữ {1}+V trong {2} để chọn từng mục từ lịch sử.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Tải lên {0}?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Tải hình ảnh này lên {0}?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>Hình ảnh được gửi đến {0} (catbox.moe), một dịch vụ lưu trữ hình ảnh miễn phí không có quảng cáo, và bất kỳ ai có liên kết đều có thể xem. Không thể xóa nội dung đã tải lên. Mọi thứ khác bạn sao chép đều không bao giờ rời khỏi máy tính của bạn.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter sẽ không hỏi lại. Lần này liên kết đã được sao chép: nhấn {0}+V để dán.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Tải lên {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
 </root>

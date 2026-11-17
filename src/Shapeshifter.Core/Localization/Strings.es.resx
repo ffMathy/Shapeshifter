@@ -326,4 +326,49 @@ Para pegar algo que copiaste antes, mantén pulsada {0} y pulsa V. Sigue manteni
   <data name="ToggleOff" xml:space="preserve">
     <value>Desactivado</value>
   </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Guarda esta imagen en un archivo .{0} y pega el archivo.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Subir y pegar enlace</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Sube esta imagen a {0} y pega un enlace público a ella.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Consejos</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Avisar cuando el historial podría haberte ahorrado una copia</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Ya está en tu historial</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>No hace falta volver a copiarlo: mantén pulsado {0}+V para elegirlo de tu historial.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>¿Sabías que…?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>Puedes copiar primero varias cosas de {0} y luego mantener pulsado {1}+V en {2} para elegir cada una de tu historial.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>¿Subir a {0}?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>¿Subir esta imagen a {0}?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>La imagen se envía a {0} (catbox.moe), un alojamiento de imágenes gratuito y sin anuncios, y cualquiera que tenga el enlace puede verla. Las subidas no se pueden eliminar. Nada más de lo que copias sale nunca de tu equipo.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter no volverá a preguntar. Esta vez el enlace se copia: pulsa {0}+V para pegarlo.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Subir a {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
 </root>

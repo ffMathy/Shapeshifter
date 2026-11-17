@@ -326,4 +326,49 @@ Para colar algo que você copiou antes, mantenha {0} pressionada e pressione V. 
   <data name="ToggleOff" xml:space="preserve">
     <value>Desativado</value>
   </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Salva esta imagem em um arquivo .{0} e cola o arquivo.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Enviar e colar link</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Envia esta imagem para o {0} e cola um link público para ela.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Dicas</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Avisar quando o histórico poderia ter poupado uma cópia</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Já está no seu histórico</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>Não precisa copiar de novo: segure {0}+V para escolher no seu histórico.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>Você sabia?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>Você pode copiar várias coisas de {0} primeiro e depois segurar {1}+V em {2} para escolher cada uma no seu histórico.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Enviar para o {0}?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Enviar esta imagem para o {0}?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>A imagem é enviada para o {0} (catbox.moe), um serviço gratuito de hospedagem de imagens sem anúncios, e qualquer pessoa com o link pode vê-la. Os envios não podem ser excluídos. Nada mais que você copia sai do seu computador.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>O Shapeshifter não vai perguntar de novo. Desta vez o link foi copiado: pressione {0}+V para colá-lo.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Enviar para o {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
 </root>

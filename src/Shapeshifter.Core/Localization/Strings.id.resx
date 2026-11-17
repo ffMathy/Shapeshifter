@@ -326,4 +326,49 @@ Untuk menempelkan sesuatu yang Anda salin sebelumnya, tahan {0} lalu tekan V. Te
   <data name="ToggleOff" xml:space="preserve">
     <value>Nonaktif</value>
   </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Menyimpan gambar ini ke file .{0} dan menempelkan file tersebut.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Unggah dan tempel tautan</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Mengunggah gambar ini ke {0} dan menempelkan tautan publiknya.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Tips</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Beri tahu saat riwayat sebenarnya bisa menghemat satu salinan</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Sudah ada di riwayat Anda</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>Tidak perlu menyalinnya lagi: tahan {0}+V untuk memilihnya dari riwayat Anda.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>Tahukah Anda?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>Anda bisa menyalin beberapa hal dari {0} terlebih dahulu, lalu tahan {1}+V di {2} untuk memilih masing-masing dari riwayat Anda.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Unggah ke {0}?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Unggah gambar ini ke {0}?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>Gambar dikirim ke {0} (catbox.moe), layanan hosting gambar gratis tanpa iklan, dan siapa pun yang memiliki tautannya dapat melihatnya. Unggahan tidak dapat dihapus. Tidak ada hal lain yang Anda salin yang pernah meninggalkan komputer Anda.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter tidak akan bertanya lagi. Kali ini tautan sudah disalin: tekan {0}+V untuk menempelkannya.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Unggah ke {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Batal</value>
+  </data>
 </root>

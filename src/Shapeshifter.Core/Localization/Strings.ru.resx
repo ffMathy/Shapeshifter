@@ -326,4 +326,49 @@
   <data name="ToggleOff" xml:space="preserve">
     <value>Откл.</value>
   </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Сохраняет это изображение в файл .{0} и вставляет файл.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Загрузить и вставить ссылку</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Загружает это изображение на сервис {0} и вставляет общедоступную ссылку на него.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Подсказки</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Подсказывать, когда история могла избавить от повторного копирования</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Уже есть в истории</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>Копировать заново не нужно: удерживайте {0}+V, чтобы выбрать это из истории.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>Знаете ли вы?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>Можно сначала скопировать несколько фрагментов в приложении {0}, а затем удерживать {1}+V в приложении {2}, чтобы выбрать каждый из истории.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Загрузить на {0}?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Загрузить это изображение на {0}?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>Изображение отправляется на сервис {0} (catbox.moe) — бесплатный хостинг изображений без рекламы, — и его сможет увидеть любой, у кого есть ссылка. Загруженные файлы нельзя удалить. Ничто другое из того, что вы копируете, никогда не покидает ваш компьютер.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter больше не будет спрашивать. В этот раз ссылка скопирована: нажмите {0}+V, чтобы вставить её.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Загрузить на {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
 </root>

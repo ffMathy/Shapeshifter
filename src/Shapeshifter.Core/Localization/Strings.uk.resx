@@ -326,4 +326,49 @@
   <data name="ToggleOff" xml:space="preserve">
     <value>Вимк.</value>
   </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Зберігає це зображення у файл .{0} і вставляє файл.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Завантажити й вставити посилання</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Завантажує це зображення на сервіс {0} і вставляє публічне посилання на нього.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Підказки</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Підказувати, коли історія могла позбавити від повторного копіювання</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Уже є в історії</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>Не потрібно копіювати знову: утримуйте {0}+V, щоб вибрати це з історії.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>А ви знали?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>Можна спочатку скопіювати кілька фрагментів у програмі {0}, а потім утримувати {1}+V у програмі {2}, щоб вибрати кожен з історії.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Завантажити на {0}?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Завантажити це зображення на {0}?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>Зображення надсилається на сервіс {0} (catbox.moe) — безкоштовний хостинг зображень без реклами, — і його зможе побачити будь-хто, хто має посилання. Завантажені файли не можна видалити. Ніщо інше з того, що ви копіюєте, ніколи не залишає ваш комп’ютер.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter більше не питатиме. Цього разу посилання скопійовано: натисніть {0}+V, щоб вставити його.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Завантажити на {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
 </root>
