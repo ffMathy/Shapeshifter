@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Styling;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Desktop.Services;
 
@@ -75,6 +76,14 @@ public static class PlatformLook
 
         applied = new StyleInclude(new Uri("avares://Shapeshifter/")) { Source = new Uri($"avares://Shapeshifter/Styles/{look}.axaml") };
         application.Styles.Add(applied);
+
+        // The picker's title in the look's own words, translated (the application's resources come before its styles).
+        application.Resources["PickerTitle"] = look switch
+        {
+            Look.Windows => Strings.PickerTitleWindows,
+            Look.MacOS => Strings.PickerTitleMacOS,
+            _ => "Shapeshifter",
+        };
         application.RequestedThemeVariant = look == Look.Windows ? theme ?? RequestedTheme() : ThemeVariant.Light;
         Current = look;
     }

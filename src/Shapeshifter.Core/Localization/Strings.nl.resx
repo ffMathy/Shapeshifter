@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Shapeshifter-instellingen</value>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>Versie {0}</value>
+  </data>
+  <data name="SettingsCopyVersion" xml:space="preserve">
+    <value>Versie kopiëren</value>
+  </data>
+  <data name="SettingsCopied" xml:space="preserve">
+    <value>Gekopieerd</value>
+  </data>
+  <data name="SettingsReportProblem" xml:space="preserve">
+    <value>Probleem melden</value>
+  </data>
+  <data name="SettingsProjectPage" xml:space="preserve">
+    <value>Projectpagina</value>
+  </data>
+  <data name="SettingsUsage" xml:space="preserve">
+    <value>Kopieer zoals gewoonlijk. Om een ouder item te plakken, houd je {0} ingedrukt en druk je op V: houd {0} ingedrukt om de geschiedenis te zien, druk nogmaals op V (of ↑/↓, of 1–9) om een item te kiezen, op → om te kiezen wat je ermee wilt doen, op Del om het te verwijderen en op Esc om te annuleren. Laat {0} los om te plakken.</value>
+  </data>
+  <data name="SettingsHistoryGroup" xml:space="preserve">
+    <value>Geschiedenis</value>
+  </data>
+  <data name="SettingsDelayTitle" xml:space="preserve">
+    <value>Vertraging voordat de geschiedenis verschijnt</value>
+  </data>
+  <data name="SettingsDelayDescription" xml:space="preserve">
+    <value>Hoelang je {0}+V ingedrukt houdt voordat de geschiedenis verschijnt</value>
+  </data>
+  <data name="SettingsDelayAccessibleName" xml:space="preserve">
+    <value>Vertraging voordat de geschiedenis verschijnt, in milliseconden</value>
+  </data>
+  <data name="SettingsItemsTitle" xml:space="preserve">
+    <value>Aantal items onthouden</value>
+  </data>
+  <data name="SettingsItemsDescription" xml:space="preserve">
+    <value>Vastgemaakte items worden daarnaast bewaard</value>
+  </data>
+  <data name="SettingsRememberTitle" xml:space="preserve">
+    <value>Geschiedenis onthouden na herstart</value>
+  </data>
+  <data name="SettingsRememberDescription" xml:space="preserve">
+    <value>Bewaart de geschiedenis op de schijf van deze computer, niet alleen vastgemaakte items</value>
+  </data>
+  <data name="SettingsBehaviourGroup" xml:space="preserve">
+    <value>Gedrag</value>
+  </data>
+  <data name="SettingsNotificationsTitle" xml:space="preserve">
+    <value>Meldingen bij kopiëren</value>
+  </data>
+  <data name="SettingsNotificationsDescription" xml:space="preserve">
+    <value>Toon een melding telkens als er iets wordt gekopieerd</value>
+  </data>
+  <data name="SettingsStartAtLoginTitle" xml:space="preserve">
+    <value>Starten bij inloggen</value>
+  </data>
+  <data name="SettingsStartAtLoginDescription" xml:space="preserve">
+    <value>Shapeshifter wacht op de achtergrond nadat je bent ingelogd</value>
+  </data>
+  <data name="SettingsUpdatesTitle" xml:space="preserve">
+    <value>Automatische updates</value>
+  </data>
+  <data name="SettingsClearHistory" xml:space="preserve">
+    <value>Geschiedenis wissen</value>
+  </data>
+  <data name="SettingsCheckForUpdates" xml:space="preserve">
+    <value>Controleren op updates</value>
+  </data>
+  <data name="SettingsOpenLogFolder" xml:space="preserve">
+    <value>Logboekmap openen</value>
+  </data>
+  <data name="PickerTitleWindows" xml:space="preserve">
+    <value>Klembordgeschiedenis</value>
+  </data>
+  <data name="PickerTitleMacOS" xml:space="preserve">
+    <value>Klembord</value>
+  </data>
+  <data name="PickerItemCountOne" xml:space="preserve">
+    <value>1 item</value>
+  </data>
+  <data name="PickerItemCountOther" xml:space="preserve">
+    <value>{0} items</value>
+  </data>
+  <data name="PickerReleaseHint" xml:space="preserve">
+    <value>Laat {0} los om te plakken</value>
+  </data>
+  <data name="PickerNothingCopied" xml:space="preserve">
+    <value>Nog niets gekopieerd</value>
+  </data>
+  <data name="PickerEmptyHint" xml:space="preserve">
+    <value>Kopieer zoals gewoonlijk; Shapeshifter bewaart alles wat je kopieert.
+
+Om iets te plakken dat je eerder hebt gekopieerd, houd je {0} ingedrukt en druk je op V. Houd {0} ingedrukt om de geschiedenis te zien, kies met V of de pijltoetsen en laat {0} los om te plakken.</value>
+  </data>
+  <data name="PickerActions" xml:space="preserve">
+    <value>Acties</value>
+  </data>
+  <data name="PickerActionsForText" xml:space="preserve">
+    <value>Acties voor deze tekst</value>
+  </data>
+  <data name="PickerActionsForImage" xml:space="preserve">
+    <value>Acties voor deze afbeelding</value>
+  </data>
+  <data name="PickerActionsForFile" xml:space="preserve">
+    <value>Acties voor dit bestand</value>
+  </data>
+  <data name="PickerActionsForFiles" xml:space="preserve">
+    <value>Acties voor deze bestanden</value>
+  </data>
+  <data name="PickerDefault" xml:space="preserve">
+    <value>Standaard</value>
+  </data>
+  <data name="PickerHintRelease" xml:space="preserve">
+    <value>Loslaten om te plakken</value>
+  </data>
+  <data name="PickerHintMove" xml:space="preserve">
+    <value>Verplaatsen</value>
+  </data>
+  <data name="PickerHintJump" xml:space="preserve">
+    <value>Springen</value>
+  </data>
+  <data name="PickerHintRemove" xml:space="preserve">
+    <value>Verwijderen</value>
+  </data>
+  <data name="PickerHintCancel" xml:space="preserve">
+    <value>Annuleren</value>
+  </data>
+  <data name="KeyControl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="KeyEscape" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="ItemEmpty" xml:space="preserve">
+    <value>(leeg)</value>
+  </data>
+  <data name="ItemImage" xml:space="preserve">
+    <value>Afbeelding</value>
+  </data>
+  <data name="ItemImageWithSize" xml:space="preserve">
+    <value>Afbeelding · {0} × {1}</value>
+  </data>
+  <data name="ItemFilesWithNames" xml:space="preserve">
+    <value>{0} items · {1}</value>
+  </data>
+  <data name="ItemFileCount" xml:space="preserve">
+    <value>{0} bestanden</value>
+  </data>
+  <data name="ItemFormattedText" xml:space="preserve">
+    <value>Opgemaakte tekst</value>
+  </data>
+  <data name="ItemOtherData" xml:space="preserve">
+    <value>Overige gegevens</value>
+  </data>
+  <data name="ItemCharacterCount" xml:space="preserve">
+    <value>Tekens: {0}</value>
+  </data>
+  <data name="ItemLineCount" xml:space="preserve">
+    <value>{0} regels</value>
+  </data>
+  <data name="ToastCopiedOne" xml:space="preserve">
+    <value>Gekopieerd · 1 item in je geschiedenis</value>
+  </data>
+  <data name="ToastCopiedOther" xml:space="preserve">
+    <value>Gekopieerd · {0} items in je geschiedenis</value>
+  </data>
+  <data name="TraySettings" xml:space="preserve">
+    <value>Instellingen…</value>
+  </data>
+  <data name="TrayCheckForUpdates" xml:space="preserve">
+    <value>Controleren op updates…</value>
+  </data>
+  <data name="TrayReportProblem" xml:space="preserve">
+    <value>Probleem melden…</value>
+  </data>
+  <data name="TrayAbout" xml:space="preserve">
+    <value>Over Shapeshifter {0}</value>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>Shapeshifter afsluiten</value>
+  </data>
+  <data name="StartupErrorTitle" xml:space="preserve">
+    <value>Shapeshifter kan niet worden gestart</value>
+  </data>
+  <data name="StartupErrorDetails" xml:space="preserve">
+    <value>Details zijn geschreven naar {0}.</value>
+  </data>
+  <data name="StartupErrorQuit" xml:space="preserve">
+    <value>Afsluiten</value>
+  </data>
+  <data name="ActionPaste" xml:space="preserve">
+    <value>Plakken</value>
+  </data>
+  <data name="ActionPasteDescription" xml:space="preserve">
+    <value>Plakt de inhoud van het klembord ongewijzigd.</value>
+  </data>
+  <data name="ActionPasteAsPlainText" xml:space="preserve">
+    <value>Plakken als platte tekst</value>
+  </data>
+  <data name="ActionPasteAsPlainTextDescription" xml:space="preserve">
+    <value>Plakt de inhoud van het klembord als platte tekst zonder opmaak.</value>
+  </data>
+  <data name="ActionPasteAsFile" xml:space="preserve">
+    <value>Plakken als bestand</value>
+  </data>
+  <data name="ActionPasteAsFileDescription" xml:space="preserve">
+    <value>Slaat deze tekst op in een .txt-bestand en plakt het bestand.</value>
+  </data>
+  <data name="ActionCopyAsZip" xml:space="preserve">
+    <value>Kopiëren als gecomprimeerde map</value>
+  </data>
+  <data name="ActionCopyAsZipDescription" xml:space="preserve">
+    <value>Kopieert deze bestanden naar het klembord als gecomprimeerde (.zip-)map.</value>
+  </data>
+  <data name="ActionCopyImageFromLink" xml:space="preserve">
+    <value>Afbeelding kopiëren via link</value>
+  </data>
+  <data name="ActionCopyImageFromLinkDescription" xml:space="preserve">
+    <value>Downloadt de gelinkte afbeelding en kopieert de afbeelding zelf naar het klembord.</value>
+  </data>
+  <data name="ActionOpenLink" xml:space="preserve">
+    <value>Link openen</value>
+  </data>
+  <data name="ActionOpenLinks" xml:space="preserve">
+    <value>Links openen</value>
+  </data>
+  <data name="ActionOpenLinkDescription" xml:space="preserve">
+    <value>Opent de link in je browser.</value>
+  </data>
+  <data name="ActionOpenLinksDescription" xml:space="preserve">
+    <value>Opent de links in je browser (maximaal {0}).</value>
+  </data>
+  <data name="ActionPin" xml:space="preserve">
+    <value>Vastmaken aan klembord</value>
+  </data>
+  <data name="ActionPinDescription" xml:space="preserve">
+    <value>Maakt dit item vast zodat het altijd bovenaan blijft, en slaat het op je computer op zodat het er de volgende keer dat je Shapeshifter opent nog is.</value>
+  </data>
+  <data name="ActionUnpin" xml:space="preserve">
+    <value>Losmaken van klembord</value>
+  </data>
+  <data name="ActionUnpinDescription" xml:space="preserve">
+    <value>Maakt dit item los zodat het omlaag schuift terwijl je kopieert en niet meer op je computer wordt bewaard.</value>
+  </data>
+  <data name="TimeJustNow" xml:space="preserve">
+    <value>Zojuist</value>
+  </data>
+  <data name="TimeMinutesAgo" xml:space="preserve">
+    <value>{0} min geleden</value>
+  </data>
+  <data name="TimeHoursAgo" xml:space="preserve">
+    <value>{0} u geleden</value>
+  </data>
+  <data name="TimeYesterday" xml:space="preserve">
+    <value>Gisteren</value>
+  </data>
+  <data name="TimeDaysAgo" xml:space="preserve">
+    <value>{0} dagen geleden</value>
+  </data>
+  <data name="UpdateOff" xml:space="preserve">
+    <value>Automatische updates zijn uitgeschakeld</value>
+  </data>
+  <data name="UpdateUnsupported" xml:space="preserve">
+    <value>Deze kopie kan zichzelf niet bijwerken</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>Controleren op updates…</value>
+  </data>
+  <data name="UpdateUpToDate" xml:space="preserve">
+    <value>Up-to-date (gecontroleerd om {0})</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>Versie {0} downloaden…</value>
+  </data>
+  <data name="UpdateReadyToRestart" xml:space="preserve">
+    <value>Versie {0} is geïnstalleerd en start de volgende keer dat {1} start</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Kan niet bijwerken: {0}</value>
+  </data>
+  <data name="UpdateAutomatic" xml:space="preserve">
+    <value>Updates worden automatisch gecontroleerd</value>
+  </data>
+  <data name="UpdateTurnedOff" xml:space="preserve">
+    <value>Updates zijn uitgeschakeld ({0})</value>
+  </data>
+  <data name="UpdateReleaseBuildsOnly" xml:space="preserve">
+    <value>Alleen release-builds werken zichzelf bij</value>
+  </data>
+  <data name="UpdateCannotWrite" xml:space="preserve">
+    <value>{0} kan niet schrijven naar {1}; werk het bij op de manier waarop het is geïnstalleerd</value>
+  </data>
+  <data name="PlatformNeedsX11" xml:space="preserve">
+    <value>Shapeshifter heeft een X11-display nodig (DISPLAY is niet ingesteld). Zorg onder Wayland dat XWayland beschikbaar is.</value>
+  </data>
+  <data name="PlatformWayland" xml:space="preserve">
+    <value>Dit is een Wayland-sessie. Wayland staat apps niet toe globale toetsaanslagen te observeren of te genereren, dus het plakgebaar werkt alleen als een X11-app (XWayland) de focus heeft. Log in bij een X11-sessie voor volledige ondersteuning.</value>
+  </data>
+  <data name="PlatformAccessibility" xml:space="preserve">
+    <value>Shapeshifter heeft toegang tot Toegankelijkheid nodig om de toetscombinatie Cmd+V te zien en te versturen. Sta dit toe in Systeeminstellingen &gt; Privacy en beveiliging &gt; Toegankelijkheid en herstart Shapeshifter.</value>
+  </data>
+  <data name="PlatformNotSupported" xml:space="preserve">
+    <value>{0} wordt niet ondersteund.</value>
+  </data>
+  <data name="ToggleOn" xml:space="preserve">
+    <value>Aan</value>
+  </data>
+  <data name="ToggleOff" xml:space="preserve">
+    <value>Uit</value>
+  </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Slaat deze afbeelding op in een .{0}-bestand en plakt het bestand.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Uploaden en link plakken</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Uploadt deze afbeelding naar {0} en plakt een openbare link ernaar.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Tips</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Laten weten wanneer de geschiedenis je een kopie had kunnen besparen</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Staat al in je geschiedenis</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>Je hoeft het niet opnieuw te kopiëren: houd {0}+V ingedrukt om het uit je geschiedenis te kiezen.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>Wist je dat?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>Je kunt eerst meerdere dingen uit {0} kopiëren en daarna in {2} {1}+V ingedrukt houden om ze een voor een uit je geschiedenis te kiezen.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Uploaden naar {0}?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Deze afbeelding uploaden naar {0}?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>De afbeelding wordt naar {0} (catbox.moe) gestuurd, een gratis afbeeldingshost zonder advertenties, en iedereen met de link kan hem zien. Uploads kunnen niet worden verwijderd. Niets anders dat je kopieert verlaat ooit je computer.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter vraagt het niet opnieuw. Deze keer is de link gekopieerd: druk op {0}+V om hem te plakken.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Uploaden naar {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Annuleren</value>
+  </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Druk op Spatie om de geschiedenis open te houden zonder de toets ingedrukt te houden, en daarna op Enter om te plakken.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Om de geschiedenis te bekijken zonder {0} ingedrukt te houden, druk je op Spatie: die blijft open tot je op Enter drukt om te plakken of op Esc.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Druk op Enter om te plakken</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Sluiten</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Plakken</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Openhouden</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Spatie</value>
+  </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>Zoeken</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>Zoek in alles wat je hebt gekopieerd</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>Geen resultaten</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>Niets wat je hebt gekopieerd bevat ‘{0}’.</value>
+  </data>
+</root>

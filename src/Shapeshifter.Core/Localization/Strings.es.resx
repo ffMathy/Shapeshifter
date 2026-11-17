@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Configuración de Shapeshifter</value>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>Versión {0}</value>
+  </data>
+  <data name="SettingsCopyVersion" xml:space="preserve">
+    <value>Copiar versión</value>
+  </data>
+  <data name="SettingsCopied" xml:space="preserve">
+    <value>Copiado</value>
+  </data>
+  <data name="SettingsReportProblem" xml:space="preserve">
+    <value>Notificar un problema</value>
+  </data>
+  <data name="SettingsProjectPage" xml:space="preserve">
+    <value>Página del proyecto</value>
+  </data>
+  <data name="SettingsUsage" xml:space="preserve">
+    <value>Copia como siempre. Para pegar un elemento anterior, mantén pulsada {0} y pulsa V: sigue manteniendo {0} para ver el historial, vuelve a pulsar V (o ↑/↓, o 1–9) para elegir un elemento, → para elegir qué hacer con él, Supr para eliminarlo y Esc para cancelar. Suelta {0} para pegar.</value>
+  </data>
+  <data name="SettingsHistoryGroup" xml:space="preserve">
+    <value>Historial</value>
+  </data>
+  <data name="SettingsDelayTitle" xml:space="preserve">
+    <value>Retraso antes de mostrar el historial</value>
+  </data>
+  <data name="SettingsDelayDescription" xml:space="preserve">
+    <value>Cuánto tiempo mantener pulsado {0}+V antes de que aparezca el historial</value>
+  </data>
+  <data name="SettingsDelayAccessibleName" xml:space="preserve">
+    <value>Retraso antes de mostrar el historial, en milisegundos</value>
+  </data>
+  <data name="SettingsItemsTitle" xml:space="preserve">
+    <value>Elementos que recordar</value>
+  </data>
+  <data name="SettingsItemsDescription" xml:space="preserve">
+    <value>Los elementos anclados se conservan aparte</value>
+  </data>
+  <data name="SettingsRememberTitle" xml:space="preserve">
+    <value>Recordar el historial tras reiniciar</value>
+  </data>
+  <data name="SettingsRememberDescription" xml:space="preserve">
+    <value>Guarda el historial en el disco de este equipo, no solo los elementos anclados</value>
+  </data>
+  <data name="SettingsBehaviourGroup" xml:space="preserve">
+    <value>Comportamiento</value>
+  </data>
+  <data name="SettingsNotificationsTitle" xml:space="preserve">
+    <value>Notificaciones al copiar</value>
+  </data>
+  <data name="SettingsNotificationsDescription" xml:space="preserve">
+    <value>Mostrar una notificación cada vez que se copie algo</value>
+  </data>
+  <data name="SettingsStartAtLoginTitle" xml:space="preserve">
+    <value>Iniciar al iniciar sesión</value>
+  </data>
+  <data name="SettingsStartAtLoginDescription" xml:space="preserve">
+    <value>Shapeshifter espera en segundo plano después de iniciar sesión</value>
+  </data>
+  <data name="SettingsUpdatesTitle" xml:space="preserve">
+    <value>Actualizaciones automáticas</value>
+  </data>
+  <data name="SettingsClearHistory" xml:space="preserve">
+    <value>Borrar historial</value>
+  </data>
+  <data name="SettingsCheckForUpdates" xml:space="preserve">
+    <value>Buscar actualizaciones</value>
+  </data>
+  <data name="SettingsOpenLogFolder" xml:space="preserve">
+    <value>Abrir carpeta de registros</value>
+  </data>
+  <data name="PickerTitleWindows" xml:space="preserve">
+    <value>Historial del portapapeles</value>
+  </data>
+  <data name="PickerTitleMacOS" xml:space="preserve">
+    <value>Portapapeles</value>
+  </data>
+  <data name="PickerItemCountOne" xml:space="preserve">
+    <value>1 elemento</value>
+  </data>
+  <data name="PickerItemCountOther" xml:space="preserve">
+    <value>{0} elementos</value>
+  </data>
+  <data name="PickerReleaseHint" xml:space="preserve">
+    <value>Suelta {0} para pegar</value>
+  </data>
+  <data name="PickerNothingCopied" xml:space="preserve">
+    <value>Aún no se ha copiado nada</value>
+  </data>
+  <data name="PickerEmptyHint" xml:space="preserve">
+    <value>Copia como siempre y Shapeshifter guardará todo lo que copies.
+
+Para pegar algo que copiaste antes, mantén pulsada {0} y pulsa V. Sigue manteniendo {0} para ver el historial, pulsa V o las teclas de flecha para elegir y suelta {0} para pegar.</value>
+  </data>
+  <data name="PickerActions" xml:space="preserve">
+    <value>Acciones</value>
+  </data>
+  <data name="PickerActionsForText" xml:space="preserve">
+    <value>Acciones para este texto</value>
+  </data>
+  <data name="PickerActionsForImage" xml:space="preserve">
+    <value>Acciones para esta imagen</value>
+  </data>
+  <data name="PickerActionsForFile" xml:space="preserve">
+    <value>Acciones para este archivo</value>
+  </data>
+  <data name="PickerActionsForFiles" xml:space="preserve">
+    <value>Acciones para estos archivos</value>
+  </data>
+  <data name="PickerDefault" xml:space="preserve">
+    <value>Predeterminada</value>
+  </data>
+  <data name="PickerHintRelease" xml:space="preserve">
+    <value>Soltar para pegar</value>
+  </data>
+  <data name="PickerHintMove" xml:space="preserve">
+    <value>Mover</value>
+  </data>
+  <data name="PickerHintJump" xml:space="preserve">
+    <value>Saltar</value>
+  </data>
+  <data name="PickerHintRemove" xml:space="preserve">
+    <value>Quitar</value>
+  </data>
+  <data name="PickerHintCancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="KeyControl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Supr</value>
+  </data>
+  <data name="KeyEscape" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="ItemEmpty" xml:space="preserve">
+    <value>(vacío)</value>
+  </data>
+  <data name="ItemImage" xml:space="preserve">
+    <value>Imagen</value>
+  </data>
+  <data name="ItemImageWithSize" xml:space="preserve">
+    <value>Imagen · {0} × {1}</value>
+  </data>
+  <data name="ItemFilesWithNames" xml:space="preserve">
+    <value>{0} elementos · {1}</value>
+  </data>
+  <data name="ItemFileCount" xml:space="preserve">
+    <value>{0} archivos</value>
+  </data>
+  <data name="ItemFormattedText" xml:space="preserve">
+    <value>Texto con formato</value>
+  </data>
+  <data name="ItemOtherData" xml:space="preserve">
+    <value>Otros datos</value>
+  </data>
+  <data name="ItemCharacterCount" xml:space="preserve">
+    <value>Caracteres: {0}</value>
+  </data>
+  <data name="ItemLineCount" xml:space="preserve">
+    <value>{0} líneas</value>
+  </data>
+  <data name="ToastCopiedOne" xml:space="preserve">
+    <value>Copiado · 1 elemento en el historial</value>
+  </data>
+  <data name="ToastCopiedOther" xml:space="preserve">
+    <value>Copiado · {0} elementos en el historial</value>
+  </data>
+  <data name="TraySettings" xml:space="preserve">
+    <value>Configuración…</value>
+  </data>
+  <data name="TrayCheckForUpdates" xml:space="preserve">
+    <value>Buscar actualizaciones…</value>
+  </data>
+  <data name="TrayReportProblem" xml:space="preserve">
+    <value>Notificar un problema…</value>
+  </data>
+  <data name="TrayAbout" xml:space="preserve">
+    <value>Acerca de Shapeshifter {0}</value>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>Salir de Shapeshifter</value>
+  </data>
+  <data name="StartupErrorTitle" xml:space="preserve">
+    <value>No se pudo iniciar Shapeshifter</value>
+  </data>
+  <data name="StartupErrorDetails" xml:space="preserve">
+    <value>Los detalles se guardaron en {0}.</value>
+  </data>
+  <data name="StartupErrorQuit" xml:space="preserve">
+    <value>Salir</value>
+  </data>
+  <data name="ActionPaste" xml:space="preserve">
+    <value>Pegar</value>
+  </data>
+  <data name="ActionPasteDescription" xml:space="preserve">
+    <value>Pega el contenido del portapapeles tal cual.</value>
+  </data>
+  <data name="ActionPasteAsPlainText" xml:space="preserve">
+    <value>Pegar como texto sin formato</value>
+  </data>
+  <data name="ActionPasteAsPlainTextDescription" xml:space="preserve">
+    <value>Pega el contenido del portapapeles como texto sin formato.</value>
+  </data>
+  <data name="ActionPasteAsFile" xml:space="preserve">
+    <value>Pegar como archivo</value>
+  </data>
+  <data name="ActionPasteAsFileDescription" xml:space="preserve">
+    <value>Guarda este texto en un archivo .txt y pega el archivo.</value>
+  </data>
+  <data name="ActionCopyAsZip" xml:space="preserve">
+    <value>Copiar como carpeta comprimida</value>
+  </data>
+  <data name="ActionCopyAsZipDescription" xml:space="preserve">
+    <value>Copia estos archivos al portapapeles como una carpeta comprimida (.zip).</value>
+  </data>
+  <data name="ActionCopyImageFromLink" xml:space="preserve">
+    <value>Copiar imagen del enlace</value>
+  </data>
+  <data name="ActionCopyImageFromLinkDescription" xml:space="preserve">
+    <value>Descarga la imagen enlazada y copia la propia imagen al portapapeles.</value>
+  </data>
+  <data name="ActionOpenLink" xml:space="preserve">
+    <value>Abrir enlace</value>
+  </data>
+  <data name="ActionOpenLinks" xml:space="preserve">
+    <value>Abrir enlaces</value>
+  </data>
+  <data name="ActionOpenLinkDescription" xml:space="preserve">
+    <value>Abre el enlace en el navegador.</value>
+  </data>
+  <data name="ActionOpenLinksDescription" xml:space="preserve">
+    <value>Abre los enlaces en el navegador (como máximo {0}).</value>
+  </data>
+  <data name="ActionPin" xml:space="preserve">
+    <value>Anclar al portapapeles</value>
+  </data>
+  <data name="ActionPinDescription" xml:space="preserve">
+    <value>Ancla este elemento para que siempre esté arriba y lo guarda en el equipo para que siga ahí la próxima vez que abras Shapeshifter.</value>
+  </data>
+  <data name="ActionUnpin" xml:space="preserve">
+    <value>Desanclar del portapapeles</value>
+  </data>
+  <data name="ActionUnpinDescription" xml:space="preserve">
+    <value>Desancla este elemento para que baje a medida que copias y deja de guardarlo en el equipo.</value>
+  </data>
+  <data name="TimeJustNow" xml:space="preserve">
+    <value>Ahora mismo</value>
+  </data>
+  <data name="TimeMinutesAgo" xml:space="preserve">
+    <value>hace {0} min</value>
+  </data>
+  <data name="TimeHoursAgo" xml:space="preserve">
+    <value>hace {0} h</value>
+  </data>
+  <data name="TimeYesterday" xml:space="preserve">
+    <value>Ayer</value>
+  </data>
+  <data name="TimeDaysAgo" xml:space="preserve">
+    <value>hace {0} días</value>
+  </data>
+  <data name="UpdateOff" xml:space="preserve">
+    <value>Las actualizaciones automáticas están desactivadas</value>
+  </data>
+  <data name="UpdateUnsupported" xml:space="preserve">
+    <value>Esta copia no puede actualizarse sola</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>Buscando actualizaciones…</value>
+  </data>
+  <data name="UpdateUpToDate" xml:space="preserve">
+    <value>Actualizado (comprobado: {0})</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>Descargando la versión {0}…</value>
+  </data>
+  <data name="UpdateReadyToRestart" xml:space="preserve">
+    <value>La versión {0} está instalada y se iniciará la próxima vez que se abra {1}</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>No se pudo actualizar: {0}</value>
+  </data>
+  <data name="UpdateAutomatic" xml:space="preserve">
+    <value>Las actualizaciones se buscan automáticamente</value>
+  </data>
+  <data name="UpdateTurnedOff" xml:space="preserve">
+    <value>Las actualizaciones están desactivadas ({0})</value>
+  </data>
+  <data name="UpdateReleaseBuildsOnly" xml:space="preserve">
+    <value>Solo las versiones de lanzamiento se actualizan solas</value>
+  </data>
+  <data name="UpdateCannotWrite" xml:space="preserve">
+    <value>{0} no puede escribir en {1}; actualízalo del mismo modo en que se instaló</value>
+  </data>
+  <data name="PlatformNeedsX11" xml:space="preserve">
+    <value>Shapeshifter necesita una pantalla X11 (DISPLAY no está definida). En Wayland, asegúrate de que XWayland esté disponible.</value>
+  </data>
+  <data name="PlatformWayland" xml:space="preserve">
+    <value>Esta es una sesión de Wayland. Wayland no permite que las aplicaciones observen ni simulen pulsaciones de teclas globales, por lo que el gesto de pegar solo funciona cuando una aplicación X11 (XWayland) tiene el foco. Inicia una sesión X11 para una compatibilidad total.</value>
+  </data>
+  <data name="PlatformAccessibility" xml:space="preserve">
+    <value>Shapeshifter necesita acceso de accesibilidad para detectar y enviar la combinación Cmd+V. Permítelo en Ajustes del Sistema &gt; Privacidad y seguridad &gt; Accesibilidad y reinicia Shapeshifter.</value>
+  </data>
+  <data name="PlatformNotSupported" xml:space="preserve">
+    <value>{0} no es compatible.</value>
+  </data>
+  <data name="ToggleOn" xml:space="preserve">
+    <value>Activado</value>
+  </data>
+  <data name="ToggleOff" xml:space="preserve">
+    <value>Desactivado</value>
+  </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Guarda esta imagen en un archivo .{0} y pega el archivo.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Subir y pegar enlace</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Sube esta imagen a {0} y pega un enlace público a ella.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Consejos</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Avisar cuando el historial podría haberte ahorrado una copia</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Ya está en tu historial</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>No hace falta volver a copiarlo: mantén pulsado {0}+V para elegirlo de tu historial.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>¿Sabías que…?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>Puedes copiar primero varias cosas de {0} y luego mantener pulsado {1}+V en {2} para elegir cada una de tu historial.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>¿Subir a {0}?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>¿Subir esta imagen a {0}?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>La imagen se envía a {0} (catbox.moe), un alojamiento de imágenes gratuito y sin anuncios, y cualquiera que tenga el enlace puede verla. Las subidas no se pueden eliminar. Nada más de lo que copias sale nunca de tu equipo.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter no volverá a preguntar. Esta vez el enlace se copia: pulsa {0}+V para pegarlo.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Subir a {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Pulsa Espacio para que el historial siga abierto sin mantener pulsada la tecla y, después, Intro para pegar.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Para revisar el historial sin mantener pulsada {0}, pulsa Espacio: seguirá abierto hasta que pulses Intro para pegar o Esc.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Pulsa Intro para pegar</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Cerrar</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Pegar</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Mantener abierto</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Intro</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Espacio</value>
+  </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>Buscar</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>Busca en todo lo que has copiado</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>Sin resultados</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>Nada de lo que has copiado contiene «{0}».</value>
+  </data>
+</root>

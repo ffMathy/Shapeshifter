@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Настройки Shapeshifter</value>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>Версия {0}</value>
+  </data>
+  <data name="SettingsCopyVersion" xml:space="preserve">
+    <value>Копировать версию</value>
+  </data>
+  <data name="SettingsCopied" xml:space="preserve">
+    <value>Скопировано</value>
+  </data>
+  <data name="SettingsReportProblem" xml:space="preserve">
+    <value>Сообщить о проблеме</value>
+  </data>
+  <data name="SettingsProjectPage" xml:space="preserve">
+    <value>Страница проекта</value>
+  </data>
+  <data name="SettingsUsage" xml:space="preserve">
+    <value>Копируйте как обычно. Чтобы вставить более ранний элемент, удерживайте {0} и нажмите V: не отпускайте {0}, чтобы увидеть историю, снова нажмите V (или ↑/↓, или 1–9), чтобы выбрать элемент, → — чтобы выбрать действие с ним, Delete — чтобы удалить его, Esc — чтобы отменить. Отпустите {0}, чтобы вставить.</value>
+  </data>
+  <data name="SettingsHistoryGroup" xml:space="preserve">
+    <value>История</value>
+  </data>
+  <data name="SettingsDelayTitle" xml:space="preserve">
+    <value>Задержка перед показом истории</value>
+  </data>
+  <data name="SettingsDelayDescription" xml:space="preserve">
+    <value>Сколько удерживать {0}+V, прежде чем появится история</value>
+  </data>
+  <data name="SettingsDelayAccessibleName" xml:space="preserve">
+    <value>Задержка перед показом истории, в миллисекундах</value>
+  </data>
+  <data name="SettingsItemsTitle" xml:space="preserve">
+    <value>Сколько элементов хранить</value>
+  </data>
+  <data name="SettingsItemsDescription" xml:space="preserve">
+    <value>Закреплённые элементы хранятся сверх этого числа</value>
+  </data>
+  <data name="SettingsRememberTitle" xml:space="preserve">
+    <value>Сохранять историю после перезапуска</value>
+  </data>
+  <data name="SettingsRememberDescription" xml:space="preserve">
+    <value>История хранится на диске этого компьютера, а не только закреплённые элементы</value>
+  </data>
+  <data name="SettingsBehaviourGroup" xml:space="preserve">
+    <value>Поведение</value>
+  </data>
+  <data name="SettingsNotificationsTitle" xml:space="preserve">
+    <value>Уведомления о копировании</value>
+  </data>
+  <data name="SettingsNotificationsDescription" xml:space="preserve">
+    <value>Показывать уведомление при каждом копировании</value>
+  </data>
+  <data name="SettingsStartAtLoginTitle" xml:space="preserve">
+    <value>Запускать при входе в систему</value>
+  </data>
+  <data name="SettingsStartAtLoginDescription" xml:space="preserve">
+    <value>Приложение Shapeshifter работает в фоновом режиме после входа в систему</value>
+  </data>
+  <data name="SettingsUpdatesTitle" xml:space="preserve">
+    <value>Автоматические обновления</value>
+  </data>
+  <data name="SettingsClearHistory" xml:space="preserve">
+    <value>Очистить историю</value>
+  </data>
+  <data name="SettingsCheckForUpdates" xml:space="preserve">
+    <value>Проверить обновления</value>
+  </data>
+  <data name="SettingsOpenLogFolder" xml:space="preserve">
+    <value>Открыть папку журналов</value>
+  </data>
+  <data name="PickerTitleWindows" xml:space="preserve">
+    <value>Журнал буфера обмена</value>
+  </data>
+  <data name="PickerTitleMacOS" xml:space="preserve">
+    <value>Буфер обмена</value>
+  </data>
+  <data name="PickerItemCountOne" xml:space="preserve">
+    <value>1 элемент</value>
+  </data>
+  <data name="PickerItemCountOther" xml:space="preserve">
+    <value>Элементов: {0}</value>
+  </data>
+  <data name="PickerReleaseHint" xml:space="preserve">
+    <value>Отпустите {0} для вставки</value>
+  </data>
+  <data name="PickerNothingCopied" xml:space="preserve">
+    <value>Пока ничего не скопировано</value>
+  </data>
+  <data name="PickerEmptyHint" xml:space="preserve">
+    <value>Копируйте как обычно — Shapeshifter сохранит всё, что вы копируете.
+
+Чтобы вставить то, что вы скопировали раньше, удерживайте {0} и нажмите V. Не отпускайте {0}, чтобы увидеть историю, нажимайте V или клавиши со стрелками для выбора и отпустите {0}, чтобы вставить.</value>
+  </data>
+  <data name="PickerActions" xml:space="preserve">
+    <value>Действия</value>
+  </data>
+  <data name="PickerActionsForText" xml:space="preserve">
+    <value>Действия с текстом</value>
+  </data>
+  <data name="PickerActionsForImage" xml:space="preserve">
+    <value>Действия с изображением</value>
+  </data>
+  <data name="PickerActionsForFile" xml:space="preserve">
+    <value>Действия с файлом</value>
+  </data>
+  <data name="PickerActionsForFiles" xml:space="preserve">
+    <value>Действия с файлами</value>
+  </data>
+  <data name="PickerDefault" xml:space="preserve">
+    <value>По умолч.</value>
+  </data>
+  <data name="PickerHintRelease" xml:space="preserve">
+    <value>Отпустите для вставки</value>
+  </data>
+  <data name="PickerHintMove" xml:space="preserve">
+    <value>Выбор</value>
+  </data>
+  <data name="PickerHintJump" xml:space="preserve">
+    <value>Переход</value>
+  </data>
+  <data name="PickerHintRemove" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="PickerHintCancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="KeyControl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="KeyEscape" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="ItemEmpty" xml:space="preserve">
+    <value>(пусто)</value>
+  </data>
+  <data name="ItemImage" xml:space="preserve">
+    <value>Изображение</value>
+  </data>
+  <data name="ItemImageWithSize" xml:space="preserve">
+    <value>Изображение · {0} × {1}</value>
+  </data>
+  <data name="ItemFilesWithNames" xml:space="preserve">
+    <value>Элементов: {0} · {1}</value>
+  </data>
+  <data name="ItemFileCount" xml:space="preserve">
+    <value>Файлов: {0}</value>
+  </data>
+  <data name="ItemFormattedText" xml:space="preserve">
+    <value>Форматированный текст</value>
+  </data>
+  <data name="ItemOtherData" xml:space="preserve">
+    <value>Другие данные</value>
+  </data>
+  <data name="ItemCharacterCount" xml:space="preserve">
+    <value>Символов: {0}</value>
+  </data>
+  <data name="ItemLineCount" xml:space="preserve">
+    <value>Строк: {0}</value>
+  </data>
+  <data name="ToastCopiedOne" xml:space="preserve">
+    <value>Скопировано · в истории 1 элемент</value>
+  </data>
+  <data name="ToastCopiedOther" xml:space="preserve">
+    <value>Скопировано · элементов в истории: {0}</value>
+  </data>
+  <data name="TraySettings" xml:space="preserve">
+    <value>Настройки…</value>
+  </data>
+  <data name="TrayCheckForUpdates" xml:space="preserve">
+    <value>Проверить обновления…</value>
+  </data>
+  <data name="TrayReportProblem" xml:space="preserve">
+    <value>Сообщить о проблеме…</value>
+  </data>
+  <data name="TrayAbout" xml:space="preserve">
+    <value>О программе Shapeshifter {0}</value>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>Завершить Shapeshifter</value>
+  </data>
+  <data name="StartupErrorTitle" xml:space="preserve">
+    <value>Не удалось запустить Shapeshifter</value>
+  </data>
+  <data name="StartupErrorDetails" xml:space="preserve">
+    <value>Подробности записаны в {0}.</value>
+  </data>
+  <data name="StartupErrorQuit" xml:space="preserve">
+    <value>Выйти</value>
+  </data>
+  <data name="ActionPaste" xml:space="preserve">
+    <value>Вставить</value>
+  </data>
+  <data name="ActionPasteDescription" xml:space="preserve">
+    <value>Вставляет содержимое буфера обмена без изменений.</value>
+  </data>
+  <data name="ActionPasteAsPlainText" xml:space="preserve">
+    <value>Вставить как обычный текст</value>
+  </data>
+  <data name="ActionPasteAsPlainTextDescription" xml:space="preserve">
+    <value>Вставляет содержимое буфера обмена как обычный текст без форматирования.</value>
+  </data>
+  <data name="ActionPasteAsFile" xml:space="preserve">
+    <value>Вставить как файл</value>
+  </data>
+  <data name="ActionPasteAsFileDescription" xml:space="preserve">
+    <value>Сохраняет этот текст в файл .txt и вставляет файл.</value>
+  </data>
+  <data name="ActionCopyAsZip" xml:space="preserve">
+    <value>Копировать как сжатую папку</value>
+  </data>
+  <data name="ActionCopyAsZipDescription" xml:space="preserve">
+    <value>Копирует эти файлы в буфер обмена в виде сжатой папки (.zip).</value>
+  </data>
+  <data name="ActionCopyImageFromLink" xml:space="preserve">
+    <value>Копировать изображение по ссылке</value>
+  </data>
+  <data name="ActionCopyImageFromLinkDescription" xml:space="preserve">
+    <value>Скачивает изображение по ссылке и копирует само изображение в буфер обмена.</value>
+  </data>
+  <data name="ActionOpenLink" xml:space="preserve">
+    <value>Открыть ссылку</value>
+  </data>
+  <data name="ActionOpenLinks" xml:space="preserve">
+    <value>Открыть ссылки</value>
+  </data>
+  <data name="ActionOpenLinkDescription" xml:space="preserve">
+    <value>Открывает ссылку в браузере.</value>
+  </data>
+  <data name="ActionOpenLinksDescription" xml:space="preserve">
+    <value>Открывает ссылки в браузере (не более {0}).</value>
+  </data>
+  <data name="ActionPin" xml:space="preserve">
+    <value>Закрепить в буфере обмена</value>
+  </data>
+  <data name="ActionPinDescription" xml:space="preserve">
+    <value>Закрепляет этот элемент, чтобы он всегда оставался вверху, и сохраняет его на компьютере, чтобы он был доступен при следующем запуске приложения Shapeshifter.</value>
+  </data>
+  <data name="ActionUnpin" xml:space="preserve">
+    <value>Открепить из буфера обмена</value>
+  </data>
+  <data name="ActionUnpinDescription" xml:space="preserve">
+    <value>Открепляет этот элемент: он будет смещаться вниз по мере копирования и больше не будет сохраняться на компьютере.</value>
+  </data>
+  <data name="TimeJustNow" xml:space="preserve">
+    <value>Только что</value>
+  </data>
+  <data name="TimeMinutesAgo" xml:space="preserve">
+    <value>{0} мин назад</value>
+  </data>
+  <data name="TimeHoursAgo" xml:space="preserve">
+    <value>{0} ч назад</value>
+  </data>
+  <data name="TimeYesterday" xml:space="preserve">
+    <value>Вчера</value>
+  </data>
+  <data name="TimeDaysAgo" xml:space="preserve">
+    <value>{0} дн. назад</value>
+  </data>
+  <data name="UpdateOff" xml:space="preserve">
+    <value>Автоматические обновления отключены</value>
+  </data>
+  <data name="UpdateUnsupported" xml:space="preserve">
+    <value>Эта копия не может обновляться сама</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>Проверка обновлений…</value>
+  </data>
+  <data name="UpdateUpToDate" xml:space="preserve">
+    <value>Установлена последняя версия (проверено в {0})</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>Загрузка версии {0}…</value>
+  </data>
+  <data name="UpdateReadyToRestart" xml:space="preserve">
+    <value>Версия {0} установлена и запустится при следующем запуске приложения {1}</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Не удалось обновить: {0}</value>
+  </data>
+  <data name="UpdateAutomatic" xml:space="preserve">
+    <value>Обновления проверяются автоматически</value>
+  </data>
+  <data name="UpdateTurnedOff" xml:space="preserve">
+    <value>Обновления отключены ({0})</value>
+  </data>
+  <data name="UpdateReleaseBuildsOnly" xml:space="preserve">
+    <value>Обновляются только релизные сборки</value>
+  </data>
+  <data name="UpdateCannotWrite" xml:space="preserve">
+    <value>Приложение {0} не может выполнить запись в {1}; обновите его тем же способом, каким оно было установлено</value>
+  </data>
+  <data name="PlatformNeedsX11" xml:space="preserve">
+    <value>Приложению Shapeshifter требуется дисплей X11 (переменная DISPLAY не задана). В Wayland убедитесь, что доступен XWayland.</value>
+  </data>
+  <data name="PlatformWayland" xml:space="preserve">
+    <value>Это сеанс Wayland. Wayland не позволяет приложениям отслеживать и имитировать глобальные нажатия клавиш, поэтому жест вставки работает, только когда активно приложение X11 (XWayland). Для полной поддержки войдите в сеанс X11.</value>
+  </data>
+  <data name="PlatformAccessibility" xml:space="preserve">
+    <value>Приложению Shapeshifter нужен доступ к универсальному доступу, чтобы отслеживать и отправлять сочетание Cmd+V. Разрешите его в разделе «Системные настройки» &gt; «Конфиденциальность и безопасность» &gt; «Универсальный доступ» и перезапустите Shapeshifter.</value>
+  </data>
+  <data name="PlatformNotSupported" xml:space="preserve">
+    <value>{0} не поддерживается.</value>
+  </data>
+  <data name="ToggleOn" xml:space="preserve">
+    <value>Вкл.</value>
+  </data>
+  <data name="ToggleOff" xml:space="preserve">
+    <value>Откл.</value>
+  </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Сохраняет это изображение в файл .{0} и вставляет файл.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Загрузить и вставить ссылку</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Загружает это изображение на сервис {0} и вставляет общедоступную ссылку на него.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Подсказки</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Подсказывать, когда история могла избавить от повторного копирования</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Уже есть в истории</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>Копировать заново не нужно: удерживайте {0}+V, чтобы выбрать это из истории.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>Знаете ли вы?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>Можно сначала скопировать несколько фрагментов в приложении {0}, а затем удерживать {1}+V в приложении {2}, чтобы выбрать каждый из истории.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Загрузить на {0}?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Загрузить это изображение на {0}?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>Изображение отправляется на сервис {0} (catbox.moe) — бесплатный хостинг изображений без рекламы, — и его сможет увидеть любой, у кого есть ссылка. Загруженные файлы нельзя удалить. Ничто другое из того, что вы копируете, никогда не покидает ваш компьютер.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter больше не будет спрашивать. В этот раз ссылка скопирована: нажмите {0}+V, чтобы вставить её.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Загрузить на {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Нажмите Пробел, чтобы история оставалась открытой без удержания клавиши, затем Enter, чтобы вставить.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Чтобы просмотреть историю, не удерживая {0}, нажмите Пробел: она останется открытой, пока вы не нажмёте Enter для вставки или Esc.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Нажмите Enter для вставки</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Вставить</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Не закрывать</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Пробел</value>
+  </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>Искать во всём скопированном</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>Ничего не найдено</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>Ничто из скопированного не содержит «{0}».</value>
+  </data>
+</root>

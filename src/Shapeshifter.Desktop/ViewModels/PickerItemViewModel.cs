@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Text;
 using Shapeshifter.Desktop.Services;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Desktop.ViewModels;
 
@@ -58,7 +59,7 @@ public sealed partial class PickerItemViewModel : ObservableObject
             ClipboardContentKind.Image => DescribeImage(item.Snapshot.Image),
             ClipboardContentKind.FileCollection => DescribeFiles(files),
             ClipboardContentKind.File => Path.GetFileName(Path.TrimEndingDirectorySeparator(files[0])),
-            _ => string.IsNullOrWhiteSpace(item.PreviewText) ? "(empty)" : item.PreviewText,
+            _ => string.IsNullOrWhiteSpace(item.PreviewText) ? Strings.ItemEmpty : item.PreviewText,
         };
 
         // A copied colour code ("#2c5497", "rgb(44, 84, 151)") shows the colour itself on its tile (issue #299).
@@ -180,17 +181,17 @@ public sealed partial class PickerItemViewModel : ObservableObject
         {
             var width = BinaryPrimitives.ReadUInt32BigEndian(png.AsSpan(16, 4));
             var height = BinaryPrimitives.ReadUInt32BigEndian(png.AsSpan(20, 4));
-            return string.Create(CultureInfo.CurrentCulture, $"Image · {width} × {height}");
+            return Localizer.Format(Strings.ItemImageWithSize, width, height);
         }
 
-        return "Image";
+        return Strings.ItemImage;
     }
 
     /// <summary>"4 items · Projects, Notes.txt, Holiday.mp4, Sunset.png".</summary>
     internal static string DescribeFiles(IReadOnlyList<string> files)
     {
         var names = string.Join(", ", files.Take(6).Select(file => Path.GetFileName(Path.TrimEndingDirectorySeparator(file))));
-        return string.Create(CultureInfo.CurrentCulture, $"{files.Count} items · {names}");
+        return Localizer.Format(Strings.ItemFilesWithNames, files.Count, names);
     }
 
     private static string CreateFallbackSubtitle(ClipboardItem item)
@@ -198,17 +199,19 @@ public sealed partial class PickerItemViewModel : ObservableObject
         var snapshot = item.Snapshot;
         return item.Kind switch
         {
-            ClipboardContentKind.Text when ClipboardFormatClassifier.FindRichText(snapshot) is not null => "Formatted text",
+            ClipboardContentKind.Text when ClipboardFormatClassifier.FindRichText(snapshot) is not null => Strings.ItemFormattedText,
             ClipboardContentKind.Text => CountLines(snapshot.Text),
             ClipboardContentKind.Image => string.Empty,
-            _ => "Other data",
+            _ => Strings.ItemOtherData,
         };
     }
 
     private static string CountLines(string? text)
     {
         var lines = string.IsNullOrEmpty(text) ? 0 : text.AsSpan().Count('\n') + 1;
-        return lines <= 1 ? $"{text?.Length ?? 0} characters" : $"{lines} lines";
+        return lines <= 1
+            ? Localizer.Format(Strings.ItemCharacterCount, text?.Length ?? 0)
+            : Localizer.Format(Strings.ItemLineCount, lines);
     }
 }
 
@@ -242,7 +245,7 @@ public sealed class PickerActionViewModel(Shapeshifter.Core.Engine.PickerActionV
 
     public string Description => View.Description;
 
-    public Geometry Glyph { get; } = Glyphs.ForAction(view?.Title ?? string.Empty);
+    public Geometry Glyph { get; } = Glyphs.ForAction(view?.Id ?? string.Empty, unpins: view?.Title == Strings.ActionUnpin);
 
     /// <summary>The action that runs when the modifier is released without choosing another (the first).</summary>
     public bool IsDefault { get; } = isDefault;

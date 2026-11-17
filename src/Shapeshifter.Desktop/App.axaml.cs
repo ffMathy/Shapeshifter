@@ -19,6 +19,7 @@ using Shapeshifter.Desktop.Services;
 using Shapeshifter.Desktop.ViewModels;
 using Shapeshifter.Desktop.Views;
 using Shapeshifter.Platform;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Desktop;
 
@@ -173,15 +174,15 @@ public partial class App : Application
         {
             using var iconStream = AssetLoader.Open(PlatformLook.Asset(TrayIconName()));
             var menu = new NativeMenu();
-            menu.Items.Add(MenuItem("Settings…", ShowSettings));
-            menu.Items.Add(MenuItem("Open log folder", () => platform?.Launcher.OpenFolder(Paths.LogDirectory)));
-            menu.Items.Add(MenuItem("Clear history", () => history?.Clear()));
-            menu.Items.Add(MenuItem("Check for updates…", CheckForUpdates));
+            menu.Items.Add(MenuItem(Strings.TraySettings, ShowSettings));
+            menu.Items.Add(MenuItem(Strings.SettingsOpenLogFolder, () => platform?.Launcher.OpenFolder(Paths.LogDirectory)));
+            menu.Items.Add(MenuItem(Strings.SettingsClearHistory, () => history?.Clear()));
+            menu.Items.Add(MenuItem(Strings.TrayCheckForUpdates, CheckForUpdates));
             menu.Items.Add(new NativeMenuItemSeparator());
-            menu.Items.Add(MenuItem("Report a problem…", ReportProblem));
-            menu.Items.Add(MenuItem("About Shapeshifter " + ReleaseVersion.Current(), ShowSettings));
+            menu.Items.Add(MenuItem(Strings.TrayReportProblem, ReportProblem));
+            menu.Items.Add(MenuItem(Localizer.Format(Strings.TrayAbout, ReleaseVersion.Current()), ShowSettings));
             menu.Items.Add(new NativeMenuItemSeparator());
-            menu.Items.Add(MenuItem("Quit Shapeshifter", () => desktop?.Shutdown()));
+            menu.Items.Add(MenuItem(Strings.TrayQuit, () => desktop?.Shutdown()));
 
             trayIcon = new TrayIcon
             {
@@ -396,10 +397,11 @@ public partial class App : Application
     private static async Task ShowStartupErrorAsync(Exception exception)
     {
         var tcs = new TaskCompletionSource();
-        var close = new Button { Content = "Quit", HorizontalAlignment = HorizontalAlignment.Right };
+        var close = new Button { Content = Strings.StartupErrorQuit, HorizontalAlignment = HorizontalAlignment.Right };
         var window = new Window
         {
-            Title = "Shapeshifter could not start",
+            Title = Strings.StartupErrorTitle,
+            FlowDirection = Localizer.IsRightToLeft ? Avalonia.Media.FlowDirection.RightToLeft : Avalonia.Media.FlowDirection.LeftToRight,
             Width = 460,
             SizeToContent = SizeToContent.Height,
             WindowStartupLocation = WindowStartupLocation.CenterScreen,
@@ -410,7 +412,7 @@ public partial class App : Application
                 Children =
                 {
                     new TextBlock { Text = exception.Message, TextWrapping = Avalonia.Media.TextWrapping.Wrap },
-                    new TextBlock { Text = $"Details were written to {Paths.LogDirectory}.", TextWrapping = Avalonia.Media.TextWrapping.Wrap, Opacity = 0.7 },
+                    new TextBlock { Text = Localizer.Format(Strings.StartupErrorDetails, Paths.LogDirectory), TextWrapping = Avalonia.Media.TextWrapping.Wrap, Opacity = 0.7 },
                     close,
                 },
             },

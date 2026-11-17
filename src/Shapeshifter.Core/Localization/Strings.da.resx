@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Indstillinger for Shapeshifter</value>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
+  <data name="SettingsCopyVersion" xml:space="preserve">
+    <value>Kopiér version</value>
+  </data>
+  <data name="SettingsCopied" xml:space="preserve">
+    <value>Kopieret</value>
+  </data>
+  <data name="SettingsReportProblem" xml:space="preserve">
+    <value>Rapportér et problem</value>
+  </data>
+  <data name="SettingsProjectPage" xml:space="preserve">
+    <value>Projektside</value>
+  </data>
+  <data name="SettingsUsage" xml:space="preserve">
+    <value>Kopiér som normalt. Hvis du vil indsætte et ældre element, skal du holde {0} nede og trykke på V: Bliv ved med at holde {0} nede for at se historikken, tryk på V igen (eller ↑/↓ eller 1–9) for at vælge et element, → for at vælge, hvad der skal ske med det, Delete for at fjerne det og Esc for at annullere. Slip {0} for at indsætte.</value>
+  </data>
+  <data name="SettingsHistoryGroup" xml:space="preserve">
+    <value>Historik</value>
+  </data>
+  <data name="SettingsDelayTitle" xml:space="preserve">
+    <value>Forsinkelse, før historikken vises</value>
+  </data>
+  <data name="SettingsDelayDescription" xml:space="preserve">
+    <value>Hvor længe {0}+V skal holdes nede, før historikken vises</value>
+  </data>
+  <data name="SettingsDelayAccessibleName" xml:space="preserve">
+    <value>Forsinkelse, før historikken vises, i millisekunder</value>
+  </data>
+  <data name="SettingsItemsTitle" xml:space="preserve">
+    <value>Antal elementer, der skal huskes</value>
+  </data>
+  <data name="SettingsItemsDescription" xml:space="preserve">
+    <value>Fastgjorte elementer gemmes ud over dette</value>
+  </data>
+  <data name="SettingsRememberTitle" xml:space="preserve">
+    <value>Husk historikken efter genstart</value>
+  </data>
+  <data name="SettingsRememberDescription" xml:space="preserve">
+    <value>Gemmer historikken på denne computers disk, ikke kun fastgjorte elementer</value>
+  </data>
+  <data name="SettingsBehaviourGroup" xml:space="preserve">
+    <value>Adfærd</value>
+  </data>
+  <data name="SettingsNotificationsTitle" xml:space="preserve">
+    <value>Notifikationer om kopiering</value>
+  </data>
+  <data name="SettingsNotificationsDescription" xml:space="preserve">
+    <value>Vis en notifikation, hver gang noget kopieres</value>
+  </data>
+  <data name="SettingsStartAtLoginTitle" xml:space="preserve">
+    <value>Start ved login</value>
+  </data>
+  <data name="SettingsStartAtLoginDescription" xml:space="preserve">
+    <value>Shapeshifter venter i baggrunden, når du har logget ind</value>
+  </data>
+  <data name="SettingsUpdatesTitle" xml:space="preserve">
+    <value>Automatiske opdateringer</value>
+  </data>
+  <data name="SettingsClearHistory" xml:space="preserve">
+    <value>Ryd historik</value>
+  </data>
+  <data name="SettingsCheckForUpdates" xml:space="preserve">
+    <value>Søg efter opdateringer</value>
+  </data>
+  <data name="SettingsOpenLogFolder" xml:space="preserve">
+    <value>Åbn logmappe</value>
+  </data>
+  <data name="PickerTitleWindows" xml:space="preserve">
+    <value>Udklipsholderhistorik</value>
+  </data>
+  <data name="PickerTitleMacOS" xml:space="preserve">
+    <value>Udklipsholder</value>
+  </data>
+  <data name="PickerItemCountOne" xml:space="preserve">
+    <value>1 element</value>
+  </data>
+  <data name="PickerItemCountOther" xml:space="preserve">
+    <value>{0} elementer</value>
+  </data>
+  <data name="PickerReleaseHint" xml:space="preserve">
+    <value>Slip {0} for at indsætte</value>
+  </data>
+  <data name="PickerNothingCopied" xml:space="preserve">
+    <value>Intet kopieret endnu</value>
+  </data>
+  <data name="PickerEmptyHint" xml:space="preserve">
+    <value>Kopiér som normalt, så gemmer Shapeshifter alt, hvad du kopierer.
+
+Hvis du vil indsætte noget, du har kopieret tidligere, skal du holde {0} nede og trykke på V. Bliv ved med at holde {0} nede for at se historikken, tryk på V eller piletasterne for at vælge, og slip {0} for at indsætte.</value>
+  </data>
+  <data name="PickerActions" xml:space="preserve">
+    <value>Handlinger</value>
+  </data>
+  <data name="PickerActionsForText" xml:space="preserve">
+    <value>Handlinger for denne tekst</value>
+  </data>
+  <data name="PickerActionsForImage" xml:space="preserve">
+    <value>Handlinger for dette billede</value>
+  </data>
+  <data name="PickerActionsForFile" xml:space="preserve">
+    <value>Handlinger for denne fil</value>
+  </data>
+  <data name="PickerActionsForFiles" xml:space="preserve">
+    <value>Handlinger for disse filer</value>
+  </data>
+  <data name="PickerDefault" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="PickerHintRelease" xml:space="preserve">
+    <value>Slip for at indsætte</value>
+  </data>
+  <data name="PickerHintMove" xml:space="preserve">
+    <value>Flyt</value>
+  </data>
+  <data name="PickerHintJump" xml:space="preserve">
+    <value>Gå til</value>
+  </data>
+  <data name="PickerHintRemove" xml:space="preserve">
+    <value>Fjern</value>
+  </data>
+  <data name="PickerHintCancel" xml:space="preserve">
+    <value>Annuller</value>
+  </data>
+  <data name="KeyControl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="KeyEscape" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="ItemEmpty" xml:space="preserve">
+    <value>(tom)</value>
+  </data>
+  <data name="ItemImage" xml:space="preserve">
+    <value>Billede</value>
+  </data>
+  <data name="ItemImageWithSize" xml:space="preserve">
+    <value>Billede · {0} × {1}</value>
+  </data>
+  <data name="ItemFilesWithNames" xml:space="preserve">
+    <value>{0} elementer · {1}</value>
+  </data>
+  <data name="ItemFileCount" xml:space="preserve">
+    <value>{0} filer</value>
+  </data>
+  <data name="ItemFormattedText" xml:space="preserve">
+    <value>Formateret tekst</value>
+  </data>
+  <data name="ItemOtherData" xml:space="preserve">
+    <value>Andre data</value>
+  </data>
+  <data name="ItemCharacterCount" xml:space="preserve">
+    <value>{0} tegn</value>
+  </data>
+  <data name="ItemLineCount" xml:space="preserve">
+    <value>{0} linjer</value>
+  </data>
+  <data name="ToastCopiedOne" xml:space="preserve">
+    <value>Kopieret · 1 element i din historik</value>
+  </data>
+  <data name="ToastCopiedOther" xml:space="preserve">
+    <value>Kopieret · {0} elementer i din historik</value>
+  </data>
+  <data name="TraySettings" xml:space="preserve">
+    <value>Indstillinger…</value>
+  </data>
+  <data name="TrayCheckForUpdates" xml:space="preserve">
+    <value>Søg efter opdateringer…</value>
+  </data>
+  <data name="TrayReportProblem" xml:space="preserve">
+    <value>Rapportér et problem…</value>
+  </data>
+  <data name="TrayAbout" xml:space="preserve">
+    <value>Om Shapeshifter {0}</value>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>Afslut Shapeshifter</value>
+  </data>
+  <data name="StartupErrorTitle" xml:space="preserve">
+    <value>Shapeshifter kunne ikke starte</value>
+  </data>
+  <data name="StartupErrorDetails" xml:space="preserve">
+    <value>Detaljer blev skrevet til {0}.</value>
+  </data>
+  <data name="StartupErrorQuit" xml:space="preserve">
+    <value>Afslut</value>
+  </data>
+  <data name="ActionPaste" xml:space="preserve">
+    <value>Indsæt</value>
+  </data>
+  <data name="ActionPasteDescription" xml:space="preserve">
+    <value>Indsætter udklipsholderens indhold uændret.</value>
+  </data>
+  <data name="ActionPasteAsPlainText" xml:space="preserve">
+    <value>Indsæt som ren tekst</value>
+  </data>
+  <data name="ActionPasteAsPlainTextDescription" xml:space="preserve">
+    <value>Indsætter udklipsholderens indhold som ren tekst uden formatering.</value>
+  </data>
+  <data name="ActionPasteAsFile" xml:space="preserve">
+    <value>Indsæt som fil</value>
+  </data>
+  <data name="ActionPasteAsFileDescription" xml:space="preserve">
+    <value>Gemmer denne tekst i en .txt-fil og indsætter filen.</value>
+  </data>
+  <data name="ActionCopyAsZip" xml:space="preserve">
+    <value>Kopiér som komprimeret mappe</value>
+  </data>
+  <data name="ActionCopyAsZipDescription" xml:space="preserve">
+    <value>Kopierer disse filer til udklipsholderen som en komprimeret (.zip) mappe.</value>
+  </data>
+  <data name="ActionCopyImageFromLink" xml:space="preserve">
+    <value>Kopiér billede fra link</value>
+  </data>
+  <data name="ActionCopyImageFromLinkDescription" xml:space="preserve">
+    <value>Henter det linkede billede og kopierer selve billedet til udklipsholderen.</value>
+  </data>
+  <data name="ActionOpenLink" xml:space="preserve">
+    <value>Åbn link</value>
+  </data>
+  <data name="ActionOpenLinks" xml:space="preserve">
+    <value>Åbn links</value>
+  </data>
+  <data name="ActionOpenLinkDescription" xml:space="preserve">
+    <value>Åbner linket i din browser.</value>
+  </data>
+  <data name="ActionOpenLinksDescription" xml:space="preserve">
+    <value>Åbner linksene i din browser (højst {0}).</value>
+  </data>
+  <data name="ActionPin" xml:space="preserve">
+    <value>Fastgør til udklipsholder</value>
+  </data>
+  <data name="ActionPinDescription" xml:space="preserve">
+    <value>Fastgør dette element, så det altid bliver øverst, og gemmer det på din computer, så det er der, næste gang du åbner Shapeshifter.</value>
+  </data>
+  <data name="ActionUnpin" xml:space="preserve">
+    <value>Frigør fra udklipsholder</value>
+  </data>
+  <data name="ActionUnpinDescription" xml:space="preserve">
+    <value>Frigør dette element, så det rykker ned, når du kopierer, og ikke længere gemmes på din computer.</value>
+  </data>
+  <data name="TimeJustNow" xml:space="preserve">
+    <value>Lige nu</value>
+  </data>
+  <data name="TimeMinutesAgo" xml:space="preserve">
+    <value>{0} min. siden</value>
+  </data>
+  <data name="TimeHoursAgo" xml:space="preserve">
+    <value>{0} t. siden</value>
+  </data>
+  <data name="TimeYesterday" xml:space="preserve">
+    <value>I går</value>
+  </data>
+  <data name="TimeDaysAgo" xml:space="preserve">
+    <value>{0} dage siden</value>
+  </data>
+  <data name="UpdateOff" xml:space="preserve">
+    <value>Automatiske opdateringer er slået fra</value>
+  </data>
+  <data name="UpdateUnsupported" xml:space="preserve">
+    <value>Denne kopi kan ikke opdatere sig selv</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>Søger efter opdateringer…</value>
+  </data>
+  <data name="UpdateUpToDate" xml:space="preserve">
+    <value>Opdateret (tjekket {0})</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>Henter version {0}…</value>
+  </data>
+  <data name="UpdateReadyToRestart" xml:space="preserve">
+    <value>Version {0} er installeret og starter, næste gang {1} gør</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Kunne ikke opdatere: {0}</value>
+  </data>
+  <data name="UpdateAutomatic" xml:space="preserve">
+    <value>Der søges automatisk efter opdateringer</value>
+  </data>
+  <data name="UpdateTurnedOff" xml:space="preserve">
+    <value>Opdateringer er slået fra ({0})</value>
+  </data>
+  <data name="UpdateReleaseBuildsOnly" xml:space="preserve">
+    <value>Kun udgivelsesbuilds opdaterer sig selv</value>
+  </data>
+  <data name="UpdateCannotWrite" xml:space="preserve">
+    <value>{0} kan ikke skrive til {1}; opdater programmet på samme måde, som det blev installeret</value>
+  </data>
+  <data name="PlatformNeedsX11" xml:space="preserve">
+    <value>Shapeshifter kræver en X11-skærm (DISPLAY er ikke angivet). Under Wayland skal du sikre dig, at XWayland er tilgængelig.</value>
+  </data>
+  <data name="PlatformWayland" xml:space="preserve">
+    <value>Dette er en Wayland-session. Wayland tillader ikke programmer at overvåge eller simulere globale tastetryk, så indsætningsbevægelsen virker kun, mens et X11-program (XWayland) er i fokus. Log ind i en X11-session for fuld understøttelse.</value>
+  </data>
+  <data name="PlatformAccessibility" xml:space="preserve">
+    <value>Shapeshifter skal have adgang til Tilgængelighed for at kunne se og sende tastetrykket Cmd+V. Tillad det i Systemindstillinger &gt; Anonymitet og sikkerhed &gt; Tilgængelighed, og genstart Shapeshifter.</value>
+  </data>
+  <data name="PlatformNotSupported" xml:space="preserve">
+    <value>{0} understøttes ikke.</value>
+  </data>
+  <data name="ToggleOn" xml:space="preserve">
+    <value>Til</value>
+  </data>
+  <data name="ToggleOff" xml:space="preserve">
+    <value>Fra</value>
+  </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Gemmer dette billede i en .{0}-fil og indsætter filen.</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Upload og indsæt link</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Uploader dette billede til {0} og indsætter et offentligt link til det.</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Tips</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Foreslå, når historikken kunne have sparet dig for en kopiering</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Allerede i din historik</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>Du behøver ikke kopiere det igen: Hold {0}+V nede for at vælge det fra din historik.</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>Vidste du det?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>Du kan først kopiere flere ting fra {0} og derefter holde {1}+V nede i {2} for at vælge hver af dem fra din historik.</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Upload til {0}?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Upload dette billede til {0}?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>Billedet sendes til {0} (catbox.moe), en gratis billedtjeneste uden reklamer, og alle med linket kan se det. Uploads kan ikke slettes. Intet andet, du kopierer, forlader nogensinde din computer.</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter spørger ikke igen. Denne gang er linket kopieret: Tryk på {0}+V for at indsætte det.</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Upload til {0}</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Annuller</value>
+  </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Tryk på Mellemrum for at holde historikken åben uden at holde tasten nede, og tryk derefter på Enter for at indsætte.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Hvis du vil se historikken igennem uden at holde {0} nede, skal du trykke på Mellemrum: Den forbliver åben, indtil du trykker på Enter for at indsætte eller på Esc.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Tryk på Enter for at indsætte</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Luk</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Indsæt</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Hold åben</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Mellemrum</value>
+  </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>Søg</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>Søg i alt, du har kopieret</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>Ingen resultater</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>Intet af det, du har kopieret, indeholder “{0}”.</value>
+  </data>
+</root>

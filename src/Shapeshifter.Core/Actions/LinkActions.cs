@@ -1,5 +1,6 @@
 using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Text;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Core.Actions;
 
@@ -15,15 +16,15 @@ public sealed class OpenLinksAction : IClipboardAction
     public string GetTitle(ClipboardItem item)
     {
         ArgumentNullException.ThrowIfNull(item);
-        return LinkParser.ExtractLinks(item.Snapshot.Text).Count == 1 ? "Open link" : "Open links";
+        return LinkParser.ExtractLinks(item.Snapshot.Text).Count == 1 ? Strings.ActionOpenLink : Strings.ActionOpenLinks;
     }
 
     public string GetDescription(ClipboardItem item)
     {
         ArgumentNullException.ThrowIfNull(item);
         return LinkParser.ExtractLinks(item.Snapshot.Text).Count == 1
-            ? "Opens the link in your browser."
-            : $"Opens the links in your browser (at most {MaxLinks}).";
+            ? Strings.ActionOpenLinkDescription
+            : Localizer.Format(Strings.ActionOpenLinksDescription, MaxLinks);
     }
 
     public bool CanExecute(ClipboardItem item)
@@ -54,9 +55,9 @@ public sealed class CopyImageFromLinkAction : IClipboardAction
 
     public int Order => 100;
 
-    public string GetTitle(ClipboardItem item) => "Copy image from link";
+    public string GetTitle(ClipboardItem item) => Strings.ActionCopyImageFromLink;
 
-    public string GetDescription(ClipboardItem item) => "Downloads the linked image and copies the image itself to the clipboard.";
+    public string GetDescription(ClipboardItem item) => Strings.ActionCopyImageFromLinkDescription;
 
     public bool CanExecute(ClipboardItem item)
     {

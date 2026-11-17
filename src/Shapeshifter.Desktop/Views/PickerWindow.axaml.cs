@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Shapeshifter.Core.Input;
+using Shapeshifter.Core.Localization;
 using Shapeshifter.Desktop.Services;
 
 namespace Shapeshifter.Desktop.Views;
@@ -11,6 +12,11 @@ public partial class PickerWindow : Window
     public PickerWindow()
     {
         InitializeComponent();
+        if (Localizer.IsRightToLeft)
+        {
+            FlowDirection = Avalonia.Media.FlowDirection.RightToLeft;
+        }
+
         NativeMaterial.Prepare(this, Chrome);
 
         // Before the search box sees them, so the arrows, Enter and Escape drive the picker rather than the text.

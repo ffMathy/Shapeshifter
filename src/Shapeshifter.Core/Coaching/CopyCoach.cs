@@ -1,5 +1,6 @@
 using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Platform;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Core.Coaching;
 
@@ -89,8 +90,8 @@ public sealed class CopyCoach
                 // could help with; copying something that was replaced since is.
                 tip = new CoachingTip(
                     CoachingTipKind.CopiedAgain,
-                    "Already in your history",
-                    $"No need to copy it again: hold {modifierName}+V to pick it from your history.");
+                    Strings.TipAlreadyInHistoryTitle,
+                    Localizer.Format(Strings.TipAlreadyInHistoryMessage, Localizer.ModifierKey(modifierName)));
             }
             else if (returning is { } trip
                 && application is not null
@@ -99,8 +100,8 @@ public sealed class CopyCoach
             {
                 tip = new CoachingTip(
                     CoachingTipKind.CopiedBackAndForth,
-                    "Did you know?",
-                    $"You can copy several things from {trip.From} first, then hold {modifierName}+V in {trip.To} to pick each one from your history.");
+                    Strings.TipDidYouKnowTitle,
+                    Localizer.Format(Strings.TipCopyBackAndForthMessage, trip.From, Localizer.ModifierKey(modifierName), trip.To));
             }
 
             if (tip is null || !isEnabled() || (lastTipAt is { } shown && time.GetElapsedTime(shown, now) < Cooldown))

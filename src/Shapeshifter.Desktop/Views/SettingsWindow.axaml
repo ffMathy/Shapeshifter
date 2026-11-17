@@ -2,10 +2,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Shapeshifter.Desktop.ViewModels"
         xmlns:services="using:Shapeshifter.Desktop.Services"
+        xmlns:loc="using:Shapeshifter.Core.Localization"
         x:Class="Shapeshifter.Desktop.Views.SettingsWindow"
         x:DataType="vm:SettingsViewModel"
         Classes="settings"
-        Title="Shapeshifter Settings"
+        Title="{x:Static loc:Strings.SettingsTitle}"
         SizeToContent="Height"
         CanResize="False"
         WindowStartupLocation="CenterScreen">
@@ -22,11 +23,11 @@
         <WrapPanel Classes="heroLinks">
           <TextBlock Classes="heroVersion" Text="{Binding Version}" VerticalAlignment="Center" Margin="0,0,12,0" />
           <HyperlinkButton x:Name="CopyVersionLink" Classes="heroLink" Padding="0" Margin="0,0,12,0" FontSize="12"
-                           Content="Copy version" Click="OnCopyVersion" />
+                           Content="{x:Static loc:Strings.SettingsCopyVersion}" Click="OnCopyVersion" />
           <HyperlinkButton Classes="heroLink" Padding="0" Margin="0,0,12,0" FontSize="12"
-                           Content="Report a problem" Command="{Binding ReportProblemCommand}" />
+                           Content="{x:Static loc:Strings.SettingsReportProblem}" Command="{Binding ReportProblemCommand}" />
           <HyperlinkButton Classes="heroLink" Padding="0" FontSize="12"
-                           Content="Project page" Command="{Binding OpenProjectPageCommand}" />
+                           Content="{x:Static loc:Strings.SettingsProjectPage}" Command="{Binding OpenProjectPageCommand}" />
         </WrapPanel>
       </StackPanel>
     </Grid>
@@ -37,105 +38,106 @@
       <TextBlock Text="{Binding Warnings}" />
     </Border>
 
-    <TextBlock Classes="groupHeader" Text="History" />
+    <TextBlock Classes="groupHeader" Text="{x:Static loc:Strings.SettingsHistoryGroup}" />
     <Border Classes="group">
       <StackPanel>
         <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto">
           <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Clock}" Stretch="Uniform" />
           <StackPanel Grid.Column="1" Classes="rowText">
-            <TextBlock Classes="rowTitle" Text="Delay before the history appears" />
+            <TextBlock Classes="rowTitle" Text="{x:Static loc:Strings.SettingsDelayTitle}" />
             <TextBlock Classes="rowDescription" Text="{Binding DelayDescription}" />
           </StackPanel>
           <NumericUpDown Grid.Column="2" Classes="rowControl" Minimum="0" Maximum="3000" Increment="50" FormatString="0"
-                         Value="{Binding PasteDelayMilliseconds}" AutomationProperties.Name="Delay before the history appears, in milliseconds" />
+                         Value="{Binding PasteDelayMilliseconds}" AutomationProperties.Name="{x:Static loc:Strings.SettingsDelayAccessibleName}" />
         </Grid>
         <Border Classes="rowDivider" />
         <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto">
           <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Stack}" Stretch="Uniform" />
           <StackPanel Grid.Column="1" Classes="rowText">
-            <TextBlock Classes="rowTitle" Text="Items to remember" />
-            <TextBlock Classes="rowDescription" Text="Pinned items are kept in addition" />
+            <TextBlock Classes="rowTitle" Text="{x:Static loc:Strings.SettingsItemsTitle}" />
+            <TextBlock Classes="rowDescription" Text="{x:Static loc:Strings.SettingsItemsDescription}" />
           </StackPanel>
           <NumericUpDown Grid.Column="2" Classes="rowControl" Minimum="1" Maximum="1000" Increment="5" FormatString="0"
-                         Value="{Binding MaxHistoryItems}" AutomationProperties.Name="Items to remember" />
+                         Value="{Binding MaxHistoryItems}" AutomationProperties.Name="{x:Static loc:Strings.SettingsItemsTitle}" />
         </Grid>
         <Border Classes="rowDivider" />
         <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto">
           <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Archive}" Stretch="Uniform" />
           <StackPanel Grid.Column="1" Classes="rowText">
-            <TextBlock Classes="rowTitle" Text="Remember history after restart" />
-            <TextBlock Classes="rowDescription" Text="Keeps the history on this computer's disk, not just pinned items" />
+            <TextBlock Classes="rowTitle" Text="{x:Static loc:Strings.SettingsRememberTitle}" />
+            <TextBlock Classes="rowDescription" Text="{x:Static loc:Strings.SettingsRememberDescription}" />
           </StackPanel>
           <ToggleSwitch Grid.Column="2" Classes="rowControl" IsChecked="{Binding RememberHistory}"
-                        AutomationProperties.Name="Remember history after restart" />
+                        AutomationProperties.Name="{x:Static loc:Strings.SettingsRememberTitle}" />
         </Grid>
       </StackPanel>
     </Border>
 
-    <TextBlock Classes="groupHeader" Text="Behaviour" />
+    <TextBlock Classes="groupHeader" Text="{x:Static loc:Strings.SettingsBehaviourGroup}" />
     <Border Classes="group">
       <StackPanel>
         <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto">
           <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Bell}" Stretch="Uniform" />
           <StackPanel Grid.Column="1" Classes="rowText">
-            <TextBlock Classes="rowTitle" Text="Copy notifications" />
-            <TextBlock Classes="rowDescription" Text="Show a notification each time something is copied" />
+            <TextBlock Classes="rowTitle" Text="{x:Static loc:Strings.SettingsNotificationsTitle}" />
+            <TextBlock Classes="rowDescription" Text="{x:Static loc:Strings.SettingsNotificationsDescription}" />
           </StackPanel>
           <ToggleSwitch Grid.Column="2" Classes="rowControl" IsChecked="{Binding ShowCopyNotifications}"
-                        AutomationProperties.Name="Copy notifications" />
+                        AutomationProperties.Name="{x:Static loc:Strings.SettingsNotificationsTitle}" />
         </Grid>
         <Border Classes="rowDivider" />
         <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto">
           <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Lightbulb}" Stretch="Uniform" />
           <StackPanel Grid.Column="1" Classes="rowText">
-            <TextBlock Classes="rowTitle" Text="Tips" />
-            <TextBlock Classes="rowDescription" Text="Suggest when the history could have saved you a copy" />
+            <TextBlock Classes="rowTitle" Text="{x:Static loc:Strings.SettingsTipsTitle}" />
+            <TextBlock Classes="rowDescription" Text="{x:Static loc:Strings.SettingsTipsDescription}" />
           </StackPanel>
           <ToggleSwitch Grid.Column="2" Classes="rowControl" IsChecked="{Binding CoachingTips}"
-                        AutomationProperties.Name="Tips" />
+                        AutomationProperties.Name="{x:Static loc:Strings.SettingsTipsTitle}" />
         </Grid>
         <Border Classes="rowDivider" />
         <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto">
           <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Power}" Stretch="Uniform" />
           <StackPanel Grid.Column="1" Classes="rowText">
-            <TextBlock Classes="rowTitle" Text="Start at login" />
-            <TextBlock Classes="rowDescription" Text="Shapeshifter waits in the background after you sign in" />
+            <TextBlock Classes="rowTitle" Text="{x:Static loc:Strings.SettingsStartAtLoginTitle}" />
+            <TextBlock Classes="rowDescription" Text="{x:Static loc:Strings.SettingsStartAtLoginDescription}" />
           </StackPanel>
           <ToggleSwitch Grid.Column="2" Classes="rowControl" IsChecked="{Binding StartAtLogin}" IsEnabled="{Binding IsAutostartSupported}"
-                        AutomationProperties.Name="Start at login" />
+                        AutomationProperties.Name="{x:Static loc:Strings.SettingsStartAtLoginTitle}" />
         </Grid>
         <Border Classes="rowDivider" />
         <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto">
           <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Update}" Stretch="Uniform" />
           <StackPanel Grid.Column="1" Classes="rowText">
-            <TextBlock Classes="rowTitle" Text="Automatic updates" />
+            <TextBlock Classes="rowTitle" Text="{x:Static loc:Strings.SettingsUpdatesTitle}" />
             <TextBlock Classes="rowDescription" Text="{Binding UpdateStatus}" />
           </StackPanel>
           <ToggleSwitch Grid.Column="2" Classes="rowControl" IsChecked="{Binding AutomaticUpdates}" IsEnabled="{Binding CanUpdate}"
-                        AutomationProperties.Name="Automatic updates" />
+                        AutomationProperties.Name="{x:Static loc:Strings.SettingsUpdatesTitle}" />
         </Grid>
       </StackPanel>
     </Border>
 
-    <StackPanel Classes="commands">
+    <!-- A wrapping row: translated labels can be much longer than the English ones. -->
+    <WrapPanel Classes="commands">
       <Button Classes="command" Command="{Binding ClearHistoryCommand}">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <Path Classes="commandIcon" Data="{x:Static services:Glyphs.Trash}" Stretch="Uniform" />
-          <TextBlock Text="Clear history" VerticalAlignment="Center" />
+          <TextBlock Text="{x:Static loc:Strings.SettingsClearHistory}" VerticalAlignment="Center" />
         </StackPanel>
       </Button>
       <Button Classes="command" Command="{Binding CheckForUpdatesCommand}">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <Path Classes="commandIcon" Data="{x:Static services:Glyphs.Update}" Stretch="Uniform" />
-          <TextBlock Text="Check for updates" VerticalAlignment="Center" />
+          <TextBlock Text="{x:Static loc:Strings.SettingsCheckForUpdates}" VerticalAlignment="Center" />
         </StackPanel>
       </Button>
       <Button Classes="command" Command="{Binding OpenLogFolderCommand}">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <Path Classes="commandIcon" Data="{x:Static services:Glyphs.Folder}" Stretch="Uniform" />
-          <TextBlock Text="Open log folder" VerticalAlignment="Center" />
+          <TextBlock Text="{x:Static loc:Strings.SettingsOpenLogFolder}" VerticalAlignment="Center" />
         </StackPanel>
       </Button>
-    </StackPanel>
+    </WrapPanel>
   </StackPanel>
 </Window>

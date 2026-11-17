@@ -5,6 +5,7 @@ using SharpHook;
 using SharpHook.Data;
 using SharpHook.Providers;
 using SharpHook.Simulation;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Platform.Input;
 
@@ -66,9 +67,7 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
             // libuiohook cannot create the event tap without Accessibility access (UIOHOOK_ERROR_AXAPI_DISABLED),
             // so RunAsync would fail with an opaque HookException. Fail with an actionable message instead;
             // the call above has already shown the system prompt that leads to the setting.
-            throw new InvalidOperationException(
-                "Shapeshifter needs Accessibility access to see and send the Cmd+V keystroke. " +
-                "Allow it in System Settings > Privacy & Security > Accessibility, then start Shapeshifter again.");
+            throw new InvalidOperationException(Strings.PlatformAccessibility);
         }
 
         simulator = EventSimulator.Create("Shapeshifter");

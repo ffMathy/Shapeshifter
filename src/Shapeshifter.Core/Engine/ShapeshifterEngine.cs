@@ -9,7 +9,7 @@ using Shapeshifter.Core.Platform;
 namespace Shapeshifter.Core.Engine;
 
 /// <summary>An action as the picker displays it.</summary>
-public sealed record PickerActionView(string Title, string Description);
+public sealed record PickerActionView(string Id, string Title, string Description);
 
 /// <summary>What the picker displays.</summary>
 /// <param name="IsHeldOpen">The picker stays open after the modifier is released; Enter pastes (issue #420).</param>
@@ -513,7 +513,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
             return new PickerViewState(
                 items,
                 selection.SelectedIndex,
-                selected.Actions.Select(action => new PickerActionView(action.GetTitle(selected.Item), action.GetDescription(selected.Item))).ToArray(),
+                selected.Actions.Select(action => new PickerActionView(action.Id, action.GetTitle(selected.Item), action.GetDescription(selected.Item))).ToArray(),
                 selection.SelectedActionIndex,
                 selection.Pane,
                 selection.IsHeldOpen)

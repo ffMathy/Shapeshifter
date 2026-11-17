@@ -50,6 +50,7 @@ Looking for something you copied a while ago? Press <kbd>S</kbd> while the histo
 - **Installs and updates itself:** the first start installs Shapeshifter for your user (no administrator rights) and
   starts it at login. It checks GitHub for new releases every few hours, verifies the download's SHA-256 and restarts
   into it when you're not using it. Switch this off in Settings; on Windows, uninstall it from Apps or Control Panel.
+- **In your language:** Shapeshifter is translated into 21 languages and follows your system's language.
 - **Something wrong?** *Report a problem…* in the tray menu opens a GitHub issue with your version and system filled in.
 - **macOS** needs Accessibility access. **Linux** works fully on X11; on Wayland only while an X11 app is focused.
 

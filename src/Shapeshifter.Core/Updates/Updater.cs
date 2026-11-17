@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Core.Updates;
 
@@ -104,19 +105,19 @@ public sealed class Updater : IDisposable
             {
                 if (State is UpdateState.Idle or UpdateState.UpToDate or UpdateState.Disabled && !isEnabled())
                 {
-                    return "Automatic updates are off";
+                    return Strings.UpdateOff;
                 }
 
                 return State switch
                 {
-                    UpdateState.Unsupported => unsupportedReason ?? "This copy cannot update itself",
-                    UpdateState.Disabled => "Automatic updates are off",
-                    UpdateState.Checking => "Checking for updates…",
-                    UpdateState.UpToDate => $"Up to date (checked {LastChecked?.ToLocalTime().ToString("t", CultureInfo.CurrentCulture)})",
-                    UpdateState.Downloading => $"Downloading version {PendingVersion}…",
-                    UpdateState.ReadyToRestart => $"Version {PendingVersion} is installed and starts the next time {app.Name} does",
-                    UpdateState.Failed => $"Could not update: {LastError}",
-                    _ => "Updates are checked automatically",
+                    UpdateState.Unsupported => unsupportedReason ?? Strings.UpdateUnsupported,
+                    UpdateState.Disabled => Strings.UpdateOff,
+                    UpdateState.Checking => Strings.UpdateChecking,
+                    UpdateState.UpToDate => Localizer.Format(Strings.UpdateUpToDate, LastChecked?.ToLocalTime().ToString("t", CultureInfo.CurrentCulture)),
+                    UpdateState.Downloading => Localizer.Format(Strings.UpdateDownloading, PendingVersion),
+                    UpdateState.ReadyToRestart => Localizer.Format(Strings.UpdateReadyToRestart, PendingVersion, app.Name),
+                    UpdateState.Failed => Localizer.Format(Strings.UpdateFailed, LastError),
+                    _ => Strings.UpdateAutomatic,
                 };
             }
         }
@@ -346,18 +347,18 @@ public sealed class Updater : IDisposable
     {
         if (Environment.GetEnvironmentVariable(app.NoUpdateVariable) == "1")
         {
-            return $"Updates are turned off ({app.NoUpdateVariable})";
+            return Localizer.Format(Strings.UpdateTurnedOff, app.NoUpdateVariable);
         }
 
         if (!running.IsSingleFile)
         {
-            return "Only release builds update themselves";
+            return Strings.UpdateReleaseBuildsOnly;
         }
 
         var directory = Path.GetDirectoryName(running.ReplaceablePath);
         if (directory is null || !CanWrite(directory))
         {
-            return $"{app.Name} cannot write to {directory}; update it the way it was installed";
+            return Localizer.Format(Strings.UpdateCannotWrite, app.Name, directory);
         }
 
         return null;
