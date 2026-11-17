@@ -416,4 +416,7 @@
   <data name="SettingsShortcutDescription" xml:space="preserve">
     <value>Win+V, Windows के क्लिपबोर्ड इतिहास की जगह लेता है, इसलिए Ctrl+V पहले की तरह पेस्ट करता है</value>
   </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Ctrl+V चुनने पर Cmd+V पहले की तरह पेस्ट करता है</value>
+  </data>
 </root>

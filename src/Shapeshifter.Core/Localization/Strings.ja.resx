@@ -416,4 +416,7 @@
   <data name="SettingsShortcutDescription" xml:space="preserve">
     <value>Win+V が Windows のクリップボード履歴の代わりになり、Ctrl+V は通常どおり貼り付けます</value>
   </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Ctrl+V にすると、Cmd+V は通常どおり貼り付けます</value>
+  </data>
 </root>

@@ -416,4 +416,7 @@
   <data name="SettingsShortcutDescription" xml:space="preserve">
     <value>Win+V جای تاریخچهٔ کلیپ‌بورد Windows را می‌گیرد، پس Ctrl+V مثل همیشه جای‌گذاری می‌کند</value>
   </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>با Ctrl+V، کلید Cmd+V مثل همیشه جای‌گذاری می‌کند</value>
+  </data>
 </root>

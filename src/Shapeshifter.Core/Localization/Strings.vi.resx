@@ -416,4 +416,7 @@
   <data name="SettingsShortcutDescription" xml:space="preserve">
     <value>Win+V thay cho lịch sử bộ nhớ tạm của Windows, nên Ctrl+V vẫn dán như bình thường</value>
   </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Khi dùng Ctrl+V, Cmd+V vẫn dán như bình thường</value>
+  </data>
 </root>

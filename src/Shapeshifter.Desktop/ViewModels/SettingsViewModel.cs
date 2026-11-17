@@ -62,13 +62,20 @@ public sealed partial class SettingsViewModel : ObservableObject
         Func<string> modifierName,
         IReadOnlyList<string> warnings,
         Updater? updater = null,
-        bool canChoosePasteShortcut = false)
+        IReadOnlyList<string>? shortcutModifierNames = null)
     {
         ArgumentNullException.ThrowIfNull(settings);
         ArgumentNullException.ThrowIfNull(autostart);
         ArgumentNullException.ThrowIfNull(modifierName);
         this.modifierName = modifierName;
-        CanChoosePasteShortcut = canChoosePasteShortcut;
+        shortcutModifierNames ??= [];
+        CanChoosePasteShortcut = shortcutModifierNames.Count > 1;
+        PasteShortcutOptions = shortcutModifierNames.Select(name => Localizer.ModifierKey(name) + "+V").ToArray();
+
+        // Win+V needs explaining on Windows (it replaces the clipboard history); Ctrl+V on macOS leaves Cmd+V alone.
+        PasteShortcutDescription = shortcutModifierNames is [_, "Win"]
+            ? Strings.SettingsShortcutDescription
+            : Strings.SettingsShortcutDescriptionMac;
         this.settings = settings;
         this.autostart = autostart;
         this.history = history;
@@ -92,11 +99,14 @@ public sealed partial class SettingsViewModel : ObservableObject
         UpdateModifierTexts();
     }
 
-    /// <summary>Whether the user can choose between Ctrl+V and Win+V (on Windows only).</summary>
+    /// <summary>Whether the user can choose the shortcut: Ctrl+V or Win+V on Windows, Cmd+V or Ctrl+V on macOS.</summary>
     public bool CanChoosePasteShortcut { get; }
 
     /// <summary>The choices of the shortcut, in the order of <see cref="Core.Settings.PasteShortcut"/>.</summary>
-    public IReadOnlyList<string> PasteShortcutOptions { get; } = [Strings.KeyControl + "+V", "Win+V"];
+    public IReadOnlyList<string> PasteShortcutOptions { get; }
+
+    /// <summary>What choosing the alternative shortcut does on this platform.</summary>
+    public string PasteShortcutDescription { get; }
 
     /// <summary>The inverse of <see cref="QuietMode"/>, for a switch that reads "Copy notifications: on".</summary>
     public bool ShowCopyNotifications

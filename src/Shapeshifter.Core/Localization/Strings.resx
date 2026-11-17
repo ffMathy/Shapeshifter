@@ -544,10 +544,14 @@ To paste something you copied earlier, hold {0} and press V. Keep holding {0} to
   </data>
   <data name="SettingsShortcutTitle" xml:space="preserve">
     <value>Shortcut</value>
-    <comment>Setting title, Windows only: whether Ctrl+V or Win+V (the Windows key and V) opens the history.</comment>
+    <comment>Setting title, Windows and macOS: which keys open the history (Ctrl+V or Win+V on Windows, Cmd+V or Ctrl+V on macOS).</comment>
   </data>
   <data name="SettingsShortcutDescription" xml:space="preserve">
     <value>Win+V replaces the Windows clipboard history, so Ctrl+V pastes as usual</value>
-    <comment>Explains the Win+V choice of the shortcut setting. Use the local name of the Ctrl key (German: Strg).</comment>
+    <comment>Windows: explains the Win+V choice of the shortcut setting. Use the local name of the Ctrl key (German: Strg).</comment>
+  </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Ctrl+V leaves Cmd+V free to paste as usual</value>
+    <comment>macOS: explains the Ctrl+V choice of the shortcut setting. Keep Cmd; use the local name of the Ctrl key (German: Strg).</comment>
   </data>
 </root>

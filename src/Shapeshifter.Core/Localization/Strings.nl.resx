@@ -416,4 +416,7 @@ Om iets te plakken dat je eerder hebt gekopieerd, houd je {0} ingedrukt en druk 
   <data name="SettingsShortcutDescription" xml:space="preserve">
     <value>Win+V vervangt de klembordgeschiedenis van Windows, zodat Ctrl+V gewoon plakt</value>
   </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Met Ctrl+V plakt Cmd+V gewoon</value>
+  </data>
 </root>

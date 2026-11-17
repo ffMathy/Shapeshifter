@@ -7,7 +7,10 @@ public enum GestureKey
 {
     Other,
 
-    /// <summary>Ctrl on Windows and Linux, Command on macOS; the Windows key when the shortcut is Win+V.</summary>
+    /// <summary>
+    /// Ctrl on Windows and Linux, Command on macOS; with the alternative shortcut, the Windows key on Windows and Ctrl on
+    /// macOS.
+    /// </summary>
     Modifier,
 
     /// <summary>The V key.</summary>
@@ -61,19 +64,22 @@ public interface IKeyboardHook : IDisposable
     Func<KeyInput, bool>? KeyHandler { get; set; }
 
     /// <summary>
-    /// A human-readable name of the gesture modifier: "Ctrl", "Cmd" on macOS or "Win". Changes with
-    /// <see cref="PasteShortcut"/>.
+    /// A human-readable name of the gesture modifier: "Ctrl", "Cmd" or "Win". Changes with <see cref="PasteShortcut"/>.
     /// </summary>
     string ModifierName { get; }
 
     /// <summary>
-    /// Which keys the gesture uses. Takes effect with the next key press; where <see cref="SupportsWindowsKey"/> is
-    /// <see langword="false"/>, <see cref="Settings.PasteShortcut.WindowsV"/> acts as Ctrl+V (or Cmd+V).
+    /// Which keys the gesture uses. Takes effect with the next key press; where there is no alternative
+    /// (<see cref="ShortcutModifierNames"/> has one entry), <see cref="Settings.PasteShortcut.Alternative"/> acts as the
+    /// standard keys.
     /// </summary>
     PasteShortcut PasteShortcut { get; set; }
 
-    /// <summary>Whether the gesture can use the Windows key (<see cref="Settings.PasteShortcut.WindowsV"/>): on Windows only.</summary>
-    bool SupportsWindowsKey { get; }
+    /// <summary>
+    /// The modifier names of the shortcuts the user can choose from, in the order of <see cref="Settings.PasteShortcut"/>:
+    /// "Ctrl" and "Win" on Windows, "Cmd" and "Ctrl" on macOS, and only "Ctrl" on Linux.
+    /// </summary>
+    IReadOnlyList<string> ShortcutModifierNames { get; }
 
     /// <summary>
     /// Some platforms (X11) can only suppress keys that were grabbed beforehand. While a gesture is active the

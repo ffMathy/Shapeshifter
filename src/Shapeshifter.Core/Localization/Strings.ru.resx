@@ -416,4 +416,7 @@
   <data name="SettingsShortcutDescription" xml:space="preserve">
     <value>Win+V заменяет журнал буфера обмена Windows, а Ctrl+V вставляет как обычно</value>
   </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>С Ctrl+V сочетание Cmd+V вставляет как обычно</value>
+  </data>
 </root>

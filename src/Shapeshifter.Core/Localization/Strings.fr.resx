@@ -416,4 +416,7 @@ Pour coller quelque chose que vous avez copié auparavant, maintenez {0} enfonc�
   <data name="SettingsShortcutDescription" xml:space="preserve">
     <value>Win+V remplace l’historique du presse-papiers de Windows, et Ctrl+V colle comme d’habitude</value>
   </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Avec Ctrl+V, Cmd+V colle comme d’habitude</value>
+  </data>
 </root>

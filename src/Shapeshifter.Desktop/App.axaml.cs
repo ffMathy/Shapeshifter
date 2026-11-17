@@ -310,7 +310,7 @@ public partial class App : Application
             Icon = new WindowIcon(AssetLoader.Open(PlatformLook.Asset("Application.png"))),
             DataContext = new SettingsViewModel(
                 settings, platform.Autostart, history, platform.Launcher, Paths, () => platform.KeyboardHook.ModifierName, platform.Warnings, updater,
-                platform.KeyboardHook.SupportsWindowsKey),
+                platform.KeyboardHook.ShortcutModifierNames),
         };
         settingsWindow.Closed += (_, _) =>
         {

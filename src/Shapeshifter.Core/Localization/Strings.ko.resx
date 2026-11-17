@@ -416,4 +416,7 @@
   <data name="SettingsShortcutDescription" xml:space="preserve">
     <value>Win+V가 Windows 클립보드 기록을 대신하므로 Ctrl+V는 평소처럼 붙여넣습니다</value>
   </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Ctrl+V를 사용하면 Cmd+V는 평소처럼 붙여넣습니다</value>
+  </data>
 </root>

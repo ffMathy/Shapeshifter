@@ -306,7 +306,7 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
         Assert.Equal(string.Empty, await session.GetTargetTextAsync());
         await session.TapAsync(KeyCode.VcEnter);
 
-        Assert.Equal($"banana {id}", await session.WaitForTargetTextAsync($"banana {id}"));
+        await session.ExpectTargetTextAsync($"banana {id}");
         var state = await session.WaitForStateAsync(s => !s.PickerVisible && !s.Searching && s.Previews[0] == $"banana {id}", "picker hidden and the match moved to the top");
         Assert.Equal($"cherry {id}", state.Previews[1]);
         await session.WaitForIdleAsync();

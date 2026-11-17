@@ -416,4 +416,7 @@ Daha önce kopyaladığınız bir şeyi yapıştırmak için {0} tuşunu basıl�
   <data name="SettingsShortcutDescription" xml:space="preserve">
     <value>Win+V, Windows pano geçmişinin yerini alır; Ctrl+V her zamanki gibi yapıştırır</value>
   </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Ctrl+V seçilince Cmd+V her zamanki gibi yapıştırır</value>
+  </data>
 </root>

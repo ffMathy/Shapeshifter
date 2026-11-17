@@ -3,14 +3,14 @@ namespace Shapeshifter.Core.Settings;
 /// <summary>The keys held for the paste gesture (issue #28).</summary>
 public enum PasteShortcut
 {
-    /// <summary>Ctrl+V, or Cmd+V on macOS: a quick press still pastes as usual.</summary>
-    ControlV,
+    /// <summary>The platform's paste keys: Ctrl+V, or Cmd+V on macOS. A quick press still pastes as usual.</summary>
+    Standard,
 
     /// <summary>
-    /// Win+V, in place of the Windows clipboard history, so Ctrl+V is left alone. Only available on Windows; elsewhere
-    /// it acts as <see cref="ControlV"/>.
+    /// Win+V on Windows (in place of the Windows clipboard history) or Ctrl+V on macOS, which leaves the paste keys
+    /// alone. Linux has no alternative; there it acts as <see cref="Standard"/>.
     /// </summary>
-    WindowsV,
+    Alternative,
 }
 
 /// <summary>User preferences. Persisted as JSON by <see cref="SettingsStore"/>.</summary>
@@ -21,7 +21,7 @@ public sealed record ShapeshifterSettings
     /// <summary>How long the modifier must be held after V before the picker shows up.</summary>
     public int PasteDelayMilliseconds { get; init; } = 300;
 
-    /// <summary>Which keys open the history. Saved as a number, so an unknown value falls back to Ctrl+V.</summary>
+    /// <summary>Which keys open the history. Saved as a number, so an unknown value falls back to the standard keys.</summary>
     public PasteShortcut PasteShortcut { get; init; }
 
     /// <summary>When set, no "copied" notification is shown after each copy.</summary>
@@ -69,7 +69,7 @@ public sealed record ShapeshifterSettings
     public ShapeshifterSettings Normalize() => this with
     {
         PasteDelayMilliseconds = Math.Clamp(PasteDelayMilliseconds, 0, MaxPasteDelayMilliseconds),
-        PasteShortcut = Enum.IsDefined(PasteShortcut) ? PasteShortcut : PasteShortcut.ControlV,
+        PasteShortcut = Enum.IsDefined(PasteShortcut) ? PasteShortcut : PasteShortcut.Standard,
         MaxHistoryItems = Math.Clamp(MaxHistoryItems, 1, 1000),
         UploadConsents = UploadConsents ?? [],
     };

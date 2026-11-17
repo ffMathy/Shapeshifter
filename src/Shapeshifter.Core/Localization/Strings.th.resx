@@ -416,4 +416,7 @@
   <data name="SettingsShortcutDescription" xml:space="preserve">
     <value>Win+V ใช้แทนประวัติคลิปบอร์ดของ Windows ส่วน Ctrl+V จะวางตามปกติ</value>
   </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>เมื่อใช้ Ctrl+V แล้ว Cmd+V จะวางตามปกติ</value>
+  </data>
 </root>

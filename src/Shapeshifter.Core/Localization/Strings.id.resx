@@ -416,4 +416,7 @@ Untuk menempelkan sesuatu yang Anda salin sebelumnya, tahan {0} lalu tekan V. Te
   <data name="SettingsShortcutDescription" xml:space="preserve">
     <value>Win+V menggantikan riwayat papan klip Windows, jadi Ctrl+V menempel seperti biasa</value>
   </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Dengan Ctrl+V, Cmd+V menempel seperti biasa</value>
+  </data>
 </root>

@@ -416,4 +416,7 @@
   <data name="SettingsShortcutDescription" xml:space="preserve">
     <value>يحل Win+V محل سجل الحافظة في Windows، فيبقى Ctrl+V للصق كالمعتاد</value>
   </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>مع Ctrl+V يبقى Cmd+V للصق كالمعتاد</value>
+  </data>
 </root>

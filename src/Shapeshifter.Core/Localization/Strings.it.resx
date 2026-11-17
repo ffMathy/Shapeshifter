@@ -416,4 +416,7 @@ Per incollare qualcosa che hai copiato in precedenza, tieni premuto {0} e premi 
   <data name="SettingsShortcutDescription" xml:space="preserve">
     <value>Win+V sostituisce la cronologia degli Appunti di Windows, così Ctrl+V incolla come sempre</value>
   </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Con Ctrl+V, Cmd+V incolla come sempre</value>
+  </data>
 </root>

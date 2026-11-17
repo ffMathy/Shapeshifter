@@ -234,7 +234,7 @@ public sealed class UploadConsentSettingsTests
                 var t when t == typeof(int) => (int)property.GetValue(original)! + 1,
                 var t when t == typeof(bool) => !(bool)property.GetValue(original)!,
                 var t when t == typeof(IReadOnlyList<string>) => new[] { "changed" },
-                var t when t == typeof(PasteShortcut) => PasteShortcut.WindowsV,
+                var t when t == typeof(PasteShortcut) => PasteShortcut.Alternative,
                 var t => throw new InvalidOperationException($"Add a changed value for {t.Name} ({property.Name}) to this test."),
             };
             property.SetValue(changed, value);

@@ -119,7 +119,7 @@ internal sealed class FakeKeyboardHook : IKeyboardHook
 
     public Shapeshifter.Core.Settings.PasteShortcut PasteShortcut { get; set; }
 
-    public bool SupportsWindowsKey => false;
+    public IReadOnlyList<string> ShortcutModifierNames => ["Ctrl"];
 
     public int StartCount { get; private set; }
 

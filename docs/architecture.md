@@ -50,7 +50,7 @@ Applications are compared by name (`ClipboardSource.ApplicationName`; for the pa
 
 **Suppression:**
 - Windows and macOS: the SharpHook callback sets `SuppressEvent`, so the focused application never receives the intercepted V.
-- Windows, with the "Shortcut" setting on Win+V (#28): `KeyMap` makes the Windows key the gesture's `Modifier` and Ctrl an `OtherModifier`, while pasting still sends Ctrl+V. Windows opens the Start menu when the Windows key is released without another key in between, and it never saw the suppressed V; so the first time a key is suppressed while the Windows key is held, `SharpHookKeyboardService` sends a Ctrl press to "mask" it. The choice is Windows-only, as macOS and X11 reserve Cmd/Super+V for themselves or cannot grab it reliably.
+- The "Shortcut" setting (#28) offers an alternative to the paste keys: Win+V on Windows, Ctrl+V on macOS. `KeyMap` then makes that key the gesture's `Modifier` and the paste key an `OtherModifier`, while pasting still sends Ctrl+V (Cmd+V on macOS). Windows opens the Start menu when the Windows key is released without another key in between, and it never saw the suppressed V; so the first time a key is suppressed while the Windows key is held, `SharpHookKeyboardService` sends a Ctrl press to "mask" it. X11 has no alternative: Super+V belongs to the desktop.
 - Linux: libuiohook cannot suppress events. The X11 integration therefore holds a passive grab on Ctrl+V for all CapsLock and NumLock combinations, and grabs the navigation keys only while a gesture is active. Key events are still observed through XRecord, which also reports grabbed keys.
 
 **Pasting:**

@@ -416,4 +416,7 @@ Hvis du vil indsætte noget, du har kopieret tidligere, skal du holde {0} nede o
   <data name="SettingsShortcutDescription" xml:space="preserve">
     <value>Win+V erstatter Windows' udklipsholderhistorik, så Ctrl+V indsætter som normalt</value>
   </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Med Ctrl+V indsætter Cmd+V som normalt</value>
+  </data>
 </root>

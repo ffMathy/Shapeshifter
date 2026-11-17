@@ -77,7 +77,7 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
         }
     }
 
-    public bool SupportsWindowsKey => KeyMap.SupportsWindowsKey;
+    public IReadOnlyList<string> ShortcutModifierNames => KeyMap.ShortcutModifierNames;
 
     /// <summary>Delay between individual simulated key events. Some applications drop events sent back-to-back.</summary>
     public TimeSpan KeystrokeDelay { get; set; } = TimeSpan.FromMilliseconds(8);

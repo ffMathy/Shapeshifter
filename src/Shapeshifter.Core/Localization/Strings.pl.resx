@@ -416,4 +416,7 @@ Aby wkleić coś skopiowanego wcześniej, przytrzymaj {0} i naciśnij V. Trzymaj
   <data name="SettingsShortcutDescription" xml:space="preserve">
     <value>Win+V zastępuje historię schowka systemu Windows, więc Ctrl+V wkleja jak zwykle</value>
   </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Przy Ctrl+V skrót Cmd+V wkleja jak zwykle</value>
+  </data>
 </root>
