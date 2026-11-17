@@ -531,6 +531,79 @@ kbd {
 .feature h3 { font-size: 1.1rem; font-weight: 650; letter-spacing: -0.01em; margin-bottom: 8px; }
 .feature p { color: var(--text-muted); font-size: 0.98rem; }
 
+/* Actions */
+
+.kinds {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  gap: 16px;
+}
+
+.kind {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px 22px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.kind-head { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.kind-head h3 { font-size: 1.08rem; font-weight: 650; letter-spacing: -0.01em; }
+.kind > p { color: var(--text-muted); font-size: 0.94rem; margin-bottom: 16px; }
+
+.kind-icon {
+  flex: none;
+  width: 36px; height: 36px;
+  padding: 7px;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.kind-actions {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  display: grid;
+  gap: 2px;
+  background: var(--surface-sunken);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.kind-actions li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 7px;
+  font-size: 0.93rem;
+}
+
+/* The first action is the default: releasing the key right away runs it. */
+.kind-actions li:first-child { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.kind-actions li:first-child .action-icon { stroke: currentColor; }
+
+.action-icon {
+  flex: none;
+  width: 18px; height: 18px;
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.actions dt { display: flex; align-items: center; gap: 8px; }
+.actions dt .action-icon { stroke: var(--accent); }
+
 .actions-block {
   margin-top: 56px;
   display: grid;
