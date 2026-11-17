@@ -86,6 +86,16 @@
         </Grid>
         <Border Classes="rowDivider" />
         <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto">
+          <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Lightbulb}" Stretch="Uniform" />
+          <StackPanel Grid.Column="1" Classes="rowText">
+            <TextBlock Classes="rowTitle" Text="Tips" />
+            <TextBlock Classes="rowDescription" Text="Suggest when the history could have saved you a copy" />
+          </StackPanel>
+          <ToggleSwitch Grid.Column="2" Classes="rowControl" IsChecked="{Binding CoachingTips}"
+                        AutomationProperties.Name="Tips" />
+        </Grid>
+        <Border Classes="rowDivider" />
+        <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto">
           <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Power}" Stretch="Uniform" />
           <StackPanel Grid.Column="1" Classes="rowText">
             <TextBlock Classes="rowTitle" Text="Start at login" />
