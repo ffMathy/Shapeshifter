@@ -26,6 +26,9 @@ public sealed partial class SettingsViewModel : ObservableObject
     private bool quietMode;
 
     [ObservableProperty]
+    private bool coachingTips;
+
+    [ObservableProperty]
     private int maxHistoryItems;
 
     [ObservableProperty]
@@ -58,6 +61,7 @@ public sealed partial class SettingsViewModel : ObservableObject
         var current = settings.Current;
         pasteDelayMilliseconds = current.PasteDelayMilliseconds;
         quietMode = current.QuietMode;
+        coachingTips = current.CoachingTips;
         maxHistoryItems = current.MaxHistoryItems;
         rememberHistory = current.RememberHistory;
         startAtLogin = autostart.IsSupported && autostart.IsEnabled;
@@ -134,6 +138,9 @@ public sealed partial class SettingsViewModel : ObservableObject
 
     partial void OnQuietModeChanged(bool value) =>
         settings.Update(current => current with { QuietMode = value });
+
+    partial void OnCoachingTipsChanged(bool value) =>
+        settings.Update(current => current with { CoachingTips = value });
 
     partial void OnMaxHistoryItemsChanged(int value) =>
         settings.Update(current => current with { MaxHistoryItems = value });

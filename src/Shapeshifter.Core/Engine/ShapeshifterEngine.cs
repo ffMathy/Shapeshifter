@@ -2,6 +2,7 @@ using System.Threading.Channels;
 using Serilog;
 using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Coaching;
 using Shapeshifter.Core.Input;
 using Shapeshifter.Core.Platform;
 
@@ -30,10 +31,13 @@ public interface IPickerPresenter
     Task HideAsync();
 }
 
-/// <summary>Shows the short "copied" notification.</summary>
+/// <summary>Shows the short "copied" notification, or a coaching tip in its place.</summary>
 public interface ICopyNotifier
 {
     void NotifyCopied(ClipboardItem item, int historyCount);
+
+    /// <summary>Shows a tip on how Shapeshifter could have helped with the copy the user just made.</summary>
+    void NotifyTip(CoachingTip tip);
 }
 
 /// <summary>Coordinates the clipboard monitor, the keyboard hook, the gesture and the picker.</summary>
@@ -46,6 +50,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
     private readonly ActionContext actionContext;
     private readonly IPickerPresenter picker;
     private readonly ICopyNotifier? copyNotifier;
+    private readonly CopyCoach? coach;
     private readonly ILogger logger;
     private readonly TimeProvider time;
     private readonly PasteGestureStateMachine gesture;
@@ -58,6 +63,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
     private ITimer? tickTimer;
     private Task? effectLoop;
     private bool navigationCaptured;
+    private volatile bool capturingAtStartup;
     private int disposed;
 
     public ShapeshifterEngine(
@@ -69,7 +75,8 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
         IPickerPresenter picker,
         ICopyNotifier? copyNotifier = null,
         ILogger? logger = null,
-        TimeProvider? time = null)
+        TimeProvider? time = null,
+        CopyCoach? coach = null)
     {
         this.history = history;
         this.monitor = monitor;
@@ -78,6 +85,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
         this.actionContext = actionContext;
         this.picker = picker;
         this.copyNotifier = copyNotifier;
+        this.coach = coach;
         this.logger = logger ?? Log.Logger;
         this.time = time ?? TimeProvider.System;
         startTimestamp = this.time.GetTimestamp();
@@ -126,7 +134,15 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
         effectLoop = Task.Run(ProcessEffectsAsync, CancellationToken.None);
         monitor.Captured += OnCaptured;
         monitor.Start();
-        await monitor.CaptureNowAsync(cancellationToken).ConfigureAwait(false);
+        capturingAtStartup = true;
+        try
+        {
+            await monitor.CaptureNowAsync(cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            capturingAtStartup = false;
+        }
 
         keyboardHook.KeyHandler = OnKey;
         await keyboardHook.StartAsync(cancellationToken).ConfigureAwait(false);
@@ -260,6 +276,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
         switch (effect)
         {
             case ShowPicker show:
+                coach?.OnPickerUsed();
                 await picker.ShowAsync(CreateViewState(show.Selection)).ConfigureAwait(false);
                 break;
 
@@ -273,10 +290,14 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
 
             case PasteCurrentClipboard:
                 logger.Debug("Pasting the current clipboard");
+
+                // Before the keystroke, while the application being pasted into is surely still in front.
+                coach?.OnPasted();
                 await actionContext.Paste.SimulatePasteAsync(cancellationToken).ConfigureAwait(false);
                 break;
 
             case PerformAction perform:
+                coach?.OnPickerUsed();
                 await PerformAsync(perform, cancellationToken).ConfigureAwait(false);
                 break;
 
@@ -366,6 +387,18 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
 
     private void OnCaptured(object? sender, ClipboardCapturedEventArgs e)
     {
+        if (capturingAtStartup)
+        {
+            // Whatever was on the clipboard before Shapeshifter started: announce it, but there is nothing to coach.
+            coach?.OnStartupCapture(e.Item);
+        }
+        else if (coach?.OnCopied(e.Item, e.IsNew, e.Source) is { } tip)
+        {
+            logger.Information("Showing the {Tip} tip", tip.Kind);
+            copyNotifier?.NotifyTip(tip);
+            return;
+        }
+
         if (e.IsNew)
         {
             copyNotifier?.NotifyCopied(e.Item, history.Count);

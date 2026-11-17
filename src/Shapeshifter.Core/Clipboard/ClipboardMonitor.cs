@@ -3,12 +3,18 @@ using Shapeshifter.Core.Platform;
 
 namespace Shapeshifter.Core.Clipboard;
 
-public sealed class ClipboardCapturedEventArgs(ClipboardItem item, bool isNew) : EventArgs
+public sealed class ClipboardCapturedEventArgs(ClipboardItem item, bool isNew, ClipboardSource? source = null) : EventArgs
 {
     public ClipboardItem Item { get; } = item;
 
     /// <summary><see langword="false"/> when the content was already in the history and was only moved to the top.</summary>
     public bool IsNew { get; } = isNew;
+
+    /// <summary>
+    /// Where this copy came from, if known. Unlike <see cref="ClipboardItem.Source"/>, which keeps the source of the
+    /// item's first copy, this is the application the user copied from just now.
+    /// </summary>
+    public ClipboardSource? Source { get; } = source;
 }
 
 /// <summary>
@@ -125,7 +131,7 @@ public sealed class ClipboardMonitor : IDisposable
 
             var item = history.Add(snapshot, source, out var isNew);
             logger.Information("Captured {Kind} item ({State}, {Size} bytes)", item.Kind, isNew ? "new" : "existing", snapshot.ApproximateSize);
-            Captured?.Invoke(this, new ClipboardCapturedEventArgs(item, isNew));
+            Captured?.Invoke(this, new ClipboardCapturedEventArgs(item, isNew, source));
             return item;
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested || disposed)

@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Clipboard;
@@ -14,7 +15,7 @@ public sealed class PasteAsFileActionTests
         { "html-only", false },
         { "empty-text+html", false },
         { "rtf-only", false },
-        { "image", false },
+        { "image", true },
         { "file", false },
         { "files", false },
         { "file+html", false },
@@ -27,7 +28,7 @@ public sealed class PasteAsFileActionTests
 
     [Theory]
     [MemberData(nameof(CanExecuteMatrix))]
-    public void CanExecute_OnlyForItemsWithPlainText(string kind, bool expected) =>
+    public void CanExecute_OnlyForItemsWithPlainTextOrAnImage(string kind, bool expected) =>
         Assert.Equal(expected, new PasteAsFileAction().CanExecute(Items.ByName(kind)));
 
     [Fact]
@@ -42,7 +43,7 @@ public sealed class PasteAsFileActionTests
 
         var path = Assert.Single(Assert.Single(harness.Backend.Writes).Files);
         Assert.Equal(Path.Combine(harness.Paths.TempDirectory, "Text files", item.Id.ToString("N")), Path.GetDirectoryName(path));
-        Assert.Equal($"Text {capturedAt.LocalDateTime:yyyy-MM-dd HH.mm.ss}.txt", Path.GetFileName(path));
+        Assert.Equal($"Text {capturedAt.LocalDateTime.ToString("yyyy-MM-dd HH.mm.ss", CultureInfo.InvariantCulture)}.txt", Path.GetFileName(path));
         Assert.EndsWith(".txt", path, StringComparison.Ordinal);
 
         var bytes = await File.ReadAllBytesAsync(path, ActionTestHarness.Ct);
@@ -128,4 +129,62 @@ public sealed class PasteAsFileActionTests
         Assert.Equal("first", await File.ReadAllTextAsync(firstPath, ActionTestHarness.Ct));
         Assert.Equal("second", await File.ReadAllTextAsync(secondPath, ActionTestHarness.Ct));
     }
+
+    [Fact]
+    public void CanExecute_IsFalseForAnEmptyImage() =>
+        Assert.False(new PasteAsFileAction().CanExecute(new ClipboardItem(new ClipboardSnapshot { Image = [] })));
+
+    /// <summary>Firefox copies an image together with a temporary file of it; the image is what gets saved.</summary>
+    [Fact]
+    public void CanExecute_ForAnImageWithItsTemporaryFile() =>
+        Assert.True(new PasteAsFileAction().CanExecute(new ClipboardItem(new ClipboardSnapshot
+        {
+            Image = Png,
+            Files = [Path.Combine(Path.GetTempPath(), "mozilla_x", "picture.png")],
+        })));
+
+    [Fact]
+    public async Task Execute_ForAnImage_WritesTheImageBytesToAFileInTempDirectory()
+    {
+        using var harness = new ActionTestHarness();
+        var capturedAt = new DateTimeOffset(2024, 3, 9, 14, 5, 7, TimeSpan.Zero);
+        var item = new ClipboardItem(new ClipboardSnapshot { Image = Png }, capturedAt: capturedAt);
+
+        await new PasteAsFileAction().ExecuteAsync(item, harness.Context, ActionTestHarness.Ct);
+
+        var written = Assert.Single(harness.Backend.Writes);
+        var path = Assert.Single(written.Files);
+        Assert.Null(written.Image);
+        Assert.Null(written.Text);
+        Assert.Equal(Path.Combine(harness.Paths.TempDirectory, "Image files", item.Id.ToString("N")), Path.GetDirectoryName(path));
+        Assert.Equal($"Image {capturedAt.LocalDateTime.ToString("yyyy-MM-dd HH.mm.ss", CultureInfo.InvariantCulture)}.png", Path.GetFileName(path));
+        Assert.Equal(Png, await File.ReadAllBytesAsync(path, ActionTestHarness.Ct));
+        Assert.Equal(1, harness.Paste.Calls);
+    }
+
+    [Theory]
+    [InlineData(new byte[] { 0xFF, 0xD8, 0xFF, 0xE0, 0, 0x10 }, ".jpg")]
+    [InlineData(new byte[] { (byte)'G', (byte)'I', (byte)'F', (byte)'8', (byte)'9', (byte)'a', 1 }, ".gif")]
+    [InlineData(new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A }, ".png")]
+    [InlineData(new byte[] { 1, 2, 3 }, ".png")]
+    public async Task Execute_ForAnImage_NamesTheFileAfterItsFormat(byte[] image, string extension)
+    {
+        using var harness = new ActionTestHarness();
+        var item = harness.AddToHistory(new ClipboardSnapshot { Image = image });
+
+        await new PasteAsFileAction().ExecuteAsync(item, harness.Context, ActionTestHarness.Ct);
+
+        Assert.Equal(extension, Path.GetExtension(Assert.Single(Assert.Single(harness.Backend.Writes).Files)));
+    }
+
+    [Fact]
+    public void Description_NamesTheKindOfFile()
+    {
+        var action = new PasteAsFileAction();
+
+        Assert.Equal("Saves this text to a .txt file and pastes the file.", action.GetDescription(Items.ByName("plain")));
+        Assert.Equal("Saves this image to a .png file and pastes the file.", action.GetDescription(Items.ByName("image")));
+    }
+
+    private static readonly byte[] Png = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 1, 2, 3];
 }

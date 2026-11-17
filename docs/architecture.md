@@ -33,6 +33,15 @@ Pinned items are saved by `PinnedItemStore`, one folder per item. With "Remember
 
 Shapeshifter's own clipboard writes go through `ClipboardMonitor.WriteAsync`. Their fingerprint and a short grace period are remembered, so they are not captured as new copies.
 
+## Coaching tips
+
+The history stays out of sight until the paste gesture is held, so new users easily forget it is there. `CopyCoach` watches copies and plain pastes for two habits the history could have saved, and the engine then shows a tip through `ICopyNotifier.NotifyTip` instead of the "copied" notification:
+
+- **Copied again** (#284): content already in the history was copied again, and it was not what the clipboard already held (a second Ctrl+C to be sure is not coached).
+- **Back and forth** (#310): the user copied from one application, pasted with a quick Ctrl+V into another, and copied from the first application again within 30 seconds of the first copy.
+
+Applications are compared by name (`ClipboardSource.ApplicationName`; for the paste target, `IClipboardSourceLocator` is asked when the paste runs). Opening the picker ends a back-and-forth sequence, the clipboard content at startup is never coached, and tips are at least five minutes apart. The "Tips" setting turns them off.
+
 ## The paste gesture
 
 `PasteGestureStateMachine` is a pure state machine fed with key events and clock ticks. It returns whether to suppress each event and a list of effects: `ShowPicker`, `UpdatePicker`, `HidePicker`, `PerformAction`, `PasteCurrentClipboard`, `DeleteItem` and `GestureCancelled`.
@@ -46,6 +55,7 @@ Shapeshifter's own clipboard writes go through `ClipboardMonitor.WriteAsync`. Th
 **Pasting:**
 - If the user did not choose anything else, the current clipboard is pasted untouched (`PasteCurrentClipboard`). This keeps a quick Ctrl+V identical to a normal paste, even for data that was copied a few milliseconds earlier.
 - Otherwise the selected action runs. "Paste" restores the snapshot with all of its formats and then sends Ctrl+V (Cmd+V on macOS).
+- "Upload and paste link" is the only action that sends content off the computer. It asks `ActionContext.UploadConsent` first. `RememberedUploadConsent` shows `UploadConsentDialog` once per service and remembers a "yes" in `ShapeshifterSettings.UploadConsents`. Because the dialog takes focus, the link is only copied on that first run, and pasted on later runs.
 - On Linux, the trigger grab is released while the synthetic keystroke is sent.
 
 **Keeping the picker open:** Space during a gesture holds the picker open (`PickerSelection.IsHeldOpen`), for reviewing the history without holding the modifier (issue #420). Releasing the modifier then does nothing; the navigation keys work on their own, Enter performs the selection and Escape closes the picker. Enter also pastes right away in a normal gesture. On Linux the navigation keys (including Space and Enter) are therefore grabbed with and without Ctrl while a gesture is active.
