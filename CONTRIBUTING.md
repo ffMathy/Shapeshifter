@@ -66,7 +66,7 @@ dotnet publish src/Shapeshifter.Desktop -c Release -r linux-x64 -o publish
 
 ## Changing how the picker looks
 
-The screenshots in `assets/screenshots` (used by the README and the website) are rendered from the real picker, settings window and notification of each look, with sample content. To run the app in another platform's look, set `SHAPESHIFTER_LOOK` to `windows`, `macos` or `linux`. After a visual change, regenerate them with `scripts/generate-screenshots.sh` and check the result. CI also does this on pull requests and commits changed screenshots to the branch.
+The screenshots in `assets/screenshots` (used by the README and the website) are rendered from the real picker, settings window and notification of each look, with sample content. To run the app in another platform's look, set `SHAPESHIFTER_LOOK` to `windows`, `macos` or `linux`. After a visual change, regenerate them with `scripts/generate-screenshots.sh` and check the result. A look only shows its real font on its own operating system (Segoe UI on Windows, SF Pro on macOS, Adwaita Sans on Linux, which `scripts/install-adwaita-fonts.sh` installs); elsewhere it falls back to Inter with a warning. CI renders each look on its own runner and commits changed screenshots to the branch.
 
 ## Website
 
