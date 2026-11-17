@@ -84,6 +84,8 @@
                           <Border Classes="thumbnail" IsVisible="{Binding HasThumbnail}">
                             <Image Source="{Binding Thumbnail}" Stretch="UniformToFill" />
                           </Border>
+                          <!-- A copied colour code shows its colour -->
+                          <Border Classes="thumbnail colorSwatch" Background="{Binding ColorSwatch}" IsVisible="{Binding HasColorSwatch}" />
                         </Panel>
                       </Border>
 

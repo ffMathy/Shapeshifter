@@ -10,11 +10,13 @@
         Topmost="True"
         CanResize="False"
         Focusable="False"
-        IsHitTestVisible="False"
         SizeToContent="WidthAndHeight"
         TransparencyLevelHint="Transparent"
         Background="Transparent">
-  <!-- The "copied" notification; Styles/<Look>.axaml styles it as the platform's own notifications look. -->
+  <!--
+    The "copied" notification; Styles/<Look>.axaml styles it as the platform's own notifications look. It gets out of
+    the way as soon as the pointer moves onto it or clicks it (issue #340), so it never covers anything for long.
+  -->
   <Border x:Name="Chrome" Classes="toastChrome">
     <Grid Classes="toastBody" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto">
       <Image Grid.Row="0" Grid.Column="0" Classes="toastIcon" Source="{x:Static services:PlatformLook.ApplicationIcon}" />
