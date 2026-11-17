@@ -190,12 +190,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { rid: win-x64, os: windows-latest, archive: zip }
-          - { rid: win-arm64, os: windows-latest, archive: zip }
-          - { rid: osx-arm64, os: macos-latest, archive: zip }
-          - { rid: osx-x64, os: macos-latest, archive: zip }
-          - { rid: linux-x64, os: ubuntu-latest, archive: tar.gz }
-          - { rid: linux-arm64, os: ubuntu-latest, archive: tar.gz }
+          - { rid: win-x64, os: windows-latest, ext: .exe }
+          - { rid: win-arm64, os: windows-latest, ext: .exe }
+          - { rid: osx-arm64, os: macos-latest, ext: '' }
+          - { rid: osx-x64, os: macos-latest, ext: '' }
+          - { rid: linux-x64, os: ubuntu-latest, ext: '' }
+          - { rid: linux-arm64, os: ubuntu-latest, ext: '' }
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
@@ -219,17 +219,21 @@ jobs:
       - name: Publish self-contained single-file build
         shell: bash
         run: dotnet publish src/Shapeshifter.Desktop -c Release -r ${{ matrix.rid }} -o publish/Shapeshifter $VERSION_ARGS
-      - name: Archive (zip)
-        if: matrix.archive == 'zip'
-        shell: pwsh
-        run: Compress-Archive -Path publish/Shapeshifter -DestinationPath Shapeshifter-${{ matrix.rid }}.zip
-      - name: Archive (tar.gz)
-        if: matrix.archive == 'tar.gz'
-        run: tar -czf Shapeshifter-${{ matrix.rid }}.tar.gz -C publish Shapeshifter
+      - name: Name the executable after the platform
+        # The single-file build is the whole app, so it is released as it is, without an archive:
+        # Shapeshifter-win-x64.exe, Shapeshifter-osx-arm64, Shapeshifter-linux-x64 and so on.
+        shell: bash
+        run: |
+          files=(publish/Shapeshifter/*)
+          if [[ ${#files[@]} -ne 1 ]]; then
+            echo "::error::The single-file build should be one file, but publish/Shapeshifter holds: ${files[*]}"
+            exit 1
+          fi
+          mv "${files[0]}" "Shapeshifter-${{ matrix.rid }}${{ matrix.ext }}"
       - uses: actions/upload-artifact@v7
         with:
           name: Shapeshifter-${{ matrix.rid }}
-          path: Shapeshifter-${{ matrix.rid }}.${{ matrix.archive }}
+          path: Shapeshifter-${{ matrix.rid }}${{ matrix.ext }}
 
   release:
     name: GitHub release

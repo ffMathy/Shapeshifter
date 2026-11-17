@@ -795,9 +795,11 @@
   </Style>
 
   <!-- ============================================================================================================
-       On the system's material (NativeMaterial, Windows 11): the window is the flyout, with Acrylic behind it and
-       DWM's rounded corners (8, as the flyout) and shadow, so the flyout loses its margin and drawn shadow and lets the
-       Acrylic through. The settings window on Mica ("mica") shows it around its cards, as the Settings app does.
+       On the system's material (NativeMaterial, Windows 11): the window is the flyout, with Mica behind it (Acrylic
+       where Mica cannot be had) and DWM's rounded corners (8, as the flyout) and shadow, so the flyout loses its margin
+       and drawn shadow and lets the material through. On Mica ("mica") the panel is see-through, as Mica brings its own
+       light or dark tint; on Acrylic it lays Fluent's flyout tint over the blur. Windows on Mica ("Window.mica": the
+       settings window, the startup error) show it around their cards, as the Settings app does.
        ============================================================================================================ -->
   <!--
     The tint of Fluent's flyout Acrylic (about 85 % over the blur; lighter tints read grey over dark windows). Avalonia's
@@ -813,6 +815,9 @@
     <Setter Property="BoxShadow" Value="0 0 0 0 Transparent" />
     <Setter Property="Background" Value="{DynamicResource MicaToastAcrylicTintBrush}" />
   </Style>
+  <Style Selector="Border.chrome.nativeMaterial.mica, Border.toastChrome.nativeMaterial.mica">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
   <!--
     On Mica the window lets the backdrop through (under the title bar too, with the system's Mica) and the cards are
     translucent layers on it, as in the Settings app, instead of opaque white boxes on a flat sheet. With the system's
@@ -820,7 +825,7 @@
     writes the margins again in WindowImpl.UpdateWindowProperties and WindowImpl.ExtendClientArea, so NativeMaterial
     applies the Mica again after a change of decorations, extended client area or window state.
   -->
-  <Style Selector="Window.settings.mica">
+  <Style Selector="Window.mica">
     <Setter Property="Background" Value="Transparent" />
   </Style>
   <Style Selector="Window.settings.mica Border.group">

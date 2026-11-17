@@ -4,7 +4,7 @@ using Shapeshifter.Core.Clipboard;
 
 namespace Shapeshifter.Core.Tests.Actions;
 
-public sealed class CopyAsFileActionTests
+public sealed class PasteAsFileActionTests
 {
     public static readonly TheoryData<string, bool> CanExecuteMatrix = new()
     {
@@ -28,7 +28,7 @@ public sealed class CopyAsFileActionTests
     [Theory]
     [MemberData(nameof(CanExecuteMatrix))]
     public void CanExecute_OnlyForItemsWithPlainText(string kind, bool expected) =>
-        Assert.Equal(expected, new CopyAsFileAction().CanExecute(Items.ByName(kind)));
+        Assert.Equal(expected, new PasteAsFileAction().CanExecute(Items.ByName(kind)));
 
     [Fact]
     public async Task Execute_WritesUtf8TextFileInTempDirectory()
@@ -38,7 +38,7 @@ public sealed class CopyAsFileActionTests
         var capturedAt = new DateTimeOffset(2024, 3, 9, 14, 5, 7, TimeSpan.Zero);
         var item = new ClipboardItem(new ClipboardSnapshot { Text = text }, capturedAt: capturedAt);
 
-        await new CopyAsFileAction().ExecuteAsync(item, harness.Context, ActionTestHarness.Ct);
+        await new PasteAsFileAction().ExecuteAsync(item, harness.Context, ActionTestHarness.Ct);
 
         var path = Assert.Single(Assert.Single(harness.Backend.Writes).Files);
         Assert.Equal(Path.Combine(harness.Paths.TempDirectory, "Text files", item.Id.ToString("N")), Path.GetDirectoryName(path));
@@ -52,68 +52,58 @@ public sealed class CopyAsFileActionTests
     }
 
     [Fact]
-    public async Task Execute_WritesOnlyTheFileToTheClipboard_AndAddsNewestHistoryItem()
+    public async Task Execute_PutsOnlyTheFileOnTheClipboard_AndPastesIt()
     {
         using var harness = new ActionTestHarness();
         var item = harness.AddToHistory(new ClipboardSnapshot { Text = "some text" });
 
-        await new CopyAsFileAction().ExecuteAsync(item, harness.Context, ActionTestHarness.Ct);
+        await new PasteAsFileAction().ExecuteAsync(item, harness.Context, ActionTestHarness.Ct);
 
         var written = Assert.Single(harness.Backend.Writes);
         Assert.Null(written.Text);
         Assert.Null(written.Image);
         Assert.Empty(written.RawFormats);
-        Assert.Equal(0, harness.Paste.Calls);
-
-        var items = harness.History.Items;
-        Assert.Equal(2, items.Count);
-        Assert.Equal(ClipboardContentKind.File, items[0].Kind);
-        Assert.Equal(written.Files, items[0].Snapshot.Files);
-        Assert.Equal(item.Id, items[1].Id);
-        Assert.True(File.Exists(written.Files[0]));
+        Assert.True(File.Exists(Assert.Single(written.Files)));
+        Assert.Equal(1, harness.Paste.Calls);
     }
 
     [Fact]
-    public async Task Execute_NewItemIsPlacedBelowPinnedItems()
-    {
-        using var harness = new ActionTestHarness();
-        var pinned = harness.AddToHistory(new ClipboardSnapshot { Text = "pinned" });
-        harness.History.SetPinned(pinned.Id, pinned: true);
-        var item = harness.AddToHistory(new ClipboardSnapshot { Text = "some text" });
-
-        await new CopyAsFileAction().ExecuteAsync(item, harness.Context, ActionTestHarness.Ct);
-
-        var items = harness.History.Items;
-        Assert.Equal(pinned.Id, items[0].Id);
-        Assert.Equal(ClipboardContentKind.File, items[1].Kind);
-        Assert.Equal(1, ClipboardHistory.GetDefaultIndex(items));
-    }
-
-    [Fact]
-    public async Task Execute_WrittenFileIsNotCapturedAgainByTheMonitor()
+    public async Task Execute_LeavesTheHistoryAsItWas()
     {
         using var harness = new ActionTestHarness();
         var item = harness.AddToHistory(new ClipboardSnapshot { Text = "some text" });
 
-        await new CopyAsFileAction().ExecuteAsync(item, harness.Context, ActionTestHarness.Ct);
+        await new PasteAsFileAction().ExecuteAsync(item, harness.Context, ActionTestHarness.Ct);
+
+        Assert.Equal(item.Id, Assert.Single(harness.History.Items).Id);
+    }
+
+    [Fact]
+    public async Task Execute_PastedFileIsNotCapturedAgainByTheMonitor()
+    {
+        using var harness = new ActionTestHarness();
+        var item = harness.AddToHistory(new ClipboardSnapshot { Text = "some text" });
+
+        await new PasteAsFileAction().ExecuteAsync(item, harness.Context, ActionTestHarness.Ct);
         var captured = await harness.Monitor.CaptureNowAsync(ActionTestHarness.Ct);
 
         Assert.Null(captured);
-        Assert.Equal(2, harness.History.Count);
+        Assert.Equal(1, harness.History.Count);
     }
 
     [Fact]
-    public async Task Execute_TwiceForTheSameItem_DoesNotDuplicateTheHistoryItem()
+    public async Task Execute_TwiceForTheSameItem_PastesTwice()
     {
         using var harness = new ActionTestHarness();
         var item = harness.AddToHistory(new ClipboardSnapshot { Text = "some text" });
-        var action = new CopyAsFileAction();
+        var action = new PasteAsFileAction();
 
         await action.ExecuteAsync(item, harness.Context, ActionTestHarness.Ct);
         await action.ExecuteAsync(item, harness.Context, ActionTestHarness.Ct);
 
-        Assert.Equal(2, harness.History.Count);
+        Assert.Equal(1, harness.History.Count);
         Assert.Equal(2, harness.Backend.Writes.Count);
+        Assert.Equal(2, harness.Paste.Calls);
     }
 
     /// <summary>
@@ -127,7 +117,7 @@ public sealed class CopyAsFileActionTests
         var capturedAt = new DateTimeOffset(2024, 3, 9, 14, 5, 7, TimeSpan.Zero);
         var first = new ClipboardItem(new ClipboardSnapshot { Text = "first" }, capturedAt: capturedAt);
         var second = new ClipboardItem(new ClipboardSnapshot { Text = "second" }, capturedAt: capturedAt.AddMilliseconds(300));
-        var action = new CopyAsFileAction();
+        var action = new PasteAsFileAction();
 
         await action.ExecuteAsync(first, harness.Context, ActionTestHarness.Ct);
         await action.ExecuteAsync(second, harness.Context, ActionTestHarness.Ct);
