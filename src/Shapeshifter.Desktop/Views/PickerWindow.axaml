@@ -84,6 +84,8 @@
                           <Border Classes="thumbnail" IsVisible="{Binding HasThumbnail}">
                             <Image Source="{Binding Thumbnail}" Stretch="UniformToFill" />
                           </Border>
+                          <!-- A copied colour code shows its colour -->
+                          <Border Classes="thumbnail colorSwatch" Background="{Binding ColorSwatch}" IsVisible="{Binding HasColorSwatch}" />
                         </Panel>
                       </Border>
 
@@ -147,6 +149,10 @@
               <Border Classes="key"><TextBlock Text="V" /></Border>
               <Border Classes="key"><TextBlock Text="↑↓" /></Border>
               <TextBlock Text="Move" />
+            </StackPanel>
+            <StackPanel Classes="hint">
+              <Border Classes="key"><TextBlock Text="1–9" /></Border>
+              <TextBlock Text="Jump" />
             </StackPanel>
             <StackPanel Classes="hint">
               <Border Classes="key"><TextBlock Text="←→" /></Border>

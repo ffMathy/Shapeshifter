@@ -28,6 +28,8 @@ internal sealed unsafe class X11Integration : IClipboardChangeSource, ICursorLoc
     private static readonly ulong[] NavigationKeysyms =
     [
         X11Native.XK_Up, X11Native.XK_Down, X11Native.XK_Left, X11Native.XK_Right, X11Native.XK_Delete, X11Native.XK_Escape,
+        .. Enumerable.Range(0, 9).Select(i => X11Native.XK_1 + (ulong)i),
+        .. Enumerable.Range(0, 9).Select(i => X11Native.XK_KP_1 + (ulong)i),
     ];
 
     // Process-wide: X error handlers are global, so ours is chained in front of whatever was installed before.

@@ -2,6 +2,7 @@ using System.Buffers.Binary;
 using System.Globalization;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Media.Immutable;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Text;
@@ -59,6 +60,12 @@ public sealed partial class PickerItemViewModel : ObservableObject
             ClipboardContentKind.File => Path.GetFileName(Path.TrimEndingDirectorySeparator(files[0])),
             _ => string.IsNullOrWhiteSpace(item.PreviewText) ? "(empty)" : item.PreviewText,
         };
+
+        // A copied colour code ("#2c5497", "rgb(44, 84, 151)") shows the colour itself on its tile (issue #299).
+        if (item.Kind == ClipboardContentKind.Text && ColorParser.TryParse(item.Snapshot.Text, out var color))
+        {
+            ColorSwatch = new ImmutableSolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
+        }
 
         if (files.Count > 0)
         {
@@ -127,7 +134,12 @@ public sealed partial class PickerItemViewModel : ObservableObject
     /// <summary>The line icon on the tile when there is no thumbnail or file icon.</summary>
     public Geometry Glyph { get; }
 
-    public bool ShowsGlyph => Thumbnail is null && FileIcon is null && FilePreviews.Count == 0;
+    public bool ShowsGlyph => Thumbnail is null && FileIcon is null && FilePreviews.Count == 0 && ColorSwatch is null;
+
+    /// <summary>The colour of a copied colour code, filling the tile.</summary>
+    public IBrush? ColorSwatch { get; }
+
+    public bool HasColorSwatch => ColorSwatch is not null;
 
     /// <summary>A copied image, filling the tile.</summary>
     public Bitmap? Thumbnail { get; }

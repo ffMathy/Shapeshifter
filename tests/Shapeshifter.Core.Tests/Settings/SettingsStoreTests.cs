@@ -14,6 +14,7 @@ public sealed class ShapeshifterSettingsTests
         Assert.False(settings.QuietMode);
         Assert.Equal(50, settings.MaxHistoryItems);
         Assert.True(settings.AutomaticUpdates);
+        Assert.False(settings.RememberHistory);
         Assert.Equal(3000, ShapeshifterSettings.MaxPasteDelayMilliseconds);
     }
 

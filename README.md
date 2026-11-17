@@ -19,7 +19,7 @@ Tap it and it pastes as always. Keep holding <kbd>Ctrl</kbd> and your history ap
 |---|---|
 | ![The history, with the newest item selected](assets/screenshots/windows.PNG) | ![The actions for the selected text, with "Paste as plain text" chosen](assets/screenshots/actions.PNG) |
 
-<kbd>Delete</kbd> removes an item, <kbd>Esc</kbd> cancels. On macOS it's <kbd>Cmd</kbd>+<kbd>V</kbd>.
+<kbd>1</kbd>–<kbd>9</kbd> jump to that item, <kbd>Delete</kbd> removes an item, <kbd>Esc</kbd> cancels. On macOS it's <kbd>Cmd</kbd>+<kbd>V</kbd>.
 
 ## At home on every platform
 
@@ -39,19 +39,21 @@ Tap it and it pastes as always. Keep holding <kbd>Ctrl</kbd> and your history ap
 
 - **Everything is kept:** rich text, HTML, images, files and app-specific formats are restored exactly.
 - **Passwords are skipped:** content that password managers mark as sensitive is never recorded.
-- **Pinned items** survive restarts.
+- **Pinned items** survive restarts; turn on *Remember history after restart* in Settings to keep the rest of the
+  history too.
 - **Nothing you copy leaves your computer**, unless you choose **Upload and paste link** for an image. That one
   image is uploaded to [Catbox](https://catbox.moe), a free image host without ads, and a public link to it is pasted.
   Shapeshifter asks before the first upload.
 - **Installs and updates itself:** the first start installs Shapeshifter for your user (no administrator rights) and
   starts it at login. It checks GitHub for new releases every few hours, verifies the download's SHA-256 and restarts
   into it when you're not using it. Switch this off in Settings; on Windows, uninstall it from Apps or Control Panel.
+- **Something wrong?** *Report a problem…* in the tray menu opens a GitHub issue with your version and system filled in.
 - **macOS** needs Accessibility access. **Linux** works fully on X11; on Wayland only while an X11 app is focused.
 
 <details>
 <summary>Where your data lives</summary>
 
-| | Settings | Pinned items and logs |
+| | Settings | Pinned items, saved history and logs |
 |---|---|---|
 | Windows | `%APPDATA%\Shapeshifter` | `%LOCALAPPDATA%\Shapeshifter` |
 | macOS | `~/Library/Application Support/Shapeshifter` | same, logs in `~/Library/Logs/Shapeshifter` |

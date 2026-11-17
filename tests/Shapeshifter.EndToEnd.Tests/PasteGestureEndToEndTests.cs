@@ -73,6 +73,27 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
     }
 
     [Fact]
+    public async Task DigitJumpsToThatItem_WithoutTypingTheDigit()
+    {
+        SkipUnlessEnabled();
+        var id = Unique();
+        await session.CopyTextAsync($"first {id}");
+        await session.CopyTextAsync($"second {id}");
+        await session.CopyTextAsync($"third {id}");
+        await session.PrepareTargetAsync();
+
+        await session.PressModifierAsync();
+        await session.TapAsync(KeyCode.VcV);
+        await session.TapAsync(KeyCode.Vc3);
+        await session.WaitForStateAsync(state => state.PickerVisible && state.SelectedIndex == 2, "picker on the third item");
+        await session.ReleaseModifierAsync();
+
+        // A digit that leaked to the target would show up in its text.
+        Assert.Equal($"first {id}", await session.WaitForTargetTextAsync($"first {id}"));
+        await session.WaitForIdleAsync();
+    }
+
+    [Fact]
     public async Task EscapeCancelsWithoutPasting()
     {
         SkipUnlessEnabled();

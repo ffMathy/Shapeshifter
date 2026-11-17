@@ -218,6 +218,30 @@ public sealed class UploadConsentSettingsTests
     public void SettingsWithTheSameConsents_AreEqual() =>
         Assert.Equal(new ShapeshifterSettings { UploadConsents = ["Catbox"] }, new ShapeshifterSettings { UploadConsents = ["Catbox"] });
 
+    /// <summary>
+    /// <see cref="ShapeshifterSettings.Equals(ShapeshifterSettings?)"/> lists the properties by hand. A property it
+    /// forgets would make <see cref="SettingsStore"/> drop changes to it, so changing any property must make a difference.
+    /// </summary>
+    [Fact]
+    public void ChangingAnyProperty_MakesSettingsDiffer()
+    {
+        var original = new ShapeshifterSettings();
+        foreach (var property in typeof(ShapeshifterSettings).GetProperties().Where(p => p.CanWrite))
+        {
+            var changed = original with { };
+            object value = property.PropertyType switch
+            {
+                var t when t == typeof(int) => (int)property.GetValue(original)! + 1,
+                var t when t == typeof(bool) => !(bool)property.GetValue(original)!,
+                var t when t == typeof(IReadOnlyList<string>) => new[] { "changed" },
+                var t => throw new InvalidOperationException($"Add a changed value for {t.Name} ({property.Name}) to this test."),
+            };
+            property.SetValue(changed, value);
+
+            Assert.False(original.Equals(changed), $"{property.Name} is not compared in ShapeshifterSettings.Equals.");
+        }
+    }
+
     [Fact]
     public void SettingsWithDifferentConsents_DifferFromEachOther() =>
         Assert.NotEqual(new ShapeshifterSettings(), new ShapeshifterSettings { UploadConsents = ["Catbox"] });
