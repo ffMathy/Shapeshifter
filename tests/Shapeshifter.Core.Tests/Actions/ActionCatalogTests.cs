@@ -7,7 +7,7 @@ public sealed class ActionCatalogTests
 {
     private static readonly string[] DefaultOrder =
     [
-        "paste", "copy-as-file", "paste-plain-text", "copy-as-zip", "copy-image-from-link", "open-links", "toggle-pin",
+        "paste", "paste-as-file", "paste-plain-text", "copy-as-zip", "copy-image-from-link", "open-links", "toggle-pin",
     ];
 
     [Fact]
@@ -80,9 +80,9 @@ public sealed class ActionCatalogTests
 
     public static readonly TheoryData<string, string[]> DefaultAvailability = new()
     {
-        { "plain", ["paste", "copy-as-file", "toggle-pin"] },
-        { "whitespace", ["paste", "copy-as-file", "toggle-pin"] },
-        { "text+html", ["paste", "copy-as-file", "paste-plain-text", "toggle-pin"] },
+        { "plain", ["paste", "paste-as-file", "toggle-pin"] },
+        { "whitespace", ["paste", "paste-as-file", "toggle-pin"] },
+        { "text+html", ["paste", "paste-as-file", "paste-plain-text", "toggle-pin"] },
         { "html-only", ["paste", "paste-plain-text", "toggle-pin"] },
         { "empty-text+html", ["paste", "paste-plain-text", "toggle-pin"] },
         { "rtf-only", ["paste", "toggle-pin"] },  // RTF without text has no plain text to offer
@@ -92,9 +92,9 @@ public sealed class ActionCatalogTests
         { "file+html", ["paste", "copy-as-zip", "toggle-pin"] },
         { "other", ["paste", "toggle-pin"] },
         { "empty", ["paste", "toggle-pin"] },
-        { "link", ["paste", "copy-as-file", "open-links", "toggle-pin"] },
-        { "image-link", ["paste", "copy-as-file", "copy-image-from-link", "open-links", "toggle-pin"] },
-        { "text+image", ["paste", "copy-as-file", "copy-image-from-link", "open-links", "toggle-pin"] },
+        { "link", ["paste", "paste-as-file", "open-links", "toggle-pin"] },
+        { "image-link", ["paste", "paste-as-file", "copy-image-from-link", "open-links", "toggle-pin"] },
+        { "text+image", ["paste", "paste-as-file", "copy-image-from-link", "open-links", "toggle-pin"] },
     };
 
     [Theory]
@@ -129,7 +129,7 @@ public sealed class ActionCatalogTests
     {
         IClipboardAction[] actions =
         [
-            new PasteAsPlainTextAction(), new CopyAsFileAction(), new ZipFilesAction(), new CopyImageFromLinkAction(),
+            new PasteAsPlainTextAction(), new PasteAsFileAction(), new ZipFilesAction(), new CopyImageFromLinkAction(),
             new OpenLinksAction(),
         ];
 
@@ -156,7 +156,7 @@ public sealed class ActionCatalogTests
 
         Assert.Equal("Paste", new PasteAction().GetTitle(item));
         Assert.Equal("Paste as plain text", new PasteAsPlainTextAction().GetTitle(item));
-        Assert.Equal("Copy as file", new CopyAsFileAction().GetTitle(item));
+        Assert.Equal("Paste as file", new PasteAsFileAction().GetTitle(item));
         Assert.Equal("Copy as compressed folder", new ZipFilesAction().GetTitle(item));
         Assert.Equal("Copy image from link", new CopyImageFromLinkAction().GetTitle(item));
     }

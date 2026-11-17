@@ -4,16 +4,16 @@ using Shapeshifter.Core.Clipboard;
 
 namespace Shapeshifter.Core.Actions;
 
-/// <summary>Saves copied text to a .txt file and copies that file.</summary>
-public sealed class CopyAsFileAction : IClipboardAction
+/// <summary>Saves copied text to a .txt file and pastes that file, as if the file had been copied.</summary>
+public sealed class PasteAsFileAction : IClipboardAction
 {
-    public string Id => "copy-as-file";
+    public string Id => "paste-as-file";
 
     public int Order => 10;
 
-    public string GetTitle(ClipboardItem item) => "Copy as file";
+    public string GetTitle(ClipboardItem item) => "Paste as file";
 
-    public string GetDescription(ClipboardItem item) => "Copy this text to the clipboard as a file.";
+    public string GetDescription(ClipboardItem item) => "Saves this text to a .txt file and pastes the file.";
 
     public bool CanExecute(ClipboardItem item)
     {
@@ -30,7 +30,7 @@ public sealed class CopyAsFileAction : IClipboardAction
         Directory.CreateDirectory(folder);
         var path = Path.Combine(folder, $"Text {item.CapturedAt.LocalDateTime:yyyy-MM-dd HH.mm.ss}.txt");
         await File.WriteAllTextAsync(path, item.Snapshot.Text, Encoding.UTF8, cancellationToken).ConfigureAwait(false);
-        await context.CopyNewContentAsync(new ClipboardSnapshot { Files = [path] }, cancellationToken).ConfigureAwait(false);
+        await context.WriteAndPasteAsync(new ClipboardSnapshot { Files = [path] }, cancellationToken).ConfigureAwait(false);
     }
 }
 

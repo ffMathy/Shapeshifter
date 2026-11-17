@@ -7,7 +7,7 @@ namespace Shapeshifter.Desktop.Services;
 /// <summary>The visual identity Shapeshifter wears, matched to the design language of the operating system.</summary>
 public enum Look
 {
-    /// <summary>Windows 11, Fluent 2: an Acrylic flyout ("Mica Sheets").</summary>
+    /// <summary>Windows 11, Fluent 2: Mica everywhere ("Mica Sheets").</summary>
     Windows,
 
     /// <summary>macOS 26: a floating sheet of Liquid Glass ("Refraction").</summary>

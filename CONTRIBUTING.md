@@ -83,7 +83,7 @@ website/preview.sh    # then open http://localhost:8000
 
 ## Releasing
 
-Every merge to `master` is released (merges that land while a release is being built are released together). CI builds and tests the merge, publishes all six platforms and creates a GitHub release with the archives, the bare executables (which the app downloads when it updates itself) and `SHA256SUMS.txt` attached and release notes generated from the merged pull requests.
+Every merge to `master` is released (merges that land while a release is being built are released together). CI builds and tests the merge, publishes all six platforms and creates a GitHub release with the six executables attached as they are, one single file per platform (`Shapeshifter-win-x64.exe`, `Shapeshifter-osx-arm64`, `Shapeshifter-linux-x64` and so on; no archives), which the app also downloads when it updates itself, plus `SHA256SUMS.txt`, and release notes generated from the merged pull requests.
 
 The version is worked out by `scripts/next-version.sh`: the newest `v*` tag with its patch number increased (v7.1.0 → v7.1.1), or the `<Version>` in `Directory.Build.props` when that is newer. To release a new minor or major version, raise `<Version>` in the pull request (for example to `7.2.0` or `8.0.0`).
 

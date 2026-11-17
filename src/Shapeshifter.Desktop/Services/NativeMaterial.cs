@@ -10,19 +10,20 @@ namespace Shapeshifter.Desktop.Services;
 
 /// <summary>
 /// Gives the picker and the copy notification the operating system's own frosted material, clipped to their rounded
-/// panel and with the system's shadow: Acrylic on Windows 11, the popover material (or Liquid Glass) on macOS.
+/// panel and with the system's shadow: Mica on Windows 11 (Acrylic where Mica cannot be had), the popover material (or
+/// Liquid Glass) on macOS.
 /// </summary>
 /// <remarks>
 /// <para>
 /// Both systems put a backdrop under the whole window, so the window has to be exactly the panel: no transparent margin
 /// around it for a drawn shadow. While the material is on, the panel ("chrome" or "toastChrome") has the
 /// <see cref="ClassName"/> class; the looks then drop that margin and shadow and make the panel see-through. If the
-/// material cannot be had (Windows 10, no Acrylic, an unexpected native window), the class is removed again and the
+/// material cannot be had (Windows 10, neither Mica nor Acrylic, an unexpected native window), the class is removed again and the
 /// look's own panel and drawn shadow are used.
 /// </para>
 /// <para>
 /// Windows 11: the window gets a thin frame (WindowDecorations.BorderOnly, not resizable), which brings back the system
-/// shadow and DWM's rounded corners (8 px, as the Windows look's panel), the Acrylic backdrop and no DWM border.
+/// shadow and DWM's rounded corners (8 px, as the Windows look's panel), Avalonia's Mica (or Acrylic) and no DWM border.
 /// macOS: see <see cref="MacWindowMaterial"/>.
 /// </para>
 /// </remarks>
@@ -31,7 +32,8 @@ internal static class NativeMaterial
     /// <summary>
     /// <c>off</c> keeps the looks' own panels; <c>glass</c> uses Liquid Glass (NSGlassEffectView) on macOS 26 and later
     /// instead of the frosted popover material; <c>emulated</c> gives the settings window Avalonia's own Mica instead of
-    /// the system's (see <see cref="PrepareBackdrop"/>).
+    /// the system's (see <see cref="PrepareBackdrop"/>); <c>acrylic</c> gives the picker and the notification Acrylic
+    /// instead of Mica on Windows.
     /// </summary>
     public const string Variable = "SHAPESHIFTER_NATIVE_MATERIAL";
 
@@ -237,33 +239,46 @@ internal static class NativeMaterial
     {
         if (!WindowsWindowMaterial.AreTransparencyEffectsEnabled)
         {
-            // Avalonia would still report Acrylic, but Windows draws no blur: keep the look's own near-opaque panel.
-            Logger.Information("Transparency effects are off; no Acrylic for {Window}", window.GetType().Name);
+            // Avalonia would still report Mica or Acrylic, but Windows draws neither: keep the look's own panel.
+            Logger.Information("Transparency effects are off; no Mica for {Window}", window.GetType().Name);
             return;
         }
 
+        // Mica first, as everywhere in the Windows look, and Acrylic only where Mica cannot be had. This is Avalonia's
+        // Mica (drawn by its compositor), not the system's: DWM draws its Mica as a flat colour while a window is not
+        // active, and the picker and the notification never are.
+        var acrylicOnly = string.Equals(Environment.GetEnvironmentVariable(Variable), "acrylic", StringComparison.OrdinalIgnoreCase);
         window.WindowDecorations = WindowDecorations.BorderOnly;
         window.CanResize = false;
         Win32Properties.SetWindowCornerPreference(window, Win32Properties.WindowCornerPreference.Round);
-        window.TransparencyLevelHint = [WindowTransparencyLevel.AcrylicBlur, WindowTransparencyLevel.Transparent];
+        window.TransparencyLevelHint = acrylicOnly
+            ? [WindowTransparencyLevel.AcrylicBlur, WindowTransparencyLevel.Transparent]
+            : [WindowTransparencyLevel.Mica, WindowTransparencyLevel.AcrylicBlur, WindowTransparencyLevel.Transparent];
+
+        // Assumed until the window is open and Avalonia reports what it got, so the first frame is already right.
         panel.Classes.Add(ClassName);
+        panel.Classes.Set(MicaClassName, !acrylicOnly);
         window.Opened += (_, _) =>
         {
             // Checked again on every show: the picker is shown again and again, and "Transparency effects" can have been
             // turned off since (once off, the window keeps the look's own panel until the app restarts).
-            if (window.ActualTransparencyLevel != WindowTransparencyLevel.AcrylicBlur || !WindowsWindowMaterial.AreTransparencyEffectsEnabled)
+            var level = window.ActualTransparencyLevel;
+            var material = level == WindowTransparencyLevel.Mica || level == WindowTransparencyLevel.AcrylicBlur;
+            if (!material || !WindowsWindowMaterial.AreTransparencyEffectsEnabled)
             {
                 if (!panel.Classes.Contains(ClassName))
                 {
                     return;
                 }
 
-                Logger.Information("No Acrylic for {Window} ({Level}); using the look's own panel", window.GetType().Name, window.ActualTransparencyLevel);
+                Logger.Information("No Mica or Acrylic for {Window} ({Level}); using the look's own panel", window.GetType().Name, level);
                 panel.Classes.Remove(ClassName);
+                panel.Classes.Remove(MicaClassName);
                 window.WindowDecorations = WindowDecorations.None;
                 return;
             }
 
+            panel.Classes.Set(MicaClassName, level == WindowTransparencyLevel.Mica);
             try
             {
                 if (window.TryGetPlatformHandle() is { } handle)

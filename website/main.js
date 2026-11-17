@@ -10,12 +10,12 @@
   var VERSION_CACHE_MS = 60 * 60 * 1000;
 
   var BUILDS = {
-    'win-x64': { os: 'windows', name: 'Windows', arch: 'x64', file: 'Shapeshifter-win-x64.zip' },
-    'win-arm64': { os: 'windows', name: 'Windows', arch: 'Arm64', file: 'Shapeshifter-win-arm64.zip' },
-    'osx-arm64': { os: 'macos', name: 'Mac', arch: 'Apple silicon', file: 'Shapeshifter-osx-arm64.zip' },
-    'osx-x64': { os: 'macos', name: 'Mac', arch: 'Intel', file: 'Shapeshifter-osx-x64.zip' },
-    'linux-x64': { os: 'linux', name: 'Linux', arch: 'x64', file: 'Shapeshifter-linux-x64.tar.gz' },
-    'linux-arm64': { os: 'linux', name: 'Linux', arch: 'Arm64', file: 'Shapeshifter-linux-arm64.tar.gz' }
+    'win-x64': { os: 'windows', name: 'Windows', arch: 'x64', file: 'Shapeshifter-win-x64.exe' },
+    'win-arm64': { os: 'windows', name: 'Windows', arch: 'Arm64', file: 'Shapeshifter-win-arm64.exe' },
+    'osx-arm64': { os: 'macos', name: 'Mac', arch: 'Apple silicon', file: 'Shapeshifter-osx-arm64' },
+    'osx-x64': { os: 'macos', name: 'Mac', arch: 'Intel', file: 'Shapeshifter-osx-x64' },
+    'linux-x64': { os: 'linux', name: 'Linux', arch: 'x64', file: 'Shapeshifter-linux-x64' },
+    'linux-arm64': { os: 'linux', name: 'Linux', arch: 'Arm64', file: 'Shapeshifter-linux-arm64' }
   };
 
   var LOOKS = {
@@ -134,7 +134,8 @@
     });
   }
 
-  function extension(file) { return /\.tar\.gz$/.test(file) ? '.tar.gz' : '.zip'; }
+  // Every download is the app itself, a single file: an .exe on Windows, an executable on macOS and Linux.
+  function extension(file) { return /\.exe$/.test(file) ? '.exe' : 'single file'; }
 
   function showBuild(id) {
     var build = BUILDS[id];

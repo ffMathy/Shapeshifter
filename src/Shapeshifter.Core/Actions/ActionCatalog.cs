@@ -14,7 +14,7 @@ public sealed class ActionCatalog
     public static ActionCatalog CreateDefault() => new(
     [
         new PasteAction(),
-        new CopyAsFileAction(),
+        new PasteAsFileAction(),
         new PasteAsPlainTextAction(),
         new ZipFilesAction(),
         new CopyImageFromLinkAction(),
