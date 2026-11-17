@@ -18,7 +18,7 @@ public static class Glyphs
 
     public static Geometry Clipboard { get; } = Geometry.Parse("M7.5,3.5 H5.5 C4.9,3.5 4.5,3.9 4.5,4.5 V17 C4.5,17.6 4.9,18 5.5,18 H14.5 C15.1,18 15.5,17.6 15.5,17 V4.5 C15.5,3.9 15.1,3.5 14.5,3.5 H12.5 M7.5,2.5 H12.5 V5 H7.5 Z");
 
-    public static Geometry CopyAsFile { get; } = Geometry.Parse("M5,2.5 H11.5 L15.5,6.5 V17.5 H5 Z M11.5,2.5 V6.5 H15.5 M10.25,9 V15 M7.75,12.5 L10.25,15 L12.75,12.5");
+    public static Geometry PasteAsFile { get; } = Geometry.Parse("M5,2.5 H11.5 L15.5,6.5 V17.5 H5 Z M11.5,2.5 V6.5 H15.5 M10.25,9 V15 M7.75,12.5 L10.25,15 L12.75,12.5");
 
     public static Geometry PlainText { get; } = Geometry.Parse("M3.5,5 V3.5 H12.5 V5 M8,3.5 V16.5 M6,16.5 H10 M12.5,11 H17 M12.5,14 H17 M12.5,17 H15.5");
 
@@ -54,7 +54,7 @@ public static class Glyphs
             _ when title.StartsWith("Pin", StringComparison.OrdinalIgnoreCase) => Pin,
             _ when title.Contains("plain text", StringComparison.OrdinalIgnoreCase) => PlainText,
             _ when title.Contains("compressed", StringComparison.OrdinalIgnoreCase) => Archive,
-            _ when title.Contains("as file", StringComparison.OrdinalIgnoreCase) => CopyAsFile,
+            _ when title.Contains("as file", StringComparison.OrdinalIgnoreCase) => PasteAsFile,
             _ when title.Contains("image", StringComparison.OrdinalIgnoreCase) => Image,
             _ when title.Contains("link", StringComparison.OrdinalIgnoreCase) => Link,
             _ => Clipboard,

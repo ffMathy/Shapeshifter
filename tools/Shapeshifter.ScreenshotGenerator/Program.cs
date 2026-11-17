@@ -7,6 +7,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using Serilog;
+using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Engine;
 using Shapeshifter.Core.Platform;
@@ -207,22 +208,31 @@ internal static class Program
         AccentPalette.Apply(application, Color.Parse(color));
     }
 
+    /// <summary>
+    /// The actions the app offers for <paramref name="item"/>, as the engine lists them (the real action catalog), so the
+    /// screenshots show the right titles: "Unpin from clipboard" for the pinned sample item, for instance.
+    /// </summary>
+    internal static IReadOnlyList<PickerActionView> SampleActions(ClipboardItem? item) => item is null
+        ? []
+        : ActionCatalog.CreateDefault().GetAvailable(item).Select(action => new PickerActionView(action.GetTitle(item), action.GetDescription(item))).ToArray();
+
     /// <summary>The picker's state in the screenshots: the sample items, the first selected, its actions.</summary>
     internal static PickerViewModel CreateSampleViewModel(Look look, byte[] photo, Bitmap thumbnail)
     {
         var viewModel = new PickerViewModel(look == Look.MacOS ? "Cmd" : "Ctrl") { MaxListHeight = 10_000 };
         var visuals = new PickerVisuals(new SampleFileIcons(), Log.Logger);
-        foreach (var item in SampleItems(look, photo))
+        var items = SampleItems(look, photo).ToArray();
+        foreach (var item in items)
         {
             viewModel.Items.Add(new PickerItemViewModel(item, item.Kind == ClipboardContentKind.Image ? thumbnail : null, visuals));
         }
 
-        viewModel.Actions.Add(new PickerActionViewModel(new PickerActionView("Paste", "Pastes clipboard contents as-is."), isDefault: true));
-        viewModel.Actions.Add(new PickerActionViewModel(new PickerActionView("Copy as file", "Copy this text to the clipboard as a file."), isDefault: false));
-        viewModel.Actions.Add(new PickerActionViewModel(new PickerActionView("Paste as plain text", "Pastes clipboard contents as plain text with no formatting."), isDefault: false));
-        viewModel.Actions.Add(new PickerActionViewModel(new PickerActionView(
-            "Pin to clipboard",
-            "Pins this item so that it always stays in the top, and gets saved to your harddrive so that it is there the next time you open Shapeshifter."), isDefault: false));
+        var actions = SampleActions(items.FirstOrDefault());
+        for (var i = 0; i < actions.Count; i++)
+        {
+            viewModel.Actions.Add(new PickerActionViewModel(actions[i], isDefault: i == 0));
+        }
+
         viewModel.SelectedIndex = 0;
         viewModel.SelectedActionIndex = 0;
         viewModel.UpdateActionsHeader();
@@ -367,7 +377,13 @@ internal static class Program
         // The first item is pinned, as pinned items are kept at the top. All are copied within the hour, so the times
         // read the same whenever this runs.
         var pinned = new ClipboardItem(
-            new ClipboardSnapshot { Text = article },
+            new ClipboardSnapshot
+            {
+                Text = article,
+
+                // Copied from a browser, which also puts HTML on the clipboard: so "Paste as plain text" is offered.
+                RawFormats = [new RawClipboardFormat(look == Look.Windows ? "HTML Format" : "text/html", System.Text.Encoding.UTF8.GetBytes($"<p>{article}</p>"))],
+            },
             capturedAt: now - TimeSpan.FromMinutes(47),
             source: new ClipboardSource(browserName, page, browser));
         new ClipboardHistory().AddPinned(pinned);

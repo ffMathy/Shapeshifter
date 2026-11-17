@@ -131,13 +131,7 @@ internal static class LiveCapture
 
         var presenter = new PickerPresenter(new NoCursor(), new PickerVisuals(new Program.SampleFileIcons(), Log.Logger), look == Look.MacOS ? "Cmd" : "Ctrl", Log.Logger);
         var items = Program.SampleItems(look, SampleArt.Banner(900, 600)).ToArray();
-        IReadOnlyList<PickerActionView> actions =
-        [
-            new("Paste", "Pastes clipboard contents as-is."),
-            new("Copy as file", "Copy this text to the clipboard as a file."),
-            new("Paste as plain text", "Pastes clipboard contents as plain text with no formatting."),
-            new("Pin to clipboard", "Keeps this item at the top, even after a restart."),
-        ];
+        var actions = Program.SampleActions(items[0]);
 
         await presenter.ShowAsync(new PickerViewState(items, 0, actions, 0, PickerPane.Items)).ConfigureAwait(true);
         await Task.Delay(Settle).ConfigureAwait(true);
