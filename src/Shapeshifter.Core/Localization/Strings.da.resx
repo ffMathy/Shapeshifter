@@ -407,4 +407,7 @@ Hvis du vil indsætte noget, du har kopieret tidligere, skal du holde {0} nede o
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>Intet af det, du har kopieret, indeholder “{0}”.</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Builds fra pull requests opdaterer ikke sig selv</value>
+  </data>
 </root>

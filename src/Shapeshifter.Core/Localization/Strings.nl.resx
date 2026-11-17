@@ -407,4 +407,7 @@ Om iets te plakken dat je eerder hebt gekopieerd, houd je {0} ingedrukt en druk 
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>Niets wat je hebt gekopieerd bevat ‘{0}’.</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Builds van pull requests werken zichzelf niet bij</value>
+  </data>
 </root>

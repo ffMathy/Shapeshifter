@@ -407,4 +407,7 @@ Per incollare qualcosa che hai copiato in precedenza, tieni premuto {0} e premi 
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>Niente di ciò che hai copiato contiene «{0}».</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Le build delle pull request non si aggiornano da sole</value>
+  </data>
 </root>

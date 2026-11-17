@@ -407,4 +407,7 @@
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>コピーしたものに「{0}」を含むものはありません。</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>プルリクエストのビルドは自動更新されません</value>
+  </data>
 </root>

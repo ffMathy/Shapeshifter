@@ -23,6 +23,12 @@ public sealed class ReleaseVersion : IComparable<ReleaseVersion>, IEquatable<Rel
 
     public bool IsPrerelease => Prerelease.Length > 0;
 
+    /// <summary>
+    /// A build of a pull request (<c>7.1.17-pr.635.98</c>: the next release, the pull request and the CI run), as CI
+    /// publishes them for testing. These run where they are started: they never install or update themselves.
+    /// </summary>
+    public bool IsPullRequestBuild => Prerelease.StartsWith("pr.", StringComparison.Ordinal);
+
     /// <summary>Parses <c>1.2</c>, <c>1.2.3</c>, <c>v1.2.3</c> and <c>1.2.3-rc.1+build</c>; null for anything else.</summary>
     public static ReleaseVersion? TryParse(string? text)
     {

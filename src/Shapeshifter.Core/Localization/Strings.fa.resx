@@ -407,4 +407,7 @@
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>هیچ‌یک از چیزهایی که کپی کرده‌اید «{0}» را ندارد.</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>نسخه‌های درخواست ادغام خودشان به‌روز نمی‌شوند</value>
+  </data>
 </root>

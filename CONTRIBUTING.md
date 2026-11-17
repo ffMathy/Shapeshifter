@@ -85,6 +85,11 @@ with newer GitHub releases. While trying out such a build, start it with `--no-i
 `SHAPESHIFTER_NO_UPDATE=1`, or it moves into the install location and updates to the latest release. `dotnet run` and
 the tests are never installed or updated.
 
+Every pull request's CI run publishes builds for each platform as artifacts (`Shapeshifter-win-x64` and so on). Their
+version is the next release with the pull request and the run after it, such as `7.1.17-pr.635.98`, and such builds
+just run where they are started: they never install or update themselves. Like any newer version, a pull request
+build closes an older Shapeshifter that is running (your installed one, say), and the next release closes it in turn.
+
 ## Changing how the picker looks
 
 The screenshots in `assets/screenshots` (used by the README and the website) are rendered from the real picker, settings window and notification of each look, with sample content. To run the app in another platform's look, set `SHAPESHIFTER_LOOK` to `windows`, `macos` or `linux`. After a visual change, regenerate them with `scripts/generate-screenshots.sh` and check the result. A look only shows its real font on its own operating system (Segoe UI on Windows, SF Pro on macOS, Adwaita Sans on Linux, which `scripts/install-adwaita-fonts.sh` installs); elsewhere it falls back to Inter with a warning. CI renders each look on its own runner and commits changed screenshots to the branch.

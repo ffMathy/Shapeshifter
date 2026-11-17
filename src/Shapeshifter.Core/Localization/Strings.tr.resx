@@ -407,4 +407,7 @@ Daha önce kopyaladığınız bir şeyi yapıştırmak için {0} tuşunu basıl�
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>Kopyaladıklarınızın hiçbiri “{0}” içermiyor.</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Pull request derlemeleri kendini güncellemez</value>
+  </data>
 </root>

@@ -407,4 +407,7 @@
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>لا يحتوي أي شيء نسخته على «{0}».</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>إصدارات طلبات الدمج لا تحدّث نفسها</value>
+  </data>
 </root>

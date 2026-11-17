@@ -407,4 +407,7 @@
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>你复制的内容中没有包含“{0}”的项。</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>拉取请求的构建不会自动更新</value>
+  </data>
 </root>

@@ -407,4 +407,7 @@
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>ไม่มีสิ่งที่คุณคัดลอกที่มี “{0}”</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>บิลด์จากพูลรีเควสต์ไม่อัปเดตตัวเอง</value>
+  </data>
 </root>

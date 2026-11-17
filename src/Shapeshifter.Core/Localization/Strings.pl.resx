@@ -407,4 +407,7 @@ Aby wkleić coś skopiowanego wcześniej, przytrzymaj {0} i naciśnij V. Trzymaj
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>Nic, co skopiowano, nie zawiera „{0}”.</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Kompilacje z pull requestów nie aktualizują się same</value>
+  </data>
 </root>

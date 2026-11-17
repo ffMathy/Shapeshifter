@@ -538,4 +538,8 @@ To paste something you copied earlier, hold {0} and press V. Keep holding {0} to
     <value>Nothing you copied contains “{0}”.</value>
     <comment>Shown under the title when a search finds nothing. {0} is what the user typed; keep the quotation marks of your language around it.</comment>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Pull request builds do not update themselves</value>
+    <comment>Status line in Settings, for builds of a pull request (made for testing a change; they never update).</comment>
+  </data>
 </root>

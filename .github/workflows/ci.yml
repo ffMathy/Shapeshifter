@@ -34,6 +34,9 @@ jobs:
     outputs:
       # The release being built, or empty for ordinary CI runs (pull requests, manual runs without a version).
       tag: ${{ steps.version.outputs.tag }}
+      # The version of a pull request's builds, such as 7.1.17-pr.635.98 (the next release, the pull request and the
+      # CI run), or empty. The app runs such builds where they are started, without installing or updating them.
+      pull_request_version: ${{ steps.version.outputs.pull_request_version }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -42,6 +45,7 @@ jobs:
       - id: version
         env:
           MANUAL_TAG: ${{ inputs.release_tag }}
+          PULL_REQUEST: ${{ github.event.pull_request.number }}
         run: |
           if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
             tag="$GITHUB_REF_NAME"
@@ -54,6 +58,11 @@ jobs:
           fi
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           echo "Release: ${tag:-none}"
+          if [[ "$GITHUB_EVENT_NAME" == pull_request && -n "$PULL_REQUEST" ]]; then
+            next=$(scripts/next-version.sh)
+            echo "pull_request_version=${next#v}-pr.$PULL_REQUEST.$GITHUB_RUN_NUMBER" >> "$GITHUB_OUTPUT"
+            echo "Pull request build: ${next#v}-pr.$PULL_REQUEST.$GITHUB_RUN_NUMBER"
+          fi
 
   build:
     name: Build and unit tests (${{ matrix.os }})
@@ -186,6 +195,7 @@ jobs:
     needs: [version, build]
     env:
       RELEASE_TAG: ${{ needs.version.outputs.tag }}
+      PULL_REQUEST_VERSION: ${{ needs.version.outputs.pull_request_version }}
     strategy:
       fail-fast: false
       matrix:
@@ -216,6 +226,10 @@ jobs:
             exit 1
           fi
           echo "VERSION_ARGS=-p:Version=$version" >> "$GITHUB_ENV"
+      - name: Version of a pull request build
+        if: env.RELEASE_TAG == '' && env.PULL_REQUEST_VERSION != ''
+        shell: bash
+        run: echo "VERSION_ARGS=-p:Version=$PULL_REQUEST_VERSION" >> "$GITHUB_ENV"
       - name: Publish self-contained single-file build
         shell: bash
         run: dotnet publish src/Shapeshifter.Desktop -c Release -r ${{ matrix.rid }} -o publish/Shapeshifter $VERSION_ARGS

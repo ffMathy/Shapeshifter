@@ -407,4 +407,7 @@ Untuk menempelkan sesuatu yang Anda salin sebelumnya, tahan {0} lalu tekan V. Te
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>Tidak ada yang Anda salin yang berisi “{0}”.</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Build pull request tidak memperbarui dirinya sendiri</value>
+  </data>
 </root>

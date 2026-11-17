@@ -407,4 +407,7 @@
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>Không có mục nào bạn đã sao chép chứa “{0}”.</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Bản dựng từ pull request không tự cập nhật</value>
+  </data>
 </root>

@@ -407,4 +407,7 @@ Pour coller quelque chose que vous avez copié auparavant, maintenez {0} enfonc�
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>Rien de ce que vous avez copié ne contient « {0} ».</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Les versions de pull requests ne se mettent pas à jour</value>
+  </data>
 </root>

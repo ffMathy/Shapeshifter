@@ -407,4 +407,7 @@
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>Ніщо зі скопійованого не містить «{0}».</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Збірки з pull request не оновлюються самі</value>
+  </data>
 </root>

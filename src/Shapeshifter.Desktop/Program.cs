@@ -42,7 +42,8 @@ internal static class Program
         args = installation.Arguments;
         App.Installed = installation;
 
-        using var instance = SingleInstance.TryAcquire(paths.InstanceLockFile);
+        // A newer copy replaces an older one that runs; otherwise the running copy stays and this one exits.
+        using var instance = SingleInstance.Acquire(paths, Services.Installation.Layout(paths), Core.Updates.ReleaseVersion.Current());
         if (instance is null)
         {
             Log.Information("Shapeshifter is already running");
@@ -54,7 +55,7 @@ internal static class Program
         try
         {
             Log.Information("Starting Shapeshifter {Version} on {Platform} (.NET {Runtime})",
-                typeof(Program).Assembly.GetName().Version, Platform.PlatformServices.PlatformName, Environment.Version);
+                Core.Updates.ReleaseVersion.Current(), Platform.PlatformServices.PlatformName, Environment.Version);
             App.Paths = paths;
             return BuildAvaloniaApp().StartWithClassicDesktopLifetime(args, Avalonia.Controls.ShutdownMode.OnExplicitShutdown);
         }

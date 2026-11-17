@@ -407,4 +407,7 @@
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>আপনার কপি করা কোনো কিছুতে “{0}” নেই।</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>পুল রিকোয়েস্ট বিল্ড নিজে থেকে আপডেট হয় না</value>
+  </data>
 </root>

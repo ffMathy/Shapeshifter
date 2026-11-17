@@ -407,4 +407,7 @@ Um etwas einzufügen, das früher kopiert wurde, {0} gedrückt halten und V drü
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>Nichts, was du kopiert hast, enthält „{0}“.</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Builds aus Pull Requests aktualisieren sich nicht selbst</value>
+  </data>
 </root>

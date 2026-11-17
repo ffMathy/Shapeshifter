@@ -407,4 +407,7 @@
   <data name="PickerSearchNoMatchesText" xml:space="preserve">
     <value>आपकी कॉपी की गई किसी भी चीज़ में “{0}” नहीं है।</value>
   </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>पुल रिक्वेस्ट बिल्ड खुद को अपडेट नहीं करते</value>
+  </data>
 </root>
