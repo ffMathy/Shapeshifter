@@ -93,7 +93,13 @@ public static class LinkParser
     public static bool IsImageLink(Uri uri)
     {
         ArgumentNullException.ThrowIfNull(uri);
-        var path = uri.AbsolutePath;
+        return IsImagePath(uri.AbsolutePath);
+    }
+
+    /// <summary>Whether a path (of a link or a file) ends in the extension of an image format the picker can show.</summary>
+    public static bool IsImagePath(string path)
+    {
+        ArgumentNullException.ThrowIfNull(path);
         return ImageExtensions.Any(extension => path.EndsWith(extension, StringComparison.OrdinalIgnoreCase));
     }
 }

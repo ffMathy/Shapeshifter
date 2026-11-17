@@ -12,6 +12,7 @@ using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Coaching;
 using Shapeshifter.Core.Engine;
 using Shapeshifter.Core.Persistence;
+using Shapeshifter.Core.Previews;
 using Shapeshifter.Core.Settings;
 using Shapeshifter.Core.Support;
 using Shapeshifter.Core.Updates;
@@ -124,7 +125,12 @@ public partial class App : Application
 
             var windowFocus = platform.WindowFocus is { } focus ? new UiThreadWindowFocus(focus) : null;
             picker = new PickerPresenter(
-                platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), keyboard.ModifierName, logger, windowFocus);
+                platform.CursorLocator,
+                new PickerVisuals(platform.FileIcons, logger),
+                keyboard.ModifierName,
+                logger,
+                windowFocus,
+                new LinkedImageLoader(http, logger));
             var coach = new CopyCoach(platform.SourceLocator, () => keyboard.ModifierName, () => settings.Current.CoachingTips);
             engine = new ShapeshifterEngine(
                 history,
