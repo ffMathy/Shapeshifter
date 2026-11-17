@@ -19,7 +19,6 @@
   <Styles.Resources>
     <!-- Where the copy notification appears (CopyNotifier): BottomRight, TopRight or BottomCenter. -->
     <x:String x:Key="ToastPlacement">TopRight</x:String>
-    <x:String x:Key="PickerTitle">Clipboard</x:String>
     <!-- 60 for the row and 2 above and below it: the 4 between capsules -->
     <x:Double x:Key="PickerRowHeight">64</x:Double>
     <x:String x:Key="LookDefaultAccent">#3A5CF0</x:String>
@@ -745,10 +744,11 @@
   </Style>
 
   <!-- Commands: capsule push buttons -->
-  <Style Selector="StackPanel.commands">
+  <Style Selector="WrapPanel.commands">
     <Setter Property="Orientation" Value="Horizontal" />
     <Setter Property="HorizontalAlignment" Value="Right" />
-    <Setter Property="Spacing" Value="8" />
+    <Setter Property="ItemSpacing" Value="8" />
+    <Setter Property="LineSpacing" Value="8" />
     <Setter Property="Margin" Value="0,16,0,0" />
   </Style>
   <Style Selector="Button.command">

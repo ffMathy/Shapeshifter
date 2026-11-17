@@ -2,6 +2,7 @@ using System.Globalization;
 using System.IO.Compression;
 using System.Text;
 using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Core.Actions;
 
@@ -15,14 +16,14 @@ public sealed class PasteAsFileAction : IClipboardAction
 
     public int Order => 10;
 
-    public string GetTitle(ClipboardItem item) => "Paste as file";
+    public string GetTitle(ClipboardItem item) => Strings.ActionPasteAsFile;
 
     public string GetDescription(ClipboardItem item)
     {
         ArgumentNullException.ThrowIfNull(item);
         return IsImage(item)
-            ? $"Saves this image to a .{ImageFormat.GetExtension(item.Snapshot.Image!)} file and pastes the file."
-            : "Saves this text to a .txt file and pastes the file.";
+            ? Localizer.Format(Strings.ActionPasteAsImageFileDescription, ImageFormat.GetExtension(item.Snapshot.Image!))
+            : Strings.ActionPasteAsFileDescription;
     }
 
     public bool CanExecute(ClipboardItem item)
@@ -68,9 +69,9 @@ public sealed class ZipFilesAction : IClipboardAction
 
     public int Order => 75;
 
-    public string GetTitle(ClipboardItem item) => "Copy as compressed folder";
+    public string GetTitle(ClipboardItem item) => Strings.ActionCopyAsZip;
 
-    public string GetDescription(ClipboardItem item) => "Copy these files to the clipboard as a compressed (.zip) folder.";
+    public string GetDescription(ClipboardItem item) => Strings.ActionCopyAsZipDescription;
 
     public bool CanExecute(ClipboardItem item)
     {

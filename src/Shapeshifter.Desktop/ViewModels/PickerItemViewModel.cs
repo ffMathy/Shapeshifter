@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Text;
 using Shapeshifter.Desktop.Services;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Desktop.ViewModels;
 
@@ -58,7 +59,7 @@ public sealed partial class PickerItemViewModel : ObservableObject
             ClipboardContentKind.Image => DescribeImage(item.Snapshot.Image),
             ClipboardContentKind.FileCollection => DescribeFiles(files),
             ClipboardContentKind.File => Path.GetFileName(Path.TrimEndingDirectorySeparator(files[0])),
-            _ => string.IsNullOrWhiteSpace(item.PreviewText) ? "(empty)" : item.PreviewText,
+            _ => string.IsNullOrWhiteSpace(item.PreviewText) ? Strings.ItemEmpty : item.PreviewText,
         };
 
         // A copied colour code ("#2c5497", "rgb(44, 84, 151)") shows the colour itself on its tile (issue #299).
@@ -182,7 +183,7 @@ public sealed partial class PickerItemViewModel : ObservableObject
 
     public bool HasPreviewText => PreviewText.Length > 0;
 
-    /// <summary>The line under the preview: "3 lines · 120 characters", "Image · 1920 × 1080", "4 files and folders".</summary>
+    /// <summary>The line under the preview: "3 lines · 120 characters", "Image · 1920 × 1080", "4 files".</summary>
     public string PreviewCaption { get; }
 
     /// <summary>
@@ -217,10 +218,8 @@ public sealed partial class PickerItemViewModel : ObservableObject
                 return files[0];
             case ClipboardContentKind.FileCollection:
                 var names = files.Take(MaxPreviewFiles).Select(file => Path.GetFileName(Path.TrimEndingDirectorySeparator(file)));
-                var more = files.Count > MaxPreviewFiles
-                    ? string.Create(CultureInfo.CurrentCulture, $"\n… and {files.Count - MaxPreviewFiles} more")
-                    : string.Empty;
-                return string.Join('\n', names) + more;
+                // The caption gives the count, so a longer list just ends in an ellipsis.
+                return string.Join('\n', names) + (files.Count > MaxPreviewFiles ? "\n…" : string.Empty);
             case ClipboardContentKind.Text when ColorParser.TryParse(item.Snapshot.Text, out _):
                 // A colour code shows its colour, filling the pane.
                 return string.Empty;
@@ -239,28 +238,27 @@ public sealed partial class PickerItemViewModel : ObservableObject
         }
     }
 
+    /// <remarks>Made of the strings the rows already use, so it needs no translations of its own.</remarks>
     internal static string CreatePreviewCaption(ClipboardItem item, string title)
     {
         var snapshot = item.Snapshot;
         switch (item.Kind)
         {
             case ClipboardContentKind.Image:
-                return title;
             case ClipboardContentKind.File:
-                return "File";
+                return title;
             case ClipboardContentKind.FileCollection:
-                return string.Create(CultureInfo.CurrentCulture, $"{snapshot.Files.Count} files and folders");
+                return Localizer.Format(Strings.ItemFileCount, snapshot.Files.Count);
             case ClipboardContentKind.Text when ColorParser.TryParse(snapshot.Text, out _):
-                return "Colour · " + snapshot.Text!.Trim();
+                return snapshot.Text!.Trim();
             case ClipboardContentKind.Text:
                 var text = snapshot.Text ?? string.Empty;
                 var lines = text.Length == 0 ? 0 : text.AsSpan().Count('\n') + 1;
-                var size = lines <= 1
-                    ? string.Create(CultureInfo.CurrentCulture, $"{text.Length} characters")
-                    : string.Create(CultureInfo.CurrentCulture, $"{lines} lines · {text.Length} characters");
-                return ClipboardFormatClassifier.FindRichText(snapshot) is not null ? "Formatted text · " + size : size;
+                var characters = Localizer.Format(Strings.ItemCharacterCount, text.Length);
+                var size = lines <= 1 ? characters : Localizer.Format(Strings.ItemLineCount, lines) + " · " + characters;
+                return ClipboardFormatClassifier.FindRichText(snapshot) is not null ? Strings.ItemFormattedText + " · " + size : size;
             default:
-                return "Other data";
+                return Strings.ItemOtherData;
         }
     }
 
@@ -269,8 +267,8 @@ public sealed partial class PickerItemViewModel : ObservableObject
 
     /// <summary>"Image · 1920 × 1080" when the size can be read from the PNG header, otherwise "Image".</summary>
     internal static string DescribeImage(byte[]? png) => ReadPngSize(png) is { } size
-        ? string.Create(CultureInfo.CurrentCulture, $"Image · {size.Width} × {size.Height}")
-        : "Image";
+        ? Localizer.Format(Strings.ItemImageWithSize, size.Width, size.Height)
+        : Strings.ItemImage;
 
     /// <summary>The size of a PNG, read from its header, or null when it is not a PNG.</summary>
     internal static (uint Width, uint Height)? ReadPngSize(byte[]? png)
@@ -289,7 +287,7 @@ public sealed partial class PickerItemViewModel : ObservableObject
     internal static string DescribeFiles(IReadOnlyList<string> files)
     {
         var names = string.Join(", ", files.Take(6).Select(file => Path.GetFileName(Path.TrimEndingDirectorySeparator(file))));
-        return string.Create(CultureInfo.CurrentCulture, $"{files.Count} items · {names}");
+        return Localizer.Format(Strings.ItemFilesWithNames, files.Count, names);
     }
 
     private static string CreateFallbackSubtitle(ClipboardItem item)
@@ -297,17 +295,19 @@ public sealed partial class PickerItemViewModel : ObservableObject
         var snapshot = item.Snapshot;
         return item.Kind switch
         {
-            ClipboardContentKind.Text when ClipboardFormatClassifier.FindRichText(snapshot) is not null => "Formatted text",
+            ClipboardContentKind.Text when ClipboardFormatClassifier.FindRichText(snapshot) is not null => Strings.ItemFormattedText,
             ClipboardContentKind.Text => CountLines(snapshot.Text),
             ClipboardContentKind.Image => string.Empty,
-            _ => "Other data",
+            _ => Strings.ItemOtherData,
         };
     }
 
     private static string CountLines(string? text)
     {
         var lines = string.IsNullOrEmpty(text) ? 0 : text.AsSpan().Count('\n') + 1;
-        return lines <= 1 ? $"{text?.Length ?? 0} characters" : $"{lines} lines";
+        return lines <= 1
+            ? Localizer.Format(Strings.ItemCharacterCount, text?.Length ?? 0)
+            : Localizer.Format(Strings.ItemLineCount, lines);
     }
 }
 
@@ -341,7 +341,7 @@ public sealed class PickerActionViewModel(Shapeshifter.Core.Engine.PickerActionV
 
     public string Description => View.Description;
 
-    public Geometry Glyph { get; } = Glyphs.ForAction(view?.Title ?? string.Empty);
+    public Geometry Glyph { get; } = Glyphs.ForAction(view?.Id ?? string.Empty, unpins: view?.Title == Strings.ActionUnpin);
 
     /// <summary>The action that runs when the modifier is released without choosing another (the first).</summary>
     public bool IsDefault { get; } = isDefault;

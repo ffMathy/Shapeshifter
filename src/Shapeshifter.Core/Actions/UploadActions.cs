@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Globalization;
 using System.Net.Http.Headers;
 using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Core.Actions;
 
@@ -18,9 +19,9 @@ public sealed class UploadImageAction : IClipboardAction
 
     public int Order => 30;
 
-    public string GetTitle(ClipboardItem item) => "Upload and paste link";
+    public string GetTitle(ClipboardItem item) => Strings.ActionUploadImage;
 
-    public string GetDescription(ClipboardItem item) => $"Uploads this image to {Catbox.Name} and pastes a public link to it.";
+    public string GetDescription(ClipboardItem item) => Localizer.Format(Strings.ActionUploadImageDescription, Catbox.Name);
 
     public bool CanExecute(ClipboardItem item)
     {

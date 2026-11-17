@@ -1,9 +1,15 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="using:Shapeshifter.Core.Localization"
              x:Class="Shapeshifter.Desktop.App"
              Name="Shapeshifter">
   <Application.Styles>
     <FluentTheme />
+    <!-- The words beside switches, in the display language (a look can still hide them, as the Linux look does). -->
+    <Style Selector="ToggleSwitch">
+      <Setter Property="OnContent" Value="{x:Static loc:Strings.ToggleOn}" />
+      <Setter Property="OffContent" Value="{x:Static loc:Strings.ToggleOff}" />
+    </Style>
     <!--
       The look of the operating system (Styles/Windows.axaml, MacOS.axaml or Linux.axaml) is added by PlatformLook, which
       also sets the theme variant: the Windows look follows the light or dark app mode of Windows, the others are light.

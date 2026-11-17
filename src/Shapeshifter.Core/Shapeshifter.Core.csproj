@@ -8,6 +8,19 @@
     <PackageReference Include="Serilog" />
   </ItemGroup>
   <ItemGroup>
+    <!--
+      The user-facing text, in English (Strings.resx) and translated (Strings.<culture>.resx), compiled into satellite
+      assemblies that a single-file build carries inside the executable. The generated Strings class has one property per
+      string, looked up in the current UI culture.
+    -->
+    <EmbeddedResource Update="Localization\Strings.resx"
+                      StronglyTypedLanguage="CSharp"
+                      StronglyTypedClassName="Strings"
+                      StronglyTypedNamespace="Shapeshifter.Core.Localization"
+                      StronglyTypedFileName="$(IntermediateOutputPath)Strings.Designer.cs"
+                      PublicClass="true" />
+  </ItemGroup>
+  <ItemGroup>
     <InternalsVisibleTo Include="Shapeshifter.Core.Tests" />
   </ItemGroup>
 </Project>

@@ -71,6 +71,7 @@ internal static class Program
     /// </summary>
     public static int Main(string[] args)
     {
+        Shapeshifter.Core.Localization.Localizer.ApplyLanguageOverride();
         if (args.Contains("--live"))
         {
             return LiveCapture.Run(args);
@@ -228,7 +229,7 @@ internal static class Program
     /// </summary>
     internal static IReadOnlyList<PickerActionView> SampleActions(ClipboardItem? item) => item is null
         ? []
-        : ActionCatalog.CreateDefault().GetAvailable(item).Select(action => new PickerActionView(action.GetTitle(item), action.GetDescription(item))).ToArray();
+        : ActionCatalog.CreateDefault().GetAvailable(item).Select(action => new PickerActionView(action.Id, action.GetTitle(item), action.GetDescription(item))).ToArray();
 
     /// <summary>The picker's state in the screenshots: the sample items, the first selected, its actions.</summary>
     internal static PickerViewModel CreateSampleViewModel(Look look, byte[] photo, Bitmap thumbnail)
@@ -275,6 +276,7 @@ internal static class Program
         var content = (Control)picker.Content!;
         picker.Content = null;
         content.DataContext = viewModel;
+        content.FlowDirection = picker.FlowDirection;
 
         using var background = ToBitmap(SampleArt.Desktop(look, width, height, dark));
         var host = new Window
@@ -310,6 +312,7 @@ internal static class Program
         var content = (Control)window.Content!;
         window.Content = null;
         content.DataContext = window.DataContext;
+        content.FlowDirection = window.FlowDirection;
         if (!double.IsNaN(window.Width))
             content.Width = window.Width - (content.Margin.Left + content.Margin.Right);
         var host = new Window

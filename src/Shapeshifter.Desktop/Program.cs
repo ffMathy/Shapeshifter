@@ -9,6 +9,8 @@ internal static class Program
     [STAThread]
     public static int Main(string[] args)
     {
+        // The display language follows the system unless SHAPESHIFTER_LANGUAGE names another (e.g. "de").
+        Core.Localization.Localizer.ApplyLanguageOverride();
         var paths = AppPaths.CreateDefault();
         paths.EnsureCreated();
         Log.Logger = new LoggerConfiguration()

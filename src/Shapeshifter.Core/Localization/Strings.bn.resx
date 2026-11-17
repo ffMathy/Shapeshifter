@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Shapeshifter সেটিংস</value>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>সংস্করণ {0}</value>
+  </data>
+  <data name="SettingsCopyVersion" xml:space="preserve">
+    <value>সংস্করণ কপি করুন</value>
+  </data>
+  <data name="SettingsCopied" xml:space="preserve">
+    <value>কপি হয়েছে</value>
+  </data>
+  <data name="SettingsReportProblem" xml:space="preserve">
+    <value>সমস্যা জানান</value>
+  </data>
+  <data name="SettingsProjectPage" xml:space="preserve">
+    <value>প্রকল্পের পাতা</value>
+  </data>
+  <data name="SettingsUsage" xml:space="preserve">
+    <value>সাধারণভাবে কপি করুন। পুরোনো কোনো আইটেম আটকাতে {0} ধরে রেখে V চাপুন: ইতিহাস দেখতে {0} ধরে রাখুন, আইটেম বাছতে আবার V (বা ↑/↓, বা 1–9) চাপুন, সেটি দিয়ে কী করবেন তা বাছতে →, সরাতে Delete এবং বাতিল করতে Esc চাপুন। আটকাতে {0} ছেড়ে দিন।</value>
+  </data>
+  <data name="SettingsHistoryGroup" xml:space="preserve">
+    <value>ইতিহাস</value>
+  </data>
+  <data name="SettingsDelayTitle" xml:space="preserve">
+    <value>ইতিহাস দেখানোর আগে বিলম্ব</value>
+  </data>
+  <data name="SettingsDelayDescription" xml:space="preserve">
+    <value>ইতিহাস দেখানোর আগে কতক্ষণ {0}+V ধরে রাখতে হবে</value>
+  </data>
+  <data name="SettingsDelayAccessibleName" xml:space="preserve">
+    <value>ইতিহাস দেখানোর আগে বিলম্ব, মিলিসেকেন্ডে</value>
+  </data>
+  <data name="SettingsItemsTitle" xml:space="preserve">
+    <value>যতগুলি আইটেম মনে রাখবে</value>
+  </data>
+  <data name="SettingsItemsDescription" xml:space="preserve">
+    <value>পিন করা আইটেমগুলি এর অতিরিক্ত রাখা হয়</value>
+  </data>
+  <data name="SettingsRememberTitle" xml:space="preserve">
+    <value>রিস্টার্টের পরেও ইতিহাস মনে রাখুন</value>
+  </data>
+  <data name="SettingsRememberDescription" xml:space="preserve">
+    <value>শুধু পিন করা আইটেম নয়, পুরো ইতিহাস এই কম্পিউটারের ডিস্কে রাখে</value>
+  </data>
+  <data name="SettingsBehaviourGroup" xml:space="preserve">
+    <value>আচরণ</value>
+  </data>
+  <data name="SettingsNotificationsTitle" xml:space="preserve">
+    <value>কপির বিজ্ঞপ্তি</value>
+  </data>
+  <data name="SettingsNotificationsDescription" xml:space="preserve">
+    <value>প্রতিবার কিছু কপি হলে একটি বিজ্ঞপ্তি দেখান</value>
+  </data>
+  <data name="SettingsStartAtLoginTitle" xml:space="preserve">
+    <value>সাইন ইন করলে চালু করুন</value>
+  </data>
+  <data name="SettingsStartAtLoginDescription" xml:space="preserve">
+    <value>আপনি সাইন ইন করার পরে Shapeshifter ব্যাকগ্রাউন্ডে অপেক্ষা করে</value>
+  </data>
+  <data name="SettingsUpdatesTitle" xml:space="preserve">
+    <value>স্বয়ংক্রিয় আপডেট</value>
+  </data>
+  <data name="SettingsClearHistory" xml:space="preserve">
+    <value>ইতিহাস মুছুন</value>
+  </data>
+  <data name="SettingsCheckForUpdates" xml:space="preserve">
+    <value>আপডেট খুঁজুন</value>
+  </data>
+  <data name="SettingsOpenLogFolder" xml:space="preserve">
+    <value>লগ ফোল্ডার খুলুন</value>
+  </data>
+  <data name="PickerTitleWindows" xml:space="preserve">
+    <value>ক্লিপবোর্ডের ইতিহাস</value>
+  </data>
+  <data name="PickerTitleMacOS" xml:space="preserve">
+    <value>ক্লিপবোর্ড</value>
+  </data>
+  <data name="PickerItemCountOne" xml:space="preserve">
+    <value>1টি আইটেম</value>
+  </data>
+  <data name="PickerItemCountOther" xml:space="preserve">
+    <value>{0}টি আইটেম</value>
+  </data>
+  <data name="PickerReleaseHint" xml:space="preserve">
+    <value>আটকাতে {0} ছেড়ে দিন</value>
+  </data>
+  <data name="PickerNothingCopied" xml:space="preserve">
+    <value>এখনও কিছু কপি করা হয়নি</value>
+  </data>
+  <data name="PickerEmptyHint" xml:space="preserve">
+    <value>সাধারণভাবে কপি করুন, আর আপনি যা কিছু কপি করেন Shapeshifter সব রেখে দেয়।
+
+আগে কপি করা কিছু আটকাতে {0} ধরে রেখে V চাপুন। ইতিহাস দেখতে {0} ধরে রাখুন, বাছতে V বা তীর কী চাপুন, আর আটকাতে {0} ছেড়ে দিন।</value>
+  </data>
+  <data name="PickerActions" xml:space="preserve">
+    <value>কাজ</value>
+  </data>
+  <data name="PickerActionsForText" xml:space="preserve">
+    <value>এই টেক্সটের জন্য কাজ</value>
+  </data>
+  <data name="PickerActionsForImage" xml:space="preserve">
+    <value>এই ছবির জন্য কাজ</value>
+  </data>
+  <data name="PickerActionsForFile" xml:space="preserve">
+    <value>এই ফাইলের জন্য কাজ</value>
+  </data>
+  <data name="PickerActionsForFiles" xml:space="preserve">
+    <value>এই ফাইলগুলির জন্য কাজ</value>
+  </data>
+  <data name="PickerDefault" xml:space="preserve">
+    <value>ডিফল্ট</value>
+  </data>
+  <data name="PickerHintRelease" xml:space="preserve">
+    <value>ছাড়লে আটকানো হবে</value>
+  </data>
+  <data name="PickerHintMove" xml:space="preserve">
+    <value>সরান</value>
+  </data>
+  <data name="PickerHintJump" xml:space="preserve">
+    <value>যান</value>
+  </data>
+  <data name="PickerHintRemove" xml:space="preserve">
+    <value>মুছুন</value>
+  </data>
+  <data name="PickerHintCancel" xml:space="preserve">
+    <value>বাতিল</value>
+  </data>
+  <data name="KeyControl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="KeyEscape" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="ItemEmpty" xml:space="preserve">
+    <value>(খালি)</value>
+  </data>
+  <data name="ItemImage" xml:space="preserve">
+    <value>ছবি</value>
+  </data>
+  <data name="ItemImageWithSize" xml:space="preserve">
+    <value>ছবি · {0} × {1}</value>
+  </data>
+  <data name="ItemFilesWithNames" xml:space="preserve">
+    <value>{0}টি আইটেম · {1}</value>
+  </data>
+  <data name="ItemFileCount" xml:space="preserve">
+    <value>{0}টি ফাইল</value>
+  </data>
+  <data name="ItemFormattedText" xml:space="preserve">
+    <value>ফরম্যাট করা টেক্সট</value>
+  </data>
+  <data name="ItemOtherData" xml:space="preserve">
+    <value>অন্যান্য ডেটা</value>
+  </data>
+  <data name="ItemCharacterCount" xml:space="preserve">
+    <value>{0}টি অক্ষর</value>
+  </data>
+  <data name="ItemLineCount" xml:space="preserve">
+    <value>{0}টি লাইন</value>
+  </data>
+  <data name="ToastCopiedOne" xml:space="preserve">
+    <value>কপি হয়েছে · আপনার ইতিহাসে 1টি আইটেম</value>
+  </data>
+  <data name="ToastCopiedOther" xml:space="preserve">
+    <value>কপি হয়েছে · আপনার ইতিহাসে {0}টি আইটেম</value>
+  </data>
+  <data name="TraySettings" xml:space="preserve">
+    <value>সেটিংস…</value>
+  </data>
+  <data name="TrayCheckForUpdates" xml:space="preserve">
+    <value>আপডেট খুঁজুন…</value>
+  </data>
+  <data name="TrayReportProblem" xml:space="preserve">
+    <value>সমস্যা জানান…</value>
+  </data>
+  <data name="TrayAbout" xml:space="preserve">
+    <value>Shapeshifter {0} সম্পর্কে</value>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>Shapeshifter বন্ধ করুন</value>
+  </data>
+  <data name="StartupErrorTitle" xml:space="preserve">
+    <value>Shapeshifter চালু করা যায়নি</value>
+  </data>
+  <data name="StartupErrorDetails" xml:space="preserve">
+    <value>বিস্তারিত তথ্য {0}-এ লেখা হয়েছে।</value>
+  </data>
+  <data name="StartupErrorQuit" xml:space="preserve">
+    <value>বন্ধ করুন</value>
+  </data>
+  <data name="ActionPaste" xml:space="preserve">
+    <value>আটকান</value>
+  </data>
+  <data name="ActionPasteDescription" xml:space="preserve">
+    <value>ক্লিপবোর্ডের বিষয়বস্তু যেমন আছে তেমনই আটকায়।</value>
+  </data>
+  <data name="ActionPasteAsPlainText" xml:space="preserve">
+    <value>সাধারণ টেক্সট হিসেবে আটকান</value>
+  </data>
+  <data name="ActionPasteAsPlainTextDescription" xml:space="preserve">
+    <value>ক্লিপবোর্ডের বিষয়বস্তু ফরম্যাটিং ছাড়া সাধারণ টেক্সট হিসেবে আটকায়।</value>
+  </data>
+  <data name="ActionPasteAsFile" xml:space="preserve">
+    <value>ফাইল হিসেবে আটকান</value>
+  </data>
+  <data name="ActionPasteAsFileDescription" xml:space="preserve">
+    <value>এই টেক্সট একটি .txt ফাইলে সংরক্ষণ করে ফাইলটি আটকায়।</value>
+  </data>
+  <data name="ActionCopyAsZip" xml:space="preserve">
+    <value>সংকুচিত ফোল্ডার হিসেবে কপি করুন</value>
+  </data>
+  <data name="ActionCopyAsZipDescription" xml:space="preserve">
+    <value>এই ফাইলগুলি একটি সংকুচিত (.zip) ফোল্ডার হিসেবে ক্লিপবোর্ডে কপি করুন।</value>
+  </data>
+  <data name="ActionCopyImageFromLink" xml:space="preserve">
+    <value>লিঙ্ক থেকে ছবি কপি করুন</value>
+  </data>
+  <data name="ActionCopyImageFromLinkDescription" xml:space="preserve">
+    <value>লিঙ্ক করা ছবিটি ডাউনলোড করে ছবিটিই ক্লিপবোর্ডে কপি করে।</value>
+  </data>
+  <data name="ActionOpenLink" xml:space="preserve">
+    <value>লিঙ্ক খুলুন</value>
+  </data>
+  <data name="ActionOpenLinks" xml:space="preserve">
+    <value>লিঙ্কগুলি খুলুন</value>
+  </data>
+  <data name="ActionOpenLinkDescription" xml:space="preserve">
+    <value>লিঙ্কটি আপনার ব্রাউজারে খোলে।</value>
+  </data>
+  <data name="ActionOpenLinksDescription" xml:space="preserve">
+    <value>লিঙ্কগুলি আপনার ব্রাউজারে খোলে (সর্বাধিক {0}টি)।</value>
+  </data>
+  <data name="ActionPin" xml:space="preserve">
+    <value>ক্লিপবোর্ডে পিন করুন</value>
+  </data>
+  <data name="ActionPinDescription" xml:space="preserve">
+    <value>এই আইটেমটি পিন করে যাতে এটি সবসময় উপরে থাকে, এবং আপনার কম্পিউটারে সংরক্ষণ করে যাতে পরের বার Shapeshifter খুললেও এটি থাকে।</value>
+  </data>
+  <data name="ActionUnpin" xml:space="preserve">
+    <value>ক্লিপবোর্ড থেকে আনপিন করুন</value>
+  </data>
+  <data name="ActionUnpinDescription" xml:space="preserve">
+    <value>এই আইটেমটি আনপিন করে যাতে আপনি কপি করার সাথে সাথে এটি নিচে নামে, এবং এটি আর আপনার কম্পিউটারে সংরক্ষিত থাকে না।</value>
+  </data>
+  <data name="TimeJustNow" xml:space="preserve">
+    <value>এইমাত্র</value>
+  </data>
+  <data name="TimeMinutesAgo" xml:space="preserve">
+    <value>{0} মিনিট আগে</value>
+  </data>
+  <data name="TimeHoursAgo" xml:space="preserve">
+    <value>{0} ঘণ্টা আগে</value>
+  </data>
+  <data name="TimeYesterday" xml:space="preserve">
+    <value>গতকাল</value>
+  </data>
+  <data name="TimeDaysAgo" xml:space="preserve">
+    <value>{0} দিন আগে</value>
+  </data>
+  <data name="UpdateOff" xml:space="preserve">
+    <value>স্বয়ংক্রিয় আপডেট বন্ধ আছে</value>
+  </data>
+  <data name="UpdateUnsupported" xml:space="preserve">
+    <value>এই কপিটি নিজেকে আপডেট করতে পারে না</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>আপডেট খোঁজা হচ্ছে…</value>
+  </data>
+  <data name="UpdateUpToDate" xml:space="preserve">
+    <value>হালনাগাদ আছে ({0}-এ যাচাই করা হয়েছে)</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>সংস্করণ {0} ডাউনলোড হচ্ছে…</value>
+  </data>
+  <data name="UpdateReadyToRestart" xml:space="preserve">
+    <value>সংস্করণ {0} ইনস্টল হয়েছে এবং পরের বার {1} চালু হলে এটি চালু হবে</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>আপডেট করা যায়নি: {0}</value>
+  </data>
+  <data name="UpdateAutomatic" xml:space="preserve">
+    <value>আপডেট স্বয়ংক্রিয়ভাবে খোঁজা হয়</value>
+  </data>
+  <data name="UpdateTurnedOff" xml:space="preserve">
+    <value>আপডেট বন্ধ আছে ({0})</value>
+  </data>
+  <data name="UpdateReleaseBuildsOnly" xml:space="preserve">
+    <value>শুধু রিলিজ বিল্ড নিজেকে আপডেট করে</value>
+  </data>
+  <data name="UpdateCannotWrite" xml:space="preserve">
+    <value>{0} {1}-এ লিখতে পারছে না; যেভাবে ইনস্টল করা হয়েছিল সেভাবেই এটি আপডেট করুন</value>
+  </data>
+  <data name="PlatformNeedsX11" xml:space="preserve">
+    <value>Shapeshifter-এর একটি X11 ডিসপ্লে প্রয়োজন (DISPLAY সেট করা নেই)। Wayland-এ XWayland উপলব্ধ আছে কিনা নিশ্চিত করুন।</value>
+  </data>
+  <data name="PlatformWayland" xml:space="preserve">
+    <value>এটি একটি Wayland সেশন। Wayland অ্যাপ্লিকেশনগুলিকে গ্লোবাল কীস্ট্রোক দেখতে বা তৈরি করতে দেয় না, তাই আটকানোর অঙ্গভঙ্গি কেবল তখনই কাজ করে যখন একটি X11 (XWayland) অ্যাপ্লিকেশন ফোকাসে থাকে। সম্পূর্ণ সমর্থনের জন্য একটি X11 সেশনে লগ ইন করুন।</value>
+  </data>
+  <data name="PlatformAccessibility" xml:space="preserve">
+    <value>Cmd+V কীস্ট্রোক দেখতে ও পাঠাতে Shapeshifter-এর Accessibility অ্যাক্সেস প্রয়োজন। System Settings &gt; Privacy &amp; Security &gt; Accessibility-এ এটির অনুমতি দিন এবং Shapeshifter রিস্টার্ট করুন।</value>
+  </data>
+  <data name="PlatformNotSupported" xml:space="preserve">
+    <value>{0} সমর্থিত নয়।</value>
+  </data>
+  <data name="ToggleOn" xml:space="preserve">
+    <value>চালু</value>
+  </data>
+  <data name="ToggleOff" xml:space="preserve">
+    <value>বন্ধ</value>
+  </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>এই ছবিটি একটি .{0} ফাইলে সংরক্ষণ করে ফাইলটি আটকায়।</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>আপলোড করে লিঙ্ক আটকান</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>এই ছবিটি {0}-এ আপলোড করে এবং এর একটি সর্বজনীন লিঙ্ক আটকায়।</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>পরামর্শ</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>ইতিহাস থেকে নিলে আবার কপি করতে হতো না, এমন হলে জানান</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>আগে থেকেই আপনার ইতিহাসে আছে</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>আবার কপি করার দরকার নেই: আপনার ইতিহাস থেকে এটি বাছতে {0}+V ধরে রাখুন।</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>আপনি কি জানেন?</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>আপনি প্রথমে {0} থেকে কয়েকটি জিনিস কপি করতে পারেন, তারপর {2}-এ {1}+V ধরে রেখে আপনার ইতিহাস থেকে প্রতিটি বেছে নিতে পারেন।</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>{0}-এ আপলোড করবেন?</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>এই ছবিটি {0}-এ আপলোড করবেন?</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>ছবিটি {0} (catbox.moe)-এ পাঠানো হয়, যা বিজ্ঞাপনহীন একটি বিনামূল্যের ছবি হোস্ট, এবং লিঙ্কটি যার কাছে আছে সে-ই এটি দেখতে পারবে। আপলোড মোছা যায় না। আপনি আর যা কিছু কপি করেন তা কখনো আপনার কম্পিউটারের বাইরে যায় না।</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter আর জিজ্ঞাসা করবে না। এবার লিঙ্কটি কপি করা হয়েছে: আটকাতে {0}+V চাপুন।</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>{0}-এ আপলোড করুন</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>বাতিল</value>
+  </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> কী ধরে না রেখেই ইতিহাস খোলা রাখতে Space চাপুন, তারপর আটকাতে Enter চাপুন।</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> {0} ধরে না রেখে ইতিহাস দেখতে Space চাপুন: আটকাতে Enter বা Esc না চাপা পর্যন্ত এটি খোলা থাকে।</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>আটকাতে Enter চাপুন</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>বন্ধ</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>আটকান</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>খোলা রাখুন</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Space</value>
+  </data>
+</root>

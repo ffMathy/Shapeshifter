@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Shapeshifter.Core.Localization;
 using Shapeshifter.Desktop.Services;
 
 namespace Shapeshifter.Desktop.Views;
@@ -8,6 +9,11 @@ public partial class ToastWindow : Window
     public ToastWindow()
     {
         InitializeComponent();
+        if (Localizer.IsRightToLeft)
+        {
+            FlowDirection = Avalonia.Media.FlowDirection.RightToLeft;
+        }
+
         NativeMaterial.Prepare(this, Chrome);
 
         // As the picker's "chrome.opaque": without a compositor the toast has to fill its window.
@@ -39,7 +45,7 @@ public partial class ToastWindow : Window
     public void SetContent(int count, string preview)
     {
         Chrome.Classes.Set("tip", false);
-        CountText.Text = count == 1 ? "Copied · 1 item in your history" : $"Copied · {count} items in your history";
+        CountText.Text = count == 1 ? Strings.ToastCopiedOne : Localizer.Format(Strings.ToastCopiedOther, count);
         PreviewText.Text = preview;
     }
 

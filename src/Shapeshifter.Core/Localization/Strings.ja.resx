@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Shapeshifter の設定</value>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>バージョン {0}</value>
+  </data>
+  <data name="SettingsCopyVersion" xml:space="preserve">
+    <value>バージョンをコピー</value>
+  </data>
+  <data name="SettingsCopied" xml:space="preserve">
+    <value>コピーしました</value>
+  </data>
+  <data name="SettingsReportProblem" xml:space="preserve">
+    <value>問題を報告</value>
+  </data>
+  <data name="SettingsProjectPage" xml:space="preserve">
+    <value>プロジェクトページ</value>
+  </data>
+  <data name="SettingsUsage" xml:space="preserve">
+    <value>いつもどおりにコピーしてください。以前の項目を貼り付けるには、{0} を押したまま V を押します。{0} を押したままにすると履歴が表示され、もう一度 V（または ↑/↓、1–9）を押して項目を選び、→ で操作を選択、Delete で削除、Esc でキャンセルします。{0} を離すと貼り付けられます。</value>
+  </data>
+  <data name="SettingsHistoryGroup" xml:space="preserve">
+    <value>履歴</value>
+  </data>
+  <data name="SettingsDelayTitle" xml:space="preserve">
+    <value>履歴が表示されるまでの時間</value>
+  </data>
+  <data name="SettingsDelayDescription" xml:space="preserve">
+    <value>履歴が表示されるまで {0}+V を押し続ける時間</value>
+  </data>
+  <data name="SettingsDelayAccessibleName" xml:space="preserve">
+    <value>履歴が表示されるまでの時間（ミリ秒）</value>
+  </data>
+  <data name="SettingsItemsTitle" xml:space="preserve">
+    <value>保持する項目数</value>
+  </data>
+  <data name="SettingsItemsDescription" xml:space="preserve">
+    <value>ピン留めした項目はこの数に含まれません</value>
+  </data>
+  <data name="SettingsRememberTitle" xml:space="preserve">
+    <value>再起動後も履歴を保持</value>
+  </data>
+  <data name="SettingsRememberDescription" xml:space="preserve">
+    <value>ピン留めした項目だけでなく、履歴をこのコンピューターのディスクに保存します</value>
+  </data>
+  <data name="SettingsBehaviourGroup" xml:space="preserve">
+    <value>動作</value>
+  </data>
+  <data name="SettingsNotificationsTitle" xml:space="preserve">
+    <value>コピー時の通知</value>
+  </data>
+  <data name="SettingsNotificationsDescription" xml:space="preserve">
+    <value>何かをコピーするたびに通知を表示します</value>
+  </data>
+  <data name="SettingsStartAtLoginTitle" xml:space="preserve">
+    <value>ログイン時に起動</value>
+  </data>
+  <data name="SettingsStartAtLoginDescription" xml:space="preserve">
+    <value>サインイン後、Shapeshifter がバックグラウンドで待機します</value>
+  </data>
+  <data name="SettingsUpdatesTitle" xml:space="preserve">
+    <value>自動更新</value>
+  </data>
+  <data name="SettingsClearHistory" xml:space="preserve">
+    <value>履歴を消去</value>
+  </data>
+  <data name="SettingsCheckForUpdates" xml:space="preserve">
+    <value>更新を確認</value>
+  </data>
+  <data name="SettingsOpenLogFolder" xml:space="preserve">
+    <value>ログフォルダーを開く</value>
+  </data>
+  <data name="PickerTitleWindows" xml:space="preserve">
+    <value>クリップボードの履歴</value>
+  </data>
+  <data name="PickerTitleMacOS" xml:space="preserve">
+    <value>クリップボード</value>
+  </data>
+  <data name="PickerItemCountOne" xml:space="preserve">
+    <value>1 項目</value>
+  </data>
+  <data name="PickerItemCountOther" xml:space="preserve">
+    <value>{0} 項目</value>
+  </data>
+  <data name="PickerReleaseHint" xml:space="preserve">
+    <value>{0} を離して貼り付け</value>
+  </data>
+  <data name="PickerNothingCopied" xml:space="preserve">
+    <value>まだ何もコピーされていません</value>
+  </data>
+  <data name="PickerEmptyHint" xml:space="preserve">
+    <value>いつもどおりにコピーすれば、Shapeshifter がコピーしたものをすべて保持します。
+
+以前にコピーしたものを貼り付けるには、{0} を押したまま V を押します。{0} を押したままにすると履歴が表示されます。V または矢印キーで選び、{0} を離すと貼り付けられます。</value>
+  </data>
+  <data name="PickerActions" xml:space="preserve">
+    <value>操作</value>
+  </data>
+  <data name="PickerActionsForText" xml:space="preserve">
+    <value>このテキストに対する操作</value>
+  </data>
+  <data name="PickerActionsForImage" xml:space="preserve">
+    <value>この画像に対する操作</value>
+  </data>
+  <data name="PickerActionsForFile" xml:space="preserve">
+    <value>このファイルに対する操作</value>
+  </data>
+  <data name="PickerActionsForFiles" xml:space="preserve">
+    <value>これらのファイルに対する操作</value>
+  </data>
+  <data name="PickerDefault" xml:space="preserve">
+    <value>既定</value>
+  </data>
+  <data name="PickerHintRelease" xml:space="preserve">
+    <value>離して貼り付け</value>
+  </data>
+  <data name="PickerHintMove" xml:space="preserve">
+    <value>移動</value>
+  </data>
+  <data name="PickerHintJump" xml:space="preserve">
+    <value>ジャンプ</value>
+  </data>
+  <data name="PickerHintRemove" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="PickerHintCancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="KeyControl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="KeyEscape" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="ItemEmpty" xml:space="preserve">
+    <value>（空）</value>
+  </data>
+  <data name="ItemImage" xml:space="preserve">
+    <value>画像</value>
+  </data>
+  <data name="ItemImageWithSize" xml:space="preserve">
+    <value>画像 · {0} × {1}</value>
+  </data>
+  <data name="ItemFilesWithNames" xml:space="preserve">
+    <value>{0} 項目 · {1}</value>
+  </data>
+  <data name="ItemFileCount" xml:space="preserve">
+    <value>{0} 個のファイル</value>
+  </data>
+  <data name="ItemFormattedText" xml:space="preserve">
+    <value>書式付きテキスト</value>
+  </data>
+  <data name="ItemOtherData" xml:space="preserve">
+    <value>その他のデータ</value>
+  </data>
+  <data name="ItemCharacterCount" xml:space="preserve">
+    <value>{0} 文字</value>
+  </data>
+  <data name="ItemLineCount" xml:space="preserve">
+    <value>{0} 行</value>
+  </data>
+  <data name="ToastCopiedOne" xml:space="preserve">
+    <value>コピーしました · 履歴に 1 項目</value>
+  </data>
+  <data name="ToastCopiedOther" xml:space="preserve">
+    <value>コピーしました · 履歴に {0} 項目</value>
+  </data>
+  <data name="TraySettings" xml:space="preserve">
+    <value>設定…</value>
+  </data>
+  <data name="TrayCheckForUpdates" xml:space="preserve">
+    <value>更新を確認…</value>
+  </data>
+  <data name="TrayReportProblem" xml:space="preserve">
+    <value>問題を報告…</value>
+  </data>
+  <data name="TrayAbout" xml:space="preserve">
+    <value>Shapeshifter {0} について</value>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>Shapeshifter を終了</value>
+  </data>
+  <data name="StartupErrorTitle" xml:space="preserve">
+    <value>Shapeshifter を起動できませんでした</value>
+  </data>
+  <data name="StartupErrorDetails" xml:space="preserve">
+    <value>詳細は {0} に書き込まれました。</value>
+  </data>
+  <data name="StartupErrorQuit" xml:space="preserve">
+    <value>終了</value>
+  </data>
+  <data name="ActionPaste" xml:space="preserve">
+    <value>貼り付け</value>
+  </data>
+  <data name="ActionPasteDescription" xml:space="preserve">
+    <value>クリップボードの内容をそのまま貼り付けます。</value>
+  </data>
+  <data name="ActionPasteAsPlainText" xml:space="preserve">
+    <value>プレーンテキストとして貼り付け</value>
+  </data>
+  <data name="ActionPasteAsPlainTextDescription" xml:space="preserve">
+    <value>クリップボードの内容を書式なしのプレーンテキストとして貼り付けます。</value>
+  </data>
+  <data name="ActionPasteAsFile" xml:space="preserve">
+    <value>ファイルとして貼り付け</value>
+  </data>
+  <data name="ActionPasteAsFileDescription" xml:space="preserve">
+    <value>このテキストを .txt ファイルに保存し、そのファイルを貼り付けます。</value>
+  </data>
+  <data name="ActionCopyAsZip" xml:space="preserve">
+    <value>圧縮フォルダーとしてコピー</value>
+  </data>
+  <data name="ActionCopyAsZipDescription" xml:space="preserve">
+    <value>これらのファイルを圧縮 (.zip) フォルダーとしてクリップボードにコピーします。</value>
+  </data>
+  <data name="ActionCopyImageFromLink" xml:space="preserve">
+    <value>リンクから画像をコピー</value>
+  </data>
+  <data name="ActionCopyImageFromLinkDescription" xml:space="preserve">
+    <value>リンク先の画像をダウンロードし、画像そのものをクリップボードにコピーします。</value>
+  </data>
+  <data name="ActionOpenLink" xml:space="preserve">
+    <value>リンクを開く</value>
+  </data>
+  <data name="ActionOpenLinks" xml:space="preserve">
+    <value>リンクを開く</value>
+  </data>
+  <data name="ActionOpenLinkDescription" xml:space="preserve">
+    <value>リンクをブラウザーで開きます。</value>
+  </data>
+  <data name="ActionOpenLinksDescription" xml:space="preserve">
+    <value>リンクをブラウザーで開きます（最大 {0} 件）。</value>
+  </data>
+  <data name="ActionPin" xml:space="preserve">
+    <value>クリップボードにピン留め</value>
+  </data>
+  <data name="ActionPinDescription" xml:space="preserve">
+    <value>この項目をピン留めして常に一番上に表示し、次回 Shapeshifter を開いたときにも残るようにコンピューターに保存します。</value>
+  </data>
+  <data name="ActionUnpin" xml:space="preserve">
+    <value>クリップボードからピン留めを外す</value>
+  </data>
+  <data name="ActionUnpinDescription" xml:space="preserve">
+    <value>この項目のピン留めを外します。コピーするにつれて下に移動し、コンピューターには保存されなくなります。</value>
+  </data>
+  <data name="TimeJustNow" xml:space="preserve">
+    <value>たった今</value>
+  </data>
+  <data name="TimeMinutesAgo" xml:space="preserve">
+    <value>{0} 分前</value>
+  </data>
+  <data name="TimeHoursAgo" xml:space="preserve">
+    <value>{0} 時間前</value>
+  </data>
+  <data name="TimeYesterday" xml:space="preserve">
+    <value>昨日</value>
+  </data>
+  <data name="TimeDaysAgo" xml:space="preserve">
+    <value>{0} 日前</value>
+  </data>
+  <data name="UpdateOff" xml:space="preserve">
+    <value>自動更新はオフです</value>
+  </data>
+  <data name="UpdateUnsupported" xml:space="preserve">
+    <value>このコピーは自動で更新できません</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>更新を確認しています…</value>
+  </data>
+  <data name="UpdateUpToDate" xml:space="preserve">
+    <value>最新の状態です（{0} に確認）</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>バージョン {0} をダウンロードしています…</value>
+  </data>
+  <data name="UpdateReadyToRestart" xml:space="preserve">
+    <value>バージョン {0} がインストールされました。次回 {1} の起動時に有効になります</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>更新できませんでした: {0}</value>
+  </data>
+  <data name="UpdateAutomatic" xml:space="preserve">
+    <value>更新は自動的に確認されます</value>
+  </data>
+  <data name="UpdateTurnedOff" xml:space="preserve">
+    <value>更新はオフになっています（{0}）</value>
+  </data>
+  <data name="UpdateReleaseBuildsOnly" xml:space="preserve">
+    <value>自動更新できるのはリリースビルドのみです</value>
+  </data>
+  <data name="UpdateCannotWrite" xml:space="preserve">
+    <value>{0} は {1} に書き込めません。インストールしたときと同じ方法で更新してください</value>
+  </data>
+  <data name="PlatformNeedsX11" xml:space="preserve">
+    <value>Shapeshifter には X11 ディスプレイが必要です（DISPLAY が設定されていません）。Wayland の場合は XWayland が使用できることを確認してください。</value>
+  </data>
+  <data name="PlatformWayland" xml:space="preserve">
+    <value>これは Wayland セッションです。Wayland ではアプリケーションがグローバルなキー入力を監視したり生成したりできないため、貼り付け操作は X11 (XWayland) アプリケーションにフォーカスがあるときにしか機能しません。すべての機能を使うには X11 セッションにログインしてください。</value>
+  </data>
+  <data name="PlatformAccessibility" xml:space="preserve">
+    <value>Shapeshifter が Cmd+V のキー入力を検出・送信するには、アクセシビリティへのアクセスが必要です。「システム設定」&gt;「プライバシーとセキュリティ」&gt;「アクセシビリティ」で許可し、Shapeshifter を再起動してください。</value>
+  </data>
+  <data name="PlatformNotSupported" xml:space="preserve">
+    <value>{0} はサポートされていません。</value>
+  </data>
+  <data name="ToggleOn" xml:space="preserve">
+    <value>オン</value>
+  </data>
+  <data name="ToggleOff" xml:space="preserve">
+    <value>オフ</value>
+  </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>この画像を .{0} ファイルに保存し、そのファイルを貼り付けます。</value>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>アップロードしてリンクを貼り付け</value>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>この画像を {0} にアップロードし、その公開リンクを貼り付けます。</value>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>ヒント</value>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>履歴を使えばコピーし直さずに済んだときにお知らせします</value>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>すでに履歴にあります</value>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>もう一度コピーする必要はありません。{0}+V を押したままにすると履歴から選べます。</value>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>ご存じですか？</value>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>先に {0} で複数の項目をコピーしておき、{2} で {1}+V を押したままにすると、履歴から 1 つずつ選べます。</value>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>{0} にアップロードしますか？</value>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>この画像を {0} にアップロードしますか？</value>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>画像は広告のない無料の画像ホスティングサービス {0} (catbox.moe) に送信され、リンクを知っている人は誰でも見ることができます。アップロードしたものは削除できません。それ以外にコピーしたものがコンピューターの外に送られることはありません。</value>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter が再度確認することはありません。今回はリンクがコピーされました。{0}+V を押して貼り付けてください。</value>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>{0} にアップロード</value>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value>キーを押し続けなくても履歴を開いたままにするには Space を押し、Enter で貼り付けます。</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value>{0} を押し続けずに履歴を見るには、Space を押します。Enter で貼り付けるか Esc を押すまで開いたままになります。</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Enter で貼り付け</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>貼り付け</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>開いたままにする</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Space</value>
+  </data>
+</root>

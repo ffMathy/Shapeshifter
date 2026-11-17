@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Shapeshifter Settings</value>
+    <comment>Title of the settings window. 'Shapeshifter' is the app's name and is never translated.</comment>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>Version {0}</value>
+    <comment>Shown under the app name; {0} is a version number such as 7.1.0.</comment>
+  </data>
+  <data name="SettingsCopyVersion" xml:space="preserve">
+    <value>Copy version</value>
+    <comment>Link that copies the version and OS to the clipboard for bug reports.</comment>
+  </data>
+  <data name="SettingsCopied" xml:space="preserve">
+    <value>Copied</value>
+    <comment>Replaces 'Copy version' for two seconds after it was clicked.</comment>
+  </data>
+  <data name="SettingsReportProblem" xml:space="preserve">
+    <value>Report a problem</value>
+    <comment>Link that opens a new GitHub issue.</comment>
+  </data>
+  <data name="SettingsProjectPage" xml:space="preserve">
+    <value>Project page</value>
+    <comment>Link to the project's GitHub page.</comment>
+  </data>
+  <data name="SettingsUsage" xml:space="preserve">
+    <value>Copy as usual. To paste an older item, hold {0} and press V: keep {0} held to see the history, press V again (or ↑/↓, or 1–9) to pick an item, → to choose what to do with it, Delete to remove it and Esc to cancel. Release {0} to paste.</value>
+    <comment>How to use the app, at the top of the settings window. {0} is the modifier key name (Ctrl, or Cmd on macOS). Keep V, ↑/↓, 1–9, →, Delete and Esc as key names (you may use the local name of the Delete and Esc keys).</comment>
+  </data>
+  <data name="SettingsHistoryGroup" xml:space="preserve">
+    <value>History</value>
+    <comment>Header of a group of settings about the clipboard history.</comment>
+  </data>
+  <data name="SettingsDelayTitle" xml:space="preserve">
+    <value>Delay before the history appears</value>
+    <comment>Setting title; the value is in milliseconds.</comment>
+  </data>
+  <data name="SettingsDelayDescription" xml:space="preserve">
+    <value>How long to hold {0}+V before the history appears</value>
+    <comment>{0} is the modifier key (Ctrl or Cmd).</comment>
+  </data>
+  <data name="SettingsDelayAccessibleName" xml:space="preserve">
+    <value>Delay before the history appears, in milliseconds</value>
+    <comment>Screen reader name of the number box.</comment>
+  </data>
+  <data name="SettingsItemsTitle" xml:space="preserve">
+    <value>Items to remember</value>
+    <comment>Setting title: how many clipboard items the history keeps.</comment>
+  </data>
+  <data name="SettingsItemsDescription" xml:space="preserve">
+    <value>Pinned items are kept in addition</value>
+    <comment>Pinned items do not count toward the limit.</comment>
+  </data>
+  <data name="SettingsRememberTitle" xml:space="preserve">
+    <value>Remember history after restart</value>
+    <comment>Setting title (toggle).</comment>
+  </data>
+  <data name="SettingsRememberDescription" xml:space="preserve">
+    <value>Keeps the history on this computer's disk, not just pinned items</value>
+    <comment>Description of the toggle above.</comment>
+  </data>
+  <data name="SettingsBehaviourGroup" xml:space="preserve">
+    <value>Behaviour</value>
+    <comment>Header of a group of general settings.</comment>
+  </data>
+  <data name="SettingsNotificationsTitle" xml:space="preserve">
+    <value>Copy notifications</value>
+    <comment>Setting title (toggle).</comment>
+  </data>
+  <data name="SettingsNotificationsDescription" xml:space="preserve">
+    <value>Show a notification each time something is copied</value>
+    <comment>Description of the toggle above.</comment>
+  </data>
+  <data name="SettingsStartAtLoginTitle" xml:space="preserve">
+    <value>Start at login</value>
+    <comment>Setting title (toggle): start the app when the user signs in to the computer.</comment>
+  </data>
+  <data name="SettingsStartAtLoginDescription" xml:space="preserve">
+    <value>Shapeshifter waits in the background after you sign in</value>
+    <comment>Description of the toggle above.</comment>
+  </data>
+  <data name="SettingsUpdatesTitle" xml:space="preserve">
+    <value>Automatic updates</value>
+    <comment>Setting title (toggle).</comment>
+  </data>
+  <data name="SettingsClearHistory" xml:space="preserve">
+    <value>Clear history</value>
+    <comment>Button that removes all unpinned clipboard items. Also in the tray menu.</comment>
+  </data>
+  <data name="SettingsCheckForUpdates" xml:space="preserve">
+    <value>Check for updates</value>
+    <comment>Button.</comment>
+  </data>
+  <data name="SettingsOpenLogFolder" xml:space="preserve">
+    <value>Open log folder</value>
+    <comment>Button that opens the folder with the log files. Also in the tray menu.</comment>
+  </data>
+  <data name="PickerTitleWindows" xml:space="preserve">
+    <value>Clipboard history</value>
+    <comment>Title of the picker popup in the Windows look.</comment>
+  </data>
+  <data name="PickerTitleMacOS" xml:space="preserve">
+    <value>Clipboard</value>
+    <comment>Title of the picker popup in the macOS look.</comment>
+  </data>
+  <data name="PickerItemCountOne" xml:space="preserve">
+    <value>1 item</value>
+    <comment>Number of items in the history, in a small badge in the picker header. Exactly one item.</comment>
+  </data>
+  <data name="PickerItemCountOther" xml:space="preserve">
+    <value>{0} items</value>
+    <comment>Number of items in the history, in a small badge; {0} is 0 or 2 and more. Use a form that reads correctly for any number (e.g. 'Items: {0}') if the language has several plural forms.</comment>
+  </data>
+  <data name="PickerReleaseHint" xml:space="preserve">
+    <value>Release {0} to paste</value>
+    <comment>Picker header hint; {0} is the modifier key (Ctrl or ⌘).</comment>
+  </data>
+  <data name="PickerNothingCopied" xml:space="preserve">
+    <value>Nothing copied yet</value>
+    <comment>Shown in the empty picker.</comment>
+  </data>
+  <data name="PickerEmptyHint" xml:space="preserve">
+    <value>Copy as usual, and Shapeshifter keeps everything you copy.
+
+To paste something you copied earlier, hold {0} and press V. Keep holding {0} to see the history, press V or the arrow keys to choose, and release {0} to paste.</value>
+    <comment>Shown in the empty picker. {0} is the modifier key (Ctrl or Cmd). Keep the \n\n paragraph break.</comment>
+  </data>
+  <data name="PickerActions" xml:space="preserve">
+    <value>Actions</value>
+    <comment>Header above the list of actions for the selected item; also a footer hint for the ←→ keys.</comment>
+  </data>
+  <data name="PickerActionsForText" xml:space="preserve">
+    <value>Actions for this text</value>
+    <comment>Header above the actions of a text item.</comment>
+  </data>
+  <data name="PickerActionsForImage" xml:space="preserve">
+    <value>Actions for this image</value>
+    <comment>Header above the actions of an image item.</comment>
+  </data>
+  <data name="PickerActionsForFile" xml:space="preserve">
+    <value>Actions for this file</value>
+    <comment>Header above the actions of one copied file.</comment>
+  </data>
+  <data name="PickerActionsForFiles" xml:space="preserve">
+    <value>Actions for these files</value>
+    <comment>Header above the actions of several copied files.</comment>
+  </data>
+  <data name="PickerDefault" xml:space="preserve">
+    <value>Default</value>
+    <comment>Small badge next to the action that runs when the key is released. Keep it short.</comment>
+  </data>
+  <data name="PickerHintRelease" xml:space="preserve">
+    <value>Release to paste</value>
+    <comment>Footer hint next to the modifier key cap. Keep it short.</comment>
+  </data>
+  <data name="PickerHintMove" xml:space="preserve">
+    <value>Move</value>
+    <comment>Footer hint next to the V and ↑↓ key caps: move the selection. One short word.</comment>
+  </data>
+  <data name="PickerHintJump" xml:space="preserve">
+    <value>Jump</value>
+    <comment>Footer hint next to the 1–9 key cap: jump to that item. One short word.</comment>
+  </data>
+  <data name="PickerHintRemove" xml:space="preserve">
+    <value>Remove</value>
+    <comment>Footer hint next to the Delete key cap: remove the item. One short word.</comment>
+  </data>
+  <data name="PickerHintCancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>Footer hint next to the Esc key cap. One short word.</comment>
+  </data>
+  <data name="KeyControl" xml:space="preserve">
+    <value>Ctrl</value>
+    <comment>Label of the Control key as printed on keyboards in this language (German: Strg).</comment>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Del</value>
+    <comment>Label of the Delete key as printed on keyboards in this language (German: Entf). Very short.</comment>
+  </data>
+  <data name="KeyEscape" xml:space="preserve">
+    <value>Esc</value>
+    <comment>Label of the Escape key as printed on keyboards. Usually stays Esc.</comment>
+  </data>
+  <data name="ItemEmpty" xml:space="preserve">
+    <value>(empty)</value>
+    <comment>Title of a text item that only contains whitespace.</comment>
+  </data>
+  <data name="ItemImage" xml:space="preserve">
+    <value>Image</value>
+    <comment>A copied image.</comment>
+  </data>
+  <data name="ItemImageWithSize" xml:space="preserve">
+    <value>Image · {0} × {1}</value>
+    <comment>A copied image; {0} is the width and {1} the height in pixels.</comment>
+  </data>
+  <data name="ItemFilesWithNames" xml:space="preserve">
+    <value>{0} items · {1}</value>
+    <comment>Several copied files; {0} is the count (2 or more), {1} a comma-separated list of file names.</comment>
+  </data>
+  <data name="ItemFileCount" xml:space="preserve">
+    <value>{0} files</value>
+    <comment>Several copied files; {0} is the count (2 or more).</comment>
+  </data>
+  <data name="ItemFormattedText" xml:space="preserve">
+    <value>Formatted text</value>
+    <comment>Text copied with formatting (HTML or RTF).</comment>
+  </data>
+  <data name="ItemOtherData" xml:space="preserve">
+    <value>Other data</value>
+    <comment>Clipboard content of an unknown kind.</comment>
+  </data>
+  <data name="ItemCharacterCount" xml:space="preserve">
+    <value>{0} characters</value>
+    <comment>Length of a one-line text; {0} is any number.</comment>
+  </data>
+  <data name="ItemLineCount" xml:space="preserve">
+    <value>{0} lines</value>
+    <comment>Number of lines of a text; {0} is 2 or more.</comment>
+  </data>
+  <data name="ToastCopiedOne" xml:space="preserve">
+    <value>Copied · 1 item in your history</value>
+    <comment>Notification shown after copying, when the history holds exactly one item.</comment>
+  </data>
+  <data name="ToastCopiedOther" xml:space="preserve">
+    <value>Copied · {0} items in your history</value>
+    <comment>Notification shown after copying; {0} is 2 or more.</comment>
+  </data>
+  <data name="TraySettings" xml:space="preserve">
+    <value>Settings…</value>
+    <comment>Tray menu item.</comment>
+  </data>
+  <data name="TrayCheckForUpdates" xml:space="preserve">
+    <value>Check for updates…</value>
+    <comment>Tray menu item.</comment>
+  </data>
+  <data name="TrayReportProblem" xml:space="preserve">
+    <value>Report a problem…</value>
+    <comment>Tray menu item.</comment>
+  </data>
+  <data name="TrayAbout" xml:space="preserve">
+    <value>About Shapeshifter {0}</value>
+    <comment>Tray menu item; {0} is the version number.</comment>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>Quit Shapeshifter</value>
+    <comment>Tray menu item that exits the app.</comment>
+  </data>
+  <data name="StartupErrorTitle" xml:space="preserve">
+    <value>Shapeshifter could not start</value>
+    <comment>Title of the error window shown when the app fails to start.</comment>
+  </data>
+  <data name="StartupErrorDetails" xml:space="preserve">
+    <value>Details were written to {0}.</value>
+    <comment>{0} is the path of the log folder.</comment>
+  </data>
+  <data name="StartupErrorQuit" xml:space="preserve">
+    <value>Quit</value>
+    <comment>Button that closes the error window and the app.</comment>
+  </data>
+  <data name="ActionPaste" xml:space="preserve">
+    <value>Paste</value>
+    <comment>Action title.</comment>
+  </data>
+  <data name="ActionPasteDescription" xml:space="preserve">
+    <value>Pastes clipboard contents as-is.</value>
+    <comment>Action description.</comment>
+  </data>
+  <data name="ActionPasteAsPlainText" xml:space="preserve">
+    <value>Paste as plain text</value>
+    <comment>Action title.</comment>
+  </data>
+  <data name="ActionPasteAsPlainTextDescription" xml:space="preserve">
+    <value>Pastes clipboard contents as plain text with no formatting.</value>
+    <comment>Action description.</comment>
+  </data>
+  <data name="ActionPasteAsFile" xml:space="preserve">
+    <value>Paste as file</value>
+    <comment>Action title: save the text to a .txt file and paste the file.</comment>
+  </data>
+  <data name="ActionPasteAsFileDescription" xml:space="preserve">
+    <value>Saves this text to a .txt file and pastes the file.</value>
+    <comment>Action description.</comment>
+  </data>
+  <data name="ActionCopyAsZip" xml:space="preserve">
+    <value>Copy as compressed folder</value>
+    <comment>Action title: zip the copied files.</comment>
+  </data>
+  <data name="ActionCopyAsZipDescription" xml:space="preserve">
+    <value>Copy these files to the clipboard as a compressed (.zip) folder.</value>
+    <comment>Action description.</comment>
+  </data>
+  <data name="ActionCopyImageFromLink" xml:space="preserve">
+    <value>Copy image from link</value>
+    <comment>Action title: download the image a copied link points to.</comment>
+  </data>
+  <data name="ActionCopyImageFromLinkDescription" xml:space="preserve">
+    <value>Downloads the linked image and copies the image itself to the clipboard.</value>
+    <comment>Action description.</comment>
+  </data>
+  <data name="ActionOpenLink" xml:space="preserve">
+    <value>Open link</value>
+    <comment>Action title, when the text contains exactly one link.</comment>
+  </data>
+  <data name="ActionOpenLinks" xml:space="preserve">
+    <value>Open links</value>
+    <comment>Action title, when the text contains several links.</comment>
+  </data>
+  <data name="ActionOpenLinkDescription" xml:space="preserve">
+    <value>Opens the link in your browser.</value>
+    <comment>Action description, one link.</comment>
+  </data>
+  <data name="ActionOpenLinksDescription" xml:space="preserve">
+    <value>Opens the links in your browser (at most {0}).</value>
+    <comment>Action description, several links; {0} is 10.</comment>
+  </data>
+  <data name="ActionPin" xml:space="preserve">
+    <value>Pin to clipboard</value>
+    <comment>Action title: keep the item at the top and save it to disk.</comment>
+  </data>
+  <data name="ActionPinDescription" xml:space="preserve">
+    <value>Pins this item so that it always stays at the top, and saves it to your computer so that it is there the next time you open Shapeshifter.</value>
+    <comment>Action description.</comment>
+  </data>
+  <data name="ActionUnpin" xml:space="preserve">
+    <value>Unpin from clipboard</value>
+    <comment>Action title: undo pinning.</comment>
+  </data>
+  <data name="ActionUnpinDescription" xml:space="preserve">
+    <value>Unpins this item so that it moves down as you copy, and is no longer saved to your computer.</value>
+    <comment>Action description.</comment>
+  </data>
+  <data name="TimeJustNow" xml:space="preserve">
+    <value>Just now</value>
+    <comment>When an item was copied: less than a minute ago.</comment>
+  </data>
+  <data name="TimeMinutesAgo" xml:space="preserve">
+    <value>{0} min ago</value>
+    <comment>When an item was copied; {0} is 1 to 59. Keep it short; an abbreviation is fine.</comment>
+  </data>
+  <data name="TimeHoursAgo" xml:space="preserve">
+    <value>{0} h ago</value>
+    <comment>When an item was copied; {0} is 1 to 23. Keep it short; an abbreviation is fine.</comment>
+  </data>
+  <data name="TimeYesterday" xml:space="preserve">
+    <value>Yesterday</value>
+    <comment>When an item was copied.</comment>
+  </data>
+  <data name="TimeDaysAgo" xml:space="preserve">
+    <value>{0} days ago</value>
+    <comment>When an item was copied; {0} is 2 to 6.</comment>
+  </data>
+  <data name="UpdateOff" xml:space="preserve">
+    <value>Automatic updates are off</value>
+    <comment>Status line under the 'Automatic updates' setting.</comment>
+  </data>
+  <data name="UpdateUnsupported" xml:space="preserve">
+    <value>This copy cannot update itself</value>
+    <comment>Status line.</comment>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>Checking for updates…</value>
+    <comment>Status line.</comment>
+  </data>
+  <data name="UpdateUpToDate" xml:space="preserve">
+    <value>Up to date (checked {0})</value>
+    <comment>Status line; {0} is a time of day such as 14:05.</comment>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>Downloading version {0}…</value>
+    <comment>Status line; {0} is a version number.</comment>
+  </data>
+  <data name="UpdateReadyToRestart" xml:space="preserve">
+    <value>Version {0} is installed and starts the next time {1} does</value>
+    <comment>Status line; {0} is a version number, {1} is the app name (Shapeshifter).</comment>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Could not update: {0}</value>
+    <comment>Status line; {0} is an error message (may be in English).</comment>
+  </data>
+  <data name="UpdateAutomatic" xml:space="preserve">
+    <value>Updates are checked automatically</value>
+    <comment>Status line.</comment>
+  </data>
+  <data name="UpdateTurnedOff" xml:space="preserve">
+    <value>Updates are turned off ({0})</value>
+    <comment>Status line; {0} is the name of an environment variable.</comment>
+  </data>
+  <data name="UpdateReleaseBuildsOnly" xml:space="preserve">
+    <value>Only release builds update themselves</value>
+    <comment>Status line, for developer builds.</comment>
+  </data>
+  <data name="UpdateCannotWrite" xml:space="preserve">
+    <value>{0} cannot write to {1}; update it the way it was installed</value>
+    <comment>Status line; {0} is the app name, {1} a folder path.</comment>
+  </data>
+  <data name="PlatformNeedsX11" xml:space="preserve">
+    <value>Shapeshifter needs an X11 display (DISPLAY is not set). On Wayland, make sure XWayland is available.</value>
+    <comment>Linux error. Keep X11, DISPLAY, Wayland and XWayland as they are.</comment>
+  </data>
+  <data name="PlatformWayland" xml:space="preserve">
+    <value>This is a Wayland session. Wayland does not let applications observe or synthesize global keystrokes, so the paste gesture only works while an X11 (XWayland) application is focused. Log in to an X11 session for full support.</value>
+    <comment>Linux warning shown in the settings window.</comment>
+  </data>
+  <data name="PlatformAccessibility" xml:space="preserve">
+    <value>Shapeshifter needs Accessibility access to see and send the Cmd+V keystroke. Allow it in System Settings &gt; Privacy &amp; Security &gt; Accessibility and restart Shapeshifter.</value>
+    <comment>macOS warning. Use the names macOS itself uses in this language for System Settings &gt; Privacy &amp; Security &gt; Accessibility.</comment>
+  </data>
+  <data name="PlatformNotSupported" xml:space="preserve">
+    <value>{0} is not supported.</value>
+    <comment>{0} is the name of an operating system.</comment>
+  </data>
+  <data name="ToggleOn" xml:space="preserve">
+    <value>On</value>
+    <comment>Label beside a switch that is on (settings window). One short word, as in the OS settings.</comment>
+  </data>
+  <data name="ToggleOff" xml:space="preserve">
+    <value>Off</value>
+    <comment>Label beside a switch that is off (settings window). One short word, as in the OS settings.</comment>
+  </data>
+  <data name="ActionPasteAsImageFileDescription" xml:space="preserve">
+    <value>Saves this image to a .{0} file and pastes the file.</value>
+    <comment>Action description for 'Paste as file' on an image; {0} is a file extension such as png or jpg.</comment>
+  </data>
+  <data name="ActionUploadImage" xml:space="preserve">
+    <value>Upload and paste link</value>
+    <comment>Action title: upload the copied image to an image host and paste a link to it.</comment>
+  </data>
+  <data name="ActionUploadImageDescription" xml:space="preserve">
+    <value>Uploads this image to {0} and pastes a public link to it.</value>
+    <comment>Action description; {0} is the name of the image host (Catbox).</comment>
+  </data>
+  <data name="SettingsTipsTitle" xml:space="preserve">
+    <value>Tips</value>
+    <comment>Setting title (toggle): show coaching tips.</comment>
+  </data>
+  <data name="SettingsTipsDescription" xml:space="preserve">
+    <value>Suggest when the history could have saved you a copy</value>
+    <comment>Description of the Tips toggle: Shapeshifter points out when the user copied something that the clipboard history already had.</comment>
+  </data>
+  <data name="TipAlreadyInHistoryTitle" xml:space="preserve">
+    <value>Already in your history</value>
+    <comment>Title of a tip notification shown when the user copies something that is already in the history.</comment>
+  </data>
+  <data name="TipAlreadyInHistoryMessage" xml:space="preserve">
+    <value>No need to copy it again: hold {0}+V to pick it from your history.</value>
+    <comment>Tip notification text; {0} is the modifier key (Ctrl or Cmd).</comment>
+  </data>
+  <data name="TipDidYouKnowTitle" xml:space="preserve">
+    <value>Did you know?</value>
+    <comment>Title of a tip notification.</comment>
+  </data>
+  <data name="TipCopyBackAndForthMessage" xml:space="preserve">
+    <value>You can copy several things from {0} first, then hold {1}+V in {2} to pick each one from your history.</value>
+    <comment>Tip shown when the user switches back and forth between two apps to copy and paste; {0} and {2} are application names, {1} is the modifier key (Ctrl or Cmd).</comment>
+  </data>
+  <data name="UploadConsentTitle" xml:space="preserve">
+    <value>Upload to {0}?</value>
+    <comment>Title of a dialog that asks before an image is uploaded; {0} is the image host (Catbox).</comment>
+  </data>
+  <data name="UploadConsentQuestion" xml:space="preserve">
+    <value>Upload this image to {0}?</value>
+    <comment>Heading of the dialog; {0} is the image host (Catbox).</comment>
+  </data>
+  <data name="UploadConsentExplanation" xml:space="preserve">
+    <value>The image is sent to {0} (catbox.moe), a free image host without ads, and anyone with the link can see it. Uploads can't be deleted. Nothing else you copy ever leaves your computer.</value>
+    <comment>Body of the dialog; {0} is the image host (Catbox). Keep catbox.moe as is.</comment>
+  </data>
+  <data name="UploadConsentAskOnce" xml:space="preserve">
+    <value>Shapeshifter won't ask again. This time the link is copied: press {0}+V to paste it.</value>
+    <comment>Note in the dialog; {0} is the modifier key (Ctrl or Cmd).</comment>
+  </data>
+  <data name="UploadConsentUpload" xml:space="preserve">
+    <value>Upload to {0}</value>
+    <comment>Button that agrees to the upload; {0} is the image host (Catbox).</comment>
+  </data>
+  <data name="DialogCancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>Button that closes a dialog without doing anything.</comment>
+  </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Press Space to keep the history open without holding the key, then Enter to paste.</value>
+    <comment>Appended directly after PickerEmptyHint (the empty-picker explanation). Starts with a space because it follows a sentence: keep a leading space if your language separates sentences with a space, and drop it if not (Chinese, Japanese, Thai). Keep Space and Enter as key names (you may use the local key names).</comment>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> To look through the history without holding {0}, press Space: it stays open until you press Enter to paste or Esc.</value>
+    <comment>Appended directly after SettingsUsage. Starts with a space because it follows a sentence: keep a leading space if your language separates sentences with a space, and drop it if not (Chinese, Japanese, Thai). {0} is the modifier key (Ctrl or Cmd).</comment>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Press Enter to paste</value>
+    <comment>Picker header hint while the picker is kept open with Space.</comment>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Close</value>
+    <comment>Footer hint next to the Esc key cap while the picker is kept open. One short word.</comment>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Paste</value>
+    <comment>Footer hint next to the Enter key cap. One short word.</comment>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Keep open</value>
+    <comment>Footer hint next to the Space key cap: keep the picker open without holding the modifier key. Short.</comment>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+    <comment>Label of the Enter key as printed on keyboards in this language (German: Eingabe is rare; Enter or ↵ is fine). Very short.</comment>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Space</value>
+    <comment>Label of the Space bar on a key cap in this language (German: Leertaste). Short.</comment>
+  </data>
+</root>
