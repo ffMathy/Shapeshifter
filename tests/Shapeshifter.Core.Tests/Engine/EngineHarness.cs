@@ -48,7 +48,8 @@ internal sealed class EngineHarness : IAsyncDisposable
             Logger = Logger,
         };
 
-        Engine = new ShapeshifterEngine(History, Monitor, Hook, Catalog, Context, Picker, Notifier, Logger, Time);
+        Focus = new FakeFocusTracker(Log);
+        Engine = new ShapeshifterEngine(History, Monitor, Hook, Catalog, Context, Picker, Notifier, Logger, Time, Focus);
         Engine.EffectProcessed += OnEffectProcessed;
     }
 
@@ -77,6 +78,8 @@ internal sealed class EngineHarness : IAsyncDisposable
     public FakePickerPresenter Picker { get; }
 
     public FakeCopyNotifier Notifier { get; } = new();
+
+    public FakeFocusTracker Focus { get; }
 
     public FakeLauncher Launcher { get; } = new();
 

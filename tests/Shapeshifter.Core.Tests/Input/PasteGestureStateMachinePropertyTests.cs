@@ -9,7 +9,7 @@ public sealed class PasteGestureStateMachinePropertyTests
     private static readonly GestureKey[] Keys =
     [
         GestureKey.Other, GestureKey.Modifier, GestureKey.Trigger, GestureKey.Up, GestureKey.Down,
-        GestureKey.Left, GestureKey.Right, GestureKey.Delete, GestureKey.Escape,
+        GestureKey.Left, GestureKey.Right, GestureKey.Delete, GestureKey.Escape, GestureKey.Search,
         GestureKey.Digit1, GestureKey.Digit3, GestureKey.Digit9,
     ];
 
@@ -112,6 +112,14 @@ public sealed class PasteGestureStateMachinePropertyTests
                     case PasteCurrentClipboard:
                     case GestureCancelled:
                         terminal++;
+                        break;
+                    case BeginSearch begin:
+                        // The picker stays open, but it now belongs to the search rather than to the gesture.
+                        terminal++;
+                        Assert.True(pickerShown, "A search began without the picker.");
+                        Assert.NotEmpty(begin.Selection.ItemIds);
+                        AssertSelectionValid(begin.Selection, known, deleted);
+                        pickerShown = false;
                         break;
                     default:
                         Assert.Fail($"Unexpected effect {effect}.");

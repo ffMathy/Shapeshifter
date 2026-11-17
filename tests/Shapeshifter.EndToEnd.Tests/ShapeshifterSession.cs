@@ -10,6 +10,12 @@ internal sealed record AppState(int HistoryCount, IReadOnlyList<string> Previews
 {
     /// <summary>The kind of each item (Text, Image, File, ...), in the same order as <see cref="Previews"/>.</summary>
     public IReadOnlyList<string> Kinds { get; init; } = [];
+
+    /// <summary>The picker shows the search box.</summary>
+    public bool Searching { get; init; }
+
+    /// <summary>The picker has the keyboard focus for the search.</summary>
+    public bool SearchFocused { get; init; }
 }
 
 /// <summary>
@@ -200,6 +206,8 @@ public sealed class ShapeshifterSession : IAsyncLifetime
                     root.GetProperty("effectsProcessed").GetInt32())
                 {
                     Kinds = root.GetProperty("items").EnumerateArray().Select(item => item.GetProperty("kind").GetString() ?? string.Empty).ToArray(),
+                    Searching = root.GetProperty("searching").GetBoolean(),
+                    SearchFocused = root.GetProperty("searchFocused").GetBoolean(),
                 };
             }
             catch (Exception exception) when ((exception is IOException or JsonException or KeyNotFoundException) && attempt < 50)
@@ -249,6 +257,22 @@ public sealed class ShapeshifterSession : IAsyncLifetime
     {
         await KeyAsync(key, down: true, holdMilliseconds);
         await KeyAsync(key, down: false);
+    }
+
+    /// <summary>Types lower-case letters, digits and spaces with real key presses.</summary>
+    public async Task TypeAsync(string text)
+    {
+        foreach (var character in text)
+        {
+            var key = character switch
+            {
+                ' ' => KeyCode.VcSpace,
+                >= 'a' and <= 'z' => Enum.Parse<KeyCode>("Vc" + char.ToUpperInvariant(character)),
+                >= '0' and <= '9' => Enum.Parse<KeyCode>("Vc" + character),
+                _ => throw new ArgumentException($"Cannot type '{character}'.", nameof(text)),
+            };
+            await TapAsync(key);
+        }
     }
 
     public async Task KeyAsync(KeyCode key, bool down, int afterMilliseconds = 60)

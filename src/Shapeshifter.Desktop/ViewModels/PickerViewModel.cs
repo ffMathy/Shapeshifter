@@ -36,6 +36,16 @@ public sealed partial class PickerViewModel : ObservableObject
     [ObservableProperty]
     private string actionsHeader = "Actions";
 
+    /// <summary>The picker has the keyboard focus and shows the search box (issue #458).</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsEmpty), nameof(HasNoMatches), nameof(IsNotSearching), nameof(HeaderHint), nameof(ShowsActions))]
+    private bool isSearching;
+
+    /// <summary>What the user typed in the search box.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(NoMatchesText))]
+    private string searchQuery = string.Empty;
+
     public PickerViewModel()
         : this("Ctrl")
     {
@@ -52,6 +62,8 @@ public sealed partial class PickerViewModel : ObservableObject
             ItemCountText = Items.Count == 1 ? "1 item" : string.Create(CultureInfo.CurrentCulture, $"{Items.Count} items");
             OnPropertyChanged(nameof(HasItems));
             OnPropertyChanged(nameof(IsEmpty));
+            OnPropertyChanged(nameof(HasNoMatches));
+            OnPropertyChanged(nameof(ShowsActions));
         };
     }
 
@@ -66,7 +78,22 @@ public sealed partial class PickerViewModel : ObservableObject
     public bool HasItems => Items.Count > 0;
 
     /// <summary>Nothing has been copied yet, so the picker explains how to use it (issue #144).</summary>
-    public bool IsEmpty => Items.Count == 0;
+    public bool IsEmpty => Items.Count == 0 && !IsSearching;
+
+    /// <summary>The search found nothing.</summary>
+    public bool HasNoMatches => Items.Count == 0 && IsSearching;
+
+    public bool IsNotSearching => !IsSearching;
+
+    /// <summary>
+    /// The actions pane is shown beside the history, and stays while a search finds nothing, so the picker keeps its width.
+    /// </summary>
+    public bool ShowsActions => HasItems || IsSearching;
+
+    public string NoMatchesText => $"Nothing you copied contains “{SearchQuery.Trim()}”.";
+
+    /// <summary>The text in the top right corner of the header.</summary>
+    public string HeaderHint => IsSearching ? "Enter to paste" : ReleaseHint;
 
     /// <summary>How to use Shapeshifter, shown in place of the history while it is empty.</summary>
     public string EmptyHint { get; }

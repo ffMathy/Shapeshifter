@@ -123,6 +123,247 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
         Assert.Equal(["b", "c", "a"], Texts(h.History.Items));
     }
 
+    // ---------------------------------------------------------------- searching (issue #458)
+
+    /// <summary>Holds the modifier, presses V and then S, and releases: the search begins.</summary>
+    private async Task BeginSearchAsync()
+    {
+        h.Down(GestureKey.Modifier);
+        h.Tap(GestureKey.Trigger);
+        Assert.True(h.Tap(GestureKey.Search));
+        h.Up(GestureKey.Modifier);
+        await EngineHarness.WaitUntilAsync(() => h.Picker.SearchInput is not null, "the search began");
+    }
+
+    private Task<IReadOnlyList<GestureEffect>> WaitForEffectAsync<T>()
+        where T : GestureEffect => WaitForAsync(() => h.Processed.OfType<T>().Any(), typeof(T).Name);
+
+    private async Task<IReadOnlyList<GestureEffect>> WaitForAsync(Func<bool> condition, string description)
+    {
+        await EngineHarness.WaitUntilAsync(condition, description);
+        return h.Processed;
+    }
+
+    [Fact]
+    public async Task Search_S_KeepsThePickerOpenForSearching_WithEveryItem()
+    {
+        var seeded = h.Seed("apple", "banana", "cherry");
+        await h.StartAsync();
+
+        await BeginSearchAsync();
+
+        // S before the show delay shows the picker first.
+        var calls = h.Picker.Calls;
+        Assert.Equal(["Show", "BeginSearch"], calls.Select(call => call.Method));
+        var begun = calls[^1];
+        Assert.Equal("BeginSearch", begun.Method);
+        Assert.Equal(Ids(seeded), Ids(begun.State!.Items));
+        Assert.Equal(string.Empty, begun.State.SearchQuery);
+        Assert.Equal(0, begun.State.SelectedIndex);
+        Assert.Equal(DefaultTextActions, begun.State.Actions.Select(action => action.Title));
+        Assert.DoesNotContain(calls, call => call.Method == "Hide");
+
+        // The focus was noted before the picker took it, and nothing was pasted.
+        Assert.Equal(1, h.Log.Entries.Count(entry => entry == "focus.capture"));
+        Assert.True(h.Log.Entries.ToList().IndexOf("focus.capture") < h.Log.Entries.ToList().IndexOf("picker.BeginSearch"));
+        Assert.Equal(0, h.Paste.Count);
+        Assert.True(h.Engine.IsSearching);
+        Assert.False(h.Engine.IsGestureActive);
+    }
+
+    [Fact]
+    public async Task Search_TypingFiltersTheItems()
+    {
+        var seeded = h.Seed("apple pie", "banana", "apple juice");
+        await h.StartAsync();
+        await BeginSearchAsync();
+
+        Assert.True(h.Picker.Search(PickerSearchInput.Typed("APPLE")));
+        await WaitForAsync(() => h.Picker.Calls[^1].State?.SearchQuery == "APPLE", "the filtered picker");
+
+        var state = h.Picker.Calls[^1].State!;
+        Assert.Equal("Update", h.Picker.Calls[^1].Method);
+        Assert.Equal([seeded[0].Id, seeded[2].Id], Ids(state.Items));
+        Assert.Equal(0, state.SelectedIndex);
+
+        h.Picker.Search(PickerSearchInput.Typed("kiwi"));
+        await WaitForAsync(() => h.Picker.Calls[^1].State?.SearchQuery == "kiwi", "the empty result");
+        Assert.Empty(h.Picker.Calls[^1].State!.Items);
+        Assert.Empty(h.Picker.Calls[^1].State!.Actions);
+    }
+
+    [Fact]
+    public async Task Search_Enter_RestoresTheFocus_HidesThePicker_ThenPastesTheMatch()
+    {
+        h.Seed("apple pie", "banana", "cherry");
+        await h.StartAsync();
+        await BeginSearchAsync();
+
+        h.Picker.Search(PickerSearchInput.Typed("pie"));
+        Assert.True(h.Picker.Search(new PickerSearchInput(PickerSearchKey.Enter)));
+        await WaitForEffectAsync<PerformAction>();
+
+        Assert.Equal("apple pie", Assert.Single(h.Paste.ClipboardAtPaste).Text);
+        var log = h.Log.Entries.SkipWhile(entry => entry != "picker.BeginSearch").Where(entry => entry != "picker.Update").ToArray();
+        Assert.Equal(["picker.BeginSearch", "focus.restore:42", "picker.Hide", "clipboard.write:apple pie", "paste"], log);
+        Assert.False(h.Engine.IsSearching);
+        Assert.Equal("apple pie", h.History.Items[0].Snapshot.Text);
+    }
+
+    [Fact]
+    public async Task Search_ChoosingAnotherAction_PerformsThatAction()
+    {
+        h.Seed("apple", "banana");
+        await h.StartAsync();
+        await BeginSearchAsync();
+
+        h.Picker.Search(PickerSearchInput.Typed("banana"));
+        h.Picker.Search(new PickerSearchInput(PickerSearchKey.Right));
+        h.Picker.Search(new PickerSearchInput(PickerSearchKey.Down));
+        h.Picker.Search(new PickerSearchInput(PickerSearchKey.Down));
+        h.Picker.Search(new PickerSearchInput(PickerSearchKey.Enter));
+        await WaitForEffectAsync<PerformAction>();
+
+        // "Pin to clipboard" pins rather than pastes.
+        Assert.Equal(0, h.Paste.Count);
+        Assert.True(h.History.Items.Single(item => item.Snapshot.Text == "banana").IsPinned);
+    }
+
+    [Fact]
+    public async Task Search_Escape_RestoresTheFocus_AndPastesNothing()
+    {
+        h.Seed("apple", "banana");
+        await h.StartAsync();
+        await BeginSearchAsync();
+
+        h.Picker.Search(new PickerSearchInput(PickerSearchKey.Escape));
+        await WaitForEffectAsync<GestureCancelled>();
+
+        Assert.Equal([new FocusedWindow(42)], h.Focus.Restored);
+        Assert.Equal("Hide", h.Picker.Calls[^1].Method);
+        Assert.Equal(0, h.Paste.Count);
+        Assert.Empty(h.Backend.Written);
+        Assert.False(h.Engine.IsSearching);
+    }
+
+    [Fact]
+    public async Task Search_LosingTheFocus_HidesThePicker_WithoutTakingTheFocusBack()
+    {
+        h.Seed("apple", "banana");
+        await h.StartAsync();
+        await BeginSearchAsync();
+
+        h.Picker.Search(new PickerSearchInput(PickerSearchKey.Deactivated));
+        await WaitForEffectAsync<GestureCancelled>();
+
+        Assert.Empty(h.Focus.Restored);
+        Assert.Equal("Hide", h.Picker.Calls[^1].Method);
+        Assert.Equal(0, h.Paste.Count);
+    }
+
+    [Fact]
+    public async Task Search_WithoutAFocusedWindow_StillPastes()
+    {
+        h.Seed("apple", "banana");
+        h.Focus.Focused = null;
+        await h.StartAsync();
+        await BeginSearchAsync();
+
+        h.Picker.Search(new PickerSearchInput(PickerSearchKey.Enter));
+        await WaitForEffectAsync<PerformAction>();
+
+        Assert.Empty(h.Focus.Restored);
+        Assert.Equal(1, h.Paste.Count);
+    }
+
+    [Fact]
+    public async Task Search_KeysGoToThePicker_NotToTheGesture()
+    {
+        h.Seed("apple", "banana");
+        await h.StartAsync();
+        await BeginSearchAsync();
+        var calls = h.Picker.Calls.Count;
+
+        // Ctrl+V into the search box, S, the arrows and Escape are the search box's, not a new gesture's.
+        Assert.False(h.Down(GestureKey.Modifier));
+        Assert.False(h.Tap(GestureKey.Trigger));
+        Assert.False(h.Tap(GestureKey.Search));
+        Assert.False(h.Tap(GestureKey.Down));
+        Assert.False(h.Tap(GestureKey.Escape));
+        Assert.False(h.Up(GestureKey.Modifier));
+        await Task.Delay(100, Ct);
+
+        Assert.False(h.Engine.IsGestureActive);
+        Assert.Equal(calls, h.Picker.Calls.Count);
+        Assert.True(h.Engine.IsSearching);
+    }
+
+    [Fact]
+    public async Task Search_AfterItEnds_TheGestureWorksAgain_WithTheModifierStillTracked()
+    {
+        h.Seed("apple", "banana");
+        await h.StartAsync();
+        await BeginSearchAsync();
+
+        // The modifier goes down while the search box has the focus, and stays down after the search ends.
+        h.Down(GestureKey.Modifier);
+        h.Picker.Search(new PickerSearchInput(PickerSearchKey.Escape));
+        await WaitForEffectAsync<GestureCancelled>();
+
+        Assert.True(h.Down(GestureKey.Trigger));
+        h.Up(GestureKey.Trigger);
+        Assert.True(h.Engine.IsGestureActive);
+        h.Up(GestureKey.Modifier);
+        await WaitForEffectAsync<PasteCurrentClipboard>();
+        Assert.Equal(1, h.Paste.Count);
+    }
+
+    [Fact]
+    public async Task Search_InputBeforeOrAfterASearch_IsIgnored()
+    {
+        h.Seed("apple");
+        await h.StartAsync();
+
+        Assert.False(h.Engine.OnSearchInput(new PickerSearchInput(PickerSearchKey.Enter)));
+        await BeginSearchAsync();
+        h.Picker.Search(new PickerSearchInput(PickerSearchKey.Escape));
+        Assert.False(h.Picker.Search(new PickerSearchInput(PickerSearchKey.Enter)));
+        await WaitForEffectAsync<GestureCancelled>();
+
+        Assert.Equal(0, h.Paste.Count);
+    }
+
+    [Fact]
+    public async Task Search_ThatCannotBegin_HidesThePicker_AndGivesTheKeysBackToTheGesture()
+    {
+        h.Seed("apple", "banana");
+        h.Picker.ThrowOnBeginSearch = true;
+        await h.StartAsync();
+
+        await BeginSearchAsync();
+        await WaitForAsync(() => h.Picker.Calls[^1].Method == "Hide", "the picker hidden");
+
+        Assert.False(h.Engine.IsSearching);
+        Assert.False(h.Picker.Search(new PickerSearchInput(PickerSearchKey.Enter)));
+        h.Down(GestureKey.Modifier);
+        Assert.True(h.Tap(GestureKey.Trigger));
+        Assert.True(h.Engine.IsGestureActive);
+        h.Up(GestureKey.Modifier);
+    }
+
+    [Fact]
+    public async Task Search_FindsItemsByTheirFullText()
+    {
+        h.Seed("line one\n" + string.Concat(Enumerable.Repeat("filler ", 100)) + "\nhidden needle", "other");
+        await h.StartAsync();
+        await BeginSearchAsync();
+
+        h.Picker.Search(PickerSearchInput.Typed("needle"));
+        await WaitForAsync(() => h.Picker.Calls[^1].State?.SearchQuery == "needle", "the filtered picker");
+
+        Assert.StartsWith("line one", Assert.Single(h.Picker.Calls[^1].State!.Items).Snapshot.Text, StringComparison.Ordinal);
+    }
+
     // ---------------------------------------------------------------- quick tap
 
     [Fact]

@@ -21,10 +21,13 @@
     the selected item side by side, and a footer with the keys. "chrome.opaque" is set when the window cannot be
     see-through (no compositor): the panel then has to fill the window, without rounded corners or a shadow.
     "chrome.empty" is set while nothing has been copied yet.
+
+    Pressing S starts a search (issue #458): the picker takes the keyboard focus and shows the search bar below the
+    header ("Border.searchBar" with "TextBox.searchBox"); "chrome.searching" is set until the picker is hidden.
   -->
-  <Border x:Name="Chrome" Classes="chrome" Classes.opaque="{Binding IsOpaque}" Classes.empty="{Binding IsEmpty}">
+  <Border x:Name="Chrome" Classes="chrome" Classes.opaque="{Binding IsOpaque}" Classes.empty="{Binding IsEmpty}" Classes.searching="{Binding IsSearching}">
     <Border Classes="surface">
-      <Grid RowDefinitions="Auto,Auto,Auto">
+      <Grid RowDefinitions="Auto,Auto,Auto,Auto">
         <!-- Header: the app's icon and name, how many items there are, and how to paste -->
         <Border Grid.Row="0" Classes="header">
           <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto">
@@ -33,18 +36,32 @@
             <Border Grid.Column="2" Classes="countPill">
               <TextBlock Classes="headerCount" Text="{Binding ItemCountText}" />
             </Border>
-            <TextBlock Grid.Column="4" Classes="headerHint" Text="{Binding ReleaseHint}" />
+            <TextBlock Grid.Column="4" Classes="headerHint" Text="{Binding HeaderHint}" />
           </Grid>
         </Border>
 
-        <Grid Grid.Row="1" Classes="body" ColumnDefinitions="Auto,Auto">
+        <!-- While searching: what the user types -->
+        <Border Grid.Row="1" Classes="searchBar" IsVisible="{Binding IsSearching}">
+          <Grid ColumnDefinitions="Auto,*">
+            <Path Grid.Column="0" Classes="searchGlyph" Data="{x:Static services:Glyphs.Search}" Stretch="Uniform" />
+            <TextBox x:Name="SearchBox" Grid.Column="1" Classes="searchBox" Text="{Binding SearchQuery}" PlaceholderText="Search everything you copied" />
+          </Grid>
+        </Border>
+
+        <Grid Grid.Row="2" Classes="body" ColumnDefinitions="Auto,Auto">
           <!-- History -->
           <Border Grid.Column="0" Classes="historyPane" Classes.inactive="{Binding IsActionsPaneActive}">
-            <Panel>
+            <StackPanel>
               <!-- Nothing copied yet: explain how Shapeshifter works instead of showing an empty list (issue #144) -->
               <StackPanel Classes="emptyState" IsVisible="{Binding IsEmpty}">
                 <TextBlock Classes="emptyTitle" Text="Nothing copied yet" />
                 <TextBlock Classes="emptyText" Text="{Binding EmptyHint}" />
+              </StackPanel>
+
+              <!-- The search found nothing -->
+              <StackPanel Classes="emptyState" IsVisible="{Binding HasNoMatches}">
+                <TextBlock Classes="emptyTitle" Text="No matches" />
+                <TextBlock Classes="emptyText" Text="{Binding NoMatchesText}" />
               </StackPanel>
 
               <ListBox x:Name="ItemList" Classes="items" Focusable="False" IsVisible="{Binding HasItems}"
@@ -108,13 +125,14 @@
                   </DataTemplate>
                 </ListBox.ItemTemplate>
               </ListBox>
-            </Panel>
+            </StackPanel>
           </Border>
 
           <!-- Actions of the selected item -->
-          <Border Grid.Column="1" Classes="actionsPane" Classes.inactive="{Binding IsItemsPaneActive}" IsVisible="{Binding HasItems}">
+          <Border Grid.Column="1" Classes="actionsPane" Classes.inactive="{Binding IsItemsPaneActive}" IsVisible="{Binding ShowsActions}">
             <StackPanel>
               <TextBlock Classes="actionsHeader" Text="{Binding ActionsHeader}" />
+
               <ListBox Classes="actions" Focusable="False"
                        ItemsSource="{Binding Actions}"
                        SelectedIndex="{Binding SelectedActionIndex}"
@@ -139,8 +157,9 @@
         </Grid>
 
         <!-- Footer: the keys -->
-        <Border Grid.Row="2" Classes="footer">
-          <WrapPanel Classes="hints">
+        <Border Grid.Row="3" Classes="footer">
+          <Panel>
+          <WrapPanel Classes="hints" IsVisible="{Binding IsNotSearching}">
             <StackPanel Classes="hint">
               <Border Classes="key"><TextBlock Text="{Binding ModifierKey}" /></Border>
               <TextBlock Text="Release to paste" />
@@ -159,6 +178,10 @@
               <TextBlock Text="Actions" />
             </StackPanel>
             <StackPanel Classes="hint">
+              <Border Classes="key"><TextBlock Text="S" /></Border>
+              <TextBlock Text="Search" />
+            </StackPanel>
+            <StackPanel Classes="hint">
               <Border Classes="key"><TextBlock Text="Del" /></Border>
               <TextBlock Text="Remove" />
             </StackPanel>
@@ -167,6 +190,27 @@
               <TextBlock Text="Cancel" />
             </StackPanel>
           </WrapPanel>
+
+          <!-- While searching, the picker has the keyboard focus -->
+          <WrapPanel Classes="hints" IsVisible="{Binding IsSearching}">
+            <StackPanel Classes="hint">
+              <Border Classes="key"><TextBlock Text="Enter" /></Border>
+              <TextBlock Text="Paste" />
+            </StackPanel>
+            <StackPanel Classes="hint">
+              <Border Classes="key"><TextBlock Text="↑↓" /></Border>
+              <TextBlock Text="Move" />
+            </StackPanel>
+            <StackPanel Classes="hint">
+              <Border Classes="key"><TextBlock Text="←→" /></Border>
+              <TextBlock Text="Actions" />
+            </StackPanel>
+            <StackPanel Classes="hint">
+              <Border Classes="key"><TextBlock Text="Esc" /></Border>
+              <TextBlock Text="Cancel" />
+            </StackPanel>
+          </WrapPanel>
+          </Panel>
         </Border>
       </Grid>
     </Border>

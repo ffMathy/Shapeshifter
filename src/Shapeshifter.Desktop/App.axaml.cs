@@ -114,9 +114,18 @@ public partial class App : Application
                 Logger = logger,
             };
 
-            picker = new PickerPresenter(platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), platform.KeyboardHook.ModifierName, logger);
+            picker = new PickerPresenter(
+                platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), platform.KeyboardHook.ModifierName, logger, platform.WindowFocus);
             engine = new ShapeshifterEngine(
-                history, monitor, platform.KeyboardHook, ActionCatalog.CreateDefault(), context, picker, new CopyNotifier(settings), logger)
+                history,
+                monitor,
+                platform.KeyboardHook,
+                ActionCatalog.CreateDefault(),
+                context,
+                picker,
+                new CopyNotifier(settings),
+                logger,
+                focusTracker: platform.WindowFocus)
             {
                 PasteDelay = TimeSpan.FromMilliseconds(settings.Current.PasteDelayMilliseconds),
             };

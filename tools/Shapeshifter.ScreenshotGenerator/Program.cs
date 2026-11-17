@@ -133,6 +133,11 @@ internal static class Program
             UseLook(Look.Windows, null);
             RenderPicker(Look.Windows, 1.25, 1400, 820, actions, selectedAction: 2);
             Console.WriteLine($"Wrote {actions}");
+
+            // Searching the history (issue #458): the search bar below the header, with what matches.
+            var search = Path.Combine(output, "search.PNG");
+            RenderPicker(Look.Windows, 1.25, 1400, 820, search, search: "shapeshifter");
+            Console.WriteLine($"Wrote {search}");
         }
 
         foreach (var look in looks)
@@ -240,8 +245,9 @@ internal static class Program
     }
 
     /// <param name="selectedAction">When set, the actions pane is active with this action selected.</param>
+    /// <param name="search">When set, the picker is searching for this, showing only the sample items that match.</param>
     private static void RenderPicker(
-        Look look, double scale, int width, int height, string path, bool empty = false, int? selectedAction = null, bool dark = false)
+        Look look, double scale, int width, int height, string path, bool empty = false, int? selectedAction = null, bool dark = false, string? search = null)
     {
         var photo = SampleArt.Banner(900, 600);
         using var thumbnail = ToBitmap(photo);
@@ -249,6 +255,18 @@ internal static class Program
             ? new PickerViewModel(look == Look.MacOS ? "Cmd" : "Ctrl") { MaxListHeight = 10_000 }
             : CreateSampleViewModel(look, photo, thumbnail);
         viewModel.IsOpaque = false;
+        if (search is not null)
+        {
+            var terms = HistorySearch.ParseQuery(search);
+            foreach (var item in viewModel.Items.Where(item => !HistorySearch.Matches(HistorySearch.Normalize($"{item.Title}\n{item.SourceText}"), terms)).ToArray())
+            {
+                viewModel.Items.Remove(item);
+            }
+
+            viewModel.IsSearching = true;
+            viewModel.SearchQuery = search;
+        }
+
         if (selectedAction is { } action)
         {
             viewModel.IsActionsPaneActive = true;

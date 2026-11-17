@@ -57,6 +57,8 @@ internal sealed class DiagnosticsStateWriter
             items = items.Select(item => new { kind = item.Kind.ToString(), preview = item.PreviewText, pinned = item.IsPinned }),
             pickerVisible = picker.IsVisible,
             selectedIndex = picker.SelectedIndex,
+            searching = picker.IsSearching,
+            searchFocused = picker.HasSearchFocus,
             effectsProcessed = Volatile.Read(ref effectsProcessed),
         };
 

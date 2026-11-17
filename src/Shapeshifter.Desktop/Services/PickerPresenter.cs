@@ -14,7 +14,8 @@ using Shapeshifter.Desktop.Views;
 namespace Shapeshifter.Desktop.Services;
 
 /// <summary>
-/// Shows the picker centred near the top of the screen that contains the pointer, without activating it.
+/// Shows the picker centred near the top of the screen that contains the pointer, without activating it. Only while the
+/// user searches the history does the picker take the keyboard focus, until it is hidden.
 /// </summary>
 internal sealed class PickerPresenter : IPickerPresenter
 {
@@ -27,17 +28,31 @@ internal sealed class PickerPresenter : IPickerPresenter
     /// <summary>The history may use this fraction of the working area's height.</summary>
     private const double HeightFraction = 0.62;
 
+    /// <summary>How long the picker may take to get the keyboard focus when a search begins.</summary>
+    private static readonly TimeSpan ActivationTimeout = TimeSpan.FromSeconds(1.5);
+
     private readonly ICursorLocator cursorLocator;
+    private readonly IWindowFocus? windowFocus;
     private readonly ILogger logger;
     private readonly PickerVisuals visuals;
     private readonly PickerViewModel viewModel;
     private readonly Dictionary<Guid, Bitmap?> thumbnails = [];
     private PickerWindow? window;
+    private Func<PickerSearchInput, bool>? searchInput;
+    private bool activatedForSearch;
 
-    public PickerPresenter(ICursorLocator cursorLocator, PickerVisuals visuals, string modifierName, ILogger logger)
+    public PickerPresenter(ICursorLocator cursorLocator, PickerVisuals visuals, string modifierName, ILogger logger, IWindowFocus? windowFocus = null)
     {
         viewModel = new PickerViewModel(modifierName);
+        viewModel.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(PickerViewModel.SearchQuery))
+            {
+                searchInput?.Invoke(PickerSearchInput.Typed(viewModel.SearchQuery));
+            }
+        };
         this.cursorLocator = cursorLocator;
+        this.windowFocus = windowFocus;
         this.visuals = visuals;
         this.logger = logger.ForContext<PickerPresenter>();
     }
@@ -48,6 +63,11 @@ internal sealed class PickerPresenter : IPickerPresenter
 
     public int SelectedIndex => viewModel.SelectedIndex;
 
+    /// <summary>Whether the user is searching in the picker (it has the keyboard focus).</summary>
+    public bool IsSearching => viewModel.IsSearching;
+
+    public bool HasSearchFocus { get; private set; }
+
     public Task ShowAsync(PickerViewState state) => Dispatcher.UIThread.InvokeAsync(() =>
     {
         Apply(state);
@@ -57,7 +77,7 @@ internal sealed class PickerPresenter : IPickerPresenter
             item.RefreshCopiedAgo(now);
         }
 
-        var picker = window ??= new PickerWindow { DataContext = viewModel };
+        var picker = window ??= CreateWindow();
         SetMaxListHeight(picker);
         picker.Show();
 
@@ -85,10 +105,109 @@ internal sealed class PickerPresenter : IPickerPresenter
 
     public Task HideAsync() => Dispatcher.UIThread.InvokeAsync(() =>
     {
+        EndSearch();
         window?.Hide();
         IsVisible = false;
         VisibilityChanged?.Invoke(this, false);
     }).GetTask();
+
+    public Task BeginSearchAsync(PickerViewState state, Func<PickerSearchInput, bool> onInput) => Dispatcher.UIThread.InvokeAsync(() =>
+    {
+        ArgumentNullException.ThrowIfNull(onInput);
+        if (window is null || !IsVisible)
+        {
+            // Hidden in the meantime; there is nothing to search in.
+            onInput(new PickerSearchInput(PickerSearchKey.Deactivated));
+            return;
+        }
+
+        viewModel.SearchQuery = string.Empty;
+        viewModel.IsSearching = true;
+        Apply(state);
+        window.UpdateLayout();
+        Position(window);
+
+        searchInput = onInput;
+        activatedForSearch = false;
+        window.SearchKeyHandler = key => searchInput?.Invoke(new PickerSearchInput(key)) ?? false;
+
+        // The picker is shown without being activated, and another application is in the foreground.
+        if (windowFocus is not null && GetNativeHandle(window) is { } handle and not 0)
+        {
+            windowFocus.ActivateOwnWindow(handle);
+        }
+
+        window.Activate();
+
+        // If the system refuses to activate the picker, the keys still go to the other application, where Escape could
+        // not close it: give up instead.
+        var attempt = onInput;
+        DispatcherTimer.RunOnce(
+            () =>
+            {
+                if (ReferenceEquals(searchInput, attempt) && !activatedForSearch)
+                {
+                    logger.Warning("The picker did not get the keyboard focus for searching");
+                    attempt(new PickerSearchInput(PickerSearchKey.Deactivated));
+                }
+            },
+            ActivationTimeout);
+
+        if (!window.FocusSearchBox())
+        {
+            // The search box is laid out with the next pass.
+            Dispatcher.UIThread.Post(() => window.FocusSearchBox(), DispatcherPriority.Loaded);
+        }
+
+        VisibilityChanged?.Invoke(this, true);
+    }).GetTask();
+
+    private PickerWindow CreateWindow()
+    {
+        var picker = new PickerWindow { DataContext = viewModel };
+        picker.Activated += (_, _) =>
+        {
+            if (searchInput is not null)
+            {
+                activatedForSearch = true;
+                HasSearchFocus = true;
+                picker.FocusSearchBox();
+                VisibilityChanged?.Invoke(this, true);
+            }
+        };
+        picker.Deactivated += (_, _) =>
+        {
+            HasSearchFocus = false;
+
+            // Only once the search had the focus: the user clicked or switched to another window.
+            if (searchInput is not null && activatedForSearch)
+            {
+                searchInput(new PickerSearchInput(PickerSearchKey.Deactivated));
+            }
+        };
+        return picker;
+    }
+
+    private void EndSearch()
+    {
+        searchInput = null;
+        activatedForSearch = false;
+        HasSearchFocus = false;
+        if (window is not null)
+        {
+            window.SearchKeyHandler = null;
+        }
+
+        viewModel.IsSearching = false;
+        viewModel.SearchQuery = string.Empty;
+    }
+
+    private static nint? GetNativeHandle(Window window) => window.TryGetPlatformHandle() switch
+    {
+        IMacOSTopLevelPlatformHandle mac => mac.NSWindow,
+        { } handle => handle.Handle,
+        null => null,
+    };
 
     private void Apply(PickerViewState state)
     {

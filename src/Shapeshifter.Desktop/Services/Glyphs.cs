@@ -32,6 +32,8 @@ public static class Glyphs
 
     public static Geometry Other { get; } = Clipboard;
 
+    public static Geometry Search { get; } = Geometry.Parse("M8.5,3 A5.5,5.5 0 1 1 8.49,3 M12.5,12.5 L17,17");
+
     public static Geometry Clock { get; } = Geometry.Parse("M10,2.5 A7.5,7.5 0 1 1 9.99,2.5 M10,6 V10 L12.75,11.75");
 
     public static Geometry Stack { get; } = Geometry.Parse("M4,7.5 H16 V17 H4 Z M5.5,5 H14.5 M7,2.5 H13");

@@ -13,9 +13,18 @@ public readonly record struct GestureItem(Guid Id, int ActionCount);
 
 /// <summary>What the picker should currently display.</summary>
 /// <remarks>With an empty history the picker is shown without items (<see cref="IsEmpty"/>), to explain how to use it.</remarks>
+/// <para>
+/// While the user searches (issue #458), <see cref="Query"/> holds what they typed and <see cref="ItemIds"/> only the
+/// items that match it, which may be none.
+/// </para>
 public sealed record PickerSelection(IReadOnlyList<Guid> ItemIds, int SelectedIndex, int SelectedActionIndex, PickerPane Pane)
 {
     public bool IsEmpty => ItemIds.Count == 0;
+
+    /// <summary>What the user typed in the search box, or <see langword="null"/> while not searching.</summary>
+    public string? Query { get; init; }
+
+    public bool IsSearching => Query is not null;
 
     /// <summary>The selected item. Not available when <see cref="IsEmpty"/>.</summary>
     public Guid SelectedItemId => ItemIds[SelectedIndex];
@@ -46,6 +55,15 @@ public sealed record DeleteItem(Guid ItemId) : GestureEffect;
 /// <summary>The gesture was cancelled; nothing is pasted.</summary>
 public sealed record GestureCancelled : GestureEffect;
 
+/// <summary>
+/// S was pressed: the picker stays open, takes the keyboard focus and lets the user type to search the history (see
+/// <see cref="PickerSearch"/>). The gesture itself has ended.
+/// </summary>
+public sealed record BeginSearch(PickerSelection Selection) : GestureEffect;
+
+/// <summary>Give the keyboard focus back to the window that had it before the search began.</summary>
+public sealed record RestoreFocus : GestureEffect;
+
 public readonly record struct GestureResult(bool Suppress, IReadOnlyList<GestureEffect> Effects)
 {
     public static GestureResult PassThrough { get; } = new(false, []);
@@ -68,6 +86,7 @@ public readonly record struct GestureResult(bool Suppress, IReadOnlyList<Gesture
 /// <item>Up/Down move the selection, Right switches to the actions of the selected item, Left switches back.</item>
 /// <item>1 to 9 jump to the item with that number (the first nine items, top first).</item>
 /// <item>Delete removes the selected item; Escape cancels.</item>
+/// <item>S starts searching the history (<see cref="BeginSearch"/>): the gesture ends and the picker stays open.</item>
 /// <item>Releasing the modifier performs the selected action (normally "Paste") on the selected item.</item>
 /// <item>V pressed together with Shift, Alt/AltGr or another modifier is left alone (Ctrl+Shift+V, AltGr+V).</item>
 /// </list>
@@ -135,6 +154,7 @@ public sealed class PasteGestureStateMachine
             case GestureKey.Right:
             case GestureKey.Delete:
             case GestureKey.Escape:
+            case GestureKey.Search:
             case >= GestureKey.Digit1 and <= GestureKey.Digit9:
                 return OnNavigationKey(input);
             default:
@@ -288,6 +308,20 @@ public sealed class PasteGestureStateMachine
             return GestureResult.Swallow;
         }
 
+        if (input.Key == GestureKey.Search)
+        {
+            // The picker stays open for the search, which takes over from here.
+            var effects = new List<GestureEffect>(2);
+            if (!pickerVisible)
+            {
+                effects.Add(ShowOrUpdate());
+            }
+
+            effects.Add(new BeginSearch(CreateSelection()));
+            Reset();
+            return new GestureResult(true, effects);
+        }
+
         switch (input.Key)
         {
             case GestureKey.Up:
@@ -425,5 +459,5 @@ public sealed class PasteGestureStateMachine
         pane = PickerPane.Items;
     }
 
-    private static int Wrap(int value, int count) => ((value % count) + count) % count;
+    internal static int Wrap(int value, int count) => ((value % count) + count) % count;
 }

@@ -21,6 +21,9 @@ Tap it and it pastes as always. Keep holding <kbd>Ctrl</kbd> and your history ap
 
 <kbd>1</kbd>–<kbd>9</kbd> jump to that item, <kbd>Delete</kbd> removes an item, <kbd>Esc</kbd> cancels. On macOS it's <kbd>Cmd</kbd>+<kbd>V</kbd>.
 
+Looking for something you copied a while ago? Press <kbd>S</kbd> while the history is open and type a few words:
+<kbd>Enter</kbd> pastes what you found.
+
 ## At home on every platform
 
 | Windows | macOS | Linux |

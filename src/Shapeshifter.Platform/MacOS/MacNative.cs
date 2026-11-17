@@ -69,6 +69,18 @@ internal static partial class MacNative
     [LibraryImport(ObjC, EntryPoint = "objc_msgSend")]
     public static partial IntPtr SendCGImageForProposedRect(IntPtr receiver, IntPtr selector, ref CGRect proposedRect, IntPtr context, IntPtr hints);
 
+    /// <summary><c>id objc_msgSend(id, SEL, int)</c>, e.g. <c>+[NSRunningApplication runningApplicationWithProcessIdentifier:]</c>.</summary>
+    [LibraryImport(ObjC, EntryPoint = "objc_msgSend")]
+    public static partial IntPtr SendIntPtrInt32(IntPtr receiver, IntPtr selector, int argument);
+
+    /// <summary><c>BOOL objc_msgSend(id, SEL, NSUInteger)</c>, e.g. <c>-[NSRunningApplication activateWithOptions:]</c>.</summary>
+    [LibraryImport(ObjC, EntryPoint = "objc_msgSend")]
+    public static partial byte SendByteNUInt(IntPtr receiver, IntPtr selector, nuint argument);
+
+    /// <summary><c>objc_msgSend(id, SEL, BOOL)</c>, e.g. <c>-[NSApplication activateIgnoringOtherApps:]</c>.</summary>
+    [LibraryImport(ObjC, EntryPoint = "objc_msgSend")]
+    public static partial byte SendByteByte(IntPtr receiver, IntPtr selector, byte argument);
+
     [LibraryImport(CoreGraphics)]
     public static partial IntPtr CGWindowListCopyWindowInfo(uint option, uint relativeToWindow);
 

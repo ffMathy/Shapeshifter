@@ -256,6 +256,44 @@
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
     <Setter Property="MaxLines" Value="1" />
   </Style>
+  <!-- The search bar below the header while searching (issue #458) -->
+  <Style Selector="Border.searchBar">
+    <Setter Property="Margin" Value="8,0,8,8" />
+    <Setter Property="Padding" Value="10,0" />
+    <Setter Property="Height" Value="32" />
+    <Setter Property="CornerRadius" Value="16" />
+    <Setter Property="Background" Value="#14000000" />
+  </Style>
+  <Style Selector="Path.searchGlyph">
+    <Setter Property="Width" Value="13" />
+    <Setter Property="Height" Value="13" />
+    <Setter Property="Margin" Value="0,0,10,0" />
+    <Setter Property="Stroke" Value="#6E6E73" />
+    <Setter Property="StrokeThickness" Value="1.5" />
+    <Setter Property="StrokeLineCap" Value="Round" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBox.searchBox">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="MinWidth" Value="0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="Foreground" Value="#1D1D1F" />
+    <Setter Property="CaretBrush" Value="#1D1D1F" />
+    <Setter Property="SelectionBrush" Value="{DynamicResource AccentTextBrush}" />
+    <Setter Property="SelectionForegroundBrush" Value="White" />
+  </Style>
+  <Style Selector="TextBox.searchBox /template/ Border#PART_BorderElement,
+                   TextBox.searchBox:pointerover /template/ Border#PART_BorderElement,
+                   TextBox.searchBox:focus /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
   <Style Selector="Grid.row StackPanel.source">
     <Setter Property="Orientation" Value="Vertical" />
   </Style>

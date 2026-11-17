@@ -354,6 +354,50 @@
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
     <Setter Property="TextWrapping" Value="NoWrap" />
   </Style>
+  <!-- The search bar below the header while searching (issue #458) -->
+  <Style Selector="Border.searchBar">
+    <Setter Property="Margin" Value="12,10,12,4" />
+    <Setter Property="Padding" Value="12,0" />
+    <Setter Property="Height" Value="36" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="Background" Value="{DynamicResource MicaControlFillBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MicaControlStrokeBrush}" />
+    <Setter Property="BorderThickness" Value="1,1,1,2" />
+  </Style>
+  <!-- The accent underline of a focused Fluent text box -->
+  <Style Selector="Border.searchBar:focus-within">
+    <Setter Property="BorderBrush" Value="{DynamicResource AccentTextBrush}" />
+  </Style>
+  <Style Selector="Path.searchGlyph">
+    <Setter Property="Width" Value="13" />
+    <Setter Property="Height" Value="13" />
+    <Setter Property="Margin" Value="0,0,10,0" />
+    <Setter Property="Stroke" Value="{DynamicResource MicaGlyphSecondaryBrush}" />
+    <Setter Property="StrokeThickness" Value="1.5" />
+    <Setter Property="StrokeLineCap" Value="Round" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBox.searchBox">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="MinWidth" Value="0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Foreground" Value="{DynamicResource MicaTextPrimaryBrush}" />
+    <Setter Property="CaretBrush" Value="{DynamicResource MicaTextPrimaryBrush}" />
+    <Setter Property="SelectionBrush" Value="{DynamicResource AccentTextBrush}" />
+    <Setter Property="SelectionForegroundBrush" Value="White" />
+  </Style>
+  <Style Selector="TextBox.searchBox /template/ Border#PART_BorderElement,
+                   TextBox.searchBox:pointerover /template/ Border#PART_BorderElement,
+                   TextBox.searchBox:focus /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
   <Style Selector="Grid.row.textItem TextBlock.title">
     <Setter Property="TextWrapping" Value="Wrap" />
     <Setter Property="MaxLines" Value="2" />

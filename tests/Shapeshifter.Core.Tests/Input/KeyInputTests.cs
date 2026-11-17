@@ -24,7 +24,7 @@ public sealed class KeyInputTests
     {
         Assert.Equal(
             ["Other", "Modifier", "Trigger", "Up", "Down", "Left", "Right", "Delete", "Escape", "Shift", "Alt", "OtherModifier",
-             "Digit1", "Digit2", "Digit3", "Digit4", "Digit5", "Digit6", "Digit7", "Digit8", "Digit9"],
+             "Digit1", "Digit2", "Digit3", "Digit4", "Digit5", "Digit6", "Digit7", "Digit8", "Digit9", "Search"],
             Enum.GetNames<GestureKey>());
     }
 }
