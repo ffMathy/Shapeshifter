@@ -61,9 +61,9 @@ public static class PlatformLook
 
     /// <summary>
     /// Applies <paramref name="look"/>, replacing the look applied before, in <paramref name="theme"/>. Only the Windows look
-    /// has a dark variant: without a theme it follows the system's (<see cref="ThemeVariant.Default"/>, which Avalonia
-    /// updates live from the app mode of Windows), unless <see cref="ThemeVariable"/> names one. The macOS and Linux looks
-    /// are always light.
+    /// has a dark variant: without <paramref name="theme"/> it uses <see cref="ThemeVariable"/> if set, else the system's
+    /// (<see cref="ThemeVariant.Default"/>, which Avalonia updates live from the app mode of Windows). The macOS and Linux
+    /// looks are always light.
     /// </summary>
     public static void Apply(Application application, Look look, ThemeVariant? theme)
     {

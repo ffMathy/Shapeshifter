@@ -64,8 +64,15 @@ public static partial class WindowsWindowMaterial
     /// Gives a decorated window the system's Mica, drawn by DWM as in the Settings app: behind the title bar (keeping the
     /// native caption and its buttons) and, with the frame extended over the whole window, behind the client area, which
     /// has to be transparent. The tint follows the window's dark-mode attribute. Returns false, and leaves the window as it
-    /// was, where Windows has no system backdrops.
+    /// was, where Windows has no system backdrops. Idempotent, so it can be called again whenever the frame may have been
+    /// reset.
     /// </summary>
+    /// <remarks>
+    /// The frame margins of -1 must stay: anything that calls DwmExtendFrameIntoClientArea again for the window (in
+    /// Avalonia 12.1, WindowImpl.UpdateWindowProperties on a change of decorations or a forced change, as on leaving full
+    /// screen or showing a window whose decorations are not Full, and WindowImpl.ExtendClientArea) takes the Mica out of
+    /// the client area, which then shows black or unblurred. Call this again after such a change.
+    /// </remarks>
     public static bool TryApplyMainWindowMica(IntPtr hwnd)
     {
         if (hwnd == IntPtr.Zero || !IsSystemBackdropSupported)
@@ -85,9 +92,25 @@ public static partial class WindowsWindowMaterial
             return true;
         }
 
-        backdrop = 0;
-        DwmSetWindowAttribute(hwnd, DwmwaSystemBackdropType, ref backdrop, sizeof(int));
+        RemoveMainWindowMica(hwnd);
         return false;
+    }
+
+    /// <summary>
+    /// Undoes <see cref="TryApplyMainWindowMica"/>: no system backdrop and no frame over the client area, as Avalonia
+    /// leaves a decorated window.
+    /// </summary>
+    public static void RemoveMainWindowMica(IntPtr hwnd)
+    {
+        if (hwnd == IntPtr.Zero || !IsSystemBackdropSupported)
+        {
+            return;
+        }
+
+        var none = 0;
+        DwmSetWindowAttribute(hwnd, DwmwaSystemBackdropType, ref none, sizeof(int));
+        var margins = default(Margins);
+        DwmExtendFrameIntoClientArea(hwnd, ref margins);
     }
 
     [StructLayout(LayoutKind.Sequential)]

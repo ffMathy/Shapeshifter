@@ -815,7 +815,10 @@
   </Style>
   <!--
     On Mica the window lets the backdrop through (under the title bar too, with the system's Mica) and the cards are
-    translucent layers on it, as in the Settings app, instead of opaque white boxes on a flat sheet.
+    translucent layers on it, as in the Settings app, instead of opaque white boxes on a flat sheet. With the system's
+    Mica the client area only shows it while DWM's frame stays extended over the whole window (margins of -1); Avalonia
+    writes the margins again in WindowImpl.UpdateWindowProperties and WindowImpl.ExtendClientArea, so NativeMaterial
+    applies the Mica again after a change of decorations, extended client area or window state.
   -->
   <Style Selector="Window.settings.mica">
     <Setter Property="Background" Value="Transparent" />

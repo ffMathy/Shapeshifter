@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Styling;
+using Shapeshifter.Platform.Windows;
 
 namespace Shapeshifter.Desktop.Services;
 
@@ -99,21 +100,57 @@ public static class AccentPalette
     }
 
     /// <summary>
-    /// The accent for text and strokes in dark: Fluent's "Light 2" shade of it (the shade Windows uses in dark mode),
-    /// mixed further toward white until it reads as text on the dark surfaces (4.5:1) and as a stroke where they are
-    /// lightest (3:1).
+    /// The accent for text and strokes in dark: its "Light 2" shade (the shade Windows uses in dark mode), mixed further
+    /// toward white until it reads as text on the dark surfaces (4.5:1) and as a stroke where they are lightest (3:1).
     /// </summary>
-    internal static Color DarkThemeAccentText(Color accent)
+    internal static Color DarkThemeAccentText(Color accent) => DarkThemeAccentText(accent, SystemLight2(accent));
+
+    /// <summary>
+    /// As <see cref="DarkThemeAccentText(Color)"/>, from <paramref name="light2"/>, or, without it, an approximation of
+    /// Light 2 (the accent 70/255 lighter in HSL), as off Windows.
+    /// </summary>
+    internal static Color DarkThemeAccentText(Color accent, Color? light2)
     {
-        var hsl = Color.FromRgb(accent.R, accent.G, accent.B).ToHsl();
-        var text = new HslColor(1, hsl.H, hsl.S, Math.Min(1, hsl.L + (70 / 255d))).ToRgb();
-        text = Color.FromRgb(text.R, text.G, text.B);
+        Color text;
+        if (light2 is { } shade)
+        {
+            text = Color.FromRgb(shade.R, shade.G, shade.B);
+        }
+        else
+        {
+            var hsl = Color.FromRgb(accent.R, accent.G, accent.B).ToHsl();
+            var approximation = new HslColor(1, hsl.H, hsl.S, Math.Min(1, hsl.L + (70 / 255d))).ToRgb();
+            text = Color.FromRgb(approximation.R, approximation.G, approximation.B);
+        }
+
         while (ContrastRatio(text, DarkSurface) < 4.5 || ContrastRatio(text, DarkSurfaceOverLight) < 3)
         {
             text = Mix(text, Colors.White, 0.08);
         }
 
         return text;
+    }
+
+    /// <summary>
+    /// The Light 2 shade Windows itself computed for <paramref name="accent"/> (from Explorer's AccentPalette), or null
+    /// off Windows, when the palette cannot be read or when it is for another accent (the colour passed in is not the
+    /// system's).
+    /// </summary>
+    private static Color? SystemLight2(Color accent)
+    {
+        if (!OperatingSystem.IsWindows() || WindowsAccentPalette.TryRead() is not { } palette)
+        {
+            return null;
+        }
+
+        var system = palette[WindowsAccentPalette.Accent];
+        if (system.R != accent.R || system.G != accent.G || system.B != accent.B)
+        {
+            return null;
+        }
+
+        var light2 = palette[WindowsAccentPalette.Light2];
+        return Color.FromRgb(light2.R, light2.G, light2.B);
     }
 
     /// <summary>The WCAG contrast ratio of <paramref name="color"/> against white.</summary>

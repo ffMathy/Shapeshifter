@@ -12,6 +12,8 @@ name: Live screenshots
 on:
   pull_request:
     paths:
+      - 'src/Shapeshifter.Desktop/App.axaml'
+      - 'src/Shapeshifter.Desktop/App.axaml.cs'
       - 'src/Shapeshifter.Desktop/Styles/**'
       - 'src/Shapeshifter.Desktop/Assets/**'
       - 'src/Shapeshifter.Desktop/Views/**'
