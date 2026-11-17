@@ -179,6 +179,41 @@ public sealed class ClipboardHistory
         Changed?.Invoke(this, new HistoryChangedEventArgs(HistoryChangeKind.Added, item));
     }
 
+    /// <summary>
+    /// Adds unpinned items restored from disk below the existing ones, in the given order (top first). Items whose id
+    /// or content is already in the history are skipped; items beyond <see cref="MaxUnpinnedItems"/> are dropped.
+    /// </summary>
+    public void AddRestored(IEnumerable<ClipboardItem> restored)
+    {
+        ArgumentNullException.ThrowIfNull(restored);
+
+        // Hash before taking the lock, as in Add.
+        var candidates = restored.Select(item => (Item: item, Fingerprint: item.Snapshot.Fingerprint)).ToArray();
+        var added = new List<ClipboardItem>();
+        List<ClipboardItem> removed;
+        lock (gate)
+        {
+            foreach (var (item, fingerprint) in candidates)
+            {
+                if (items.Any(existing => existing.Id == item.Id || existing.Snapshot.Fingerprint == fingerprint))
+                {
+                    continue;
+                }
+
+                item.IsPinned = false;
+                items.Add(item);
+                added.Add(item);
+            }
+
+            removed = TrimLocked();
+        }
+
+        foreach (var item in added.Except(removed))
+        {
+            Changed?.Invoke(this, new HistoryChangedEventArgs(HistoryChangeKind.Added, item));
+        }
+    }
+
     /// <summary>Moves an unpinned item to the top of the unpinned section (it becomes the newest).</summary>
     public bool MoveToTop(Guid id)
     {

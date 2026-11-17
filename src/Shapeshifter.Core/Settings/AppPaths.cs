@@ -34,6 +34,9 @@ public sealed class AppPaths
 
     public string PinnedDirectory => Path.Combine(DataDirectory, "Pinned");
 
+    /// <summary>The unpinned history, while "Remember history after restart" is on.</summary>
+    public string HistoryDirectory => Path.Combine(DataDirectory, "History");
+
     public string InstanceLockFile => Path.Combine(DataDirectory, "instance.lock");
 
     public static AppPaths ForRoot(string root) => new(

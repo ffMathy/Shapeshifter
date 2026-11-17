@@ -35,6 +35,7 @@ public partial class App : Application
     private ClipboardMonitor? monitor;
     private SettingsStore? settings;
     private ClipboardHistory? history;
+    private HistoryPersistence? savedHistory;
     private SettingsWindow? settingsWindow;
     private HttpClient? http;
     private TrayIcon? trayIcon;
@@ -93,6 +94,12 @@ public partial class App : Application
                 history.AddPinned(pinned);
             }
 
+            // The unpinned history, when "Remember history after restart" is on; before the first capture, so the
+            // current clipboard lands on top of it.
+            savedHistory = new HistoryPersistence(history, Paths.HistoryDirectory, () => settings.Current.RememberHistory, logger);
+            await savedHistory.LoadAsync().ConfigureAwait(true);
+            savedHistory.Start();
+
             http = new HttpClient();
             http.DefaultRequestHeaders.UserAgent.ParseAdd("Shapeshifter/" + typeof(App).Assembly.GetName().Version?.ToString(3));
             var context = new ActionContext
@@ -118,6 +125,7 @@ public partial class App : Application
             {
                 engine.PasteDelay = TimeSpan.FromMilliseconds(current.PasteDelayMilliseconds);
                 history.MaxUnpinnedItems = current.MaxHistoryItems;
+                savedHistory.RequestSync();
             };
 
             DiagnosticsStateWriter.TryCreate(history, picker, engine);
@@ -408,6 +416,8 @@ public partial class App : Application
         try
         {
             engine?.DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(3));
+            savedHistory?.Stop();
+            savedHistory?.FlushAsync().Wait(TimeSpan.FromSeconds(3));
             monitor?.Dispose();
             platform?.DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(3));
             trayIcon?.Dispose();

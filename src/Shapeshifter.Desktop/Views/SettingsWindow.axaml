@@ -59,6 +59,16 @@
           <NumericUpDown Grid.Column="2" Classes="rowControl" Minimum="1" Maximum="1000" Increment="5" FormatString="0"
                          Value="{Binding MaxHistoryItems}" AutomationProperties.Name="Items to remember" />
         </Grid>
+        <Border Classes="rowDivider" />
+        <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto">
+          <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Archive}" Stretch="Uniform" />
+          <StackPanel Grid.Column="1" Classes="rowText">
+            <TextBlock Classes="rowTitle" Text="Remember history after restart" />
+            <TextBlock Classes="rowDescription" Text="Keeps the history on this computer's disk, not just pinned items" />
+          </StackPanel>
+          <ToggleSwitch Grid.Column="2" Classes="rowControl" IsChecked="{Binding RememberHistory}"
+                        AutomationProperties.Name="Remember history after restart" />
+        </Grid>
       </StackPanel>
     </Border>
 

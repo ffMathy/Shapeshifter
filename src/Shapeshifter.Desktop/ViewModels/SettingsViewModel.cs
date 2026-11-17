@@ -29,6 +29,9 @@ public sealed partial class SettingsViewModel : ObservableObject
     private int maxHistoryItems;
 
     [ObservableProperty]
+    private bool rememberHistory;
+
+    [ObservableProperty]
     private bool startAtLogin;
 
     [ObservableProperty]
@@ -56,6 +59,7 @@ public sealed partial class SettingsViewModel : ObservableObject
         pasteDelayMilliseconds = current.PasteDelayMilliseconds;
         quietMode = current.QuietMode;
         maxHistoryItems = current.MaxHistoryItems;
+        rememberHistory = current.RememberHistory;
         startAtLogin = autostart.IsSupported && autostart.IsEnabled;
         automaticUpdates = current.AutomaticUpdates;
         if (updater is not null)
@@ -132,6 +136,9 @@ public sealed partial class SettingsViewModel : ObservableObject
 
     partial void OnMaxHistoryItemsChanged(int value) =>
         settings.Update(current => current with { MaxHistoryItems = value });
+
+    partial void OnRememberHistoryChanged(bool value) =>
+        settings.Update(current => current with { RememberHistory = value });
 
     partial void OnStartAtLoginChanged(bool value)
     {
