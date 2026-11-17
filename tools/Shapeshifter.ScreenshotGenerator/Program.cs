@@ -75,6 +75,11 @@ internal static class Program
             return LiveCapture.Run(args);
         }
 
+        // Headless rendering has no window behind the panels, so no Mica, Acrylic or glass. Without this, a look rendered
+        // on its own operating system (as CI does) would prepare its panels for the system's material, which makes them
+        // see-through, and show the wallpaper straight through them. The looks' own panels stand in for the material.
+        Environment.SetEnvironmentVariable(NativeMaterial.Variable, "off");
+
         var looks = ParseLooks(args);
         var strictFonts = args.Contains("--native-fonts");
         var lookIndex = Array.IndexOf(args, "--look");
