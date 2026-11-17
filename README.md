@@ -5,7 +5,7 @@
 [![Join the chat at https://gitter.im/ffMathy/Shapeshifter](https://badges.gitter.im/ffMathy/Shapeshifter.svg)](https://gitter.im/ffMathy/Shapeshifter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Financial Contributors on Open Collective](https://opencollective.com/shapeshifterclipboard/all/badge.svg?label=financial+contributors)](https://opencollective.com/shapeshifterclipboard)
 
-<p align="center"><img src="assets/screenshots/macos.PNG" alt="The Shapeshifter picker on macOS, showing five copied items: text, an image, files and a terminal command"></p>
+<p align="center"><img src="assets/screenshots/cover@2x.PNG" alt="Shapeshifter: copy many things, paste any of them. A free, open-source clipboard manager for Windows, macOS and Linux, shown next to its picker with five copied items"></p>
 
 <p align="center"><b>Copy many things. Paste any of them.</b><br>A clipboard manager for Windows, macOS and Linux.</p>
 
