@@ -285,6 +285,7 @@ public partial class App : Application
                 },
             },
         };
+        NativeMaterial.PrepareBackdrop(window);
         close.Click += (_, _) => window.Close();
         window.Closed += (_, _) => tcs.TrySetResult();
         if (Environment.GetEnvironmentVariable(DiagnosticsStateWriter.Variable) is not null)
