@@ -116,6 +116,60 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
     }
 
     [Fact]
+    public async Task SpaceKeepsThePickerOpen_AndEnterPastes_WithoutTypingTheKeys()
+    {
+        SkipUnlessEnabled();
+        var id = Unique();
+        await session.CopyTextAsync($"oak {id}");
+        await session.CopyTextAsync($"elm {id}");
+        await session.CopyTextAsync($"ash {id}");
+        await session.PrepareTargetAsync();
+
+        await session.PressModifierAsync();
+        await session.TapAsync(KeyCode.VcV);
+        await session.TapAsync(KeyCode.VcSpace);
+        await session.WaitForStateAsync(state => state.PickerVisible, "picker kept open after Space");
+        await session.ReleaseModifierAsync();
+
+        // Released, but still open: the arrows and digits work without the modifier and never reach the target.
+        await Task.Delay(400, TestContext.Current.CancellationToken);
+        Assert.True(session.ReadState().PickerVisible);
+        await session.TapAsync(KeyCode.VcDown);
+        await session.TapAsync(KeyCode.VcDown);
+        await session.WaitForStateAsync(state => state.SelectedIndex == 2, "selection moved to the third item");
+        await session.TapAsync(KeyCode.Vc2);
+        await session.WaitForStateAsync(state => state.SelectedIndex == 1, "selection jumped to the second item");
+        await session.TapAsync(KeyCode.VcEnter);
+
+        // A Space, digit or Enter that leaked to the target would show up in its text.
+        Assert.Equal($"elm {id}", await session.WaitForTargetTextAsync($"elm {id}"));
+        await session.WaitForStateAsync(state => !state.PickerVisible, "picker hidden after Enter");
+        await session.WaitForIdleAsync();
+    }
+
+    [Fact]
+    public async Task EscapeClosesAPickerKeptOpen_WithoutPasting()
+    {
+        SkipUnlessEnabled();
+        var id = Unique();
+        await session.CopyTextAsync($"stay {id}");
+        await session.CopyTextAsync($"newest {id}");
+        await session.PrepareTargetAsync();
+
+        await session.PressModifierAsync();
+        await session.TapAsync(KeyCode.VcV);
+        await session.TapAsync(KeyCode.VcSpace);
+        await session.WaitForStateAsync(state => state.PickerVisible, "picker kept open after Space");
+        await session.ReleaseModifierAsync();
+        await session.TapAsync(KeyCode.VcEscape);
+        await session.WaitForStateAsync(state => !state.PickerVisible, "picker hidden after Escape");
+        await session.WaitForIdleAsync();
+        await Task.Delay(500, TestContext.Current.CancellationToken);
+
+        Assert.Equal(string.Empty, await session.GetTargetTextAsync());
+    }
+
+    [Fact]
     public async Task TypingWithoutTheModifierIsNotIntercepted()
     {
         SkipUnlessEnabled();

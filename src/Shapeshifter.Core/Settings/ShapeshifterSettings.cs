@@ -43,10 +43,11 @@ public sealed record ShapeshifterSettings
         && MaxHistoryItems == other.MaxHistoryItems
         && RememberHistory == other.RememberHistory
         && AutomaticUpdates == other.AutomaticUpdates
+        && CoachingTips == other.CoachingTips
         && (UploadConsents ?? []).SequenceEqual(other.UploadConsents ?? [], StringComparer.Ordinal);
 
     public override int GetHashCode() =>
-        HashCode.Combine(PasteDelayMilliseconds, QuietMode, MaxHistoryItems, RememberHistory, AutomaticUpdates, UploadConsents?.Count ?? 0);
+        HashCode.Combine(PasteDelayMilliseconds, QuietMode, MaxHistoryItems, RememberHistory, AutomaticUpdates, CoachingTips, UploadConsents?.Count ?? 0);
 
     public ShapeshifterSettings Normalize() => this with
     {

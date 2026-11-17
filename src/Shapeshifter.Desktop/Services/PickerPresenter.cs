@@ -122,6 +122,7 @@ internal sealed class PickerPresenter : IPickerPresenter
         viewModel.UpdateActionsHeader();
         viewModel.SelectedActionIndex = state.SelectedActionIndex;
         viewModel.IsActionsPaneActive = state.Pane == PickerPane.Actions;
+        viewModel.IsHeldOpen = state.IsHeldOpen;
     }
 
     private Bitmap? GetThumbnail(ClipboardItem item)

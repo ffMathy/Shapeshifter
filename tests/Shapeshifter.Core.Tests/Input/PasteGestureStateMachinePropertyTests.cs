@@ -10,7 +10,7 @@ public sealed class PasteGestureStateMachinePropertyTests
     [
         GestureKey.Other, GestureKey.Modifier, GestureKey.Trigger, GestureKey.Up, GestureKey.Down,
         GestureKey.Left, GestureKey.Right, GestureKey.Delete, GestureKey.Escape,
-        GestureKey.Digit1, GestureKey.Digit3, GestureKey.Digit9,
+        GestureKey.Digit1, GestureKey.Digit3, GestureKey.Digit9, GestureKey.Space, GestureKey.Enter,
     ];
 
     [Theory]
@@ -47,6 +47,8 @@ public sealed class PasteGestureStateMachinePropertyTests
         for (var step = 0; step < 60; step++)
         {
             var wasActive = machine.IsActive;
+            var wasHeldOpen = machine.IsHeldOpen;
+            var wasModifierDown = machine.IsModifierDown;
             GestureResult result;
             var roll = random.Next(10);
             GestureKey? key = null;
@@ -130,6 +132,7 @@ public sealed class PasteGestureStateMachinePropertyTests
             // State-level invariants.
             Assert.Equal(pickerShown, machine.IsPickerVisible);
             Assert.True(!machine.IsPickerVisible || machine.IsActive);
+            Assert.True(!machine.IsHeldOpen || (machine.IsActive && machine.IsPickerVisible), "Held open without a visible picker.");
             if (machine.CurrentSelection is { } current)
             {
                 Assert.True(machine.IsActive);
@@ -146,7 +149,13 @@ public sealed class PasteGestureStateMachinePropertyTests
             {
                 Assert.Equal(isDown, machine.IsModifierDown);
                 Assert.False(result.Suppress, "Modifier events must never be suppressed.");
-                if (!isDown)
+                if (!isDown && wasHeldOpen)
+                {
+                    // A picker kept open (Space) survives the release and waits for Enter or Escape.
+                    Assert.Equal(GestureResult.PassThrough, result);
+                    Assert.True(machine.IsPickerVisible);
+                }
+                else if (!isDown)
                 {
                     Assert.False(machine.IsActive, "The machine must be idle after the modifier is released.");
                     Assert.False(machine.IsPickerVisible);
@@ -161,8 +170,13 @@ public sealed class PasteGestureStateMachinePropertyTests
 
             if (key is { } k && k != GestureKey.Modifier && k != GestureKey.Other && isDown)
             {
-                // While a gesture is running every gesture key-down is suppressed; when idle only V can be.
-                if (wasActive)
+                // While a gesture is running every gesture key-down is suppressed (except V without the modifier, while
+                // the picker is kept open: that is typing); when idle only V can be.
+                if (wasActive && k == GestureKey.Trigger && wasHeldOpen && !wasModifierDown)
+                {
+                    Assert.Equal(GestureResult.PassThrough, result);
+                }
+                else if (wasActive)
                 {
                     Assert.True(result.Suppress);
                 }
@@ -179,8 +193,14 @@ public sealed class PasteGestureStateMachinePropertyTests
             }
         }
 
-        // Releasing the modifier always ends with an idle machine.
+        // Releasing the modifier always ends with an idle machine, unless the picker is kept open: then Escape does.
         harness.Up(GestureKey.Modifier);
+        if (machine.IsHeldOpen)
+        {
+            Assert.True(machine.IsPickerVisible);
+            harness.Down(GestureKey.Escape);
+        }
+
         Assert.False(machine.IsActive);
         Assert.False(machine.IsPickerVisible);
     }

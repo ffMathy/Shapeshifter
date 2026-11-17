@@ -13,7 +13,15 @@ public readonly record struct GestureItem(Guid Id, int ActionCount);
 
 /// <summary>What the picker should currently display.</summary>
 /// <remarks>With an empty history the picker is shown without items (<see cref="IsEmpty"/>), to explain how to use it.</remarks>
-public sealed record PickerSelection(IReadOnlyList<Guid> ItemIds, int SelectedIndex, int SelectedActionIndex, PickerPane Pane)
+/// <param name="IsHeldOpen">
+/// The user pressed Space, so the picker stays open after the modifier is released: Enter pastes and Escape closes it.
+/// </param>
+public sealed record PickerSelection(
+    IReadOnlyList<Guid> ItemIds,
+    int SelectedIndex,
+    int SelectedActionIndex,
+    PickerPane Pane,
+    bool IsHeldOpen = false)
 {
     public bool IsEmpty => ItemIds.Count == 0;
 
@@ -69,6 +77,11 @@ public readonly record struct GestureResult(bool Suppress, IReadOnlyList<Gesture
 /// <item>1 to 9 jump to the item with that number (the first nine items, top first).</item>
 /// <item>Delete removes the selected item; Escape cancels.</item>
 /// <item>Releasing the modifier performs the selected action (normally "Paste") on the selected item.</item>
+/// <item>
+/// Space keeps the picker open after the modifier is released, to look through the history at leisure (issue #420).
+/// The navigation keys then work without the modifier, Enter performs the selected action and Escape closes the picker.
+/// </item>
+/// <item>Enter performs the selected action right away, whether or not the picker is kept open.</item>
 /// <item>V pressed together with Shift, Alt/AltGr or another modifier is left alone (Ctrl+Shift+V, AltGr+V).</item>
 /// </list>
 /// <para>
@@ -86,6 +99,7 @@ public sealed class PasteGestureStateMachine
     private bool triggerDown;
     private bool active;
     private bool pickerVisible;
+    private bool heldOpen;
     private bool selectionChanged;
     private TimeSpan startedAt;
     private List<GestureItem> items = [];
@@ -109,6 +123,9 @@ public sealed class PasteGestureStateMachine
     public bool IsPickerVisible => pickerVisible;
 
     public bool IsModifierDown => modifierDown;
+
+    /// <summary>Whether the picker stays open after the modifier is released (the user pressed Space).</summary>
+    public bool IsHeldOpen => heldOpen;
 
     public PickerSelection? CurrentSelection => active && items.Count > 0 ? CreateSelection() : null;
 
@@ -135,6 +152,8 @@ public sealed class PasteGestureStateMachine
             case GestureKey.Right:
             case GestureKey.Delete:
             case GestureKey.Escape:
+            case GestureKey.Space:
+            case GestureKey.Enter:
             case >= GestureKey.Digit1 and <= GestureKey.Digit9:
                 return OnNavigationKey(input);
             default:
@@ -181,11 +200,19 @@ public sealed class PasteGestureStateMachine
     private GestureResult OnModifierUp()
     {
         modifierDown = false;
-        if (!active)
+        if (!active || heldOpen)
         {
+            // A picker that is kept open waits for Enter or Escape.
             return GestureResult.PassThrough;
         }
 
+        // The modifier release itself always reaches the focused application.
+        return new GestureResult(false, Finish());
+    }
+
+    /// <summary>Hides the picker and pastes: the selected action, or the current clipboard if nothing was chosen.</summary>
+    private List<GestureEffect> Finish()
+    {
         var effects = new List<GestureEffect>(2);
         if (pickerVisible)
         {
@@ -202,9 +229,7 @@ public sealed class PasteGestureStateMachine
         }
 
         Reset();
-
-        // The modifier release itself always reaches the focused application.
-        return new GestureResult(false, effects);
+        return effects;
     }
 
     private GestureResult OnTriggerDown(TimeSpan now)
@@ -277,10 +302,21 @@ public sealed class PasteGestureStateMachine
             return GestureResult.Swallow;
         }
 
-        if (input.Key == GestureKey.Escape)
+        switch (input.Key)
         {
-            var cancelled = Cancel();
-            return new GestureResult(true, cancelled.Effects);
+            case GestureKey.Escape:
+                return new GestureResult(true, Cancel().Effects);
+            case GestureKey.Enter:
+                return new GestureResult(true, Finish());
+            case GestureKey.Space:
+                if (heldOpen)
+                {
+                    return GestureResult.Swallow;
+                }
+
+                // Shown right away, even before the show delay, so the user sees that it stays open.
+                heldOpen = true;
+                return new GestureResult(true, [ShowOrUpdate()]);
         }
 
         if (items.Count == 0)
@@ -410,13 +446,14 @@ public sealed class PasteGestureStateMachine
     }
 
     private PickerSelection CreateSelection() =>
-        new(items.Select(item => item.Id).ToArray(), selectedIndex, selectedActionIndex, pane);
+        new(items.Select(item => item.Id).ToArray(), selectedIndex, selectedActionIndex, pane, heldOpen);
 
     private void Reset()
     {
         // triggerDown tracks the physical key and is only cleared by its key-up.
         active = false;
         pickerVisible = false;
+        heldOpen = false;
         selectionChanged = false;
         items = [];
         selectedIndex = 0;
