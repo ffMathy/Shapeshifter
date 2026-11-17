@@ -142,9 +142,17 @@
         <!-- Footer: the keys -->
         <Border Grid.Row="2" Classes="footer">
           <WrapPanel Classes="hints">
-            <StackPanel Classes="hint">
+            <StackPanel Classes="hint" IsVisible="{Binding IsNotHeldOpen}">
               <Border Classes="key"><TextBlock Text="{Binding ModifierKey}" /></Border>
               <TextBlock Text="{x:Static loc:Strings.PickerHintRelease}" />
+            </StackPanel>
+            <StackPanel Classes="hint" IsVisible="{Binding IsHeldOpen}">
+              <Border Classes="key"><TextBlock Text="{x:Static loc:Strings.KeyEnter}" /></Border>
+              <TextBlock Text="{x:Static loc:Strings.PickerHintPaste}" />
+            </StackPanel>
+            <StackPanel Classes="hint" IsVisible="{Binding IsNotHeldOpen}">
+              <Border Classes="key"><TextBlock Text="{x:Static loc:Strings.KeySpace}" /></Border>
+              <TextBlock Text="{x:Static loc:Strings.PickerHintKeepOpen}" />
             </StackPanel>
             <StackPanel Classes="hint">
               <Border Classes="key"><TextBlock Text="V" /></Border>
@@ -165,7 +173,7 @@
             </StackPanel>
             <StackPanel Classes="hint">
               <Border Classes="key"><TextBlock Text="{x:Static loc:Strings.KeyEscape}" /></Border>
-              <TextBlock Text="{x:Static loc:Strings.PickerHintCancel}" />
+              <TextBlock Text="{Binding EscapeHint}" />
             </StackPanel>
           </WrapPanel>
         </Border>

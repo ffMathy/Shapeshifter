@@ -490,4 +490,36 @@ To paste something you copied earlier, hold {0} and press V. Keep holding {0} to
     <value>Cancel</value>
     <comment>Button that closes a dialog without doing anything.</comment>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Press Space to keep the history open without holding the key, then Enter to paste.</value>
+    <comment>Appended directly after PickerEmptyHint (the empty-picker explanation). Starts with a space because it follows a sentence: keep a leading space if your language separates sentences with a space, and drop it if not (Chinese, Japanese, Thai). Keep Space and Enter as key names (you may use the local key names).</comment>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> To look through the history without holding {0}, press Space: it stays open until you press Enter to paste or Esc.</value>
+    <comment>Appended directly after SettingsUsage. Starts with a space because it follows a sentence: keep a leading space if your language separates sentences with a space, and drop it if not (Chinese, Japanese, Thai). {0} is the modifier key (Ctrl or Cmd).</comment>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Press Enter to paste</value>
+    <comment>Picker header hint while the picker is kept open with Space.</comment>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Close</value>
+    <comment>Footer hint next to the Esc key cap while the picker is kept open. One short word.</comment>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Paste</value>
+    <comment>Footer hint next to the Enter key cap. One short word.</comment>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Keep open</value>
+    <comment>Footer hint next to the Space key cap: keep the picker open without holding the modifier key. Short.</comment>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+    <comment>Label of the Enter key as printed on keyboards in this language (German: Eingabe is rare; Enter or ↵ is fine). Very short.</comment>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Space</value>
+    <comment>Label of the Space bar on a key cap in this language (German: Leertaste). Short.</comment>
+  </data>
 </root>

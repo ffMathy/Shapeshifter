@@ -74,7 +74,7 @@ public sealed partial class SettingsViewModel : ObservableObject
         var modifier = Localizer.ModifierKey(modifierName);
         DelayDescription = Localizer.Format(Strings.SettingsDelayDescription, modifier);
         Warnings = string.Join(Environment.NewLine + Environment.NewLine, warnings);
-        Usage = Localizer.Format(Strings.SettingsUsage, modifier);
+        Usage = Localizer.Format(Strings.SettingsUsage, modifier) + Localizer.Format(Strings.SettingsUsageHoldOpen, modifier);
     }
 
     public string Usage { get; }
