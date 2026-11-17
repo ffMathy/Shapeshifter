@@ -25,6 +25,11 @@ public sealed partial class PickerViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsItemsPaneActive))]
     private bool isActionsPaneActive;
 
+    /// <summary>The user pressed Space, so the picker stays open after the modifier is released (issue #420).</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ReleaseHint), nameof(IsNotHeldOpen), nameof(EscapeHint))]
+    private bool isHeldOpen;
+
     /// <summary>Height available to the history on the current screen, in window units.</summary>
     [ObservableProperty]
     private double maxListHeight = 600;
@@ -67,8 +72,13 @@ public sealed partial class PickerViewModel : ObservableObject
     /// <summary>The key cap of the modifier in the footer: "Ctrl" or "⌘".</summary>
     public string ModifierKey { get; }
 
-    /// <summary>"Release Ctrl to paste".</summary>
-    public string ReleaseHint => $"Release {ModifierKey} to paste";
+    /// <summary>"Release Ctrl to paste", or "Press Enter to paste" while the picker is kept open.</summary>
+    public string ReleaseHint => IsHeldOpen ? "Press Enter to paste" : $"Release {ModifierKey} to paste";
+
+    public bool IsNotHeldOpen => !IsHeldOpen;
+
+    /// <summary>What Esc does: cancel the paste, or close a picker that is kept open.</summary>
+    public string EscapeHint => IsHeldOpen ? "Close" : "Cancel";
 
     public ObservableCollection<PickerItemViewModel> Items { get; } = [];
 
@@ -86,7 +96,8 @@ public sealed partial class PickerViewModel : ObservableObject
     public static string CreateEmptyHint(string modifier) =>
         "Copy as usual, and Shapeshifter keeps everything you copy.\n\n" +
         $"To paste something you copied earlier, hold {modifier} and press V. Keep holding {modifier} to see the history, " +
-        $"press V or the arrow keys to choose, and release {modifier} to paste.";
+        $"press V or the arrow keys to choose, and release {modifier} to paste. Press Space to keep the history open " +
+        "without holding the key, then Enter to paste.";
 
     public ObservableCollection<PickerActionViewModel> Actions { get; } = [];
 

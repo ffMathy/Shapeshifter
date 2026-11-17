@@ -12,12 +12,14 @@ namespace Shapeshifter.Core.Engine;
 public sealed record PickerActionView(string Title, string Description);
 
 /// <summary>What the picker displays.</summary>
+/// <param name="IsHeldOpen">The picker stays open after the modifier is released; Enter pastes (issue #420).</param>
 public sealed record PickerViewState(
     IReadOnlyList<ClipboardItem> Items,
     int SelectedIndex,
     IReadOnlyList<PickerActionView> Actions,
     int SelectedActionIndex,
-    PickerPane Pane);
+    PickerPane Pane,
+    bool IsHeldOpen = false);
 
 /// <summary>The picker UI. Implementations marshal to their UI thread and must not take keyboard focus.</summary>
 public interface IPickerPresenter
@@ -341,7 +343,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
     {
         if (selection.IsEmpty)
         {
-            return new PickerViewState([], 0, [], 0, PickerPane.Items);
+            return new PickerViewState([], 0, [], 0, PickerPane.Items, selection.IsHeldOpen);
         }
 
         lock (session)
@@ -353,7 +355,8 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
                 selection.SelectedIndex,
                 selected.Actions.Select(action => new PickerActionView(action.GetTitle(selected.Item), action.GetDescription(selected.Item))).ToArray(),
                 selection.SelectedActionIndex,
-                selection.Pane);
+                selection.Pane,
+                selection.IsHeldOpen);
         }
     }
 

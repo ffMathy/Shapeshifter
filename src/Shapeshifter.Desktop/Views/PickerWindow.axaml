@@ -156,9 +156,17 @@
         <!-- Footer: the keys -->
         <Border Grid.Row="2" Classes="footer">
           <WrapPanel Classes="hints">
-            <StackPanel Classes="hint">
+            <StackPanel Classes="hint" IsVisible="{Binding IsNotHeldOpen}">
               <Border Classes="key"><TextBlock Text="{Binding ModifierKey}" /></Border>
               <TextBlock Text="Release to paste" />
+            </StackPanel>
+            <StackPanel Classes="hint" IsVisible="{Binding IsHeldOpen}">
+              <Border Classes="key"><TextBlock Text="Enter" /></Border>
+              <TextBlock Text="Paste" />
+            </StackPanel>
+            <StackPanel Classes="hint" IsVisible="{Binding IsNotHeldOpen}">
+              <Border Classes="key"><TextBlock Text="Space" /></Border>
+              <TextBlock Text="Keep open" />
             </StackPanel>
             <StackPanel Classes="hint">
               <Border Classes="key"><TextBlock Text="V" /></Border>
@@ -179,7 +187,7 @@
             </StackPanel>
             <StackPanel Classes="hint">
               <Border Classes="key"><TextBlock Text="Esc" /></Border>
-              <TextBlock Text="Cancel" />
+              <TextBlock Text="{Binding EscapeHint}" />
             </StackPanel>
           </WrapPanel>
         </Border>
