@@ -99,6 +99,37 @@ public sealed partial class PickerItemViewModel : ObservableObject
         {
             SourceText = CreateFallbackSubtitle(item);
         }
+
+        PreviewText = CreatePreviewText(item);
+        PreviewCaption = CreatePreviewCaption(item, Title);
+        PreviewCaptionGlyph = Glyph;
+        IsCodeLike = item.Kind == ClipboardContentKind.Text && LooksLikeCode(item.Snapshot.Text);
+        if (ColorSwatch is not null && ColorParser.TryParse(item.Snapshot.Text, out var parsed))
+        {
+            ColorHex = parsed.A == 255
+                ? string.Create(CultureInfo.InvariantCulture, $"#{parsed.R:X2}{parsed.G:X2}{parsed.B:X2}")
+                : string.Create(CultureInfo.InvariantCulture, $"#{parsed.R:X2}{parsed.G:X2}{parsed.B:X2}{parsed.A:X2}");
+            ColorRgb = parsed.A == 255
+                ? string.Create(CultureInfo.InvariantCulture, $"rgb({parsed.R}, {parsed.G}, {parsed.B})")
+                : string.Create(CultureInfo.InvariantCulture, $"rgba({parsed.R}, {parsed.G}, {parsed.B}, {parsed.A / 255.0:0.##})");
+            PreviewCaption = ColorRgb;
+        }
+
+        if (item.Kind == ClipboardContentKind.File)
+        {
+            var path = Path.TrimEndingDirectorySeparator(files[0]);
+            PreviewFileName = Path.GetFileName(path) is { Length: > 0 } name ? name : path;
+            PreviewFileFolder = Path.GetDirectoryName(path) ?? string.Empty;
+
+            // The name is shown large, so the line below gives its folder.
+            PreviewCaption = PreviewFileFolder;
+            PreviewCaptionGlyph = Glyphs.Folder;
+        }
+
+        // The icons of the listed files are only fetched when the item is previewed.
+        previewFiles = new Lazy<IReadOnlyList<PickerPreviewFileViewModel>>(() => item.Kind == ClipboardContentKind.FileCollection
+            ? files.Take(MaxPreviewFiles).Select(file => new PickerPreviewFileViewModel(file, visuals?.GetFileIcon(file, FileIconSize))).ToArray()
+            : []);
     }
 
     public Guid Id { get; }
@@ -172,19 +203,165 @@ public sealed partial class PickerItemViewModel : ObservableObject
 
     public bool HasSourceText => SourceText.Length > 0;
 
+    // ---------------------------------------------------------------- The preview pane above the actions (issue #54)
+
+    /// <summary>
+    /// The text in the preview pane: much more of it than the row's one or two lines. Empty for anything but text, and
+    /// for a colour code, which shows its colour instead.
+    /// </summary>
+    public string PreviewText { get; }
+
+    public bool HasPreviewText => PreviewText.Length > 0;
+
+    /// <summary>Text that looks like code or a command, shown in a monospaced font.</summary>
+    public bool IsCodeLike { get; }
+
+    /// <summary>
+    /// The line under the preview: "3 lines · 120 characters", "Image · 1920 × 1080", "4 files", the folder of a file
+    /// or the rgb() notation of a colour.
+    /// </summary>
+    public string PreviewCaption { get; }
+
+    /// <summary>The line icon before <see cref="PreviewCaption"/>: the kind of item, or a folder before a folder.</summary>
+    public Geometry PreviewCaptionGlyph { get; }
+
+    /// <summary>A copied colour as "#2C5497", next to its swatch.</summary>
+    public string ColorHex { get; } = string.Empty;
+
+    /// <summary>A copied colour as "rgb(44, 84, 151)", the caption under its swatch.</summary>
+    public string ColorRgb { get; } = string.Empty;
+
+    /// <summary>The name of a single copied file, large next to its icon.</summary>
+    public string PreviewFileName { get; } = string.Empty;
+
+    /// <summary>The folder of a single copied file, the caption under its name.</summary>
+    public string PreviewFileFolder { get; } = string.Empty;
+
+    private readonly Lazy<IReadOnlyList<PickerPreviewFileViewModel>> previewFiles;
+
+    /// <summary>The first <see cref="MaxPreviewFiles"/> of several copied files, each with its icon.</summary>
+    public IReadOnlyList<PickerPreviewFileViewModel> PreviewFiles => previewFiles.Value;
+
+    /// <summary>"+12" below the list when more files were copied than it shows.</summary>
+    public string MorePreviewFiles => item.Snapshot.Files.Count > MaxPreviewFiles
+        ? string.Create(CultureInfo.CurrentCulture, $"+{item.Snapshot.Files.Count - MaxPreviewFiles}")
+        : string.Empty;
+
+    public bool HasMorePreviewFiles => MorePreviewFiles.Length > 0;
+
+    /// <summary>
+    /// The copied image decoded larger than <see cref="Thumbnail"/>, for the preview pane. Only the selected item has
+    /// one (the presenter decodes it when the item is selected and drops it when another is).
+    /// </summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PreviewImage))]
+    [NotifyPropertyChangedFor(nameof(ShowsPreviewImage))]
+    private Bitmap? largeImage;
+
+    /// <summary>The image in the preview pane: the large one once it is decoded, the thumbnail until then.</summary>
+    public Bitmap? PreviewImage => LargeImage ?? Thumbnail;
+
+    public bool ShowsPreviewImage => PreviewImage is not null && Layout == PickerItemLayout.Image;
+
+    /// <summary>A large line icon when there is nothing else to preview (an image that could not be decoded, other data).</summary>
+    public bool ShowsPreviewGlyph => !HasPreviewText && !ShowsPreviewImage && ColorSwatch is null && !IsFileLayout && !IsFilesLayout;
+
+    /// <summary>How much of a text the preview takes; the pane only shows the first lines anyway.</summary>
+    internal const int MaxPreviewLength = 2000;
+
+    /// <summary>How many of several copied files the preview lists.</summary>
+    internal const int MaxPreviewFiles = 6;
+
+    /// <summary>
+    /// Whether a text reads as code or a command rather than prose: several lines with indentation or code
+    /// punctuation at their ends, or a single line typed at a prompt.
+    /// </summary>
+    internal static bool LooksLikeCode(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return false;
+        }
+
+        var lines = text.Replace("\r\n", "\n", StringComparison.Ordinal).Split('\n');
+        if (lines.Length == 1)
+        {
+            // "dotnet run --project src/App", "git checkout -b fix", "npm install": no sentence ends with a flag.
+            var line = lines[0].Trim();
+            return !line.Contains(". ", StringComparison.Ordinal) && line.Split(' ').Any(word => word.StartsWith('-') && word.Length > 1);
+        }
+
+        var codeLines = lines.Count(line =>
+            line.StartsWith("  ", StringComparison.Ordinal) || line.StartsWith('\t')
+            || (line.TrimEnd() is { Length: > 0 } trimmed && trimmed[^1] is ';' or '{' or '}' or ')' or '>'));
+        return codeLines * 3 >= lines.Count(line => line.Trim().Length > 0);
+    }
+
+    internal static string CreatePreviewText(ClipboardItem item)
+    {
+        switch (item.Kind)
+        {
+            case ClipboardContentKind.Text when ColorParser.TryParse(item.Snapshot.Text, out _):
+                // A colour code shows its colour, filling the pane.
+                return string.Empty;
+            case ClipboardContentKind.Text:
+                var text = item.Snapshot.Text ?? item.PreviewText ?? string.Empty;
+                if (text.Length > MaxPreviewLength)
+                {
+                    text = text[..MaxPreviewLength] + "…";
+                }
+
+                // Line endings of every platform show as one line break, and tabs as a few spaces (a tab is drawn as
+                // nothing, so indented code would lose its indentation).
+                return text.Replace("\r\n", "\n", StringComparison.Ordinal).Replace('\r', '\n').Replace("\t", "    ", StringComparison.Ordinal);
+            default:
+                return string.Empty;
+        }
+    }
+
+    /// <remarks>Made of the strings the rows already use, so it needs no translations of its own.</remarks>
+    internal static string CreatePreviewCaption(ClipboardItem item, string title)
+    {
+        var snapshot = item.Snapshot;
+        switch (item.Kind)
+        {
+            case ClipboardContentKind.Image:
+            case ClipboardContentKind.File:
+                return title;
+            case ClipboardContentKind.FileCollection:
+                return Localizer.Format(Strings.ItemFileCount, snapshot.Files.Count);
+            case ClipboardContentKind.Text when ColorParser.TryParse(snapshot.Text, out _):
+                return snapshot.Text!.Trim();
+            case ClipboardContentKind.Text:
+                var text = snapshot.Text ?? string.Empty;
+                var lines = text.Length == 0 ? 0 : text.AsSpan().Count('\n') + 1;
+                var characters = Localizer.Format(Strings.ItemCharacterCount, text.Length);
+                var size = lines <= 1 ? characters : Localizer.Format(Strings.ItemLineCount, lines) + " · " + characters;
+                return ClipboardFormatClassifier.FindRichText(snapshot) is not null ? Strings.ItemFormattedText + " · " + size : size;
+            default:
+                return Strings.ItemOtherData;
+        }
+    }
+
+    /// <summary>The copied PNG, for an image.</summary>
+    public byte[]? Image => item.Snapshot.Image;
+
     /// <summary>"Image · 1920 × 1080" when the size can be read from the PNG header, otherwise "Image".</summary>
-    internal static string DescribeImage(byte[]? png)
+    internal static string DescribeImage(byte[]? png) => ReadPngSize(png) is { } size
+        ? Localizer.Format(Strings.ItemImageWithSize, size.Width, size.Height)
+        : Strings.ItemImage;
+
+    /// <summary>The size of a PNG, read from its header, or null when it is not a PNG.</summary>
+    internal static (uint Width, uint Height)? ReadPngSize(byte[]? png)
     {
         // A PNG starts with an 8-byte signature followed by the IHDR chunk: length, type, width, height (big-endian).
         ReadOnlySpan<byte> signature = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
         if (png is { Length: >= 24 } && png.AsSpan(0, 8).SequenceEqual(signature))
         {
-            var width = BinaryPrimitives.ReadUInt32BigEndian(png.AsSpan(16, 4));
-            var height = BinaryPrimitives.ReadUInt32BigEndian(png.AsSpan(20, 4));
-            return Localizer.Format(Strings.ItemImageWithSize, width, height);
+            return (BinaryPrimitives.ReadUInt32BigEndian(png.AsSpan(16, 4)), BinaryPrimitives.ReadUInt32BigEndian(png.AsSpan(20, 4)));
         }
 
-        return Strings.ItemImage;
+        return null;
     }
 
     /// <summary>"4 items · Projects, Notes.txt, Holiday.mp4, Sunset.png".</summary>
@@ -222,6 +399,23 @@ public enum PickerItemLayout
     Image,
     Files,
     File,
+}
+
+/// <summary>One of several copied files in the preview: its icon and name.</summary>
+public sealed class PickerPreviewFileViewModel(string path, Bitmap? icon)
+{
+    public string Name { get; } = Path.GetFileName(Path.TrimEndingDirectorySeparator(path)) is { Length: > 0 } name ? name : path;
+
+    public Bitmap? Icon { get; } = icon;
+
+    public bool HasIcon => Icon is not null;
+
+    public bool HasNoIcon => Icon is null;
+
+    /// <summary>A folder or file line icon when the system has no icon for it.</summary>
+    public Geometry FallbackGlyph { get; } = path.EndsWith(Path.DirectorySeparatorChar) || path.EndsWith(Path.AltDirectorySeparatorChar)
+        ? Glyphs.Folder
+        : Glyphs.File;
 }
 
 /// <summary>The icon of one kind of copied file on the tile of several files.</summary>
