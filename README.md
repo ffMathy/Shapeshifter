@@ -5,48 +5,45 @@
 [![Join the chat at https://gitter.im/ffMathy/Shapeshifter](https://badges.gitter.im/ffMathy/Shapeshifter.svg)](https://gitter.im/ffMathy/Shapeshifter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Financial Contributors on Open Collective](https://opencollective.com/shapeshifterclipboard/all/badge.svg?label=financial+contributors)](https://opencollective.com/shapeshifterclipboard)
 
-Shapeshifter is a clipboard manager that lets you copy multiple items and choose which one to paste later, without losing any of them. It runs on **Windows, macOS and Linux** and is built with .NET 11 and [Avalonia](https://avaloniaui.net).
+<p align="center"><img src="assets/screenshots/macos.PNG" alt="The Shapeshifter picker on macOS, showing five copied items: text, an image, files and a terminal command"></p>
 
-<b>To get Shapeshifter or to see more information, go to the website:</b> [https://shapeshifter.app](https://shapeshifter.app). Builds for every platform are attached to the [GitHub releases](https://github.com/ffMathy/Shapeshifter/releases) and to every CI run.
+<p align="center"><b>Copy many things. Paste any of them.</b><br>A clipboard manager for Windows, macOS and Linux.</p>
 
-Shapeshifter looks at home on each platform: Fluent 2 on Windows, Liquid Glass on macOS, and GNOME's libadwaita on Linux. Each look follows your system accent colour.
+<p align="center"><a href="https://shapeshifter.app"><b>shapeshifter.app</b></a> · <a href="https://github.com/ffMathy/Shapeshifter/releases">Download</a></p>
+
+## Hold <kbd>Ctrl</kbd>+<kbd>V</kbd>
+
+Tap it and it pastes as always. Keep holding <kbd>Ctrl</kbd> and your history appears. Press <kbd>V</kbd> to move, release to paste.
+
+| Pick an item | <kbd>→</kbd> to choose what to do with it |
+|---|---|
+| ![The history, with the newest item selected](assets/screenshots/windows.PNG) | ![The actions for the selected text, with "Paste as plain text" chosen](assets/screenshots/actions.PNG) |
+
+<kbd>Delete</kbd> removes an item, <kbd>Esc</kbd> cancels. On macOS it's <kbd>Cmd</kbd>+<kbd>V</kbd>.
+
+## At home on every platform
 
 | Windows | macOS | Linux |
 |---|---|---|
 | ![The picker on Windows](assets/screenshots/windows.PNG) | ![The picker on macOS](assets/screenshots/macos.PNG) | ![The picker on Linux](assets/screenshots/linux.PNG) |
+| ![Settings on Windows](assets/screenshots/settings-windows.PNG) | ![Settings on macOS](assets/screenshots/settings-macos.PNG) | ![Settings on Linux](assets/screenshots/settings-linux.PNG) |
+| ![Copy notification on Windows](assets/screenshots/toast-windows.PNG) | ![Copy notification on macOS](assets/screenshots/toast-macos.PNG) | ![Copy notification on Linux](assets/screenshots/toast-linux.PNG) |
 
-## How it works
+## In your accent colour
 
-Copy as usual. Shapeshifter remembers what you copied, including every clipboard format (rich text, HTML, images, files and application-specific data), so an item is restored exactly when you paste it.
+| | | | |
+|---|---|---|---|
+| ![Blue accent](assets/screenshots/blue.PNG) | ![Green accent](assets/screenshots/green.PNG) | ![Purple accent](assets/screenshots/purple.PNG) | ![Red accent](assets/screenshots/red.PNG) |
 
-| You do | Shapeshifter does |
-|---|---|
-| <kbd>Ctrl</kbd>+<kbd>V</kbd> (tap) | Pastes normally. |
-| Hold <kbd>Ctrl</kbd>, press <kbd>V</kbd> and keep holding <kbd>Ctrl</kbd> | Shows your clipboard history after a short delay (300 ms by default). |
-| Press <kbd>V</kbd> again, or <kbd>↑</kbd>/<kbd>↓</kbd> | Selects the next (older) or previous item. |
-| <kbd>←</kbd> / <kbd>→</kbd> | Switches between the items and the actions for the selected item. |
-| <kbd>Delete</kbd> | Removes the selected item from the history. |
-| <kbd>Esc</kbd> | Cancels; nothing is pasted. |
-| Release <kbd>Ctrl</kbd> | Pastes the selected item (or performs the selected action). |
+## Good to know
 
-On macOS, use <kbd>Cmd</kbd> instead of <kbd>Ctrl</kbd>. Shortcuts that add another modifier, such as <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> in terminals or <kbd>AltGr</kbd>+<kbd>V</kbd>, are left to the application.
+- **Everything is kept:** rich text, HTML, images, files and app-specific formats are restored exactly.
+- **Passwords are skipped:** content that password managers mark as sensitive is never recorded.
+- **Pinned items** survive restarts. Nothing ever leaves your computer.
+- **macOS** needs Accessibility access. **Linux** works fully on X11; on Wayland only while an X11 app is focused.
 
-Shapeshifter does not record clipboard content that password managers mark as sensitive (Windows `ExcludeClipboardContentFromMonitorProcessing` / `CanIncludeInClipboardHistory`, macOS `org.nspasteboard.ConcealedType` and related types, KDE `x-kde-passwordManagerHint`).
-
-Actions available for an item, depending on its content: **Paste**, **Copy as file** (saves text to a `.txt` file), **Paste as plain text**, **Copy as compressed folder** (zips copied files), **Copy image from link**, **Open links**, and **Pin to clipboard / Unpin from clipboard** (pinned items are kept across restarts).
-
-Settings (tray icon → Settings) include the delay before the history appears, the number of items to keep, copy notifications and starting at login.
-
-## Platform support
-
-| Platform | Status | Notes |
-|---|---|---|
-| Windows 10/11 (x64, Arm64) | Supported | No special permissions needed. |
-| macOS (Apple silicon, Intel) | Supported | Grant **Accessibility** access (System Settings → Privacy & Security → Accessibility). macOS requires it for any app that observes or sends keystrokes. |
-| Linux, X11 session (x64, Arm64) | Supported | Works on any X11 desktop. A system tray (StatusNotifierItem or XEmbed) is optional. |
-| Linux, Wayland session | Limited | Wayland does not let applications observe or send global keystrokes. Shapeshifter runs through XWayland, so the paste gesture only works while an X11 application is focused. Log in to an X11 session for full support. |
-
-Where data lives:
+<details>
+<summary>Where your data lives</summary>
 
 | | Settings | Pinned items and logs |
 |---|---|---|
@@ -54,91 +51,10 @@ Where data lives:
 | macOS | `~/Library/Application Support/Shapeshifter` | same, logs in `~/Library/Logs/Shapeshifter` |
 | Linux | `$XDG_CONFIG_HOME/shapeshifter` | `$XDG_DATA_HOME/shapeshifter` |
 
-## Building from source
-
-Install the [.NET 11 SDK](https://dotnet.microsoft.com/download), then:
-
-```bash
-dotnet build Shapeshifter.slnx
-dotnet run --project src/Shapeshifter.Desktop
-```
-
-To produce a self-contained, single-file build for a platform (the output folder holds only the executable; debug symbols are embedded) (`win-x64`, `win-arm64`, `osx-arm64`, `osx-x64`, `linux-x64`, `linux-arm64`):
-
-```bash
-dotnet publish src/Shapeshifter.Desktop -c Release -r linux-x64 -o publish
-```
-
-### Screenshots
-
-The screenshots in `assets/screenshots` (also used by the website) are rendered from the real picker of each look with sample content. To run the app in another platform's look, set `SHAPESHIFTER_LOOK` to `windows`, `macos` or `linux`. After changing how the picker looks, regenerate them with:
-
-```bash
-scripts/generate-screenshots.sh
-```
-
-CI does the same on every pull request and commits changed screenshots to the pull request's branch.
-
-### Tests
-
-```bash
-dotnet test --project tests/Shapeshifter.Core.Tests
-```
-
-The end-to-end tests start Shapeshifter and a separate target application, copy through the real operating system clipboard and paste with real keystrokes. They need a desktop session:
-
-```bash
-# Linux (starts Xvfb and openbox when no display is available)
-scripts/run-e2e-linux.sh
-
-# Windows, or any machine with a desktop session
-SHAPESHIFTER_E2E=1 dotnet test --project tests/Shapeshifter.EndToEnd.Tests
-```
-
-On macOS the terminal running the tests needs Accessibility access.
-
-### Website
-
-The website, [shapeshifter.app](https://shapeshifter.app), is the static site in `website/`: plain HTML, CSS and a little JavaScript, with no build step. The [Website workflow](.github/workflows/website.yml) deploys it to GitHub Pages whenever it, the screenshots or the app icons change on `master`. At build time the workflow copies `assets/screenshots` and the app icons into the site, renders each look's settings window and notification with the screenshot generator, checks that every local link and image exists (`scripts/check-website.py`) and deploys the result, so the site always shows the current app.
-
-To preview it locally (renders the settings and notification screenshots too when the .NET SDK is installed):
-
-```bash
-website/preview.sh    # then open http://localhost:8000
-```
-
-### Project layout
-
-| Project | Purpose |
-|---|---|
-| `src/Shapeshifter.Core` | Platform-independent logic: clipboard history, the paste gesture state machine, actions, persistence, settings. |
-| `src/Shapeshifter.Platform` | Operating system integration: global keyboard hook and paste simulation ([SharpHook](https://github.com/TolikPylypchuk/SharpHook)), X11 key grabs and clipboard notifications, autostart. |
-| `src/Shapeshifter.Desktop` | The Avalonia application: picker, notifications, settings, tray icon and clipboard access. |
-| `website/` | The static website, [shapeshifter.app](https://shapeshifter.app) (see [Website](#website)). |
-| `tests/` | Unit tests and the end-to-end suite. |
-
-See [docs/architecture.md](docs/architecture.md) for how the pieces fit together.
-
-### Releasing
-
-Every merge to `master` is released (merges that land while a release is being built are released together). CI builds and tests the merge, publishes all six platforms and creates a GitHub release with the archives attached and release notes generated from the merged pull requests.
-
-The version is worked out by `scripts/next-version.sh`: the newest `v*` tag with its patch number increased (v7.1.0 → v7.1.1), or the `<Version>` in `Directory.Build.props` when that is newer. To release a new minor or major version, raise `<Version>` in the pull request (for example to `7.2.0` or `8.0.0`).
-
-For a prerelease, push a tag with a suffix instead:
-
-```bash
-git tag v7.2.0-beta.1
-git push origin v7.2.0-beta.1
-```
-
-You can also start the CI workflow manually on `master` (Actions → CI → Run workflow) with **release_tag** set to a version, such as `v7.2.0`.
+</details>
 
 # Contributing
-Feel free to contribute! See [CONTRIBUTING.md](CONTRIBUTING.md) for how to build, test and send a pull request, and look for issues labelled [`good first issue`](https://github.com/ffMathy/Shapeshifter/labels/good%20first%20issue) to get started.
-
-# Can Shapeshifter be trusted?
-Shapeshifter can be fully trusted, and hopefully having it 100% open-source helps showing that. Shapeshifter does not send your clipboard data anywhere. Pinned items are stored only on your own computer, in the folders listed above.
+Feel free to contribute! See [CONTRIBUTING.md](CONTRIBUTING.md) for how to build, test and send a pull request, [docs/architecture.md](docs/architecture.md) for how the pieces fit together, and look for issues labelled [`good first issue`](https://github.com/ffMathy/Shapeshifter/labels/good%20first%20issue) to get started.
 
 ## Contributors
 

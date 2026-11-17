@@ -45,10 +45,11 @@ internal static class Program
     ];
 
     /// <summary>
-    /// <c>[output-folder] [--surfaces]</c>, or <c>[output-folder] --live</c> to capture the real windows on the screen
-    /// (see <see cref="LiveCapture"/>). With <c>--surfaces</c>, the settings window and the copy notification of
-    /// each look are rendered as well (<c>settings-&lt;look&gt;.PNG</c>, <c>toast-&lt;look&gt;.PNG</c>), and its picker with an empty
-    /// history (<c>empty-&lt;look&gt;.PNG</c>), for reviewing a look.
+    /// <c>[output-folder]</c>, or <c>[output-folder] --live</c> to capture the real windows on the screen
+    /// (see <see cref="LiveCapture"/>). Besides the pickers above, the picker with its actions chosen
+    /// (<c>actions.PNG</c>) is rendered, and for each look its settings window (<c>settings-&lt;look&gt;.PNG</c>), its copy
+    /// notification (<c>toast-&lt;look&gt;.PNG</c>) and its picker with an empty history (<c>empty-&lt;look&gt;.PNG</c>). The README
+    /// and the website show them.
     /// </summary>
     public static int Main(string[] args)
     {
@@ -57,7 +58,6 @@ internal static class Program
             return LiveCapture.Run(args);
         }
 
-        var surfaces = args.Contains("--surfaces");
         var folder = args.FirstOrDefault(arg => !arg.StartsWith("--", StringComparison.Ordinal));
         var output = Path.GetFullPath(folder ?? Path.Combine("assets", "screenshots"));
         Directory.CreateDirectory(output);
@@ -76,23 +76,26 @@ internal static class Program
             Console.WriteLine($"Wrote {path}");
         }
 
-        if (surfaces)
+        // The actions of the selected item, chosen with the right arrow key, with "Paste as plain text" selected.
+        var actions = Path.Combine(output, "actions.PNG");
+        UseLook(Look.Windows, null);
+        RenderPicker(Look.Windows, 1.25, 1400, 820, actions, selectedAction: 2);
+        Console.WriteLine($"Wrote {actions}");
+
+        foreach (var look in Enum.GetValues<Look>())
         {
-            foreach (var look in Enum.GetValues<Look>())
-            {
-                UseLook(look, null);
-                var settings = Path.Combine(output, $"settings-{look.ToString().ToLowerInvariant()}.PNG");
-                RenderWindow(CreateSettingsWindow(), look, settings);
-                Console.WriteLine($"Wrote {settings}");
-                var emptyPicker = Path.Combine(output, $"empty-{look.ToString().ToLowerInvariant()}.PNG");
-                RenderPicker(look, 1.25, 1400, 820, emptyPicker, empty: true);
-                Console.WriteLine($"Wrote {emptyPicker}");
-                var toast = Path.Combine(output, $"toast-{look.ToString().ToLowerInvariant()}.PNG");
-                var toastWindow = new ToastWindow();
-                toastWindow.SetContent(5, "Shapeshifter is a freeware clipboard manager, originally developed by defunct Flamefusion company");
-                RenderWindow(toastWindow, look, toast);
-                Console.WriteLine($"Wrote {toast}");
-            }
+            UseLook(look, null);
+            var settings = Path.Combine(output, $"settings-{look.ToString().ToLowerInvariant()}.PNG");
+            RenderWindow(CreateSettingsWindow(), look, settings);
+            Console.WriteLine($"Wrote {settings}");
+            var emptyPicker = Path.Combine(output, $"empty-{look.ToString().ToLowerInvariant()}.PNG");
+            RenderPicker(look, 1.25, 1400, 820, emptyPicker, empty: true);
+            Console.WriteLine($"Wrote {emptyPicker}");
+            var toast = Path.Combine(output, $"toast-{look.ToString().ToLowerInvariant()}.PNG");
+            var toastWindow = new ToastWindow();
+            toastWindow.SetContent(5, "Shapeshifter is a freeware clipboard manager, originally developed by defunct Flamefusion company");
+            RenderWindow(toastWindow, look, toast);
+            Console.WriteLine($"Wrote {toast}");
         }
 
         return 0;
@@ -128,7 +131,9 @@ internal static class Program
         return viewModel;
     }
 
-    private static void RenderPicker(Look look, double scale, int width, int height, string path, bool empty = false)
+    /// <param name="selectedAction">When set, the actions pane is active with this action selected.</param>
+    private static void RenderPicker(
+        Look look, double scale, int width, int height, string path, bool empty = false, int? selectedAction = null)
     {
         var photo = SampleArt.Banner(900, 600);
         using var thumbnail = ToBitmap(photo);
@@ -136,6 +141,11 @@ internal static class Program
             ? new PickerViewModel(look == Look.MacOS ? "Cmd" : "Ctrl") { MaxListHeight = 10_000 }
             : CreateSampleViewModel(look, photo, thumbnail);
         viewModel.IsOpaque = false;
+        if (selectedAction is { } action)
+        {
+            viewModel.IsActionsPaneActive = true;
+            viewModel.SelectedActionIndex = action;
+        }
 
         // The picker's own window cannot be captured over a desktop, so its content is moved into a window that
         // also shows a desktop background behind it.
