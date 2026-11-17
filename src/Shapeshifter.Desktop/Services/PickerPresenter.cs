@@ -7,6 +7,7 @@ using Serilog;
 using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Engine;
 using Shapeshifter.Core.Input;
+using Shapeshifter.Core.Previews;
 using Shapeshifter.Core.Platform;
 using Shapeshifter.Desktop.ViewModels;
 using Shapeshifter.Desktop.Views;
@@ -39,14 +40,23 @@ internal sealed class PickerPresenter : IPickerPresenter
     private readonly ILogger logger;
     private readonly PickerVisuals visuals;
     private readonly PickerViewModel viewModel;
+    private readonly LinkedImageLoader? linkedImages;
     private readonly Dictionary<Guid, Bitmap?> thumbnails = [];
+    private readonly Dictionary<Guid, Bitmap> linkedThumbnails = [];
     private (PickerItemViewModel Item, Bitmap? Bitmap)? previewImage;
     private PickerWindow? window;
     private Func<PickerSearchInput, bool>? searchInput;
     private bool activatedForSearch;
 
-    public PickerPresenter(ICursorLocator cursorLocator, PickerVisuals visuals, string modifierName, ILogger logger, IWindowFocus? windowFocus = null)
+    public PickerPresenter(
+        ICursorLocator cursorLocator,
+        PickerVisuals visuals,
+        string modifierName,
+        ILogger logger,
+        IWindowFocus? windowFocus = null,
+        LinkedImageLoader? linkedImages = null)
     {
+        this.linkedImages = linkedImages;
         viewModel = new PickerViewModel(modifierName);
         viewModel.PropertyChanged += (_, e) =>
         {
@@ -232,13 +242,21 @@ internal sealed class PickerPresenter : IPickerPresenter
             viewModel.Items.Clear();
             foreach (var item in state.Items)
             {
-                viewModel.Items.Add(new PickerItemViewModel(item, GetThumbnail(item), visuals));
+                var row = new PickerItemViewModel(item, GetThumbnail(item), visuals);
+                viewModel.Items.Add(row);
+                ShowLinkedThumbnail(row);
             }
 
             foreach (var stale in thumbnails.Keys.Except(ids).ToArray())
             {
                 thumbnails[stale]?.Dispose();
                 thumbnails.Remove(stale);
+            }
+
+            foreach (var stale in linkedThumbnails.Keys.Except(ids).ToArray())
+            {
+                linkedThumbnails[stale].Dispose();
+                linkedThumbnails.Remove(stale);
             }
         }
 
@@ -278,6 +296,21 @@ internal sealed class PickerPresenter : IPickerPresenter
             previewImage = null;
         }
 
+        if (selected?.LinkedImage is { } linked && linkedImages is not null)
+        {
+            previewImage = (selected, null);
+            if (linkedImages.TryGetLoaded(linked, out var loaded))
+            {
+                ShowLinkedImage(selected, loaded);
+            }
+            else
+            {
+                _ = LoadLinkedImageAsync(selected, linked);
+            }
+
+            return;
+        }
+
         if (selected is null || !selected.IsImageLayout)
         {
             return;
@@ -298,6 +331,114 @@ internal sealed class PickerPresenter : IPickerPresenter
 
         selected.LargeImage = bitmap;
         previewImage = (selected, bitmap);
+    }
+
+    /// <summary>
+    /// Shows the image of a copied link or path on the row's tile (issue #21) when it can be had without asking a web
+    /// site: it was loaded before, or it is a file on this computer. A web link's image is only requested once the row
+    /// is selected (<see cref="UpdatePreviewImage"/>), so scrolling past links does not contact their sites.
+    /// </summary>
+    private void ShowLinkedThumbnail(PickerItemViewModel row)
+    {
+        if (row.LinkedImage is not { } linked || linkedImages is null)
+        {
+            return;
+        }
+
+        if (linkedThumbnails.TryGetValue(row.Id, out var cached))
+        {
+            row.LinkedThumbnail = cached;
+        }
+        else if (linkedImages.TryGetLoaded(linked, out var bytes))
+        {
+            SetLinkedThumbnail(row, bytes);
+        }
+        else if (linked.FilePath is not null)
+        {
+            _ = LoadLinkedImageAsync(row, linked);
+        }
+    }
+
+    /// <summary>Loads the image of a copied link or path, then shows it if the row is still in the picker.</summary>
+    private async Task LoadLinkedImageAsync(PickerItemViewModel row, LinkedImage linked)
+    {
+        var bytes = await linkedImages!.LoadAsync(linked).ConfigureAwait(true);
+        if (bytes is null || !viewModel.Items.Contains(row))
+        {
+            return;
+        }
+
+        if (previewImage is { } current && ReferenceEquals(current.Item, row))
+        {
+            ShowLinkedImage(row, bytes);
+        }
+        else
+        {
+            SetLinkedThumbnail(row, bytes);
+        }
+
+        // The preview may have grown with the image.
+        if (window is not null && IsVisible)
+        {
+            window.UpdateLayout();
+            Position(window);
+        }
+    }
+
+    /// <summary>Shows the image of the selected copied link in the preview, and on its tile.</summary>
+    private void ShowLinkedImage(PickerItemViewModel selected, byte[]? bytes)
+    {
+        // A file's image may also have been loaded for its tile, so this can be called twice for the same selection.
+        if (bytes is null || previewImage is { Bitmap: not null } shown && ReferenceEquals(shown.Item, selected))
+        {
+            return;
+        }
+
+        SetLinkedThumbnail(selected, bytes);
+        var bitmap = Decode(bytes, PreviewImageHeight, selected.Id);
+        selected.LargeImage = bitmap;
+        previewImage = (selected, bitmap);
+    }
+
+    private void SetLinkedThumbnail(PickerItemViewModel row, byte[]? bytes)
+    {
+        if (bytes is null || linkedThumbnails.ContainsKey(row.Id))
+        {
+            return;
+        }
+
+        if (Decode(bytes, ThumbnailHeight, row.Id) is { } bitmap)
+        {
+            linkedThumbnails[row.Id] = bitmap;
+            row.LinkedThumbnail = bitmap;
+        }
+    }
+
+    /// <summary>Decodes an image (PNG, JPEG, GIF, BMP or WebP) to at most the given height, or null when it cannot be.</summary>
+    private Bitmap? Decode(byte[] bytes, int maxHeight, Guid id)
+    {
+        try
+        {
+            using var stream = new MemoryStream(bytes);
+            var bitmap = new Bitmap(stream);
+
+            // Small images are not scaled up.
+            if (bitmap.PixelSize.Height <= maxHeight)
+            {
+                return bitmap;
+            }
+
+            using (bitmap)
+            {
+                var width = Math.Max(1, (int)Math.Round((double)bitmap.PixelSize.Width * maxHeight / bitmap.PixelSize.Height));
+                return bitmap.CreateScaledBitmap(new PixelSize(width, maxHeight));
+            }
+        }
+        catch (Exception exception)
+        {
+            logger.Debug(exception, "Could not decode the linked image of item {Id}", id);
+            return null;
+        }
     }
 
     private Bitmap? GetThumbnail(ClipboardItem item)

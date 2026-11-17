@@ -102,6 +102,17 @@
                           <Border Classes="thumbnail" IsVisible="{Binding HasThumbnail}">
                             <Image Source="{Binding Thumbnail}" Stretch="UniformToFill" />
                           </Border>
+                          <!-- A copied link to an image (or path of one) shows the image, with a text icon over it (issue #21) -->
+                          <Panel IsVisible="{Binding HasLinkedThumbnail}">
+                            <Border Classes="thumbnail">
+                              <Image Source="{Binding LinkedThumbnail}" Stretch="UniformToFill" />
+                            </Border>
+                            <Border Classes="linkedImageBadge" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                    Width="17" Height="17" Margin="2" CornerRadius="4" Background="#A6000000">
+                              <Path Data="{x:Static vm:PickerItemViewModel.TextGlyph}" Stretch="Uniform" Margin="2.5"
+                                    Stroke="White" StrokeThickness="1.4" StrokeLineCap="Round" StrokeJoin="Round" />
+                            </Border>
+                          </Panel>
                           <!-- A copied colour code shows its colour -->
                           <Border Classes="thumbnail colorSwatch" Background="{Binding ColorSwatch}" IsVisible="{Binding HasColorSwatch}" />
                         </Panel>
@@ -140,10 +151,36 @@
               <Border Classes="previewPane" IsVisible="{Binding ShowsPreview}">
                 <Grid x:DataType="vm:PickerItemViewModel" DataContext="{Binding SelectedItem, FallbackValue={x:Null}}"
                       RowDefinitions="Auto,Auto">
+                  <!--
+                    A copied link to an image, or path of one (issue #21): the image fills the card, darkened towards
+                    the bottom, where the link is written over it next to a text icon. The colours are the same in every
+                    look, since they are drawn over a picture.
+                  -->
+                  <Panel Grid.Row="0" Classes="previewLinkedImage" MinHeight="168" IsVisible="{Binding ShowsLinkedImage}">
+                    <Image Source="{Binding LinkedPreviewImage}" Stretch="UniformToFill" />
+                    <Border>
+                      <Border.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                          <GradientStop Offset="0.3" Color="#00000000" />
+                          <GradientStop Offset="1" Color="#B8000000" />
+                        </LinearGradientBrush>
+                      </Border.Background>
+                    </Border>
+                  </Panel>
                   <Border Grid.Row="0" Classes="previewContent">
                     <Panel>
                       <TextBlock Classes="previewText" Classes.code="{Binding IsCodeLike}"
-                                 Text="{Binding PreviewText}" IsVisible="{Binding HasPreviewText}" />
+                                 Text="{Binding PreviewText}" IsVisible="{Binding ShowsPlainPreviewText}" />
+
+                      <Grid Classes="previewLink" ColumnDefinitions="Auto,*" VerticalAlignment="Bottom" IsVisible="{Binding ShowsLinkedImage}">
+                        <Border Grid.Column="0" Width="28" Height="28" CornerRadius="6" Background="#40FFFFFF"
+                                BorderBrush="#59FFFFFF" BorderThickness="1" VerticalAlignment="Bottom">
+                          <Path Data="{x:Static vm:PickerItemViewModel.TextGlyph}" Stretch="Uniform" Margin="5"
+                                Stroke="White" StrokeThickness="1.4" StrokeLineCap="Round" StrokeJoin="Round" />
+                        </Border>
+                        <TextBlock Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center" Text="{Binding PreviewText}"
+                                   FontSize="13" Foreground="White" TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis" />
+                      </Grid>
 
                       <Border Classes="previewImageFrame" IsVisible="{Binding ShowsPreviewImage}">
                         <Image Classes="previewImage" Source="{Binding PreviewImage}" />
