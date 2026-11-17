@@ -39,7 +39,10 @@ Tap it and it pastes as always. Keep holding <kbd>Ctrl</kbd> and your history ap
 
 - **Everything is kept:** rich text, HTML, images, files and app-specific formats are restored exactly.
 - **Passwords are skipped:** content that password managers mark as sensitive is never recorded.
-- **Pinned items** survive restarts. Nothing ever leaves your computer.
+- **Pinned items** survive restarts. Nothing you copy ever leaves your computer.
+- **Installs and updates itself:** the first start installs Shapeshifter for your user (no administrator rights) and
+  starts it at login. It checks GitHub for new releases every few hours, verifies the download's SHA-256 and restarts
+  into it when you're not using it. Switch this off in Settings; on Windows, uninstall it from Apps or Control Panel.
 - **macOS** needs Accessibility access. **Linux** works fully on X11; on Wayland only while an X11 app is focused.
 
 <details>
@@ -50,6 +53,20 @@ Tap it and it pastes as always. Keep holding <kbd>Ctrl</kbd> and your history ap
 | Windows | `%APPDATA%\Shapeshifter` | `%LOCALAPPDATA%\Shapeshifter` |
 | macOS | `~/Library/Application Support/Shapeshifter` | same, logs in `~/Library/Logs/Shapeshifter` |
 | Linux | `$XDG_CONFIG_HOME/shapeshifter` | `$XDG_DATA_HOME/shapeshifter` |
+
+</details>
+
+<details>
+<summary>Where Shapeshifter installs itself</summary>
+
+| | Installed to | Also |
+|---|---|---|
+| Windows | `%LOCALAPPDATA%\Programs\Shapeshifter` | Start menu shortcut, entry in Apps and Control Panel |
+| macOS | `~/Applications/Shapeshifter.app` | |
+| Linux | `~/.local/bin/shapeshifter` | desktop entry in `~/.local/share/applications` |
+
+Run it with `--no-install` (or set `SHAPESHIFTER_NO_INSTALL=1`) to keep a copy where it is, `--uninstall` to remove the
+installation (your settings and pinned items stay), and set `SHAPESHIFTER_NO_UPDATE=1` to never check for updates.
 
 </details>
 

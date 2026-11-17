@@ -75,6 +75,16 @@
           <ToggleSwitch Grid.Column="2" Classes="rowControl" IsChecked="{Binding StartAtLogin}" IsEnabled="{Binding IsAutostartSupported}"
                         AutomationProperties.Name="Start at login" />
         </Grid>
+        <Border Classes="rowDivider" />
+        <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto">
+          <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Update}" Stretch="Uniform" />
+          <StackPanel Grid.Column="1" Classes="rowText">
+            <TextBlock Classes="rowTitle" Text="Automatic updates" />
+            <TextBlock Classes="rowDescription" Text="{Binding UpdateStatus}" />
+          </StackPanel>
+          <ToggleSwitch Grid.Column="2" Classes="rowControl" IsChecked="{Binding AutomaticUpdates}" IsEnabled="{Binding CanUpdate}"
+                        AutomationProperties.Name="Automatic updates" />
+        </Grid>
       </StackPanel>
     </Border>
 
@@ -83,6 +93,12 @@
         <StackPanel Orientation="Horizontal" Spacing="8">
           <Path Classes="commandIcon" Data="{x:Static services:Glyphs.Trash}" Stretch="Uniform" />
           <TextBlock Text="Clear history" VerticalAlignment="Center" />
+        </StackPanel>
+      </Button>
+      <Button Classes="command" Command="{Binding CheckForUpdatesCommand}">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Path Classes="commandIcon" Data="{x:Static services:Glyphs.Update}" Stretch="Uniform" />
+          <TextBlock Text="Check for updates" VerticalAlignment="Center" />
         </StackPanel>
       </Button>
       <Button Classes="command" Command="{Binding OpenLogFolderCommand}">

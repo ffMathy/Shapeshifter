@@ -29,6 +29,17 @@ internal static class Program
             e.SetObserved();
         };
 
+        // Started from a download or anywhere else: install for this user and start the installed copy instead.
+        var installation = Services.Installation.OnStartup(args, paths);
+        if (installation.Exit)
+        {
+            Log.CloseAndFlush();
+            return 0;
+        }
+
+        args = installation.Arguments;
+        App.Installed = installation;
+
         using var instance = SingleInstance.TryAcquire(paths.InstanceLockFile);
         if (instance is null)
         {

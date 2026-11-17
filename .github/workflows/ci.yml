@@ -190,12 +190,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { rid: win-x64, os: windows-latest, archive: zip }
-          - { rid: win-arm64, os: windows-latest, archive: zip }
-          - { rid: osx-arm64, os: macos-latest, archive: zip }
-          - { rid: osx-x64, os: macos-latest, archive: zip }
-          - { rid: linux-x64, os: ubuntu-latest, archive: tar.gz }
-          - { rid: linux-arm64, os: ubuntu-latest, archive: tar.gz }
+          - { rid: win-x64, os: windows-latest, archive: zip, exe: Shapeshifter.exe }
+          - { rid: win-arm64, os: windows-latest, archive: zip, exe: Shapeshifter.exe }
+          - { rid: osx-arm64, os: macos-latest, archive: zip, exe: Shapeshifter }
+          - { rid: osx-x64, os: macos-latest, archive: zip, exe: Shapeshifter }
+          - { rid: linux-x64, os: ubuntu-latest, archive: tar.gz, exe: Shapeshifter }
+          - { rid: linux-arm64, os: ubuntu-latest, archive: tar.gz, exe: Shapeshifter }
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
@@ -226,10 +226,23 @@ jobs:
       - name: Archive (tar.gz)
         if: matrix.archive == 'tar.gz'
         run: tar -czf Shapeshifter-${{ matrix.rid }}.tar.gz -C publish Shapeshifter
+      - name: Executable on its own
+        # What the app downloads when it updates itself (src/Shapeshifter.Desktop/Services/Installation.cs), and
+        # what users can download and run directly: it installs itself on first start.
+        shell: bash
+        run: |
+          ext=""; case "${{ matrix.exe }}" in *.exe) ext=".exe" ;; esac
+          cp "publish/Shapeshifter/${{ matrix.exe }}" "Shapeshifter-${{ matrix.rid }}$ext"
       - uses: actions/upload-artifact@v7
         with:
           name: Shapeshifter-${{ matrix.rid }}
-          path: Shapeshifter-${{ matrix.rid }}.${{ matrix.archive }}
+          path: |
+            Shapeshifter-${{ matrix.rid }}.${{ matrix.archive }}
+            Shapeshifter-${{ matrix.rid }}
+            Shapeshifter-${{ matrix.rid }}.exe
+          if-no-files-found: error
+          # Already-compressed archives and executables.
+          compression-level: 0
 
   release:
     name: GitHub release
@@ -246,6 +259,12 @@ jobs:
           pattern: Shapeshifter-*
           path: dist
           merge-multiple: true
+      - name: Checksums
+        # The updater refuses a download whose SHA-256 does not match this file (or the digest GitHub reports).
+        working-directory: dist
+        run: |
+          sha256sum Shapeshifter-* > SHA256SUMS.txt
+          cat SHA256SUMS.txt
       - name: Create the release with the builds attached
         env:
           GH_TOKEN: ${{ github.token }}
