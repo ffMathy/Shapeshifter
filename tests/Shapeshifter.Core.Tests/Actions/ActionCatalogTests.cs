@@ -86,7 +86,7 @@ public sealed class ActionCatalogTests
         { "html-only", ["paste", "paste-plain-text", "toggle-pin"] },
         { "empty-text+html", ["paste", "paste-plain-text", "toggle-pin"] },
         { "rtf-only", ["paste", "toggle-pin"] },  // RTF without text has no plain text to offer
-        { "image", ["paste", "toggle-pin"] },
+        { "image", ["paste", "paste-as-file", "toggle-pin"] },
         { "file", ["paste", "copy-as-zip", "toggle-pin"] },
         { "files", ["paste", "copy-as-zip", "toggle-pin"] },
         { "file+html", ["paste", "copy-as-zip", "toggle-pin"] },
