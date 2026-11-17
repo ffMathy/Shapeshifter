@@ -37,6 +37,7 @@ Start with [docs/architecture.md](docs/architecture.md), which explains how the 
 | `src/Shapeshifter.Desktop` | The Avalonia application: the picker, the notifications and the settings window. |
 | `tests/` | Unit tests, and end-to-end tests that drive the real app. |
 | `tools/Shapeshifter.ScreenshotGenerator` | Renders `assets/screenshots` from the real picker. |
+| `website/` | The static website, [shapeshifter.app](https://shapeshifter.app). |
 
 ## Tests
 
@@ -51,11 +52,37 @@ The end-to-end tests start Shapeshifter and a separate target application, copy 
 - **Linux:** `scripts/run-e2e-linux.sh` runs them under Xvfb with openbox (install `xvfb openbox x11-utils`).
 - **Windows:** set `SHAPESHIFTER_E2E=1`, then run `dotnet test --project tests/Shapeshifter.EndToEnd.Tests`. Don't touch the keyboard or mouse while they run.
 
+On macOS the terminal running the tests needs Accessibility access.
+
 CI runs the unit tests on Windows, macOS and Linux, and the end-to-end tests on Linux and Windows, including a Remote Desktop session on Windows.
+
+## Publishing a build
+
+To produce a self-contained, single-file build for a platform (`win-x64`, `win-arm64`, `osx-arm64`, `osx-x64`, `linux-x64`, `linux-arm64`; the output folder holds only the executable, with debug symbols embedded):
+
+```bash
+dotnet publish src/Shapeshifter.Desktop -c Release -r linux-x64 -o publish
+```
 
 ## Changing how the picker looks
 
-The screenshots in `assets/screenshots` (also used on the website) are rendered from the real picker. After a visual change, regenerate them with `scripts/generate-screenshots.sh` and check the result. CI also does this on pull requests and commits changed screenshots to the branch.
+The screenshots in `assets/screenshots` (used by the README and the website) are rendered from the real picker, settings window and notification of each look, with sample content. To run the app in another platform's look, set `SHAPESHIFTER_LOOK` to `windows`, `macos` or `linux`. After a visual change, regenerate them with `scripts/generate-screenshots.sh` and check the result. CI also does this on pull requests and commits changed screenshots to the branch.
+
+## Website
+
+The website, [shapeshifter.app](https://shapeshifter.app), is the static site in `website/`: plain HTML, CSS and a little JavaScript, with no build step. The [Website workflow](.github/workflows/website.yml) deploys it to GitHub Pages whenever it, the screenshots or the app icons change on `master`. It copies `assets/screenshots` and the app icons into the site, checks that every local link and image exists (`scripts/check-website.py`) and deploys the result. To preview it locally:
+
+```bash
+website/preview.sh    # then open http://localhost:8000
+```
+
+## Releasing
+
+Every merge to `master` is released (merges that land while a release is being built are released together). CI builds and tests the merge, publishes all six platforms and creates a GitHub release with the archives attached and release notes generated from the merged pull requests.
+
+The version is worked out by `scripts/next-version.sh`: the newest `v*` tag with its patch number increased (v7.1.0 → v7.1.1), or the `<Version>` in `Directory.Build.props` when that is newer. To release a new minor or major version, raise `<Version>` in the pull request (for example to `7.2.0` or `8.0.0`).
+
+For a prerelease, push a tag with a suffix instead (`git tag v7.2.0-beta.1 && git push origin v7.2.0-beta.1`), or start the CI workflow manually on `master` (Actions → CI → Run workflow) with **release_tag** set to a version, such as `v7.2.0`.
 
 ## Code style
 
