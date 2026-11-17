@@ -8,7 +8,7 @@ namespace Shapeshifter.Core.Previews;
 /// </summary>
 /// <remarks>
 /// Loading a web link sends a request to its site, so the picker only asks for the image of the item the user has
-/// selected; a file on this computer can be read for every row. An image that cannot be loaded (no network, not an
+/// selected, which it shows in the preview; the rows keep their text icon. An image that cannot be loaded (no network, not an
 /// image, too large) is remembered as missing as well, and the text is then shown as before.
 /// </remarks>
 public sealed class LinkedImageLoader

@@ -42,7 +42,6 @@ internal sealed class PickerPresenter : IPickerPresenter
     private readonly PickerViewModel viewModel;
     private readonly LinkedImageLoader? linkedImages;
     private readonly Dictionary<Guid, Bitmap?> thumbnails = [];
-    private readonly Dictionary<Guid, Bitmap> linkedThumbnails = [];
     private (PickerItemViewModel Item, Bitmap? Bitmap)? previewImage;
     private PickerWindow? window;
     private Func<PickerSearchInput, bool>? searchInput;
@@ -242,21 +241,13 @@ internal sealed class PickerPresenter : IPickerPresenter
             viewModel.Items.Clear();
             foreach (var item in state.Items)
             {
-                var row = new PickerItemViewModel(item, GetThumbnail(item), visuals);
-                viewModel.Items.Add(row);
-                ShowLinkedThumbnail(row);
+                viewModel.Items.Add(new PickerItemViewModel(item, GetThumbnail(item), visuals));
             }
 
             foreach (var stale in thumbnails.Keys.Except(ids).ToArray())
             {
                 thumbnails[stale]?.Dispose();
                 thumbnails.Remove(stale);
-            }
-
-            foreach (var stale in linkedThumbnails.Keys.Except(ids).ToArray())
-            {
-                linkedThumbnails[stale].Dispose();
-                linkedThumbnails.Remove(stale);
             }
         }
 
@@ -334,48 +325,19 @@ internal sealed class PickerPresenter : IPickerPresenter
     }
 
     /// <summary>
-    /// Shows the image of a copied link or path on the row's tile (issue #21) when it can be had without asking a web
-    /// site: it was loaded before, or it is a file on this computer. A web link's image is only requested once the row
-    /// is selected (<see cref="UpdatePreviewImage"/>), so scrolling past links does not contact their sites.
+    /// Loads the image of the selected copied link or path (issue #21), then shows it in the preview if the item is
+    /// still selected. Only the selected item's image is loaded, so the picker contacts a web site only for the link
+    /// the user is looking at; the rows keep their text icon.
     /// </summary>
-    private void ShowLinkedThumbnail(PickerItemViewModel row)
-    {
-        if (row.LinkedImage is not { } linked || linkedImages is null)
-        {
-            return;
-        }
-
-        if (linkedThumbnails.TryGetValue(row.Id, out var cached))
-        {
-            row.LinkedThumbnail = cached;
-        }
-        else if (linkedImages.TryGetLoaded(linked, out var bytes))
-        {
-            SetLinkedThumbnail(row, bytes);
-        }
-        else if (linked.FilePath is not null)
-        {
-            _ = LoadLinkedImageAsync(row, linked);
-        }
-    }
-
-    /// <summary>Loads the image of a copied link or path, then shows it if the row is still in the picker.</summary>
-    private async Task LoadLinkedImageAsync(PickerItemViewModel row, LinkedImage linked)
+    private async Task LoadLinkedImageAsync(PickerItemViewModel selected, LinkedImage linked)
     {
         var bytes = await linkedImages!.LoadAsync(linked).ConfigureAwait(true);
-        if (bytes is null || !viewModel.Items.Contains(row))
+        if (bytes is null || previewImage is not { } current || !ReferenceEquals(current.Item, selected))
         {
             return;
         }
 
-        if (previewImage is { } current && ReferenceEquals(current.Item, row))
-        {
-            ShowLinkedImage(row, bytes);
-        }
-        else
-        {
-            SetLinkedThumbnail(row, bytes);
-        }
+        ShowLinkedImage(selected, bytes);
 
         // The preview may have grown with the image.
         if (window is not null && IsVisible)
@@ -385,33 +347,17 @@ internal sealed class PickerPresenter : IPickerPresenter
         }
     }
 
-    /// <summary>Shows the image of the selected copied link in the preview, and on its tile.</summary>
+    /// <summary>Shows the image of the selected copied link in the preview.</summary>
     private void ShowLinkedImage(PickerItemViewModel selected, byte[]? bytes)
     {
-        // A file's image may also have been loaded for its tile, so this can be called twice for the same selection.
-        if (bytes is null || previewImage is { Bitmap: not null } shown && ReferenceEquals(shown.Item, selected))
+        if (bytes is null)
         {
             return;
         }
 
-        SetLinkedThumbnail(selected, bytes);
         var bitmap = Decode(bytes, PreviewImageHeight, selected.Id);
         selected.LargeImage = bitmap;
         previewImage = (selected, bitmap);
-    }
-
-    private void SetLinkedThumbnail(PickerItemViewModel row, byte[]? bytes)
-    {
-        if (bytes is null || linkedThumbnails.ContainsKey(row.Id))
-        {
-            return;
-        }
-
-        if (Decode(bytes, ThumbnailHeight, row.Id) is { } bitmap)
-        {
-            linkedThumbnails[row.Id] = bitmap;
-            row.LinkedThumbnail = bitmap;
-        }
     }
 
     /// <summary>Decodes an image (PNG, JPEG, GIF, BMP or WebP) to at most the given height, or null when it cannot be.</summary>

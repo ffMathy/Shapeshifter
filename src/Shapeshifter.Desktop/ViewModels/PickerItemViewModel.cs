@@ -176,7 +176,7 @@ public sealed partial class PickerItemViewModel : ObservableObject
     /// <summary>The line icon on the tile when there is no thumbnail or file icon.</summary>
     public Geometry Glyph { get; }
 
-    public bool ShowsGlyph => Thumbnail is null && FileIcon is null && FilePreviews.Count == 0 && ColorSwatch is null && LinkedThumbnail is null;
+    public bool ShowsGlyph => Thumbnail is null && FileIcon is null && FilePreviews.Count == 0 && ColorSwatch is null;
 
     /// <summary>The colour of a copied colour code, filling the tile.</summary>
     public IBrush? ColorSwatch { get; }
@@ -191,21 +191,7 @@ public sealed partial class PickerItemViewModel : ObservableObject
     /// <summary>The image a copied link or path points to (issue #21), or null for any other item.</summary>
     public LinkedImage? LinkedImage { get; }
 
-    /// <summary>
-    /// The image of <see cref="LinkedImage"/>, filling the tile behind a small text icon. Set by the presenter once the
-    /// image is loaded: a file's right away, a web link's once the item has been selected.
-    /// </summary>
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(HasLinkedThumbnail))]
-    [NotifyPropertyChangedFor(nameof(ShowsGlyph))]
-    [NotifyPropertyChangedFor(nameof(LinkedPreviewImage))]
-    [NotifyPropertyChangedFor(nameof(ShowsLinkedImage))]
-    [NotifyPropertyChangedFor(nameof(ShowsPlainPreviewText))]
-    private Bitmap? linkedThumbnail;
-
-    public bool HasLinkedThumbnail => LinkedThumbnail is not null;
-
-    /// <summary>The text icon on the tile and in the preview of a link, over its image.</summary>
+    /// <summary>The text icon in the preview of a link, over its image.</summary>
     public static Geometry TextGlyph => Glyphs.Text;
 
     /// <summary>The system icon of a single copied file.</summary>
@@ -296,8 +282,11 @@ public sealed partial class PickerItemViewModel : ObservableObject
 
     public bool ShowsPreviewImage => PreviewImage is not null && Layout == PickerItemLayout.Image;
 
-    /// <summary>The image behind a copied link in the preview: the large one once it is decoded, the tile's until then.</summary>
-    public Bitmap? LinkedPreviewImage => LinkedImage is null ? null : LargeImage ?? LinkedThumbnail;
+    /// <summary>
+    /// The image behind a copied link in the preview, once the presenter has loaded it (only for the selected item; the
+    /// row keeps its text icon).
+    /// </summary>
+    public Bitmap? LinkedPreviewImage => LinkedImage is null ? null : LargeImage;
 
     /// <summary>Whether the preview shows the link over its image rather than as plain text.</summary>
     public bool ShowsLinkedImage => LinkedPreviewImage is not null;

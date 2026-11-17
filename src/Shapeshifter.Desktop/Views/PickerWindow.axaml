@@ -102,18 +102,6 @@
                           <Border Classes="thumbnail" IsVisible="{Binding HasThumbnail}">
                             <Image Source="{Binding Thumbnail}" Stretch="UniformToFill" />
                           </Border>
-                          <!-- A copied link to an image (or path of one) shows the image, with a text icon over it (issue #21) -->
-                          <Panel IsVisible="{Binding HasLinkedThumbnail}">
-                            <Border Classes="thumbnail">
-                              <Image Source="{Binding LinkedThumbnail}" Stretch="UniformToFill" />
-                            </Border>
-                            <Border Classes="linkedImageBadge" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                                    Width="17" Height="17" Margin="2" CornerRadius="4" Background="#A6000000">
-                              <Path Data="{x:Static vm:PickerItemViewModel.TextGlyph}" Stretch="Uniform" Height="12"
-                                    HorizontalAlignment="Center" VerticalAlignment="Center"
-                                    Stroke="White" StrokeThickness="1.4" StrokeLineCap="Round" StrokeJoin="Round" />
-                            </Border>
-                          </Panel>
                           <!-- A copied colour code shows its colour -->
                           <Border Classes="thumbnail colorSwatch" Background="{Binding ColorSwatch}" IsVisible="{Binding HasColorSwatch}" />
                         </Panel>
