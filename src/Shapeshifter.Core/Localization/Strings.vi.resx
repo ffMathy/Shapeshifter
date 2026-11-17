@@ -410,4 +410,10 @@
   <data name="UpdatePullRequestBuild" xml:space="preserve">
     <value>Bản dựng từ pull request không tự cập nhật</value>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>Phím tắt</value>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>Win+V thay cho lịch sử bộ nhớ tạm của Windows, nên Ctrl+V vẫn dán như bình thường</value>
+  </data>
 </root>

@@ -542,4 +542,12 @@ To paste something you copied earlier, hold {0} and press V. Keep holding {0} to
     <value>Pull request builds do not update themselves</value>
     <comment>Status line in Settings, for builds of a pull request (made for testing a change; they never update).</comment>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>Shortcut</value>
+    <comment>Setting title, Windows only: whether Ctrl+V or Win+V (the Windows key and V) opens the history.</comment>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>Win+V replaces the Windows clipboard history, so Ctrl+V pastes as usual</value>
+    <comment>Explains the Win+V choice of the shortcut setting. Use the local name of the Ctrl key (German: Strg).</comment>
+  </data>
 </root>

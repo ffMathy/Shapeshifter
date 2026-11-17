@@ -1,5 +1,18 @@
 namespace Shapeshifter.Core.Settings;
 
+/// <summary>The keys held for the paste gesture (issue #28).</summary>
+public enum PasteShortcut
+{
+    /// <summary>Ctrl+V, or Cmd+V on macOS: a quick press still pastes as usual.</summary>
+    ControlV,
+
+    /// <summary>
+    /// Win+V, in place of the Windows clipboard history, so Ctrl+V is left alone. Only available on Windows; elsewhere
+    /// it acts as <see cref="ControlV"/>.
+    /// </summary>
+    WindowsV,
+}
+
 /// <summary>User preferences. Persisted as JSON by <see cref="SettingsStore"/>.</summary>
 public sealed record ShapeshifterSettings
 {
@@ -7,6 +20,9 @@ public sealed record ShapeshifterSettings
 
     /// <summary>How long the modifier must be held after V before the picker shows up.</summary>
     public int PasteDelayMilliseconds { get; init; } = 300;
+
+    /// <summary>Which keys open the history. Saved as a number, so an unknown value falls back to Ctrl+V.</summary>
+    public PasteShortcut PasteShortcut { get; init; }
 
     /// <summary>When set, no "copied" notification is shown after each copy.</summary>
     public bool QuietMode { get; init; }
@@ -39,6 +55,7 @@ public sealed record ShapeshifterSettings
     public bool Equals(ShapeshifterSettings? other) =>
         other is not null
         && PasteDelayMilliseconds == other.PasteDelayMilliseconds
+        && PasteShortcut == other.PasteShortcut
         && QuietMode == other.QuietMode
         && MaxHistoryItems == other.MaxHistoryItems
         && RememberHistory == other.RememberHistory
@@ -47,11 +64,12 @@ public sealed record ShapeshifterSettings
         && (UploadConsents ?? []).SequenceEqual(other.UploadConsents ?? [], StringComparer.Ordinal);
 
     public override int GetHashCode() =>
-        HashCode.Combine(PasteDelayMilliseconds, QuietMode, MaxHistoryItems, RememberHistory, AutomaticUpdates, CoachingTips, UploadConsents?.Count ?? 0);
+        HashCode.Combine(PasteDelayMilliseconds, PasteShortcut, QuietMode, MaxHistoryItems, RememberHistory, AutomaticUpdates, CoachingTips, UploadConsents?.Count ?? 0);
 
     public ShapeshifterSettings Normalize() => this with
     {
         PasteDelayMilliseconds = Math.Clamp(PasteDelayMilliseconds, 0, MaxPasteDelayMilliseconds),
+        PasteShortcut = Enum.IsDefined(PasteShortcut) ? PasteShortcut : PasteShortcut.ControlV,
         MaxHistoryItems = Math.Clamp(MaxHistoryItems, 1, 1000),
         UploadConsents = UploadConsents ?? [],
     };

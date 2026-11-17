@@ -410,4 +410,10 @@
   <data name="UpdatePullRequestBuild" xml:space="preserve">
     <value>نسخه‌های درخواست ادغام خودشان به‌روز نمی‌شوند</value>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>میانبر</value>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>Win+V جای تاریخچهٔ کلیپ‌بورد Windows را می‌گیرد، پس Ctrl+V مثل همیشه جای‌گذاری می‌کند</value>
+  </data>
 </root>

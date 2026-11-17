@@ -41,6 +41,17 @@
     <TextBlock Classes="groupHeader" Text="{x:Static loc:Strings.SettingsHistoryGroup}" />
     <Border Classes="group">
       <StackPanel>
+        <!-- Ctrl+V or Win+V (#28): only Windows has a choice, so elsewhere the row is left out. -->
+        <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto" IsVisible="{Binding CanChoosePasteShortcut}">
+          <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Keyboard}" Stretch="Uniform" />
+          <StackPanel Grid.Column="1" Classes="rowText">
+            <TextBlock Classes="rowTitle" Text="{x:Static loc:Strings.SettingsShortcutTitle}" />
+            <TextBlock Classes="rowDescription" Text="{x:Static loc:Strings.SettingsShortcutDescription}" />
+          </StackPanel>
+          <ComboBox Grid.Column="2" Classes="rowControl" ItemsSource="{Binding PasteShortcutOptions}"
+                    SelectedIndex="{Binding PasteShortcutIndex}" AutomationProperties.Name="{x:Static loc:Strings.SettingsShortcutTitle}" />
+        </Grid>
+        <Border Classes="rowDivider" IsVisible="{Binding CanChoosePasteShortcut}" />
         <Grid Classes="settingRow" ColumnDefinitions="Auto,*,Auto">
           <Path Grid.Column="0" Classes="rowIcon" Data="{x:Static services:Glyphs.Clock}" Stretch="Uniform" />
           <StackPanel Grid.Column="1" Classes="rowText">

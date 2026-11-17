@@ -383,7 +383,7 @@ internal static class Program
         {
             DataContext = new SettingsViewModel(
                 store, new SampleAutostart(), new ClipboardHistory(25), new SampleLauncher(), paths,
-                PlatformLook.Current == Look.MacOS ? "Cmd" : "Ctrl", []),
+                () => PlatformLook.Current == Look.MacOS ? "Cmd" : "Ctrl", [], canChoosePasteShortcut: PlatformLook.Current == Look.Windows),
         };
     }
 

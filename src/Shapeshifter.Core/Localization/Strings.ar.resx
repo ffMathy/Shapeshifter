@@ -410,4 +410,10 @@
   <data name="UpdatePullRequestBuild" xml:space="preserve">
     <value>إصدارات طلبات الدمج لا تحدّث نفسها</value>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>الاختصار</value>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>يحل Win+V محل سجل الحافظة في Windows، فيبقى Ctrl+V للصق كالمعتاد</value>
+  </data>
 </root>

@@ -1,3 +1,5 @@
+using Shapeshifter.Core.Settings;
+
 namespace Shapeshifter.Core.Platform;
 
 /// <summary>The keys that take part in the paste gesture, independent of the platform's key codes.</summary>
@@ -5,7 +7,7 @@ public enum GestureKey
 {
     Other,
 
-    /// <summary>Ctrl on Windows and Linux, Command on macOS.</summary>
+    /// <summary>Ctrl on Windows and Linux, Command on macOS; the Windows key when the shortcut is Win+V.</summary>
     Modifier,
 
     /// <summary>The V key.</summary>
@@ -58,8 +60,20 @@ public interface IKeyboardHook : IDisposable
 {
     Func<KeyInput, bool>? KeyHandler { get; set; }
 
-    /// <summary>A human-readable name of the gesture modifier on this platform ("Ctrl" or "Cmd").</summary>
+    /// <summary>
+    /// A human-readable name of the gesture modifier: "Ctrl", "Cmd" on macOS or "Win". Changes with
+    /// <see cref="PasteShortcut"/>.
+    /// </summary>
     string ModifierName { get; }
+
+    /// <summary>
+    /// Which keys the gesture uses. Takes effect with the next key press; where <see cref="SupportsWindowsKey"/> is
+    /// <see langword="false"/>, <see cref="Settings.PasteShortcut.WindowsV"/> acts as Ctrl+V (or Cmd+V).
+    /// </summary>
+    PasteShortcut PasteShortcut { get; set; }
+
+    /// <summary>Whether the gesture can use the Windows key (<see cref="Settings.PasteShortcut.WindowsV"/>): on Windows only.</summary>
+    bool SupportsWindowsKey { get; }
 
     /// <summary>
     /// Some platforms (X11) can only suppress keys that were grabbed beforehand. While a gesture is active the

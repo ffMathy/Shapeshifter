@@ -410,4 +410,10 @@
   <data name="UpdatePullRequestBuild" xml:space="preserve">
     <value>プルリクエストのビルドは自動更新されません</value>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>ショートカット</value>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>Win+V が Windows のクリップボード履歴の代わりになり、Ctrl+V は通常どおり貼り付けます</value>
+  </data>
 </root>

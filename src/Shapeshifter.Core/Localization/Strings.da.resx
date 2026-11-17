@@ -410,4 +410,10 @@ Hvis du vil indsætte noget, du har kopieret tidligere, skal du holde {0} nede o
   <data name="UpdatePullRequestBuild" xml:space="preserve">
     <value>Builds fra pull requests opdaterer ikke sig selv</value>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>Genvej</value>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>Win+V erstatter Windows' udklipsholderhistorik, så Ctrl+V indsætter som normalt</value>
+  </data>
 </root>

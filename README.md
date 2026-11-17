@@ -19,7 +19,7 @@ Tap it and it pastes as always. Keep holding <kbd>Ctrl</kbd> and your history ap
 |---|---|
 | ![The history, with the newest item selected](assets/screenshots/windows.PNG) | ![The actions for the selected text, with "Paste as plain text" chosen](assets/screenshots/actions.PNG) |
 
-<kbd>1</kbd>–<kbd>9</kbd> jump to that item, <kbd>Delete</kbd> removes an item, <kbd>Esc</kbd> cancels. To look around without holding <kbd>Ctrl</kbd>, press <kbd>Space</kbd>: the history stays open until you press <kbd>Enter</kbd> to paste or <kbd>Esc</kbd>. On macOS it's <kbd>Cmd</kbd>+<kbd>V</kbd>.
+<kbd>1</kbd>–<kbd>9</kbd> jump to that item, <kbd>Delete</kbd> removes an item, <kbd>Esc</kbd> cancels. To look around without holding <kbd>Ctrl</kbd>, press <kbd>Space</kbd>: the history stays open until you press <kbd>Enter</kbd> to paste or <kbd>Esc</kbd>. On macOS it's <kbd>Cmd</kbd>+<kbd>V</kbd>. On Windows you can choose <kbd>Win</kbd>+<kbd>V</kbd> in Settings instead, in place of the Windows clipboard history, and leave <kbd>Ctrl</kbd>+<kbd>V</kbd> alone.
 
 Looking for something you copied a while ago? Press <kbd>S</kbd> while the history is open and type a few words:
 <kbd>Enter</kbd> pastes what you found.

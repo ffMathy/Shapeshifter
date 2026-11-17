@@ -18,9 +18,21 @@ public sealed partial class SettingsViewModel : ObservableObject
     private readonly ILauncher launcher;
     private readonly AppPaths paths;
     private readonly Updater? updater;
+    private readonly Func<string> modifierName;
 
     [ObservableProperty]
     private int pasteDelayMilliseconds;
+
+    /// <summary>The index of the chosen <see cref="Core.Settings.PasteShortcut"/> in <see cref="PasteShortcutOptions"/>.</summary>
+    [ObservableProperty]
+    private int pasteShortcutIndex;
+
+    /// <summary>"Hold Ctrl+V this long before the history appears".</summary>
+    [ObservableProperty]
+    private string delayDescription = string.Empty;
+
+    [ObservableProperty]
+    private string usage = string.Empty;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ShowCopyNotifications))]
@@ -47,12 +59,16 @@ public sealed partial class SettingsViewModel : ObservableObject
         ClipboardHistory history,
         ILauncher launcher,
         AppPaths paths,
-        string modifierName,
+        Func<string> modifierName,
         IReadOnlyList<string> warnings,
-        Updater? updater = null)
+        Updater? updater = null,
+        bool canChoosePasteShortcut = false)
     {
         ArgumentNullException.ThrowIfNull(settings);
         ArgumentNullException.ThrowIfNull(autostart);
+        ArgumentNullException.ThrowIfNull(modifierName);
+        this.modifierName = modifierName;
+        CanChoosePasteShortcut = canChoosePasteShortcut;
         this.settings = settings;
         this.autostart = autostart;
         this.history = history;
@@ -61,6 +77,7 @@ public sealed partial class SettingsViewModel : ObservableObject
         this.updater = updater;
         var current = settings.Current;
         pasteDelayMilliseconds = current.PasteDelayMilliseconds;
+        pasteShortcutIndex = (int)current.PasteShortcut;
         quietMode = current.QuietMode;
         coachingTips = current.CoachingTips;
         maxHistoryItems = current.MaxHistoryItems;
@@ -71,13 +88,15 @@ public sealed partial class SettingsViewModel : ObservableObject
         {
             updater.StateChanged += OnUpdaterStateChanged;
         }
-        var modifier = Localizer.ModifierKey(modifierName);
-        DelayDescription = Localizer.Format(Strings.SettingsDelayDescription, modifier);
         Warnings = string.Join(Environment.NewLine + Environment.NewLine, warnings);
-        Usage = Localizer.Format(Strings.SettingsUsage, modifier) + Localizer.Format(Strings.SettingsUsageHoldOpen, modifier);
+        UpdateModifierTexts();
     }
 
-    public string Usage { get; }
+    /// <summary>Whether the user can choose between Ctrl+V and Win+V (on Windows only).</summary>
+    public bool CanChoosePasteShortcut { get; }
+
+    /// <summary>The choices of the shortcut, in the order of <see cref="Core.Settings.PasteShortcut"/>.</summary>
+    public IReadOnlyList<string> PasteShortcutOptions { get; } = [Strings.KeyControl + "+V", "Win+V"];
 
     /// <summary>The inverse of <see cref="QuietMode"/>, for a switch that reads "Copy notifications: on".</summary>
     public bool ShowCopyNotifications
@@ -85,9 +104,6 @@ public sealed partial class SettingsViewModel : ObservableObject
         get => !QuietMode;
         set => QuietMode = !value;
     }
-
-    /// <summary>"Hold Ctrl+V this long before the history appears".</summary>
-    public string DelayDescription { get; private set; } = string.Empty;
 
     public string Warnings { get; }
 
@@ -133,6 +149,21 @@ public sealed partial class SettingsViewModel : ObservableObject
 
     partial void OnPasteDelayMillisecondsChanged(int value) =>
         settings.Update(current => current with { PasteDelayMilliseconds = value });
+
+    partial void OnPasteShortcutIndexChanged(int value)
+    {
+        settings.Update(current => current with { PasteShortcut = (PasteShortcut)value });
+
+        // The keyboard hook follows the setting as it is saved, and now names the other modifier.
+        UpdateModifierTexts();
+    }
+
+    private void UpdateModifierTexts()
+    {
+        var modifier = Localizer.ModifierKey(modifierName());
+        DelayDescription = Localizer.Format(Strings.SettingsDelayDescription, modifier);
+        Usage = Localizer.Format(Strings.SettingsUsage, modifier) + Localizer.Format(Strings.SettingsUsageHoldOpen, modifier);
+    }
 
     partial void OnQuietModeChanged(bool value) =>
         settings.Update(current => current with { QuietMode = value });

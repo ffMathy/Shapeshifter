@@ -410,4 +410,10 @@ Pour coller quelque chose que vous avez copié auparavant, maintenez {0} enfonc�
   <data name="UpdatePullRequestBuild" xml:space="preserve">
     <value>Les versions de pull requests ne se mettent pas à jour</value>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>Raccourci</value>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>Win+V remplace l’historique du presse-papiers de Windows, et Ctrl+V colle comme d’habitude</value>
+  </data>
 </root>

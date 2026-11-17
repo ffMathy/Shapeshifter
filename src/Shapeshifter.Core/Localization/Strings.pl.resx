@@ -410,4 +410,10 @@ Aby wkleić coś skopiowanego wcześniej, przytrzymaj {0} i naciśnij V. Trzymaj
   <data name="UpdatePullRequestBuild" xml:space="preserve">
     <value>Kompilacje z pull requestów nie aktualizują się same</value>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>Skrót</value>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>Win+V zastępuje historię schowka systemu Windows, więc Ctrl+V wkleja jak zwykle</value>
+  </data>
 </root>

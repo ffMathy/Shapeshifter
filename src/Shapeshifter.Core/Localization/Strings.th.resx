@@ -410,4 +410,10 @@
   <data name="UpdatePullRequestBuild" xml:space="preserve">
     <value>บิลด์จากพูลรีเควสต์ไม่อัปเดตตัวเอง</value>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>แป้นลัด</value>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>Win+V ใช้แทนประวัติคลิปบอร์ดของ Windows ส่วน Ctrl+V จะวางตามปกติ</value>
+  </data>
 </root>

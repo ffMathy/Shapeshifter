@@ -1,5 +1,6 @@
 using Serilog;
 using Shapeshifter.Core.Platform;
+using Shapeshifter.Core.Settings;
 using Shapeshifter.Platform.Linux;
 using SharpHook;
 using SharpHook.Data;
@@ -21,13 +22,18 @@ namespace Shapeshifter.Platform.Input;
 /// Our own simulated keystrokes come back through the hook. They are recognised by matching the exact
 /// sequence that was sent (XRecord does not flag simulated events) and are not handed to <see cref="KeyHandler"/>.
 /// </para>
+/// <para>
+/// With Win+V on Windows, the Start menu would open when the Windows key comes up, because Windows never saw the
+/// suppressed V. So the first time a key is suppressed while the Windows key is held, a Ctrl press is sent to "mask" it,
+/// as other keyboard tools do: Windows only opens the Start menu when the Windows key was pressed on its own.
+/// </para>
 /// </remarks>
 public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
 {
     private static readonly TimeSpan EchoTimeout = TimeSpan.FromMilliseconds(750);
 
     private readonly ILogger logger;
-    private readonly KeyMap keyMap;
+    private volatile KeyMap keyMap;
     private readonly X11Integration? x11;
     private readonly SemaphoreSlim pasteLock = new(1, 1);
     private readonly Lock echoGate = new();
@@ -40,6 +46,10 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
     private TaskCompletionSource? echoDrained;
     private TaskCompletionSource triggerReleased = CreateReleasedSignal(released: true);
 
+    // Only touched on the hook thread.
+    private bool modifierHeld;
+    private bool startMenuMasked;
+
     internal SharpHookKeyboardService(ILogger logger, KeyMap keyMap, X11Integration? x11)
     {
         this.logger = logger.ForContext<SharpHookKeyboardService>();
@@ -51,6 +61,23 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
     public Func<KeyInput, bool>? KeyHandler { get; set; }
 
     public string ModifierName => keyMap.ModifierName;
+
+    public PasteShortcut PasteShortcut
+    {
+        get => keyMap.Shortcut;
+        set
+        {
+            if (keyMap.Shortcut == value)
+            {
+                return;
+            }
+
+            keyMap = KeyMap.ForCurrentPlatform(value);
+            logger.Information("Paste gesture modifier: {Modifier}", keyMap.ModifierName);
+        }
+    }
+
+    public bool SupportsWindowsKey => KeyMap.SupportsWindowsKey;
 
     /// <summary>Delay between individual simulated key events. Some applications drop events sent back-to-back.</summary>
     public TimeSpan KeystrokeDelay { get; set; } = TimeSpan.FromMilliseconds(8);
@@ -117,7 +144,11 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
 
     public async Task SimulatePasteAsync(CancellationToken cancellationToken = default)
     {
-        var events = simulator ?? throw new InvalidOperationException("The keyboard service has not been started.");
+        if (simulator is null)
+        {
+            throw new InvalidOperationException("The keyboard service has not been started.");
+        }
+
         await pasteLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
@@ -132,27 +163,49 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
                 await x11.SetTriggerGrabbedAsync(false).ConfigureAwait(false);
             }
 
-            var sequence = new (KeyCode Key, bool IsDown)[]
+            var pasteModifier = keyMap.PasteModifier;
+            await SimulateSequenceAsync(
+                [
+                    (pasteModifier, true),
+                    (KeyCode.VcV, true),
+                    (KeyCode.VcV, false),
+                    (pasteModifier, false),
+                ],
+                cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            if (x11 is not null)
             {
-                (keyMap.PasteModifier, true),
-                (KeyCode.VcV, true),
-                (KeyCode.VcV, false),
-                (keyMap.PasteModifier, false),
-            };
-
-            TaskCompletionSource drained;
-            lock (echoGate)
-            {
-                expectedEcho.Clear();
-                foreach (var entry in sequence)
-                {
-                    expectedEcho.Enqueue(entry);
-                }
-
-                echoDeadline = Environment.TickCount64 + (long)EchoTimeout.TotalMilliseconds;
-                echoDrained = drained = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+                await x11.SetTriggerGrabbedAsync(true).ConfigureAwait(false);
             }
 
+            pasteLock.Release();
+        }
+    }
+
+    /// <summary>
+    /// Sends <paramref name="sequence"/> and waits until the hook has seen it come back, so it is not handed to
+    /// <see cref="KeyHandler"/>. The caller holds <see cref="pasteLock"/>, as only one sequence can be expected at a time.
+    /// </summary>
+    private async Task SimulateSequenceAsync((KeyCode Key, bool IsDown)[] sequence, CancellationToken cancellationToken)
+    {
+        var events = simulator ?? throw new InvalidOperationException("The keyboard service has not been started.");
+        TaskCompletionSource drained;
+        lock (echoGate)
+        {
+            expectedEcho.Clear();
+            foreach (var entry in sequence)
+            {
+                expectedEcho.Enqueue(entry);
+            }
+
+            echoDeadline = Environment.TickCount64 + (long)EchoTimeout.TotalMilliseconds;
+            echoDrained = drained = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        }
+
+        try
+        {
             foreach (var (key, isDown) in sequence)
             {
                 var result = isDown ? events.SimulateKeyPress(key) : events.SimulateKeyRelease(key);
@@ -164,7 +217,7 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
                 await Task.Delay(KeystrokeDelay, cancellationToken).ConfigureAwait(false);
             }
 
-            // Wait until the hook has seen our keystrokes before re-arming the grab, so they are not re-captured.
+            // Wait until the hook has seen our keystrokes (before a grab is re-armed, so they are not re-captured).
             await Task.WhenAny(drained.Task, Task.Delay(EchoTimeout, cancellationToken)).ConfigureAwait(false);
         }
         finally
@@ -175,13 +228,28 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
                 echoDrained?.TrySetResult();
                 echoDrained = null;
             }
+        }
+    }
 
-            if (x11 is not null)
+    /// <summary>Sends a Ctrl press while the Windows key is held, so releasing it does not open the Start menu.</summary>
+    private async Task MaskStartMenuAsync()
+    {
+        try
+        {
+            await pasteLock.WaitAsync().ConfigureAwait(false);
+            try
             {
-                await x11.SetTriggerGrabbedAsync(true).ConfigureAwait(false);
+                await SimulateSequenceAsync([(KeyCode.VcLeftControl, true), (KeyCode.VcLeftControl, false)], CancellationToken.None)
+                    .ConfigureAwait(false);
             }
-
-            pasteLock.Release();
+            finally
+            {
+                pasteLock.Release();
+            }
+        }
+        catch (Exception exception) when (exception is ObjectDisposedException or InvalidOperationException)
+        {
+            logger.Debug(exception, "Could not keep the Start menu from opening");
         }
     }
 
@@ -213,6 +281,17 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
             TrackTrigger(isDown);
         }
 
+        var map = keyMap;
+        var key = map.Map(keyCode);
+        if (key == GestureKey.Modifier)
+        {
+            modifierHeld = isDown;
+            if (!isDown)
+            {
+                startMenuMasked = false;
+            }
+        }
+
         var handler = KeyHandler;
         if (handler is null)
         {
@@ -222,7 +301,7 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
         bool suppress;
         try
         {
-            suppress = handler(new KeyInput(keyMap.Map(keyCode), isDown));
+            suppress = handler(new KeyInput(key, isDown));
         }
         catch (Exception exception)
         {
@@ -233,6 +312,11 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
         if (suppress && canSuppress)
         {
             e.SuppressEvent = true;
+            if (map.UsesWindowsKey && isDown && modifierHeld && !startMenuMasked)
+            {
+                startMenuMasked = true;
+                _ = MaskStartMenuAsync();
+            }
         }
     }
 
@@ -280,7 +364,7 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
             }
 
             var (expectedKey, expectedDown) = expectedEcho.Peek();
-            if (!keyMap.IsSameKey(expectedKey, keyCode) || expectedDown != isDown)
+            if (!KeyMap.IsSameKey(expectedKey, keyCode) || expectedDown != isDown)
             {
                 return false;
             }

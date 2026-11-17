@@ -16,6 +16,7 @@ public sealed class ShapeshifterSettingsTests
         Assert.Equal(50, settings.MaxHistoryItems);
         Assert.True(settings.AutomaticUpdates);
         Assert.False(settings.RememberHistory);
+        Assert.Equal(PasteShortcut.ControlV, settings.PasteShortcut);
         Assert.Equal(3000, ShapeshifterSettings.MaxPasteDelayMilliseconds);
     }
 
@@ -50,6 +51,18 @@ public sealed class ShapeshifterSettingsTests
     [InlineData(int.MaxValue, 1000)]
     public void Normalize_ClampsHistorySize(int value, int expected) =>
         Assert.Equal(expected, new ShapeshifterSettings { MaxHistoryItems = value }.Normalize().MaxHistoryItems);
+
+    [Theory]
+    [InlineData(PasteShortcut.ControlV, PasteShortcut.ControlV)]
+    [InlineData(PasteShortcut.WindowsV, PasteShortcut.WindowsV)]
+    [InlineData((PasteShortcut)2, PasteShortcut.ControlV)]
+    [InlineData((PasteShortcut)(-1), PasteShortcut.ControlV)]
+    public void Normalize_FallsBackToControlV_ForAnUnknownShortcut(PasteShortcut value, PasteShortcut expected) =>
+        Assert.Equal(expected, new ShapeshifterSettings { PasteShortcut = value }.Normalize().PasteShortcut);
+
+    [Fact]
+    public void Equality_ComparesTheShortcut() =>
+        Assert.NotEqual(new ShapeshifterSettings(), new ShapeshifterSettings { PasteShortcut = PasteShortcut.WindowsV });
 
     [Fact]
     public void Normalize_KeepsQuietMode_AndDoesNotMutateTheOriginal()
@@ -260,6 +273,26 @@ public sealed class SettingsStoreTests : IDisposable
 
         Assert.Equal(0, settings.PasteDelayMilliseconds);
         Assert.Equal(1000, settings.MaxHistoryItems);
+    }
+
+    [Fact]
+    public void PasteShortcut_SurvivesARestart()
+    {
+        new SettingsStore(SettingsPath).Update(settings => settings with { PasteShortcut = PasteShortcut.WindowsV });
+
+        Assert.Equal(PasteShortcut.WindowsV, new SettingsStore(SettingsPath).Current.PasteShortcut);
+    }
+
+    [Fact]
+    public void UnknownPasteShortcut_FromANewerVersion_FallsBackToControlV_AndKeepsTheOtherSettings()
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(SettingsPath)!);
+        File.WriteAllText(SettingsPath, "{\"PasteShortcut\": 7, \"QuietMode\": true}");
+
+        var settings = new SettingsStore(SettingsPath).Current;
+
+        Assert.Equal(PasteShortcut.ControlV, settings.PasteShortcut);
+        Assert.True(settings.QuietMode);
     }
 
     [Fact]
