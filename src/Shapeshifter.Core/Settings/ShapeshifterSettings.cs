@@ -14,6 +14,9 @@ public sealed record ShapeshifterSettings
     /// <summary>How many unpinned items are kept.</summary>
     public int MaxHistoryItems { get; init; } = 50;
 
+    /// <summary>Whether new releases are downloaded from GitHub and installed automatically.</summary>
+    public bool AutomaticUpdates { get; init; } = true;
+
     public ShapeshifterSettings Normalize() => this with
     {
         PasteDelayMilliseconds = Math.Clamp(PasteDelayMilliseconds, 0, MaxPasteDelayMilliseconds),

@@ -12,6 +12,7 @@ using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Engine;
 using Shapeshifter.Core.Persistence;
 using Shapeshifter.Core.Settings;
+using Shapeshifter.Core.Updates;
 using Shapeshifter.Desktop.Services;
 using Shapeshifter.Desktop.ViewModels;
 using Shapeshifter.Desktop.Views;
@@ -22,7 +23,9 @@ namespace Shapeshifter.Desktop;
 #pragma warning disable CA1001 // Disposed in Shutdown(), driven by the application lifetime.
 public partial class App : Application
 {
-    private static readonly Uri ReleasesPage = new("https://github.com/ffMathy/Shapeshifter/releases");
+    /// <summary>The first update check waits this long, so it does not compete with starting up.</summary>
+    private static readonly TimeSpan FirstUpdateCheck = TimeSpan.FromMinutes(1);
+    private static readonly TimeSpan UpdateCheckInterval = TimeSpan.FromHours(6);
 
     private readonly ILogger logger = Log.ForContext<App>();
     private IClassicDesktopStyleApplicationLifetime? desktop;
@@ -34,9 +37,16 @@ public partial class App : Application
     private SettingsWindow? settingsWindow;
     private HttpClient? http;
     private TrayIcon? trayIcon;
+    private PickerPresenter? picker;
+    private HttpClient? updateHttp;
+    private Updater? updater;
+    private DispatcherTimer? restartTimer;
 
     /// <summary>Set by <see cref="Program"/> before Avalonia starts.</summary>
     internal static AppPaths Paths { get; set; } = AppPaths.CreateDefault();
+
+    /// <summary>What the installer found at startup (set by <see cref="Program"/>); null when it did not run.</summary>
+    internal static StartupResult? Installed { get; set; }
 
     public override void Initialize() => AvaloniaXamlLoader.Load(this);
 
@@ -96,7 +106,7 @@ public partial class App : Application
                 Logger = logger,
             };
 
-            var picker = new PickerPresenter(platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), platform.KeyboardHook.ModifierName, logger);
+            picker = new PickerPresenter(platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), platform.KeyboardHook.ModifierName, logger);
             engine = new ShapeshifterEngine(
                 history, monitor, platform.KeyboardHook, ActionCatalog.CreateDefault(), context, picker, new CopyNotifier(settings), logger)
             {
@@ -112,6 +122,8 @@ public partial class App : Application
             DiagnosticsStateWriter.TryCreate(history, picker, engine);
             await engine.StartAsync().ConfigureAwait(true);
             CreateTrayIcon();
+            ConfigureInstalledCopy();
+            StartUpdater();
 
             logger.Information("Shapeshifter is ready");
             Console.WriteLine("SHAPESHIFTER_READY");
@@ -138,7 +150,7 @@ public partial class App : Application
             menu.Items.Add(MenuItem("Settings…", ShowSettings));
             menu.Items.Add(MenuItem("Open log folder", () => platform?.Launcher.OpenFolder(Paths.LogDirectory)));
             menu.Items.Add(MenuItem("Clear history", () => history?.Clear()));
-            menu.Items.Add(MenuItem("Check for updates…", () => platform?.Launcher.OpenUrl(ReleasesPage)));
+            menu.Items.Add(MenuItem("Check for updates…", CheckForUpdates));
             menu.Items.Add(new NativeMenuItemSeparator());
             menu.Items.Add(MenuItem("Quit Shapeshifter", () => desktop?.Shutdown()));
 
@@ -256,11 +268,96 @@ public partial class App : Application
         {
             Icon = new WindowIcon(AssetLoader.Open(PlatformLook.Asset("Application.png"))),
             DataContext = new SettingsViewModel(
-                settings, platform.Autostart, history, platform.Launcher, Paths, platform.KeyboardHook.ModifierName, platform.Warnings),
+                settings, platform.Autostart, history, platform.Launcher, Paths, platform.KeyboardHook.ModifierName, platform.Warnings, updater),
         };
-        settingsWindow.Closed += (_, _) => settingsWindow = null;
+        settingsWindow.Closed += (_, _) =>
+        {
+            (settingsWindow?.DataContext as SettingsViewModel)?.Detach();
+            settingsWindow = null;
+        };
         settingsWindow.Show();
         settingsWindow.Activate();
+    }
+
+    /// <summary>
+    /// The installed copy starts at login: switched on when Shapeshifter was just installed, and pointed at the
+    /// installed executable when it was switched on for a copy elsewhere.
+    /// </summary>
+    private void ConfigureInstalledCopy()
+    {
+        if (Installed is not { IsInstalledCopy: true } installed || platform is not { Autostart.IsSupported: true })
+        {
+            return;
+        }
+
+        try
+        {
+            if (installed.FirstInstall || platform.Autostart.IsEnabled)
+            {
+                platform.Autostart.SetEnabled(true);
+            }
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or System.Security.SecurityException or InvalidOperationException)
+        {
+            logger.Warning(exception, "Could not set up start at login");
+        }
+    }
+
+    private void StartUpdater()
+    {
+        updateHttp = new HttpClient { Timeout = Timeout.InfiniteTimeSpan };
+        updateHttp.DefaultRequestHeaders.UserAgent.ParseAdd("Shapeshifter/" + ReleaseVersion.Current());
+        updater = new Updater(
+            Installation.App,
+            RunningApp.Current(),
+            Installation.Layout(Paths),
+            updateHttp,
+            new Installation.UpdateLog(logger),
+            () => settings?.Current.AutomaticUpdates == true);
+        updater.UpdateReady += (_, _) => Dispatcher.UIThread.Post(RestartWhenIdle);
+        updater.Start(FirstUpdateCheck, UpdateCheckInterval);
+    }
+
+    private void CheckForUpdates()
+    {
+        if (updater is not { IsSupported: true })
+        {
+            platform?.Launcher.OpenUrl(Installation.App.ReleasesPage);
+            return;
+        }
+
+        ShowSettings();
+        _ = updater.CheckNowAsync();
+    }
+
+    /// <summary>Restarts into the new version once the picker and the settings window are closed.</summary>
+    private void RestartWhenIdle()
+    {
+        if (updater is not { State: UpdateState.ReadyToRestart } || desktop is null)
+        {
+            return;
+        }
+
+        if (picker?.IsVisible == true || settingsWindow is not null)
+        {
+            restartTimer ??= new DispatcherTimer(TimeSpan.FromSeconds(15), DispatcherPriority.Background, (_, _) => RestartWhenIdle());
+            restartTimer.Start();
+            return;
+        }
+
+        restartTimer?.Stop();
+        logger.Information("Restarting into Shapeshifter {Version}", updater.PendingVersion);
+        try
+        {
+            updater.Restart([]);
+        }
+        catch (Exception exception) when (exception is System.ComponentModel.Win32Exception or InvalidOperationException)
+        {
+            logger.Warning(exception, "Could not start the new version; it starts the next time Shapeshifter does");
+            return;
+        }
+
+        desktop.Shutdown();
     }
 
     private static async Task ShowStartupErrorAsync(Exception exception)
@@ -307,6 +404,8 @@ public partial class App : Application
             platform?.DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(3));
             trayIcon?.Dispose();
             http?.Dispose();
+            updater?.Dispose();
+            updateHttp?.Dispose();
         }
         catch (Exception exception)
         {

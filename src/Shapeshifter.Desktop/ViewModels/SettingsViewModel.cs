@@ -3,6 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Platform;
 using Shapeshifter.Core.Settings;
+using Shapeshifter.Core.Updates;
+using Shapeshifter.Desktop.Services;
 
 namespace Shapeshifter.Desktop.ViewModels;
 
@@ -13,6 +15,7 @@ public sealed partial class SettingsViewModel : ObservableObject
     private readonly ClipboardHistory history;
     private readonly ILauncher launcher;
     private readonly AppPaths paths;
+    private readonly Updater? updater;
 
     [ObservableProperty]
     private int pasteDelayMilliseconds;
@@ -27,6 +30,9 @@ public sealed partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private bool startAtLogin;
 
+    [ObservableProperty]
+    private bool automaticUpdates;
+
     public SettingsViewModel(
         SettingsStore settings,
         IAutostartService autostart,
@@ -34,7 +40,8 @@ public sealed partial class SettingsViewModel : ObservableObject
         ILauncher launcher,
         AppPaths paths,
         string modifierName,
-        IReadOnlyList<string> warnings)
+        IReadOnlyList<string> warnings,
+        Updater? updater = null)
     {
         ArgumentNullException.ThrowIfNull(settings);
         ArgumentNullException.ThrowIfNull(autostart);
@@ -43,11 +50,17 @@ public sealed partial class SettingsViewModel : ObservableObject
         this.history = history;
         this.launcher = launcher;
         this.paths = paths;
+        this.updater = updater;
         var current = settings.Current;
         pasteDelayMilliseconds = current.PasteDelayMilliseconds;
         quietMode = current.QuietMode;
         maxHistoryItems = current.MaxHistoryItems;
         startAtLogin = autostart.IsSupported && autostart.IsEnabled;
+        automaticUpdates = current.AutomaticUpdates;
+        if (updater is not null)
+        {
+            updater.StateChanged += OnUpdaterStateChanged;
+        }
         DelayDescription = $"How long to hold {modifierName}+V before the history appears";
         Warnings = string.Join(Environment.NewLine + Environment.NewLine, warnings);
         Usage =
@@ -76,6 +89,37 @@ public sealed partial class SettingsViewModel : ObservableObject
 
     public string Version { get; } = "Version " + (typeof(SettingsViewModel).Assembly.GetName().Version?.ToString(3) ?? "?");
 
+    /// <summary>What the updater is doing, or why this copy cannot update itself.</summary>
+    public string UpdateStatus => updater?.StatusText ?? "Updates are checked automatically";
+
+    /// <summary>Whether this copy can download and install updates (single-file release builds in a writable folder).</summary>
+    public bool CanUpdate => updater?.IsSupported == true;
+
+    /// <summary>Stops following the updater; called when the window closes.</summary>
+    public void Detach()
+    {
+        if (updater is not null)
+        {
+            updater.StateChanged -= OnUpdaterStateChanged;
+        }
+    }
+
+    private void OnUpdaterStateChanged(object? sender, EventArgs e) =>
+        Avalonia.Threading.Dispatcher.UIThread.Post(() => OnPropertyChanged(nameof(UpdateStatus)));
+
+    partial void OnAutomaticUpdatesChanged(bool value)
+    {
+        settings.Update(current => current with { AutomaticUpdates = value });
+        if (value && updater is { IsSupported: true, State: UpdateState.Idle or UpdateState.Disabled })
+        {
+            _ = updater.CheckNowAsync();
+        }
+        else
+        {
+            OnPropertyChanged(nameof(UpdateStatus));
+        }
+    }
+
     partial void OnPasteDelayMillisecondsChanged(int value) =>
         settings.Update(current => current with { PasteDelayMilliseconds = value });
 
@@ -95,6 +139,20 @@ public sealed partial class SettingsViewModel : ObservableObject
 
     [RelayCommand]
     private void ClearHistory() => history.Clear(includePinned: false);
+
+    /// <summary>Checks GitHub now; builds that cannot update themselves open the releases page instead.</summary>
+    [RelayCommand]
+    private void CheckForUpdates()
+    {
+        if (updater is { IsSupported: true })
+        {
+            _ = updater.CheckNowAsync();
+        }
+        else
+        {
+            launcher.OpenUrl(Installation.App.ReleasesPage);
+        }
+    }
 
     [RelayCommand]
     private void OpenLogFolder() => launcher.OpenFolder(paths.LogDirectory);

@@ -250,6 +250,13 @@ jobs:
           pattern: Shapeshifter-*
           path: dist
           merge-multiple: true
+      - name: Checksums
+        # The updater (src/Shapeshifter.Core/Updates) refuses a download whose SHA-256 does not match this file or
+        # the digest GitHub reports for the asset.
+        working-directory: dist
+        run: |
+          sha256sum Shapeshifter-* > SHA256SUMS.txt
+          cat SHA256SUMS.txt
       - name: Create the release with the builds attached
         env:
           GH_TOKEN: ${{ github.token }}

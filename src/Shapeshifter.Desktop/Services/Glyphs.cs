@@ -40,6 +40,8 @@ public static class Glyphs
 
     public static Geometry Power { get; } = Geometry.Parse("M10,2.5 V9.5 M6,5.25 C4.4,6.5 3.5,8.2 3.5,10.25 C3.5,13.8 6.4,16.75 10,16.75 C13.6,16.75 16.5,13.8 16.5,10.25 C16.5,8.2 15.6,6.5 14,5.25");
 
+    public static Geometry Update { get; } = Geometry.Parse("M16.5,10 A6.5,6.5 0 1 1 14.6,5.4 M15,2.25 V5.75 H11.5 M10,6.5 V11.5 M7.75,9.5 L10,11.75 L12.25,9.5");
+
     public static Geometry Trash { get; } = Geometry.Parse("M3.5,5.5 H16.5 M8,5.5 V3.5 H12 V5.5 M5,5.5 L6,17 H14 L15,5.5 M8.5,8.5 V14 M11.5,8.5 V14");
 
     public static Geometry Source { get; } = Geometry.Parse("M10,2.5 A7.5,7.5 0 1 1 9.99,2.5 M2.5,10 H17.5 M10,2.5 C7.5,5 7.5,15 10,17.5 C12.5,15 12.5,5 10,2.5");

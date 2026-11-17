@@ -165,7 +165,8 @@ public sealed class PlatformServices : IAsyncDisposable
         return ValueTask.CompletedTask;
     }
 
-    private static IAutostartService CreateAutostart()
+    /// <summary>The start-at-login service of this platform; usable without the rest of the platform services.</summary>
+    public static IAutostartService CreateAutostart()
     {
         if (OperatingSystem.IsWindows())
         {

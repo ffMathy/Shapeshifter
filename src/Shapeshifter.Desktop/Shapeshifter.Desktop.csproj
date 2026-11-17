@@ -29,6 +29,8 @@
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
+    <!-- The icon of the Linux desktop entry the installer writes, readable before Avalonia starts. -->
+    <EmbeddedResource Include="Assets\Linux\Application.png" LogicalName="Shapeshifter.Application.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" />

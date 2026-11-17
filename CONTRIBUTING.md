@@ -64,6 +64,11 @@ To produce a self-contained, single-file build for a platform (`win-x64`, `win-a
 dotnet publish src/Shapeshifter.Desktop -c Release -r linux-x64 -o publish
 ```
 
+A single-file build installs itself the first time it starts (see `src/Shapeshifter.Core/Updates`) and replaces itself
+with newer GitHub releases. While trying out such a build, start it with `--no-install` and set
+`SHAPESHIFTER_NO_UPDATE=1`, or it moves into the install location and updates to the latest release. `dotnet run` and
+the tests are never installed or updated.
+
 ## Changing how the picker looks
 
 The screenshots in `assets/screenshots` (used by the README and the website) are rendered from the real picker, settings window and notification of each look, with sample content. To run the app in another platform's look, set `SHAPESHIFTER_LOOK` to `windows`, `macos` or `linux`. After a visual change, regenerate them with `scripts/generate-screenshots.sh` and check the result. A look only shows its real font on its own operating system (Segoe UI on Windows, SF Pro on macOS, Adwaita Sans on Linux, which `scripts/install-adwaita-fonts.sh` installs); elsewhere it falls back to Inter with a warning. CI renders each look on its own runner and commits changed screenshots to the branch.
@@ -78,7 +83,7 @@ website/preview.sh    # then open http://localhost:8000
 
 ## Releasing
 
-Every merge to `master` is released (merges that land while a release is being built are released together). CI builds and tests the merge, publishes all six platforms and creates a GitHub release with the six executables attached as they are, one single file per platform (`Shapeshifter-win-x64.exe`, `Shapeshifter-osx-arm64`, `Shapeshifter-linux-x64` and so on; no archives) and release notes generated from the merged pull requests.
+Every merge to `master` is released (merges that land while a release is being built are released together). CI builds and tests the merge, publishes all six platforms and creates a GitHub release with the six executables attached as they are, one single file per platform (`Shapeshifter-win-x64.exe`, `Shapeshifter-osx-arm64`, `Shapeshifter-linux-x64` and so on; no archives), which the app also downloads when it updates itself, plus `SHA256SUMS.txt`, and release notes generated from the merged pull requests.
 
 The version is worked out by `scripts/next-version.sh`: the newest `v*` tag with its patch number increased (v7.1.0 → v7.1.1), or the `<Version>` in `Directory.Build.props` when that is newer. To release a new minor or major version, raise `<Version>` in the pull request (for example to `7.2.0` or `8.0.0`).
 
