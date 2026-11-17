@@ -262,6 +262,7 @@ internal static class Program
         var content = (Control)picker.Content!;
         picker.Content = null;
         content.DataContext = viewModel;
+        content.FlowDirection = picker.FlowDirection;
 
         using var background = ToBitmap(SampleArt.Desktop(look, width, height, dark));
         var host = new Window
@@ -297,6 +298,7 @@ internal static class Program
         var content = (Control)window.Content!;
         window.Content = null;
         content.DataContext = window.DataContext;
+        content.FlowDirection = window.FlowDirection;
         if (!double.IsNaN(window.Width))
             content.Width = window.Width - (content.Margin.Left + content.Margin.Right);
         var host = new Window

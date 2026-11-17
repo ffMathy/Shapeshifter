@@ -108,7 +108,8 @@
       </StackPanel>
     </Border>
 
-    <StackPanel Classes="commands">
+    <!-- A wrapping row: translated labels can be much longer than the English ones. -->
+    <WrapPanel Classes="commands">
       <Button Classes="command" Command="{Binding ClearHistoryCommand}">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <Path Classes="commandIcon" Data="{x:Static services:Glyphs.Trash}" Stretch="Uniform" />
@@ -127,6 +128,6 @@
           <TextBlock Text="{x:Static loc:Strings.SettingsOpenLogFolder}" VerticalAlignment="Center" />
         </StackPanel>
       </Button>
-    </StackPanel>
+    </WrapPanel>
   </StackPanel>
 </Window>

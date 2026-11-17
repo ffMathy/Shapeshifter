@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Shapeshifter Ayarları</value>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>Sürüm {0}</value>
+  </data>
+  <data name="SettingsCopyVersion" xml:space="preserve">
+    <value>Sürümü kopyala</value>
+  </data>
+  <data name="SettingsCopied" xml:space="preserve">
+    <value>Kopyalandı</value>
+  </data>
+  <data name="SettingsReportProblem" xml:space="preserve">
+    <value>Sorun bildir</value>
+  </data>
+  <data name="SettingsProjectPage" xml:space="preserve">
+    <value>Proje sayfası</value>
+  </data>
+  <data name="SettingsUsage" xml:space="preserve">
+    <value>Her zamanki gibi kopyalayın. Daha eski bir öğeyi yapıştırmak için {0} tuşunu basılı tutup V tuşuna basın: geçmişi görmek için {0} tuşunu basılı tutmaya devam edin, bir öğe seçmek için V tuşuna tekrar basın (veya ↑/↓ ya da 1–9), öğeyle ne yapılacağını seçmek için →, kaldırmak için Delete ve iptal etmek için Esc tuşunu kullanın. Yapıştırmak için {0} tuşunu bırakın.</value>
+  </data>
+  <data name="SettingsHistoryGroup" xml:space="preserve">
+    <value>Geçmiş</value>
+  </data>
+  <data name="SettingsDelayTitle" xml:space="preserve">
+    <value>Geçmiş görünmeden önceki gecikme</value>
+  </data>
+  <data name="SettingsDelayDescription" xml:space="preserve">
+    <value>Geçmişin görünmesi için {0}+V tuşlarının ne kadar basılı tutulacağı</value>
+  </data>
+  <data name="SettingsDelayAccessibleName" xml:space="preserve">
+    <value>Geçmiş görünmeden önceki gecikme, milisaniye cinsinden</value>
+  </data>
+  <data name="SettingsItemsTitle" xml:space="preserve">
+    <value>Hatırlanacak öğe sayısı</value>
+  </data>
+  <data name="SettingsItemsDescription" xml:space="preserve">
+    <value>Sabitlenmiş öğeler bunlara ek olarak saklanır</value>
+  </data>
+  <data name="SettingsRememberTitle" xml:space="preserve">
+    <value>Yeniden başlatmadan sonra geçmişi hatırla</value>
+  </data>
+  <data name="SettingsRememberDescription" xml:space="preserve">
+    <value>Yalnızca sabitlenmiş öğeleri değil, geçmişi de bu bilgisayarın diskinde saklar</value>
+  </data>
+  <data name="SettingsBehaviourGroup" xml:space="preserve">
+    <value>Davranış</value>
+  </data>
+  <data name="SettingsNotificationsTitle" xml:space="preserve">
+    <value>Kopyalama bildirimleri</value>
+  </data>
+  <data name="SettingsNotificationsDescription" xml:space="preserve">
+    <value>Her kopyalamada bir bildirim göster</value>
+  </data>
+  <data name="SettingsStartAtLoginTitle" xml:space="preserve">
+    <value>Oturum açıldığında başlat</value>
+  </data>
+  <data name="SettingsStartAtLoginDescription" xml:space="preserve">
+    <value>Shapeshifter, oturum açtıktan sonra arka planda bekler</value>
+  </data>
+  <data name="SettingsUpdatesTitle" xml:space="preserve">
+    <value>Otomatik güncellemeler</value>
+  </data>
+  <data name="SettingsClearHistory" xml:space="preserve">
+    <value>Geçmişi temizle</value>
+  </data>
+  <data name="SettingsCheckForUpdates" xml:space="preserve">
+    <value>Güncellemeleri denetle</value>
+  </data>
+  <data name="SettingsOpenLogFolder" xml:space="preserve">
+    <value>Günlük klasörünü aç</value>
+  </data>
+  <data name="PickerTitleWindows" xml:space="preserve">
+    <value>Pano geçmişi</value>
+  </data>
+  <data name="PickerTitleMacOS" xml:space="preserve">
+    <value>Pano</value>
+  </data>
+  <data name="PickerItemCountOne" xml:space="preserve">
+    <value>1 öğe</value>
+  </data>
+  <data name="PickerItemCountOther" xml:space="preserve">
+    <value>{0} öğe</value>
+  </data>
+  <data name="PickerReleaseHint" xml:space="preserve">
+    <value>Yapıştırmak için {0} tuşunu bırakın</value>
+  </data>
+  <data name="PickerNothingCopied" xml:space="preserve">
+    <value>Henüz hiçbir şey kopyalanmadı</value>
+  </data>
+  <data name="PickerEmptyHint" xml:space="preserve">
+    <value>Her zamanki gibi kopyalayın; Shapeshifter kopyaladığınız her şeyi saklar.
+
+Daha önce kopyaladığınız bir şeyi yapıştırmak için {0} tuşunu basılı tutup V tuşuna basın. Geçmişi görmek için {0} tuşunu basılı tutmaya devam edin, seçmek için V veya ok tuşlarına basın ve yapıştırmak için {0} tuşunu bırakın.</value>
+  </data>
+  <data name="PickerActions" xml:space="preserve">
+    <value>Eylemler</value>
+  </data>
+  <data name="PickerActionsForText" xml:space="preserve">
+    <value>Bu metin için eylemler</value>
+  </data>
+  <data name="PickerActionsForImage" xml:space="preserve">
+    <value>Bu görüntü için eylemler</value>
+  </data>
+  <data name="PickerActionsForFile" xml:space="preserve">
+    <value>Bu dosya için eylemler</value>
+  </data>
+  <data name="PickerActionsForFiles" xml:space="preserve">
+    <value>Bu dosyalar için eylemler</value>
+  </data>
+  <data name="PickerDefault" xml:space="preserve">
+    <value>Varsayılan</value>
+  </data>
+  <data name="PickerHintRelease" xml:space="preserve">
+    <value>Bırak ve yapıştır</value>
+  </data>
+  <data name="PickerHintMove" xml:space="preserve">
+    <value>Gezin</value>
+  </data>
+  <data name="PickerHintJump" xml:space="preserve">
+    <value>Atla</value>
+  </data>
+  <data name="PickerHintRemove" xml:space="preserve">
+    <value>Kaldır</value>
+  </data>
+  <data name="PickerHintCancel" xml:space="preserve">
+    <value>İptal</value>
+  </data>
+  <data name="KeyControl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="KeyEscape" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="ItemEmpty" xml:space="preserve">
+    <value>(boş)</value>
+  </data>
+  <data name="ItemImage" xml:space="preserve">
+    <value>Görüntü</value>
+  </data>
+  <data name="ItemImageWithSize" xml:space="preserve">
+    <value>Görüntü · {0} × {1}</value>
+  </data>
+  <data name="ItemFilesWithNames" xml:space="preserve">
+    <value>{0} öğe · {1}</value>
+  </data>
+  <data name="ItemFileCount" xml:space="preserve">
+    <value>{0} dosya</value>
+  </data>
+  <data name="ItemFormattedText" xml:space="preserve">
+    <value>Biçimlendirilmiş metin</value>
+  </data>
+  <data name="ItemOtherData" xml:space="preserve">
+    <value>Diğer veriler</value>
+  </data>
+  <data name="ItemCharacterCount" xml:space="preserve">
+    <value>{0} karakter</value>
+  </data>
+  <data name="ItemLineCount" xml:space="preserve">
+    <value>{0} satır</value>
+  </data>
+  <data name="ToastCopiedOne" xml:space="preserve">
+    <value>Kopyalandı · Geçmişinizde 1 öğe var</value>
+  </data>
+  <data name="ToastCopiedOther" xml:space="preserve">
+    <value>Kopyalandı · Geçmişinizde {0} öğe var</value>
+  </data>
+  <data name="TraySettings" xml:space="preserve">
+    <value>Ayarlar…</value>
+  </data>
+  <data name="TrayCheckForUpdates" xml:space="preserve">
+    <value>Güncellemeleri denetle…</value>
+  </data>
+  <data name="TrayReportProblem" xml:space="preserve">
+    <value>Sorun bildir…</value>
+  </data>
+  <data name="TrayAbout" xml:space="preserve">
+    <value>Shapeshifter {0} Hakkında</value>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>Shapeshifter’dan Çık</value>
+  </data>
+  <data name="StartupErrorTitle" xml:space="preserve">
+    <value>Shapeshifter başlatılamadı</value>
+  </data>
+  <data name="StartupErrorDetails" xml:space="preserve">
+    <value>Ayrıntılar şuraya yazıldı: {0}.</value>
+  </data>
+  <data name="StartupErrorQuit" xml:space="preserve">
+    <value>Çık</value>
+  </data>
+  <data name="ActionPaste" xml:space="preserve">
+    <value>Yapıştır</value>
+  </data>
+  <data name="ActionPasteDescription" xml:space="preserve">
+    <value>Pano içeriğini olduğu gibi yapıştırır.</value>
+  </data>
+  <data name="ActionPasteAsPlainText" xml:space="preserve">
+    <value>Düz metin olarak yapıştır</value>
+  </data>
+  <data name="ActionPasteAsPlainTextDescription" xml:space="preserve">
+    <value>Pano içeriğini biçimlendirme olmadan düz metin olarak yapıştırır.</value>
+  </data>
+  <data name="ActionPasteAsFile" xml:space="preserve">
+    <value>Dosya olarak yapıştır</value>
+  </data>
+  <data name="ActionPasteAsFileDescription" xml:space="preserve">
+    <value>Bu metni bir .txt dosyasına kaydeder ve dosyayı yapıştırır.</value>
+  </data>
+  <data name="ActionCopyAsZip" xml:space="preserve">
+    <value>Sıkıştırılmış klasör olarak kopyala</value>
+  </data>
+  <data name="ActionCopyAsZipDescription" xml:space="preserve">
+    <value>Bu dosyaları panoya sıkıştırılmış (.zip) klasör olarak kopyalar.</value>
+  </data>
+  <data name="ActionCopyImageFromLink" xml:space="preserve">
+    <value>Bağlantıdaki görüntüyü kopyala</value>
+  </data>
+  <data name="ActionCopyImageFromLinkDescription" xml:space="preserve">
+    <value>Bağlantıdaki görüntüyü indirir ve görüntünün kendisini panoya kopyalar.</value>
+  </data>
+  <data name="ActionOpenLink" xml:space="preserve">
+    <value>Bağlantıyı aç</value>
+  </data>
+  <data name="ActionOpenLinks" xml:space="preserve">
+    <value>Bağlantıları aç</value>
+  </data>
+  <data name="ActionOpenLinkDescription" xml:space="preserve">
+    <value>Bağlantıyı tarayıcınızda açar.</value>
+  </data>
+  <data name="ActionOpenLinksDescription" xml:space="preserve">
+    <value>Bağlantıları tarayıcınızda açar (en fazla {0}).</value>
+  </data>
+  <data name="ActionPin" xml:space="preserve">
+    <value>Panoya sabitle</value>
+  </data>
+  <data name="ActionPinDescription" xml:space="preserve">
+    <value>Bu öğeyi her zaman en üstte kalacak şekilde sabitler ve Shapeshifter bir sonraki açıldığında da orada olması için bilgisayarınıza kaydeder.</value>
+  </data>
+  <data name="ActionUnpin" xml:space="preserve">
+    <value>Panodaki sabitlemeyi kaldır</value>
+  </data>
+  <data name="ActionUnpinDescription" xml:space="preserve">
+    <value>Bu öğenin sabitlemesini kaldırır; öğe siz kopyaladıkça aşağı kayar ve artık bilgisayarınıza kaydedilmez.</value>
+  </data>
+  <data name="TimeJustNow" xml:space="preserve">
+    <value>Az önce</value>
+  </data>
+  <data name="TimeMinutesAgo" xml:space="preserve">
+    <value>{0} dk önce</value>
+  </data>
+  <data name="TimeHoursAgo" xml:space="preserve">
+    <value>{0} sa önce</value>
+  </data>
+  <data name="TimeYesterday" xml:space="preserve">
+    <value>Dün</value>
+  </data>
+  <data name="TimeDaysAgo" xml:space="preserve">
+    <value>{0} gün önce</value>
+  </data>
+  <data name="UpdateOff" xml:space="preserve">
+    <value>Otomatik güncellemeler kapalı</value>
+  </data>
+  <data name="UpdateUnsupported" xml:space="preserve">
+    <value>Bu kopya kendini güncelleyemez</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>Güncellemeler denetleniyor…</value>
+  </data>
+  <data name="UpdateUpToDate" xml:space="preserve">
+    <value>Güncel (denetlenme: {0})</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>{0} sürümü indiriliyor…</value>
+  </data>
+  <data name="UpdateReadyToRestart" xml:space="preserve">
+    <value>{0} sürümü yüklendi ve {1} bir sonraki başlatıldığında çalışacak</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Güncellenemedi: {0}</value>
+  </data>
+  <data name="UpdateAutomatic" xml:space="preserve">
+    <value>Güncellemeler otomatik olarak denetlenir</value>
+  </data>
+  <data name="UpdateTurnedOff" xml:space="preserve">
+    <value>Güncellemeler kapalı ({0})</value>
+  </data>
+  <data name="UpdateReleaseBuildsOnly" xml:space="preserve">
+    <value>Yalnızca sürüm derlemeleri kendini günceller</value>
+  </data>
+  <data name="UpdateCannotWrite" xml:space="preserve">
+    <value>{0} uygulaması şuraya yazamıyor: {1}. Uygulamayı yüklendiği yöntemle güncelleyin</value>
+  </data>
+  <data name="PlatformNeedsX11" xml:space="preserve">
+    <value>Shapeshifter bir X11 ekranı gerektirir (DISPLAY ayarlanmamış). Wayland kullanıyorsanız XWayland kurulu ve kullanılabilir olmalıdır.</value>
+  </data>
+  <data name="PlatformWayland" xml:space="preserve">
+    <value>Bu bir Wayland oturumu. Wayland, uygulamaların genel tuş vuruşlarını izlemesine veya oluşturmasına izin vermez; bu nedenle yapıştırma hareketi yalnızca bir X11 (XWayland) uygulaması odaktayken çalışır. Tam destek için bir X11 oturumunda oturum açın.</value>
+  </data>
+  <data name="PlatformAccessibility" xml:space="preserve">
+    <value>Cmd+V tuş vuruşunu görüp gönderebilmek için Shapeshifter uygulamasına Erişilebilirlik izni gerekir. Sistem Ayarları &gt; Gizlilik ve Güvenlik &gt; Erişilebilirlik bölümünden izin verin ve Shapeshifter uygulamasını yeniden başlatın.</value>
+  </data>
+  <data name="PlatformNotSupported" xml:space="preserve">
+    <value>{0} desteklenmiyor.</value>
+  </data>
+  <data name="ToggleOn" xml:space="preserve">
+    <value>Açık</value>
+  </data>
+  <data name="ToggleOff" xml:space="preserve">
+    <value>Kapalı</value>
+  </data>
+</root>

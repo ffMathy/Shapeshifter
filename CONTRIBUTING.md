@@ -56,6 +56,22 @@ On macOS the terminal running the tests needs Accessibility access.
 
 CI runs the unit tests on Windows, macOS and Linux, and the end-to-end tests on Linux and Windows, including a Remote Desktop session on Windows.
 
+## Translations
+
+Shapeshifter speaks the display language of the operating system. Its text lives in
+`src/Shapeshifter.Core/Localization`: `Strings.resx` holds the English, with a note for translators on each string,
+and `Strings.<language>.resx` holds a translation (Arabic, Bengali, Chinese (Simplified), Danish, Dutch, French, German,
+Hindi, Indonesian, Italian, Japanese, Korean, Persian, Polish, Portuguese (Brazil), Russian, Spanish, Thai, Turkish,
+Ukrainian and Vietnamese). Languages without a translation fall back to English.
+
+The first translations were made with AI, so corrections from native speakers are very welcome. Edit the `.resx` file
+of your language in any text editor or resx editor. To add a language, copy `Strings.resx` to
+`Strings.<code>.resx` (for example `Strings.sv.resx`), translate the `<value>` of every string, drop the `<comment>`s
+and add the code to `Localizer.Translations`. Keep placeholders such as `{0}` and the name Shapeshifter as they are.
+`TranslationTests` checks that every translation has every string with the same placeholders. To see the app in another
+language, start it with `SHAPESHIFTER_LANGUAGE` set to the code, for example `SHAPESHIFTER_LANGUAGE=de`; the
+screenshot generator follows it too.
+
 ## Publishing a build
 
 To produce a self-contained, single-file build for a platform (`win-x64`, `win-arm64`, `osx-arm64`, `osx-x64`, `linux-x64`, `linux-arm64`; the output folder holds only the executable, with debug symbols embedded):

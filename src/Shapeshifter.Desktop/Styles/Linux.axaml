@@ -771,10 +771,11 @@
   </Style>
 
   <!-- Flat, rounded pill buttons, as at the foot of a preferences page. -->
-  <Style Selector="StackPanel.commands">
+  <Style Selector="WrapPanel.commands">
     <Setter Property="Orientation" Value="Horizontal" />
     <Setter Property="HorizontalAlignment" Value="Center" />
-    <Setter Property="Spacing" Value="12" />
+    <Setter Property="ItemSpacing" Value="12" />
+    <Setter Property="LineSpacing" Value="12" />
     <Setter Property="Margin" Value="0,24,0,0" />
   </Style>
   <Style Selector="Button.command">

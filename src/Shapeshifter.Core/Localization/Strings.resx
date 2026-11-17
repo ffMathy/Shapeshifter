@@ -422,4 +422,12 @@ To paste something you copied earlier, hold {0} and press V. Keep holding {0} to
     <value>{0} is not supported.</value>
     <comment>{0} is the name of an operating system.</comment>
   </data>
+  <data name="ToggleOn" xml:space="preserve">
+    <value>On</value>
+    <comment>Label beside a switch that is on (settings window). One short word, as in the OS settings.</comment>
+  </data>
+  <data name="ToggleOff" xml:space="preserve">
+    <value>Off</value>
+    <comment>Label beside a switch that is off (settings window). One short word, as in the OS settings.</comment>
+  </data>
 </root>

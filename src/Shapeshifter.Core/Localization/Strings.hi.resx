@@ -320,4 +320,10 @@
   <data name="PlatformNotSupported" xml:space="preserve">
     <value>{0} समर्थित नहीं है।</value>
   </data>
+  <data name="ToggleOn" xml:space="preserve">
+    <value>चालू</value>
+  </data>
+  <data name="ToggleOff" xml:space="preserve">
+    <value>बंद</value>
+  </data>
 </root>

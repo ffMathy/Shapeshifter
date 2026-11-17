@@ -320,4 +320,10 @@ Untuk menempelkan sesuatu yang Anda salin sebelumnya, tahan {0} lalu tekan V. Te
   <data name="PlatformNotSupported" xml:space="preserve">
     <value>{0} tidak didukung.</value>
   </data>
+  <data name="ToggleOn" xml:space="preserve">
+    <value>Aktif</value>
+  </data>
+  <data name="ToggleOff" xml:space="preserve">
+    <value>Nonaktif</value>
+  </data>
 </root>

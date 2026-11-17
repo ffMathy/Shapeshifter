@@ -320,4 +320,10 @@
   <data name="PlatformNotSupported" xml:space="preserve">
     <value>{0} はサポートされていません。</value>
   </data>
+  <data name="ToggleOn" xml:space="preserve">
+    <value>オン</value>
+  </data>
+  <data name="ToggleOff" xml:space="preserve">
+    <value>オフ</value>
+  </data>
 </root>

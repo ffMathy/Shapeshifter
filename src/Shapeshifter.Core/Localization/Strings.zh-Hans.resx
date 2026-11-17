@@ -320,4 +320,10 @@
   <data name="PlatformNotSupported" xml:space="preserve">
     <value>不支持 {0}。</value>
   </data>
+  <data name="ToggleOn" xml:space="preserve">
+    <value>开</value>
+  </data>
+  <data name="ToggleOff" xml:space="preserve">
+    <value>关</value>
+  </data>
 </root>

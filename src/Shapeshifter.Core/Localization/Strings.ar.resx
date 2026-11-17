@@ -320,4 +320,10 @@
   <data name="PlatformNotSupported" xml:space="preserve">
     <value>{0} غير مدعوم.</value>
   </data>
+  <data name="ToggleOn" xml:space="preserve">
+    <value>تشغيل</value>
+  </data>
+  <data name="ToggleOff" xml:space="preserve">
+    <value>إيقاف</value>
+  </data>
 </root>

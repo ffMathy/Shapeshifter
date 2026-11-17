@@ -695,10 +695,11 @@
   </Style>
 
   <!-- Commands: capsule push buttons -->
-  <Style Selector="StackPanel.commands">
+  <Style Selector="WrapPanel.commands">
     <Setter Property="Orientation" Value="Horizontal" />
     <Setter Property="HorizontalAlignment" Value="Right" />
-    <Setter Property="Spacing" Value="8" />
+    <Setter Property="ItemSpacing" Value="8" />
+    <Setter Property="LineSpacing" Value="8" />
     <Setter Property="Margin" Value="0,16,0,0" />
   </Style>
   <Style Selector="Button.command">
