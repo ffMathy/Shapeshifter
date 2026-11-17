@@ -829,6 +829,26 @@
     <Setter Property="BorderThickness" Value="0" />
   </Style>
 
+  <!-- A pop-up button: the same grey capsule as the steppers -->
+  <Style Selector="ComboBox.rowControl">
+    <Setter Property="MinWidth" Value="96" />
+    <Setter Property="Height" Value="28" />
+    <Setter Property="MinHeight" Value="28" />
+    <Setter Property="Margin" Value="12,0,0,0" />
+    <Setter Property="Padding" Value="12,0,6,0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="Foreground" Value="#1D1D1F" />
+    <Setter Property="Background" Value="#EDEDF1" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="14" />
+  </Style>
+  <Style Selector="ComboBox.rowControl:pointerover /template/ Border#Background">
+    <Setter Property="Background" Value="#E4E4E9" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
+
   <!-- A switch: a capsule track in the accent, with a pill knob -->
   <Style Selector="ToggleSwitch.rowControl">
     <Setter Property="Margin" Value="12,0,0,0" />

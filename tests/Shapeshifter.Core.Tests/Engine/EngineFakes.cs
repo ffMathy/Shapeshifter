@@ -200,9 +200,13 @@ internal sealed class FakePasteSimulator(FakeClipboardBackend backend, CallLog l
 
     public CancellationToken LastToken { get; private set; }
 
+    /// <summary>When the last paste was sent (<see cref="System.Diagnostics.Stopwatch"/> timestamp).</summary>
+    public long PastedAt { get; private set; }
+
     public Task SimulatePasteAsync(CancellationToken cancellationToken = default)
     {
         LastToken = cancellationToken;
+        PastedAt = System.Diagnostics.Stopwatch.GetTimestamp();
         lock (clipboardAtPaste)
         {
             clipboardAtPaste.Add(backend.Current);
@@ -284,6 +288,9 @@ internal sealed class FakeFocusTracker(CallLog log) : IFocusedWindowTracker
 
     public List<FocusedWindow> Restored { get; } = [];
 
+    /// <summary>When the focus was last given back (<see cref="System.Diagnostics.Stopwatch"/> timestamp).</summary>
+    public long RestoredAt { get; private set; }
+
     public FocusedWindow? Capture()
     {
         log.Add("focus.capture");
@@ -297,6 +304,7 @@ internal sealed class FakeFocusTracker(CallLog log) : IFocusedWindowTracker
             Restored.Add(window);
         }
 
+        RestoredAt = System.Diagnostics.Stopwatch.GetTimestamp();
         log.Add($"focus.restore:{window.Handle}");
         return Task.FromResult(true);
     }
