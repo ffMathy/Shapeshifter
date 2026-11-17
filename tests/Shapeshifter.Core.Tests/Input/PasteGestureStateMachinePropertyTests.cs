@@ -10,6 +10,7 @@ public sealed class PasteGestureStateMachinePropertyTests
     [
         GestureKey.Other, GestureKey.Modifier, GestureKey.Trigger, GestureKey.Up, GestureKey.Down,
         GestureKey.Left, GestureKey.Right, GestureKey.Delete, GestureKey.Escape,
+        GestureKey.Digit1, GestureKey.Digit3, GestureKey.Digit9,
     ];
 
     [Theory]

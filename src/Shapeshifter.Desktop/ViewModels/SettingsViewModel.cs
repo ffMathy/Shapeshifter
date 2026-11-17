@@ -65,7 +65,7 @@ public sealed partial class SettingsViewModel : ObservableObject
         Warnings = string.Join(Environment.NewLine + Environment.NewLine, warnings);
         Usage =
             $"Copy as usual. To paste an older item, hold {modifierName} and press V: keep {modifierName} held to see " +
-            $"the history, press V again (or ↑/↓) to pick an item, ← to choose what to do with it, Delete to remove it " +
+            $"the history, press V again (or ↑/↓, or 1–9) to pick an item, → to choose what to do with it, Delete to remove it " +
             $"and Esc to cancel. Release {modifierName} to paste.";
     }
 

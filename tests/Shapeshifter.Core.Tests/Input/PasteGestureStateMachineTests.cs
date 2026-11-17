@@ -691,7 +691,7 @@ public sealed class PasteGestureStateMachineTests
     // ---- navigation keys when idle ----
 
     public static TheoryData<GestureKey> NavigationKeys =>
-        [GestureKey.Up, GestureKey.Down, GestureKey.Right, GestureKey.Left, GestureKey.Delete, GestureKey.Escape];
+        [GestureKey.Up, GestureKey.Down, GestureKey.Right, GestureKey.Left, GestureKey.Delete, GestureKey.Escape, GestureKey.Digit1, GestureKey.Digit9];
 
     public static TheoryData<GestureKey> MovementKeys =>
         [GestureKey.Up, GestureKey.Down, GestureKey.Right, GestureKey.Left, GestureKey.Delete];
@@ -1451,5 +1451,68 @@ public sealed class PasteGestureStateMachineTests
         var selection = new PickerSelection([Id(0), Id(1), Id(2)], 2, 0, PickerPane.Items);
 
         Assert.Equal(Id(2), selection.SelectedItemId);
+    }
+
+    // ---- digits jump to an item (issue #44) ----
+
+    [Fact]
+    public void Digit_JumpsToTheItemWithThatNumber_AndShowsThePicker()
+    {
+        var h = GestureHarness.WithItems(5);
+        h.Start();
+
+        var result = h.Down(GestureKey.Digit3);
+
+        Assert.True(result.Suppress);
+        AssertSelection(SingleShow(result), 2);
+        Assert.True(h.Up(GestureKey.Digit3).Suppress);
+    }
+
+    [Fact]
+    public void Digit_ThenRelease_PerformsTheDefaultActionOnThatItem()
+    {
+        var h = GestureHarness.WithItems(5);
+        h.StartAndShow();
+        h.Press(GestureKey.Digit4);
+
+        var release = h.Up(GestureKey.Modifier);
+
+        Assert.Contains(new PerformAction(Id(3), 0), release.Effects);
+    }
+
+    [Fact]
+    public void Digit_ForTheDefaultItem_StillPerformsTheAction()
+    {
+        // Choosing an item explicitly pastes that item, even when it is the default one.
+        var h = GestureHarness.WithItems(3);
+        h.StartAndShow();
+        h.Press(GestureKey.Digit1);
+
+        Assert.Contains(new PerformAction(Id(0), 0), h.Up(GestureKey.Modifier).Effects);
+    }
+
+    [Fact]
+    public void Digit_FromTheActionsPane_GoesBackToTheItems_AndResetsTheAction()
+    {
+        var h = GestureHarness.WithItems(5);
+        h.StartAndShow();
+        h.Press(GestureKey.Right);
+        h.Press(GestureKey.Down);
+
+        var result = h.Down(GestureKey.Digit2);
+
+        AssertSelection(SingleUpdate(result), 1);
+    }
+
+    [Fact]
+    public void Digit_BeyondTheLastItem_IsSwallowed_AndChangesNothing()
+    {
+        var h = GestureHarness.WithItems(2);
+        h.StartAndShow();
+
+        var result = h.Down(GestureKey.Digit9);
+
+        Assert.Equal(GestureResult.Swallow, result);
+        Assert.Contains(new PasteCurrentClipboard(), h.Up(GestureKey.Modifier).Effects);
     }
 }

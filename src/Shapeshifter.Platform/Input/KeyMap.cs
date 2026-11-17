@@ -42,6 +42,15 @@ internal sealed class KeyMap
         // The key labelled "delete" on Mac keyboards is Backspace.
         KeyCode.VcBackspace when UsesCommandKey => GestureKey.Delete,
         KeyCode.VcEscape => GestureKey.Escape,
+        KeyCode.Vc1 or KeyCode.VcNumPad1 => GestureKey.Digit1,
+        KeyCode.Vc2 or KeyCode.VcNumPad2 => GestureKey.Digit2,
+        KeyCode.Vc3 or KeyCode.VcNumPad3 => GestureKey.Digit3,
+        KeyCode.Vc4 or KeyCode.VcNumPad4 => GestureKey.Digit4,
+        KeyCode.Vc5 or KeyCode.VcNumPad5 => GestureKey.Digit5,
+        KeyCode.Vc6 or KeyCode.VcNumPad6 => GestureKey.Digit6,
+        KeyCode.Vc7 or KeyCode.VcNumPad7 => GestureKey.Digit7,
+        KeyCode.Vc8 or KeyCode.VcNumPad8 => GestureKey.Digit8,
+        KeyCode.Vc9 or KeyCode.VcNumPad9 => GestureKey.Digit9,
         _ => GestureKey.Other,
     };
 

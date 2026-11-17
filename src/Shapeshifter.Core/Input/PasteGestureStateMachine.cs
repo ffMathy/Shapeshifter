@@ -66,6 +66,7 @@ public readonly record struct GestureResult(bool Suppress, IReadOnlyList<Gesture
 /// </item>
 /// <item>Each further press of V (with the modifier still held) selects the next, older item and shows the picker.</item>
 /// <item>Up/Down move the selection, Right switches to the actions of the selected item, Left switches back.</item>
+/// <item>1 to 9 jump to the item with that number (the first nine items, top first).</item>
 /// <item>Delete removes the selected item; Escape cancels.</item>
 /// <item>Releasing the modifier performs the selected action (normally "Paste") on the selected item.</item>
 /// <item>V pressed together with Shift, Alt/AltGr or another modifier is left alone (Ctrl+Shift+V, AltGr+V).</item>
@@ -134,6 +135,7 @@ public sealed class PasteGestureStateMachine
             case GestureKey.Right:
             case GestureKey.Delete:
             case GestureKey.Escape:
+            case >= GestureKey.Digit1 and <= GestureKey.Digit9:
                 return OnNavigationKey(input);
             default:
                 return GestureResult.PassThrough;
@@ -307,6 +309,16 @@ public sealed class PasteGestureStateMachine
                 break;
             case GestureKey.Delete:
                 return new GestureResult(true, DeleteSelected());
+            case >= GestureKey.Digit1 and <= GestureKey.Digit9:
+                var index = input.Key - GestureKey.Digit1;
+                if (index >= items.Count)
+                {
+                    return GestureResult.Swallow;
+                }
+
+                pane = PickerPane.Items;
+                Select(index);
+                break;
         }
 
         selectionChanged = true;

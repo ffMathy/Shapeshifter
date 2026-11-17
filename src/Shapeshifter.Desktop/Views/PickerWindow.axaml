@@ -149,6 +149,10 @@
               <TextBlock Text="Move" />
             </StackPanel>
             <StackPanel Classes="hint">
+              <Border Classes="key"><TextBlock Text="1–9" /></Border>
+              <TextBlock Text="Jump" />
+            </StackPanel>
+            <StackPanel Classes="hint">
               <Border Classes="key"><TextBlock Text="←→" /></Border>
               <TextBlock Text="Actions" />
             </StackPanel>

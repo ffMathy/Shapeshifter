@@ -25,6 +25,17 @@ public enum GestureKey
 
     /// <summary>The platform's remaining modifier: the Windows/Super key, or Ctrl on macOS.</summary>
     OtherModifier,
+
+    /// <summary>The digit keys 1 to 9 (top row or keypad), which jump to the item with that number.</summary>
+    Digit1,
+    Digit2,
+    Digit3,
+    Digit4,
+    Digit5,
+    Digit6,
+    Digit7,
+    Digit8,
+    Digit9,
 }
 
 public readonly record struct KeyInput(GestureKey Key, bool IsDown);
@@ -43,7 +54,7 @@ public interface IKeyboardHook : IDisposable
 
     /// <summary>
     /// Some platforms (X11) can only suppress keys that were grabbed beforehand. While a gesture is active the
-    /// navigation keys (arrows, Delete, Escape) are grabbed so the focused application does not see them.
+    /// navigation keys (arrows, Delete, Escape, 1 to 9) are grabbed so the focused application does not see them.
     /// </summary>
     void SetNavigationCaptureEnabled(bool enabled);
 
