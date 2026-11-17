@@ -72,6 +72,10 @@ internal sealed class PickerPresenter : IPickerPresenter
 
     public event EventHandler<bool>? VisibilityChanged;
 
+    /// <summary>Follows a change of the paste shortcut: "Ctrl", "Cmd" or "Win".</summary>
+    public void SetModifierName(string modifierName) =>
+        Dispatcher.UIThread.Post(() => viewModel.SetModifierName(modifierName));
+
     public bool IsVisible { get; private set; }
 
     public int SelectedIndex => viewModel.SelectedIndex;

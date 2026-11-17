@@ -410,4 +410,13 @@ Untuk menempelkan sesuatu yang Anda salin sebelumnya, tahan {0} lalu tekan V. Te
   <data name="UpdatePullRequestBuild" xml:space="preserve">
     <value>Build pull request tidak memperbarui dirinya sendiri</value>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>Pintasan</value>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>Win+V menggantikan riwayat papan klip Windows, jadi Ctrl+V menempel seperti biasa</value>
+  </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Dengan Ctrl+V, Cmd+V menempel seperti biasa</value>
+  </data>
 </root>

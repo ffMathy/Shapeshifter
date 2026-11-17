@@ -1,33 +1,67 @@
 using Shapeshifter.Core.Platform;
+using Shapeshifter.Core.Settings;
 using SharpHook.Data;
 
 namespace Shapeshifter.Platform.Input;
 
-/// <summary>Translates libuiohook key codes into gesture keys for one platform.</summary>
+/// <summary>Translates libuiohook key codes into gesture keys for one platform and paste shortcut.</summary>
 internal sealed class KeyMap
 {
-    private KeyMap(bool useCommandKey)
+    private KeyMap(bool pastesWithCommandKey, bool gestureUsesMetaKey)
     {
-        UsesCommandKey = useCommandKey;
+        PastesWithCommandKey = pastesWithCommandKey;
+        GestureUsesMetaKey = gestureUsesMetaKey;
     }
 
     /// <summary>macOS pastes with Command; Windows and Linux with Control.</summary>
-    public bool UsesCommandKey { get; }
+    public bool PastesWithCommandKey { get; }
 
-    public string ModifierName => UsesCommandKey ? "Cmd" : "Ctrl";
+    /// <summary>
+    /// Whether the gesture's modifier is the Command key (macOS) or the Windows key, rather than Control. With Win+V on
+    /// Windows and Ctrl+V on macOS (issue #28), the gesture's modifier differs from the one that pastes.
+    /// </summary>
+    public bool GestureUsesMetaKey { get; }
 
-    public KeyCode PasteModifier => UsesCommandKey ? KeyCode.VcLeftMeta : KeyCode.VcLeftControl;
+    /// <summary>The gesture is Win+V: Windows opens the Start menu when the Windows key is released on its own.</summary>
+    public bool UsesWindowsKey => GestureUsesMetaKey && !PastesWithCommandKey;
 
-    public static KeyMap ForCurrentPlatform() => new(OperatingSystem.IsMacOS());
+    public string ModifierName => ModifierNameOf(PastesWithCommandKey, GestureUsesMetaKey);
 
-    public static KeyMap ForControlKey() => new(false);
+    /// <summary>The modifier of the keystroke that pastes, which is not the gesture's modifier with the alternative shortcut.</summary>
+    public KeyCode PasteModifier => PastesWithCommandKey ? KeyCode.VcLeftMeta : KeyCode.VcLeftControl;
 
-    public static KeyMap ForCommandKey() => new(true);
+    /// <summary>The paste shortcut that is actually used.</summary>
+    public PasteShortcut Shortcut => GestureUsesMetaKey == PastesWithCommandKey ? PasteShortcut.Standard : PasteShortcut.Alternative;
+
+    /// <summary>Win+V on Windows and Ctrl+V on macOS; X11 has no alternative (Super+V is the desktop's own).</summary>
+    public static bool SupportsAlternative => OperatingSystem.IsWindows() || OperatingSystem.IsMacOS();
+
+    /// <summary>The modifier names of the standard and the alternative shortcut on this platform.</summary>
+    public static IReadOnlyList<string> ShortcutModifierNames =>
+        OperatingSystem.IsMacOS() ? ["Cmd", "Ctrl"] : OperatingSystem.IsWindows() ? ["Ctrl", "Win"] : ["Ctrl"];
+
+    public static KeyMap ForCurrentPlatform(PasteShortcut shortcut = PasteShortcut.Standard)
+    {
+        var mac = OperatingSystem.IsMacOS();
+        var alternative = shortcut == PasteShortcut.Alternative && SupportsAlternative;
+        return new KeyMap(mac, gestureUsesMetaKey: mac != alternative);
+    }
+
+    public static KeyMap ForControlKey() => new(false, false);
+
+    public static KeyMap ForCommandKey() => new(true, true);
+
+    public static KeyMap ForWindowsKey() => new(false, true);
+
+    /// <summary>Ctrl+V on macOS, where pasting still sends Cmd+V.</summary>
+    public static KeyMap ForControlKeyOnMac() => new(true, false);
+
+    private static string ModifierNameOf(bool mac, bool meta) => meta ? (mac ? "Cmd" : "Win") : "Ctrl";
 
     public GestureKey Map(KeyCode keyCode) => keyCode switch
     {
-        KeyCode.VcLeftControl or KeyCode.VcRightControl when !UsesCommandKey => GestureKey.Modifier,
-        KeyCode.VcLeftMeta or KeyCode.VcRightMeta when UsesCommandKey => GestureKey.Modifier,
+        KeyCode.VcLeftControl or KeyCode.VcRightControl when !GestureUsesMetaKey => GestureKey.Modifier,
+        KeyCode.VcLeftMeta or KeyCode.VcRightMeta when GestureUsesMetaKey => GestureKey.Modifier,
         KeyCode.VcLeftShift or KeyCode.VcRightShift => GestureKey.Shift,
         KeyCode.VcLeftAlt or KeyCode.VcRightAlt => GestureKey.Alt,
         KeyCode.VcLeftMeta or KeyCode.VcRightMeta => GestureKey.OtherModifier,
@@ -40,7 +74,7 @@ internal sealed class KeyMap
         KeyCode.VcDelete => GestureKey.Delete,
 
         // The key labelled "delete" on Mac keyboards is Backspace.
-        KeyCode.VcBackspace when UsesCommandKey => GestureKey.Delete,
+        KeyCode.VcBackspace when PastesWithCommandKey => GestureKey.Delete,
         KeyCode.VcEscape => GestureKey.Escape,
         KeyCode.VcS => GestureKey.Search,
         KeyCode.Vc1 or KeyCode.VcNumPad1 => GestureKey.Digit1,
@@ -57,7 +91,13 @@ internal sealed class KeyMap
         _ => GestureKey.Other,
     };
 
-    /// <summary>Left and right variants of the modifier are interchangeable when matching our own echo.</summary>
-    public bool IsSameKey(KeyCode expected, KeyCode actual) =>
-        expected == actual || (Map(expected) == GestureKey.Modifier && Map(actual) == GestureKey.Modifier);
+    /// <summary>Left and right variants of a modifier are interchangeable when matching our own echo.</summary>
+    public static bool IsSameKey(KeyCode expected, KeyCode actual) =>
+        expected == actual
+        || (IsControl(expected) && IsControl(actual))
+        || (IsMeta(expected) && IsMeta(actual));
+
+    private static bool IsControl(KeyCode key) => key is KeyCode.VcLeftControl or KeyCode.VcRightControl;
+
+    private static bool IsMeta(KeyCode key) => key is KeyCode.VcLeftMeta or KeyCode.VcRightMeta;
 }

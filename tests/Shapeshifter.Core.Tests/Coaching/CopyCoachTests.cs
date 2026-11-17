@@ -85,6 +85,21 @@ public sealed class CopyCoachTests
         Assert.Contains("Cmd+V", tip!.Message);
     }
 
+    [Fact]
+    public void TheMessageFollowsAChangedShortcut()
+    {
+        var modifier = "Ctrl";
+        var changing = new CopyCoach(locator, () => modifier, time: time);
+        var first = Item("first");
+        changing.OnCopied(first, true, null);
+        changing.OnCopied(Item("second"), true, null);
+        modifier = "Win";
+
+        var tip = changing.OnCopied(first, false, null);
+
+        Assert.Contains("Win+V", tip!.Message);
+    }
+
     // ------------------------------------------------------------ back and forth (#310)
 
     [Fact]

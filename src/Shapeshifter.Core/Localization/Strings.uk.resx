@@ -410,4 +410,13 @@
   <data name="UpdatePullRequestBuild" xml:space="preserve">
     <value>Збірки з pull request не оновлюються самі</value>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>Сполучення клавіш</value>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>Win+V замінює журнал буфера обміну Windows, а Ctrl+V вставляє як завжди</value>
+  </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>З Ctrl+V сполучення Cmd+V вставляє як завжди</value>
+  </data>
 </root>

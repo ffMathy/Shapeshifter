@@ -117,6 +117,10 @@ internal sealed class FakeKeyboardHook : IKeyboardHook
 
     public string ModifierName => "Ctrl";
 
+    public Shapeshifter.Core.Settings.PasteShortcut PasteShortcut { get; set; }
+
+    public IReadOnlyList<string> ShortcutModifierNames => ["Ctrl"];
+
     public int StartCount { get; private set; }
 
     /// <summary>Whether <see cref="KeyHandler"/> had already been assigned when <see cref="StartAsync"/> ran.</summary>

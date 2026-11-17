@@ -106,9 +106,10 @@ public partial class App : Application
 
             http = new HttpClient();
             http.DefaultRequestHeaders.UserAgent.ParseAdd("Shapeshifter/" + typeof(App).Assembly.GetName().Version?.ToString(3));
-            var modifierName = platform.KeyboardHook.ModifierName;
+            var keyboard = platform.KeyboardHook;
+            keyboard.PasteShortcut = settings.Current.PasteShortcut;
             uploadConsent = new RememberedUploadConsent(
-                settings, (service, cancellationToken) => UploadConsentDialog.AskAsync(service, modifierName, cancellationToken));
+                settings, (service, cancellationToken) => UploadConsentDialog.AskAsync(service, keyboard.ModifierName, cancellationToken));
             var context = new ActionContext
             {
                 Clipboard = monitor,
@@ -122,14 +123,15 @@ public partial class App : Application
                 UploadConsent = uploadConsent,
             };
 
+            var windowFocus = platform.WindowFocus is { } focus ? new UiThreadWindowFocus(focus) : null;
             picker = new PickerPresenter(
                 platform.CursorLocator,
                 new PickerVisuals(platform.FileIcons, logger),
-                platform.KeyboardHook.ModifierName,
+                keyboard.ModifierName,
                 logger,
-                platform.WindowFocus,
+                windowFocus,
                 new LinkedImageLoader(http, logger));
-            var coach = new CopyCoach(platform.SourceLocator, platform.KeyboardHook.ModifierName, () => settings.Current.CoachingTips);
+            var coach = new CopyCoach(platform.SourceLocator, () => keyboard.ModifierName, () => settings.Current.CoachingTips);
             engine = new ShapeshifterEngine(
                 history,
                 monitor,
@@ -140,7 +142,7 @@ public partial class App : Application
                 new CopyNotifier(settings),
                 logger,
                 coach: coach,
-                focusTracker: platform.WindowFocus)
+                focusTracker: windowFocus)
             {
                 PasteDelay = TimeSpan.FromMilliseconds(settings.Current.PasteDelayMilliseconds),
             };
@@ -148,6 +150,12 @@ public partial class App : Application
             settings.Changed += (_, current) =>
             {
                 engine.PasteDelay = TimeSpan.FromMilliseconds(current.PasteDelayMilliseconds);
+                if (keyboard.PasteShortcut != current.PasteShortcut)
+                {
+                    keyboard.PasteShortcut = current.PasteShortcut;
+                    picker.SetModifierName(keyboard.ModifierName);
+                }
+
                 history.MaxUnpinnedItems = current.MaxHistoryItems;
                 savedHistory.RequestSync();
             };
@@ -308,7 +316,8 @@ public partial class App : Application
         {
             Icon = new WindowIcon(AssetLoader.Open(PlatformLook.Asset("Application.png"))),
             DataContext = new SettingsViewModel(
-                settings, platform.Autostart, history, platform.Launcher, Paths, platform.KeyboardHook.ModifierName, platform.Warnings, updater),
+                settings, platform.Autostart, history, platform.Launcher, Paths, () => platform.KeyboardHook.ModifierName, platform.Warnings, updater,
+                platform.KeyboardHook.ShortcutModifierNames),
         };
         settingsWindow.Closed += (_, _) =>
         {

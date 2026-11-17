@@ -188,6 +188,20 @@ public sealed class ShapeshifterSession : IAsyncLifetime
         return text;
     }
 
+    /// <summary>
+    /// Like <see cref="WaitForTargetTextAsync"/>, but fails with both processes' logs and Shapeshifter's state when the
+    /// text does not arrive, so a CI run shows why.
+    /// </summary>
+    public async Task ExpectTargetTextAsync(string expected, TimeSpan? timeout = null)
+    {
+        var text = await WaitForTargetTextAsync(expected, timeout);
+        if (text != expected)
+        {
+            throw new Xunit.Sdk.XunitException(
+                $"The target's text is \"{text}\", expected \"{expected}\". Last state: {ReadState()}\n{Logs}");
+        }
+    }
+
     internal AppState ReadState()
     {
         for (var attempt = 0; ; attempt++)

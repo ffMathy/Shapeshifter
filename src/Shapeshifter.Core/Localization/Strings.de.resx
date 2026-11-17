@@ -410,4 +410,13 @@ Um etwas einzufügen, das früher kopiert wurde, {0} gedrückt halten und V drü
   <data name="UpdatePullRequestBuild" xml:space="preserve">
     <value>Builds aus Pull Requests aktualisieren sich nicht selbst</value>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>Tastenkürzel</value>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>Win+V ersetzt den Windows-Zwischenablageverlauf, sodass Strg+V wie gewohnt einfügt</value>
+  </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Mit Strg+V fügt Cmd+V wie gewohnt ein</value>
+  </data>
 </root>

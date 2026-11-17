@@ -34,7 +34,7 @@ public sealed class CopyCoach
     public static readonly TimeSpan BackAndForthWindow = TimeSpan.FromSeconds(30);
 
     private readonly IClipboardSourceLocator? sourceLocator;
-    private readonly string modifierName;
+    private readonly Func<string> modifierName;
     private readonly Func<bool> isEnabled;
     private readonly TimeProvider time;
     private readonly Lock gate = new();
@@ -48,7 +48,17 @@ public sealed class CopyCoach
     /// <param name="isEnabled">Whether tips are wanted; read each time one would be shown.</param>
     /// <param name="time">The clock.</param>
     public CopyCoach(IClipboardSourceLocator? sourceLocator, string modifierName, Func<bool>? isEnabled = null, TimeProvider? time = null)
+        : this(sourceLocator, () => modifierName, isEnabled, time)
     {
+    }
+
+    /// <param name="sourceLocator">Tells which application is in front when the user pastes.</param>
+    /// <param name="modifierName">"Ctrl", "Cmd" or "Win"; read each time a tip is shown, as the user can change the shortcut.</param>
+    /// <param name="isEnabled">Whether tips are wanted; read each time one would be shown.</param>
+    /// <param name="time">The clock.</param>
+    public CopyCoach(IClipboardSourceLocator? sourceLocator, Func<string> modifierName, Func<bool>? isEnabled = null, TimeProvider? time = null)
+    {
+        ArgumentNullException.ThrowIfNull(modifierName);
         this.sourceLocator = sourceLocator;
         this.modifierName = modifierName;
         this.isEnabled = isEnabled ?? (() => true);
@@ -91,7 +101,7 @@ public sealed class CopyCoach
                 tip = new CoachingTip(
                     CoachingTipKind.CopiedAgain,
                     Strings.TipAlreadyInHistoryTitle,
-                    Localizer.Format(Strings.TipAlreadyInHistoryMessage, Localizer.ModifierKey(modifierName)));
+                    Localizer.Format(Strings.TipAlreadyInHistoryMessage, Localizer.ModifierKey(modifierName())));
             }
             else if (returning is { } trip
                 && application is not null
@@ -101,7 +111,7 @@ public sealed class CopyCoach
                 tip = new CoachingTip(
                     CoachingTipKind.CopiedBackAndForth,
                     Strings.TipDidYouKnowTitle,
-                    Localizer.Format(Strings.TipCopyBackAndForthMessage, trip.From, Localizer.ModifierKey(modifierName), trip.To));
+                    Localizer.Format(Strings.TipCopyBackAndForthMessage, trip.From, Localizer.ModifierKey(modifierName()), trip.To));
             }
 
             if (tip is null || !isEnabled() || (lastTipAt is { } shown && time.GetElapsedTime(shown, now) < Cooldown))

@@ -65,12 +65,10 @@ public sealed partial class PickerViewModel : ObservableObject
     {
     }
 
-    /// <param name="modifierName">The key held to keep the picker open: "Ctrl", or "Cmd" on macOS.</param>
+    /// <param name="modifierName">The key held to keep the picker open: "Ctrl", "Cmd" on macOS, or "Win".</param>
     public PickerViewModel(string modifierName)
     {
-        ArgumentNullException.ThrowIfNull(modifierName);
-        ModifierKey = modifierName == "Cmd" ? "⌘" : Localizer.ModifierKey(modifierName);
-        EmptyHint = CreateEmptyHint(Localizer.ModifierKey(modifierName));
+        SetModifierName(modifierName);
         Items.CollectionChanged += (_, _) =>
         {
             ItemCountText = Items.Count == 1 ? Strings.PickerItemCountOne : Localizer.Format(Strings.PickerItemCountOther, Items.Count);
@@ -82,8 +80,20 @@ public sealed partial class PickerViewModel : ObservableObject
         };
     }
 
-    /// <summary>The key cap of the modifier in the footer: "Ctrl" or "⌘".</summary>
-    public string ModifierKey { get; }
+    /// <summary>The key cap of the modifier in the footer: "Ctrl", "⌘" or "Win".</summary>
+    public string ModifierKey { get; private set; } = string.Empty;
+
+    /// <summary>Follows a change of the paste shortcut in the settings.</summary>
+    public void SetModifierName(string modifierName)
+    {
+        ArgumentNullException.ThrowIfNull(modifierName);
+        ModifierKey = modifierName == "Cmd" ? "⌘" : Localizer.ModifierKey(modifierName);
+        EmptyHint = CreateEmptyHint(Localizer.ModifierKey(modifierName));
+        OnPropertyChanged(nameof(ModifierKey));
+        OnPropertyChanged(nameof(ReleaseHint));
+        OnPropertyChanged(nameof(HeaderHint));
+        OnPropertyChanged(nameof(EmptyHint));
+    }
 
     /// <summary>"Release Ctrl to paste", or "Press Enter to paste" while the picker is kept open.</summary>
     public string ReleaseHint => IsHeldOpen ? Strings.PickerReleaseHintHeldOpen : Localizer.Format(Strings.PickerReleaseHint, ModifierKey);
@@ -119,7 +129,7 @@ public sealed partial class PickerViewModel : ObservableObject
     public string HeaderHint => IsSearching ? Strings.PickerReleaseHintHeldOpen : ReleaseHint;
 
     /// <summary>How to use Shapeshifter, shown in place of the history while it is empty.</summary>
-    public string EmptyHint { get; }
+    public string EmptyHint { get; private set; } = string.Empty;
 
     public static string CreateEmptyHint(string modifier) =>
         Localizer.Format(Strings.PickerEmptyHint, modifier) + Strings.PickerEmptyHintHoldOpen;

@@ -410,4 +410,13 @@ Para colar algo que você copiou antes, mantenha {0} pressionada e pressione V. 
   <data name="UpdatePullRequestBuild" xml:space="preserve">
     <value>Builds de pull requests não se atualizam sozinhos</value>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>Atalho</value>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>Win+V substitui o histórico da área de transferência do Windows, e Ctrl+V cola como sempre</value>
+  </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Com Ctrl+V, Cmd+V cola como sempre</value>
+  </data>
 </root>

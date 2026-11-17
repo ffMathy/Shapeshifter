@@ -410,4 +410,13 @@ Per incollare qualcosa che hai copiato in precedenza, tieni premuto {0} e premi 
   <data name="UpdatePullRequestBuild" xml:space="preserve">
     <value>Le build delle pull request non si aggiornano da sole</value>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>Scorciatoia</value>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>Win+V sostituisce la cronologia degli Appunti di Windows, così Ctrl+V incolla come sempre</value>
+  </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Con Ctrl+V, Cmd+V incolla come sempre</value>
+  </data>
 </root>

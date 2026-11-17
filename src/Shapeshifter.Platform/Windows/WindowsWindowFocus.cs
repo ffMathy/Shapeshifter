@@ -39,9 +39,23 @@ internal sealed class WindowsWindowFocus(ILogger logger) : IWindowFocus
             return false;
         }
 
-        BringToForeground(window.Handle);
-        return await FocusWait.UntilAsync(() => WindowsNative.GetForegroundWindow() == window.Handle, FocusWait.Timeout, cancellationToken)
-            .ConfigureAwait(false);
+        var accepted = BringToForeground(window.Handle);
+        if (await FocusWait.UntilAsync(() => WindowsNative.GetForegroundWindow() == window.Handle, FocusWait.Timeout, cancellationToken)
+            .ConfigureAwait(false))
+        {
+            return true;
+        }
+
+        var foreground = WindowsNative.GetForegroundWindow();
+        WindowsNative.GetWindowThreadProcessId(foreground, out var processId);
+        logger.Warning(
+            "Giving the foreground back to window {Window:X} failed (SetForegroundWindow returned {Accepted}); window {Foreground:X} of process {ProcessId} has it (Shapeshifter is {Own})",
+            window.Handle,
+            accepted,
+            foreground,
+            processId,
+            Environment.ProcessId);
+        return false;
     }
 
     public void ActivateOwnWindow(nint nativeHandle)

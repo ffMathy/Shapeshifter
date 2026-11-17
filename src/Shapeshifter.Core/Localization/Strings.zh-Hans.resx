@@ -410,4 +410,13 @@
   <data name="UpdatePullRequestBuild" xml:space="preserve">
     <value>拉取请求的构建不会自动更新</value>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>快捷键</value>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>Win+V 取代 Windows 剪贴板历史记录，Ctrl+V 照常粘贴</value>
+  </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>使用 Ctrl+V 时，Cmd+V 照常粘贴</value>
+  </data>
 </root>

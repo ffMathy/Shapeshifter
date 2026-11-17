@@ -410,4 +410,13 @@
   <data name="UpdatePullRequestBuild" xml:space="preserve">
     <value>풀 리퀘스트 빌드는 스스로 업데이트되지 않습니다</value>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>바로 가기 키</value>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>Win+V가 Windows 클립보드 기록을 대신하므로 Ctrl+V는 평소처럼 붙여넣습니다</value>
+  </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Ctrl+V를 사용하면 Cmd+V는 평소처럼 붙여넣습니다</value>
+  </data>
 </root>

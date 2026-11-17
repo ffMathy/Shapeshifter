@@ -410,4 +410,13 @@ Om iets te plakken dat je eerder hebt gekopieerd, houd je {0} ingedrukt en druk 
   <data name="UpdatePullRequestBuild" xml:space="preserve">
     <value>Builds van pull requests werken zichzelf niet bij</value>
   </data>
+  <data name="SettingsShortcutTitle" xml:space="preserve">
+    <value>Sneltoets</value>
+  </data>
+  <data name="SettingsShortcutDescription" xml:space="preserve">
+    <value>Win+V vervangt de klembordgeschiedenis van Windows, zodat Ctrl+V gewoon plakt</value>
+  </data>
+  <data name="SettingsShortcutDescriptionMac" xml:space="preserve">
+    <value>Met Ctrl+V plakt Cmd+V gewoon</value>
+  </data>
 </root>
