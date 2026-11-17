@@ -18,7 +18,7 @@
   <!--
     The layout shared by every look; Styles/Windows.axaml, MacOS.axaml and Linux.axaml give it its material, sizes,
     colours and type through the classes used here. A panel ("chrome") with a header, the history and the actions of
-    the selected item side by side, and a footer with the keys. "chrome.opaque" is set when the window cannot be
+    the selected item side by side (a preview of the item above its actions), and a footer with the keys. "chrome.opaque" is set when the window cannot be
     see-through (no compositor): the panel then has to fill the window, without rounded corners or a shadow.
     "chrome.empty" is set while nothing has been copied yet.
   -->
@@ -111,9 +111,24 @@
             </Panel>
           </Border>
 
-          <!-- Actions of the selected item -->
+          <!-- The selected item, previewed large, and its actions below -->
           <Border Grid.Column="1" Classes="actionsPane" Classes.inactive="{Binding IsItemsPaneActive}" IsVisible="{Binding HasItems}">
             <StackPanel>
+              <!-- Preview: much more of a text, the image itself, every file name or the colour (issue #54) -->
+              <Border Classes="previewPane" IsVisible="{Binding ShowsPreview}">
+                <Grid x:DataType="vm:PickerItemViewModel" DataContext="{Binding SelectedItem, FallbackValue={x:Null}}"
+                      RowDefinitions="*,Auto">
+                  <Border Grid.Row="0" Classes="previewContent">
+                    <Panel>
+                      <TextBlock Classes="previewText" Text="{Binding PreviewText}" IsVisible="{Binding HasPreviewText}" />
+                      <Image Classes="previewImage" Source="{Binding PreviewImage}" IsVisible="{Binding ShowsPreviewImage}" />
+                      <Border Classes="previewSwatch" Background="{Binding ColorSwatch}" IsVisible="{Binding HasColorSwatch}" />
+                      <Path Classes="previewGlyph" Data="{Binding Glyph}" Stretch="Uniform" IsVisible="{Binding ShowsPreviewGlyph}" />
+                    </Panel>
+                  </Border>
+                  <TextBlock Grid.Row="1" Classes="previewCaption" Text="{Binding PreviewCaption}" />
+                </Grid>
+              </Border>
               <TextBlock Classes="actionsHeader" Text="{Binding ActionsHeader}" />
               <ListBox Classes="actions" Focusable="False"
                        ItemsSource="{Binding Actions}"

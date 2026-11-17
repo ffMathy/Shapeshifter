@@ -39,14 +39,14 @@ internal static class Program
     /// </summary>
     private static readonly (string Name, Look Look, string? Accent, double Scale, int Width, int Height)[] Screenshots =
     [
-        ("windows", Look.Windows, null, 1.25, 1400, 820),
-        ("macos", Look.MacOS, null, 1.25, 1400, 820),
-        ("linux", Look.Linux, null, 1.25, 1400, 820),
-        ("blue", Look.Windows, "#0063B1", 1.25, 1400, 820),
-        ("green", Look.Windows, "#107C10", 1.25, 1400, 820),
-        ("purple", Look.Windows, "#881798", 1.25, 1400, 820),
-        ("red", Look.Windows, "#D41124", 1.25, 1400, 820),
-        ("pad", Look.Windows, null, 0.9, 1000, 600),
+        ("windows", Look.Windows, null, 1.25, 1400, 1000),
+        ("macos", Look.MacOS, null, 1.25, 1400, 1000),
+        ("linux", Look.Linux, null, 1.25, 1400, 1000),
+        ("blue", Look.Windows, "#0063B1", 1.25, 1400, 1000),
+        ("green", Look.Windows, "#107C10", 1.25, 1400, 1000),
+        ("purple", Look.Windows, "#881798", 1.25, 1400, 1000),
+        ("red", Look.Windows, "#D41124", 1.25, 1400, 1000),
+        ("pad", Look.Windows, null, 0.9, 1000, 760),
     ];
 
     /// <summary>
@@ -131,7 +131,7 @@ internal static class Program
         {
             var actions = Path.Combine(output, "actions.PNG");
             UseLook(Look.Windows, null);
-            RenderPicker(Look.Windows, 1.25, 1400, 820, actions, selectedAction: 2);
+            RenderPicker(Look.Windows, 1.25, 1400, 1000, actions, selectedAction: 2);
             Console.WriteLine($"Wrote {actions}");
         }
 
@@ -197,7 +197,7 @@ internal static class Program
     {
         UseLook(Look.Windows, null, ThemeVariant.Dark);
         var picker = Path.Combine(output, "windows-dark.PNG");
-        RenderPicker(Look.Windows, 1.25, 1400, 820, picker, dark: true);
+        RenderPicker(Look.Windows, 1.25, 1400, 1000, picker, dark: true);
         Console.WriteLine($"Wrote {picker}");
         var settings = Path.Combine(output, "settings-windows-dark.PNG");
         RenderWindow(CreateSettingsWindow(), Look.Windows, settings, dark: true);

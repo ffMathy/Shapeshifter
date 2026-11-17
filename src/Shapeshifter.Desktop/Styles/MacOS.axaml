@@ -346,6 +346,55 @@
     <Setter Property="BorderBrush" Value="#B3FFFFFF" />
     <Setter Property="BoxShadow" Value="inset 0 1 0 0 #F2FFFFFF, 0 1 2 0 #0F281E5A" />
   </Style>
+  <!-- The preview of the selected item, at the top of the sidebar: a white card, a fixed height so the picker does not
+       change size from item to item. -->
+  <Style Selector="Border.previewPane">
+    <Setter Property="Height" Value="188" />
+    <Setter Property="Margin" Value="0,0,0,10" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="Background" Value="#E6FFFFFF" />
+    <Setter Property="BorderBrush" Value="#14000000" />
+    <Setter Property="BorderThickness" Value="0.5" />
+    <Setter Property="BoxShadow" Value="0 1 2 0 #0F281E5A" />
+  </Style>
+  <Style Selector="Border.previewContent">
+    <Setter Property="Margin" Value="12,10,12,4" />
+    <Setter Property="ClipToBounds" Value="True" />
+  </Style>
+  <Style Selector="TextBlock.previewText">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="LineHeight" Value="17" />
+    <Setter Property="Foreground" Value="#1D1D1F" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+  </Style>
+  <Style Selector="Image.previewImage">
+    <Setter Property="Stretch" Value="Uniform" />
+    <Setter Property="StretchDirection" Value="DownOnly" />
+  </Style>
+  <Style Selector="Border.previewSwatch">
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="BorderBrush" Value="#1F000000" />
+    <Setter Property="BorderThickness" Value="1" />
+  </Style>
+  <Style Selector="Path.previewGlyph">
+    <Setter Property="Width" Value="40" />
+    <Setter Property="Height" Value="40" />
+    <Setter Property="Stroke" Value="#6E6E73" />
+    <Setter Property="StrokeThickness" Value="1.3" />
+    <Setter Property="StrokeLineCap" Value="Round" />
+    <Setter Property="StrokeJoin" Value="Round" />
+    <Setter Property="Fill" Value="Transparent" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBlock.previewCaption">
+    <Setter Property="Margin" Value="12,2,12,8" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Foreground" Value="#6E6E73" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+  </Style>
+
   <Style Selector="TextBlock.actionsHeader">
     <Setter Property="FontSize" Value="11" />
     <Setter Property="FontWeight" Value="SemiBold" />

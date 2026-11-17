@@ -98,6 +98,9 @@ public sealed partial class PickerItemViewModel : ObservableObject
         {
             SourceText = CreateFallbackSubtitle(item);
         }
+
+        PreviewText = CreatePreviewText(item);
+        PreviewCaption = CreatePreviewCaption(item, Title);
     }
 
     public Guid Id { get; }
@@ -171,19 +174,115 @@ public sealed partial class PickerItemViewModel : ObservableObject
 
     public bool HasSourceText => SourceText.Length > 0;
 
+    /// <summary>
+    /// What the preview pane above the actions shows of a text or of files: much more of the text than the row's one
+    /// or two lines, or every file name. Empty for images, which show <see cref="PreviewImage"/> instead.
+    /// </summary>
+    public string PreviewText { get; }
+
+    public bool HasPreviewText => PreviewText.Length > 0;
+
+    /// <summary>The line under the preview: "3 lines · 120 characters", "Image · 1920 × 1080", "4 files and folders".</summary>
+    public string PreviewCaption { get; }
+
+    /// <summary>
+    /// The copied image decoded larger than <see cref="Thumbnail"/>, for the preview pane. Only the selected item has
+    /// one (the presenter decodes it when the item is selected and drops it when another is).
+    /// </summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PreviewImage))]
+    [NotifyPropertyChangedFor(nameof(ShowsPreviewImage))]
+    private Bitmap? largeImage;
+
+    /// <summary>The image in the preview pane: the large one once it is decoded, the thumbnail until then.</summary>
+    public Bitmap? PreviewImage => LargeImage ?? Thumbnail;
+
+    public bool ShowsPreviewImage => PreviewImage is not null && Layout == PickerItemLayout.Image;
+
+    /// <summary>A large line icon when there is nothing else to preview (an image that could not be decoded, other data).</summary>
+    public bool ShowsPreviewGlyph => !HasPreviewText && !ShowsPreviewImage && ColorSwatch is null;
+
+    /// <summary>How much of a text the preview shows; the pane only has room for a screenful anyway.</summary>
+    internal const int MaxPreviewLength = 2000;
+
+    /// <summary>How many file names the preview lists.</summary>
+    internal const int MaxPreviewFiles = 30;
+
+    internal static string CreatePreviewText(ClipboardItem item)
+    {
+        var files = item.Snapshot.Files;
+        switch (item.Kind)
+        {
+            case ClipboardContentKind.File:
+                return files[0];
+            case ClipboardContentKind.FileCollection:
+                var names = files.Take(MaxPreviewFiles).Select(file => Path.GetFileName(Path.TrimEndingDirectorySeparator(file)));
+                var more = files.Count > MaxPreviewFiles
+                    ? string.Create(CultureInfo.CurrentCulture, $"\n… and {files.Count - MaxPreviewFiles} more")
+                    : string.Empty;
+                return string.Join('\n', names) + more;
+            case ClipboardContentKind.Text when ColorParser.TryParse(item.Snapshot.Text, out _):
+                // A colour code shows its colour, filling the pane.
+                return string.Empty;
+            case ClipboardContentKind.Text:
+                var text = item.Snapshot.Text ?? item.PreviewText ?? string.Empty;
+                if (text.Length > MaxPreviewLength)
+                {
+                    text = text[..MaxPreviewLength] + "…";
+                }
+
+                // Line endings of every platform show as one line break, and tabs as a few spaces (a tab is drawn as
+                // nothing, so indented code would lose its indentation).
+                return text.Replace("\r\n", "\n", StringComparison.Ordinal).Replace('\r', '\n').Replace("\t", "    ", StringComparison.Ordinal);
+            default:
+                return string.Empty;
+        }
+    }
+
+    internal static string CreatePreviewCaption(ClipboardItem item, string title)
+    {
+        var snapshot = item.Snapshot;
+        switch (item.Kind)
+        {
+            case ClipboardContentKind.Image:
+                return title;
+            case ClipboardContentKind.File:
+                return "File";
+            case ClipboardContentKind.FileCollection:
+                return string.Create(CultureInfo.CurrentCulture, $"{snapshot.Files.Count} files and folders");
+            case ClipboardContentKind.Text when ColorParser.TryParse(snapshot.Text, out _):
+                return "Colour · " + snapshot.Text!.Trim();
+            case ClipboardContentKind.Text:
+                var text = snapshot.Text ?? string.Empty;
+                var lines = text.Length == 0 ? 0 : text.AsSpan().Count('\n') + 1;
+                var size = lines <= 1
+                    ? string.Create(CultureInfo.CurrentCulture, $"{text.Length} characters")
+                    : string.Create(CultureInfo.CurrentCulture, $"{lines} lines · {text.Length} characters");
+                return ClipboardFormatClassifier.FindRichText(snapshot) is not null ? "Formatted text · " + size : size;
+            default:
+                return "Other data";
+        }
+    }
+
+    /// <summary>The copied PNG, for an image.</summary>
+    public byte[]? Image => item.Snapshot.Image;
+
     /// <summary>"Image · 1920 × 1080" when the size can be read from the PNG header, otherwise "Image".</summary>
-    internal static string DescribeImage(byte[]? png)
+    internal static string DescribeImage(byte[]? png) => ReadPngSize(png) is { } size
+        ? string.Create(CultureInfo.CurrentCulture, $"Image · {size.Width} × {size.Height}")
+        : "Image";
+
+    /// <summary>The size of a PNG, read from its header, or null when it is not a PNG.</summary>
+    internal static (uint Width, uint Height)? ReadPngSize(byte[]? png)
     {
         // A PNG starts with an 8-byte signature followed by the IHDR chunk: length, type, width, height (big-endian).
         ReadOnlySpan<byte> signature = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
         if (png is { Length: >= 24 } && png.AsSpan(0, 8).SequenceEqual(signature))
         {
-            var width = BinaryPrimitives.ReadUInt32BigEndian(png.AsSpan(16, 4));
-            var height = BinaryPrimitives.ReadUInt32BigEndian(png.AsSpan(20, 4));
-            return string.Create(CultureInfo.CurrentCulture, $"Image · {width} × {height}");
+            return (BinaryPrimitives.ReadUInt32BigEndian(png.AsSpan(16, 4)), BinaryPrimitives.ReadUInt32BigEndian(png.AsSpan(20, 4)));
         }
 
-        return "Image";
+        return null;
     }
 
     /// <summary>"4 items · Projects, Notes.txt, Holiday.mp4, Sunset.png".</summary>

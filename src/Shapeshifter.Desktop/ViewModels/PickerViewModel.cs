@@ -8,7 +8,15 @@ namespace Shapeshifter.Desktop.ViewModels;
 public sealed partial class PickerViewModel : ObservableObject
 {
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SelectedItem))]
     private int selectedIndex;
+
+    /// <summary>
+    /// Whether the preview of the selected item is shown above its actions (issue #54). The presenter hides it on
+    /// screens too short for the taller picker.
+    /// </summary>
+    [ObservableProperty]
+    private bool showsPreview = true;
 
     [ObservableProperty]
     private int selectedActionIndex;
@@ -52,6 +60,7 @@ public sealed partial class PickerViewModel : ObservableObject
             ItemCountText = Items.Count == 1 ? "1 item" : string.Create(CultureInfo.CurrentCulture, $"{Items.Count} items");
             OnPropertyChanged(nameof(HasItems));
             OnPropertyChanged(nameof(IsEmpty));
+            OnPropertyChanged(nameof(SelectedItem));
         };
     }
 
@@ -62,6 +71,9 @@ public sealed partial class PickerViewModel : ObservableObject
     public string ReleaseHint => $"Release {ModifierKey} to paste";
 
     public ObservableCollection<PickerItemViewModel> Items { get; } = [];
+
+    /// <summary>The item the preview pane shows.</summary>
+    public PickerItemViewModel? SelectedItem => SelectedIndex >= 0 && SelectedIndex < Items.Count ? Items[SelectedIndex] : null;
 
     public bool HasItems => Items.Count > 0;
 

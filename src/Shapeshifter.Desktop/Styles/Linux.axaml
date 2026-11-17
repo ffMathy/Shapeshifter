@@ -147,6 +147,53 @@
     <Setter Property="Width" Value="284" />
     <Setter Property="VerticalAlignment" Value="Top" />
   </Style>
+  <!-- The preview of the selected item, above the actions: a card like the lists, a fixed height so the picker does
+       not change size from item to item. It starts level with the history's card. -->
+  <Style Selector="Border.previewPane">
+    <Setter Property="Height" Value="164" />
+    <Setter Property="Margin" Value="0,30,0,12" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="Background" Value="#FFFFFF" />
+    <Setter Property="BoxShadow" Value="0 1 3 0 #12000006" />
+  </Style>
+  <Style Selector="Border.previewContent">
+    <Setter Property="Margin" Value="12,10,12,4" />
+    <Setter Property="ClipToBounds" Value="True" />
+  </Style>
+  <Style Selector="TextBlock.previewText">
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="LineHeight" Value="18" />
+    <Setter Property="Foreground" Value="#2E2E33" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+  </Style>
+  <Style Selector="Image.previewImage">
+    <Setter Property="Stretch" Value="Uniform" />
+    <Setter Property="StretchDirection" Value="DownOnly" />
+  </Style>
+  <Style Selector="Border.previewSwatch">
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="BorderBrush" Value="#1A000006" />
+    <Setter Property="BorderThickness" Value="1" />
+  </Style>
+  <Style Selector="Path.previewGlyph">
+    <Setter Property="Width" Value="40" />
+    <Setter Property="Height" Value="40" />
+    <Setter Property="Stroke" Value="#5E5C64" />
+    <Setter Property="StrokeThickness" Value="1.3" />
+    <Setter Property="StrokeLineCap" Value="Round" />
+    <Setter Property="StrokeJoin" Value="Round" />
+    <Setter Property="Fill" Value="Transparent" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBlock.previewCaption">
+    <Setter Property="Margin" Value="12,2,12,8" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Foreground" Value="#5E5C64" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+  </Style>
+
   <Style Selector="TextBlock.actionsHeader">
     <Setter Property="IsVisible" Value="False" />
   </Style>
