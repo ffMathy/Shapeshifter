@@ -62,7 +62,7 @@ public sealed partial class TranslationTests
     {
         var unlisted = CultureInfo.GetCultures(CultureTypes.AllCultures)
             .Where(culture => !string.IsNullOrEmpty(culture.Name) && culture.Name != "en")
-            .Where(culture => Read(culture) is not null)
+            .Where(HasSatelliteAssembly)
             .Select(culture => culture.Name)
             .Except(Localizer.Translations);
 
@@ -77,6 +77,23 @@ public sealed partial class TranslationTests
 
         Assert.Equal(string.Format(CultureInfo.InvariantCulture, Localizer.Get(nameof(Strings.TimeMinutesAgo), CultureInfo.GetCultureInfo("de")), 5), german);
         Assert.NotEqual("5 min ago", german);
+    }
+
+    /// <summary>
+    /// Whether a translation was built for exactly <paramref name="culture"/>. The resource manager is no good for this:
+    /// once asked for "de-DE" it caches the German strings under that name too.
+    /// </summary>
+    private static bool HasSatelliteAssembly(CultureInfo culture)
+    {
+        try
+        {
+            _ = typeof(Strings).Assembly.GetSatelliteAssembly(culture);
+            return true;
+        }
+        catch (FileNotFoundException)
+        {
+            return false;
+        }
     }
 
     [Theory]
