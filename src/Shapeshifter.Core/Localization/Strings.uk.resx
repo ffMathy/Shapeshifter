@@ -371,4 +371,28 @@
   <data name="DialogCancel" xml:space="preserve">
     <value>Скасувати</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Натисніть Пробіл, щоб історія залишалася відкритою без утримання клавіші, а потім Enter, щоб вставити.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Щоб переглянути історію, не утримуючи {0}, натисніть Пробіл: вона залишатиметься відкритою, доки ви не натиснете Enter, щоб вставити, або Esc.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Натисніть Enter, щоб вставити</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Закрити</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Вставити</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Не закривати</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Пробіл</value>
+  </data>
 </root>

@@ -371,4 +371,28 @@ Om iets te plakken dat je eerder hebt gekopieerd, houd je {0} ingedrukt en druk 
   <data name="DialogCancel" xml:space="preserve">
     <value>Annuleren</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Druk op Spatie om de geschiedenis open te houden zonder de toets ingedrukt te houden, en daarna op Enter om te plakken.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Om de geschiedenis te bekijken zonder {0} ingedrukt te houden, druk je op Spatie: die blijft open tot je op Enter drukt om te plakken of op Esc.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Druk op Enter om te plakken</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Sluiten</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Plakken</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Openhouden</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Spatie</value>
+  </data>
 </root>

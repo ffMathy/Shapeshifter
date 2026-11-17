@@ -371,4 +371,28 @@
   <data name="DialogCancel" xml:space="preserve">
     <value>Hủy</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Nhấn Space để giữ lịch sử luôn mở mà không cần giữ phím, rồi nhấn Enter để dán.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Để xem lịch sử mà không cần giữ {0}, hãy nhấn Space: lịch sử sẽ luôn mở cho đến khi bạn nhấn Enter để dán hoặc Esc.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Nhấn Enter để dán</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Đóng</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Dán</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Giữ mở</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Space</value>
+  </data>
 </root>

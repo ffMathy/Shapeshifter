@@ -371,4 +371,28 @@ Per incollare qualcosa che hai copiato in precedenza, tieni premuto {0} e premi 
   <data name="DialogCancel" xml:space="preserve">
     <value>Annulla</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Premi Spazio per tenere aperta la cronologia senza tenere premuto il tasto, poi Invio per incollare.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Per scorrere la cronologia senza tenere premuto {0}, premi Spazio: resta aperta finché non premi Invio per incollare o Esc.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Premi Invio per incollare</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Chiudi</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Incolla</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Tieni aperto</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Invio</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Spazio</value>
+  </data>
 </root>

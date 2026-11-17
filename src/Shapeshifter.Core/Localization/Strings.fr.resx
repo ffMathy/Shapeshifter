@@ -371,4 +371,28 @@ Pour coller quelque chose que vous avez copié auparavant, maintenez {0} enfonc�
   <data name="DialogCancel" xml:space="preserve">
     <value>Annuler</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Appuyez sur Espace pour garder l’historique ouvert sans maintenir la touche, puis sur Entrée pour coller.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Pour parcourir l’historique sans maintenir {0} enfoncée, appuyez sur Espace : il reste ouvert jusqu’à ce que vous appuyiez sur Entrée pour coller ou sur Échap.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Appuyez sur Entrée pour coller</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Coller</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Garder ouvert</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Entrée</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Espace</value>
+  </data>
 </root>

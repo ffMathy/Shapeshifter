@@ -371,4 +371,28 @@ Para colar algo que você copiou antes, mantenha {0} pressionada e pressione V. 
   <data name="DialogCancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Pressione Espaço para manter o histórico aberto sem segurar a tecla e depois Enter para colar.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Para percorrer o histórico sem segurar {0}, pressione Espaço: ele fica aberto até você pressionar Enter para colar ou Esc.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Pressione Enter para colar</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Fechar</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Colar</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Manter aberto</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Espaço</value>
+  </data>
 </root>

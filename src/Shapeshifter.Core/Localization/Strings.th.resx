@@ -371,4 +371,28 @@
   <data name="DialogCancel" xml:space="preserve">
     <value>ยกเลิก</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> กด Space เพื่อให้ประวัติเปิดค้างไว้โดยไม่ต้องกดปุ่มค้าง แล้วกด Enter เพื่อวาง</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> หากต้องการดูประวัติโดยไม่ต้องกด {0} ค้างไว้ ให้กด Space: ประวัติจะเปิดค้างไว้จนกว่าคุณจะกด Enter เพื่อวางหรือกด Esc</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>กด Enter เพื่อวาง</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>ปิด</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>วาง</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>เปิดค้างไว้</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Space</value>
+  </data>
 </root>

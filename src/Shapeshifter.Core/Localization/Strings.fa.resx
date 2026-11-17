@@ -371,4 +371,28 @@
   <data name="DialogCancel" xml:space="preserve">
     <value>لغو</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> برای باز ماندن تاریخچه بدون نگه داشتن کلید، فاصله را فشار دهید و سپس برای چسباندن Enter را فشار دهید.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> برای مرور تاریخچه بدون نگه داشتن {0}، فاصله را فشار دهید: تا وقتی برای چسباندن Enter یا Esc را فشار ندهید، باز می‌ماند.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>برای چسباندن Enter را فشار دهید</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>بستن</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>چسباندن</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>باز نگه داشتن</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>فاصله</value>
+  </data>
 </root>

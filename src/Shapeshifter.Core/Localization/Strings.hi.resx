@@ -371,4 +371,28 @@
   <data name="DialogCancel" xml:space="preserve">
     <value>रद्द करें</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> कुंजी दबाए रखे बिना इतिहास खुला रखने के लिए Space दबाएँ, फिर चिपकाने के लिए Enter दबाएँ।</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> {0} दबाए रखे बिना इतिहास देखने के लिए Space दबाएँ: यह तब तक खुला रहता है जब तक आप चिपकाने के लिए Enter या Esc नहीं दबाते।</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>चिपकाने के लिए Enter दबाएँ</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>बंद करें</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>चिपकाएँ</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>खुला रखें</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Space</value>
+  </data>
 </root>

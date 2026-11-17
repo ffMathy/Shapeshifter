@@ -371,4 +371,28 @@
   <data name="DialogCancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Нажмите Пробел, чтобы история оставалась открытой без удержания клавиши, затем Enter, чтобы вставить.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Чтобы просмотреть историю, не удерживая {0}, нажмите Пробел: она останется открытой, пока вы не нажмёте Enter для вставки или Esc.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Нажмите Enter для вставки</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Вставить</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Не закрывать</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Пробел</value>
+  </data>
 </root>

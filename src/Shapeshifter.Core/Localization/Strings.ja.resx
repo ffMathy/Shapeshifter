@@ -371,4 +371,28 @@
   <data name="DialogCancel" xml:space="preserve">
     <value>キャンセル</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value>キーを押し続けなくても履歴を開いたままにするには Space を押し、Enter で貼り付けます。</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value>{0} を押し続けずに履歴を見るには、Space を押します。Enter で貼り付けるか Esc を押すまで開いたままになります。</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Enter で貼り付け</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>貼り付け</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>開いたままにする</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Space</value>
+  </data>
 </root>

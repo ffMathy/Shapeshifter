@@ -371,4 +371,28 @@
   <data name="DialogCancel" xml:space="preserve">
     <value>إلغاء</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> اضغط على المسافة لإبقاء المحفوظات مفتوحة دون الضغط باستمرار على المفتاح، ثم اضغط Enter للصق.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> لتصفح المحفوظات دون الضغط باستمرار على {0}، اضغط على المسافة: ستبقى مفتوحة حتى تضغط Enter للصق أو Esc.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>اضغط Enter للصق</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>إغلاق</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>لصق</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>إبقاء مفتوحة</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>مسافة</value>
+  </data>
 </root>

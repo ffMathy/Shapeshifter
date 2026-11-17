@@ -371,4 +371,28 @@ Aby wkleić coś skopiowanego wcześniej, przytrzymaj {0} i naciśnij V. Trzymaj
   <data name="DialogCancel" xml:space="preserve">
     <value>Anuluj</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Naciśnij Spację, aby historia pozostała otwarta bez trzymania klawisza, a potem Enter, aby wkleić.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Aby przejrzeć historię bez trzymania {0}, naciśnij Spację: pozostanie otwarta, dopóki nie naciśniesz Enter, aby wkleić, lub Esc.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Naciśnij Enter, aby wkleić</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Zamknij</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Wklej</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Zostaw otwarte</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Spacja</value>
+  </data>
 </root>

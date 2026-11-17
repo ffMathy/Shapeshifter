@@ -371,4 +371,28 @@ Um etwas einzufügen, das früher kopiert wurde, {0} gedrückt halten und V drü
   <data name="DialogCancel" xml:space="preserve">
     <value>Abbrechen</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Leertaste drücken, damit der Verlauf auch ohne gedrückte Taste geöffnet bleibt, dann Enter drücken, um einzufügen.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Um den Verlauf durchzusehen, ohne {0} gedrückt zu halten, die Leertaste drücken: Er bleibt geöffnet, bis Enter zum Einfügen oder Esc gedrückt wird.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Enter drücken zum Einfügen</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Schließen</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Einfügen</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Offen halten</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Leertaste</value>
+  </data>
 </root>

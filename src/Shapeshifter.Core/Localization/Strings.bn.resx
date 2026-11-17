@@ -371,4 +371,28 @@
   <data name="DialogCancel" xml:space="preserve">
     <value>বাতিল</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> কী ধরে না রেখেই ইতিহাস খোলা রাখতে Space চাপুন, তারপর আটকাতে Enter চাপুন।</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> {0} ধরে না রেখে ইতিহাস দেখতে Space চাপুন: আটকাতে Enter বা Esc না চাপা পর্যন্ত এটি খোলা থাকে।</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>আটকাতে Enter চাপুন</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>বন্ধ</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>আটকান</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>খোলা রাখুন</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Space</value>
+  </data>
 </root>

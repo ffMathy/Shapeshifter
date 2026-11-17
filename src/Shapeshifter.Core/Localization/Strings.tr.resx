@@ -371,4 +371,28 @@ Daha önce kopyaladığınız bir şeyi yapıştırmak için {0} tuşunu basıl�
   <data name="DialogCancel" xml:space="preserve">
     <value>İptal</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Tuşu basılı tutmadan geçmişi açık tutmak için Boşluk tuşuna, ardından yapıştırmak için Enter tuşuna basın.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Geçmişe {0} tuşunu basılı tutmadan göz atmak için Boşluk tuşuna basın: yapıştırmak için Enter tuşuna veya Esc tuşuna basana kadar açık kalır.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Yapıştırmak için Enter tuşuna basın</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Kapat</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Yapıştır</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Açık tut</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Boşluk</value>
+  </data>
 </root>

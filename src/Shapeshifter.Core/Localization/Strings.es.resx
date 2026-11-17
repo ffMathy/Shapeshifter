@@ -371,4 +371,28 @@ Para pegar algo que copiaste antes, mantén pulsada {0} y pulsa V. Sigue manteni
   <data name="DialogCancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Pulsa Espacio para que el historial siga abierto sin mantener pulsada la tecla y, después, Intro para pegar.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Para revisar el historial sin mantener pulsada {0}, pulsa Espacio: seguirá abierto hasta que pulses Intro para pegar o Esc.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Pulsa Intro para pegar</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Cerrar</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Pegar</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Mantener abierto</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Intro</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Espacio</value>
+  </data>
 </root>

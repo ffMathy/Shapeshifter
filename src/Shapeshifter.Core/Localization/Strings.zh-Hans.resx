@@ -371,4 +371,28 @@
   <data name="DialogCancel" xml:space="preserve">
     <value>取消</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value>按空格键可让历史记录保持打开而无需按住按键，然后按 Enter 粘贴。</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value>如需在不按住 {0} 的情况下浏览历史记录，请按空格键：历史记录会保持打开，直到你按 Enter 粘贴或按 Esc。</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>按 Enter 粘贴</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>保持打开</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>空格</value>
+  </data>
 </root>

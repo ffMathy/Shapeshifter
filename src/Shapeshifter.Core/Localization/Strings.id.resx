@@ -371,4 +371,28 @@ Untuk menempelkan sesuatu yang Anda salin sebelumnya, tahan {0} lalu tekan V. Te
   <data name="DialogCancel" xml:space="preserve">
     <value>Batal</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Tekan Spasi agar riwayat tetap terbuka tanpa menahan tombol, lalu Enter untuk menempel.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Untuk melihat-lihat riwayat tanpa menahan {0}, tekan Spasi: riwayat tetap terbuka hingga Anda menekan Enter untuk menempel atau Esc.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Tekan Enter untuk menempel</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Tutup</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Tempel</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Tetap buka</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Spasi</value>
+  </data>
 </root>

@@ -371,4 +371,28 @@ Hvis du vil indsætte noget, du har kopieret tidligere, skal du holde {0} nede o
   <data name="DialogCancel" xml:space="preserve">
     <value>Annuller</value>
   </data>
+  <data name="PickerEmptyHintHoldOpen" xml:space="preserve">
+    <value> Tryk på Mellemrum for at holde historikken åben uden at holde tasten nede, og tryk derefter på Enter for at indsætte.</value>
+  </data>
+  <data name="SettingsUsageHoldOpen" xml:space="preserve">
+    <value> Hvis du vil se historikken igennem uden at holde {0} nede, skal du trykke på Mellemrum: Den forbliver åben, indtil du trykker på Enter for at indsætte eller på Esc.</value>
+  </data>
+  <data name="PickerReleaseHintHeldOpen" xml:space="preserve">
+    <value>Tryk på Enter for at indsætte</value>
+  </data>
+  <data name="PickerHintClose" xml:space="preserve">
+    <value>Luk</value>
+  </data>
+  <data name="PickerHintPaste" xml:space="preserve">
+    <value>Indsæt</value>
+  </data>
+  <data name="PickerHintKeepOpen" xml:space="preserve">
+    <value>Hold åben</value>
+  </data>
+  <data name="KeyEnter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Mellemrum</value>
+  </data>
 </root>
