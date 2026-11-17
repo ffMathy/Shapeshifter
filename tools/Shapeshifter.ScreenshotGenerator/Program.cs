@@ -85,7 +85,9 @@ internal static class Program
         var looks = ParseLooks(args);
         var strictFonts = args.Contains("--native-fonts");
         var lookIndex = Array.IndexOf(args, "--look");
-        var folder = args.Where((arg, index) => !arg.StartsWith("--", StringComparison.Ordinal) && index != lookIndex + 1).FirstOrDefault();
+        // The folder is the first argument that is neither an option nor the value after --look (when it is given:
+        // without it, lookIndex + 1 is 0, which would skip a folder given first).
+        var folder = args.Where((arg, index) => !arg.StartsWith("--", StringComparison.Ordinal) && (lookIndex < 0 || index != lookIndex + 1)).FirstOrDefault();
         var output = Path.GetFullPath(folder ?? Path.Combine("assets", "screenshots"));
         Directory.CreateDirectory(output);
 
