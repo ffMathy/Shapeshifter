@@ -12,6 +12,7 @@ using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Engine;
 using Shapeshifter.Core.Persistence;
 using Shapeshifter.Core.Settings;
+using Shapeshifter.Core.Support;
 using Shapeshifter.Core.Updates;
 using Shapeshifter.Desktop.Services;
 using Shapeshifter.Desktop.ViewModels;
@@ -152,12 +153,15 @@ public partial class App : Application
             menu.Items.Add(MenuItem("Clear history", () => history?.Clear()));
             menu.Items.Add(MenuItem("Check for updates…", CheckForUpdates));
             menu.Items.Add(new NativeMenuItemSeparator());
+            menu.Items.Add(MenuItem("Report a problem…", ReportProblem));
+            menu.Items.Add(MenuItem("About Shapeshifter " + ReleaseVersion.Current(), ShowSettings));
+            menu.Items.Add(new NativeMenuItemSeparator());
             menu.Items.Add(MenuItem("Quit Shapeshifter", () => desktop?.Shutdown()));
 
             trayIcon = new TrayIcon
             {
                 Icon = new WindowIcon(new Bitmap(iconStream)),
-                ToolTipText = "Shapeshifter",
+                ToolTipText = "Shapeshifter " + ReleaseVersion.Current(),
                 Menu = menu,
                 IsVisible = true,
             };
@@ -250,6 +254,10 @@ public partial class App : Application
         item.Click += (_, _) => action();
         return item;
     }
+
+    /// <summary>Opens a new GitHub issue with the version and operating system filled in.</summary>
+    private void ReportProblem() => platform?.Launcher.OpenUrl(
+        ProblemReport.CreateIssueUrl(Installation.App, ProblemReport.DescribeCurrentEnvironment(Installation.App.Name)));
 
     private void ShowSettings()
     {

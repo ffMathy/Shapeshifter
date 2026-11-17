@@ -18,7 +18,16 @@
       <Image Grid.Column="0" Classes="heroIcon" Source="{x:Static services:PlatformLook.ApplicationIcon}" />
       <StackPanel Grid.Column="1" Classes="heroText">
         <TextBlock Classes="heroTitle" Text="Shapeshifter" />
-        <TextBlock Classes="heroVersion" Text="{Binding Version}" />
+        <!-- About: the version (copyable, for bug reports), reporting a problem and the project page (#586, #342, #561) -->
+        <WrapPanel Classes="heroLinks">
+          <TextBlock Classes="heroVersion" Text="{Binding Version}" VerticalAlignment="Center" Margin="0,0,12,0" />
+          <HyperlinkButton x:Name="CopyVersionLink" Classes="heroLink" Padding="0" Margin="0,0,12,0" FontSize="12"
+                           Content="Copy version" Click="OnCopyVersion" />
+          <HyperlinkButton Classes="heroLink" Padding="0" Margin="0,0,12,0" FontSize="12"
+                           Content="Report a problem" Command="{Binding ReportProblemCommand}" />
+          <HyperlinkButton Classes="heroLink" Padding="0" FontSize="12"
+                           Content="Project page" Command="{Binding OpenProjectPageCommand}" />
+        </WrapPanel>
       </StackPanel>
     </Grid>
 

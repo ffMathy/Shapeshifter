@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Platform;
 using Shapeshifter.Core.Settings;
+using Shapeshifter.Core.Support;
 using Shapeshifter.Core.Updates;
 using Shapeshifter.Desktop.Services;
 
@@ -89,6 +90,9 @@ public sealed partial class SettingsViewModel : ObservableObject
 
     public string Version { get; } = "Version " + (typeof(SettingsViewModel).Assembly.GetName().Version?.ToString(3) ?? "?");
 
+    /// <summary>The version, operating system and architecture, as "Copy version" puts them on the clipboard.</summary>
+    public string EnvironmentDescription { get; } = ProblemReport.DescribeCurrentEnvironment(Installation.App.Name);
+
     /// <summary>What the updater is doing, or why this copy cannot update itself.</summary>
     public string UpdateStatus => updater?.StatusText ?? "Updates are checked automatically";
 
@@ -156,4 +160,11 @@ public sealed partial class SettingsViewModel : ObservableObject
 
     [RelayCommand]
     private void OpenLogFolder() => launcher.OpenFolder(paths.LogDirectory);
+
+    /// <summary>Opens a new GitHub issue with the version and operating system filled in.</summary>
+    [RelayCommand]
+    private void ReportProblem() => launcher.OpenUrl(ProblemReport.CreateIssueUrl(Installation.App, EnvironmentDescription));
+
+    [RelayCommand]
+    private void OpenProjectPage() => launcher.OpenUrl(Installation.App.ProjectPage);
 }
