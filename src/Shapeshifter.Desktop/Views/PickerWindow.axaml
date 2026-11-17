@@ -109,7 +109,7 @@
                             </Border>
                             <Border Classes="linkedImageBadge" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                                     Width="17" Height="17" Margin="2" CornerRadius="4" Background="#A6000000">
-                              <Path Data="{x:Static vm:PickerItemViewModel.TextGlyph}" Stretch="Uniform" Width="12" Height="12"
+                              <Path Data="{x:Static vm:PickerItemViewModel.TextGlyph}" Stretch="Uniform" Height="12"
                                     HorizontalAlignment="Center" VerticalAlignment="Center"
                                     Stroke="White" StrokeThickness="1.4" StrokeLineCap="Round" StrokeJoin="Round" />
                             </Border>
@@ -176,7 +176,7 @@
                       <Grid Classes="previewLink" ColumnDefinitions="Auto,*" VerticalAlignment="Bottom" IsVisible="{Binding ShowsLinkedImage}">
                         <Border Grid.Column="0" Width="28" Height="28" CornerRadius="6" Background="#40FFFFFF"
                                 BorderBrush="#59FFFFFF" BorderThickness="1" VerticalAlignment="Bottom">
-                          <Path Data="{x:Static vm:PickerItemViewModel.TextGlyph}" Stretch="Uniform" Width="17" Height="17"
+                          <Path Data="{x:Static vm:PickerItemViewModel.TextGlyph}" Stretch="Uniform" Height="17"
                                 HorizontalAlignment="Center" VerticalAlignment="Center"
                                 Stroke="White" StrokeThickness="1.4" StrokeLineCap="Round" StrokeJoin="Round" />
                         </Border>
