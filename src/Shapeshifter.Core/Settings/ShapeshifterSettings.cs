@@ -11,6 +11,12 @@ public sealed record ShapeshifterSettings
     /// <summary>When set, no "copied" notification is shown after each copy.</summary>
     public bool QuietMode { get; init; }
 
+    /// <summary>
+    /// Whether to show a tip, in place of the "copied" notification, when Shapeshifter could have saved the user a
+    /// copy: something copied again that is already in the history, or copying back and forth between two applications.
+    /// </summary>
+    public bool CoachingTips { get; init; } = true;
+
     /// <summary>How many unpinned items are kept.</summary>
     public int MaxHistoryItems { get; init; } = 50;
 

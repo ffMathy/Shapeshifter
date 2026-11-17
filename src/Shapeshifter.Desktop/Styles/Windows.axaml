@@ -793,6 +793,12 @@
     <Setter Property="MaxLines" Value="3" />
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
   </Style>
+  <!-- A tip's message reads as body text, not as quoted content. -->
+  <Style Selector="Border.toastChrome.tip TextBlock.toastPreview">
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="LineHeight" Value="18" />
+    <Setter Property="MaxLines" Value="4" />
+  </Style>
 
   <!-- ============================================================================================================
        On the system's material (NativeMaterial, Windows 11): the window is the flyout, with Mica behind it (Acrylic

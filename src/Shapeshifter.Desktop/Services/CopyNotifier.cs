@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Threading;
 using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Coaching;
 using Shapeshifter.Core.Engine;
 using Shapeshifter.Core.Settings;
 using Shapeshifter.Desktop.Views;
@@ -10,11 +11,14 @@ namespace Shapeshifter.Desktop.Services;
 /// <summary>
 /// Shows a small, non-activating "copied" notification for 1.5 seconds where the platform shows its own: bottom right
 /// on Windows, top right under the menu bar on macOS, bottom centre on Linux (the look's <c>ToastPlacement</c>).
-/// Pointing at it or clicking it dismisses it at once.
+/// Pointing at it or clicking it dismisses it at once. Coaching tips use the same notification, for longer.
 /// </summary>
 internal sealed class CopyNotifier(SettingsStore settings) : ICopyNotifier
 {
     private static readonly TimeSpan Duration = TimeSpan.FromSeconds(1.5);
+
+    /// <summary>A tip is a sentence to read, not a glance.</summary>
+    private static readonly TimeSpan TipDuration = TimeSpan.FromSeconds(7);
 
     /// <summary>Distance from the edges of the working area; the looks' shadow margins add to it.</summary>
     private const int Margin = 8;
@@ -28,16 +32,23 @@ internal sealed class CopyNotifier(SettingsStore settings) : ICopyNotifier
             return;
         }
 
+        Show(toast => toast.SetContent(historyCount, item.PreviewText), Duration);
+    }
+
+    public void NotifyTip(CoachingTip tip) => Show(toast => toast.SetTip(tip.Title, tip.Message), TipDuration);
+
+    private void Show(Action<ToastWindow> setContent, TimeSpan duration)
+    {
         Dispatcher.UIThread.Post(() =>
         {
             var toast = window ??= CreateWindow();
-            toast.SetContent(historyCount, item.PreviewText);
+            setContent(toast);
             toast.Show();
             toast.UpdateLayout();
             Position(toast);
 
             hideTimer?.Dispose();
-            hideTimer = DispatcherTimer.RunOnce(() => toast.Hide(), Duration);
+            hideTimer = DispatcherTimer.RunOnce(() => toast.Hide(), duration);
         });
     }
 

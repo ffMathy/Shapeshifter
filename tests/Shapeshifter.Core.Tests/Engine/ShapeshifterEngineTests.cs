@@ -1,6 +1,7 @@
 using NSubstitute;
 using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Coaching;
 using Shapeshifter.Core.Engine;
 using Shapeshifter.Core.Input;
 using Shapeshifter.Core.Platform;
@@ -121,6 +122,104 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
 
         Assert.Empty(h.Notifier.Calls);
         Assert.Equal(["b", "c", "a"], Texts(h.History.Items));
+    }
+
+    // ---------------------------------------------------------------- coaching tips
+
+    private async Task CopyAsync(string text, string? from)
+    {
+        h.Focus(from);
+        h.Backend.Current = EngineHarness.Text(text);
+        await h.RaiseClipboardChangeAndWaitAsync();
+    }
+
+    private async Task QuickPasteAsync(string into)
+    {
+        h.Focus(into);
+        var count = h.Processed.Count;
+        h.Down(GestureKey.Modifier);
+        h.Tap(GestureKey.Trigger);
+        h.Up(GestureKey.Modifier);
+        await h.WaitForEffectsAsync(count + 1);
+    }
+
+    [Fact]
+    public async Task CopyingSomethingAlreadyInTheHistory_ShowsATip()
+    {
+        await h.StartAsync();
+        await CopyAsync("a", "Editor");
+        await CopyAsync("b", "Editor");
+
+        await CopyAsync("a", "Editor");
+
+        var tip = Assert.Single(h.Notifier.Tips);
+        Assert.Equal(CoachingTipKind.CopiedAgain, tip.Kind);
+        Assert.Equal(2, h.Notifier.Calls.Count);
+    }
+
+    [Fact]
+    public async Task WhatIsOnTheClipboardAtStartup_IsNotCoached_WhenCopiedAgain()
+    {
+        h.Seed("a", "b");
+        await h.StartAsync();
+
+        await CopyAsync("b", "Editor");
+
+        Assert.Empty(h.Notifier.Tips);
+    }
+
+    [Fact]
+    public async Task CopyPasteElsewhereAndBack_ShowsTheTipInsteadOfTheCopiedNotification()
+    {
+        await h.StartAsync();
+        await CopyAsync("a", "Photoshop");
+        await QuickPasteAsync("Paint");
+        h.Time.Advance(TimeSpan.FromSeconds(10));
+
+        await CopyAsync("b", "Photoshop");
+
+        var tip = Assert.Single(h.Notifier.Tips);
+        Assert.Equal(CoachingTipKind.CopiedBackAndForth, tip.Kind);
+        Assert.Contains("Photoshop", tip.Message);
+        Assert.Contains("Paint", tip.Message);
+
+        // Only the first copy was announced as "copied": the tip took the second's place.
+        Assert.Equal(["a"], h.Notifier.Calls.Select(call => call.Item.Snapshot.Text));
+    }
+
+    [Fact]
+    public async Task CopyPasteElsewhereAndBack_AfterThirtySeconds_ShowsNoTip()
+    {
+        await h.StartAsync();
+        await CopyAsync("a", "Photoshop");
+        await QuickPasteAsync("Paint");
+        h.Time.Advance(TimeSpan.FromSeconds(31));
+
+        await CopyAsync("b", "Photoshop");
+
+        Assert.Empty(h.Notifier.Tips);
+        Assert.Equal(2, h.Notifier.Calls.Count);
+    }
+
+    [Fact]
+    public async Task PastingThroughThePicker_ShowsNoBackAndForthTip()
+    {
+        h.Seed("x");
+        await h.StartAsync();
+        await CopyAsync("a", "Photoshop");
+        h.Focus("Paint");
+
+        // Hold the gesture until the picker shows, then release: the clipboard is pasted, but the user saw the history.
+        h.Down(GestureKey.Modifier);
+        h.Tap(GestureKey.Trigger);
+        h.Tap(GestureKey.Trigger);
+        h.Tap(GestureKey.Trigger);
+        h.Up(GestureKey.Modifier);
+        await h.WaitForEffectsAsync(4);
+
+        await CopyAsync("b", "Photoshop");
+
+        Assert.Empty(h.Notifier.Tips);
     }
 
     // ---------------------------------------------------------------- quick tap

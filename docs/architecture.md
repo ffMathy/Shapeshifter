@@ -33,6 +33,15 @@ Pinned items are saved by `PinnedItemStore`, one folder per item. With "Remember
 
 Shapeshifter's own clipboard writes go through `ClipboardMonitor.WriteAsync`. Their fingerprint and a short grace period are remembered, so they are not captured as new copies.
 
+## Coaching tips
+
+The history stays out of sight until the paste gesture is held, so new users easily forget it is there. `CopyCoach` watches copies and plain pastes for two habits the history could have saved, and the engine then shows a tip through `ICopyNotifier.NotifyTip` instead of the "copied" notification:
+
+- **Copied again** (#284): content already in the history was copied again, and it was not what the clipboard already held (a second Ctrl+C to be sure is not coached).
+- **Back and forth** (#310): the user copied from one application, pasted with a quick Ctrl+V into another, and copied from the first application again within 30 seconds of the first copy.
+
+Applications are compared by name (`ClipboardSource.ApplicationName`; for the paste target, `IClipboardSourceLocator` is asked when the paste runs). Opening the picker ends a back-and-forth sequence, the clipboard content at startup is never coached, and tips are at least five minutes apart. The "Tips" setting turns them off.
+
 ## The paste gesture
 
 `PasteGestureStateMachine` is a pure state machine fed with key events and clock ticks. It returns whether to suppress each event and a list of effects: `ShowPicker`, `UpdatePicker`, `HidePicker`, `PerformAction`, `PasteCurrentClipboard`, `DeleteItem` and `GestureCancelled`.

@@ -9,6 +9,7 @@ using Avalonia.Threading;
 using Serilog;
 using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Coaching;
 using Shapeshifter.Core.Engine;
 using Shapeshifter.Core.Persistence;
 using Shapeshifter.Core.Settings;
@@ -115,8 +116,10 @@ public partial class App : Application
             };
 
             picker = new PickerPresenter(platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), platform.KeyboardHook.ModifierName, logger);
+            var coach = new CopyCoach(platform.SourceLocator, platform.KeyboardHook.ModifierName, () => settings.Current.CoachingTips);
             engine = new ShapeshifterEngine(
-                history, monitor, platform.KeyboardHook, ActionCatalog.CreateDefault(), context, picker, new CopyNotifier(settings), logger)
+                history, monitor, platform.KeyboardHook, ActionCatalog.CreateDefault(), context, picker, new CopyNotifier(settings), logger,
+                coach: coach)
             {
                 PasteDelay = TimeSpan.FromMilliseconds(settings.Current.PasteDelayMilliseconds),
             };

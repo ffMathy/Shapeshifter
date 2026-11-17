@@ -38,6 +38,8 @@ public static class Glyphs
 
     public static Geometry Bell { get; } = Geometry.Parse("M5,13.5 V9 C5,6.2 7.2,4 10,4 C12.8,4 15,6.2 15,9 V13.5 L16.5,15 H3.5 Z M8.25,17 C8.6,17.8 9.25,18 10,18 C10.75,18 11.4,17.8 11.75,17 M10,2.5 V4");
 
+    public static Geometry Lightbulb { get; } = Geometry.Parse("M7.5,14 C7.5,12.25 5,11 5,7.75 C5,5 7.2,2.75 10,2.75 C12.8,2.75 15,5 15,7.75 C15,11 12.5,12.25 12.5,14 Z M7.75,16.25 H12.25 M8.75,18 H11.25");
+
     public static Geometry Power { get; } = Geometry.Parse("M10,2.5 V9.5 M6,5.25 C4.4,6.5 3.5,8.2 3.5,10.25 C3.5,13.8 6.4,16.75 10,16.75 C13.6,16.75 16.5,13.8 16.5,10.25 C16.5,8.2 15.6,6.5 14,5.25");
 
     public static Geometry Update { get; } = Geometry.Parse("M16.5,10 A6.5,6.5 0 1 1 14.6,5.4 M15,2.25 V5.75 H11.5 M10,6.5 V11.5 M7.75,9.5 L10,11.75 L12.25,9.5");
