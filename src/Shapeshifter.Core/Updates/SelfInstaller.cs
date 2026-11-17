@@ -32,7 +32,8 @@ public sealed record StartupResult(bool Exit, string[] Arguments, bool IsInstall
 /// one starts the installed, newer copy instead.
 /// </summary>
 /// <remarks>
-/// Only single-file release builds install themselves (see <see cref="RunningApp.IsSingleFile"/>). Start with
+/// Only single-file release builds install themselves (see <see cref="RunningApp.IsSingleFile"/>); pull request builds
+/// (<see cref="ReleaseVersion.IsPullRequestBuild"/>) run where they are. Start with
 /// <c>--no-install</c>, or set <c>NAME_NO_INSTALL=1</c>, to run a copy where it is. <c>--uninstall</c> removes the
 /// installation (the user's settings and data stay).
 /// </remarks>
@@ -139,6 +140,12 @@ public sealed class SelfInstaller
         {
             Uninstall();
             return new StartupResult(true, arguments, isInstalled, false);
+        }
+
+        if (version.IsPullRequestBuild && !isInstalled)
+        {
+            log.Information($"{app.Name} {version} is a pull request build: running it from {running.ExecutablePath} without installing it");
+            return new StartupResult(false, arguments, false, false);
         }
 
         if (isInstalled)

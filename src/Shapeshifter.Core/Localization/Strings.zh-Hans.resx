@@ -395,4 +395,19 @@
   <data name="KeySpace" xml:space="preserve">
     <value>空格</value>
   </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>搜索你复制过的所有内容</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>无匹配项</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>你复制的内容中没有包含“{0}”的项。</value>
+  </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>拉取请求的构建不会自动更新</value>
+  </data>
 </root>

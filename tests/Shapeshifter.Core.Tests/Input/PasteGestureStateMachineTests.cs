@@ -759,6 +759,59 @@ public sealed class PasteGestureStateMachineTests
         Assert.True(h.Machine.IsActive);
     }
 
+    // ---- S: searching the history (issue #458) ----
+
+    [Fact]
+    public void S_BeginsASearch_KeepingThePickerOpen_AndEndsTheGesture()
+    {
+        var h = GestureHarness.WithItems(3);
+        h.StartAndShow();
+        h.Press(GestureKey.Down);
+
+        var result = h.Down(GestureKey.Search);
+
+        Assert.True(result.Suppress);
+        var begin = Assert.IsType<BeginSearch>(Assert.Single(result.Effects));
+        Assert.Equal([Id(0), Id(1), Id(2)], begin.Selection.ItemIds);
+        Assert.Equal(1, begin.Selection.SelectedIndex);
+        Assert.False(h.Machine.IsActive);
+        Assert.False(h.Machine.IsPickerVisible);
+
+        // Releasing the modifier afterwards pastes nothing.
+        Assert.Equal(GestureResult.PassThrough, h.Up(GestureKey.Modifier));
+    }
+
+    [Fact]
+    public void S_BeforeThePickerIsShown_ShowsItFirst()
+    {
+        var h = GestureHarness.WithItems(2);
+        h.Start();
+
+        var result = h.Down(GestureKey.Search);
+
+        Assert.Collection(result.Effects, e => Assert.IsType<ShowPicker>(e), e => Assert.IsType<BeginSearch>(e));
+    }
+
+    [Fact]
+    public void S_WithAnEmptyHistory_DoesNothing()
+    {
+        var h = GestureHarness.WithItems(0);
+        h.StartAndShow();
+
+        Assert.Equal(GestureResult.Swallow, h.Down(GestureKey.Search));
+        Assert.True(h.Machine.IsActive);
+    }
+
+    [Fact]
+    public void S_WithoutAGesture_IsLeftToTheApplication()
+    {
+        var h = GestureHarness.WithItems(2);
+
+        Assert.Equal(GestureResult.PassThrough, h.Down(GestureKey.Search));
+        h.Down(GestureKey.Modifier);
+        Assert.Equal(GestureResult.PassThrough, h.Down(GestureKey.Search));
+    }
+
     // ---- Up / Down in the items pane ----
 
     [Theory]

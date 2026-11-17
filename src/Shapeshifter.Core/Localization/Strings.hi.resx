@@ -395,4 +395,19 @@
   <data name="KeySpace" xml:space="preserve">
     <value>Space</value>
   </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>खोजें</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>आपने जो कुछ भी कॉपी किया है उसमें खोजें</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>कोई परिणाम नहीं</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>आपकी कॉपी की गई किसी भी चीज़ में “{0}” नहीं है।</value>
+  </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>पुल रिक्वेस्ट बिल्ड खुद को अपडेट नहीं करते</value>
+  </data>
 </root>

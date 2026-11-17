@@ -101,6 +101,40 @@ internal static partial class WindowsNative
     [LibraryImport("user32.dll")]
     public static partial nint GetForegroundWindow();
 
+    // ---- Moving the keyboard focus between the picker and the window the user works in ----
+
+    public const int SwRestore = 9;
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool SetForegroundWindow(nint window);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool BringWindowToTop(nint window);
+
+    [LibraryImport("user32.dll")]
+    public static partial nint SetFocus(nint window);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool IsWindow(nint window);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool IsIconic(nint window);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool ShowWindow(nint window, int command);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool AttachThreadInput(uint attach, uint attachTo, [MarshalAs(UnmanagedType.Bool)] bool doAttach);
+
+    [LibraryImport("kernel32.dll")]
+    public static partial uint GetCurrentThreadId();
+
     [LibraryImport("user32.dll", SetLastError = true)]
     public static partial nint GetClipboardOwner();
 

@@ -395,4 +395,19 @@
   <data name="KeySpace" xml:space="preserve">
     <value>Space</value>
   </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>検索</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>コピーしたすべてを検索</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>一致なし</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>コピーしたものに「{0}」を含むものはありません。</value>
+  </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>プルリクエストのビルドは自動更新されません</value>
+  </data>
 </root>

@@ -395,4 +395,19 @@
   <data name="KeySpace" xml:space="preserve">
     <value>مسافة</value>
   </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>بحث</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>ابحث في كل ما نسخته</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>لا توجد نتائج</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>لا يحتوي أي شيء نسخته على «{0}».</value>
+  </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>إصدارات طلبات الدمج لا تحدّث نفسها</value>
+  </data>
 </root>

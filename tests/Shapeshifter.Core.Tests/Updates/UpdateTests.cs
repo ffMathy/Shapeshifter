@@ -55,6 +55,87 @@ public sealed class ReleaseVersionTests
     [Fact]
     public void Equality_IgnoresTheTagPrefixAndBuildMetadata() =>
         Assert.Equal(ReleaseVersion.TryParse("v7.1.0"), ReleaseVersion.TryParse("7.1.0+deadbeef"));
+
+    [Theory]
+    [InlineData("7.1.17-pr.635.98", true)]
+    [InlineData("7.1.17-pr.635.98+abc123", true)]
+    [InlineData("7.1.17", false)]
+    [InlineData("7.2.0-beta.1", false)]
+    [InlineData("7.2.0-preview.1", false)]
+    public void IsPullRequestBuild_RecognisesTheVersionsCiGivesPullRequests(string text, bool expected) =>
+        Assert.Equal(expected, ReleaseVersion.TryParse(text)!.IsPullRequestBuild);
+
+    [Theory]
+    [InlineData("7.1.16", "7.1.17-pr.635.98")]
+    [InlineData("7.1.17-pr.635.98", "7.1.17-pr.635.99")]
+    [InlineData("7.1.17-pr.635.99", "7.1.17")]
+    public void PullRequestBuilds_AreNewerThanTheLastRelease_AndOlderThanTheNext(string older, string newer) =>
+        Assert.True(ReleaseVersion.TryParse(older) < ReleaseVersion.TryParse(newer));
+}
+
+public sealed class RunningInstanceTests : IDisposable
+{
+    private readonly string root = Directory.CreateTempSubdirectory("instance-test").FullName;
+
+    private string InfoFile => Path.Combine(root, "data", "instance.json");
+
+    public void Dispose() => Directory.Delete(root, recursive: true);
+
+    [Fact]
+    public void WriteThenRead_RoundTrips()
+    {
+        var instance = new RunningInstance(1234, ReleaseVersion.TryParse("7.1.17-pr.635.98")!, "/opt/Shapeshifter");
+
+        instance.Write(InfoFile);
+
+        Assert.Equal(instance, RunningInstance.Read(InfoFile));
+        Assert.Equal([InfoFile], Directory.GetFiles(Path.GetDirectoryName(InfoFile)!));
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("not json")]
+    [InlineData("{\"pid\":1,\"version\":\"latest\",\"path\":\"/x\"}")]
+    [InlineData("{\"pid\":0,\"version\":\"7.1.0\",\"path\":\"/x\"}")]
+    [InlineData("{\"pid\":1,\"version\":\"7.1.0\"}")]
+    public void Read_ReturnsNull_ForAMissingOrBrokenRecord(string? content)
+    {
+        if (content is not null)
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(InfoFile)!);
+            File.WriteAllText(InfoFile, content);
+        }
+
+        Assert.Null(RunningInstance.Read(InfoFile));
+    }
+
+    [Fact]
+    public void Remove_OnlyRemovesTheRecordOfThatProcess()
+    {
+        new RunningInstance(1, ReleaseVersion.TryParse("7.1.0")!, "/x").Write(InfoFile);
+
+        RunningInstance.Remove(InfoFile, 2);
+        Assert.True(File.Exists(InfoFile));
+
+        RunningInstance.Remove(InfoFile, 1);
+        Assert.False(File.Exists(InfoFile));
+    }
+
+    [Theory]
+    [InlineData("7.1.17", "7.1.16", true)]
+    [InlineData("7.1.17-pr.635.98", "7.1.16", true)]
+    [InlineData("7.1.16", "7.1.16", false)]
+    [InlineData("7.1.15", "7.1.16", false)]
+    [InlineData("7.1.16", "7.1.17-pr.635.98", false)]
+    public void ShouldReplace_OnlyWhenTheLaunchedCopyIsNewer(string launching, string running, bool expected) =>
+        Assert.Equal(
+            expected,
+            RunningInstance.ShouldReplace(ReleaseVersion.TryParse(launching)!, new RunningInstance(1, ReleaseVersion.TryParse(running)!, "/x")));
+
+    [Fact]
+    public void ShouldReplace_NotWhenNothingIsKnownAboutTheRunningCopy() =>
+        Assert.False(RunningInstance.ShouldReplace(ReleaseVersion.TryParse("99.0.0")!, null));
 }
 
 public sealed class InstallLayoutTests
@@ -212,6 +293,27 @@ public sealed class SelfInstallerTests : IDisposable
         Assert.False(result.IsInstalledCopy);
         Assert.Equal(["--show"], result.Arguments);
         Assert.False(File.Exists(layout.Executable));
+    }
+
+    [Fact]
+    public void OnStartup_RunsAPullRequestBuildWhereItIs_WithoutInstallingIt()
+    {
+        var layout = InstallLayout.Create(TestApp.Identity, InstallLayout.CurrentPlatform, Path.Combine(root, "home"), Path.Combine(root, "local"), Path.Combine(root, "state"));
+        var downloaded = Path.Combine(root, "Downloads", "demo");
+        Directory.CreateDirectory(Path.GetDirectoryName(downloaded)!);
+        File.WriteAllText(downloaded, "pull request build");
+        var host = new RecordingHost();
+        var installer = new SelfInstaller(
+            TestApp.Identity, layout, new RunningApp(downloaded, null, true), host, new NullLog(), ReleaseVersion.TryParse("7.1.17-pr.635.98"));
+
+        var result = installer.OnStartup(["--show"]);
+
+        Assert.False(result.Exit);
+        Assert.False(result.IsInstalledCopy);
+        Assert.Equal(["--show"], result.Arguments);
+        Assert.False(File.Exists(layout.Executable));
+        Assert.Null(SelfInstaller.ReadInstalledVersion(layout));
+        Assert.False(host.Stopped);
     }
 
     [Fact]
@@ -421,6 +523,19 @@ public sealed class UpdaterTests : IDisposable
         using var updater = new Updater(
             TestApp.Identity, new RunningApp(Path.Combine(root, "demo"), null, false), null, http, new NullLog(), () => true,
             ReleaseVersion.TryParse("1.0.0"), "linux-x64");
+
+        Assert.False(updater.IsSupported);
+        Assert.Equal(UpdateState.Unsupported, updater.State);
+    }
+
+    [Fact]
+    public void PullRequestBuilds_DoNotUpdate()
+    {
+        var executable = WriteExecutable("pull request build");
+        using var http = new HttpClient(new FakeGitHub("{}", []));
+        using var updater = new Updater(
+            TestApp.Identity, new RunningApp(executable, null, true), null, http, new NullLog(), () => true,
+            ReleaseVersion.TryParse("7.1.17-pr.635.98"), "linux-x64");
 
         Assert.False(updater.IsSupported);
         Assert.Equal(UpdateState.Unsupported, updater.State);

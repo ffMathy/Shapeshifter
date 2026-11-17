@@ -395,4 +395,19 @@ Om iets te plakken dat je eerder hebt gekopieerd, houd je {0} ingedrukt en druk 
   <data name="KeySpace" xml:space="preserve">
     <value>Spatie</value>
   </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>Zoeken</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>Zoek in alles wat je hebt gekopieerd</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>Geen resultaten</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>Niets wat je hebt gekopieerd bevat ‘{0}’.</value>
+  </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Builds van pull requests werken zichzelf niet bij</value>
+  </data>
 </root>

@@ -395,4 +395,19 @@
   <data name="KeySpace" xml:space="preserve">
     <value>Пробел</value>
   </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>Искать во всём скопированном</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>Ничего не найдено</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>Ничто из скопированного не содержит «{0}».</value>
+  </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Сборки из pull request не обновляются сами</value>
+  </data>
 </root>

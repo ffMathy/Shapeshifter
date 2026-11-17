@@ -29,6 +29,7 @@ public sealed class PlatformServices : IAsyncDisposable
         CursorLocator = CreateCursorLocator(x11);
         SourceLocator = CreateSourceLocator(logger);
         FileIcons = CreateFileIconProvider(logger);
+        WindowFocus = CreateWindowFocus(logger, x11);
     }
 
     public IKeyboardHook KeyboardHook => keyboard;
@@ -46,6 +47,9 @@ public sealed class PlatformServices : IAsyncDisposable
 
     /// <summary>The operating system's icons for files and folders, or <see langword="null"/> where unavailable.</summary>
     public IFileIconProvider? FileIcons { get; }
+
+    /// <summary>Moves the keyboard focus between the picker and the window the user works in, where possible.</summary>
+    public IWindowFocus? WindowFocus { get; }
 
     /// <summary>Limitations of the current session that the user should know about.</summary>
     public IReadOnlyList<string> Warnings { get; }
@@ -211,6 +215,21 @@ public sealed class PlatformServices : IAsyncDisposable
 
         DesktopEntryIndex.Warm();
         return new X11ClipboardSourceLocator(logger);
+    }
+
+    private static IWindowFocus? CreateWindowFocus(ILogger logger, X11Integration? x11)
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            return new WindowsWindowFocus(logger);
+        }
+
+        if (OperatingSystem.IsMacOS())
+        {
+            return new MacWindowFocus();
+        }
+
+        return x11 is null ? null : new X11WindowFocus(x11);
     }
 
     private static IFileIconProvider? CreateFileIconProvider(ILogger logger)

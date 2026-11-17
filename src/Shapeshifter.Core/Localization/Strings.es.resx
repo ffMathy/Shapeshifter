@@ -395,4 +395,19 @@ Para pegar algo que copiaste antes, mantén pulsada {0} y pulsa V. Sigue manteni
   <data name="KeySpace" xml:space="preserve">
     <value>Espacio</value>
   </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>Buscar</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>Busca en todo lo que has copiado</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>Sin resultados</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>Nada de lo que has copiado contiene «{0}».</value>
+  </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Las compilaciones de pull requests no se actualizan solas</value>
+  </data>
 </root>

@@ -395,4 +395,19 @@ Per incollare qualcosa che hai copiato in precedenza, tieni premuto {0} e premi 
   <data name="KeySpace" xml:space="preserve">
     <value>Spazio</value>
   </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>Cerca</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>Cerca in tutto ciò che hai copiato</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>Nessun risultato</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>Niente di ciò che hai copiato contiene «{0}».</value>
+  </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Le build delle pull request non si aggiornano da sole</value>
+  </data>
 </root>

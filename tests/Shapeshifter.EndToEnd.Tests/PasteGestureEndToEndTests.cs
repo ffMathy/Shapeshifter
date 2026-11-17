@@ -283,6 +283,59 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
         Assert.DoesNotContain(state.Previews, preview => preview.Contains("hunter2", StringComparison.Ordinal));
     }
 
+    [Fact]
+    public async Task S_SearchesTheHistory_AndPastesTheMatchIntoTheWindowTheUserCameFrom()
+    {
+        SkipUnlessEnabled();
+        var id = Unique();
+        await session.CopyTextAsync($"apple {id}");
+        await session.CopyTextAsync($"banana {id}");
+        await session.CopyTextAsync($"cherry {id}");
+        await session.PrepareTargetAsync();
+
+        // S starts a search; the S itself never reaches the target.
+        await session.PressModifierAsync();
+        await session.TapAsync(KeyCode.VcV);
+        await session.TapAsync(KeyCode.VcS);
+        await session.ReleaseModifierAsync();
+        await session.WaitForStateAsync(state => state.PickerVisible && state.Searching && state.SearchFocused, "the search box focused");
+
+        // The picker has the focus: the typing goes to the search box, not to the target.
+        await session.TypeAsync("banana " + id);
+        await Task.Delay(300, TestContext.Current.CancellationToken);
+        Assert.Equal(string.Empty, await session.GetTargetTextAsync());
+        await session.TapAsync(KeyCode.VcEnter);
+
+        Assert.Equal($"banana {id}", await session.WaitForTargetTextAsync($"banana {id}"));
+        var state = await session.WaitForStateAsync(s => !s.PickerVisible && !s.Searching && s.Previews[0] == $"banana {id}", "picker hidden and the match moved to the top");
+        Assert.Equal($"cherry {id}", state.Previews[1]);
+        await session.WaitForIdleAsync();
+    }
+
+    [Fact]
+    public async Task EscapeWhileSearching_GivesTheFocusBack_WithoutPasting()
+    {
+        SkipUnlessEnabled();
+        var id = Unique();
+        await session.CopyTextAsync($"first {id}");
+        await session.CopyTextAsync($"second {id}");
+        await session.PrepareTargetAsync();
+
+        await session.PressModifierAsync();
+        await session.TapAsync(KeyCode.VcV);
+        await session.TapAsync(KeyCode.VcS);
+        await session.ReleaseModifierAsync();
+        await session.WaitForStateAsync(state => state.Searching && state.SearchFocused, "the search box focused");
+        await session.TypeAsync("first");
+        await session.TapAsync(KeyCode.VcEscape);
+        await session.WaitForStateAsync(state => !state.PickerVisible && !state.Searching, "picker hidden after Escape");
+        await session.WaitForIdleAsync();
+
+        // Nothing was pasted, and the target has the keyboard focus again.
+        await session.TypeAsync("ok");
+        Assert.Equal("ok", await session.WaitForTargetTextAsync("ok"));
+    }
+
     private static void SkipUnlessEnabled()
     {
         if (!ShapeshifterSession.IsEnabled)

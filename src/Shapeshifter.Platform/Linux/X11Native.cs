@@ -21,6 +21,7 @@ internal static unsafe partial class X11Native
     public const ulong XFixesSetSelectionOwnerNotifyMask = 1;
 
     public const ulong XK_v = 0x0076;
+    public const ulong XK_s = 0x0073;
     public const ulong XK_Escape = 0xff1b;
     public const ulong XK_space = 0x0020;
     public const ulong XK_Return = 0xff0d;
@@ -108,6 +109,34 @@ internal static unsafe partial class X11Native
     [LibraryImport(LibX11)]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool XQueryPointer(IntPtr display, IntPtr window, out IntPtr rootReturn, out IntPtr childReturn, out int rootX, out int rootY, out int winX, out int winY, out uint mask);
+
+    // ---- Moving the keyboard focus between the picker and the window the user works in ----
+
+    public const int ClientMessage = 33;
+    public const int RevertToParent = 2;
+    public static readonly IntPtr XA_WINDOW = 33;
+    public const long SubstructureNotifyMask = 1L << 19;
+    public const long SubstructureRedirectMask = 1L << 20;
+
+    [LibraryImport(LibX11)]
+    public static partial int XGetWindowProperty(
+        IntPtr display, IntPtr window, IntPtr property, long offset, long length, [MarshalAs(UnmanagedType.Bool)] bool delete, IntPtr requestedType,
+        out IntPtr actualType, out int actualFormat, out ulong itemCount, out ulong bytesAfter, out IntPtr data);
+
+    [LibraryImport(LibX11)]
+    public static partial void XFree(IntPtr data);
+
+    [LibraryImport(LibX11)]
+    public static partial int XGetInputFocus(IntPtr display, out IntPtr focus, out int revertTo);
+
+    [LibraryImport(LibX11)]
+    public static partial void XSetInputFocus(IntPtr display, IntPtr window, int revertTo, IntPtr time);
+
+    [LibraryImport(LibX11)]
+    public static partial void XRaiseWindow(IntPtr display, IntPtr window);
+
+    [LibraryImport(LibX11)]
+    public static partial int XSendEvent(IntPtr display, IntPtr window, [MarshalAs(UnmanagedType.Bool)] bool propagate, long eventMask, IntPtr eventSend);
 
     [LibraryImport(LibXfixes)]
     [return: MarshalAs(UnmanagedType.Bool)]

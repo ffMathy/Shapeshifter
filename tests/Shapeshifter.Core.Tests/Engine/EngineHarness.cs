@@ -50,7 +50,8 @@ internal sealed class EngineHarness : IAsyncDisposable
             Logger = Logger,
         };
 
-        Engine = new ShapeshifterEngine(History, Monitor, Hook, Catalog, Context, Picker, Notifier, Logger, Time, Coach);
+        FocusTracker = new FakeFocusTracker(Log);
+        Engine = new ShapeshifterEngine(History, Monitor, Hook, Catalog, Context, Picker, Notifier, Logger, Time, Coach, FocusTracker);
         Engine.EffectProcessed += OnEffectProcessed;
     }
 
@@ -88,6 +89,9 @@ internal sealed class EngineHarness : IAsyncDisposable
     /// <summary>Makes <paramref name="application"/> the application in front.</summary>
     public void Focus(string? application) =>
         SourceLocator.GetCurrentSource().Returns(application is null ? null : new ClipboardSource(application, application, null));
+
+    /// <summary>Which window has the keyboard focus, as far as searching the history is concerned.</summary>
+    public FakeFocusTracker FocusTracker { get; }
 
     public FakeLauncher Launcher { get; } = new();
 

@@ -395,4 +395,19 @@
   <data name="KeySpace" xml:space="preserve">
     <value>Space</value>
   </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>খুঁজুন</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>আপনার কপি করা সবকিছুতে খুঁজুন</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>কিছু পাওয়া যায়নি</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>আপনার কপি করা কোনো কিছুতে “{0}” নেই।</value>
+  </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>পুল রিকোয়েস্ট বিল্ড নিজে থেকে আপডেট হয় না</value>
+  </data>
 </root>

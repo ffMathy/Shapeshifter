@@ -395,4 +395,19 @@ Daha önce kopyaladığınız bir şeyi yapıştırmak için {0} tuşunu basıl�
   <data name="KeySpace" xml:space="preserve">
     <value>Boşluk</value>
   </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>Ara</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>Kopyaladığınız her şeyde arayın</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>Sonuç yok</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>Kopyaladıklarınızın hiçbiri “{0}” içermiyor.</value>
+  </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Pull request derlemeleri kendini güncellemez</value>
+  </data>
 </root>

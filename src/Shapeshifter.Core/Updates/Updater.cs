@@ -355,6 +355,11 @@ public sealed class Updater : IDisposable
             return Strings.UpdateReleaseBuildsOnly;
         }
 
+        if (current.IsPullRequestBuild)
+        {
+            return Strings.UpdatePullRequestBuild;
+        }
+
         var directory = Path.GetDirectoryName(running.ReplaceablePath);
         if (directory is null || !CanWrite(directory))
         {

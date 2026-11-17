@@ -42,6 +42,9 @@ public enum GestureKey
 
     /// <summary>Enter (or the keypad's Enter), which pastes the selected item right away.</summary>
     Enter,
+
+    /// <summary>The S key, which starts searching the history.</summary>
+    Search,
 }
 
 public readonly record struct KeyInput(GestureKey Key, bool IsDown);
@@ -60,7 +63,7 @@ public interface IKeyboardHook : IDisposable
 
     /// <summary>
     /// Some platforms (X11) can only suppress keys that were grabbed beforehand. While a gesture is active the
-    /// navigation keys (arrows, Delete, Escape, 1 to 9, Space and Enter) are grabbed, with and without the modifier
+    /// navigation keys (arrows, Delete, Escape, 1 to 9, Space, Enter and S) are grabbed, with and without the modifier
     /// (the picker can be kept open after the modifier is released), so the focused application does not see them.
     /// </summary>
     void SetNavigationCaptureEnabled(bool enabled);
@@ -73,4 +76,31 @@ public interface IKeyboardHook : IDisposable
 public interface IPasteSimulator
 {
     Task SimulatePasteAsync(CancellationToken cancellationToken = default);
+}
+
+/// <summary>A window of another application that had the keyboard focus, as the platform identifies it.</summary>
+/// <param name="Handle">A window handle on Windows and X11, the process id of the application on macOS.</param>
+public readonly record struct FocusedWindow(nint Handle);
+
+/// <summary>
+/// Finds out which window has the keyboard focus, and gives it back. The picker takes the focus while the user searches
+/// the history; afterwards the focus has to return to the window the user was working in, so the paste lands there.
+/// </summary>
+public interface IFocusedWindowTracker
+{
+    /// <summary>The window (of another application) that has the keyboard focus, or <see langword="null"/>. Must not throw.</summary>
+    FocusedWindow? Capture();
+
+    /// <summary>Gives the keyboard focus to <paramref name="window"/>, and returns once it has it (or did not get it in time).</summary>
+    Task<bool> RestoreAsync(FocusedWindow window, CancellationToken cancellationToken = default);
+}
+
+/// <summary>Moves the keyboard focus between Shapeshifter's picker and the window the user was working in.</summary>
+public interface IWindowFocus : IFocusedWindowTracker
+{
+    /// <summary>
+    /// Gives the keyboard focus to one of Shapeshifter's own windows (its native handle: an HWND, an NSWindow or an X11
+    /// window), although another application is active. Called on the UI thread.
+    /// </summary>
+    void ActivateOwnWindow(nint nativeHandle);
 }

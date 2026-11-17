@@ -395,4 +395,19 @@ Pour coller quelque chose que vous avez copié auparavant, maintenez {0} enfonc�
   <data name="KeySpace" xml:space="preserve">
     <value>Espace</value>
   </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>Rechercher</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>Rechercher dans tout ce que vous avez copié</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>Aucun résultat</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>Rien de ce que vous avez copié ne contient « {0} ».</value>
+  </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Les versions de pull requests ne se mettent pas à jour</value>
+  </data>
 </root>

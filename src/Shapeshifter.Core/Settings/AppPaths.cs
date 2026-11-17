@@ -39,6 +39,9 @@ public sealed class AppPaths
 
     public string InstanceLockFile => Path.Combine(DataDirectory, "instance.lock");
 
+    /// <summary>Which process holds <see cref="InstanceLockFile"/>, and its version (see <see cref="Updates.RunningInstance"/>).</summary>
+    public string InstanceInfoFile => Path.Combine(DataDirectory, "instance.json");
+
     public static AppPaths ForRoot(string root) => new(
         Path.Combine(root, "config"),
         Path.Combine(root, "data"),

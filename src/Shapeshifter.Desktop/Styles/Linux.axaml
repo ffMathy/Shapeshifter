@@ -507,6 +507,44 @@
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
     <Setter Property="TextWrapping" Value="NoWrap" />
   </Style>
+  <!-- The search bar below the header while searching (issue #458) -->
+  <Style Selector="Border.searchBar">
+    <Setter Property="Margin" Value="12,4,12,12" />
+    <Setter Property="Padding" Value="12,0" />
+    <Setter Property="Height" Value="38" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="Background" Value="#FFFFFF" />
+  </Style>
+  <Style Selector="Path.searchGlyph">
+    <Setter Property="Width" Value="13" />
+    <Setter Property="Height" Value="13" />
+    <Setter Property="Margin" Value="0,0,10,0" />
+    <Setter Property="Stroke" Value="#5E5C64" />
+    <Setter Property="StrokeThickness" Value="1.5" />
+    <Setter Property="StrokeLineCap" Value="Round" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBox.searchBox">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="MinWidth" Value="0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Foreground" Value="#2E2E33" />
+    <Setter Property="CaretBrush" Value="#2E2E33" />
+    <Setter Property="SelectionBrush" Value="{DynamicResource AccentTextBrush}" />
+    <Setter Property="SelectionForegroundBrush" Value="White" />
+  </Style>
+  <Style Selector="TextBox.searchBox /template/ Border#PART_BorderElement,
+                   TextBox.searchBox:pointerover /template/ Border#PART_BorderElement,
+                   TextBox.searchBox:focus /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
   <Style Selector="ListBox.items > ListBoxItem:selected TextBlock.title">
     <Setter Property="FontWeight" Value="Medium" />
     <Setter Property="Foreground" Value="#1E1E22" />

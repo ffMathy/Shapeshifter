@@ -395,4 +395,19 @@ Para colar algo que você copiou antes, mantenha {0} pressionada e pressione V. 
   <data name="KeySpace" xml:space="preserve">
     <value>Espaço</value>
   </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>Buscar</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>Busque em tudo o que você copiou</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>Nenhum resultado</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>Nada do que você copiou contém “{0}”.</value>
+  </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Builds de pull requests não se atualizam sozinhos</value>
+  </data>
 </root>

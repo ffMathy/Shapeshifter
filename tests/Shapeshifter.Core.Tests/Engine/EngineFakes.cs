@@ -1,6 +1,7 @@
 using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Engine;
+using Shapeshifter.Core.Input;
 using Shapeshifter.Core.Platform;
 
 namespace Shapeshifter.Core.Tests.Engine;
@@ -245,6 +246,22 @@ internal sealed class FakePickerPresenter(CallLog log) : IPickerPresenter
         return Task.CompletedTask;
     }
 
+    /// <summary>What the user does in the picker while searching; set by <see cref="BeginSearchAsync"/>.</summary>
+    public Func<PickerSearchInput, bool>? SearchInput { get; private set; }
+
+    public bool ThrowOnBeginSearch { get; set; }
+
+    public Task BeginSearchAsync(PickerViewState state, Func<PickerSearchInput, bool> onInput)
+    {
+        SearchInput = onInput;
+        Record(new PickerCall("BeginSearch", state));
+        return ThrowOnBeginSearch ? Task.FromException(new InvalidOperationException("Search failed")) : Task.CompletedTask;
+    }
+
+    /// <summary>Delivers what the user did in the focused picker, the way the window would.</summary>
+    public bool Search(PickerSearchInput input) =>
+        (SearchInput ?? throw new InvalidOperationException("No search has begun."))(input);
+
     private void Record(PickerCall call)
     {
         lock (calls)
@@ -253,6 +270,31 @@ internal sealed class FakePickerPresenter(CallLog log) : IPickerPresenter
         }
 
         log.Add("picker." + call.Method);
+    }
+}
+
+internal sealed class FakeFocusTracker(CallLog log) : IFocusedWindowTracker
+{
+    /// <summary>The window that has the focus, as <see cref="Capture"/> reports it.</summary>
+    public FocusedWindow? Focused { get; set; } = new FocusedWindow(42);
+
+    public List<FocusedWindow> Restored { get; } = [];
+
+    public FocusedWindow? Capture()
+    {
+        log.Add("focus.capture");
+        return Focused;
+    }
+
+    public Task<bool> RestoreAsync(FocusedWindow window, CancellationToken cancellationToken = default)
+    {
+        lock (Restored)
+        {
+            Restored.Add(window);
+        }
+
+        log.Add($"focus.restore:{window.Handle}");
+        return Task.FromResult(true);
     }
 }
 

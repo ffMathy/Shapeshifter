@@ -13,15 +13,28 @@ public sealed record PickerActionView(string Id, string Title, string Descriptio
 
 /// <summary>What the picker displays.</summary>
 /// <param name="IsHeldOpen">The picker stays open after the modifier is released; Enter pastes (issue #420).</param>
+/// <remarks>
+/// While searching, <see cref="SearchQuery"/> is what the user typed and <see cref="Items"/> the items that match it,
+/// which may be none.
+/// </remarks>
 public sealed record PickerViewState(
     IReadOnlyList<ClipboardItem> Items,
     int SelectedIndex,
     IReadOnlyList<PickerActionView> Actions,
     int SelectedActionIndex,
     PickerPane Pane,
-    bool IsHeldOpen = false);
+    bool IsHeldOpen = false)
+{
+    /// <summary>What the user typed in the search box, or <see langword="null"/> while not searching.</summary>
+    public string? SearchQuery { get; init; }
 
-/// <summary>The picker UI. Implementations marshal to their UI thread and must not take keyboard focus.</summary>
+    public bool IsSearching => SearchQuery is not null;
+}
+
+/// <summary>
+/// The picker UI. Implementations marshal to their UI thread. The picker never takes the keyboard focus, except while
+/// the user searches the history (<see cref="BeginSearchAsync"/>), until it is hidden.
+/// </summary>
 public interface IPickerPresenter
 {
     Task ShowAsync(PickerViewState state);
@@ -29,6 +42,13 @@ public interface IPickerPresenter
     Task UpdateAsync(PickerViewState state);
 
     Task HideAsync();
+
+    /// <summary>
+    /// Switches the visible picker to searching: it takes the keyboard focus and shows a search box. Everything the user
+    /// does in it is reported to <paramref name="onInput"/>, which returns whether the key was used (the search box
+    /// should not handle it as well). The search ends with <see cref="HideAsync"/>.
+    /// </summary>
+    Task BeginSearchAsync(PickerViewState state, Func<PickerSearchInput, bool> onInput);
 }
 
 /// <summary>Shows the short "copied" notification, or a coaching tip in its place.</summary>
@@ -51,6 +71,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
     private readonly IPickerPresenter picker;
     private readonly ICopyNotifier? copyNotifier;
     private readonly CopyCoach? coach;
+    private readonly IFocusedWindowTracker? focusTracker;
     private readonly ILogger logger;
     private readonly TimeProvider time;
     private readonly PasteGestureStateMachine gesture;
@@ -58,11 +79,19 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
     private readonly Channel<GestureEffect> effects = Channel.CreateUnbounded<GestureEffect>(new UnboundedChannelOptions { SingleReader = true });
     private readonly Dictionary<Guid, (ClipboardItem Item, IReadOnlyList<IClipboardAction> Actions)> session = [];
     private readonly System.Collections.Concurrent.ConcurrentDictionary<Guid, IReadOnlyList<IClipboardAction>> availableActions = new();
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<Guid, string> searchTexts = new();
     private readonly long startTimestamp;
     private readonly CancellationTokenSource shutdown = new();
     private ITimer? tickTimer;
     private Task? effectLoop;
     private bool navigationCaptured;
+
+    /// <summary>Set (under <see cref="gestureGate"/>) from the moment a search begins until it ends.</summary>
+    private bool searching;
+    private PickerSearch? search;
+
+    /// <summary>The window that had the focus when the search began; only used by the effect loop.</summary>
+    private FocusedWindow? focusBeforeSearch;
     private volatile bool capturingAtStartup;
     private int disposed;
 
@@ -76,7 +105,8 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
         ICopyNotifier? copyNotifier = null,
         ILogger? logger = null,
         TimeProvider? time = null,
-        CopyCoach? coach = null)
+        CopyCoach? coach = null,
+        IFocusedWindowTracker? focusTracker = null)
     {
         this.history = history;
         this.monitor = monitor;
@@ -86,6 +116,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
         this.picker = picker;
         this.copyNotifier = copyNotifier;
         this.coach = coach;
+        this.focusTracker = focusTracker;
         this.logger = logger ?? Log.Logger;
         this.time = time ?? TimeProvider.System;
         startTimestamp = this.time.GetTimestamp();
@@ -125,6 +156,18 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
             lock (gestureGate)
             {
                 return gesture.IsActive;
+            }
+        }
+    }
+
+    /// <summary>Whether the user is searching the history in the picker.</summary>
+    public bool IsSearching
+    {
+        get
+        {
+            lock (gestureGate)
+            {
+                return searching;
             }
         }
     }
@@ -189,8 +232,48 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
         // produced them, even when the tick timer and the hook thread race (for example Show versus Hide).
         lock (gestureGate)
         {
+            if (searching)
+            {
+                // The picker has the keyboard focus, and every key belongs to it (including Ctrl+V into the search box).
+                // The modifiers are still tracked, so the next gesture starts from the right state.
+                if (input.Key is GestureKey.Modifier or GestureKey.Shift or GestureKey.Alt or GestureKey.OtherModifier)
+                {
+                    gesture.Handle(input, Now());
+                }
+
+                return false;
+            }
+
             var result = gesture.Handle(input, Now());
             UpdateNavigationCapture(gesture.IsActive);
+            if (result.Effects.Any(effect => effect is BeginSearch))
+            {
+                searching = true;
+            }
+
+            Enqueue(result);
+            return result.Suppress;
+        }
+    }
+
+    /// <summary>Handles what the user does in the picker while searching. Called on the UI thread.</summary>
+    /// <returns>Whether the input was used, so the search box must not handle it as well.</returns>
+    internal bool OnSearchInput(PickerSearchInput input)
+    {
+        lock (gestureGate)
+        {
+            if (search is null)
+            {
+                return false;
+            }
+
+            var result = search.Handle(input);
+            if (search.HasEnded)
+            {
+                search = null;
+                searching = false;
+            }
+
             Enqueue(result);
             return result.Suppress;
         }
@@ -288,6 +371,24 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
                 await picker.HideAsync().ConfigureAwait(false);
                 break;
 
+            case BeginSearch begin:
+                await BeginSearchAsync(begin).ConfigureAwait(false);
+                break;
+
+            case RestoreFocus:
+                // Only the effect loop touches focusBeforeSearch.
+                var restore = focusBeforeSearch;
+                focusBeforeSearch = null;
+                if (restore is { } window && focusTracker is not null)
+                {
+                    if (!await focusTracker.RestoreAsync(window, cancellationToken).ConfigureAwait(false))
+                    {
+                        logger.Warning("Could not give the keyboard focus back to the window it came from");
+                    }
+                }
+
+                break;
+
             case PasteCurrentClipboard:
                 logger.Debug("Pasting the current clipboard");
 
@@ -317,6 +418,65 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
         }
     }
 
+    private async Task BeginSearchAsync(BeginSearch begin)
+    {
+        // The picker has not taken the focus yet, so this is the window the user was working in.
+        focusBeforeSearch = SafeCaptureFocus();
+        PickerSearch created;
+        lock (session)
+        {
+            created = new PickerSearch(begin.Selection.ItemIds
+                .Where(session.ContainsKey)
+                .Select(id =>
+                {
+                    var (item, itemActions) = session[id];
+                    var content = searchTexts.GetOrAdd(id, _ => HistorySearch.CreateContentText(item));
+                    return new SearchableItem(new GestureItem(id, itemActions.Count), HistorySearch.CreateSearchText(content, item));
+                })
+                .ToArray());
+        }
+
+        lock (gestureGate)
+        {
+            search = created;
+        }
+
+        logger.Debug("Searching the history");
+        try
+        {
+            await picker.BeginSearchAsync(CreateViewState(created.Selection), OnSearchInput).ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            // Never leave the keyboard hook passing every key through for a search that is not there.
+            logger.Error(exception, "Could not begin searching");
+            lock (gestureGate)
+            {
+                if (ReferenceEquals(search, created))
+                {
+                    search = null;
+                    searching = false;
+                }
+            }
+
+            focusBeforeSearch = null;
+            await picker.HideAsync().ConfigureAwait(false);
+        }
+    }
+
+    private FocusedWindow? SafeCaptureFocus()
+    {
+        try
+        {
+            return focusTracker?.Capture();
+        }
+        catch (Exception exception)
+        {
+            logger.Warning(exception, "Could not tell which window has the keyboard focus");
+            return null;
+        }
+    }
+
     private async Task PerformAsync(PerformAction perform, CancellationToken cancellationToken)
     {
         (ClipboardItem Item, IReadOnlyList<IClipboardAction> Actions) entry;
@@ -343,7 +503,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
     {
         if (selection.IsEmpty)
         {
-            return new PickerViewState([], 0, [], 0, PickerPane.Items, selection.IsHeldOpen);
+            return new PickerViewState([], 0, [], 0, PickerPane.Items, selection.IsHeldOpen) { SearchQuery = selection.Query };
         }
 
         lock (session)
@@ -356,7 +516,10 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
                 selected.Actions.Select(action => new PickerActionView(action.Id, action.GetTitle(selected.Item), action.GetDescription(selected.Item))).ToArray(),
                 selection.SelectedActionIndex,
                 selection.Pane,
-                selection.IsHeldOpen);
+                selection.IsHeldOpen)
+            {
+                SearchQuery = selection.Query,
+            };
         }
     }
 
@@ -373,12 +536,18 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
                 break;
             case HistoryChangeKind.Removed when e.Item is not null:
                 availableActions.TryRemove(e.Item.Id, out _);
+                searchTexts.TryRemove(e.Item.Id, out _);
                 break;
             case HistoryChangeKind.Reset:
                 var remaining = history.Items.Select(item => item.Id).ToHashSet();
                 foreach (var id in availableActions.Keys.Where(id => !remaining.Contains(id)).ToArray())
                 {
                     availableActions.TryRemove(id, out _);
+                }
+
+                foreach (var id in searchTexts.Keys.Where(id => !remaining.Contains(id)).ToArray())
+                {
+                    searchTexts.TryRemove(id, out _);
                 }
 
                 break;

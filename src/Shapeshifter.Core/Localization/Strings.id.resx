@@ -395,4 +395,19 @@ Untuk menempelkan sesuatu yang Anda salin sebelumnya, tahan {0} lalu tekan V. Te
   <data name="KeySpace" xml:space="preserve">
     <value>Spasi</value>
   </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>Cari</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>Cari di semua yang Anda salin</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>Tidak ada hasil</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>Tidak ada yang Anda salin yang berisi “{0}”.</value>
+  </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Build pull request tidak memperbarui dirinya sendiri</value>
+  </data>
 </root>

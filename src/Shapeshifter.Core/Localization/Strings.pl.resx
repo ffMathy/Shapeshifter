@@ -395,4 +395,19 @@ Aby wkleić coś skopiowanego wcześniej, przytrzymaj {0} i naciśnij V. Trzymaj
   <data name="KeySpace" xml:space="preserve">
     <value>Spacja</value>
   </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>Szukaj</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>Szukaj we wszystkim, co skopiowano</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>Brak wyników</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>Nic, co skopiowano, nie zawiera „{0}”.</value>
+  </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Kompilacje z pull requestów nie aktualizują się same</value>
+  </data>
 </root>

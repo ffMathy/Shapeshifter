@@ -11,7 +11,8 @@ namespace Shapeshifter.Platform.Linux;
 /// <item>suppressing the paste keystroke, by passively grabbing Ctrl+V on the root window
 /// (the focused application then never receives it), and the navigation keys while a gesture is active;</item>
 /// <item>clipboard change notifications through the XFixes extension;</item>
-/// <item>the pointer position.</item>
+/// <item>the pointer position;</item>
+/// <item>which window has the focus, and moving the focus between the picker and that window.</item>
 /// </list>
 /// Key events themselves are still observed through SharpHook (XRecord), which also sees grabbed keys.
 /// </summary>
@@ -28,7 +29,7 @@ internal sealed unsafe class X11Integration : IClipboardChangeSource, ICursorLoc
     private static readonly ulong[] NavigationKeysyms =
     [
         X11Native.XK_Up, X11Native.XK_Down, X11Native.XK_Left, X11Native.XK_Right, X11Native.XK_Delete, X11Native.XK_Escape,
-        X11Native.XK_space, X11Native.XK_Return, X11Native.XK_KP_Enter,
+        X11Native.XK_space, X11Native.XK_Return, X11Native.XK_KP_Enter, X11Native.XK_s,
         .. Enumerable.Range(0, 9).Select(i => X11Native.XK_1 + (ulong)i),
         .. Enumerable.Range(0, 9).Select(i => X11Native.XK_KP_1 + (ulong)i),
     ];
@@ -164,6 +165,15 @@ internal sealed unsafe class X11Integration : IClipboardChangeSource, ICursorLoc
         }
     }
 
+    /// <summary>The window manager's active window, else the window with the input focus; zero when there is none.</summary>
+    internal Task<IntPtr> GetFocusedWindowAsync() => InvokeAsync(GetFocusedWindow, IntPtr.Zero);
+
+    /// <summary>Asks the window manager to activate <paramref name="window"/>, as a pager or taskbar would.</summary>
+    internal Task RequestActivationAsync(IntPtr window) => InvokeAsync(() => RequestActivation(window));
+
+    /// <summary>Raises <paramref name="window"/> and gives it the input focus directly, bypassing the window manager.</summary>
+    internal Task SetInputFocusAsync(IntPtr window) => InvokeAsync(() => SetInputFocus(window));
+
     public void Dispose()
     {
         if (!running)
@@ -209,6 +219,89 @@ internal sealed unsafe class X11Integration : IClipboardChangeSource, ICursorLoc
         var done = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         commands.Enqueue((work, done));
         return done.Task;
+    }
+
+    private Task<T> InvokeAsync<T>(Func<T> work, T fallback)
+    {
+        var result = fallback;
+        return InvokeAsync(() => result = work()).ContinueWith(
+            task =>
+            {
+                task.GetAwaiter().GetResult();
+                return result;
+            },
+            CancellationToken.None,
+            TaskContinuationOptions.ExecuteSynchronously,
+            TaskScheduler.Default);
+    }
+
+    /// <summary>The window manager's active window (<c>_NET_ACTIVE_WINDOW</c>), else the X input focus. On the X11 thread.</summary>
+    private IntPtr GetFocusedWindow()
+    {
+        var active = IntPtr.Zero;
+        var atom = X11Native.XInternAtom(display, "_NET_ACTIVE_WINDOW", false);
+        if (X11Native.XGetWindowProperty(display, root, atom, 0, 1, false, X11Native.XA_WINDOW, out _, out var format, out var count, out _, out var data) == 0
+            && data != IntPtr.Zero)
+        {
+            if (format == 32 && count > 0)
+            {
+                active = Marshal.ReadIntPtr(data);
+            }
+
+            X11Native.XFree(data);
+        }
+
+        if (active != IntPtr.Zero)
+        {
+            return active;
+        }
+
+        // 0 is None and 1 is PointerRoot: no particular window.
+        X11Native.XGetInputFocus(display, out var focus, out _);
+        return focus > 1 ? focus : IntPtr.Zero;
+    }
+
+    /// <summary>Sends <c>_NET_ACTIVE_WINDOW</c> to the window manager, as a pager does (source indication 2). On the X11 thread.</summary>
+    private void RequestActivation(IntPtr window)
+    {
+        var message = Marshal.AllocHGlobal(X11Native.XEventSize);
+        try
+        {
+            new Span<byte>((void*)message, X11Native.XEventSize).Clear();
+
+            // XClientMessageEvent on LP64: type, serial, send_event, display, window, message_type, format, data.l[5].
+            Marshal.WriteInt32(message, 0, X11Native.ClientMessage);
+            Marshal.WriteInt32(message, 16, 1);
+            Marshal.WriteIntPtr(message, 24, display);
+            Marshal.WriteIntPtr(message, 32, window);
+            Marshal.WriteIntPtr(message, 40, X11Native.XInternAtom(display, "_NET_ACTIVE_WINDOW", false));
+            Marshal.WriteInt32(message, 48, 32);
+            Marshal.WriteIntPtr(message, 56, 2);
+            lastOwnErrorCode = 0;
+            X11Native.XSendEvent(display, root, false, X11Native.SubstructureRedirectMask | X11Native.SubstructureNotifyMask, message);
+            X11Native.XSync(display, false);
+            if (lastOwnErrorCode != 0)
+            {
+                logger.Debug("Requesting activation of window {Window} failed with X error {Error}", window, lastOwnErrorCode);
+            }
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(message);
+        }
+    }
+
+    /// <summary>Raises the window and gives it the input focus directly. On the X11 thread.</summary>
+    private void SetInputFocus(IntPtr window)
+    {
+        lastOwnErrorCode = 0;
+        X11Native.XRaiseWindow(display, window);
+        X11Native.XSetInputFocus(display, window, X11Native.RevertToParent, X11Native.CurrentTime);
+        X11Native.XSync(display, false);
+        if (lastOwnErrorCode != 0)
+        {
+            logger.Debug("Focusing window {Window} failed with X error {Error}", window, lastOwnErrorCode);
+        }
     }
 
     private void Run()

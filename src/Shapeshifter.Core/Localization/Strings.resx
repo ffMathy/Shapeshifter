@@ -522,4 +522,24 @@ To paste something you copied earlier, hold {0} and press V. Keep holding {0} to
     <value>Space</value>
     <comment>Label of the Space bar on a key cap in this language (German: Leertaste). Short.</comment>
   </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>Search</value>
+    <comment>Footer hint next to the S key cap: S starts searching the history. Short.</comment>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>Search everything you copied</value>
+    <comment>Placeholder in the empty search box of the picker.</comment>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>No matches</value>
+    <comment>Title shown when a search of the clipboard history finds nothing. Short.</comment>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>Nothing you copied contains “{0}”.</value>
+    <comment>Shown under the title when a search finds nothing. {0} is what the user typed; keep the quotation marks of your language around it.</comment>
+  </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Pull request builds do not update themselves</value>
+    <comment>Status line in Settings, for builds of a pull request (made for testing a change; they never update).</comment>
+  </data>
 </root>

@@ -395,4 +395,19 @@ Um etwas einzufügen, das früher kopiert wurde, {0} gedrückt halten und V drü
   <data name="KeySpace" xml:space="preserve">
     <value>Leertaste</value>
   </data>
+  <data name="PickerHintSearch" xml:space="preserve">
+    <value>Suchen</value>
+  </data>
+  <data name="PickerSearchPlaceholder" xml:space="preserve">
+    <value>Alles Kopierte durchsuchen</value>
+  </data>
+  <data name="PickerSearchNoMatches" xml:space="preserve">
+    <value>Keine Treffer</value>
+  </data>
+  <data name="PickerSearchNoMatchesText" xml:space="preserve">
+    <value>Nichts, was du kopiert hast, enthält „{0}“.</value>
+  </data>
+  <data name="UpdatePullRequestBuild" xml:space="preserve">
+    <value>Builds aus Pull Requests aktualisieren sich nicht selbst</value>
+  </data>
 </root>

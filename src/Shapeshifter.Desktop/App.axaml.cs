@@ -121,11 +121,20 @@ public partial class App : Application
                 UploadConsent = uploadConsent,
             };
 
-            picker = new PickerPresenter(platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), platform.KeyboardHook.ModifierName, logger);
+            picker = new PickerPresenter(
+                platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), platform.KeyboardHook.ModifierName, logger, platform.WindowFocus);
             var coach = new CopyCoach(platform.SourceLocator, platform.KeyboardHook.ModifierName, () => settings.Current.CoachingTips);
             engine = new ShapeshifterEngine(
-                history, monitor, platform.KeyboardHook, ActionCatalog.CreateDefault(), context, picker, new CopyNotifier(settings), logger,
-                coach: coach)
+                history,
+                monitor,
+                platform.KeyboardHook,
+                ActionCatalog.CreateDefault(),
+                context,
+                picker,
+                new CopyNotifier(settings),
+                logger,
+                coach: coach,
+                focusTracker: platform.WindowFocus)
             {
                 PasteDelay = TimeSpan.FromMilliseconds(settings.Current.PasteDelayMilliseconds),
             };
