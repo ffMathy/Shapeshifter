@@ -46,6 +46,7 @@ Shapeshifter's own clipboard writes go through `ClipboardMonitor.WriteAsync`. Th
 **Pasting:**
 - If the user did not choose anything else, the current clipboard is pasted untouched (`PasteCurrentClipboard`). This keeps a quick Ctrl+V identical to a normal paste, even for data that was copied a few milliseconds earlier.
 - Otherwise the selected action runs. "Paste" restores the snapshot with all of its formats and then sends Ctrl+V (Cmd+V on macOS).
+- "Upload and paste link" is the only action that sends content off the computer. It asks `ActionContext.UploadConsent` first. `RememberedUploadConsent` shows `UploadConsentDialog` once per service and remembers a "yes" in `ShapeshifterSettings.UploadConsents`. Because the dialog takes focus, the link is only copied on that first run, and pasted on later runs.
 - On Linux, the trigger grab is released while the synthetic keystroke is sent.
 - The hook recognises the echo of its own keystrokes by matching the exact sequence it sent, because XRecord does not flag simulated events.
 
