@@ -5,6 +5,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Media.Immutable;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Previews;
 using Shapeshifter.Core.Text;
 using Shapeshifter.Desktop.Services;
 using Shapeshifter.Core.Localization;
@@ -115,6 +116,15 @@ public sealed partial class PickerItemViewModel : ObservableObject
             PreviewCaption = ColorRgb;
         }
 
+        // A text that is only a link to an image, or the path of one, shows the image behind it once it is loaded
+        // (issue #21); the caption names where the image is.
+        LinkedImage = ColorSwatch is null ? LinkedImage.Find(item) : null;
+        if (LinkedImage is not null)
+        {
+            PreviewCaption = LinkedImage.Location;
+            PreviewCaptionGlyph = LinkedImage.Link is not null ? Glyphs.Link : Glyphs.Folder;
+        }
+
         if (item.Kind == ClipboardContentKind.File)
         {
             var path = Path.TrimEndingDirectorySeparator(files[0]);
@@ -177,6 +187,12 @@ public sealed partial class PickerItemViewModel : ObservableObject
     public Bitmap? Thumbnail { get; }
 
     public bool HasThumbnail => Thumbnail is not null;
+
+    /// <summary>The image a copied link or path points to (issue #21), or null for any other item.</summary>
+    public LinkedImage? LinkedImage { get; }
+
+    /// <summary>The text icon in the preview of a link, over its image.</summary>
+    public static Geometry TextGlyph => Glyphs.Text;
 
     /// <summary>The system icon of a single copied file.</summary>
     public Bitmap? FileIcon { get; }
@@ -256,12 +272,27 @@ public sealed partial class PickerItemViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(PreviewImage))]
     [NotifyPropertyChangedFor(nameof(ShowsPreviewImage))]
+    [NotifyPropertyChangedFor(nameof(LinkedPreviewImage))]
+    [NotifyPropertyChangedFor(nameof(ShowsLinkedImage))]
+    [NotifyPropertyChangedFor(nameof(ShowsPlainPreviewText))]
     private Bitmap? largeImage;
 
     /// <summary>The image in the preview pane: the large one once it is decoded, the thumbnail until then.</summary>
     public Bitmap? PreviewImage => LargeImage ?? Thumbnail;
 
     public bool ShowsPreviewImage => PreviewImage is not null && Layout == PickerItemLayout.Image;
+
+    /// <summary>
+    /// The image behind a copied link in the preview, once the presenter has loaded it (only for the selected item; the
+    /// row keeps its text icon).
+    /// </summary>
+    public Bitmap? LinkedPreviewImage => LinkedImage is null ? null : LargeImage;
+
+    /// <summary>Whether the preview shows the link over its image rather than as plain text.</summary>
+    public bool ShowsLinkedImage => LinkedPreviewImage is not null;
+
+    /// <summary>The text in the preview, unless it is a link shown over its image.</summary>
+    public bool ShowsPlainPreviewText => HasPreviewText && !ShowsLinkedImage;
 
     /// <summary>A large line icon when there is nothing else to preview (an image that could not be decoded, other data).</summary>
     public bool ShowsPreviewGlyph => !HasPreviewText && !ShowsPreviewImage && ColorSwatch is null && !IsFileLayout && !IsFilesLayout;

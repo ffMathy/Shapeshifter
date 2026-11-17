@@ -7,6 +7,7 @@ using Serilog;
 using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Engine;
 using Shapeshifter.Core.Input;
+using Shapeshifter.Core.Previews;
 using Shapeshifter.Core.Platform;
 using Shapeshifter.Desktop.ViewModels;
 using Shapeshifter.Desktop.Views;
@@ -39,14 +40,22 @@ internal sealed class PickerPresenter : IPickerPresenter
     private readonly ILogger logger;
     private readonly PickerVisuals visuals;
     private readonly PickerViewModel viewModel;
+    private readonly LinkedImageLoader? linkedImages;
     private readonly Dictionary<Guid, Bitmap?> thumbnails = [];
     private (PickerItemViewModel Item, Bitmap? Bitmap)? previewImage;
     private PickerWindow? window;
     private Func<PickerSearchInput, bool>? searchInput;
     private bool activatedForSearch;
 
-    public PickerPresenter(ICursorLocator cursorLocator, PickerVisuals visuals, string modifierName, ILogger logger, IWindowFocus? windowFocus = null)
+    public PickerPresenter(
+        ICursorLocator cursorLocator,
+        PickerVisuals visuals,
+        string modifierName,
+        ILogger logger,
+        IWindowFocus? windowFocus = null,
+        LinkedImageLoader? linkedImages = null)
     {
+        this.linkedImages = linkedImages;
         viewModel = new PickerViewModel(modifierName);
         viewModel.PropertyChanged += (_, e) =>
         {
@@ -278,6 +287,21 @@ internal sealed class PickerPresenter : IPickerPresenter
             previewImage = null;
         }
 
+        if (selected?.LinkedImage is { } linked && linkedImages is not null)
+        {
+            previewImage = (selected, null);
+            if (linkedImages.TryGetLoaded(linked, out var loaded))
+            {
+                ShowLinkedImage(selected, loaded);
+            }
+            else
+            {
+                _ = LoadLinkedImageAsync(selected, linked);
+            }
+
+            return;
+        }
+
         if (selected is null || !selected.IsImageLayout)
         {
             return;
@@ -298,6 +322,69 @@ internal sealed class PickerPresenter : IPickerPresenter
 
         selected.LargeImage = bitmap;
         previewImage = (selected, bitmap);
+    }
+
+    /// <summary>
+    /// Loads the image of the selected copied link or path (issue #21), then shows it in the preview if the item is
+    /// still selected. Only the selected item's image is loaded, so the picker contacts a web site only for the link
+    /// the user is looking at; the rows keep their text icon.
+    /// </summary>
+    private async Task LoadLinkedImageAsync(PickerItemViewModel selected, LinkedImage linked)
+    {
+        var bytes = await linkedImages!.LoadAsync(linked).ConfigureAwait(true);
+        if (bytes is null || previewImage is not { } current || !ReferenceEquals(current.Item, selected))
+        {
+            return;
+        }
+
+        ShowLinkedImage(selected, bytes);
+
+        // The preview may have grown with the image.
+        if (window is not null && IsVisible)
+        {
+            window.UpdateLayout();
+            Position(window);
+        }
+    }
+
+    /// <summary>Shows the image of the selected copied link in the preview.</summary>
+    private void ShowLinkedImage(PickerItemViewModel selected, byte[]? bytes)
+    {
+        if (bytes is null)
+        {
+            return;
+        }
+
+        var bitmap = Decode(bytes, PreviewImageHeight, selected.Id);
+        selected.LargeImage = bitmap;
+        previewImage = (selected, bitmap);
+    }
+
+    /// <summary>Decodes an image (PNG, JPEG, GIF, BMP or WebP) to at most the given height, or null when it cannot be.</summary>
+    private Bitmap? Decode(byte[] bytes, int maxHeight, Guid id)
+    {
+        try
+        {
+            using var stream = new MemoryStream(bytes);
+            var bitmap = new Bitmap(stream);
+
+            // Small images are not scaled up.
+            if (bitmap.PixelSize.Height <= maxHeight)
+            {
+                return bitmap;
+            }
+
+            using (bitmap)
+            {
+                var width = Math.Max(1, (int)Math.Round((double)bitmap.PixelSize.Width * maxHeight / bitmap.PixelSize.Height));
+                return bitmap.CreateScaledBitmap(new PixelSize(width, maxHeight));
+            }
+        }
+        catch (Exception exception)
+        {
+            logger.Debug(exception, "Could not decode the linked image of item {Id}", id);
+            return null;
+        }
     }
 
     private Bitmap? GetThumbnail(ClipboardItem item)

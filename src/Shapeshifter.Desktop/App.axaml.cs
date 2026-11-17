@@ -12,6 +12,7 @@ using Shapeshifter.Core.Clipboard;
 using Shapeshifter.Core.Coaching;
 using Shapeshifter.Core.Engine;
 using Shapeshifter.Core.Persistence;
+using Shapeshifter.Core.Previews;
 using Shapeshifter.Core.Settings;
 using Shapeshifter.Core.Support;
 using Shapeshifter.Core.Updates;
@@ -122,7 +123,12 @@ public partial class App : Application
             };
 
             picker = new PickerPresenter(
-                platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), platform.KeyboardHook.ModifierName, logger, platform.WindowFocus);
+                platform.CursorLocator,
+                new PickerVisuals(platform.FileIcons, logger),
+                platform.KeyboardHook.ModifierName,
+                logger,
+                platform.WindowFocus,
+                new LinkedImageLoader(http, logger));
             var coach = new CopyCoach(platform.SourceLocator, platform.KeyboardHook.ModifierName, () => settings.Current.CoachingTips);
             engine = new ShapeshifterEngine(
                 history,
