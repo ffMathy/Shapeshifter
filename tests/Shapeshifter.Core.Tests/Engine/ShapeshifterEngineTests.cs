@@ -231,23 +231,6 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Search_Enter_GivesTheWindowTimeToTakeTheFocus_BeforePasting()
-    {
-        h.Seed("apple", "banana");
-        h.Engine.FocusSettleDelay = TimeSpan.FromMilliseconds(200);
-        await h.StartAsync();
-        await BeginSearchAsync();
-
-        h.Picker.Search(new PickerSearchInput(PickerSearchKey.Enter));
-        await WaitForEffectAsync<PerformAction>();
-
-        Assert.Equal(1, h.Paste.Count);
-        Assert.True(
-            System.Diagnostics.Stopwatch.GetElapsedTime(h.FocusTracker.RestoredAt, h.Paste.PastedAt) >= TimeSpan.FromMilliseconds(190),
-            "The paste was sent before the window had time to take the keyboard focus back.");
-    }
-
-    [Fact]
     public async Task Search_Escape_RestoresTheFocus_AndPastesNothing()
     {
         h.Seed("apple", "banana");

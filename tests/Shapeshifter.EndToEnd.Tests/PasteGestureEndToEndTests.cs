@@ -310,6 +310,10 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
         var state = await session.WaitForStateAsync(s => !s.PickerVisible && !s.Searching && s.Previews[0] == $"banana {id}", "picker hidden and the match moved to the top");
         Assert.Equal($"cherry {id}", state.Previews[1]);
         await session.WaitForIdleAsync();
+
+        // The focus went back because Shapeshifter gave it back, not because hiding the picker happened to activate
+        // the target (which made this test fail now and then on Windows).
+        Assert.DoesNotContain(FocusNotRestored, session.Logs, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -334,7 +338,11 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
         // Nothing was pasted, and the target has the keyboard focus again.
         await session.TypeAsync("ok");
         Assert.Equal("ok", await session.WaitForTargetTextAsync("ok"));
+        Assert.DoesNotContain(FocusNotRestored, session.Logs, StringComparison.Ordinal);
     }
+
+    /// <summary>What Shapeshifter logs when it could not give the focus back after a search.</summary>
+    private const string FocusNotRestored = "Could not give the keyboard focus back";
 
     private static void SkipUnlessEnabled()
     {

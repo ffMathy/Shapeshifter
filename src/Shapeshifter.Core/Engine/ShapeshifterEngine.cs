@@ -131,14 +131,6 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
     /// <summary>Raised after every processed gesture effect. Useful for diagnostics and tests.</summary>
     public event EventHandler<GestureEffect>? EffectProcessed;
 
-    /// <summary>
-    /// How long to wait after giving the focus back to the window the user searched from, before pasting into it.
-    /// Applications put their keyboard focus back on the right control only once their window has been activated (the
-    /// test target, an Avalonia window, does it on its dispatcher), so a paste sent at once could reach the window
-    /// before its text box has the focus again, and be lost.
-    /// </summary>
-    public TimeSpan FocusSettleDelay { get; set; } = TimeSpan.FromMilliseconds(150);
-
     public TimeSpan PasteDelay
     {
         get
@@ -392,10 +384,6 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
                     if (!await focusTracker.RestoreAsync(window, cancellationToken).ConfigureAwait(false))
                     {
                         logger.Warning("Could not give the keyboard focus back to the window it came from");
-                    }
-                    else if (FocusSettleDelay > TimeSpan.Zero)
-                    {
-                        await Task.Delay(FocusSettleDelay, cancellationToken).ConfigureAwait(false);
                     }
                 }
 

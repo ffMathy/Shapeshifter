@@ -122,8 +122,9 @@ public partial class App : Application
                 UploadConsent = uploadConsent,
             };
 
+            var windowFocus = platform.WindowFocus is { } focus ? new UiThreadWindowFocus(focus) : null;
             picker = new PickerPresenter(
-                platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), keyboard.ModifierName, logger, platform.WindowFocus);
+                platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), keyboard.ModifierName, logger, windowFocus);
             var coach = new CopyCoach(platform.SourceLocator, () => keyboard.ModifierName, () => settings.Current.CoachingTips);
             engine = new ShapeshifterEngine(
                 history,
@@ -135,7 +136,7 @@ public partial class App : Application
                 new CopyNotifier(settings),
                 logger,
                 coach: coach,
-                focusTracker: platform.WindowFocus)
+                focusTracker: windowFocus)
             {
                 PasteDelay = TimeSpan.FromMilliseconds(settings.Current.PasteDelayMilliseconds),
             };
