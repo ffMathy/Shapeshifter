@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Pengaturan Shapeshifter</value>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>Versi {0}</value>
+  </data>
+  <data name="SettingsCopyVersion" xml:space="preserve">
+    <value>Salin versi</value>
+  </data>
+  <data name="SettingsCopied" xml:space="preserve">
+    <value>Disalin</value>
+  </data>
+  <data name="SettingsReportProblem" xml:space="preserve">
+    <value>Laporkan masalah</value>
+  </data>
+  <data name="SettingsProjectPage" xml:space="preserve">
+    <value>Halaman proyek</value>
+  </data>
+  <data name="SettingsUsage" xml:space="preserve">
+    <value>Salin seperti biasa. Untuk menempelkan item lama, tahan {0} lalu tekan V: tetap tahan {0} untuk melihat riwayat, tekan V lagi (atau ↑/↓, atau 1–9) untuk memilih item, → untuk memilih tindakan untuknya, Delete untuk menghapusnya, dan Esc untuk membatalkan. Lepaskan {0} untuk menempel.</value>
+  </data>
+  <data name="SettingsHistoryGroup" xml:space="preserve">
+    <value>Riwayat</value>
+  </data>
+  <data name="SettingsDelayTitle" xml:space="preserve">
+    <value>Jeda sebelum riwayat muncul</value>
+  </data>
+  <data name="SettingsDelayDescription" xml:space="preserve">
+    <value>Berapa lama menahan {0}+V sebelum riwayat muncul</value>
+  </data>
+  <data name="SettingsDelayAccessibleName" xml:space="preserve">
+    <value>Jeda sebelum riwayat muncul, dalam milidetik</value>
+  </data>
+  <data name="SettingsItemsTitle" xml:space="preserve">
+    <value>Item yang diingat</value>
+  </data>
+  <data name="SettingsItemsDescription" xml:space="preserve">
+    <value>Item yang disematkan disimpan sebagai tambahan</value>
+  </data>
+  <data name="SettingsRememberTitle" xml:space="preserve">
+    <value>Ingat riwayat setelah mulai ulang</value>
+  </data>
+  <data name="SettingsRememberDescription" xml:space="preserve">
+    <value>Menyimpan riwayat di disk komputer ini, tidak hanya item yang disematkan</value>
+  </data>
+  <data name="SettingsBehaviourGroup" xml:space="preserve">
+    <value>Perilaku</value>
+  </data>
+  <data name="SettingsNotificationsTitle" xml:space="preserve">
+    <value>Pemberitahuan salin</value>
+  </data>
+  <data name="SettingsNotificationsDescription" xml:space="preserve">
+    <value>Tampilkan pemberitahuan setiap kali sesuatu disalin</value>
+  </data>
+  <data name="SettingsStartAtLoginTitle" xml:space="preserve">
+    <value>Mulai saat masuk</value>
+  </data>
+  <data name="SettingsStartAtLoginDescription" xml:space="preserve">
+    <value>Shapeshifter menunggu di latar belakang setelah Anda masuk</value>
+  </data>
+  <data name="SettingsUpdatesTitle" xml:space="preserve">
+    <value>Pembaruan otomatis</value>
+  </data>
+  <data name="SettingsClearHistory" xml:space="preserve">
+    <value>Hapus riwayat</value>
+  </data>
+  <data name="SettingsCheckForUpdates" xml:space="preserve">
+    <value>Periksa pembaruan</value>
+  </data>
+  <data name="SettingsOpenLogFolder" xml:space="preserve">
+    <value>Buka folder log</value>
+  </data>
+  <data name="PickerTitleWindows" xml:space="preserve">
+    <value>Riwayat papan klip</value>
+  </data>
+  <data name="PickerTitleMacOS" xml:space="preserve">
+    <value>Papan Klip</value>
+  </data>
+  <data name="PickerItemCountOne" xml:space="preserve">
+    <value>1 item</value>
+  </data>
+  <data name="PickerItemCountOther" xml:space="preserve">
+    <value>{0} item</value>
+  </data>
+  <data name="PickerReleaseHint" xml:space="preserve">
+    <value>Lepaskan {0} untuk menempel</value>
+  </data>
+  <data name="PickerNothingCopied" xml:space="preserve">
+    <value>Belum ada yang disalin</value>
+  </data>
+  <data name="PickerEmptyHint" xml:space="preserve">
+    <value>Salin seperti biasa, dan Shapeshifter menyimpan semua yang Anda salin.
+
+Untuk menempelkan sesuatu yang Anda salin sebelumnya, tahan {0} lalu tekan V. Tetap tahan {0} untuk melihat riwayat, tekan V atau tombol panah untuk memilih, lalu lepaskan {0} untuk menempel.</value>
+  </data>
+  <data name="PickerActions" xml:space="preserve">
+    <value>Tindakan</value>
+  </data>
+  <data name="PickerActionsForText" xml:space="preserve">
+    <value>Tindakan untuk teks ini</value>
+  </data>
+  <data name="PickerActionsForImage" xml:space="preserve">
+    <value>Tindakan untuk gambar ini</value>
+  </data>
+  <data name="PickerActionsForFile" xml:space="preserve">
+    <value>Tindakan untuk file ini</value>
+  </data>
+  <data name="PickerActionsForFiles" xml:space="preserve">
+    <value>Tindakan untuk file-file ini</value>
+  </data>
+  <data name="PickerDefault" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="PickerHintRelease" xml:space="preserve">
+    <value>Lepas untuk menempel</value>
+  </data>
+  <data name="PickerHintMove" xml:space="preserve">
+    <value>Pindah</value>
+  </data>
+  <data name="PickerHintJump" xml:space="preserve">
+    <value>Lompat</value>
+  </data>
+  <data name="PickerHintRemove" xml:space="preserve">
+    <value>Hapus</value>
+  </data>
+  <data name="PickerHintCancel" xml:space="preserve">
+    <value>Batal</value>
+  </data>
+  <data name="KeyControl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="KeyEscape" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="ItemEmpty" xml:space="preserve">
+    <value>(kosong)</value>
+  </data>
+  <data name="ItemImage" xml:space="preserve">
+    <value>Gambar</value>
+  </data>
+  <data name="ItemImageWithSize" xml:space="preserve">
+    <value>Gambar · {0} × {1}</value>
+  </data>
+  <data name="ItemFilesWithNames" xml:space="preserve">
+    <value>{0} item · {1}</value>
+  </data>
+  <data name="ItemFileCount" xml:space="preserve">
+    <value>{0} file</value>
+  </data>
+  <data name="ItemFormattedText" xml:space="preserve">
+    <value>Teks berformat</value>
+  </data>
+  <data name="ItemOtherData" xml:space="preserve">
+    <value>Data lain</value>
+  </data>
+  <data name="ItemCharacterCount" xml:space="preserve">
+    <value>{0} karakter</value>
+  </data>
+  <data name="ItemLineCount" xml:space="preserve">
+    <value>{0} baris</value>
+  </data>
+  <data name="ToastCopiedOne" xml:space="preserve">
+    <value>Disalin · 1 item di riwayat Anda</value>
+  </data>
+  <data name="ToastCopiedOther" xml:space="preserve">
+    <value>Disalin · {0} item di riwayat Anda</value>
+  </data>
+  <data name="TraySettings" xml:space="preserve">
+    <value>Pengaturan…</value>
+  </data>
+  <data name="TrayCheckForUpdates" xml:space="preserve">
+    <value>Periksa pembaruan…</value>
+  </data>
+  <data name="TrayReportProblem" xml:space="preserve">
+    <value>Laporkan masalah…</value>
+  </data>
+  <data name="TrayAbout" xml:space="preserve">
+    <value>Tentang Shapeshifter {0}</value>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>Keluar dari Shapeshifter</value>
+  </data>
+  <data name="StartupErrorTitle" xml:space="preserve">
+    <value>Shapeshifter tidak dapat dimulai</value>
+  </data>
+  <data name="StartupErrorDetails" xml:space="preserve">
+    <value>Detail telah ditulis ke {0}.</value>
+  </data>
+  <data name="StartupErrorQuit" xml:space="preserve">
+    <value>Keluar</value>
+  </data>
+  <data name="ActionPaste" xml:space="preserve">
+    <value>Tempel</value>
+  </data>
+  <data name="ActionPasteDescription" xml:space="preserve">
+    <value>Menempelkan isi papan klip apa adanya.</value>
+  </data>
+  <data name="ActionPasteAsPlainText" xml:space="preserve">
+    <value>Tempel sebagai teks biasa</value>
+  </data>
+  <data name="ActionPasteAsPlainTextDescription" xml:space="preserve">
+    <value>Menempelkan isi papan klip sebagai teks biasa tanpa format.</value>
+  </data>
+  <data name="ActionPasteAsFile" xml:space="preserve">
+    <value>Tempel sebagai file</value>
+  </data>
+  <data name="ActionPasteAsFileDescription" xml:space="preserve">
+    <value>Menyimpan teks ini ke file .txt dan menempelkan file tersebut.</value>
+  </data>
+  <data name="ActionCopyAsZip" xml:space="preserve">
+    <value>Salin sebagai folder terkompresi</value>
+  </data>
+  <data name="ActionCopyAsZipDescription" xml:space="preserve">
+    <value>Salin file-file ini ke papan klip sebagai folder terkompresi (.zip).</value>
+  </data>
+  <data name="ActionCopyImageFromLink" xml:space="preserve">
+    <value>Salin gambar dari tautan</value>
+  </data>
+  <data name="ActionCopyImageFromLinkDescription" xml:space="preserve">
+    <value>Mengunduh gambar yang ditautkan dan menyalin gambar itu sendiri ke papan klip.</value>
+  </data>
+  <data name="ActionOpenLink" xml:space="preserve">
+    <value>Buka tautan</value>
+  </data>
+  <data name="ActionOpenLinks" xml:space="preserve">
+    <value>Buka tautan-tautan</value>
+  </data>
+  <data name="ActionOpenLinkDescription" xml:space="preserve">
+    <value>Membuka tautan di browser Anda.</value>
+  </data>
+  <data name="ActionOpenLinksDescription" xml:space="preserve">
+    <value>Membuka tautan-tautan di browser Anda (maksimal {0}).</value>
+  </data>
+  <data name="ActionPin" xml:space="preserve">
+    <value>Sematkan ke papan klip</value>
+  </data>
+  <data name="ActionPinDescription" xml:space="preserve">
+    <value>Menyematkan item ini agar selalu berada di atas, dan menyimpannya ke komputer Anda agar tetap ada saat Anda membuka Shapeshifter berikutnya.</value>
+  </data>
+  <data name="ActionUnpin" xml:space="preserve">
+    <value>Lepas sematan dari papan klip</value>
+  </data>
+  <data name="ActionUnpinDescription" xml:space="preserve">
+    <value>Melepas sematan item ini agar bergeser ke bawah saat Anda menyalin, dan tidak lagi disimpan di komputer Anda.</value>
+  </data>
+  <data name="TimeJustNow" xml:space="preserve">
+    <value>Baru saja</value>
+  </data>
+  <data name="TimeMinutesAgo" xml:space="preserve">
+    <value>{0} mnt lalu</value>
+  </data>
+  <data name="TimeHoursAgo" xml:space="preserve">
+    <value>{0} jam lalu</value>
+  </data>
+  <data name="TimeYesterday" xml:space="preserve">
+    <value>Kemarin</value>
+  </data>
+  <data name="TimeDaysAgo" xml:space="preserve">
+    <value>{0} hari lalu</value>
+  </data>
+  <data name="UpdateOff" xml:space="preserve">
+    <value>Pembaruan otomatis nonaktif</value>
+  </data>
+  <data name="UpdateUnsupported" xml:space="preserve">
+    <value>Salinan ini tidak dapat memperbarui dirinya sendiri</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>Memeriksa pembaruan…</value>
+  </data>
+  <data name="UpdateUpToDate" xml:space="preserve">
+    <value>Sudah terbaru (diperiksa {0})</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>Mengunduh versi {0}…</value>
+  </data>
+  <data name="UpdateReadyToRestart" xml:space="preserve">
+    <value>Versi {0} sudah terinstal dan mulai berlaku saat {1} dibuka berikutnya</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Tidak dapat memperbarui: {0}</value>
+  </data>
+  <data name="UpdateAutomatic" xml:space="preserve">
+    <value>Pembaruan diperiksa secara otomatis</value>
+  </data>
+  <data name="UpdateTurnedOff" xml:space="preserve">
+    <value>Pembaruan dinonaktifkan ({0})</value>
+  </data>
+  <data name="UpdateReleaseBuildsOnly" xml:space="preserve">
+    <value>Hanya build rilis yang dapat memperbarui dirinya sendiri</value>
+  </data>
+  <data name="UpdateCannotWrite" xml:space="preserve">
+    <value>{0} tidak dapat menulis ke {1}; perbarui dengan cara yang sama seperti saat diinstal</value>
+  </data>
+  <data name="PlatformNeedsX11" xml:space="preserve">
+    <value>Shapeshifter memerlukan tampilan X11 (DISPLAY tidak diatur). Di Wayland, pastikan XWayland tersedia.</value>
+  </data>
+  <data name="PlatformWayland" xml:space="preserve">
+    <value>Ini adalah sesi Wayland. Wayland tidak mengizinkan aplikasi mengamati atau menyintesis penekanan tombol global, sehingga gerakan tempel hanya berfungsi saat aplikasi X11 (XWayland) sedang aktif. Masuk ke sesi X11 untuk dukungan penuh.</value>
+  </data>
+  <data name="PlatformAccessibility" xml:space="preserve">
+    <value>Shapeshifter memerlukan akses Aksesibilitas untuk melihat dan mengirim penekanan tombol Cmd+V. Izinkan di Pengaturan Sistem &gt; Privasi &amp; Keamanan &gt; Aksesibilitas, lalu mulai ulang Shapeshifter.</value>
+  </data>
+  <data name="PlatformNotSupported" xml:space="preserve">
+    <value>{0} tidak didukung.</value>
+  </data>
+</root>

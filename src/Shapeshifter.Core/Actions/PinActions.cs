@@ -1,4 +1,5 @@
 using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Core.Actions;
 
@@ -12,15 +13,15 @@ public sealed class TogglePinAction : IClipboardAction
     public string GetTitle(ClipboardItem item)
     {
         ArgumentNullException.ThrowIfNull(item);
-        return item.IsPinned ? "Unpin from clipboard" : "Pin to clipboard";
+        return item.IsPinned ? Strings.ActionUnpin : Strings.ActionPin;
     }
 
     public string GetDescription(ClipboardItem item)
     {
         ArgumentNullException.ThrowIfNull(item);
         return item.IsPinned
-            ? "Unpins this item so that it moves down as you copy, and is no longer saved to your harddrive."
-            : "Pins this item so that it always stays in the top, and gets saved to your harddrive so that it is there the next time you open Shapeshifter.";
+            ? Strings.ActionUnpinDescription
+            : Strings.ActionPinDescription;
     }
 
     public bool CanExecute(ClipboardItem item) => true;

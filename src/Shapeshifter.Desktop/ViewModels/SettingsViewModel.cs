@@ -6,6 +6,7 @@ using Shapeshifter.Core.Settings;
 using Shapeshifter.Core.Support;
 using Shapeshifter.Core.Updates;
 using Shapeshifter.Desktop.Services;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Desktop.ViewModels;
 
@@ -66,12 +67,10 @@ public sealed partial class SettingsViewModel : ObservableObject
         {
             updater.StateChanged += OnUpdaterStateChanged;
         }
-        DelayDescription = $"How long to hold {modifierName}+V before the history appears";
+        var modifier = Localizer.ModifierKey(modifierName);
+        DelayDescription = Localizer.Format(Strings.SettingsDelayDescription, modifier);
         Warnings = string.Join(Environment.NewLine + Environment.NewLine, warnings);
-        Usage =
-            $"Copy as usual. To paste an older item, hold {modifierName} and press V: keep {modifierName} held to see " +
-            $"the history, press V again (or ↑/↓, or 1–9) to pick an item, → to choose what to do with it, Delete to remove it " +
-            $"and Esc to cancel. Release {modifierName} to paste.";
+        Usage = Localizer.Format(Strings.SettingsUsage, modifier);
     }
 
     public string Usage { get; }
@@ -92,13 +91,13 @@ public sealed partial class SettingsViewModel : ObservableObject
 
     public bool IsAutostartSupported => autostart.IsSupported;
 
-    public string Version { get; } = "Version " + (typeof(SettingsViewModel).Assembly.GetName().Version?.ToString(3) ?? "?");
+    public string Version { get; } = Localizer.Format(Strings.SettingsVersion, typeof(SettingsViewModel).Assembly.GetName().Version?.ToString(3) ?? "?");
 
     /// <summary>The version, operating system and architecture, as "Copy version" puts them on the clipboard.</summary>
     public string EnvironmentDescription { get; } = ProblemReport.DescribeCurrentEnvironment(Installation.App.Name);
 
     /// <summary>What the updater is doing, or why this copy cannot update itself.</summary>
-    public string UpdateStatus => updater?.StatusText ?? "Updates are checked automatically";
+    public string UpdateStatus => updater?.StatusText ?? Strings.UpdateAutomatic;
 
     /// <summary>Whether this copy can download and install updates (single-file release builds in a writable folder).</summary>
     public bool CanUpdate => updater?.IsSupported == true;

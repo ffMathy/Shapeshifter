@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Shapeshifter 设置</value>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>版本 {0}</value>
+  </data>
+  <data name="SettingsCopyVersion" xml:space="preserve">
+    <value>复制版本信息</value>
+  </data>
+  <data name="SettingsCopied" xml:space="preserve">
+    <value>已复制</value>
+  </data>
+  <data name="SettingsReportProblem" xml:space="preserve">
+    <value>报告问题</value>
+  </data>
+  <data name="SettingsProjectPage" xml:space="preserve">
+    <value>项目主页</value>
+  </data>
+  <data name="SettingsUsage" xml:space="preserve">
+    <value>照常复制即可。要粘贴较早的项目，请按住 {0} 并按 V：一直按住 {0} 可查看历史记录，再按 V（或 ↑/↓，或 1–9）选择项目，按 → 选择对其执行的操作，按 Delete 将其删除，按 Esc 取消。松开 {0} 即可粘贴。</value>
+  </data>
+  <data name="SettingsHistoryGroup" xml:space="preserve">
+    <value>历史记录</value>
+  </data>
+  <data name="SettingsDelayTitle" xml:space="preserve">
+    <value>历史记录显示前的延迟</value>
+  </data>
+  <data name="SettingsDelayDescription" xml:space="preserve">
+    <value>按住 {0}+V 多长时间后显示历史记录</value>
+  </data>
+  <data name="SettingsDelayAccessibleName" xml:space="preserve">
+    <value>历史记录显示前的延迟（毫秒）</value>
+  </data>
+  <data name="SettingsItemsTitle" xml:space="preserve">
+    <value>保留的项目数</value>
+  </data>
+  <data name="SettingsItemsDescription" xml:space="preserve">
+    <value>已固定的项目不计入此数</value>
+  </data>
+  <data name="SettingsRememberTitle" xml:space="preserve">
+    <value>重启后保留历史记录</value>
+  </data>
+  <data name="SettingsRememberDescription" xml:space="preserve">
+    <value>将历史记录保存在此电脑的磁盘上，而不仅仅是已固定的项目</value>
+  </data>
+  <data name="SettingsBehaviourGroup" xml:space="preserve">
+    <value>行为</value>
+  </data>
+  <data name="SettingsNotificationsTitle" xml:space="preserve">
+    <value>复制通知</value>
+  </data>
+  <data name="SettingsNotificationsDescription" xml:space="preserve">
+    <value>每次复制内容时显示通知</value>
+  </data>
+  <data name="SettingsStartAtLoginTitle" xml:space="preserve">
+    <value>登录时启动</value>
+  </data>
+  <data name="SettingsStartAtLoginDescription" xml:space="preserve">
+    <value>登录后 Shapeshifter 会在后台待命</value>
+  </data>
+  <data name="SettingsUpdatesTitle" xml:space="preserve">
+    <value>自动更新</value>
+  </data>
+  <data name="SettingsClearHistory" xml:space="preserve">
+    <value>清除历史记录</value>
+  </data>
+  <data name="SettingsCheckForUpdates" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="SettingsOpenLogFolder" xml:space="preserve">
+    <value>打开日志文件夹</value>
+  </data>
+  <data name="PickerTitleWindows" xml:space="preserve">
+    <value>剪贴板历史记录</value>
+  </data>
+  <data name="PickerTitleMacOS" xml:space="preserve">
+    <value>剪贴板</value>
+  </data>
+  <data name="PickerItemCountOne" xml:space="preserve">
+    <value>1 项</value>
+  </data>
+  <data name="PickerItemCountOther" xml:space="preserve">
+    <value>{0} 项</value>
+  </data>
+  <data name="PickerReleaseHint" xml:space="preserve">
+    <value>松开 {0} 即可粘贴</value>
+  </data>
+  <data name="PickerNothingCopied" xml:space="preserve">
+    <value>尚未复制任何内容</value>
+  </data>
+  <data name="PickerEmptyHint" xml:space="preserve">
+    <value>照常复制即可，Shapeshifter 会保留你复制的所有内容。
+
+要粘贴之前复制的内容，请按住 {0} 并按 V。一直按住 {0} 可查看历史记录，按 V 或方向键进行选择，松开 {0} 即可粘贴。</value>
+  </data>
+  <data name="PickerActions" xml:space="preserve">
+    <value>操作</value>
+  </data>
+  <data name="PickerActionsForText" xml:space="preserve">
+    <value>对此文本的操作</value>
+  </data>
+  <data name="PickerActionsForImage" xml:space="preserve">
+    <value>对此图像的操作</value>
+  </data>
+  <data name="PickerActionsForFile" xml:space="preserve">
+    <value>对此文件的操作</value>
+  </data>
+  <data name="PickerActionsForFiles" xml:space="preserve">
+    <value>对这些文件的操作</value>
+  </data>
+  <data name="PickerDefault" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="PickerHintRelease" xml:space="preserve">
+    <value>松开以粘贴</value>
+  </data>
+  <data name="PickerHintMove" xml:space="preserve">
+    <value>移动</value>
+  </data>
+  <data name="PickerHintJump" xml:space="preserve">
+    <value>跳转</value>
+  </data>
+  <data name="PickerHintRemove" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="PickerHintCancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="KeyControl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="KeyEscape" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="ItemEmpty" xml:space="preserve">
+    <value>（空）</value>
+  </data>
+  <data name="ItemImage" xml:space="preserve">
+    <value>图像</value>
+  </data>
+  <data name="ItemImageWithSize" xml:space="preserve">
+    <value>图像 · {0} × {1}</value>
+  </data>
+  <data name="ItemFilesWithNames" xml:space="preserve">
+    <value>{0} 项 · {1}</value>
+  </data>
+  <data name="ItemFileCount" xml:space="preserve">
+    <value>{0} 个文件</value>
+  </data>
+  <data name="ItemFormattedText" xml:space="preserve">
+    <value>带格式的文本</value>
+  </data>
+  <data name="ItemOtherData" xml:space="preserve">
+    <value>其他数据</value>
+  </data>
+  <data name="ItemCharacterCount" xml:space="preserve">
+    <value>{0} 个字符</value>
+  </data>
+  <data name="ItemLineCount" xml:space="preserve">
+    <value>{0} 行</value>
+  </data>
+  <data name="ToastCopiedOne" xml:space="preserve">
+    <value>已复制 · 历史记录中有 1 项</value>
+  </data>
+  <data name="ToastCopiedOther" xml:space="preserve">
+    <value>已复制 · 历史记录中有 {0} 项</value>
+  </data>
+  <data name="TraySettings" xml:space="preserve">
+    <value>设置…</value>
+  </data>
+  <data name="TrayCheckForUpdates" xml:space="preserve">
+    <value>检查更新…</value>
+  </data>
+  <data name="TrayReportProblem" xml:space="preserve">
+    <value>报告问题…</value>
+  </data>
+  <data name="TrayAbout" xml:space="preserve">
+    <value>关于 Shapeshifter {0}</value>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>退出 Shapeshifter</value>
+  </data>
+  <data name="StartupErrorTitle" xml:space="preserve">
+    <value>Shapeshifter 无法启动</value>
+  </data>
+  <data name="StartupErrorDetails" xml:space="preserve">
+    <value>详细信息已写入 {0}。</value>
+  </data>
+  <data name="StartupErrorQuit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="ActionPaste" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
+  <data name="ActionPasteDescription" xml:space="preserve">
+    <value>按原样粘贴剪贴板内容。</value>
+  </data>
+  <data name="ActionPasteAsPlainText" xml:space="preserve">
+    <value>粘贴为纯文本</value>
+  </data>
+  <data name="ActionPasteAsPlainTextDescription" xml:space="preserve">
+    <value>将剪贴板内容粘贴为不带格式的纯文本。</value>
+  </data>
+  <data name="ActionPasteAsFile" xml:space="preserve">
+    <value>粘贴为文件</value>
+  </data>
+  <data name="ActionPasteAsFileDescription" xml:space="preserve">
+    <value>将此文本保存为 .txt 文件并粘贴该文件。</value>
+  </data>
+  <data name="ActionCopyAsZip" xml:space="preserve">
+    <value>复制为压缩文件夹</value>
+  </data>
+  <data name="ActionCopyAsZipDescription" xml:space="preserve">
+    <value>将这些文件以压缩 (.zip) 文件夹的形式复制到剪贴板。</value>
+  </data>
+  <data name="ActionCopyImageFromLink" xml:space="preserve">
+    <value>从链接复制图像</value>
+  </data>
+  <data name="ActionCopyImageFromLinkDescription" xml:space="preserve">
+    <value>下载链接指向的图像，并将图像本身复制到剪贴板。</value>
+  </data>
+  <data name="ActionOpenLink" xml:space="preserve">
+    <value>打开链接</value>
+  </data>
+  <data name="ActionOpenLinks" xml:space="preserve">
+    <value>打开链接</value>
+  </data>
+  <data name="ActionOpenLinkDescription" xml:space="preserve">
+    <value>在浏览器中打开该链接。</value>
+  </data>
+  <data name="ActionOpenLinksDescription" xml:space="preserve">
+    <value>在浏览器中打开这些链接（最多 {0} 个）。</value>
+  </data>
+  <data name="ActionPin" xml:space="preserve">
+    <value>固定到剪贴板</value>
+  </data>
+  <data name="ActionPinDescription" xml:space="preserve">
+    <value>固定此项目，使其始终保持在顶部，并将其保存到你的电脑上，以便下次打开 Shapeshifter 时它仍在。</value>
+  </data>
+  <data name="ActionUnpin" xml:space="preserve">
+    <value>从剪贴板取消固定</value>
+  </data>
+  <data name="ActionUnpinDescription" xml:space="preserve">
+    <value>取消固定此项目，使其随着你的复制而下移，并且不再保存到你的电脑上。</value>
+  </data>
+  <data name="TimeJustNow" xml:space="preserve">
+    <value>刚刚</value>
+  </data>
+  <data name="TimeMinutesAgo" xml:space="preserve">
+    <value>{0} 分钟前</value>
+  </data>
+  <data name="TimeHoursAgo" xml:space="preserve">
+    <value>{0} 小时前</value>
+  </data>
+  <data name="TimeYesterday" xml:space="preserve">
+    <value>昨天</value>
+  </data>
+  <data name="TimeDaysAgo" xml:space="preserve">
+    <value>{0} 天前</value>
+  </data>
+  <data name="UpdateOff" xml:space="preserve">
+    <value>自动更新已关闭</value>
+  </data>
+  <data name="UpdateUnsupported" xml:space="preserve">
+    <value>此副本无法自行更新</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>正在检查更新…</value>
+  </data>
+  <data name="UpdateUpToDate" xml:space="preserve">
+    <value>已是最新版本（检查于 {0}）</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>正在下载版本 {0}…</value>
+  </data>
+  <data name="UpdateReadyToRestart" xml:space="preserve">
+    <value>版本 {0} 已安装，将在下次启动 {1} 时生效</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>无法更新：{0}</value>
+  </data>
+  <data name="UpdateAutomatic" xml:space="preserve">
+    <value>将自动检查更新</value>
+  </data>
+  <data name="UpdateTurnedOff" xml:space="preserve">
+    <value>更新已关闭（{0}）</value>
+  </data>
+  <data name="UpdateReleaseBuildsOnly" xml:space="preserve">
+    <value>只有正式发布版本才能自行更新</value>
+  </data>
+  <data name="UpdateCannotWrite" xml:space="preserve">
+    <value>{0} 无法写入 {1}；请按照安装时的方式进行更新</value>
+  </data>
+  <data name="PlatformNeedsX11" xml:space="preserve">
+    <value>Shapeshifter 需要 X11 显示（未设置 DISPLAY）。在 Wayland 下，请确保 XWayland 可用。</value>
+  </data>
+  <data name="PlatformWayland" xml:space="preserve">
+    <value>这是 Wayland 会话。Wayland 不允许应用程序监听或模拟全局按键，因此只有在 X11 (XWayland) 应用程序处于焦点时，粘贴手势才有效。请登录 X11 会话以获得完整支持。</value>
+  </data>
+  <data name="PlatformAccessibility" xml:space="preserve">
+    <value>Shapeshifter 需要辅助功能权限才能检测和发送 Cmd+V 按键。请在“系统设置”&gt;“隐私与安全性”&gt;“辅助功能”中允许，然后重新启动 Shapeshifter。</value>
+  </data>
+  <data name="PlatformNotSupported" xml:space="preserve">
+    <value>不支持 {0}。</value>
+  </data>
+</root>

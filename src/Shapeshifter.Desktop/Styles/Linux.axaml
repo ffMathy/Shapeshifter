@@ -17,7 +17,6 @@
   <Styles.Resources>
     <!-- Where the copy notification appears (CopyNotifier): BottomRight, TopRight or BottomCenter. -->
     <x:String x:Key="ToastPlacement">BottomCenter</x:String>
-    <x:String x:Key="PickerTitle">Shapeshifter</x:String>
     <!-- A row is 64 high, its hairline included (the presenter fits whole rows of this height). -->
     <x:Double x:Key="PickerRowHeight">64</x:Double>
     <x:String x:Key="LookDefaultAccent">#3584E4</x:String>

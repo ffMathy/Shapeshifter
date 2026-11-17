@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>إعدادات Shapeshifter</value>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>الإصدار {0}</value>
+  </data>
+  <data name="SettingsCopyVersion" xml:space="preserve">
+    <value>نسخ الإصدار</value>
+  </data>
+  <data name="SettingsCopied" xml:space="preserve">
+    <value>تم النسخ</value>
+  </data>
+  <data name="SettingsReportProblem" xml:space="preserve">
+    <value>الإبلاغ عن مشكلة</value>
+  </data>
+  <data name="SettingsProjectPage" xml:space="preserve">
+    <value>صفحة المشروع</value>
+  </data>
+  <data name="SettingsUsage" xml:space="preserve">
+    <value>انسخ كالمعتاد. للصق عنصر أقدم، اضغط باستمرار على {0} ثم اضغط V: أبقِ {0} مضغوطًا لعرض المحفوظات، واضغط V مرة أخرى (أو ↑/↓ أو 1–9) لاختيار عنصر، و→ لاختيار ما تفعله به، وDelete لإزالته، وEsc للإلغاء. حرّر {0} للصق.</value>
+  </data>
+  <data name="SettingsHistoryGroup" xml:space="preserve">
+    <value>المحفوظات</value>
+  </data>
+  <data name="SettingsDelayTitle" xml:space="preserve">
+    <value>التأخير قبل ظهور المحفوظات</value>
+  </data>
+  <data name="SettingsDelayDescription" xml:space="preserve">
+    <value>مدة الضغط على {0}+V قبل ظهور المحفوظات</value>
+  </data>
+  <data name="SettingsDelayAccessibleName" xml:space="preserve">
+    <value>التأخير قبل ظهور المحفوظات، بالمللي ثانية</value>
+  </data>
+  <data name="SettingsItemsTitle" xml:space="preserve">
+    <value>عدد العناصر المحفوظة</value>
+  </data>
+  <data name="SettingsItemsDescription" xml:space="preserve">
+    <value>يتم الاحتفاظ بالعناصر المثبتة إضافةً إلى ذلك</value>
+  </data>
+  <data name="SettingsRememberTitle" xml:space="preserve">
+    <value>تذكُّر المحفوظات بعد إعادة التشغيل</value>
+  </data>
+  <data name="SettingsRememberDescription" xml:space="preserve">
+    <value>يحفظ المحفوظات على قرص هذا الكمبيوتر، وليس العناصر المثبتة فقط</value>
+  </data>
+  <data name="SettingsBehaviourGroup" xml:space="preserve">
+    <value>السلوك</value>
+  </data>
+  <data name="SettingsNotificationsTitle" xml:space="preserve">
+    <value>إشعارات النسخ</value>
+  </data>
+  <data name="SettingsNotificationsDescription" xml:space="preserve">
+    <value>إظهار إشعار في كل مرة يتم فيها نسخ شيء</value>
+  </data>
+  <data name="SettingsStartAtLoginTitle" xml:space="preserve">
+    <value>البدء عند تسجيل الدخول</value>
+  </data>
+  <data name="SettingsStartAtLoginDescription" xml:space="preserve">
+    <value>ينتظر Shapeshifter في الخلفية بعد تسجيل دخولك</value>
+  </data>
+  <data name="SettingsUpdatesTitle" xml:space="preserve">
+    <value>التحديثات التلقائية</value>
+  </data>
+  <data name="SettingsClearHistory" xml:space="preserve">
+    <value>مسح المحفوظات</value>
+  </data>
+  <data name="SettingsCheckForUpdates" xml:space="preserve">
+    <value>التحقق من وجود تحديثات</value>
+  </data>
+  <data name="SettingsOpenLogFolder" xml:space="preserve">
+    <value>فتح مجلد السجلات</value>
+  </data>
+  <data name="PickerTitleWindows" xml:space="preserve">
+    <value>محفوظات الحافظة</value>
+  </data>
+  <data name="PickerTitleMacOS" xml:space="preserve">
+    <value>الحافظة</value>
+  </data>
+  <data name="PickerItemCountOne" xml:space="preserve">
+    <value>عنصر واحد</value>
+  </data>
+  <data name="PickerItemCountOther" xml:space="preserve">
+    <value>العناصر: {0}</value>
+  </data>
+  <data name="PickerReleaseHint" xml:space="preserve">
+    <value>حرّر {0} للصق</value>
+  </data>
+  <data name="PickerNothingCopied" xml:space="preserve">
+    <value>لم يتم نسخ أي شيء بعد</value>
+  </data>
+  <data name="PickerEmptyHint" xml:space="preserve">
+    <value>انسخ كالمعتاد، وسيحتفظ Shapeshifter بكل ما تنسخه.
+
+للصق شيء نسخته سابقًا، اضغط باستمرار على {0} ثم اضغط V. أبقِ {0} مضغوطًا لعرض المحفوظات، واضغط V أو مفاتيح الأسهم للاختيار، ثم حرّر {0} للصق.</value>
+  </data>
+  <data name="PickerActions" xml:space="preserve">
+    <value>الإجراءات</value>
+  </data>
+  <data name="PickerActionsForText" xml:space="preserve">
+    <value>إجراءات هذا النص</value>
+  </data>
+  <data name="PickerActionsForImage" xml:space="preserve">
+    <value>إجراءات هذه الصورة</value>
+  </data>
+  <data name="PickerActionsForFile" xml:space="preserve">
+    <value>إجراءات هذا الملف</value>
+  </data>
+  <data name="PickerActionsForFiles" xml:space="preserve">
+    <value>إجراءات هذه الملفات</value>
+  </data>
+  <data name="PickerDefault" xml:space="preserve">
+    <value>افتراضي</value>
+  </data>
+  <data name="PickerHintRelease" xml:space="preserve">
+    <value>حرّر للصق</value>
+  </data>
+  <data name="PickerHintMove" xml:space="preserve">
+    <value>تنقّل</value>
+  </data>
+  <data name="PickerHintJump" xml:space="preserve">
+    <value>انتقال</value>
+  </data>
+  <data name="PickerHintRemove" xml:space="preserve">
+    <value>إزالة</value>
+  </data>
+  <data name="PickerHintCancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="KeyControl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="KeyEscape" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="ItemEmpty" xml:space="preserve">
+    <value>(فارغ)</value>
+  </data>
+  <data name="ItemImage" xml:space="preserve">
+    <value>صورة</value>
+  </data>
+  <data name="ItemImageWithSize" xml:space="preserve">
+    <value>صورة · {0} × {1}</value>
+  </data>
+  <data name="ItemFilesWithNames" xml:space="preserve">
+    <value>العناصر: {0} · {1}</value>
+  </data>
+  <data name="ItemFileCount" xml:space="preserve">
+    <value>الملفات: {0}</value>
+  </data>
+  <data name="ItemFormattedText" xml:space="preserve">
+    <value>نص منسّق</value>
+  </data>
+  <data name="ItemOtherData" xml:space="preserve">
+    <value>بيانات أخرى</value>
+  </data>
+  <data name="ItemCharacterCount" xml:space="preserve">
+    <value>الأحرف: {0}</value>
+  </data>
+  <data name="ItemLineCount" xml:space="preserve">
+    <value>الأسطر: {0}</value>
+  </data>
+  <data name="ToastCopiedOne" xml:space="preserve">
+    <value>تم النسخ · عنصر واحد في المحفوظات</value>
+  </data>
+  <data name="ToastCopiedOther" xml:space="preserve">
+    <value>تم النسخ · العناصر في المحفوظات: {0}</value>
+  </data>
+  <data name="TraySettings" xml:space="preserve">
+    <value>الإعدادات…</value>
+  </data>
+  <data name="TrayCheckForUpdates" xml:space="preserve">
+    <value>التحقق من وجود تحديثات…</value>
+  </data>
+  <data name="TrayReportProblem" xml:space="preserve">
+    <value>الإبلاغ عن مشكلة…</value>
+  </data>
+  <data name="TrayAbout" xml:space="preserve">
+    <value>حول Shapeshifter {0}</value>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>إنهاء Shapeshifter</value>
+  </data>
+  <data name="StartupErrorTitle" xml:space="preserve">
+    <value>تعذّر بدء تشغيل Shapeshifter</value>
+  </data>
+  <data name="StartupErrorDetails" xml:space="preserve">
+    <value>تمت كتابة التفاصيل في {0}.</value>
+  </data>
+  <data name="StartupErrorQuit" xml:space="preserve">
+    <value>إنهاء</value>
+  </data>
+  <data name="ActionPaste" xml:space="preserve">
+    <value>لصق</value>
+  </data>
+  <data name="ActionPasteDescription" xml:space="preserve">
+    <value>يلصق محتوى الحافظة كما هو.</value>
+  </data>
+  <data name="ActionPasteAsPlainText" xml:space="preserve">
+    <value>لصق كنص عادي</value>
+  </data>
+  <data name="ActionPasteAsPlainTextDescription" xml:space="preserve">
+    <value>يلصق محتوى الحافظة كنص عادي بدون تنسيق.</value>
+  </data>
+  <data name="ActionPasteAsFile" xml:space="preserve">
+    <value>لصق كملف</value>
+  </data>
+  <data name="ActionPasteAsFileDescription" xml:space="preserve">
+    <value>يحفظ هذا النص في ملف .txt ويلصق الملف.</value>
+  </data>
+  <data name="ActionCopyAsZip" xml:space="preserve">
+    <value>نسخ كمجلد مضغوط</value>
+  </data>
+  <data name="ActionCopyAsZipDescription" xml:space="preserve">
+    <value>نسخ هذه الملفات إلى الحافظة كمجلد مضغوط (.zip).</value>
+  </data>
+  <data name="ActionCopyImageFromLink" xml:space="preserve">
+    <value>نسخ الصورة من الرابط</value>
+  </data>
+  <data name="ActionCopyImageFromLinkDescription" xml:space="preserve">
+    <value>ينزّل الصورة المرتبطة وينسخ الصورة نفسها إلى الحافظة.</value>
+  </data>
+  <data name="ActionOpenLink" xml:space="preserve">
+    <value>فتح الرابط</value>
+  </data>
+  <data name="ActionOpenLinks" xml:space="preserve">
+    <value>فتح الروابط</value>
+  </data>
+  <data name="ActionOpenLinkDescription" xml:space="preserve">
+    <value>يفتح الرابط في المستعرض.</value>
+  </data>
+  <data name="ActionOpenLinksDescription" xml:space="preserve">
+    <value>يفتح الروابط في المستعرض (الحد الأقصى: {0}).</value>
+  </data>
+  <data name="ActionPin" xml:space="preserve">
+    <value>تثبيت في الحافظة</value>
+  </data>
+  <data name="ActionPinDescription" xml:space="preserve">
+    <value>يثبّت هذا العنصر بحيث يبقى دائمًا في الأعلى، ويحفظه على الكمبيوتر بحيث يكون موجودًا في المرة التالية التي تفتح فيها Shapeshifter.</value>
+  </data>
+  <data name="ActionUnpin" xml:space="preserve">
+    <value>إلغاء التثبيت من الحافظة</value>
+  </data>
+  <data name="ActionUnpinDescription" xml:space="preserve">
+    <value>يلغي تثبيت هذا العنصر بحيث ينتقل إلى الأسفل كلما نسخت، ولا يعود محفوظًا على الكمبيوتر.</value>
+  </data>
+  <data name="TimeJustNow" xml:space="preserve">
+    <value>الآن</value>
+  </data>
+  <data name="TimeMinutesAgo" xml:space="preserve">
+    <value>منذ {0} د</value>
+  </data>
+  <data name="TimeHoursAgo" xml:space="preserve">
+    <value>منذ {0} س</value>
+  </data>
+  <data name="TimeYesterday" xml:space="preserve">
+    <value>أمس</value>
+  </data>
+  <data name="TimeDaysAgo" xml:space="preserve">
+    <value>منذ {0} أيام</value>
+  </data>
+  <data name="UpdateOff" xml:space="preserve">
+    <value>التحديثات التلقائية متوقفة</value>
+  </data>
+  <data name="UpdateUnsupported" xml:space="preserve">
+    <value>لا يمكن لهذه النسخة تحديث نفسها</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>جارٍ التحقق من وجود تحديثات…</value>
+  </data>
+  <data name="UpdateUpToDate" xml:space="preserve">
+    <value>محدّث (آخر تحقق: {0})</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>جارٍ تنزيل الإصدار {0}…</value>
+  </data>
+  <data name="UpdateReadyToRestart" xml:space="preserve">
+    <value>تم تثبيت الإصدار {0} وسيبدأ العمل في المرة التالية التي يبدأ فيها {1}</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>تعذّر التحديث: {0}</value>
+  </data>
+  <data name="UpdateAutomatic" xml:space="preserve">
+    <value>يتم التحقق من التحديثات تلقائيًا</value>
+  </data>
+  <data name="UpdateTurnedOff" xml:space="preserve">
+    <value>التحديثات متوقفة ({0})</value>
+  </data>
+  <data name="UpdateReleaseBuildsOnly" xml:space="preserve">
+    <value>إصدارات النشر الرسمية فقط تحدّث نفسها</value>
+  </data>
+  <data name="UpdateCannotWrite" xml:space="preserve">
+    <value>لا يمكن لـ {0} الكتابة في {1}؛ حدّثه بالطريقة التي ثُبّت بها</value>
+  </data>
+  <data name="PlatformNeedsX11" xml:space="preserve">
+    <value>يحتاج Shapeshifter إلى شاشة X11 (لم يتم تعيين DISPLAY). على Wayland، تأكد من توفر XWayland.</value>
+  </data>
+  <data name="PlatformWayland" xml:space="preserve">
+    <value>هذه جلسة Wayland. لا يسمح Wayland للتطبيقات بمراقبة ضغطات المفاتيح العامة أو محاكاتها، لذا لا تعمل إيماءة اللصق إلا عندما يكون تطبيق X11 (XWayland) في المقدمة. سجّل الدخول إلى جلسة X11 للحصول على الدعم الكامل.</value>
+  </data>
+  <data name="PlatformAccessibility" xml:space="preserve">
+    <value>يحتاج Shapeshifter إلى إذن تسهيلات الاستخدام لرؤية ضغطة المفاتيح Cmd+V وإرسالها. اسمح به في إعدادات النظام &gt; الخصوصية والأمن &gt; تسهيلات الاستخدام ثم أعد تشغيل Shapeshifter.</value>
+  </data>
+  <data name="PlatformNotSupported" xml:space="preserve">
+    <value>{0} غير مدعوم.</value>
+  </data>
+</root>

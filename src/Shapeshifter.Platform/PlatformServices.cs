@@ -8,6 +8,7 @@ using Shapeshifter.Platform.MacOS;
 using Shapeshifter.Platform.Windows;
 using SharpHook.Data;
 using SharpHook.Providers;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Platform;
 
@@ -73,8 +74,7 @@ public sealed class PlatformServices : IAsyncDisposable
         {
             if (!X11Integration.IsAvailable)
             {
-                throw new PlatformNotSupportedException(
-                    "Shapeshifter needs an X11 display (DISPLAY is not set). On Wayland, make sure XWayland is available.");
+                throw new PlatformNotSupportedException(Strings.PlatformNeedsX11);
             }
 
             // Use the XRecord/XTest backend even on Wayland sessions: it works through XWayland without root access.
@@ -86,9 +86,7 @@ public sealed class PlatformServices : IAsyncDisposable
 
             if (IsWaylandSession)
             {
-                warnings.Add(
-                    "This is a Wayland session. Wayland does not let applications observe or synthesize global keystrokes, " +
-                    "so the paste gesture only works while an X11 (XWayland) application is focused. Log in to an X11 session for full support.");
+                warnings.Add(Strings.PlatformWayland);
             }
 
             x11 = new X11Integration(logger);
@@ -98,14 +96,12 @@ public sealed class PlatformServices : IAsyncDisposable
         {
             if (!UioHookProvider.Instance.IsAxApiEnabled(false))
             {
-                warnings.Add(
-                    "Shapeshifter needs Accessibility access to see and send the Cmd+V keystroke. " +
-                    "Allow it in System Settings > Privacy & Security > Accessibility and restart Shapeshifter.");
+                warnings.Add(Strings.PlatformAccessibility);
             }
         }
         else if (!OperatingSystem.IsWindows())
         {
-            throw new PlatformNotSupportedException($"{Environment.OSVersion} is not supported.");
+            throw new PlatformNotSupportedException(Localizer.Format(Strings.PlatformNotSupported, Environment.OSVersion));
         }
 
         var services = new PlatformServices(logger, x11, warnings);

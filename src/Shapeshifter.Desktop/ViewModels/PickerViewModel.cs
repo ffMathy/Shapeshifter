@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Shapeshifter.Core.Localization;
 
 namespace Shapeshifter.Desktop.ViewModels;
 
@@ -34,7 +35,7 @@ public sealed partial class PickerViewModel : ObservableObject
 
     /// <summary>"Actions for this text", above the actions.</summary>
     [ObservableProperty]
-    private string actionsHeader = "Actions";
+    private string actionsHeader = Strings.PickerActions;
 
     public PickerViewModel()
         : this("Ctrl")
@@ -45,11 +46,11 @@ public sealed partial class PickerViewModel : ObservableObject
     public PickerViewModel(string modifierName)
     {
         ArgumentNullException.ThrowIfNull(modifierName);
-        ModifierKey = modifierName == "Cmd" ? "⌘" : modifierName;
-        EmptyHint = CreateEmptyHint(modifierName);
+        ModifierKey = modifierName == "Cmd" ? "⌘" : Localizer.ModifierKey(modifierName);
+        EmptyHint = CreateEmptyHint(Localizer.ModifierKey(modifierName));
         Items.CollectionChanged += (_, _) =>
         {
-            ItemCountText = Items.Count == 1 ? "1 item" : string.Create(CultureInfo.CurrentCulture, $"{Items.Count} items");
+            ItemCountText = Items.Count == 1 ? Strings.PickerItemCountOne : Localizer.Format(Strings.PickerItemCountOther, Items.Count);
             OnPropertyChanged(nameof(HasItems));
             OnPropertyChanged(nameof(IsEmpty));
         };
@@ -59,7 +60,7 @@ public sealed partial class PickerViewModel : ObservableObject
     public string ModifierKey { get; }
 
     /// <summary>"Release Ctrl to paste".</summary>
-    public string ReleaseHint => $"Release {ModifierKey} to paste";
+    public string ReleaseHint => Localizer.Format(Strings.PickerReleaseHint, ModifierKey);
 
     public ObservableCollection<PickerItemViewModel> Items { get; } = [];
 
@@ -71,10 +72,7 @@ public sealed partial class PickerViewModel : ObservableObject
     /// <summary>How to use Shapeshifter, shown in place of the history while it is empty.</summary>
     public string EmptyHint { get; }
 
-    public static string CreateEmptyHint(string modifier) =>
-        "Copy as usual, and Shapeshifter keeps everything you copy.\n\n" +
-        $"To paste something you copied earlier, hold {modifier} and press V. Keep holding {modifier} to see the history, " +
-        $"press V or the arrow keys to choose, and release {modifier} to paste.";
+    public static string CreateEmptyHint(string modifier) => Localizer.Format(Strings.PickerEmptyHint, modifier);
 
     public ObservableCollection<PickerActionViewModel> Actions { get; } = [];
 
@@ -86,10 +84,10 @@ public sealed partial class PickerViewModel : ObservableObject
     public void UpdateActionsHeader() => ActionsHeader = SelectedIndex >= 0 && SelectedIndex < Items.Count
         ? Items[SelectedIndex].Layout switch
         {
-            PickerItemLayout.Image => "Actions for this image",
-            PickerItemLayout.Files => "Actions for these files",
-            PickerItemLayout.File => "Actions for this file",
-            _ => "Actions for this text",
+            PickerItemLayout.Image => Strings.PickerActionsForImage,
+            PickerItemLayout.Files => Strings.PickerActionsForFiles,
+            PickerItemLayout.File => Strings.PickerActionsForFile,
+            _ => Strings.PickerActionsForText,
         }
-        : "Actions";
+        : Strings.PickerActions;
 }

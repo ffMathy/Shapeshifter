@@ -13,6 +13,8 @@
     <Product>Shapeshifter</Product>
     <Version>7.1.0</Version>
     <InvariantGlobalization>false</InvariantGlobalization>
+    <!-- English is the language of the neutral resources (Shapeshifter.Core/Localization/Strings.resx). -->
+    <NeutralLanguage>en</NeutralLanguage>
     <!-- Symbols live inside each assembly, so a published build is a single executable with no .pdb files beside it. -->
     <DebugType>embedded</DebugType>
   </PropertyGroup>

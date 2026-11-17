@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>การตั้งค่า Shapeshifter</value>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>เวอร์ชัน {0}</value>
+  </data>
+  <data name="SettingsCopyVersion" xml:space="preserve">
+    <value>คัดลอกเวอร์ชัน</value>
+  </data>
+  <data name="SettingsCopied" xml:space="preserve">
+    <value>คัดลอกแล้ว</value>
+  </data>
+  <data name="SettingsReportProblem" xml:space="preserve">
+    <value>รายงานปัญหา</value>
+  </data>
+  <data name="SettingsProjectPage" xml:space="preserve">
+    <value>หน้าโปรเจกต์</value>
+  </data>
+  <data name="SettingsUsage" xml:space="preserve">
+    <value>คัดลอกตามปกติ หากต้องการวางรายการที่เก่ากว่า ให้กด {0} ค้างไว้แล้วกด V: กด {0} ค้างไว้เพื่อดูประวัติ กด V อีกครั้ง (หรือ ↑/↓ หรือ 1–9) เพื่อเลือกรายการ กด → เพื่อเลือกสิ่งที่จะทำกับรายการนั้น กด Delete เพื่อลบ และกด Esc เพื่อยกเลิก ปล่อย {0} เพื่อวาง</value>
+  </data>
+  <data name="SettingsHistoryGroup" xml:space="preserve">
+    <value>ประวัติ</value>
+  </data>
+  <data name="SettingsDelayTitle" xml:space="preserve">
+    <value>ระยะเวลาก่อนแสดงประวัติ</value>
+  </data>
+  <data name="SettingsDelayDescription" xml:space="preserve">
+    <value>ระยะเวลาที่ต้องกด {0}+V ค้างไว้ก่อนประวัติจะแสดง</value>
+  </data>
+  <data name="SettingsDelayAccessibleName" xml:space="preserve">
+    <value>ระยะเวลาก่อนแสดงประวัติ เป็นมิลลิวินาที</value>
+  </data>
+  <data name="SettingsItemsTitle" xml:space="preserve">
+    <value>จำนวนรายการที่จะจดจำ</value>
+  </data>
+  <data name="SettingsItemsDescription" xml:space="preserve">
+    <value>รายการที่ปักหมุดไว้จะถูกเก็บเพิ่มเติมจากนี้</value>
+  </data>
+  <data name="SettingsRememberTitle" xml:space="preserve">
+    <value>จดจำประวัติหลังจากรีสตาร์ท</value>
+  </data>
+  <data name="SettingsRememberDescription" xml:space="preserve">
+    <value>เก็บประวัติไว้ในดิสก์ของคอมพิวเตอร์เครื่องนี้ ไม่ใช่เฉพาะรายการที่ปักหมุดไว้</value>
+  </data>
+  <data name="SettingsBehaviourGroup" xml:space="preserve">
+    <value>การทำงาน</value>
+  </data>
+  <data name="SettingsNotificationsTitle" xml:space="preserve">
+    <value>การแจ้งเตือนการคัดลอก</value>
+  </data>
+  <data name="SettingsNotificationsDescription" xml:space="preserve">
+    <value>แสดงการแจ้งเตือนทุกครั้งที่มีการคัดลอก</value>
+  </data>
+  <data name="SettingsStartAtLoginTitle" xml:space="preserve">
+    <value>เริ่มเมื่อเข้าสู่ระบบ</value>
+  </data>
+  <data name="SettingsStartAtLoginDescription" xml:space="preserve">
+    <value>Shapeshifter จะรออยู่เบื้องหลังหลังจากที่คุณลงชื่อเข้าใช้</value>
+  </data>
+  <data name="SettingsUpdatesTitle" xml:space="preserve">
+    <value>อัปเดตอัตโนมัติ</value>
+  </data>
+  <data name="SettingsClearHistory" xml:space="preserve">
+    <value>ล้างประวัติ</value>
+  </data>
+  <data name="SettingsCheckForUpdates" xml:space="preserve">
+    <value>ตรวจหาการอัปเดต</value>
+  </data>
+  <data name="SettingsOpenLogFolder" xml:space="preserve">
+    <value>เปิดโฟลเดอร์บันทึก</value>
+  </data>
+  <data name="PickerTitleWindows" xml:space="preserve">
+    <value>ประวัติคลิปบอร์ด</value>
+  </data>
+  <data name="PickerTitleMacOS" xml:space="preserve">
+    <value>คลิปบอร์ด</value>
+  </data>
+  <data name="PickerItemCountOne" xml:space="preserve">
+    <value>1 รายการ</value>
+  </data>
+  <data name="PickerItemCountOther" xml:space="preserve">
+    <value>{0} รายการ</value>
+  </data>
+  <data name="PickerReleaseHint" xml:space="preserve">
+    <value>ปล่อย {0} เพื่อวาง</value>
+  </data>
+  <data name="PickerNothingCopied" xml:space="preserve">
+    <value>ยังไม่มีสิ่งที่คัดลอก</value>
+  </data>
+  <data name="PickerEmptyHint" xml:space="preserve">
+    <value>คัดลอกตามปกติ แล้ว Shapeshifter จะเก็บทุกอย่างที่คุณคัดลอกไว้
+
+หากต้องการวางสิ่งที่คัดลอกไว้ก่อนหน้า ให้กด {0} ค้างไว้แล้วกด V กด {0} ค้างไว้เพื่อดูประวัติ กด V หรือปุ่มลูกศรเพื่อเลือก แล้วปล่อย {0} เพื่อวาง</value>
+  </data>
+  <data name="PickerActions" xml:space="preserve">
+    <value>การดำเนินการ</value>
+  </data>
+  <data name="PickerActionsForText" xml:space="preserve">
+    <value>การดำเนินการสำหรับข้อความนี้</value>
+  </data>
+  <data name="PickerActionsForImage" xml:space="preserve">
+    <value>การดำเนินการสำหรับรูปภาพนี้</value>
+  </data>
+  <data name="PickerActionsForFile" xml:space="preserve">
+    <value>การดำเนินการสำหรับไฟล์นี้</value>
+  </data>
+  <data name="PickerActionsForFiles" xml:space="preserve">
+    <value>การดำเนินการสำหรับไฟล์เหล่านี้</value>
+  </data>
+  <data name="PickerDefault" xml:space="preserve">
+    <value>ค่าเริ่มต้น</value>
+  </data>
+  <data name="PickerHintRelease" xml:space="preserve">
+    <value>ปล่อยเพื่อวาง</value>
+  </data>
+  <data name="PickerHintMove" xml:space="preserve">
+    <value>ย้าย</value>
+  </data>
+  <data name="PickerHintJump" xml:space="preserve">
+    <value>ข้าม</value>
+  </data>
+  <data name="PickerHintRemove" xml:space="preserve">
+    <value>ลบ</value>
+  </data>
+  <data name="PickerHintCancel" xml:space="preserve">
+    <value>ยกเลิก</value>
+  </data>
+  <data name="KeyControl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="KeyEscape" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="ItemEmpty" xml:space="preserve">
+    <value>(ว่าง)</value>
+  </data>
+  <data name="ItemImage" xml:space="preserve">
+    <value>รูปภาพ</value>
+  </data>
+  <data name="ItemImageWithSize" xml:space="preserve">
+    <value>รูปภาพ · {0} × {1}</value>
+  </data>
+  <data name="ItemFilesWithNames" xml:space="preserve">
+    <value>{0} รายการ · {1}</value>
+  </data>
+  <data name="ItemFileCount" xml:space="preserve">
+    <value>{0} ไฟล์</value>
+  </data>
+  <data name="ItemFormattedText" xml:space="preserve">
+    <value>ข้อความที่จัดรูปแบบ</value>
+  </data>
+  <data name="ItemOtherData" xml:space="preserve">
+    <value>ข้อมูลอื่นๆ</value>
+  </data>
+  <data name="ItemCharacterCount" xml:space="preserve">
+    <value>{0} อักขระ</value>
+  </data>
+  <data name="ItemLineCount" xml:space="preserve">
+    <value>{0} บรรทัด</value>
+  </data>
+  <data name="ToastCopiedOne" xml:space="preserve">
+    <value>คัดลอกแล้ว · มี 1 รายการในประวัติ</value>
+  </data>
+  <data name="ToastCopiedOther" xml:space="preserve">
+    <value>คัดลอกแล้ว · มี {0} รายการในประวัติ</value>
+  </data>
+  <data name="TraySettings" xml:space="preserve">
+    <value>การตั้งค่า…</value>
+  </data>
+  <data name="TrayCheckForUpdates" xml:space="preserve">
+    <value>ตรวจหาการอัปเดต…</value>
+  </data>
+  <data name="TrayReportProblem" xml:space="preserve">
+    <value>รายงานปัญหา…</value>
+  </data>
+  <data name="TrayAbout" xml:space="preserve">
+    <value>เกี่ยวกับ Shapeshifter {0}</value>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>ออกจาก Shapeshifter</value>
+  </data>
+  <data name="StartupErrorTitle" xml:space="preserve">
+    <value>ไม่สามารถเริ่ม Shapeshifter ได้</value>
+  </data>
+  <data name="StartupErrorDetails" xml:space="preserve">
+    <value>รายละเอียดถูกเขียนไว้ที่ {0}</value>
+  </data>
+  <data name="StartupErrorQuit" xml:space="preserve">
+    <value>ออก</value>
+  </data>
+  <data name="ActionPaste" xml:space="preserve">
+    <value>วาง</value>
+  </data>
+  <data name="ActionPasteDescription" xml:space="preserve">
+    <value>วางเนื้อหาในคลิปบอร์ดตามที่เป็นอยู่</value>
+  </data>
+  <data name="ActionPasteAsPlainText" xml:space="preserve">
+    <value>วางเป็นข้อความธรรมดา</value>
+  </data>
+  <data name="ActionPasteAsPlainTextDescription" xml:space="preserve">
+    <value>วางเนื้อหาในคลิปบอร์ดเป็นข้อความธรรมดาโดยไม่มีการจัดรูปแบบ</value>
+  </data>
+  <data name="ActionPasteAsFile" xml:space="preserve">
+    <value>วางเป็นไฟล์</value>
+  </data>
+  <data name="ActionPasteAsFileDescription" xml:space="preserve">
+    <value>บันทึกข้อความนี้เป็นไฟล์ .txt แล้ววางไฟล์นั้น</value>
+  </data>
+  <data name="ActionCopyAsZip" xml:space="preserve">
+    <value>คัดลอกเป็นโฟลเดอร์บีบอัด</value>
+  </data>
+  <data name="ActionCopyAsZipDescription" xml:space="preserve">
+    <value>คัดลอกไฟล์เหล่านี้ไปยังคลิปบอร์ดเป็นโฟลเดอร์บีบอัด (.zip)</value>
+  </data>
+  <data name="ActionCopyImageFromLink" xml:space="preserve">
+    <value>คัดลอกรูปภาพจากลิงก์</value>
+  </data>
+  <data name="ActionCopyImageFromLinkDescription" xml:space="preserve">
+    <value>ดาวน์โหลดรูปภาพที่ลิงก์ไว้ แล้วคัดลอกตัวรูปภาพไปยังคลิปบอร์ด</value>
+  </data>
+  <data name="ActionOpenLink" xml:space="preserve">
+    <value>เปิดลิงก์</value>
+  </data>
+  <data name="ActionOpenLinks" xml:space="preserve">
+    <value>เปิดลิงก์</value>
+  </data>
+  <data name="ActionOpenLinkDescription" xml:space="preserve">
+    <value>เปิดลิงก์ในเบราว์เซอร์ของคุณ</value>
+  </data>
+  <data name="ActionOpenLinksDescription" xml:space="preserve">
+    <value>เปิดลิงก์ในเบราว์เซอร์ของคุณ (สูงสุด {0} ลิงก์)</value>
+  </data>
+  <data name="ActionPin" xml:space="preserve">
+    <value>ปักหมุดไว้ในคลิปบอร์ด</value>
+  </data>
+  <data name="ActionPinDescription" xml:space="preserve">
+    <value>ปักหมุดรายการนี้ให้อยู่ด้านบนสุดเสมอ และบันทึกไว้ในคอมพิวเตอร์ของคุณเพื่อให้ยังอยู่ในครั้งถัดไปที่คุณเปิด Shapeshifter</value>
+  </data>
+  <data name="ActionUnpin" xml:space="preserve">
+    <value>เลิกปักหมุดจากคลิปบอร์ด</value>
+  </data>
+  <data name="ActionUnpinDescription" xml:space="preserve">
+    <value>เลิกปักหมุดรายการนี้ เพื่อให้รายการเลื่อนลงเมื่อคุณคัดลอก และจะไม่ถูกบันทึกไว้ในคอมพิวเตอร์ของคุณอีกต่อไป</value>
+  </data>
+  <data name="TimeJustNow" xml:space="preserve">
+    <value>เมื่อสักครู่</value>
+  </data>
+  <data name="TimeMinutesAgo" xml:space="preserve">
+    <value>{0} นาทีที่แล้ว</value>
+  </data>
+  <data name="TimeHoursAgo" xml:space="preserve">
+    <value>{0} ชม. ที่แล้ว</value>
+  </data>
+  <data name="TimeYesterday" xml:space="preserve">
+    <value>เมื่อวาน</value>
+  </data>
+  <data name="TimeDaysAgo" xml:space="preserve">
+    <value>{0} วันที่แล้ว</value>
+  </data>
+  <data name="UpdateOff" xml:space="preserve">
+    <value>ปิดการอัปเดตอัตโนมัติอยู่</value>
+  </data>
+  <data name="UpdateUnsupported" xml:space="preserve">
+    <value>สำเนานี้ไม่สามารถอัปเดตตัวเองได้</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>กำลังตรวจหาการอัปเดต…</value>
+  </data>
+  <data name="UpdateUpToDate" xml:space="preserve">
+    <value>เป็นเวอร์ชันล่าสุด (ตรวจสอบเมื่อ {0})</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>กำลังดาวน์โหลดเวอร์ชัน {0}…</value>
+  </data>
+  <data name="UpdateReadyToRestart" xml:space="preserve">
+    <value>ติดตั้งเวอร์ชัน {0} แล้ว และจะเริ่มทำงานในครั้งถัดไปที่ {1} เริ่ม</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>ไม่สามารถอัปเดตได้: {0}</value>
+  </data>
+  <data name="UpdateAutomatic" xml:space="preserve">
+    <value>ระบบจะตรวจหาการอัปเดตโดยอัตโนมัติ</value>
+  </data>
+  <data name="UpdateTurnedOff" xml:space="preserve">
+    <value>ปิดการอัปเดตอยู่ ({0})</value>
+  </data>
+  <data name="UpdateReleaseBuildsOnly" xml:space="preserve">
+    <value>เฉพาะบิลด์รุ่นเผยแพร่เท่านั้นที่อัปเดตตัวเองได้</value>
+  </data>
+  <data name="UpdateCannotWrite" xml:space="preserve">
+    <value>{0} ไม่สามารถเขียนไปยัง {1} ได้ โปรดอัปเดตด้วยวิธีเดียวกับที่ติดตั้ง</value>
+  </data>
+  <data name="PlatformNeedsX11" xml:space="preserve">
+    <value>Shapeshifter ต้องใช้จอแสดงผล X11 (ไม่ได้ตั้งค่า DISPLAY) หากใช้ Wayland โปรดตรวจสอบว่ามี XWayland พร้อมใช้งาน</value>
+  </data>
+  <data name="PlatformWayland" xml:space="preserve">
+    <value>นี่คือเซสชัน Wayland ซึ่ง Wayland ไม่อนุญาตให้แอปพลิเคชันตรวจจับหรือจำลองการกดแป้นทั่วทั้งระบบ ท่าทางการวางจึงใช้งานได้เฉพาะเมื่อแอปพลิเคชัน X11 (XWayland) กำลังทำงานอยู่ด้านหน้าเท่านั้น โปรดเข้าสู่ระบบด้วยเซสชัน X11 เพื่อให้รองรับได้อย่างสมบูรณ์</value>
+  </data>
+  <data name="PlatformAccessibility" xml:space="preserve">
+    <value>Shapeshifter ต้องได้รับสิทธิ์การช่วยการเข้าถึงเพื่อตรวจจับและส่งการกดแป้น Cmd+V โปรดอนุญาตใน การตั้งค่าระบบ &gt; ความเป็นส่วนตัวและความปลอดภัย &gt; การช่วยการเข้าถึง แล้วรีสตาร์ท Shapeshifter</value>
+  </data>
+  <data name="PlatformNotSupported" xml:space="preserve">
+    <value>ไม่รองรับ {0}</value>
+  </data>
+</root>

@@ -71,6 +71,7 @@ internal static class Program
     /// </summary>
     public static int Main(string[] args)
     {
+        Shapeshifter.Core.Localization.Localizer.ApplyLanguageOverride();
         if (args.Contains("--live"))
         {
             return LiveCapture.Run(args);
@@ -214,7 +215,7 @@ internal static class Program
     /// </summary>
     internal static IReadOnlyList<PickerActionView> SampleActions(ClipboardItem? item) => item is null
         ? []
-        : ActionCatalog.CreateDefault().GetAvailable(item).Select(action => new PickerActionView(action.GetTitle(item), action.GetDescription(item))).ToArray();
+        : ActionCatalog.CreateDefault().GetAvailable(item).Select(action => new PickerActionView(action.Id, action.GetTitle(item), action.GetDescription(item))).ToArray();
 
     /// <summary>The picker's state in the screenshots: the sample items, the first selected, its actions.</summary>
     internal static PickerViewModel CreateSampleViewModel(Look look, byte[] photo, Bitmap thumbnail)
