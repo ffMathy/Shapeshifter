@@ -120,13 +120,19 @@ jobs:
           if-no-files-found: ignore
 
   screenshots:
-    name: Screenshots
+    name: Screenshots (${{ matrix.look }})
     # Renders the picker with sample content (scripts/generate-screenshots.sh) so assets/screenshots always shows the
-    # current design. On pull requests from this repository, changed screenshots are committed to the branch.
+    # current design. Each look is rendered on its own operating system, so it shows in the font the app really uses
+    # there (Segoe UI, SF Pro, Adwaita Sans); --native-fonts fails the job rather than render a look in another font.
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { look: windows, os: windows-latest }
+          - { look: macos, os: macos-latest }
+          - { look: linux, os: ubuntu-latest }
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -135,14 +141,35 @@ jobs:
       - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
-      - name: Render the picker
-        run: scripts/generate-screenshots.sh
+      - name: Install Adwaita Sans
+        if: matrix.look == 'linux'
+        run: scripts/install-adwaita-fonts.sh
+      - name: Render the ${{ matrix.look }} look
+        shell: bash
+        run: scripts/generate-screenshots.sh rendered --look ${{ matrix.look }} --native-fonts
       - uses: actions/upload-artifact@v7
         with:
-          name: screenshots
+          name: screenshots-${{ matrix.look }}
+          path: rendered
+
+  commit-screenshots:
+    name: Commit screenshots
+    # On pull requests from this repository, changed screenshots are committed to the branch.
+    needs: screenshots
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: screenshots-*
           path: assets/screenshots
+          merge-multiple: true
       - name: Commit changed screenshots
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         run: |
           if [[ -z "$(git status --porcelain -- assets/screenshots)" ]]; then
             echo "The screenshots are up to date."

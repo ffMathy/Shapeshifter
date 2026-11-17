@@ -4,12 +4,16 @@ name: Live screenshots
 # the native backend over the runner's desktop, so the system material (frosted glass, Acrylic, Mica), the system font
 # and the system accent colour are the real ones; the headless screenshots in assets/screenshots have none of them.
 #
-# Each runner captures the windows as they ship ("default"), without the system's material ("no-material"), and on
-# macOS with Liquid Glass ("liquid-glass"). Every pass writes diagnostics.txt: the transparency level granted, whether
-# the system material is on, the fonts resolved and the screen. Everything is uploaded as one artifact per runner.
+# The macOS runner captures the windows as they ship ("default"), without the system's material ("no-material") and
+# with Liquid Glass ("liquid-glass"). The Windows runner captures them as they ship in the light and the dark app mode
+# ("light", "dark"; the Windows look follows it) and without the system's material ("no-material", light). Every pass
+# writes diagnostics.txt: the system's and the app's theme, the transparency level and backdrop granted, whether the
+# system material is on, the fonts resolved and the screen. Everything is uploaded as one artifact per runner.
 on:
   pull_request:
     paths:
+      - 'src/Shapeshifter.Desktop/App.axaml'
+      - 'src/Shapeshifter.Desktop/App.axaml.cs'
       - 'src/Shapeshifter.Desktop/Styles/**'
       - 'src/Shapeshifter.Desktop/Assets/**'
       - 'src/Shapeshifter.Desktop/Views/**'
@@ -19,6 +23,7 @@ on:
       - 'src/Shapeshifter.Platform/Windows/WindowsWindowMaterial.cs'
       - 'tools/Shapeshifter.ScreenshotGenerator/**'
       - '.github/workflows/live-screenshots.yml'
+      - '.github/scripts/set-windows-app-mode.ps1'
   workflow_dispatch:
     inputs:
       macos_runner:
@@ -115,30 +120,39 @@ jobs:
           global-json-file: global.json
       - name: Build
         run: dotnet build tools/Shapeshifter.ScreenshotGenerator -c Release
-      - name: Turn on transparency effects
-        # Acrylic and Mica are only drawn when "Transparency effects" is on (Settings > Personalisation > Colours).
-        continue-on-error: true
-        shell: pwsh
-        run: |
-          Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name EnableTransparency -Value 1 -Type DWord
-          Get-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize
+      # Each pass sets the app mode (AppsUseLightTheme, SystemUsesLightTheme) first, with transparency effects on: Acrylic
+      # and Mica are only drawn when "Transparency effects" is on (Settings > Personalisation > Colours).
       - name: Describe the runner
         shell: pwsh
         run: |
           [System.Environment]::OSVersion.VersionString
           (Get-CimInstance Win32_OperatingSystem).Caption
-      - name: Capture as it ships
-        run: dotnet run --project tools/Shapeshifter.ScreenshotGenerator -c Release --no-build -- "${{ env.OUT }}\default" --live
+      - name: Capture in light
+        shell: pwsh
+        run: |
+          ./.github/scripts/set-windows-app-mode.ps1 -Mode light
+          dotnet run --project tools/Shapeshifter.ScreenshotGenerator -c Release --no-build -- "$env:OUT\light" --live
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Capture in dark
+        shell: pwsh
+        run: |
+          ./.github/scripts/set-windows-app-mode.ps1 -Mode dark
+          dotnet run --project tools/Shapeshifter.ScreenshotGenerator -c Release --no-build -- "$env:OUT\dark" --live
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Capture without the system material
+        shell: pwsh
         env:
           SHAPESHIFTER_NATIVE_MATERIAL: 'off'
-        run: dotnet run --project tools/Shapeshifter.ScreenshotGenerator -c Release --no-build -- "${{ env.OUT }}\no-material" --live
+        run: |
+          ./.github/scripts/set-windows-app-mode.ps1 -Mode light
+          dotnet run --project tools/Shapeshifter.ScreenshotGenerator -c Release --no-build -- "$env:OUT\no-material" --live
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Summary
         if: always()
         shell: pwsh
         run: |
           $summary = @("### $((Get-CimInstance Win32_OperatingSystem).Caption)")
-          foreach ($pass in 'default', 'no-material') {
+          foreach ($pass in 'light', 'dark', 'no-material') {
             $summary += '', "**$pass**", '```'
             $file = Join-Path $env:OUT "$pass\diagnostics.txt"
             if (Test-Path $file) { $summary += Get-Content $file } else { $summary += 'No diagnostics were written.' }

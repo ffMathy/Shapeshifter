@@ -30,7 +30,8 @@ internal static class NativeMaterial
 {
     /// <summary>
     /// <c>off</c> keeps the looks' own panels; <c>glass</c> uses Liquid Glass (NSGlassEffectView) on macOS 26 and later
-    /// instead of the frosted popover material.
+    /// instead of the frosted popover material; <c>emulated</c> gives the settings window Avalonia's own Mica instead of
+    /// the system's (see <see cref="PrepareBackdrop"/>).
     /// </summary>
     public const string Variable = "SHAPESHIFTER_NATIVE_MATERIAL";
 
@@ -52,6 +53,12 @@ internal static class NativeMaterial
 
         if (PlatformLook.Current == Look.Windows && OperatingSystem.IsWindows() && WindowsWindowMaterial.IsSupported)
         {
+            if (IsHighContrast())
+            {
+                Logger.Information("High contrast is on; no Acrylic for {Window}", window.GetType().Name);
+                return;
+            }
+
             PrepareWindows(window, panel);
         }
         else if (PlatformLook.Current == Look.MacOS && OperatingSystem.IsMacOS())
@@ -63,26 +70,178 @@ internal static class NativeMaterial
         }
     }
 
+    /// <summary>The class a window has while it is on Mica; the look then makes its background see-through.</summary>
+    public const string MicaClassName = "mica";
+
     /// <summary>
-    /// Gives an ordinary window, such as the settings window, the Mica backdrop of Windows 11 (as the Settings app has);
-    /// while it has it, the window has the "mica" class and the look makes its background see-through.
+    /// The class a window on Mica also has when the Mica is the system's own (drawn by DWM, title bar included). Not
+    /// styled; it tells diagnostics (LiveCapture) which Mica the window has.
     /// </summary>
+    public const string SystemMicaClassName = "systemMica";
+
+    /// <summary>
+    /// Gives an ordinary window, such as the settings window, the Mica backdrop of Windows 11 as the Settings app has it;
+    /// while it has it, the window has the <see cref="MicaClassName"/> class and the look makes its background see-through.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// From Windows 11 22H2 (build 22621) the Mica is the system's own (DWMWA_SYSTEMBACKDROP_TYPE): DWM draws it under the
+    /// native title bar and, with the frame extended over the window, under the transparent client area, so the window is
+    /// one sheet of Mica with the native caption buttons, light or dark with the window's theme. Avalonia 12 has no such
+    /// mode: its own Mica (used on build 22000 to 22620, or when the system's cannot be set, and with
+    /// <c>SHAPESHIFTER_NATIVE_MATERIAL=emulated</c>) is drawn by Avalonia's compositor in the client area only, under an
+    /// opaque title bar.
+    /// </para>
+    /// <para>
+    /// With "Transparency effects" off the window stays opaque in the look's background, as the Settings app is then; so
+    /// it does in high contrast, where the look's colours are not the system's.
+    /// </para>
+    /// </remarks>
     public static void PrepareBackdrop(Window window)
     {
         ArgumentNullException.ThrowIfNull(window);
+        var setting = Environment.GetEnvironmentVariable(Variable);
         if (PlatformLook.Current != Look.Windows || !OperatingSystem.IsWindows() || !WindowsWindowMaterial.IsSupported
-            || string.Equals(Environment.GetEnvironmentVariable(Variable), "off", StringComparison.OrdinalIgnoreCase))
+            || string.Equals(setting, "off", StringComparison.OrdinalIgnoreCase))
         {
             return;
         }
 
+        if (!WindowsWindowMaterial.AreTransparencyEffectsEnabled)
+        {
+            Logger.Information("Transparency effects are off; no Mica for {Window}", window.GetType().Name);
+            return;
+        }
+
+        if (IsHighContrast())
+        {
+            Logger.Information("High contrast is on; no Mica for {Window}", window.GetType().Name);
+            return;
+        }
+
+        if (!WindowsWindowMaterial.IsSystemBackdropSupported || string.Equals(setting, "emulated", StringComparison.OrdinalIgnoreCase))
+        {
+            UseAvaloniaMica(window);
+            return;
+        }
+
+        UseSystemMica(window);
+    }
+
+    /// <remarks>
+    /// The Mica only reaches the client area while the frame stays extended over it (margins of -1, set by
+    /// <see cref="WindowsWindowMaterial.TryApplyMainWindowMica"/>). Avalonia 12.1 writes the margins again in
+    /// WindowImpl.UpdateWindowProperties, on a change of decorations or a forced change (leaving full screen, showing a
+    /// window whose decorations are not Full), and in WindowImpl.ExtendClientArea; the settings window has full
+    /// decorations and is never full screen, and the Mica is applied again whenever the decorations, the extended client
+    /// area or the window state change.
+    /// </remarks>
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+    private static void UseSystemMica(Window window)
+    {
+        // A transparent client area, so the Mica DWM draws behind it shows through. On the composition path this is the
+        // level Avalonia's window already has (and on Win32 it keeps a hinted level it already has, so the fallback below
+        // can hint again safely).
+        window.TransparencyLevelHint = [WindowTransparencyLevel.Transparent];
+
+        // The native window exists from the constructor on: apply the Mica and the classes before the first frame, so the
+        // window is never painted once on the look's opaque background.
+        if (TryApplySystemMica(window))
+        {
+            window.Classes.Set(SystemMicaClassName, true);
+            window.Classes.Set(MicaClassName, true);
+        }
+
+        window.Opened += (_, _) =>
+        {
+            // The level is only known now (Avalonia reports it once the template is applied). Applying again is harmless
+            // and covers anything showing the window has reset.
+            if (window.ActualTransparencyLevel == WindowTransparencyLevel.Transparent && TryApplySystemMica(window))
+            {
+                window.Classes.Set(SystemMicaClassName, true);
+                window.Classes.Set(MicaClassName, true);
+                return;
+            }
+
+            if (window.Classes.Contains(SystemMicaClassName))
+            {
+                RemoveSystemMica(window);
+            }
+
+            window.Classes.Set(SystemMicaClassName, false);
+            Logger.Information("No system Mica for {Window} ({Level}); using Avalonia's", window.GetType().Name, window.ActualTransparencyLevel);
+            window.TransparencyLevelHint = [WindowTransparencyLevel.Mica, WindowTransparencyLevel.None];
+            window.Classes.Set(MicaClassName, window.ActualTransparencyLevel == WindowTransparencyLevel.Mica);
+        };
+
+        window.PropertyChanged += (_, change) =>
+        {
+            if (window.Classes.Contains(SystemMicaClassName)
+                && (change.Property == Window.WindowDecorationsProperty
+                    || change.Property == Window.ExtendClientAreaToDecorationsHintProperty
+                    || change.Property == Window.WindowStateProperty))
+            {
+                // After Avalonia has updated the native window for the change.
+                Dispatcher.UIThread.Post(() => TryApplySystemMica(window), DispatcherPriority.Render);
+            }
+        };
+    }
+
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+    private static bool TryApplySystemMica(Window window)
+    {
+        try
+        {
+            return window.TryGetPlatformHandle() is { } handle && WindowsWindowMaterial.TryApplyMainWindowMica(handle.Handle);
+        }
+        catch (Exception exception) when (exception is DllNotFoundException or EntryPointNotFoundException)
+        {
+            Logger.Debug(exception, "Could not set the system backdrop");
+            return false;
+        }
+    }
+
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+    private static void RemoveSystemMica(Window window)
+    {
+        try
+        {
+            if (window.TryGetPlatformHandle() is { } handle)
+            {
+                WindowsWindowMaterial.RemoveMainWindowMica(handle.Handle);
+            }
+        }
+        catch (Exception exception) when (exception is DllNotFoundException or EntryPointNotFoundException)
+        {
+            Logger.Debug(exception, "Could not remove the system backdrop");
+        }
+    }
+
+    /// <summary>
+    /// Whether Windows is in a high-contrast theme. The looks have no high-contrast colours, so the surfaces then stay
+    /// opaque rather than on a translucent material.
+    /// </summary>
+    private static bool IsHighContrast() =>
+        Application.Current?.PlatformSettings?.GetColorValues().ContrastPreference == ColorContrastPreference.High;
+
+    private static void UseAvaloniaMica(Window window)
+    {
+        // Where Mica is not granted the level falls back to None or Transparent: the window keeps the look's opaque
+        // background (and TransparencyBackgroundFallback) without the class.
         window.TransparencyLevelHint = [WindowTransparencyLevel.Mica, WindowTransparencyLevel.None];
-        window.Opened += (_, _) => window.Classes.Set("mica", window.ActualTransparencyLevel == WindowTransparencyLevel.Mica);
+        window.Opened += (_, _) => window.Classes.Set(MicaClassName, window.ActualTransparencyLevel == WindowTransparencyLevel.Mica);
     }
 
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     private static void PrepareWindows(Window window, Border panel)
     {
+        if (!WindowsWindowMaterial.AreTransparencyEffectsEnabled)
+        {
+            // Avalonia would still report Acrylic, but Windows draws no blur: keep the look's own near-opaque panel.
+            Logger.Information("Transparency effects are off; no Acrylic for {Window}", window.GetType().Name);
+            return;
+        }
+
         window.WindowDecorations = WindowDecorations.BorderOnly;
         window.CanResize = false;
         Win32Properties.SetWindowCornerPreference(window, Win32Properties.WindowCornerPreference.Round);
@@ -90,8 +249,15 @@ internal static class NativeMaterial
         panel.Classes.Add(ClassName);
         window.Opened += (_, _) =>
         {
-            if (window.ActualTransparencyLevel != WindowTransparencyLevel.AcrylicBlur)
+            // Checked again on every show: the picker is shown again and again, and "Transparency effects" can have been
+            // turned off since (once off, the window keeps the look's own panel until the app restarts).
+            if (window.ActualTransparencyLevel != WindowTransparencyLevel.AcrylicBlur || !WindowsWindowMaterial.AreTransparencyEffectsEnabled)
             {
+                if (!panel.Classes.Contains(ClassName))
+                {
+                    return;
+                }
+
                 Logger.Information("No Acrylic for {Window} ({Level}); using the look's own panel", window.GetType().Name, window.ActualTransparencyLevel);
                 panel.Classes.Remove(ClassName);
                 window.WindowDecorations = WindowDecorations.None;

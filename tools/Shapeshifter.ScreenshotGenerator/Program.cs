@@ -4,6 +4,7 @@ using Avalonia.Headless;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Styling;
 using Avalonia.Threading;
 using Serilog;
 using Shapeshifter.Core.Clipboard;
@@ -23,8 +24,11 @@ namespace Shapeshifter.ScreenshotGenerator;
 /// <c>scripts/generate-screenshots.sh</c>.
 /// </summary>
 /// <remarks>
-/// Rendering is headless (Avalonia.Headless with Skia) and uses the bundled Inter font, so the output is the same on
-/// every machine and in CI. All sample artwork, including application and file icons, is drawn here.
+/// Rendering is headless (Avalonia.Headless with Skia), with the fonts installed on the machine. Each look is rendered
+/// on its own operating system in CI, so that it shows in the font the app really uses there: Segoe UI on Windows, the
+/// system font (SF Pro) on macOS and Adwaita Sans on Linux (<c>scripts/install-adwaita-fonts.sh</c>). Elsewhere the looks
+/// fall back to the bundled Inter, with a warning. All sample artwork, including application and file icons, is drawn
+/// here.
 /// </remarks>
 internal static class Program
 {
@@ -45,11 +49,24 @@ internal static class Program
     ];
 
     /// <summary>
-    /// <c>[output-folder]</c>, or <c>[output-folder] --live</c> to capture the real windows on the screen
+    /// The font each look is shown in, by the family names that the machine's font must resolve to (any of them).
+    /// </summary>
+    private static readonly Dictionary<Look, (string Requested, string[] Accepted)> NativeFonts = new()
+    {
+        [Look.Windows] = ("Segoe UI Variable Text", ["Segoe UI"]),
+        [Look.MacOS] = (".AppleSystemUIFont", ["System Font", ".AppleSystemUIFont", ".SF NS", "SF Pro"]),
+        [Look.Linux] = ("Adwaita Sans", ["Adwaita Sans"]),
+    };
+
+    /// <summary>
+    /// <c>[output-folder] [--look windows,macos,linux] [--native-fonts]</c>: <c>--look</c> renders only those looks'
+    /// screenshots; <c>--native-fonts</c> fails, instead of warning, when a look's own font is not installed (as CI does,
+    /// so that no screenshot in the wrong font is committed). Or <c>[output-folder] --live</c> to capture the real windows on the screen
     /// (see <see cref="LiveCapture"/>). Besides the pickers above, the picker with its actions chosen
     /// (<c>actions.PNG</c>) is rendered, and for each look its settings window (<c>settings-&lt;look&gt;.PNG</c>), its copy
     /// notification (<c>toast-&lt;look&gt;.PNG</c>) and its picker with an empty history (<c>empty-&lt;look&gt;.PNG</c>). The README
-    /// and the website show them.
+    /// and the website show them. All are light; with <c>--surfaces</c> the Windows look is also rendered in dark
+    /// (<c>windows-dark.PNG</c>, <c>settings-windows-dark.PNG</c>, <c>toast-windows-dark.PNG</c>, <c>empty-windows-dark.PNG</c>).
     /// </summary>
     public static int Main(string[] args)
     {
@@ -58,7 +75,10 @@ internal static class Program
             return LiveCapture.Run(args);
         }
 
-        var folder = args.FirstOrDefault(arg => !arg.StartsWith("--", StringComparison.Ordinal));
+        var looks = ParseLooks(args);
+        var strictFonts = args.Contains("--native-fonts");
+        var lookIndex = Array.IndexOf(args, "--look");
+        var folder = args.Where((arg, index) => !arg.StartsWith("--", StringComparison.Ordinal) && index != lookIndex + 1).FirstOrDefault();
         var output = Path.GetFullPath(folder ?? Path.Combine("assets", "screenshots"));
         Directory.CreateDirectory(output);
 
@@ -68,7 +88,31 @@ internal static class Program
             .WithInterFont()
             .SetupWithoutStarting();
 
-        foreach (var (name, look, accent, scale, width, height) in Screenshots)
+        foreach (var look in looks)
+        {
+            var (requested, accepted) = NativeFonts[look];
+            var resolved = FontManager.Current.TryGetGlyphTypeface(new Typeface(requested), out var glyphTypeface)
+                ? glyphTypeface.FamilyName
+                : "(none)";
+            if (!accepted.Any(name => resolved.StartsWith(name, StringComparison.OrdinalIgnoreCase)))
+            {
+                var message = $"The {look} look's font \"{requested}\" is not installed here (it resolves to \"{resolved}\"), " +
+                    "so its screenshots would show the wrong font. Render it on its own operating system (see the Screenshots job in ci.yml).";
+                if (strictFonts)
+                {
+                    Console.Error.WriteLine(message);
+                    return 2;
+                }
+
+                Console.Error.WriteLine("Warning: " + message);
+            }
+            else
+            {
+                Console.WriteLine($"{look}: \"{requested}\" resolves to \"{resolved}\".");
+            }
+        }
+
+        foreach (var (name, look, accent, scale, width, height) in Screenshots.Where(screenshot => looks.Contains(screenshot.Look)))
         {
             var path = Path.Combine(output, name + ".PNG");
             UseLook(look, accent);
@@ -77,12 +121,15 @@ internal static class Program
         }
 
         // The actions of the selected item, chosen with the right arrow key, with "Paste as plain text" selected.
-        var actions = Path.Combine(output, "actions.PNG");
-        UseLook(Look.Windows, null);
-        RenderPicker(Look.Windows, 1.25, 1400, 820, actions, selectedAction: 2);
-        Console.WriteLine($"Wrote {actions}");
+        if (looks.Contains(Look.Windows))
+        {
+            var actions = Path.Combine(output, "actions.PNG");
+            UseLook(Look.Windows, null);
+            RenderPicker(Look.Windows, 1.25, 1400, 820, actions, selectedAction: 2);
+            Console.WriteLine($"Wrote {actions}");
+        }
 
-        foreach (var look in Enum.GetValues<Look>())
+        foreach (var look in looks)
         {
             UseLook(look, null);
             var settings = Path.Combine(output, $"settings-{look.ToString().ToLowerInvariant()}.PNG");
@@ -98,13 +145,59 @@ internal static class Program
             Console.WriteLine($"Wrote {toast}");
         }
 
+        if (args.Contains("--surfaces") && looks.Contains(Look.Windows))
+        {
+            RenderWindowsDark(output);
+        }
+
         return 0;
     }
 
-    private static void UseLook(Look look, string? accent)
+    /// <summary>The looks named by <c>--look</c> (comma-separated), or all of them.</summary>
+    private static Look[] ParseLooks(string[] args)
+    {
+        var index = Array.IndexOf(args, "--look");
+        if (index < 0 || index + 1 >= args.Length)
+        {
+            return Enum.GetValues<Look>();
+        }
+
+        return args[index + 1]
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(name => Enum.Parse<Look>(name, ignoreCase: true))
+            .Distinct()
+            .ToArray();
+    }
+
+    /// <summary>
+    /// The Windows look in dark, as Windows shows it in the dark app mode: the picker, its empty state, the settings window
+    /// and the copy notification (<c>&lt;name&gt;-windows-dark.PNG</c>). For review; the README and website show light only.
+    /// </summary>
+    private static void RenderWindowsDark(string output)
+    {
+        UseLook(Look.Windows, null, ThemeVariant.Dark);
+        var picker = Path.Combine(output, "windows-dark.PNG");
+        RenderPicker(Look.Windows, 1.25, 1400, 820, picker, dark: true);
+        Console.WriteLine($"Wrote {picker}");
+        var settings = Path.Combine(output, "settings-windows-dark.PNG");
+        RenderWindow(CreateSettingsWindow(), Look.Windows, settings, dark: true);
+        Console.WriteLine($"Wrote {settings}");
+        var emptyPicker = Path.Combine(output, "empty-windows-dark.PNG");
+        RenderPicker(Look.Windows, 1.25, 1400, 820, emptyPicker, empty: true, dark: true);
+        Console.WriteLine($"Wrote {emptyPicker}");
+        var toast = Path.Combine(output, "toast-windows-dark.PNG");
+        var toastWindow = new ToastWindow();
+        toastWindow.SetContent(5, "Shapeshifter is a freeware clipboard manager, originally developed by defunct Flamefusion company");
+        RenderWindow(toastWindow, Look.Windows, toast, dark: true);
+        Console.WriteLine($"Wrote {toast}");
+        UseLook(Look.Windows, null);
+    }
+
+    /// <summary>Applies <paramref name="look"/> in light (or <paramref name="theme"/>), whatever the machine's own theme.</summary>
+    private static void UseLook(Look look, string? accent, ThemeVariant? theme = null)
     {
         var application = Application.Current!;
-        PlatformLook.Apply(application, look);
+        PlatformLook.Apply(application, look, theme ?? ThemeVariant.Light);
         var color = accent ?? PlatformLook.Resource(application, "LookDefaultAccent", "#0067C0");
         AccentPalette.Apply(application, Color.Parse(color));
     }
@@ -133,7 +226,7 @@ internal static class Program
 
     /// <param name="selectedAction">When set, the actions pane is active with this action selected.</param>
     private static void RenderPicker(
-        Look look, double scale, int width, int height, string path, bool empty = false, int? selectedAction = null)
+        Look look, double scale, int width, int height, string path, bool empty = false, int? selectedAction = null, bool dark = false)
     {
         var photo = SampleArt.Banner(900, 600);
         using var thumbnail = ToBitmap(photo);
@@ -154,7 +247,7 @@ internal static class Program
         picker.Content = null;
         content.DataContext = viewModel;
 
-        using var background = ToBitmap(SampleArt.Desktop(look, width, height));
+        using var background = ToBitmap(SampleArt.Desktop(look, width, height, dark));
         var host = new Window
         {
             Width = width,
@@ -183,7 +276,7 @@ internal static class Program
     }
 
     /// <summary>Renders a window on its own, at 125 %, over a plain backdrop of the look.</summary>
-    private static void RenderWindow(Window window, Look look, string path)
+    private static void RenderWindow(Window window, Look look, string path, bool dark = false)
     {
         var content = (Control)window.Content!;
         window.Content = null;
@@ -195,7 +288,7 @@ internal static class Program
             SizeToContent = SizeToContent.WidthAndHeight,
             WindowDecorations = WindowDecorations.None,
             FontFamily = window.FontFamily,
-            Background = new SolidColorBrush(Color.Parse(look switch { Look.MacOS => "#DCDDE6", Look.Linux => "#DEDDDA", _ => "#D8E2F0" })),
+            Background = new SolidColorBrush(Color.Parse(look switch { Look.MacOS => "#DCDDE6", Look.Linux => "#DEDDDA", _ when dark => "#1A2333", _ => "#D8E2F0" })),
             Content = new LayoutTransformControl
             {
                 LayoutTransform = new ScaleTransform(1.25, 1.25),

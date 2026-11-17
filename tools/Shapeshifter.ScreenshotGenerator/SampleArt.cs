@@ -17,13 +17,17 @@ internal static class SampleArt
         Picture,
     }
 
-    /// <summary>A wallpaper in the spirit of the platform's default one: soft colour fields, no real artwork.</summary>
-    public static byte[] Desktop(Shapeshifter.Desktop.Services.Look look, int width, int height)
+    /// <summary>
+    /// A wallpaper in the spirit of the platform's default one: soft colour fields, no real artwork. <paramref name="dark"/>
+    /// gives the dark variant of the Windows one, as Windows 11 shows in dark mode.
+    /// </summary>
+    public static byte[] Desktop(Shapeshifter.Desktop.Services.Look look, int width, int height, bool dark = false)
     {
         var (from, to, glowA, glowB) = look switch
         {
             Shapeshifter.Desktop.Services.Look.MacOS => ("#5B6CF2", "#F28CA0", "#F7B26A", "#7FD3E6"),
             Shapeshifter.Desktop.Services.Look.Linux => ("#2A64C2", "#1A3F86", "#4F8FE8", "#3E78D8"),
+            _ when dark => ("#0C1526", "#132A4D", "#2563C4", "#1B3560"),
             _ => ("#D7E6F7", "#9FC3EC", "#3D7FD9", "#B9D4F2"),
         };
         var canvas = new Canvas

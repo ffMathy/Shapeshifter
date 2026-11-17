@@ -30,8 +30,8 @@ namespace Shapeshifter.ScreenshotGenerator;
 /// placement is captured too. Set <c>SHAPESHIFTER_NATIVE_MATERIAL</c> (see <see cref="NativeMaterial"/>) to capture the
 /// windows without the system's material, or with Liquid Glass on macOS. Captures use <c>screencapture</c> on macOS,
 /// PowerShell on Windows and <c>import</c> (ImageMagick) elsewhere.
-/// <c>diagnostics.txt</c> records what was resolved at run time: the transparency level, the fonts, the accent colour
-/// and the screen.
+/// <c>diagnostics.txt</c> records what was resolved at run time: the system's and the app's theme variant, the
+/// transparency level and backdrop of each window, the fonts, the accent colour and the screen.
 /// </remarks>
 internal static class LiveCapture
 {
@@ -99,6 +99,11 @@ internal static class LiveCapture
         var colors = application.PlatformSettings?.GetColorValues();
         Note("System accent", colors is null ? "(none)" : colors.AccentColor1.ToString());
         Note("System theme", colors is null ? "(none)" : colors.ThemeVariant.ToString());
+        Note("App theme", $"requested {application.RequestedThemeVariant?.ToString() ?? "(none)"}, actual {application.ActualThemeVariant}");
+        if (OperatingSystem.IsWindows())
+        {
+            Note("Transparency effects", Shapeshifter.Platform.Windows.WindowsWindowMaterial.AreTransparencyEffectsEnabled ? "on" : "off");
+        }
         Note("Default font", $"\"{FontManager.Current.DefaultFontFamily}\"");
         foreach (var family in new[] { ".AppleSystemUIFont", "SF Pro Text", "SF Pro", "Segoe UI Variable Text", "Adwaita Sans", "Cantarell" })
         {
@@ -207,11 +212,19 @@ internal static class LiveCapture
                 ? glyphTypeface.FamilyName
                 : "(not resolved)";
             Note(label, $"{window.GetType().Name}: position {window.Position}, size {window.Bounds.Size}, " +
+                $"theme {window.ActualThemeVariant}, " +
                 $"transparency {window.ActualTransparencyLevel} (asked {string.Join(", ", window.TransparencyLevelHint)}), " +
                 $"font \"{font}\" resolves to \"{resolved}\", " +
-                $"system material {(UsesNativeMaterial(window) ? "on" : "off")}");
+                $"system material {(UsesNativeMaterial(window) ? "on" : "off")}, " +
+                $"backdrop {Backdrop(window)}");
         }
     }
+
+    /// <summary>The settings window's Mica: the system's (DWM, under the title bar too), Avalonia's, or none.</summary>
+    private static string Backdrop(Window window) =>
+        window.Classes.Contains(NativeMaterial.SystemMicaClassName) ? "system Mica"
+        : window.Classes.Contains(NativeMaterial.MicaClassName) ? "Avalonia Mica"
+        : "none";
 
     private static bool UsesNativeMaterial(Window window) =>
         window.GetVisualDescendants().OfType<Border>().Any(border => border.Classes.Contains(NativeMaterial.ClassName));
