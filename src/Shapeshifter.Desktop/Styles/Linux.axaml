@@ -904,6 +904,19 @@
   <Style Selector="TextBlock.toastPreview">
     <Setter Property="IsVisible" Value="False" />
   </Style>
+  <!-- A tip: the title in bold over its message, wrapped, in the same pill. -->
+  <Style Selector="Border.toastChrome.tip TextBlock.toastTitle">
+    <Setter Property="Margin" Value="0,11,0,0" />
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector="Border.toastChrome.tip TextBlock.toastPreview">
+    <Setter Property="IsVisible" Value="True" />
+    <Setter Property="Margin" Value="0,2,0,11" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Foreground" Value="#DEFFFFFF" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="MaxWidth" Value="420" />
+  </Style>
 
   <!-- Nothing copied yet: how to use Shapeshifter, in the history's place (the actions are hidden) -->
   <Style Selector="StackPanel.emptyState">

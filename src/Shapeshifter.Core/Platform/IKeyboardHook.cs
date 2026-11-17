@@ -37,6 +37,12 @@ public enum GestureKey
     Digit8,
     Digit9,
 
+    /// <summary>The space bar, which keeps the picker open after the modifier is released (issue #420).</summary>
+    Space,
+
+    /// <summary>Enter (or the keypad's Enter), which pastes the selected item right away.</summary>
+    Enter,
+
     /// <summary>The S key, which starts searching the history.</summary>
     Search,
 }
@@ -57,7 +63,8 @@ public interface IKeyboardHook : IDisposable
 
     /// <summary>
     /// Some platforms (X11) can only suppress keys that were grabbed beforehand. While a gesture is active the
-    /// navigation keys (arrows, Delete, Escape, S, 1 to 9) are grabbed so the focused application does not see them.
+    /// navigation keys (arrows, Delete, Escape, 1 to 9, Space, Enter and S) are grabbed, with and without the modifier
+    /// (the picker can be kept open after the modifier is released), so the focused application does not see them.
     /// </summary>
     void SetNavigationCaptureEnabled(bool enabled);
 

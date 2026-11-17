@@ -1,6 +1,7 @@
 using NSubstitute;
 using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Coaching;
 using Shapeshifter.Core.Engine;
 using Shapeshifter.Core.Input;
 using Shapeshifter.Core.Platform;
@@ -239,7 +240,7 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
         h.Picker.Search(new PickerSearchInput(PickerSearchKey.Escape));
         await WaitForEffectAsync<GestureCancelled>();
 
-        Assert.Equal([new FocusedWindow(42)], h.Focus.Restored);
+        Assert.Equal([new FocusedWindow(42)], h.FocusTracker.Restored);
         Assert.Equal("Hide", h.Picker.Calls[^1].Method);
         Assert.Equal(0, h.Paste.Count);
         Assert.Empty(h.Backend.Written);
@@ -256,7 +257,7 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
         h.Picker.Search(new PickerSearchInput(PickerSearchKey.Deactivated));
         await WaitForEffectAsync<GestureCancelled>();
 
-        Assert.Empty(h.Focus.Restored);
+        Assert.Empty(h.FocusTracker.Restored);
         Assert.Equal("Hide", h.Picker.Calls[^1].Method);
         Assert.Equal(0, h.Paste.Count);
     }
@@ -265,14 +266,14 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
     public async Task Search_WithoutAFocusedWindow_StillPastes()
     {
         h.Seed("apple", "banana");
-        h.Focus.Focused = null;
+        h.FocusTracker.Focused = null;
         await h.StartAsync();
         await BeginSearchAsync();
 
         h.Picker.Search(new PickerSearchInput(PickerSearchKey.Enter));
         await WaitForEffectAsync<PerformAction>();
 
-        Assert.Empty(h.Focus.Restored);
+        Assert.Empty(h.FocusTracker.Restored);
         Assert.Equal(1, h.Paste.Count);
     }
 
@@ -362,6 +363,104 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
         await WaitForAsync(() => h.Picker.Calls[^1].State?.SearchQuery == "needle", "the filtered picker");
 
         Assert.StartsWith("line one", Assert.Single(h.Picker.Calls[^1].State!.Items).Snapshot.Text, StringComparison.Ordinal);
+    }
+
+    // ---------------------------------------------------------------- coaching tips
+
+    private async Task CopyAsync(string text, string? from)
+    {
+        h.Focus(from);
+        h.Backend.Current = EngineHarness.Text(text);
+        await h.RaiseClipboardChangeAndWaitAsync();
+    }
+
+    private async Task QuickPasteAsync(string into)
+    {
+        h.Focus(into);
+        var count = h.Processed.Count;
+        h.Down(GestureKey.Modifier);
+        h.Tap(GestureKey.Trigger);
+        h.Up(GestureKey.Modifier);
+        await h.WaitForEffectsAsync(count + 1);
+    }
+
+    [Fact]
+    public async Task CopyingSomethingAlreadyInTheHistory_ShowsATip()
+    {
+        await h.StartAsync();
+        await CopyAsync("a", "Editor");
+        await CopyAsync("b", "Editor");
+
+        await CopyAsync("a", "Editor");
+
+        var tip = Assert.Single(h.Notifier.Tips);
+        Assert.Equal(CoachingTipKind.CopiedAgain, tip.Kind);
+        Assert.Equal(2, h.Notifier.Calls.Count);
+    }
+
+    [Fact]
+    public async Task WhatIsOnTheClipboardAtStartup_IsNotCoached_WhenCopiedAgain()
+    {
+        h.Seed("a", "b");
+        await h.StartAsync();
+
+        await CopyAsync("b", "Editor");
+
+        Assert.Empty(h.Notifier.Tips);
+    }
+
+    [Fact]
+    public async Task CopyPasteElsewhereAndBack_ShowsTheTipInsteadOfTheCopiedNotification()
+    {
+        await h.StartAsync();
+        await CopyAsync("a", "Photoshop");
+        await QuickPasteAsync("Paint");
+        h.Time.Advance(TimeSpan.FromSeconds(10));
+
+        await CopyAsync("b", "Photoshop");
+
+        var tip = Assert.Single(h.Notifier.Tips);
+        Assert.Equal(CoachingTipKind.CopiedBackAndForth, tip.Kind);
+        Assert.Contains("Photoshop", tip.Message);
+        Assert.Contains("Paint", tip.Message);
+
+        // Only the first copy was announced as "copied": the tip took the second's place.
+        Assert.Equal(["a"], h.Notifier.Calls.Select(call => call.Item.Snapshot.Text));
+    }
+
+    [Fact]
+    public async Task CopyPasteElsewhereAndBack_AfterThirtySeconds_ShowsNoTip()
+    {
+        await h.StartAsync();
+        await CopyAsync("a", "Photoshop");
+        await QuickPasteAsync("Paint");
+        h.Time.Advance(TimeSpan.FromSeconds(31));
+
+        await CopyAsync("b", "Photoshop");
+
+        Assert.Empty(h.Notifier.Tips);
+        Assert.Equal(2, h.Notifier.Calls.Count);
+    }
+
+    [Fact]
+    public async Task PastingThroughThePicker_ShowsNoBackAndForthTip()
+    {
+        h.Seed("x");
+        await h.StartAsync();
+        await CopyAsync("a", "Photoshop");
+        h.Focus("Paint");
+
+        // Hold the gesture until the picker shows, then release: the clipboard is pasted, but the user saw the history.
+        h.Down(GestureKey.Modifier);
+        h.Tap(GestureKey.Trigger);
+        h.Tap(GestureKey.Trigger);
+        h.Tap(GestureKey.Trigger);
+        h.Up(GestureKey.Modifier);
+        await h.WaitForEffectsAsync(4);
+
+        await CopyAsync("b", "Photoshop");
+
+        Assert.Empty(h.Notifier.Tips);
     }
 
     // ---------------------------------------------------------------- quick tap

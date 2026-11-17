@@ -35,6 +35,7 @@
         <ul>
           <li class="nav-optional"><a href="#how-it-works">How it works</a></li>
           <li class="nav-optional"><a href="#features">Features</a></li>
+          <li class="nav-optional"><a href="#actions">Actions</a></li>
           <li class="nav-optional"><a href="#screenshots">Screenshots</a></li>
           <li class="nav-optional"><a href="#privacy">Privacy</a></li>
           <li class="nav-optional"><a href="#platforms">Platforms</a></li>
@@ -141,6 +142,8 @@
               <tr><td><kbd>Delete</kbd></td><td>Removes the selected item from the history.</td></tr>
               <tr><td><kbd>Esc</kbd></td><td>Cancels; nothing is pasted.</td></tr>
               <tr><td>Release <kbd data-mod>Ctrl</kbd></td><td>Pastes the selected item, or performs the selected action.</td></tr>
+              <tr><td><kbd>Space</kbd></td><td>Keeps the history open after you release <kbd data-mod>Ctrl</kbd>, so you can look through it at leisure. The keys above then work without <kbd data-mod>Ctrl</kbd>.</td></tr>
+              <tr><td><kbd>Enter</kbd></td><td>Pastes the selected item right away (the way to paste while the history is kept open).</td></tr>
             </tbody>
           </table>
           <p class="fine-print">On macOS, use <kbd>Cmd</kbd> instead of <kbd>Ctrl</kbd>. Shortcuts that add another modifier, such as <kbd>Ctrl</kbd>&#8202;+&#8202;<kbd>Shift</kbd>&#8202;+&#8202;<kbd>V</kbd> in terminals or <kbd>AltGr</kbd>&#8202;+&#8202;<kbd>V</kbd>, are left to the application.</p>
@@ -188,20 +191,123 @@
             <p>From the tray icon, choose the delay before the history appears, how many items to keep, copy notifications and starting at login.</p>
           </li>
         </ul>
+      </div>
+    </section>
+
+    <!-- Actions -->
+    <section class="section" id="actions" aria-labelledby="actions-title">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Actions</p>
+          <h2 id="actions-title">More than paste, depending on what you copied.</h2>
+          <p class="section-lede">While the history is open, press <kbd>&#8594;</kbd> to see what you can do with the selected item, <kbd>&#8595;</kbd> to choose an action and release <kbd data-mod>Ctrl</kbd> to run it. The actions on offer depend on what the item contains, listed here in the order the picker shows them.</p>
+        </header>
+
+        <ul class="kinds">
+          <li class="kind">
+            <div class="kind-head">
+              <svg class="kind-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M5,2.5 H11.5 L15.5,6.5 V17.5 H5 Z M11.5,2.5 V6.5 H15.5 M7.5,9.5 H13 M7.5,12 H13 M7.5,14.5 H11"/></svg>
+              <h3>Plain text</h3>
+            </div>
+            <p>Words, code, anything without formatting.</p>
+            <ol class="kind-actions" aria-label="Actions for plain text">
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M7.5,3.5 H5.5 C4.9,3.5 4.5,3.9 4.5,4.5 V17 C4.5,17.6 4.9,18 5.5,18 H14.5 C15.1,18 15.5,17.6 15.5,17 V4.5 C15.5,3.9 15.1,3.5 14.5,3.5 H12.5 M7.5,2.5 H12.5 V5 H7.5 Z"/></svg><span>Paste</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M5,2.5 H11.5 L15.5,6.5 V17.5 H5 Z M11.5,2.5 V6.5 H15.5 M10.25,9 V15 M7.75,12.5 L10.25,15 L12.75,12.5"/></svg><span>Paste as file</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M12.5,2.5 L17.5,7.5 L14.5,9 L11.5,12 L11,15.5 L4.5,9 L8,8.5 L11,5.5 Z M7.75,12.25 L3,17"/></svg><span>Pin to clipboard</span></li>
+            </ol>
+          </li>
+          <li class="kind">
+            <div class="kind-head">
+              <svg class="kind-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M3.5,5 V3.5 H12.5 V5 M8,3.5 V16.5 M6,16.5 H10 M12.5,11 H17 M12.5,14 H17 M12.5,17 H15.5"/></svg>
+              <h3>Formatted text</h3>
+            </div>
+            <p>Rich text and HTML from browsers, word processors and mail.</p>
+            <ol class="kind-actions" aria-label="Actions for formatted text">
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M7.5,3.5 H5.5 C4.9,3.5 4.5,3.9 4.5,4.5 V17 C4.5,17.6 4.9,18 5.5,18 H14.5 C15.1,18 15.5,17.6 15.5,17 V4.5 C15.5,3.9 15.1,3.5 14.5,3.5 H12.5 M7.5,2.5 H12.5 V5 H7.5 Z"/></svg><span>Paste</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M5,2.5 H11.5 L15.5,6.5 V17.5 H5 Z M11.5,2.5 V6.5 H15.5 M10.25,9 V15 M7.75,12.5 L10.25,15 L12.75,12.5"/></svg><span>Paste as file</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M3.5,5 V3.5 H12.5 V5 M8,3.5 V16.5 M6,16.5 H10 M12.5,11 H17 M12.5,14 H17 M12.5,17 H15.5"/></svg><span>Paste as plain text</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M12.5,2.5 L17.5,7.5 L14.5,9 L11.5,12 L11,15.5 L4.5,9 L8,8.5 L11,5.5 Z M7.75,12.25 L3,17"/></svg><span>Pin to clipboard</span></li>
+            </ol>
+          </li>
+          <li class="kind">
+            <div class="kind-head">
+              <svg class="kind-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M8.5,11.5 L11.5,8.5 M9.5,5.5 L11,4 C12.4,2.6 14.6,2.6 16,4 C17.4,5.4 17.4,7.6 16,9 L14.5,10.5 M10.5,14.5 L9,16 C7.6,17.4 5.4,17.4 4,16 C2.6,14.6 2.6,12.4 4,11 L5.5,9.5"/></svg>
+              <h3>Text with links</h3>
+            </div>
+            <p>Any text that contains one or more web addresses.</p>
+            <ol class="kind-actions" aria-label="Actions for text with links">
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M7.5,3.5 H5.5 C4.9,3.5 4.5,3.9 4.5,4.5 V17 C4.5,17.6 4.9,18 5.5,18 H14.5 C15.1,18 15.5,17.6 15.5,17 V4.5 C15.5,3.9 15.1,3.5 14.5,3.5 H12.5 M7.5,2.5 H12.5 V5 H7.5 Z"/></svg><span>Paste</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M5,2.5 H11.5 L15.5,6.5 V17.5 H5 Z M11.5,2.5 V6.5 H15.5 M10.25,9 V15 M7.75,12.5 L10.25,15 L12.75,12.5"/></svg><span>Paste as file</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M8.5,11.5 L11.5,8.5 M9.5,5.5 L11,4 C12.4,2.6 14.6,2.6 16,4 C17.4,5.4 17.4,7.6 16,9 L14.5,10.5 M10.5,14.5 L9,16 C7.6,17.4 5.4,17.4 4,16 C2.6,14.6 2.6,12.4 4,11 L5.5,9.5"/></svg><span>Open links</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M12.5,2.5 L17.5,7.5 L14.5,9 L11.5,12 L11,15.5 L4.5,9 L8,8.5 L11,5.5 Z M7.75,12.25 L3,17"/></svg><span>Pin to clipboard</span></li>
+            </ol>
+          </li>
+          <li class="kind">
+            <div class="kind-head">
+              <svg class="kind-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M3,4 H17 V16 H3 Z M3,13.5 L7.5,9.5 L11,12.5 L13.5,10.5 L17,13.5 M12.5,7.5 A1,1 0 1 1 12.49,7.5"/></svg>
+              <h3>Images</h3>
+            </div>
+            <p>Screenshots and images copied from apps or browsers.</p>
+            <ol class="kind-actions" aria-label="Actions for images">
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M7.5,3.5 H5.5 C4.9,3.5 4.5,3.9 4.5,4.5 V17 C4.5,17.6 4.9,18 5.5,18 H14.5 C15.1,18 15.5,17.6 15.5,17 V4.5 C15.5,3.9 15.1,3.5 14.5,3.5 H12.5 M7.5,2.5 H12.5 V5 H7.5 Z"/></svg><span>Paste</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M5,2.5 H11.5 L15.5,6.5 V17.5 H5 Z M11.5,2.5 V6.5 H15.5 M10.25,9 V15 M7.75,12.5 L10.25,15 L12.75,12.5"/></svg><span>Paste as file</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M6,15.5 H5.5 C3.6,15.5 2.5,14.2 2.5,12.5 C2.5,10.9 3.7,9.6 5.3,9.5 C5.7,6.9 7.6,5 10,5 C12.4,5 14.3,6.9 14.7,9.5 C16.3,9.6 17.5,10.9 17.5,12.5 C17.5,14.2 16.4,15.5 14.5,15.5 H14 M10,17.5 V10.5 M7.75,12.75 L10,10.5 L12.25,12.75"/></svg><span>Upload and paste link</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M12.5,2.5 L17.5,7.5 L14.5,9 L11.5,12 L11,15.5 L4.5,9 L8,8.5 L11,5.5 Z M7.75,12.25 L3,17"/></svg><span>Pin to clipboard</span></li>
+            </ol>
+          </li>
+          <li class="kind">
+            <div class="kind-head">
+              <svg class="kind-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M3,4 H17 V16 H3 Z M3,13.5 L7.5,9.5 L11,12.5 L13.5,10.5 L17,13.5 M12.5,7.5 A1,1 0 1 1 12.49,7.5"/></svg>
+              <h3>Links to images</h3>
+            </div>
+            <p>A web address that ends in an image, such as <code>.png</code>.</p>
+            <ol class="kind-actions" aria-label="Actions for links to images">
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M7.5,3.5 H5.5 C4.9,3.5 4.5,3.9 4.5,4.5 V17 C4.5,17.6 4.9,18 5.5,18 H14.5 C15.1,18 15.5,17.6 15.5,17 V4.5 C15.5,3.9 15.1,3.5 14.5,3.5 H12.5 M7.5,2.5 H12.5 V5 H7.5 Z"/></svg><span>Paste</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M5,2.5 H11.5 L15.5,6.5 V17.5 H5 Z M11.5,2.5 V6.5 H15.5 M10.25,9 V15 M7.75,12.5 L10.25,15 L12.75,12.5"/></svg><span>Paste as file</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M3,4 H17 V16 H3 Z M3,13.5 L7.5,9.5 L11,12.5 L13.5,10.5 L17,13.5 M12.5,7.5 A1,1 0 1 1 12.49,7.5"/></svg><span>Copy image from link</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M8.5,11.5 L11.5,8.5 M9.5,5.5 L11,4 C12.4,2.6 14.6,2.6 16,4 C17.4,5.4 17.4,7.6 16,9 L14.5,10.5 M10.5,14.5 L9,16 C7.6,17.4 5.4,17.4 4,16 C2.6,14.6 2.6,12.4 4,11 L5.5,9.5"/></svg><span>Open links</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M12.5,2.5 L17.5,7.5 L14.5,9 L11.5,12 L11,15.5 L4.5,9 L8,8.5 L11,5.5 Z M7.75,12.25 L3,17"/></svg><span>Pin to clipboard</span></li>
+            </ol>
+          </li>
+          <li class="kind">
+            <div class="kind-head">
+              <svg class="kind-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M2.5,5 C2.5,4.2 3.1,3.5 4,3.5 H7.5 L9.5,5.5 H16 C16.8,5.5 17.5,6.2 17.5,7 V15 C17.5,15.8 16.8,16.5 16,16.5 H4 C3.1,16.5 2.5,15.8 2.5,15 Z"/></svg>
+              <h3>Files and folders</h3>
+            </div>
+            <p>One or more files or folders copied in a file manager.</p>
+            <ol class="kind-actions" aria-label="Actions for files and folders">
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M7.5,3.5 H5.5 C4.9,3.5 4.5,3.9 4.5,4.5 V17 C4.5,17.6 4.9,18 5.5,18 H14.5 C15.1,18 15.5,17.6 15.5,17 V4.5 C15.5,3.9 15.1,3.5 14.5,3.5 H12.5 M7.5,2.5 H12.5 V5 H7.5 Z"/></svg><span>Paste</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M3,4 H17 V7.5 H3 Z M4,7.5 V16.5 H16 V7.5 M8.5,10.5 H11.5"/></svg><span>Copy as compressed folder</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M12.5,2.5 L17.5,7.5 L14.5,9 L11.5,12 L11,15.5 L4.5,9 L8,8.5 L11,5.5 Z M7.75,12.25 L3,17"/></svg><span>Pin to clipboard</span></li>
+            </ol>
+          </li>
+          <li class="kind">
+            <div class="kind-head">
+              <svg class="kind-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M7.5,3.5 H5.5 C4.9,3.5 4.5,3.9 4.5,4.5 V17 C4.5,17.6 4.9,18 5.5,18 H14.5 C15.1,18 15.5,17.6 15.5,17 V4.5 C15.5,3.9 15.1,3.5 14.5,3.5 H12.5 M7.5,2.5 H12.5 V5 H7.5 Z"/></svg>
+              <h3>Anything else</h3>
+            </div>
+            <p>Application-specific data, restored exactly as copied.</p>
+            <ol class="kind-actions" aria-label="Actions for anything else">
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M7.5,3.5 H5.5 C4.9,3.5 4.5,3.9 4.5,4.5 V17 C4.5,17.6 4.9,18 5.5,18 H14.5 C15.1,18 15.5,17.6 15.5,17 V4.5 C15.5,3.9 15.1,3.5 14.5,3.5 H12.5 M7.5,2.5 H12.5 V5 H7.5 Z"/></svg><span>Paste</span></li>
+                <li><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M12.5,2.5 L17.5,7.5 L14.5,9 L11.5,12 L11,15.5 L4.5,9 L8,8.5 L11,5.5 Z M7.75,12.25 L3,17"/></svg><span>Pin to clipboard</span></li>
+            </ol>
+          </li>
+        </ul>
 
         <div class="actions-block">
           <div class="actions-intro">
-            <h3>Actions for every item</h3>
-            <p>Press <kbd>&#8594;</kbd> while the history is open to do more than paste. The actions on offer depend on what the item contains.</p>
+            <h3>What each action does</h3>
+            <p>Actions that make something new, such as a compressed folder or a downloaded image, add it to your history as well, so you can paste it again later.</p>
           </div>
           <dl class="actions">
-            <div><dt>Paste</dt><dd>Pastes clipboard contents as-is.</dd></div>
-            <div><dt>Paste as plain text</dt><dd>Pastes clipboard contents as plain text with no formatting.</dd></div>
-            <div><dt>Paste as file</dt><dd>Saves the text to a <code>.txt</code> file and pastes the file.</dd></div>
-            <div><dt>Copy as compressed folder</dt><dd>Copies the copied files to the clipboard as a compressed (<code>.zip</code>) folder.</dd></div>
-            <div><dt>Copy image from link</dt><dd>Downloads the linked image and copies the image itself to the clipboard.</dd></div>
-            <div><dt>Open links</dt><dd>Opens the links in your browser.</dd></div>
-            <div><dt>Pin to clipboard / Unpin</dt><dd>Pinned items stay at the top and are kept across restarts.</dd></div>
+            <div><dt><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M7.5,3.5 H5.5 C4.9,3.5 4.5,3.9 4.5,4.5 V17 C4.5,17.6 4.9,18 5.5,18 H14.5 C15.1,18 15.5,17.6 15.5,17 V4.5 C15.5,3.9 15.1,3.5 14.5,3.5 H12.5 M7.5,2.5 H12.5 V5 H7.5 Z"/></svg>Paste</dt><dd>Pastes the item as it was copied, with all of its formats. Always first, so releasing the key right away pastes.</dd></div>
+            <div><dt><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M5,2.5 H11.5 L15.5,6.5 V17.5 H5 Z M11.5,2.5 V6.5 H15.5 M10.25,9 V15 M7.75,12.5 L10.25,15 L12.75,12.5"/></svg>Paste as file</dt><dd>Saves text to a <code>.txt</code> file, or an image to an image file, and pastes the file. Handy for chat apps and upload forms.</dd></div>
+            <div><dt><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M3.5,5 V3.5 H12.5 V5 M8,3.5 V16.5 M6,16.5 H10 M12.5,11 H17 M12.5,14 H17 M12.5,17 H15.5"/></svg>Paste as plain text</dt><dd>Pastes only the text, without fonts, colours or links.</dd></div>
+            <div><dt><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M6,15.5 H5.5 C3.6,15.5 2.5,14.2 2.5,12.5 C2.5,10.9 3.7,9.6 5.3,9.5 C5.7,6.9 7.6,5 10,5 C12.4,5 14.3,6.9 14.7,9.5 C16.3,9.6 17.5,10.9 17.5,12.5 C17.5,14.2 16.4,15.5 14.5,15.5 H14 M10,17.5 V10.5 M7.75,12.75 L10,10.5 L12.25,12.75"/></svg>Upload and paste link</dt><dd>Uploads the image to <a href="https://catbox.moe">Catbox</a>, a free image host without ads, and pastes a public link to it. Shapeshifter asks before the first upload; nothing else ever leaves your computer.</dd></div>
+            <div><dt><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M3,4 H17 V7.5 H3 Z M4,7.5 V16.5 H16 V7.5 M8.5,10.5 H11.5"/></svg>Copy as compressed folder</dt><dd>Copies the files and folders as one compressed (<code>.zip</code>) folder.</dd></div>
+            <div><dt><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M3,4 H17 V16 H3 Z M3,13.5 L7.5,9.5 L11,12.5 L13.5,10.5 L17,13.5 M12.5,7.5 A1,1 0 1 1 12.49,7.5"/></svg>Copy image from link</dt><dd>Downloads the linked image and copies the image itself.</dd></div>
+            <div><dt><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M8.5,11.5 L11.5,8.5 M9.5,5.5 L11,4 C12.4,2.6 14.6,2.6 16,4 C17.4,5.4 17.4,7.6 16,9 L14.5,10.5 M10.5,14.5 L9,16 C7.6,17.4 5.4,17.4 4,16 C2.6,14.6 2.6,12.4 4,11 L5.5,9.5"/></svg>Open links</dt><dd>Opens the links in your browser (at most ten at once).</dd></div>
+            <div><dt><svg class="action-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M12.5,2.5 L17.5,7.5 L14.5,9 L11.5,12 L11,15.5 L4.5,9 L8,8.5 L11,5.5 Z M7.75,12.25 L3,17"/></svg>Pin to clipboard / Unpin</dt><dd>Keeps the item at the top of the history and across restarts. Choose it again to unpin.</dd></div>
           </dl>
         </div>
       </div>
@@ -317,7 +423,7 @@
           <header class="section-head">
             <p class="eyebrow">Privacy</p>
             <h2 id="privacy-title">Your clipboard stays on your computer.</h2>
-            <p class="section-lede">Shapeshifter does not send your clipboard data anywhere. Pinned items (and, if you turn it on, the rest of your history) are stored only on your own computer, and the code is open for anyone to check.</p>
+            <p class="section-lede">Shapeshifter does not send your clipboard data anywhere. Pinned items (and, if you turn it on, the rest of your history) are stored only on your own computer, and the code is open for anyone to check. The one exception is an image you choose to <strong>Upload and paste link</strong>: that image goes to <a href="https://catbox.moe">Catbox</a>, and Shapeshifter asks before the first upload.</p>
           </header>
           <div class="privacy-points">
             <div class="privacy-point">

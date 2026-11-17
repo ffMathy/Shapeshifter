@@ -65,7 +65,7 @@ internal static class Program
     /// so that no screenshot in the wrong font is committed). Or <c>[output-folder] --live</c> to capture the real windows on the screen
     /// (see <see cref="LiveCapture"/>). Besides the pickers above, the picker with its actions chosen
     /// (<c>actions.PNG</c>) is rendered, and for each look its settings window (<c>settings-&lt;look&gt;.PNG</c>), its copy
-    /// notification (<c>toast-&lt;look&gt;.PNG</c>) and its picker with an empty history (<c>empty-&lt;look&gt;.PNG</c>). The README
+    /// notification (<c>toast-&lt;look&gt;.PNG</c>), the same notification showing a tip (<c>tip-&lt;look&gt;.PNG</c>) and its picker with an empty history (<c>empty-&lt;look&gt;.PNG</c>). The README
     /// and the website show them. All are light; with <c>--surfaces</c> the Windows look is also rendered in dark
     /// (<c>windows-dark.PNG</c>, <c>settings-windows-dark.PNG</c>, <c>toast-windows-dark.PNG</c>, <c>empty-windows-dark.PNG</c>).
     /// </summary>
@@ -154,6 +154,9 @@ internal static class Program
             toastWindow.SetContent(5, "Shapeshifter is a freeware clipboard manager, originally developed by defunct Flamefusion company");
             RenderWindow(toastWindow, look, toast);
             Console.WriteLine($"Wrote {toast}");
+            var tip = Path.Combine(output, $"tip-{look.ToString().ToLowerInvariant()}.PNG");
+            RenderWindow(CreateTipWindow(look), look, tip);
+            Console.WriteLine($"Wrote {tip}");
         }
 
         if (args.Contains("--surfaces") && looks.Contains(Look.Windows))
@@ -162,6 +165,17 @@ internal static class Program
         }
 
         return 0;
+    }
+
+    /// <summary>The notification as it shows a coaching tip (#310), in the look's modifier key.</summary>
+    private static ToastWindow CreateTipWindow(Look look)
+    {
+        var modifier = look == Look.MacOS ? "Cmd" : "Ctrl";
+        var window = new ToastWindow();
+        window.SetTip(
+            "Did you know?",
+            $"You can copy several things from Photoshop first, then hold {modifier}+V in Paint to pick each one from your history.");
+        return window;
     }
 
     /// <summary>The looks named by <c>--look</c> (comma-separated), or all of them.</summary>

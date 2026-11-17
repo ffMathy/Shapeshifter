@@ -26,6 +26,9 @@ public sealed partial class SettingsViewModel : ObservableObject
     private bool quietMode;
 
     [ObservableProperty]
+    private bool coachingTips;
+
+    [ObservableProperty]
     private int maxHistoryItems;
 
     [ObservableProperty]
@@ -58,6 +61,7 @@ public sealed partial class SettingsViewModel : ObservableObject
         var current = settings.Current;
         pasteDelayMilliseconds = current.PasteDelayMilliseconds;
         quietMode = current.QuietMode;
+        coachingTips = current.CoachingTips;
         maxHistoryItems = current.MaxHistoryItems;
         rememberHistory = current.RememberHistory;
         startAtLogin = autostart.IsSupported && autostart.IsEnabled;
@@ -71,7 +75,8 @@ public sealed partial class SettingsViewModel : ObservableObject
         Usage =
             $"Copy as usual. To paste an older item, hold {modifierName} and press V: keep {modifierName} held to see " +
             $"the history, press V again (or ↑/↓, or 1–9) to pick an item, → to choose what to do with it, Delete to remove it " +
-            $"and Esc to cancel. Release {modifierName} to paste.";
+            $"and Esc to cancel. Release {modifierName} to paste. To look through the history without holding " +
+            $"{modifierName}, press Space: it stays open until you press Enter to paste or Esc.";
     }
 
     public string Usage { get; }
@@ -133,6 +138,9 @@ public sealed partial class SettingsViewModel : ObservableObject
 
     partial void OnQuietModeChanged(bool value) =>
         settings.Update(current => current with { QuietMode = value });
+
+    partial void OnCoachingTipsChanged(bool value) =>
+        settings.Update(current => current with { CoachingTips = value });
 
     partial void OnMaxHistoryItemsChanged(int value) =>
         settings.Update(current => current with { MaxHistoryItems = value });

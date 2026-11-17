@@ -831,6 +831,11 @@
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
     <Setter Property="MaxLines" Value="1" />
   </Style>
+  <!-- A tip's message is a sentence: it wraps, as a banner's body does. -->
+  <Style Selector="Border.toastChrome.tip TextBlock.toastPreview">
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="MaxLines" Value="4" />
+  </Style>
 
   <!-- ============================================================================================================
        On the system's material (NativeMaterial): the window is the sheet, macOS frosts what is behind it and draws

@@ -38,7 +38,16 @@ public partial class ToastWindow : Window
 
     public void SetContent(int count, string preview)
     {
+        Chrome.Classes.Set("tip", false);
         CountText.Text = count == 1 ? "Copied · 1 item in your history" : $"Copied · {count} items in your history";
         PreviewText.Text = preview;
+    }
+
+    /// <summary>Shows a coaching tip: a title and a sentence or two, which the looks let wrap.</summary>
+    public void SetTip(string title, string message)
+    {
+        Chrome.Classes.Set("tip", true);
+        CountText.Text = title;
+        PreviewText.Text = message;
     }
 }

@@ -23,6 +23,9 @@ internal static unsafe partial class X11Native
     public const ulong XK_v = 0x0076;
     public const ulong XK_s = 0x0073;
     public const ulong XK_Escape = 0xff1b;
+    public const ulong XK_space = 0x0020;
+    public const ulong XK_Return = 0xff0d;
+    public const ulong XK_KP_Enter = 0xff8d;
     public const ulong XK_Left = 0xff51;
     public const ulong XK_Up = 0xff52;
     public const ulong XK_Right = 0xff53;

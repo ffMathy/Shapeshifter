@@ -28,7 +28,8 @@ internal sealed unsafe class X11Integration : IClipboardChangeSource, ICursorLoc
 
     private static readonly ulong[] NavigationKeysyms =
     [
-        X11Native.XK_Up, X11Native.XK_Down, X11Native.XK_Left, X11Native.XK_Right, X11Native.XK_Delete, X11Native.XK_Escape, X11Native.XK_s,
+        X11Native.XK_Up, X11Native.XK_Down, X11Native.XK_Left, X11Native.XK_Right, X11Native.XK_Delete, X11Native.XK_Escape,
+        X11Native.XK_space, X11Native.XK_Return, X11Native.XK_KP_Enter, X11Native.XK_s,
         .. Enumerable.Range(0, 9).Select(i => X11Native.XK_1 + (ulong)i),
         .. Enumerable.Range(0, 9).Select(i => X11Native.XK_KP_1 + (ulong)i),
     ];
@@ -133,13 +134,14 @@ internal sealed unsafe class X11Integration : IClipboardChangeSource, ICursorLoc
                 continue;
             }
 
+            // Also without Ctrl: once the picker is kept open (Space), it is driven with Ctrl released.
             if (grabbed)
             {
-                GrabKey(keycode);
+                GrabKey(keycode, alsoWithoutControl: true);
             }
             else
             {
-                UngrabKey(keycode);
+                UngrabKey(keycode, alsoWithoutControl: true);
             }
         }
 
@@ -447,17 +449,17 @@ internal sealed unsafe class X11Integration : IClipboardChangeSource, ICursorLoc
         triggerKeycode = keycode;
     }
 
-    private void GrabKey(int keycode)
+    private void GrabKey(int keycode, bool alsoWithoutControl = false)
     {
         if (keycode <= 0)
         {
             return;
         }
 
-        foreach (var variant in LockVariants)
+        lastOwnErrorCode = 0;
+        foreach (var modifiers in ModifierCombinations(alsoWithoutControl))
         {
-            lastOwnErrorCode = 0;
-            X11Native.XGrabKey(display, keycode, X11Native.ControlMask | variant, root, false, X11Native.GrabModeAsync, X11Native.GrabModeAsync);
+            X11Native.XGrabKey(display, keycode, modifiers, root, false, X11Native.GrabModeAsync, X11Native.GrabModeAsync);
         }
 
         X11Native.XSync(display, false);
@@ -467,18 +469,24 @@ internal sealed unsafe class X11Integration : IClipboardChangeSource, ICursorLoc
         }
     }
 
-    private void UngrabKey(int keycode)
+    private void UngrabKey(int keycode, bool alsoWithoutControl = false)
     {
         if (keycode <= 0)
         {
             return;
         }
 
-        foreach (var variant in LockVariants)
+        foreach (var modifiers in ModifierCombinations(alsoWithoutControl))
         {
-            X11Native.XUngrabKey(display, keycode, X11Native.ControlMask | variant, root);
+            X11Native.XUngrabKey(display, keycode, modifiers, root);
         }
     }
+
+    /// <summary>Ctrl with every CapsLock/NumLock combination, and optionally the same combinations without Ctrl.</summary>
+    private static IEnumerable<uint> ModifierCombinations(bool alsoWithoutControl) =>
+        alsoWithoutControl
+            ? LockVariants.SelectMany(variant => new[] { X11Native.ControlMask | variant, variant })
+            : LockVariants.Select(variant => X11Native.ControlMask | variant);
 
     private static void InstallErrorHandler(IntPtr connection)
     {

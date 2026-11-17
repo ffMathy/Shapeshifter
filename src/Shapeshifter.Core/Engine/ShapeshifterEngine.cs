@@ -2,6 +2,7 @@ using System.Threading.Channels;
 using Serilog;
 using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Coaching;
 using Shapeshifter.Core.Input;
 using Shapeshifter.Core.Platform;
 
@@ -11,6 +12,7 @@ namespace Shapeshifter.Core.Engine;
 public sealed record PickerActionView(string Title, string Description);
 
 /// <summary>What the picker displays.</summary>
+/// <param name="IsHeldOpen">The picker stays open after the modifier is released; Enter pastes (issue #420).</param>
 /// <remarks>
 /// While searching, <see cref="SearchQuery"/> is what the user typed and <see cref="Items"/> the items that match it,
 /// which may be none.
@@ -20,7 +22,8 @@ public sealed record PickerViewState(
     int SelectedIndex,
     IReadOnlyList<PickerActionView> Actions,
     int SelectedActionIndex,
-    PickerPane Pane)
+    PickerPane Pane,
+    bool IsHeldOpen = false)
 {
     /// <summary>What the user typed in the search box, or <see langword="null"/> while not searching.</summary>
     public string? SearchQuery { get; init; }
@@ -48,10 +51,13 @@ public interface IPickerPresenter
     Task BeginSearchAsync(PickerViewState state, Func<PickerSearchInput, bool> onInput);
 }
 
-/// <summary>Shows the short "copied" notification.</summary>
+/// <summary>Shows the short "copied" notification, or a coaching tip in its place.</summary>
 public interface ICopyNotifier
 {
     void NotifyCopied(ClipboardItem item, int historyCount);
+
+    /// <summary>Shows a tip on how Shapeshifter could have helped with the copy the user just made.</summary>
+    void NotifyTip(CoachingTip tip);
 }
 
 /// <summary>Coordinates the clipboard monitor, the keyboard hook, the gesture and the picker.</summary>
@@ -64,6 +70,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
     private readonly ActionContext actionContext;
     private readonly IPickerPresenter picker;
     private readonly ICopyNotifier? copyNotifier;
+    private readonly CopyCoach? coach;
     private readonly IFocusedWindowTracker? focusTracker;
     private readonly ILogger logger;
     private readonly TimeProvider time;
@@ -85,6 +92,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
 
     /// <summary>The window that had the focus when the search began; only used by the effect loop.</summary>
     private FocusedWindow? focusBeforeSearch;
+    private volatile bool capturingAtStartup;
     private int disposed;
 
     public ShapeshifterEngine(
@@ -97,6 +105,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
         ICopyNotifier? copyNotifier = null,
         ILogger? logger = null,
         TimeProvider? time = null,
+        CopyCoach? coach = null,
         IFocusedWindowTracker? focusTracker = null)
     {
         this.history = history;
@@ -106,6 +115,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
         this.actionContext = actionContext;
         this.picker = picker;
         this.copyNotifier = copyNotifier;
+        this.coach = coach;
         this.focusTracker = focusTracker;
         this.logger = logger ?? Log.Logger;
         this.time = time ?? TimeProvider.System;
@@ -167,7 +177,15 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
         effectLoop = Task.Run(ProcessEffectsAsync, CancellationToken.None);
         monitor.Captured += OnCaptured;
         monitor.Start();
-        await monitor.CaptureNowAsync(cancellationToken).ConfigureAwait(false);
+        capturingAtStartup = true;
+        try
+        {
+            await monitor.CaptureNowAsync(cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            capturingAtStartup = false;
+        }
 
         keyboardHook.KeyHandler = OnKey;
         await keyboardHook.StartAsync(cancellationToken).ConfigureAwait(false);
@@ -341,6 +359,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
         switch (effect)
         {
             case ShowPicker show:
+                coach?.OnPickerUsed();
                 await picker.ShowAsync(CreateViewState(show.Selection)).ConfigureAwait(false);
                 break;
 
@@ -372,10 +391,14 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
 
             case PasteCurrentClipboard:
                 logger.Debug("Pasting the current clipboard");
+
+                // Before the keystroke, while the application being pasted into is surely still in front.
+                coach?.OnPasted();
                 await actionContext.Paste.SimulatePasteAsync(cancellationToken).ConfigureAwait(false);
                 break;
 
             case PerformAction perform:
+                coach?.OnPickerUsed();
                 await PerformAsync(perform, cancellationToken).ConfigureAwait(false);
                 break;
 
@@ -480,7 +503,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
     {
         if (selection.IsEmpty)
         {
-            return new PickerViewState([], 0, [], 0, PickerPane.Items) { SearchQuery = selection.Query };
+            return new PickerViewState([], 0, [], 0, PickerPane.Items, selection.IsHeldOpen) { SearchQuery = selection.Query };
         }
 
         lock (session)
@@ -492,7 +515,8 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
                 selection.SelectedIndex,
                 selected.Actions.Select(action => new PickerActionView(action.GetTitle(selected.Item), action.GetDescription(selected.Item))).ToArray(),
                 selection.SelectedActionIndex,
-                selection.Pane)
+                selection.Pane,
+                selection.IsHeldOpen)
             {
                 SearchQuery = selection.Query,
             };
@@ -532,6 +556,18 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
 
     private void OnCaptured(object? sender, ClipboardCapturedEventArgs e)
     {
+        if (capturingAtStartup)
+        {
+            // Whatever was on the clipboard before Shapeshifter started: announce it, but there is nothing to coach.
+            coach?.OnStartupCapture(e.Item);
+        }
+        else if (coach?.OnCopied(e.Item, e.IsNew, e.Source) is { } tip)
+        {
+            logger.Information("Showing the {Tip} tip", tip.Kind);
+            copyNotifier?.NotifyTip(tip);
+            return;
+        }
+
         if (e.IsNew)
         {
             copyNotifier?.NotifyCopied(e.Item, history.Count);

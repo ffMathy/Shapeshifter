@@ -3,6 +3,7 @@ using NSubstitute;
 using Serilog;
 using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Coaching;
 using Shapeshifter.Core.Engine;
 using Shapeshifter.Core.Input;
 using Shapeshifter.Core.Persistence;
@@ -31,7 +32,8 @@ internal sealed class EngineHarness : IAsyncDisposable
         Directory.CreateDirectory(Root);
         Paths = AppPaths.ForRoot(Root);
         Backend = new FakeClipboardBackend(Log);
-        Monitor = new ClipboardMonitor(Backend, ChangeSource, History, Logger) { Debounce = TimeSpan.FromMilliseconds(5) };
+        Monitor = new ClipboardMonitor(Backend, ChangeSource, History, Logger, SourceLocator) { Debounce = TimeSpan.FromMilliseconds(5) };
+        Coach = new CopyCoach(SourceLocator, "Ctrl", time: Time);
         Paste = new FakePasteSimulator(Backend, Log);
         Picker = new FakePickerPresenter(Log);
         PinnedStore = new PinnedItemStore(Paths.PinnedDirectory, Logger);
@@ -48,8 +50,8 @@ internal sealed class EngineHarness : IAsyncDisposable
             Logger = Logger,
         };
 
-        Focus = new FakeFocusTracker(Log);
-        Engine = new ShapeshifterEngine(History, Monitor, Hook, Catalog, Context, Picker, Notifier, Logger, Time, Focus);
+        FocusTracker = new FakeFocusTracker(Log);
+        Engine = new ShapeshifterEngine(History, Monitor, Hook, Catalog, Context, Picker, Notifier, Logger, Time, Coach, FocusTracker);
         Engine.EffectProcessed += OnEffectProcessed;
     }
 
@@ -79,7 +81,17 @@ internal sealed class EngineHarness : IAsyncDisposable
 
     public FakeCopyNotifier Notifier { get; } = new();
 
-    public FakeFocusTracker Focus { get; }
+    /// <summary>Which application is in front: asked when a copy is noticed and when the user pastes.</summary>
+    public IClipboardSourceLocator SourceLocator { get; } = Substitute.For<IClipboardSourceLocator>();
+
+    public CopyCoach Coach { get; }
+
+    /// <summary>Makes <paramref name="application"/> the application in front.</summary>
+    public void Focus(string? application) =>
+        SourceLocator.GetCurrentSource().Returns(application is null ? null : new ClipboardSource(application, application, null));
+
+    /// <summary>Which window has the keyboard focus, as far as searching the history is concerned.</summary>
+    public FakeFocusTracker FocusTracker { get; }
 
     public FakeLauncher Launcher { get; } = new();
 

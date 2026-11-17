@@ -320,6 +320,27 @@ internal sealed class FakeCopyNotifier : ICopyNotifier
             calls.Add((item, historyCount));
         }
     }
+
+    private readonly List<Shapeshifter.Core.Coaching.CoachingTip> tips = [];
+
+    public IReadOnlyList<Shapeshifter.Core.Coaching.CoachingTip> Tips
+    {
+        get
+        {
+            lock (tips)
+            {
+                return tips.ToArray();
+            }
+        }
+    }
+
+    public void NotifyTip(Shapeshifter.Core.Coaching.CoachingTip tip)
+    {
+        lock (tips)
+        {
+            tips.Add(tip);
+        }
+    }
 }
 
 internal sealed class FakeLauncher : ILauncher

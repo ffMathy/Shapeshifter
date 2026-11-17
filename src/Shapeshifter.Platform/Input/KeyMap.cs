@@ -52,6 +52,8 @@ internal sealed class KeyMap
         KeyCode.Vc7 or KeyCode.VcNumPad7 => GestureKey.Digit7,
         KeyCode.Vc8 or KeyCode.VcNumPad8 => GestureKey.Digit8,
         KeyCode.Vc9 or KeyCode.VcNumPad9 => GestureKey.Digit9,
+        KeyCode.VcSpace => GestureKey.Space,
+        KeyCode.VcEnter or KeyCode.VcNumPadEnter => GestureKey.Enter,
         _ => GestureKey.Other,
     };
 

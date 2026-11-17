@@ -9,6 +9,7 @@ using Avalonia.Threading;
 using Serilog;
 using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Clipboard;
+using Shapeshifter.Core.Coaching;
 using Shapeshifter.Core.Engine;
 using Shapeshifter.Core.Persistence;
 using Shapeshifter.Core.Settings;
@@ -38,6 +39,7 @@ public partial class App : Application
     private HistoryPersistence? savedHistory;
     private SettingsWindow? settingsWindow;
     private HttpClient? http;
+    private RememberedUploadConsent? uploadConsent;
     private TrayIcon? trayIcon;
     private PickerPresenter? picker;
     private HttpClient? updateHttp;
@@ -102,6 +104,9 @@ public partial class App : Application
 
             http = new HttpClient();
             http.DefaultRequestHeaders.UserAgent.ParseAdd("Shapeshifter/" + typeof(App).Assembly.GetName().Version?.ToString(3));
+            var modifierName = platform.KeyboardHook.ModifierName;
+            uploadConsent = new RememberedUploadConsent(
+                settings, (service, cancellationToken) => UploadConsentDialog.AskAsync(service, modifierName, cancellationToken));
             var context = new ActionContext
             {
                 Clipboard = monitor,
@@ -112,10 +117,12 @@ public partial class App : Application
                 Paths = Paths,
                 Http = http,
                 Logger = logger,
+                UploadConsent = uploadConsent,
             };
 
             picker = new PickerPresenter(
                 platform.CursorLocator, new PickerVisuals(platform.FileIcons, logger), platform.KeyboardHook.ModifierName, logger, platform.WindowFocus);
+            var coach = new CopyCoach(platform.SourceLocator, platform.KeyboardHook.ModifierName, () => settings.Current.CoachingTips);
             engine = new ShapeshifterEngine(
                 history,
                 monitor,
@@ -125,6 +132,7 @@ public partial class App : Application
                 picker,
                 new CopyNotifier(settings),
                 logger,
+                coach: coach,
                 focusTracker: platform.WindowFocus)
             {
                 PasteDelay = TimeSpan.FromMilliseconds(settings.Current.PasteDelayMilliseconds),
@@ -431,6 +439,7 @@ public partial class App : Application
             platform?.DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(3));
             trayIcon?.Dispose();
             http?.Dispose();
+            uploadConsent?.Dispose();
             updater?.Dispose();
             updateHttp?.Dispose();
         }
