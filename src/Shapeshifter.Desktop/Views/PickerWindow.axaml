@@ -19,7 +19,7 @@
   <!--
     The layout shared by every look; Styles/Windows.axaml, MacOS.axaml and Linux.axaml give it its material, sizes,
     colours and type through the classes used here. A panel ("chrome") with a header, the history and the actions of
-    the selected item side by side, and a footer with the keys. "chrome.opaque" is set when the window cannot be
+    the selected item side by side (a preview of the item above its actions), and a footer with the keys. "chrome.opaque" is set when the window cannot be
     see-through (no compositor): the panel then has to fill the window, without rounded corners or a shadow.
     "chrome.empty" is set while nothing has been copied yet.
   -->
@@ -112,9 +112,67 @@
             </Panel>
           </Border>
 
-          <!-- Actions of the selected item -->
+          <!-- The selected item, previewed large, and its actions below -->
           <Border Grid.Column="1" Classes="actionsPane" Classes.inactive="{Binding IsItemsPaneActive}" IsVisible="{Binding HasItems}">
             <StackPanel>
+              <!--
+                Preview of the selected item (issue #54): a card that grows with its content up to a maximum, with a
+                footer strip that names what it is. Text shows its first lines (code in a monospaced font), an image
+                itself, a colour its swatch and code, a file its icon and name, and several files a list of them.
+              -->
+              <Border Classes="previewPane" IsVisible="{Binding ShowsPreview}">
+                <Grid x:DataType="vm:PickerItemViewModel" DataContext="{Binding SelectedItem, FallbackValue={x:Null}}"
+                      RowDefinitions="Auto,Auto">
+                  <Border Grid.Row="0" Classes="previewContent">
+                    <Panel>
+                      <TextBlock Classes="previewText" Classes.code="{Binding IsCodeLike}"
+                                 Text="{Binding PreviewText}" IsVisible="{Binding HasPreviewText}" />
+
+                      <Border Classes="previewImageFrame" IsVisible="{Binding ShowsPreviewImage}">
+                        <Image Classes="previewImage" Source="{Binding PreviewImage}" />
+                      </Border>
+
+                      <Grid Classes="previewColor" ColumnDefinitions="Auto,*" IsVisible="{Binding HasColorSwatch}">
+                        <Border Grid.Column="0" Classes="previewSwatch" Background="{Binding ColorSwatch}" />
+                        <TextBlock Grid.Column="1" Classes="previewColorCode" Text="{Binding ColorHex}" />
+                      </Grid>
+
+                      <Grid Classes="previewFile" ColumnDefinitions="Auto,*" IsVisible="{Binding IsFileLayout}">
+                        <Panel Grid.Column="0" Classes="previewFileIcon">
+                          <Image Source="{Binding FileIcon}" IsVisible="{Binding HasFileIcon}" />
+                          <Path Data="{Binding Glyph}" Stretch="Uniform" IsVisible="{Binding !HasFileIcon}" />
+                        </Panel>
+                        <TextBlock Grid.Column="1" Classes="previewFileName" Text="{Binding PreviewFileName}" />
+                      </Grid>
+
+                      <StackPanel Classes="previewFiles" IsVisible="{Binding IsFilesLayout}">
+                        <ItemsControl ItemsSource="{Binding PreviewFiles}">
+                          <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:PickerPreviewFileViewModel">
+                              <Grid Classes="previewFileRow" ColumnDefinitions="Auto,*">
+                                <Panel Grid.Column="0" Classes="previewFileRowIcon">
+                                  <Image Source="{Binding Icon}" IsVisible="{Binding HasIcon}" />
+                                  <Path Data="{Binding FallbackGlyph}" Stretch="Uniform" IsVisible="{Binding HasNoIcon}" />
+                                </Panel>
+                                <TextBlock Grid.Column="1" Text="{Binding Name}" />
+                              </Grid>
+                            </DataTemplate>
+                          </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock Classes="previewMoreFiles" Text="{Binding MorePreviewFiles}" IsVisible="{Binding HasMorePreviewFiles}" />
+                      </StackPanel>
+
+                      <Path Classes="previewGlyph" Data="{Binding Glyph}" Stretch="Uniform" IsVisible="{Binding ShowsPreviewGlyph}" />
+                    </Panel>
+                  </Border>
+                  <Border Grid.Row="1" Classes="previewFooter">
+                    <Grid ColumnDefinitions="Auto,*">
+                      <Path Grid.Column="0" Classes="previewFooterGlyph" Data="{Binding PreviewCaptionGlyph}" Stretch="Uniform" />
+                      <TextBlock Grid.Column="1" Classes="previewCaption" Text="{Binding PreviewCaption}" />
+                    </Grid>
+                  </Border>
+                </Grid>
+              </Border>
               <TextBlock Classes="actionsHeader" Text="{Binding ActionsHeader}" />
               <ListBox Classes="actions" Focusable="False"
                        ItemsSource="{Binding Actions}"
