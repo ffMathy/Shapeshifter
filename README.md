@@ -39,7 +39,10 @@ Tap it and it pastes as always. Keep holding <kbd>Ctrl</kbd> and your history ap
 
 - **Everything is kept:** rich text, HTML, images, files and app-specific formats are restored exactly.
 - **Passwords are skipped:** content that password managers mark as sensitive is never recorded.
-- **Pinned items** survive restarts. Nothing you copy ever leaves your computer.
+- **Pinned items** survive restarts.
+- **Nothing you copy leaves your computer**, unless you choose **Upload and paste link** for an image. That one
+  image is uploaded to [Catbox](https://catbox.moe), a free image host without ads, and a public link to it is pasted.
+  Shapeshifter asks before the first upload.
 - **Installs and updates itself:** the first start installs Shapeshifter for your user (no administrator rights) and
   starts it at login. It checks GitHub for new releases every few hours, verifies the download's SHA-256 and restarts
   into it when you're not using it. Switch this off in Settings; on Windows, uninstall it from Apps or Control Panel.

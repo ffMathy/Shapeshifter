@@ -17,9 +17,25 @@ public sealed record ShapeshifterSettings
     /// <summary>Whether new releases are downloaded from GitHub and installed automatically.</summary>
     public bool AutomaticUpdates { get; init; } = true;
 
+    /// <summary>The online services (such as Catbox) the user has agreed to upload images to.</summary>
+    public IReadOnlyList<string> UploadConsents { get; init; } = [];
+
+    /// <summary>Compares the lists by their contents, so settings read back from disk equal the ones that were saved.</summary>
+    public bool Equals(ShapeshifterSettings? other) =>
+        other is not null
+        && PasteDelayMilliseconds == other.PasteDelayMilliseconds
+        && QuietMode == other.QuietMode
+        && MaxHistoryItems == other.MaxHistoryItems
+        && AutomaticUpdates == other.AutomaticUpdates
+        && (UploadConsents ?? []).SequenceEqual(other.UploadConsents ?? [], StringComparer.Ordinal);
+
+    public override int GetHashCode() =>
+        HashCode.Combine(PasteDelayMilliseconds, QuietMode, MaxHistoryItems, AutomaticUpdates, UploadConsents?.Count ?? 0);
+
     public ShapeshifterSettings Normalize() => this with
     {
         PasteDelayMilliseconds = Math.Clamp(PasteDelayMilliseconds, 0, MaxPasteDelayMilliseconds),
         MaxHistoryItems = Math.Clamp(MaxHistoryItems, 1, 1000),
+        UploadConsents = UploadConsents ?? [],
     };
 }
