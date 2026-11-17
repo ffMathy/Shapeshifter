@@ -700,4 +700,50 @@ public sealed class ClipboardHistoryTests
         Assert.Equal(items.Count, items.Select(i => i.Id).Distinct().Count());
         Assert.Equal(Max, added - removed);
     }
+
+    [Fact]
+    public void AddRestored_AppendsBelowTheExistingItems_InTheGivenOrder_AndRaisesAdded()
+    {
+        var history = new ClipboardHistory();
+        history.Add(new ClipboardSnapshot { Text = "current" });
+        var restored = new[] { new ClipboardItem(new ClipboardSnapshot { Text = "b" }), new ClipboardItem(new ClipboardSnapshot { Text = "a" }) };
+        restored[0].IsPinned = true;
+        var events = new List<HistoryChangedEventArgs>();
+        history.Changed += (_, e) => events.Add(e);
+
+        history.AddRestored(restored);
+
+        Assert.Equal(["current", "b", "a"], history.Items.Select(item => item.Snapshot.Text));
+        Assert.All(history.Items, item => Assert.False(item.IsPinned));
+        Assert.Equal([restored[0], restored[1]], events.Select(e => e.Item));
+        Assert.All(events, e => Assert.Equal(HistoryChangeKind.Added, e.Kind));
+    }
+
+    [Fact]
+    public void AddRestored_SkipsItemsAlreadyInTheHistory_ByIdOrContent()
+    {
+        var history = new ClipboardHistory();
+        var existing = history.Add(new ClipboardSnapshot { Text = "same" });
+
+        history.AddRestored([
+            new ClipboardItem(new ClipboardSnapshot { Text = "same" }),
+            new ClipboardItem(new ClipboardSnapshot { Text = "other" }, existing.Id),
+        ]);
+
+        Assert.Equal(existing, Assert.Single(history.Items));
+    }
+
+    [Fact]
+    public void AddRestored_DropsWhatDoesNotFit_WithoutRaisingAddedForIt()
+    {
+        var history = new ClipboardHistory(maxUnpinnedItems: 2);
+        history.Add(new ClipboardSnapshot { Text = "current" });
+        var added = 0;
+        history.Changed += (_, e) => added += e.Kind == HistoryChangeKind.Added ? 1 : 0;
+
+        history.AddRestored([new ClipboardItem(new ClipboardSnapshot { Text = "b" }), new ClipboardItem(new ClipboardSnapshot { Text = "a" })]);
+
+        Assert.Equal(["current", "b"], history.Items.Select(item => item.Snapshot.Text));
+        Assert.Equal(1, added);
+    }
 }

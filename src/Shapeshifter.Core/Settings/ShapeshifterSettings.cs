@@ -14,6 +14,12 @@ public sealed record ShapeshifterSettings
     /// <summary>How many unpinned items are kept.</summary>
     public int MaxHistoryItems { get; init; } = 50;
 
+    /// <summary>
+    /// Whether the unpinned history is also kept on disk, so it survives restarts. Off by default: then only pinned
+    /// items are ever written to disk.
+    /// </summary>
+    public bool RememberHistory { get; init; }
+
     /// <summary>Whether new releases are downloaded from GitHub and installed automatically.</summary>
     public bool AutomaticUpdates { get; init; } = true;
 

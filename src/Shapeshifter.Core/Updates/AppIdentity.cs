@@ -48,6 +48,9 @@ public sealed record AppIdentity
     /// <summary>Set to 1 to never check GitHub for updates.</summary>
     public string NoUpdateVariable => EnvironmentPrefix + "_NO_UPDATE";
 
+    /// <summary>The GitHub repository's page.</summary>
+    public Uri ProjectPage => new($"https://github.com/{GitHubOwner}/{GitHubRepository}");
+
     /// <summary>The GitHub page that lists the releases.</summary>
     public Uri ReleasesPage => new($"https://github.com/{GitHubOwner}/{GitHubRepository}/releases");
 }

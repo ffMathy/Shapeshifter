@@ -10,6 +10,7 @@ namespace Shapeshifter.Desktop.Services;
 /// <summary>
 /// Shows a small, non-activating "copied" notification for 1.5 seconds where the platform shows its own: bottom right
 /// on Windows, top right under the menu bar on macOS, bottom centre on Linux (the look's <c>ToastPlacement</c>).
+/// Pointing at it or clicking it dismisses it at once.
 /// </summary>
 internal sealed class CopyNotifier(SettingsStore settings) : ICopyNotifier
 {
@@ -40,9 +41,14 @@ internal sealed class CopyNotifier(SettingsStore settings) : ICopyNotifier
         });
     }
 
-    private static ToastWindow CreateWindow()
+    private ToastWindow CreateWindow()
     {
         var toast = new ToastWindow();
+        toast.Dismissed += (_, _) =>
+        {
+            hideTimer?.Dispose();
+            hideTimer = null;
+        };
 
         // The window sizes itself to its content, which is only final after layout: place it again once it is.
         toast.SizeChanged += (_, _) => Position(toast);

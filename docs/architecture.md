@@ -15,6 +15,7 @@ Shapeshifter.Core                                 Shapeshifter.Platform
  │    └─ PasteGestureStateMachine                        
  ├─ Actions ──► IPasteSimulator ◄──────────────── SharpHook EventSimulator (Ctrl+V / Cmd+V)
  ├─ PinnedItemStore, SettingsStore, AppPaths     IAutostartService: Run key / LaunchAgent / XDG autostart
+ └─ HistoryPersistence
 ```
 
 ## Capturing copies
@@ -27,6 +28,8 @@ Shapeshifter.Core                                 Shapeshifter.Platform
    - It reads text, files and the image through Avalonia's portable formats.
    - It reads every other platform format as raw bytes. `ClipboardFormatClassifier` skips protocol targets and handle-based Windows formats.
 3. `ClipboardHistory` inserts the snapshot below the pinned items. If the same content (by `Fingerprint`) is already present, that item moves to the top instead of being duplicated.
+
+Pinned items are saved by `PinnedItemStore`, one folder per item. With "Remember history after restart" on, `HistoryPersistence` keeps the unpinned items in the same format in a `History` folder, plus `order.json` with their order: each change of the history schedules one background sync that writes new items, deletes removed ones and rewrites the order. Turning the setting off deletes the folder.
 
 Shapeshifter's own clipboard writes go through `ClipboardMonitor.WriteAsync`. Their fingerprint and a short grace period are remembered, so they are not captured as new copies.
 

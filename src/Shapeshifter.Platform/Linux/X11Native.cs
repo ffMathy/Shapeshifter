@@ -28,6 +28,12 @@ internal static unsafe partial class X11Native
     public const ulong XK_Down = 0xff54;
     public const ulong XK_Delete = 0xffff;
 
+    /// <summary>XK_1 to XK_9 are their ASCII codes.</summary>
+    public const ulong XK_1 = 0x0031;
+
+    /// <summary>XK_KP_1 to XK_KP_9 follow each other.</summary>
+    public const ulong XK_KP_1 = 0xffb1;
+
     /// <summary>Size of the XEvent union on 64-bit platforms is 192 bytes; allocate generously.</summary>
     public const int XEventSize = 256;
 

@@ -12,6 +12,28 @@ public partial class ToastWindow : Window
 
         // As the picker's "chrome.opaque": without a compositor the toast has to fill its window.
         Opened += (_, _) => Chrome.Classes.Set("opaque", ActualTransparencyLevel == WindowTransparencyLevel.None);
+
+        // Moving the pointer onto the notification, or clicking it, dismisses it.
+        Chrome.PointerEntered += (_, _) => Dismiss();
+        Chrome.PointerPressed += (_, e) =>
+        {
+            e.Handled = true;
+            Dismiss();
+        };
+    }
+
+    /// <summary>Raised when the user dismissed the notification by pointing at it or clicking it.</summary>
+    public event EventHandler? Dismissed;
+
+    private void Dismiss()
+    {
+        if (!IsVisible)
+        {
+            return;
+        }
+
+        Hide();
+        Dismissed?.Invoke(this, EventArgs.Empty);
     }
 
     public void SetContent(int count, string preview)
