@@ -87,9 +87,13 @@ public readonly record struct GestureResult(bool Suppress, IReadOnlyList<Gesture
 /// <remarks>
 /// <para>Hold the modifier (Ctrl, or Cmd on macOS) and press V:</para>
 /// <list type="bullet">
-/// <item>Releasing the modifier right away pastes the current clipboard, just like a normal paste.</item>
 /// <item>
-/// Keeping the modifier held for <see cref="ShowDelay"/> shows the picker with the history. With nothing in the
+/// Releasing V (or the modifier) right away pastes the current clipboard, just like a normal paste. Releasing V is
+/// enough while the modifier is still held (<see cref="PasteOnTriggerRelease"/>), so the user can paste repeatedly
+/// with the modifier held down, as without Shapeshifter (issue #639).
+/// </item>
+/// <item>
+/// Holding V (with the modifier) for <see cref="ShowDelay"/> shows the picker with the history. With nothing in the
 /// history yet, the picker is shown empty, so it can explain how to use it; releasing still pastes normally.
 /// </item>
 /// <item>Each further press of V (with the modifier still held) selects the next, older item and shows the picker.</item>
@@ -135,8 +139,19 @@ public sealed class PasteGestureStateMachine
         this.sessionFactory = sessionFactory;
     }
 
-    /// <summary>How long the modifier must be held after V before the picker appears. Zero shows it immediately.</summary>
+    /// <summary>
+    /// How long after V is pressed the picker appears, while V is still held (or, without
+    /// <see cref="PasteOnTriggerRelease"/>, the modifier). Zero shows it immediately.
+    /// </summary>
     public TimeSpan ShowDelay { get; set; } = TimeSpan.FromMilliseconds(300);
+
+    /// <summary>
+    /// Whether releasing V before the picker is shown pastes right away, while the modifier is still held (issue #639).
+    /// This needs the gesture's modifier to be the one that pastes: with the alternative shortcuts (Win+V on Windows,
+    /// Ctrl+V on macOS) the held modifier would turn the paste keystroke into another shortcut, so the paste waits for
+    /// the modifier to be released, and the picker also appears when only the modifier is kept held.
+    /// </summary>
+    public bool PasteOnTriggerRelease { get; set; } = true;
 
     /// <summary>Whether a gesture is in progress (the paste keystroke has been intercepted).</summary>
     public bool IsActive => active;
@@ -309,6 +324,13 @@ public sealed class PasteGestureStateMachine
     {
         var wasDown = triggerDown;
         triggerDown = false;
+        if (active && wasDown && PasteOnTriggerRelease && !pickerVisible)
+        {
+            // A quick Ctrl+V: paste now, like a normal paste, even though the modifier is still held (issue #639). The
+            // picker is not visible, so nothing has been chosen; once it is, the modifier's release pastes instead.
+            return new GestureResult(true, Finish());
+        }
+
         return active || wasDown ? GestureResult.Swallow : GestureResult.PassThrough;
     }
 

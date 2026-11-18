@@ -121,6 +121,8 @@ internal sealed class FakeKeyboardHook : IKeyboardHook
 
     public IReadOnlyList<string> ShortcutModifierNames => ["Ctrl"];
 
+    public bool GestureModifierPastes { get; set; } = true;
+
     public int StartCount { get; private set; }
 
     /// <summary>Whether <see cref="KeyHandler"/> had already been assigned when <see cref="StartAsync"/> ran.</summary>

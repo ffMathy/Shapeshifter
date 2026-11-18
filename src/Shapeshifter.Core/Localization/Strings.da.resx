@@ -31,7 +31,7 @@
     <value>Projektside</value>
   </data>
   <data name="SettingsUsage" xml:space="preserve">
-    <value>Kopiér som normalt. Hvis du vil indsætte et ældre element, skal du holde {0} nede og trykke på V: Bliv ved med at holde {0} nede for at se historikken, tryk på V igen (eller ↑/↓ eller 1–9) for at vælge et element, → for at vælge, hvad der skal ske med det, Delete for at fjerne det og Esc for at annullere. Slip {0} for at indsætte.</value>
+    <value>Kopiér som normalt. Hvis du vil indsætte et ældre element, skal du holde {0}+V nede, til historikken vises, og derefter blive ved med at holde {0} nede: Tryk på V igen (eller ↑/↓ eller 1–9) for at vælge et element, → for at vælge, hvad der skal ske med det, Delete for at fjerne det og Esc for at annullere. Slip {0} for at indsætte.</value>
   </data>
   <data name="SettingsHistoryGroup" xml:space="preserve">
     <value>Historik</value>
@@ -105,7 +105,7 @@
   <data name="PickerEmptyHint" xml:space="preserve">
     <value>Kopiér som normalt, så gemmer Shapeshifter alt, hvad du kopierer.
 
-Hvis du vil indsætte noget, du har kopieret tidligere, skal du holde {0} nede og trykke på V. Bliv ved med at holde {0} nede for at se historikken, tryk på V eller piletasterne for at vælge, og slip {0} for at indsætte.</value>
+Hvis du vil indsætte noget, du har kopieret tidligere, skal du holde {0}+V nede, til historikken vises. Bliv ved med at holde {0} nede, tryk på V eller piletasterne for at vælge, og slip {0} for at indsætte.</value>
   </data>
   <data name="PickerActions" xml:space="preserve">
     <value>Handlinger</value>

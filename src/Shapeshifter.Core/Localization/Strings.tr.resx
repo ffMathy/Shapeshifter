@@ -31,7 +31,7 @@
     <value>Proje sayfası</value>
   </data>
   <data name="SettingsUsage" xml:space="preserve">
-    <value>Her zamanki gibi kopyalayın. Daha eski bir öğeyi yapıştırmak için {0} tuşunu basılı tutup V tuşuna basın: geçmişi görmek için {0} tuşunu basılı tutmaya devam edin, bir öğe seçmek için V tuşuna tekrar basın (veya ↑/↓ ya da 1–9), öğeyle ne yapılacağını seçmek için →, kaldırmak için Delete ve iptal etmek için Esc tuşunu kullanın. Yapıştırmak için {0} tuşunu bırakın.</value>
+    <value>Her zamanki gibi kopyalayın. Daha eski bir öğeyi yapıştırmak için geçmiş görünene kadar {0}+V tuşlarını basılı tutun, ardından {0} tuşunu basılı tutmaya devam edin: bir öğe seçmek için V tuşuna tekrar basın (veya ↑/↓ ya da 1–9), öğeyle ne yapılacağını seçmek için →, kaldırmak için Delete ve iptal etmek için Esc tuşunu kullanın. Yapıştırmak için {0} tuşunu bırakın.</value>
   </data>
   <data name="SettingsHistoryGroup" xml:space="preserve">
     <value>Geçmiş</value>
@@ -105,7 +105,7 @@
   <data name="PickerEmptyHint" xml:space="preserve">
     <value>Her zamanki gibi kopyalayın; Shapeshifter kopyaladığınız her şeyi saklar.
 
-Daha önce kopyaladığınız bir şeyi yapıştırmak için {0} tuşunu basılı tutup V tuşuna basın. Geçmişi görmek için {0} tuşunu basılı tutmaya devam edin, seçmek için V veya ok tuşlarına basın ve yapıştırmak için {0} tuşunu bırakın.</value>
+Daha önce kopyaladığınız bir şeyi yapıştırmak için geçmiş görünene kadar {0}+V tuşlarını basılı tutun. {0} tuşunu basılı tutmaya devam edin, seçmek için V veya ok tuşlarına basın ve yapıştırmak için {0} tuşunu bırakın.</value>
   </data>
   <data name="PickerActions" xml:space="preserve">
     <value>Eylemler</value>

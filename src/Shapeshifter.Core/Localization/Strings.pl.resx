@@ -31,7 +31,7 @@
     <value>Strona projektu</value>
   </data>
   <data name="SettingsUsage" xml:space="preserve">
-    <value>Kopiuj jak zwykle. Aby wkleić starszy element, przytrzymaj {0} i naciśnij V: trzymaj {0}, aby zobaczyć historię, naciśnij ponownie V (albo ↑/↓ lub 1–9), aby wybrać element, →, aby wybrać, co z nim zrobić, Delete, aby go usunąć, i Esc, aby anulować. Puść {0}, aby wkleić.</value>
+    <value>Kopiuj jak zwykle. Aby wkleić starszy element, przytrzymaj {0}+V, aż pojawi się historia, a potem trzymaj {0}: naciśnij ponownie V (albo ↑/↓ lub 1–9), aby wybrać element, →, aby wybrać, co z nim zrobić, Delete, aby go usunąć, i Esc, aby anulować. Puść {0}, aby wkleić.</value>
   </data>
   <data name="SettingsHistoryGroup" xml:space="preserve">
     <value>Historia</value>
@@ -105,7 +105,7 @@
   <data name="PickerEmptyHint" xml:space="preserve">
     <value>Kopiuj jak zwykle, a Shapeshifter zachowa wszystko, co skopiujesz.
 
-Aby wkleić coś skopiowanego wcześniej, przytrzymaj {0} i naciśnij V. Trzymaj {0}, aby zobaczyć historię, naciskaj V lub strzałki, aby wybrać, i puść {0}, aby wkleić.</value>
+Aby wkleić coś skopiowanego wcześniej, przytrzymaj {0}+V, aż pojawi się historia. Trzymaj {0}, naciskaj V lub strzałki, aby wybrać, i puść {0}, aby wkleić.</value>
   </data>
   <data name="PickerActions" xml:space="preserve">
     <value>Akcje</value>

@@ -31,7 +31,7 @@
     <value>Halaman proyek</value>
   </data>
   <data name="SettingsUsage" xml:space="preserve">
-    <value>Salin seperti biasa. Untuk menempelkan item lama, tahan {0} lalu tekan V: tetap tahan {0} untuk melihat riwayat, tekan V lagi (atau ↑/↓, atau 1–9) untuk memilih item, → untuk memilih tindakan untuknya, Delete untuk menghapusnya, dan Esc untuk membatalkan. Lepaskan {0} untuk menempel.</value>
+    <value>Salin seperti biasa. Untuk menempelkan item lama, tahan {0}+V sampai riwayat muncul, lalu tetap tahan {0}: tekan V lagi (atau ↑/↓, atau 1–9) untuk memilih item, → untuk memilih tindakan untuknya, Delete untuk menghapusnya, dan Esc untuk membatalkan. Lepaskan {0} untuk menempel.</value>
   </data>
   <data name="SettingsHistoryGroup" xml:space="preserve">
     <value>Riwayat</value>
@@ -105,7 +105,7 @@
   <data name="PickerEmptyHint" xml:space="preserve">
     <value>Salin seperti biasa, dan Shapeshifter menyimpan semua yang Anda salin.
 
-Untuk menempelkan sesuatu yang Anda salin sebelumnya, tahan {0} lalu tekan V. Tetap tahan {0} untuk melihat riwayat, tekan V atau tombol panah untuk memilih, lalu lepaskan {0} untuk menempel.</value>
+Untuk menempelkan sesuatu yang Anda salin sebelumnya, tahan {0}+V sampai riwayat muncul. Tetap tahan {0}, tekan V atau tombol panah untuk memilih, lalu lepaskan {0} untuk menempel.</value>
   </data>
   <data name="PickerActions" xml:space="preserve">
     <value>Tindakan</value>

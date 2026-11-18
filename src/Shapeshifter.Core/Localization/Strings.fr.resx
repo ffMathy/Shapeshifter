@@ -31,7 +31,7 @@
     <value>Page du projet</value>
   </data>
   <data name="SettingsUsage" xml:space="preserve">
-    <value>Copiez comme d’habitude. Pour coller un élément plus ancien, maintenez {0} enfoncée et appuyez sur V : gardez {0} enfoncée pour voir l’historique, appuyez à nouveau sur V (ou ↑/↓, ou 1–9) pour choisir un élément, sur → pour choisir quoi en faire, sur Suppr pour le supprimer et sur Échap pour annuler. Relâchez {0} pour coller.</value>
+    <value>Copiez comme d’habitude. Pour coller un élément plus ancien, maintenez {0}+V enfoncées jusqu’à ce que l’historique apparaisse, puis gardez {0} enfoncée : appuyez à nouveau sur V (ou ↑/↓, ou 1–9) pour choisir un élément, sur → pour choisir quoi en faire, sur Suppr pour le supprimer et sur Échap pour annuler. Relâchez {0} pour coller.</value>
   </data>
   <data name="SettingsHistoryGroup" xml:space="preserve">
     <value>Historique</value>
@@ -105,7 +105,7 @@
   <data name="PickerEmptyHint" xml:space="preserve">
     <value>Copiez comme d’habitude : Shapeshifter conserve tout ce que vous copiez.
 
-Pour coller quelque chose que vous avez copié auparavant, maintenez {0} enfoncée et appuyez sur V. Gardez {0} enfoncée pour voir l’historique, appuyez sur V ou sur les flèches pour choisir, puis relâchez {0} pour coller.</value>
+Pour coller quelque chose que vous avez copié auparavant, maintenez {0}+V enfoncées jusqu’à ce que l’historique apparaisse. Gardez {0} enfoncée, appuyez sur V ou sur les flèches pour choisir, puis relâchez {0} pour coller.</value>
   </data>
   <data name="PickerActions" xml:space="preserve">
     <value>Actions</value>

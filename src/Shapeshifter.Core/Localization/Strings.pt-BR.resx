@@ -31,7 +31,7 @@
     <value>Página do projeto</value>
   </data>
   <data name="SettingsUsage" xml:space="preserve">
-    <value>Copie normalmente. Para colar um item anterior, mantenha {0} pressionada e pressione V: continue segurando {0} para ver o histórico, pressione V de novo (ou ↑/↓, ou 1–9) para escolher um item, → para escolher o que fazer com ele, Del para removê-lo e Esc para cancelar. Solte {0} para colar.</value>
+    <value>Copie normalmente. Para colar um item anterior, mantenha {0}+V pressionadas até o histórico aparecer e depois continue segurando {0}: pressione V de novo (ou ↑/↓, ou 1–9) para escolher um item, → para escolher o que fazer com ele, Del para removê-lo e Esc para cancelar. Solte {0} para colar.</value>
   </data>
   <data name="SettingsHistoryGroup" xml:space="preserve">
     <value>Histórico</value>
@@ -105,7 +105,7 @@
   <data name="PickerEmptyHint" xml:space="preserve">
     <value>Copie normalmente, e o Shapeshifter guarda tudo o que você copiar.
 
-Para colar algo que você copiou antes, mantenha {0} pressionada e pressione V. Continue segurando {0} para ver o histórico, pressione V ou as teclas de seta para escolher e solte {0} para colar.</value>
+Para colar algo que você copiou antes, mantenha {0}+V pressionadas até o histórico aparecer. Continue segurando {0}, pressione V ou as teclas de seta para escolher e solte {0} para colar.</value>
   </data>
   <data name="PickerActions" xml:space="preserve">
     <value>Ações</value>

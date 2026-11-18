@@ -13,7 +13,7 @@
 
 ## Hold <kbd>Ctrl</kbd>+<kbd>V</kbd>
 
-Tap it and it pastes as always. Keep holding <kbd>Ctrl</kbd> and your history appears. Press <kbd>V</kbd> to move, release to paste.
+Tap it and it pastes as always, even while you keep <kbd>Ctrl</kbd> held to paste again. Keep holding both and your history appears. Then, with <kbd>Ctrl</kbd> still held, press <kbd>V</kbd> to move and release to paste.
 
 | Pick an item | <kbd>→</kbd> to choose what to do with it |
 |---|---|

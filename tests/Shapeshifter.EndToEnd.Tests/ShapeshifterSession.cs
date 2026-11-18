@@ -267,6 +267,16 @@ public sealed class ShapeshifterSession : IAsyncLifetime
 
     public async Task ReleaseModifierAsync() => await KeyAsync(Modifier, down: false);
 
+    /// <summary>
+    /// With the modifier held, holds V until the picker shows and releases it. A quick V would paste instead (issue #639).
+    /// </summary>
+    public async Task HoldVUntilThePickerShowsAsync()
+    {
+        await KeyAsync(KeyCode.VcV, down: true);
+        await WaitForStateAsync(state => state.PickerVisible, "picker after holding V");
+        await KeyAsync(KeyCode.VcV, down: false);
+    }
+
     public async Task TapAsync(KeyCode key, int holdMilliseconds = 30)
     {
         await KeyAsync(key, down: true, holdMilliseconds);

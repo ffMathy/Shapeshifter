@@ -31,7 +31,7 @@
     <value>Projektseite</value>
   </data>
   <data name="SettingsUsage" xml:space="preserve">
-    <value>Wie gewohnt kopieren. Um ein älteres Element einzufügen, {0} gedrückt halten und V drücken: {0} weiter gedrückt halten, um den Verlauf zu sehen, erneut V (oder ↑/↓ oder 1–9) drücken, um ein Element auszuwählen, → um festzulegen, was damit geschehen soll, Entf zum Entfernen und Esc zum Abbrechen. {0} loslassen, um einzufügen.</value>
+    <value>Wie gewohnt kopieren. Um ein älteres Element einzufügen, {0}+V gedrückt halten, bis der Verlauf erscheint, dann {0} weiter gedrückt halten: erneut V (oder ↑/↓ oder 1–9) drücken, um ein Element auszuwählen, → um festzulegen, was damit geschehen soll, Entf zum Entfernen und Esc zum Abbrechen. {0} loslassen, um einzufügen.</value>
   </data>
   <data name="SettingsHistoryGroup" xml:space="preserve">
     <value>Verlauf</value>
@@ -105,7 +105,7 @@
   <data name="PickerEmptyHint" xml:space="preserve">
     <value>Wie gewohnt kopieren – Shapeshifter behält alles, was kopiert wird.
 
-Um etwas einzufügen, das früher kopiert wurde, {0} gedrückt halten und V drücken. {0} weiter gedrückt halten, um den Verlauf zu sehen, mit V oder den Pfeiltasten auswählen und {0} loslassen, um einzufügen.</value>
+Um etwas einzufügen, das früher kopiert wurde, {0}+V gedrückt halten, bis der Verlauf erscheint. {0} weiter gedrückt halten, mit V oder den Pfeiltasten auswählen und {0} loslassen, um einzufügen.</value>
   </data>
   <data name="PickerActions" xml:space="preserve">
     <value>Aktionen</value>

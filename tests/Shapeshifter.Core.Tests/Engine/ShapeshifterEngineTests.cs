@@ -320,6 +320,31 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Search_BegunWhileVIsHeld_TheNextCtrlVStillWorks()
+    {
+        h.Hook.GestureModifierPastes = true;
+        h.Seed("apple", "banana");
+        await h.StartAsync();
+
+        // Ctrl and V held, S searches; V and Ctrl come up while the search box has the focus.
+        h.Down(GestureKey.Modifier);
+        h.Down(GestureKey.Trigger);
+        Assert.True(h.Tap(GestureKey.Search));
+        Assert.False(h.Up(GestureKey.Trigger));
+        h.Up(GestureKey.Modifier);
+        await EngineHarness.WaitUntilAsync(() => h.Picker.SearchInput is not null, "the search began");
+        h.Picker.Search(new PickerSearchInput(PickerSearchKey.Escape));
+        await WaitForEffectAsync<GestureCancelled>();
+
+        // The next quick Ctrl+V is not mistaken for an auto-repeat of the V that began the search.
+        h.Down(GestureKey.Modifier);
+        Assert.True(h.Tap(GestureKey.Trigger));
+        h.Up(GestureKey.Modifier);
+        await WaitForEffectAsync<PasteCurrentClipboard>();
+        Assert.Equal(1, h.Paste.Count);
+    }
+
+    [Fact]
     public async Task Search_InputBeforeOrAfterASearch_IsIgnored()
     {
         h.Seed("apple");
@@ -485,6 +510,49 @@ public sealed class ShapeshifterEngineTests : IAsyncLifetime
         Assert.Empty(h.Picker.Calls);
         Assert.Equal(Ids(seeded), Ids(h.History.Items));
         Assert.False(h.Engine.IsGestureActive);
+    }
+
+    [Fact]
+    public async Task StandardShortcut_EachTapOfV_PastesRightAway_WhileTheModifierIsHeld()
+    {
+        // Issue #639: Ctrl held, then V, Down, V, as when pasting into one row after another.
+        h.Hook.GestureModifierPastes = true;
+        h.Seed("a", "b");
+        await h.StartAsync();
+
+        h.Down(GestureKey.Modifier);
+        Assert.True(h.Tap(GestureKey.Trigger));
+        await h.WaitForEffectsAsync(1);
+        Assert.Equal(1, h.Paste.Count);
+        Assert.False(h.Engine.IsGestureActive);
+
+        Assert.False(h.Tap(GestureKey.Down));
+        Assert.True(h.Tap(GestureKey.Trigger));
+        var effects = await h.WaitForEffectsAsync(2);
+
+        Assert.All(effects, effect => Assert.IsType<PasteCurrentClipboard>(effect));
+        Assert.Equal(["b", "b"], h.Paste.ClipboardAtPaste.Select(snapshot => snapshot.Text));
+        Assert.Empty(h.Picker.Calls);
+        Assert.Empty(h.Backend.Written);
+
+        Assert.False(h.Up(GestureKey.Modifier));
+        Assert.Equal(2, h.Processed.Count);
+    }
+
+    [Fact]
+    public async Task AlternativeShortcut_ReleasingV_WaitsForTheModifier_BeforePasting()
+    {
+        h.Hook.GestureModifierPastes = false;
+        h.Seed("a");
+        await h.StartAsync();
+
+        h.Down(GestureKey.Modifier);
+        h.Tap(GestureKey.Trigger);
+        Assert.True(h.Engine.IsGestureActive);
+        Assert.Equal(0, h.Paste.Count);
+
+        h.Up(GestureKey.Modifier);
+        Assert.IsType<PasteCurrentClipboard>(Assert.Single(await h.WaitForEffectsAsync(1)));
     }
 
     [Fact]

@@ -27,6 +27,11 @@ namespace Shapeshifter.Platform.Input;
 /// suppressed V. So the first time a key is suppressed while the Windows key is held, a Ctrl press is sent to "mask" it,
 /// as other keyboard tools do: Windows only opens the Start menu when the Windows key was pressed on its own.
 /// </para>
+/// <para>
+/// A quick Ctrl+V pastes as soon as V comes up, often while the user still holds Ctrl (issue #639). The paste then sends
+/// only V, because the user's own Ctrl is already down: releasing it would leave Windows and X11 treating Ctrl as up
+/// while the user holds it, so a following key (Down, say) would reach the application without Ctrl.
+/// </para>
 /// </remarks>
 public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
 {
@@ -45,6 +50,9 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
     private long echoDeadline;
     private TaskCompletionSource? echoDrained;
     private TaskCompletionSource triggerReleased = CreateReleasedSignal(released: true);
+
+    /// <summary>The left and right variants of the paste keystroke's modifier the user holds (bit 0 left, bit 1 right).</summary>
+    private int pasteModifiersHeld;
 
     // Only touched on the hook thread.
     private bool modifierHeld;
@@ -78,6 +86,8 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
     }
 
     public IReadOnlyList<string> ShortcutModifierNames => KeyMap.ShortcutModifierNames;
+
+    public bool GestureModifierPastes => keyMap.GestureModifierPastes;
 
     /// <summary>Delay between individual simulated key events. Some applications drop events sent back-to-back.</summary>
     public TimeSpan KeystrokeDelay { get; set; } = TimeSpan.FromMilliseconds(8);
@@ -163,15 +173,14 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
                 await x11.SetTriggerGrabbedAsync(false).ConfigureAwait(false);
             }
 
+            // libuiohook on macOS sets the flags of a simulated key from the modifiers it simulated itself, ignoring the
+            // ones the user holds, so Cmd is always sent there. That does no harm: every key the user presses next carries
+            // the modifiers they physically hold, Cmd included.
             var pasteModifier = keyMap.PasteModifier;
-            await SimulateSequenceAsync(
-                [
-                    (pasteModifier, true),
-                    (KeyCode.VcV, true),
-                    (KeyCode.VcV, false),
-                    (pasteModifier, false),
-                ],
-                cancellationToken).ConfigureAwait(false);
+            (KeyCode Key, bool IsDown)[] sequence = Volatile.Read(ref pasteModifiersHeld) != 0 && !OperatingSystem.IsMacOS()
+                ? [(KeyCode.VcV, true), (KeyCode.VcV, false)]
+                : [(pasteModifier, true), (KeyCode.VcV, true), (KeyCode.VcV, false), (pasteModifier, false)];
+            await SimulateSequenceAsync(sequence, cancellationToken).ConfigureAwait(false);
         }
         finally
         {
@@ -282,6 +291,11 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
         }
 
         var map = keyMap;
+        if (map.IsPasteModifier(keyCode))
+        {
+            TrackPasteModifier(keyCode, isDown);
+        }
+
         var key = map.Map(keyCode);
         if (key == GestureKey.Modifier)
         {
@@ -345,6 +359,14 @@ public sealed class SharpHookKeyboardService : IKeyboardHook, IPasteSimulator
         {
             current.TrySetResult();
         }
+    }
+
+    /// <summary>Tracks whether the user physically holds the paste modifier (our own synthetic one is filtered out before this).</summary>
+    private void TrackPasteModifier(KeyCode keyCode, bool isDown)
+    {
+        var bit = keyCode is KeyCode.VcRightControl or KeyCode.VcRightMeta ? 2 : 1;
+        var held = Volatile.Read(ref pasteModifiersHeld);
+        Volatile.Write(ref pasteModifiersHeld, isDown ? held | bit : held & ~bit);
     }
 
     private bool IsOwnEcho(KeyCode keyCode, bool isDown)

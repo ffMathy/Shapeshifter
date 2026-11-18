@@ -31,7 +31,7 @@
     <value>プロジェクトページ</value>
   </data>
   <data name="SettingsUsage" xml:space="preserve">
-    <value>いつもどおりにコピーしてください。以前の項目を貼り付けるには、{0} を押したまま V を押します。{0} を押したままにすると履歴が表示され、もう一度 V（または ↑/↓、1–9）を押して項目を選び、→ で操作を選択、Delete で削除、Esc でキャンセルします。{0} を離すと貼り付けられます。</value>
+    <value>いつもどおりにコピーしてください。以前の項目を貼り付けるには、履歴が表示されるまで {0}+V を押し続けます。そのまま {0} を押した状態で、もう一度 V（または ↑/↓、1–9）を押して項目を選び、→ で操作を選択、Delete で削除、Esc でキャンセルします。{0} を離すと貼り付けられます。</value>
   </data>
   <data name="SettingsHistoryGroup" xml:space="preserve">
     <value>履歴</value>
@@ -105,7 +105,7 @@
   <data name="PickerEmptyHint" xml:space="preserve">
     <value>いつもどおりにコピーすれば、Shapeshifter がコピーしたものをすべて保持します。
 
-以前にコピーしたものを貼り付けるには、{0} を押したまま V を押します。{0} を押したままにすると履歴が表示されます。V または矢印キーで選び、{0} を離すと貼り付けられます。</value>
+以前にコピーしたものを貼り付けるには、履歴が表示されるまで {0}+V を押し続けます。{0} を押したまま、V または矢印キーで選び、{0} を離すと貼り付けられます。</value>
   </data>
   <data name="PickerActions" xml:space="preserve">
     <value>操作</value>

@@ -30,8 +30,11 @@ internal sealed class KeyMap
     /// <summary>The modifier of the keystroke that pastes, which is not the gesture's modifier with the alternative shortcut.</summary>
     public KeyCode PasteModifier => PastesWithCommandKey ? KeyCode.VcLeftMeta : KeyCode.VcLeftControl;
 
+    /// <summary>Whether the gesture's modifier is the paste keystroke's modifier (Ctrl+V, or Cmd+V on macOS).</summary>
+    public bool GestureModifierPastes => GestureUsesMetaKey == PastesWithCommandKey;
+
     /// <summary>The paste shortcut that is actually used.</summary>
-    public PasteShortcut Shortcut => GestureUsesMetaKey == PastesWithCommandKey ? PasteShortcut.Standard : PasteShortcut.Alternative;
+    public PasteShortcut Shortcut => GestureModifierPastes ? PasteShortcut.Standard : PasteShortcut.Alternative;
 
     /// <summary>Win+V on Windows and Ctrl+V on macOS; X11 has no alternative (Super+V is the desktop's own).</summary>
     public static bool SupportsAlternative => OperatingSystem.IsWindows() || OperatingSystem.IsMacOS();
@@ -96,6 +99,9 @@ internal sealed class KeyMap
         expected == actual
         || (IsControl(expected) && IsControl(actual))
         || (IsMeta(expected) && IsMeta(actual));
+
+    /// <summary>Whether <paramref name="key"/> is either variant of the paste keystroke's modifier.</summary>
+    public bool IsPasteModifier(KeyCode key) => PastesWithCommandKey ? IsMeta(key) : IsControl(key);
 
     private static bool IsControl(KeyCode key) => key is KeyCode.VcLeftControl or KeyCode.VcRightControl;
 
