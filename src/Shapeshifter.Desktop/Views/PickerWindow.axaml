@@ -156,6 +156,10 @@
                       </Border.Background>
                     </Border>
                   </Panel>
+                  <!-- A copied image fills the card the same way, edge to edge, with nothing written over it. -->
+                  <Panel Grid.Row="0" Classes="previewLinkedImage" MinHeight="168" IsVisible="{Binding ShowsPreviewImage}">
+                    <Image Source="{Binding PreviewImage}" Stretch="UniformToFill" />
+                  </Panel>
                   <Border Grid.Row="0" Classes="previewContent">
                     <Panel>
                       <TextBlock Classes="previewText" Classes.code="{Binding IsCodeLike}"
@@ -171,10 +175,6 @@
                         <TextBlock Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center" Text="{Binding PreviewText}"
                                    FontSize="13" Foreground="White" TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis" />
                       </Grid>
-
-                      <Border Classes="previewImageFrame" IsVisible="{Binding ShowsPreviewImage}">
-                        <Image Classes="previewImage" Source="{Binding PreviewImage}" />
-                      </Border>
 
                       <Grid Classes="previewColor" ColumnDefinitions="Auto,*" IsVisible="{Binding HasColorSwatch}">
                         <Border Grid.Column="0" Classes="previewSwatch" Background="{Binding ColorSwatch}" />
