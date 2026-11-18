@@ -47,6 +47,12 @@ Every change to behaviour should come with tests. Most logic lives in `Shapeshif
 dotnet test --project tests/Shapeshifter.Core.Tests
 ```
 
+`tests/Shapeshifter.Desktop.Tests` checks the picker window itself on Avalonia's headless platform, with no desktop needed:
+
+```bash
+dotnet test --project tests/Shapeshifter.Desktop.Tests
+```
+
 The end-to-end tests start Shapeshifter and a separate target application, copy through the real clipboard and press real keys. They need a desktop session:
 
 - **Linux:** `scripts/run-e2e-linux.sh` runs them under Xvfb with openbox (install `xvfb openbox x11-utils`).
