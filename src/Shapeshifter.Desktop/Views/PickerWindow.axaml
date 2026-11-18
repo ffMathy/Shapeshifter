@@ -3,6 +3,7 @@
         xmlns:vm="using:Shapeshifter.Desktop.ViewModels"
         xmlns:services="using:Shapeshifter.Desktop.Services"
         xmlns:loc="using:Shapeshifter.Core.Localization"
+        xmlns:views="using:Shapeshifter.Desktop.Views"
         x:Class="Shapeshifter.Desktop.Views.PickerWindow"
         x:DataType="vm:PickerViewModel"
         Classes="picker"
@@ -49,7 +50,7 @@
           </Grid>
         </Border>
 
-        <Grid Grid.Row="2" Classes="body" ColumnDefinitions="*,Auto">
+        <Grid x:Name="Body" Grid.Row="2" Classes="body" ColumnDefinitions="*,Auto">
           <!-- History -->
           <Border Grid.Column="0" Classes="historyPane" Classes.inactive="{Binding IsActionsPaneActive}">
             <StackPanel>
@@ -243,7 +244,9 @@
         </Grid>
 
         <!-- Footer: the keys -->
-        <Border Grid.Row="3" Classes="footer">
+        <!-- Measured no wider than the history and the actions, so the hints wrap instead of widening the picker -->
+        <views:WidthFollower Grid.Row="3" Source="{Binding #Body}">
+        <Border Classes="footer">
           <Panel>
           <WrapPanel Classes="hints" IsVisible="{Binding IsNotSearching}">
             <StackPanel Classes="hint" IsVisible="{Binding IsNotHeldOpen}">
@@ -306,6 +309,7 @@
           </WrapPanel>
           </Panel>
         </Border>
+        </views:WidthFollower>
       </Grid>
     </Border>
   </Border>

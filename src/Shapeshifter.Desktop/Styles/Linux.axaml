@@ -113,7 +113,7 @@
     <Setter Property="VerticalAlignment" Value="Top" />
   </Style>
   <Style Selector="ListBox.items">
-    <Setter Property="MinWidth" Value="416" />
+    <Setter Property="Width" Value="416" />
     <Setter Property="ClipToBounds" Value="False" />
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BorderThickness" Value="0" />
