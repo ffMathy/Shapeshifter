@@ -49,7 +49,7 @@
           </Grid>
         </Border>
 
-        <Grid Grid.Row="2" Classes="body" ColumnDefinitions="Auto,Auto">
+        <Grid Grid.Row="2" Classes="body" ColumnDefinitions="*,Auto">
           <!-- History -->
           <Border Grid.Column="0" Classes="historyPane" Classes.inactive="{Binding IsActionsPaneActive}">
             <StackPanel>
