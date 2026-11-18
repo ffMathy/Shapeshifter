@@ -353,21 +353,6 @@
   <data name="TipCopyBackAndForthMessage" xml:space="preserve">
     <value>می‌توانید ابتدا چند چیز را از {0} کپی کنید، سپس در {2} کلید {1}+V را نگه دارید تا هر کدام را از تاریخچه انتخاب کنید.</value>
   </data>
-  <data name="UploadConsentTitle" xml:space="preserve">
-    <value>بارگذاری در {0}؟</value>
-  </data>
-  <data name="UploadConsentQuestion" xml:space="preserve">
-    <value>این تصویر در {0} بارگذاری شود؟</value>
-  </data>
-  <data name="UploadConsentExplanation" xml:space="preserve">
-    <value>تصویر به {0} (catbox.moe) فرستاده می‌شود، که میزبان رایگان تصویر و بدون تبلیغات است، و هر کسی که پیوند را داشته باشد می‌تواند آن را ببیند. بارگذاری‌ها قابل حذف نیستند. هیچ چیز دیگری که کپی می‌کنید هرگز از رایانه شما خارج نمی‌شود.</value>
-  </data>
-  <data name="UploadConsentAskOnce" xml:space="preserve">
-    <value>Shapeshifter دیگر نمی‌پرسد. این بار پیوند کپی شده است: برای چسباندن آن {0}+V را فشار دهید.</value>
-  </data>
-  <data name="UploadConsentUpload" xml:space="preserve">
-    <value>بارگذاری در {0}</value>
-  </data>
   <data name="DialogCancel" xml:space="preserve">
     <value>لغو</value>
   </data>

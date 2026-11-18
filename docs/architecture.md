@@ -56,7 +56,7 @@ Applications are compared by name (`ClipboardSource.ApplicationName`; for the pa
 **Pasting:**
 - If the user did not choose anything else, the current clipboard is pasted untouched (`PasteCurrentClipboard`). This keeps a quick Ctrl+V identical to a normal paste, even for data that was copied a few milliseconds earlier.
 - Otherwise the selected action runs. "Paste" restores the snapshot with all of its formats and then sends Ctrl+V (Cmd+V on macOS).
-- "Upload and paste link" is the only action that sends content off the computer. It asks `ActionContext.UploadConsent` first. `RememberedUploadConsent` shows `UploadConsentDialog` once per service and remembers a "yes" in `ShapeshifterSettings.UploadConsents`. Because the dialog takes focus, the link is only copied on that first run, and pasted on later runs.
+- "Upload and paste link" is the only action that sends content off the computer. It uploads straight away, without asking, and pastes the link.
 - On Linux, the trigger grab is released while the synthetic keystroke is sent.
 
 **Keeping the picker open:** Space during a gesture holds the picker open (`PickerSelection.IsHeldOpen`), for reviewing the history without holding the modifier (issue #420). Releasing the modifier then does nothing; the navigation keys work on their own, Enter performs the selection and Escape closes the picker. Enter also pastes right away in a normal gesture. On Linux the navigation keys (including Space and Enter) are therefore grabbed with and without Ctrl while a gesture is active.

@@ -353,21 +353,6 @@ Per incollare qualcosa che hai copiato in precedenza, tieni premuto {0} e premi 
   <data name="TipCopyBackAndForthMessage" xml:space="preserve">
     <value>Puoi prima copiare più cose da {0}, poi tenere premuto {1}+V in {2} per scegliere ciascuna dalla cronologia.</value>
   </data>
-  <data name="UploadConsentTitle" xml:space="preserve">
-    <value>Caricare su {0}?</value>
-  </data>
-  <data name="UploadConsentQuestion" xml:space="preserve">
-    <value>Caricare questa immagine su {0}?</value>
-  </data>
-  <data name="UploadConsentExplanation" xml:space="preserve">
-    <value>L’immagine viene inviata a {0} (catbox.moe), un servizio di hosting di immagini gratuito e senza pubblicità, e chiunque abbia il link può vederla. I caricamenti non possono essere eliminati. Nient’altro di ciò che copi lascia mai il tuo computer.</value>
-  </data>
-  <data name="UploadConsentAskOnce" xml:space="preserve">
-    <value>Shapeshifter non lo chiederà più. Questa volta il link viene copiato: premi {0}+V per incollarlo.</value>
-  </data>
-  <data name="UploadConsentUpload" xml:space="preserve">
-    <value>Carica su {0}</value>
-  </data>
   <data name="DialogCancel" xml:space="preserve">
     <value>Annulla</value>
   </data>

@@ -353,21 +353,6 @@
   <data name="TipCopyBackAndForthMessage" xml:space="preserve">
     <value>Bạn có thể sao chép nhiều thứ từ {0} trước, rồi giữ {1}+V trong {2} để chọn từng mục từ lịch sử.</value>
   </data>
-  <data name="UploadConsentTitle" xml:space="preserve">
-    <value>Tải lên {0}?</value>
-  </data>
-  <data name="UploadConsentQuestion" xml:space="preserve">
-    <value>Tải hình ảnh này lên {0}?</value>
-  </data>
-  <data name="UploadConsentExplanation" xml:space="preserve">
-    <value>Hình ảnh được gửi đến {0} (catbox.moe), một dịch vụ lưu trữ hình ảnh miễn phí không có quảng cáo, và bất kỳ ai có liên kết đều có thể xem. Không thể xóa nội dung đã tải lên. Mọi thứ khác bạn sao chép đều không bao giờ rời khỏi máy tính của bạn.</value>
-  </data>
-  <data name="UploadConsentAskOnce" xml:space="preserve">
-    <value>Shapeshifter sẽ không hỏi lại. Lần này liên kết đã được sao chép: nhấn {0}+V để dán.</value>
-  </data>
-  <data name="UploadConsentUpload" xml:space="preserve">
-    <value>Tải lên {0}</value>
-  </data>
   <data name="DialogCancel" xml:space="preserve">
     <value>Hủy</value>
   </data>

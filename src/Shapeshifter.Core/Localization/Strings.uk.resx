@@ -353,21 +353,6 @@
   <data name="TipCopyBackAndForthMessage" xml:space="preserve">
     <value>Можна спочатку скопіювати кілька фрагментів у програмі {0}, а потім утримувати {1}+V у програмі {2}, щоб вибрати кожен з історії.</value>
   </data>
-  <data name="UploadConsentTitle" xml:space="preserve">
-    <value>Завантажити на {0}?</value>
-  </data>
-  <data name="UploadConsentQuestion" xml:space="preserve">
-    <value>Завантажити це зображення на {0}?</value>
-  </data>
-  <data name="UploadConsentExplanation" xml:space="preserve">
-    <value>Зображення надсилається на сервіс {0} (catbox.moe) — безкоштовний хостинг зображень без реклами, — і його зможе побачити будь-хто, хто має посилання. Завантажені файли не можна видалити. Ніщо інше з того, що ви копіюєте, ніколи не залишає ваш комп’ютер.</value>
-  </data>
-  <data name="UploadConsentAskOnce" xml:space="preserve">
-    <value>Shapeshifter більше не питатиме. Цього разу посилання скопійовано: натисніть {0}+V, щоб вставити його.</value>
-  </data>
-  <data name="UploadConsentUpload" xml:space="preserve">
-    <value>Завантажити на {0}</value>
-  </data>
   <data name="DialogCancel" xml:space="preserve">
     <value>Скасувати</value>
   </data>

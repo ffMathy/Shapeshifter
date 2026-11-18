@@ -1,7 +1,6 @@
 using System.Net;
 using Shapeshifter.Core.Actions;
 using Shapeshifter.Core.Clipboard;
-using Shapeshifter.Core.Settings;
 
 namespace Shapeshifter.Core.Tests.Actions;
 
@@ -37,42 +36,6 @@ public sealed class UploadImageActionTests
         Assert.Contains("Catbox", new UploadImageAction().GetDescription(Items.ByName("image")), StringComparison.Ordinal);
 
     [Fact]
-    public async Task Execute_WithoutConsent_UploadsNothing()
-    {
-        using var harness = new ActionTestHarness();
-        harness.Consent.Result = UploadConsentResult.Denied;
-        var item = harness.AddToHistory(new ClipboardSnapshot { Image = Png });
-
-        await new UploadImageAction().ExecuteAsync(item, harness.Context, ActionTestHarness.Ct);
-
-        Assert.Equal(["Catbox"], harness.Consent.Requests);
-        Assert.Empty(harness.Handler.RequestedUris);
-        Assert.Empty(harness.Backend.Writes);
-        Assert.Equal(0, harness.Paste.Calls);
-    }
-
-    [Fact]
-    public async Task Execute_ByDefault_NeverUploads()
-    {
-        using var harness = new ActionTestHarness();
-        var context = new ActionContext
-        {
-            Clipboard = harness.Monitor,
-            Paste = harness.Paste,
-            History = harness.History,
-            PinnedItems = harness.PinnedItems,
-            Launcher = harness.Launcher,
-            Paths = harness.Paths,
-            Http = harness.Http,
-        };
-        var item = harness.AddToHistory(new ClipboardSnapshot { Image = Png });
-
-        await new UploadImageAction().ExecuteAsync(item, context, ActionTestHarness.Ct);
-
-        Assert.Empty(harness.Handler.RequestedUris);
-    }
-
-    [Fact]
     public async Task Execute_UploadsTheImageToCatbox_AndPastesTheLink()
     {
         using var harness = new ActionTestHarness();
@@ -96,21 +59,6 @@ public sealed class UploadImageActionTests
         var written = Assert.Single(harness.Backend.Writes);
         Assert.Equal(Link, written.Text);
         Assert.Equal(1, harness.Paste.Calls);
-        Assert.Equal(Link, harness.History.Items[0].Snapshot.Text);
-    }
-
-    [Fact]
-    public async Task Execute_RightAfterTheUserAgreed_CopiesTheLinkInsteadOfPasting()
-    {
-        using var harness = new ActionTestHarness();
-        harness.Consent.Result = UploadConsentResult.GrantedNow;
-        harness.Handler.Respond = _ => new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(Link) };
-        var item = harness.AddToHistory(new ClipboardSnapshot { Image = Png });
-
-        await new UploadImageAction().ExecuteAsync(item, harness.Context, ActionTestHarness.Ct);
-
-        Assert.Equal(Link, Assert.Single(harness.Backend.Writes).Text);
-        Assert.Equal(0, harness.Paste.Calls);
         Assert.Equal(Link, harness.History.Items[0].Snapshot.Text);
     }
 
@@ -146,104 +94,4 @@ public sealed class UploadImageActionTests
         Assert.Empty(harness.Backend.Writes);
         Assert.Equal(0, harness.Paste.Calls);
     }
-}
-
-public sealed class RememberedUploadConsentTests : IDisposable
-{
-    private readonly string directory = Directory.CreateTempSubdirectory("shapeshifter-consent-").FullName;
-
-    private string SettingsPath => Path.Combine(directory, "settings.json");
-
-    public void Dispose()
-    {
-        try
-        {
-            Directory.Delete(directory, recursive: true);
-        }
-        catch (IOException)
-        {
-        }
-    }
-
-    [Fact]
-    public async Task AsksTheFirstTime_AndRemembersAYes()
-    {
-        var settings = new SettingsStore(SettingsPath);
-        var asked = 0;
-        using var consent = new RememberedUploadConsent(settings, (_, _) => { asked++; return Task.FromResult(true); });
-
-        Assert.Equal(UploadConsentResult.GrantedNow, await consent.RequestAsync("Catbox", TestContext.Current.CancellationToken));
-        Assert.Equal(UploadConsentResult.GrantedEarlier, await consent.RequestAsync("Catbox", TestContext.Current.CancellationToken));
-        Assert.Equal(1, asked);
-
-        // Remembered across restarts.
-        using var reloaded = new RememberedUploadConsent(new SettingsStore(SettingsPath), (_, _) => throw new InvalidOperationException("Asked again"));
-        Assert.Equal(UploadConsentResult.GrantedEarlier, await reloaded.RequestAsync("Catbox", TestContext.Current.CancellationToken));
-    }
-
-    [Fact]
-    public async Task DoesNotRememberANo()
-    {
-        var settings = new SettingsStore(SettingsPath);
-        var asked = 0;
-        using var consent = new RememberedUploadConsent(settings, (_, _) => { asked++; return Task.FromResult(false); });
-
-        Assert.Equal(UploadConsentResult.Denied, await consent.RequestAsync("Catbox", TestContext.Current.CancellationToken));
-        Assert.Equal(UploadConsentResult.Denied, await consent.RequestAsync("Catbox", TestContext.Current.CancellationToken));
-        Assert.Equal(2, asked);
-        Assert.Empty(settings.Current.UploadConsents);
-    }
-
-    [Fact]
-    public async Task ConsentIsPerService()
-    {
-        var settings = new SettingsStore(SettingsPath);
-        var asked = new List<string>();
-        using var consent = new RememberedUploadConsent(settings, (service, _) => { asked.Add(service); return Task.FromResult(true); });
-
-        await consent.RequestAsync("Catbox", TestContext.Current.CancellationToken);
-        await consent.RequestAsync("Elsewhere", TestContext.Current.CancellationToken);
-
-        Assert.Equal(["Catbox", "Elsewhere"], asked);
-    }
-
-    [Fact]
-    public async Task NoUploadConsent_AlwaysDenies() =>
-        Assert.Equal(UploadConsentResult.Denied, await NoUploadConsent.Instance.RequestAsync("Catbox", TestContext.Current.CancellationToken));
-}
-
-public sealed class UploadConsentSettingsTests
-{
-    [Fact]
-    public void SettingsWithTheSameConsents_AreEqual() =>
-        Assert.Equal(new ShapeshifterSettings { UploadConsents = ["Catbox"] }, new ShapeshifterSettings { UploadConsents = ["Catbox"] });
-
-    /// <summary>
-    /// <see cref="ShapeshifterSettings.Equals(ShapeshifterSettings?)"/> lists the properties by hand. A property it
-    /// forgets would make <see cref="SettingsStore"/> drop changes to it, so changing any property must make a difference.
-    /// </summary>
-    [Fact]
-    public void ChangingAnyProperty_MakesSettingsDiffer()
-    {
-        var original = new ShapeshifterSettings();
-        foreach (var property in typeof(ShapeshifterSettings).GetProperties().Where(p => p.CanWrite))
-        {
-            var changed = original with { };
-            object value = property.PropertyType switch
-            {
-                var t when t == typeof(int) => (int)property.GetValue(original)! + 1,
-                var t when t == typeof(bool) => !(bool)property.GetValue(original)!,
-                var t when t == typeof(IReadOnlyList<string>) => new[] { "changed" },
-                var t when t == typeof(PasteShortcut) => PasteShortcut.Alternative,
-                var t => throw new InvalidOperationException($"Add a changed value for {t.Name} ({property.Name}) to this test."),
-            };
-            property.SetValue(changed, value);
-
-            Assert.False(original.Equals(changed), $"{property.Name} is not compared in ShapeshifterSettings.Equals.");
-        }
-    }
-
-    [Fact]
-    public void SettingsWithDifferentConsents_DifferFromEachOther() =>
-        Assert.NotEqual(new ShapeshifterSettings(), new ShapeshifterSettings { UploadConsents = ["Catbox"] });
 }

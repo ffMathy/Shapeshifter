@@ -353,21 +353,6 @@
   <data name="TipCopyBackAndForthMessage" xml:space="preserve">
     <value>先に {0} で複数の項目をコピーしておき、{2} で {1}+V を押したままにすると、履歴から 1 つずつ選べます。</value>
   </data>
-  <data name="UploadConsentTitle" xml:space="preserve">
-    <value>{0} にアップロードしますか？</value>
-  </data>
-  <data name="UploadConsentQuestion" xml:space="preserve">
-    <value>この画像を {0} にアップロードしますか？</value>
-  </data>
-  <data name="UploadConsentExplanation" xml:space="preserve">
-    <value>画像は広告のない無料の画像ホスティングサービス {0} (catbox.moe) に送信され、リンクを知っている人は誰でも見ることができます。アップロードしたものは削除できません。それ以外にコピーしたものがコンピューターの外に送られることはありません。</value>
-  </data>
-  <data name="UploadConsentAskOnce" xml:space="preserve">
-    <value>Shapeshifter が再度確認することはありません。今回はリンクがコピーされました。{0}+V を押して貼り付けてください。</value>
-  </data>
-  <data name="UploadConsentUpload" xml:space="preserve">
-    <value>{0} にアップロード</value>
-  </data>
   <data name="DialogCancel" xml:space="preserve">
     <value>キャンセル</value>
   </data>

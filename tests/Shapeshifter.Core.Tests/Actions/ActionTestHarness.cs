@@ -76,19 +76,6 @@ internal sealed class RecordingLauncher : ILauncher
     public void OpenFolder(string path) => OpenedFolders.Add(path);
 }
 
-internal sealed class FakeUploadConsent : IUploadConsent
-{
-    public UploadConsentResult Result { get; set; } = UploadConsentResult.GrantedEarlier;
-
-    public List<string> Requests { get; } = [];
-
-    public Task<UploadConsentResult> RequestAsync(string serviceName, CancellationToken cancellationToken = default)
-    {
-        Requests.Add(serviceName);
-        return Task.FromResult(Result);
-    }
-}
-
 internal sealed class FakeHttpMessageHandler : HttpMessageHandler
 {
     public Func<HttpRequestMessage, HttpResponseMessage> Respond { get; set; } =
@@ -143,7 +130,6 @@ internal sealed class ActionTestHarness : IDisposable
         Launcher = new RecordingLauncher();
         Handler = new FakeHttpMessageHandler();
         Http = new HttpClient(Handler);
-        Consent = new FakeUploadConsent();
         Context = new ActionContext
         {
             Clipboard = Monitor,
@@ -153,7 +139,6 @@ internal sealed class ActionTestHarness : IDisposable
             Launcher = Launcher,
             Paths = Paths,
             Http = Http,
-            UploadConsent = Consent,
         };
     }
 
@@ -182,8 +167,6 @@ internal sealed class ActionTestHarness : IDisposable
     public FakeHttpMessageHandler Handler { get; }
 
     public HttpClient Http { get; }
-
-    public FakeUploadConsent Consent { get; }
 
     public ActionContext Context { get; }
 

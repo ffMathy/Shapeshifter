@@ -353,21 +353,6 @@
   <data name="TipCopyBackAndForthMessage" xml:space="preserve">
     <value>คุณสามารถคัดลอกหลายอย่างจาก {0} ก่อน แล้วกด {1}+V ค้างไว้ใน {2} เพื่อเลือกแต่ละรายการจากประวัติ</value>
   </data>
-  <data name="UploadConsentTitle" xml:space="preserve">
-    <value>อัปโหลดไปยัง {0} ไหม</value>
-  </data>
-  <data name="UploadConsentQuestion" xml:space="preserve">
-    <value>อัปโหลดรูปภาพนี้ไปยัง {0} ไหม</value>
-  </data>
-  <data name="UploadConsentExplanation" xml:space="preserve">
-    <value>รูปภาพจะถูกส่งไปยัง {0} (catbox.moe) ซึ่งเป็นบริการฝากรูปภาพฟรีที่ไม่มีโฆษณา และทุกคนที่มีลิงก์จะเห็นรูปภาพได้ รูปภาพที่อัปโหลดแล้วจะลบไม่ได้ สิ่งอื่นที่คุณคัดลอกจะไม่ออกจากคอมพิวเตอร์ของคุณเลย</value>
-  </data>
-  <data name="UploadConsentAskOnce" xml:space="preserve">
-    <value>Shapeshifter จะไม่ถามอีก ครั้งนี้ลิงก์ถูกคัดลอกไว้แล้ว: กด {0}+V เพื่อวาง</value>
-  </data>
-  <data name="UploadConsentUpload" xml:space="preserve">
-    <value>อัปโหลดไปยัง {0}</value>
-  </data>
   <data name="DialogCancel" xml:space="preserve">
     <value>ยกเลิก</value>
   </data>

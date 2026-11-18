@@ -353,21 +353,6 @@
   <data name="TipCopyBackAndForthMessage" xml:space="preserve">
     <value>आप पहले {0} से कई चीज़ें कॉपी कर सकते हैं, फिर {2} में {1}+V दबाकर रखें और हर एक को अपने इतिहास से चुनें।</value>
   </data>
-  <data name="UploadConsentTitle" xml:space="preserve">
-    <value>{0} पर अपलोड करें?</value>
-  </data>
-  <data name="UploadConsentQuestion" xml:space="preserve">
-    <value>इस छवि को {0} पर अपलोड करें?</value>
-  </data>
-  <data name="UploadConsentExplanation" xml:space="preserve">
-    <value>छवि {0} (catbox.moe) को भेजी जाती है, जो बिना विज्ञापनों वाला एक मुफ़्त इमेज होस्ट है, और लिंक वाला कोई भी व्यक्ति इसे देख सकता है। अपलोड हटाए नहीं जा सकते। आपकी कॉपी की गई कोई और चीज़ कभी आपके कंप्यूटर से बाहर नहीं जाती।</value>
-  </data>
-  <data name="UploadConsentAskOnce" xml:space="preserve">
-    <value>Shapeshifter दोबारा नहीं पूछेगा। इस बार लिंक कॉपी हो गया है: इसे चिपकाने के लिए {0}+V दबाएँ।</value>
-  </data>
-  <data name="UploadConsentUpload" xml:space="preserve">
-    <value>{0} पर अपलोड करें</value>
-  </data>
   <data name="DialogCancel" xml:space="preserve">
     <value>रद्द करें</value>
   </data>

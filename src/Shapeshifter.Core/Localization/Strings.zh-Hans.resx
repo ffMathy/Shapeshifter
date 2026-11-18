@@ -353,21 +353,6 @@
   <data name="TipCopyBackAndForthMessage" xml:space="preserve">
     <value>你可以先从 {0} 复制多项内容，然后在 {2} 中按住 {1}+V，从历史记录中逐一选取。</value>
   </data>
-  <data name="UploadConsentTitle" xml:space="preserve">
-    <value>上传到 {0}？</value>
-  </data>
-  <data name="UploadConsentQuestion" xml:space="preserve">
-    <value>要将此图像上传到 {0} 吗？</value>
-  </data>
-  <data name="UploadConsentExplanation" xml:space="preserve">
-    <value>图像将发送到 {0} (catbox.moe)，这是一个免费且无广告的图床，任何拥有链接的人都能看到它。上传后无法删除。你复制的其他任何内容都不会离开你的电脑。</value>
-  </data>
-  <data name="UploadConsentAskOnce" xml:space="preserve">
-    <value>Shapeshifter 不会再询问。这次链接已复制：按 {0}+V 即可粘贴。</value>
-  </data>
-  <data name="UploadConsentUpload" xml:space="preserve">
-    <value>上传到 {0}</value>
-  </data>
   <data name="DialogCancel" xml:space="preserve">
     <value>取消</value>
   </data>
