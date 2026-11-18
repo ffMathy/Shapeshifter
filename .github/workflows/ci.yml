@@ -293,3 +293,15 @@ jobs:
             if [[ "$RELEASE_TAG" == *-* ]]; then prerelease=(--prerelease); fi
             gh release create "$RELEASE_TAG" dist/* "${target[@]}" --title "Shapeshifter ${RELEASE_TAG#v}" --generate-notes "${prerelease[@]}"
           fi
+
+  store:
+    name: Store release
+    # Sends each release (not prereleases) to the Microsoft Store and the Mac App Store; see packaging/store/README.md.
+    if: needs.version.outputs.tag != '' && !contains(needs.version.outputs.tag, '-')
+    needs: [version, release]
+    permissions:
+      contents: read
+    uses: ./.github/workflows/store.yml
+    with:
+      tag: ${{ needs.version.outputs.tag }}
+    secrets: inherit

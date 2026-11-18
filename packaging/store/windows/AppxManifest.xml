@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  MSIX manifest of the Microsoft Store package. packaging/store/windows/make-msix.ps1 fills in the {{…}} placeholders:
+  the identity (Name, Publisher and PublisherDisplayName) is the one Partner Center shows under
+  Product management > Product identity, and the Store re-signs the package with that publisher.
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
+  xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap uap5 uap10 rescap">
+
+  <Identity Name="{{IDENTITY_NAME}}" Publisher="{{PUBLISHER}}" Version="{{VERSION}}" ProcessorArchitecture="{{ARCHITECTURE}}" />
+
+  <Properties>
+    <DisplayName>Shapeshifter</DisplayName>
+    <PublisherDisplayName>{{PUBLISHER_DISPLAY_NAME}}</PublisherDisplayName>
+    <Logo>Images\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+
+  <Applications>
+    <!-- A regular desktop program (full trust), started from the executable that dotnet publish produced. -->
+    <Application Id="Shapeshifter" Executable="Shapeshifter.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="Shapeshifter"
+        Description="Clipboard manager: paste anything you copied before, in the shape you need."
+        BackgroundColor="transparent"
+        Square150x150Logo="Images\Square150x150Logo.png"
+        Square44x44Logo="Images\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Images\Wide310x150Logo.png" />
+      </uap:VisualElements>
+      <Extensions>
+        <!--
+          Start at login. A packaged app cannot use the HKCU Run key (its registry writes stay inside the package), so
+          Windows starts it from this task instead; users switch it in Settings > Apps > Startup or Task Manager.
+        -->
+        <uap5:Extension Category="windows.startupTask" Executable="Shapeshifter.exe" EntryPoint="Windows.FullTrustApplication">
+          <uap5:StartupTask TaskId="ShapeshifterStartup" Enabled="true" DisplayName="Shapeshifter" />
+        </uap5:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>

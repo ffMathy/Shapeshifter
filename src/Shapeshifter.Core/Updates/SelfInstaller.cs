@@ -129,7 +129,7 @@ public sealed class SelfInstaller
             WaitForExit(pid);
         }
 
-        if (!running.IsSingleFile)
+        if (!running.IsSingleFile || running.IsStoreInstall)
         {
             return new StartupResult(false, arguments, false, false);
         }
