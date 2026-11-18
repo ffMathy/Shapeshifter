@@ -176,18 +176,6 @@
     <Setter Property="LineHeight" Value="18" />
     <Setter Property="MaxLines" Value="10" />
   </Style>
-  <Style Selector="Border.previewImageFrame">
-    <Setter Property="HorizontalAlignment" Value="Center" />
-    <Setter Property="CornerRadius" Value="6" />
-    <Setter Property="BorderBrush" Value="#1A000006" />
-    <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="ClipToBounds" Value="True" />
-  </Style>
-  <Style Selector="Image.previewImage">
-    <Setter Property="MaxHeight" Value="168" />
-    <Setter Property="Stretch" Value="Uniform" />
-    <Setter Property="StretchDirection" Value="DownOnly" />
-  </Style>
   <Style Selector="Border.previewSwatch">
     <Setter Property="Width" Value="56" />
     <Setter Property="Height" Value="56" />
