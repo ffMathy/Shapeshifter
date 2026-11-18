@@ -353,21 +353,6 @@
   <data name="TipCopyBackAndForthMessage" xml:space="preserve">
     <value>يمكنك نسخ عدة أشياء من {0} أولًا، ثم الضغط باستمرار على {1}+V في {2} لاختيار كل منها من المحفوظات.</value>
   </data>
-  <data name="UploadConsentTitle" xml:space="preserve">
-    <value>الرفع إلى {0}؟</value>
-  </data>
-  <data name="UploadConsentQuestion" xml:space="preserve">
-    <value>هل تريد رفع هذه الصورة إلى {0}؟</value>
-  </data>
-  <data name="UploadConsentExplanation" xml:space="preserve">
-    <value>تُرسَل الصورة إلى {0} (catbox.moe)، وهو موقع مجاني لاستضافة الصور بلا إعلانات، ويمكن لأي شخص لديه الرابط رؤيتها. لا يمكن حذف الصور المرفوعة. لا يغادر أي شيء آخر تنسخه الكمبيوتر أبدًا.</value>
-  </data>
-  <data name="UploadConsentAskOnce" xml:space="preserve">
-    <value>لن يسألك Shapeshifter مرة أخرى. هذه المرة تم نسخ الرابط: اضغط {0}+V للصقه.</value>
-  </data>
-  <data name="UploadConsentUpload" xml:space="preserve">
-    <value>رفع إلى {0}</value>
-  </data>
   <data name="DialogCancel" xml:space="preserve">
     <value>إلغاء</value>
   </data>

@@ -353,21 +353,6 @@
   <data name="TipCopyBackAndForthMessage" xml:space="preserve">
     <value>Можно сначала скопировать несколько фрагментов в приложении {0}, а затем удерживать {1}+V в приложении {2}, чтобы выбрать каждый из истории.</value>
   </data>
-  <data name="UploadConsentTitle" xml:space="preserve">
-    <value>Загрузить на {0}?</value>
-  </data>
-  <data name="UploadConsentQuestion" xml:space="preserve">
-    <value>Загрузить это изображение на {0}?</value>
-  </data>
-  <data name="UploadConsentExplanation" xml:space="preserve">
-    <value>Изображение отправляется на сервис {0} (catbox.moe) — бесплатный хостинг изображений без рекламы, — и его сможет увидеть любой, у кого есть ссылка. Загруженные файлы нельзя удалить. Ничто другое из того, что вы копируете, никогда не покидает ваш компьютер.</value>
-  </data>
-  <data name="UploadConsentAskOnce" xml:space="preserve">
-    <value>Shapeshifter больше не будет спрашивать. В этот раз ссылка скопирована: нажмите {0}+V, чтобы вставить её.</value>
-  </data>
-  <data name="UploadConsentUpload" xml:space="preserve">
-    <value>Загрузить на {0}</value>
-  </data>
   <data name="DialogCancel" xml:space="preserve">
     <value>Отмена</value>
   </data>

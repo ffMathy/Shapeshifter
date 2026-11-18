@@ -46,7 +46,6 @@ Looking for something you copied a while ago? Press <kbd>S</kbd> while the histo
   history too.
 - **Nothing you copy leaves your computer**, unless you choose **Upload and paste link** for an image. That one
   image is uploaded to [Catbox](https://catbox.moe), a free image host without ads, and a public link to it is pasted.
-  Shapeshifter asks before the first upload.
 - **Installs and updates itself:** the first start installs Shapeshifter for your user (no administrator rights) and
   starts it at login. It checks GitHub for new releases every few hours, verifies the download's SHA-256 and restarts
   into it when you're not using it. Switch this off in Settings; on Windows, uninstall it from Apps or Control Panel.

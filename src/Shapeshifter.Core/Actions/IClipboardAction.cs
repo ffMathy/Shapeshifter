@@ -45,9 +45,6 @@ public sealed class ActionContext
 
     public ILogger Logger { get; init; } = Log.Logger;
 
-    /// <summary>Asked before anything is uploaded to an online service.</summary>
-    public IUploadConsent UploadConsent { get; init; } = NoUploadConsent.Instance;
-
     /// <summary>
     /// Puts <paramref name="snapshot"/> on the clipboard and pastes it into the focused application.
     /// </summary>

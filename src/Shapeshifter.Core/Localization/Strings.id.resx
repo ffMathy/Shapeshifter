@@ -353,21 +353,6 @@ Untuk menempelkan sesuatu yang Anda salin sebelumnya, tahan {0} lalu tekan V. Te
   <data name="TipCopyBackAndForthMessage" xml:space="preserve">
     <value>Anda bisa menyalin beberapa hal dari {0} terlebih dahulu, lalu tahan {1}+V di {2} untuk memilih masing-masing dari riwayat Anda.</value>
   </data>
-  <data name="UploadConsentTitle" xml:space="preserve">
-    <value>Unggah ke {0}?</value>
-  </data>
-  <data name="UploadConsentQuestion" xml:space="preserve">
-    <value>Unggah gambar ini ke {0}?</value>
-  </data>
-  <data name="UploadConsentExplanation" xml:space="preserve">
-    <value>Gambar dikirim ke {0} (catbox.moe), layanan hosting gambar gratis tanpa iklan, dan siapa pun yang memiliki tautannya dapat melihatnya. Unggahan tidak dapat dihapus. Tidak ada hal lain yang Anda salin yang pernah meninggalkan komputer Anda.</value>
-  </data>
-  <data name="UploadConsentAskOnce" xml:space="preserve">
-    <value>Shapeshifter tidak akan bertanya lagi. Kali ini tautan sudah disalin: tekan {0}+V untuk menempelkannya.</value>
-  </data>
-  <data name="UploadConsentUpload" xml:space="preserve">
-    <value>Unggah ke {0}</value>
-  </data>
   <data name="DialogCancel" xml:space="preserve">
     <value>Batal</value>
   </data>

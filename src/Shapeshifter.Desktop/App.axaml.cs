@@ -41,7 +41,6 @@ public partial class App : Application
     private HistoryPersistence? savedHistory;
     private SettingsWindow? settingsWindow;
     private HttpClient? http;
-    private RememberedUploadConsent? uploadConsent;
     private TrayIcon? trayIcon;
     private PickerPresenter? picker;
     private HttpClient? updateHttp;
@@ -108,8 +107,6 @@ public partial class App : Application
             http.DefaultRequestHeaders.UserAgent.ParseAdd("Shapeshifter/" + typeof(App).Assembly.GetName().Version?.ToString(3));
             var keyboard = platform.KeyboardHook;
             keyboard.PasteShortcut = settings.Current.PasteShortcut;
-            uploadConsent = new RememberedUploadConsent(
-                settings, (service, cancellationToken) => UploadConsentDialog.AskAsync(service, keyboard.ModifierName, cancellationToken));
             var context = new ActionContext
             {
                 Clipboard = monitor,
@@ -120,7 +117,6 @@ public partial class App : Application
                 Paths = Paths,
                 Http = http,
                 Logger = logger,
-                UploadConsent = uploadConsent,
             };
 
             var windowFocus = platform.WindowFocus is { } focus ? new UiThreadWindowFocus(focus) : null;
@@ -456,7 +452,6 @@ public partial class App : Application
             platform?.DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(3));
             trayIcon?.Dispose();
             http?.Dispose();
-            uploadConsent?.Dispose();
             updater?.Dispose();
             updateHttp?.Dispose();
         }

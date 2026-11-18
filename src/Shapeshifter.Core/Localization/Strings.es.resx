@@ -353,21 +353,6 @@ Para pegar algo que copiaste antes, mantén pulsada {0} y pulsa V. Sigue manteni
   <data name="TipCopyBackAndForthMessage" xml:space="preserve">
     <value>Puedes copiar primero varias cosas de {0} y luego mantener pulsado {1}+V en {2} para elegir cada una de tu historial.</value>
   </data>
-  <data name="UploadConsentTitle" xml:space="preserve">
-    <value>¿Subir a {0}?</value>
-  </data>
-  <data name="UploadConsentQuestion" xml:space="preserve">
-    <value>¿Subir esta imagen a {0}?</value>
-  </data>
-  <data name="UploadConsentExplanation" xml:space="preserve">
-    <value>La imagen se envía a {0} (catbox.moe), un alojamiento de imágenes gratuito y sin anuncios, y cualquiera que tenga el enlace puede verla. Las subidas no se pueden eliminar. Nada más de lo que copias sale nunca de tu equipo.</value>
-  </data>
-  <data name="UploadConsentAskOnce" xml:space="preserve">
-    <value>Shapeshifter no volverá a preguntar. Esta vez el enlace se copia: pulsa {0}+V para pegarlo.</value>
-  </data>
-  <data name="UploadConsentUpload" xml:space="preserve">
-    <value>Subir a {0}</value>
-  </data>
   <data name="DialogCancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>

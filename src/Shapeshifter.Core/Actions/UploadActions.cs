@@ -7,8 +7,7 @@ using Shapeshifter.Core.Localization;
 namespace Shapeshifter.Core.Actions;
 
 /// <summary>
-/// Uploads a copied image to Catbox (catbox.moe), a free image host without ads, and pastes the link. Nothing is
-/// uploaded until the user has agreed to it once.
+/// Uploads a copied image to Catbox (catbox.moe), a free image host without ads, and pastes the link.
 /// </summary>
 public sealed class UploadImageAction : IClipboardAction
 {
@@ -33,13 +32,6 @@ public sealed class UploadImageAction : IClipboardAction
     {
         ArgumentNullException.ThrowIfNull(item);
         ArgumentNullException.ThrowIfNull(context);
-        var consent = await context.UploadConsent.RequestAsync(Catbox.Name, cancellationToken).ConfigureAwait(false);
-        if (consent == UploadConsentResult.Denied)
-        {
-            context.Logger.Information("Not uploading: the upload to {Service} was not agreed to", Catbox.Name);
-            return;
-        }
-
         if (!uploaded.TryGetValue(item.Id, out var link))
         {
             var image = item.Snapshot.Image!;
@@ -50,14 +42,6 @@ public sealed class UploadImageAction : IClipboardAction
         }
 
         var snapshot = new ClipboardSnapshot { Text = link.AbsoluteUri };
-        if (consent == UploadConsentResult.GrantedNow)
-        {
-            // The consent dialog took the focus from the application the user was pasting into, so pasting now could
-            // land somewhere else. The link is copied instead, ready for the next paste.
-            await context.CopyNewContentAsync(snapshot, cancellationToken).ConfigureAwait(false);
-            return;
-        }
-
         await context.WriteAndPasteAsync(snapshot, cancellationToken).ConfigureAwait(false);
         context.History.Add(snapshot);
     }

@@ -466,26 +466,6 @@ To paste something you copied earlier, hold {0} and press V. Keep holding {0} to
     <value>You can copy several things from {0} first, then hold {1}+V in {2} to pick each one from your history.</value>
     <comment>Tip shown when the user switches back and forth between two apps to copy and paste; {0} and {2} are application names, {1} is the modifier key (Ctrl or Cmd).</comment>
   </data>
-  <data name="UploadConsentTitle" xml:space="preserve">
-    <value>Upload to {0}?</value>
-    <comment>Title of a dialog that asks before an image is uploaded; {0} is the image host (Catbox).</comment>
-  </data>
-  <data name="UploadConsentQuestion" xml:space="preserve">
-    <value>Upload this image to {0}?</value>
-    <comment>Heading of the dialog; {0} is the image host (Catbox).</comment>
-  </data>
-  <data name="UploadConsentExplanation" xml:space="preserve">
-    <value>The image is sent to {0} (catbox.moe), a free image host without ads, and anyone with the link can see it. Uploads can't be deleted. Nothing else you copy ever leaves your computer.</value>
-    <comment>Body of the dialog; {0} is the image host (Catbox). Keep catbox.moe as is.</comment>
-  </data>
-  <data name="UploadConsentAskOnce" xml:space="preserve">
-    <value>Shapeshifter won't ask again. This time the link is copied: press {0}+V to paste it.</value>
-    <comment>Note in the dialog; {0} is the modifier key (Ctrl or Cmd).</comment>
-  </data>
-  <data name="UploadConsentUpload" xml:space="preserve">
-    <value>Upload to {0}</value>
-    <comment>Button that agrees to the upload; {0} is the image host (Catbox).</comment>
-  </data>
   <data name="DialogCancel" xml:space="preserve">
     <value>Cancel</value>
     <comment>Button that closes a dialog without doing anything.</comment>

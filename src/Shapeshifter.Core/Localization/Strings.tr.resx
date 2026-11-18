@@ -353,21 +353,6 @@ Daha önce kopyaladığınız bir şeyi yapıştırmak için {0} tuşunu basıl�
   <data name="TipCopyBackAndForthMessage" xml:space="preserve">
     <value>Önce {0} uygulamasından birkaç şey kopyalayabilir, ardından {2} uygulamasında {1}+V tuşlarını basılı tutarak her birini geçmişinizden seçebilirsiniz.</value>
   </data>
-  <data name="UploadConsentTitle" xml:space="preserve">
-    <value>{0} hizmetine yüklensin mi?</value>
-  </data>
-  <data name="UploadConsentQuestion" xml:space="preserve">
-    <value>Bu görüntü {0} hizmetine yüklensin mi?</value>
-  </data>
-  <data name="UploadConsentExplanation" xml:space="preserve">
-    <value>Görüntü, reklamsız ve ücretsiz bir görüntü barındırma hizmeti olan {0} (catbox.moe) hizmetine gönderilir ve bağlantıya sahip olan herkes görüntüyü görebilir. Yüklemeler silinemez. Kopyaladığınız başka hiçbir şey bilgisayarınızdan asla çıkmaz.</value>
-  </data>
-  <data name="UploadConsentAskOnce" xml:space="preserve">
-    <value>Shapeshifter bir daha sormayacak. Bu sefer bağlantı kopyalandı: yapıştırmak için {0}+V tuşlarına basın.</value>
-  </data>
-  <data name="UploadConsentUpload" xml:space="preserve">
-    <value>{0} hizmetine yükle</value>
-  </data>
   <data name="DialogCancel" xml:space="preserve">
     <value>İptal</value>
   </data>
