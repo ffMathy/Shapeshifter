@@ -10,7 +10,7 @@ public sealed partial class PickerViewModel : ObservableObject
 {
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SelectedItem))]
-    private int selectedIndex;
+    private int selectedIndex = -1;
 
     /// <summary>
     /// Whether the preview of the selected item is shown above its actions (issue #54). The presenter hides it on
@@ -20,7 +20,7 @@ public sealed partial class PickerViewModel : ObservableObject
     private bool showsPreview = true;
 
     [ObservableProperty]
-    private int selectedActionIndex;
+    private int selectedActionIndex = -1;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsItemsPaneActive))]
@@ -139,6 +139,18 @@ public sealed partial class PickerViewModel : ObservableObject
     public bool IsItemsPaneActive => !IsActionsPaneActive;
 
     partial void OnSelectedIndexChanged(int value) => UpdateActionsHeader();
+
+    /// <summary>
+    /// Selects the item and the action, or none (-1) while there are no items or no actions. A list cannot select an
+    /// index it does not have and then shows nothing, without telling the binding: the index here would no longer match
+    /// what the list shows, and setting that same index again once the list has items would change nothing, so no item
+    /// would be selected.
+    /// </summary>
+    public void Select(int index, int actionIndex)
+    {
+        SelectedIndex = Items.Count == 0 ? -1 : index;
+        SelectedActionIndex = Actions.Count == 0 ? -1 : actionIndex;
+    }
 
     /// <summary>Names the kind of the selected item above its actions.</summary>
     public void UpdateActionsHeader() => ActionsHeader = SelectedIndex >= 0 && SelectedIndex < Items.Count

@@ -17,6 +17,7 @@
   <Folder Name="/tests/">
     <File Path="tests/Directory.Build.props" />
     <Project Path="tests/Shapeshifter.Core.Tests/Shapeshifter.Core.Tests.csproj" />
+    <Project Path="tests/Shapeshifter.Desktop.Tests/Shapeshifter.Desktop.Tests.csproj" />
     <Project Path="tests/Shapeshifter.EndToEnd.Tests/Shapeshifter.EndToEnd.Tests.csproj" />
     <Project Path="tests/Shapeshifter.EndToEnd.TargetApp/Shapeshifter.EndToEnd.TargetApp.csproj" />
   </Folder>

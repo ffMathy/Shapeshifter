@@ -264,10 +264,9 @@ internal sealed class PickerPresenter : IPickerPresenter
             }
         }
 
-        viewModel.SelectedIndex = state.SelectedIndex;
+        viewModel.Select(state.SelectedIndex, state.SelectedActionIndex);
         UpdatePreviewImage();
         viewModel.UpdateActionsHeader();
-        viewModel.SelectedActionIndex = state.SelectedActionIndex;
         viewModel.IsActionsPaneActive = state.Pane == PickerPane.Actions;
         viewModel.IsHeldOpen = state.IsHeldOpen;
     }

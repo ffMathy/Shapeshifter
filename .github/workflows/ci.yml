@@ -80,6 +80,8 @@ jobs:
         run: dotnet build Shapeshifter.slnx -c Release
       - name: Unit tests
         run: dotnet test --project tests/Shapeshifter.Core.Tests -c Release --no-build
+      - name: Desktop tests
+        run: dotnet test --project tests/Shapeshifter.Desktop.Tests -c Release --no-build
 
   e2e-linux:
     name: End-to-end (Linux, X11)

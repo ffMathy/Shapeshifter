@@ -26,6 +26,7 @@
   <ItemGroup>
     <!-- The screenshot tool drives the real picker presenter and notifier in its live mode. -->
     <InternalsVisibleTo Include="Shapeshifter.ScreenshotGenerator" />
+    <InternalsVisibleTo Include="Shapeshifter.Desktop.Tests" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
