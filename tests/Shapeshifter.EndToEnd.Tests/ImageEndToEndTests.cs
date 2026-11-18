@@ -63,13 +63,13 @@ public sealed class ImageEndToEndTests(ShapeshifterSession session)
         }
     }
 
-    /// <summary>Copies one more text item, then picks the image (now second) with Ctrl+V, V and pastes it.</summary>
+    /// <summary>Copies one more text item, then picks the image (now second) with holding Ctrl+V and pressing V again, and pastes it.</summary>
     private async Task PasteSecondItemAsync(string id)
     {
         await session.CopyTextAsync($"after {id}");
         await session.PrepareTargetAsync();
         await session.PressModifierAsync();
-        await session.TapAsync(KeyCode.VcV);
+        await session.HoldVUntilThePickerShowsAsync();
         await session.TapAsync(KeyCode.VcV);
         await session.WaitForStateAsync(state => state.PickerVisible && state.SelectedIndex == 1, "image item selected");
         await session.ReleaseModifierAsync();

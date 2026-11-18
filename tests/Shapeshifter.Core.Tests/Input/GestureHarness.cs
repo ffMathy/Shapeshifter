@@ -4,9 +4,14 @@ using Shapeshifter.Core.Platform;
 namespace Shapeshifter.Core.Tests.Input;
 
 /// <summary>Drives a <see cref="PasteGestureStateMachine"/> with a fake clock and a configurable history.</summary>
+/// <remarks>
+/// Most tests start a gesture by tapping V and keep the modifier held, so by default the machine behaves as with the
+/// alternative shortcuts (Win+V, Ctrl+V on macOS), where releasing V does not paste. <see cref="QuickPasteTests"/>
+/// covers the standard shortcut, where it does (issue #639).
+/// </remarks>
 internal sealed class GestureHarness
 {
-    public GestureHarness(IReadOnlyList<GestureItem> items, int defaultIndex = 0, TimeSpan? showDelay = null)
+    public GestureHarness(IReadOnlyList<GestureItem> items, int defaultIndex = 0, TimeSpan? showDelay = null, bool pasteOnTriggerRelease = false)
     {
         Items = [.. items];
         DefaultIndex = defaultIndex;
@@ -19,6 +24,8 @@ internal sealed class GestureHarness
         {
             Machine.ShowDelay = delay;
         }
+
+        Machine.PasteOnTriggerRelease = pasteOnTriggerRelease;
     }
 
     public PasteGestureStateMachine Machine { get; }
@@ -31,8 +38,8 @@ internal sealed class GestureHarness
 
     public TimeSpan Now { get; set; } = TimeSpan.FromSeconds(10);
 
-    public static GestureHarness WithItems(int count, int actionCount = 3, int defaultIndex = 0, TimeSpan? showDelay = null) =>
-        new(CreateItems(count, actionCount), defaultIndex, showDelay);
+    public static GestureHarness WithItems(int count, int actionCount = 3, int defaultIndex = 0, TimeSpan? showDelay = null, bool pasteOnTriggerRelease = false) =>
+        new(CreateItems(count, actionCount), defaultIndex, showDelay, pasteOnTriggerRelease);
 
     public static List<GestureItem> CreateItems(int count, int actionCount = 3) =>
         [.. Enumerable.Range(0, count).Select(i => new GestureItem(IdFor(i), actionCount))];

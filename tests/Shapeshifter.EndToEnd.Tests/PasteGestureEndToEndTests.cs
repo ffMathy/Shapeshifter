@@ -27,6 +27,31 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
     }
 
     [Fact]
+    public async Task HoldingTheModifier_EachQuickVPastesRightAway()
+    {
+        // Issue #639: Ctrl stays down while V is pressed again and again, as when pasting into one row after another.
+        SkipUnlessEnabled();
+        await session.CopyTextAsync("again " + Unique());
+        var expected = session.ReadState().Previews[0];
+        await session.PrepareTargetAsync();
+
+        await session.PressModifierAsync();
+        await session.TapAsync(KeyCode.VcV);
+        Assert.Equal(expected, await session.WaitForTargetTextAsync(expected));
+        await session.WaitForIdleAsync();
+        await session.TapAsync(KeyCode.VcV);
+        Assert.Equal(expected + expected, await session.WaitForTargetTextAsync(expected + expected));
+        await session.WaitForIdleAsync();
+        Assert.False(session.ReadState().PickerVisible);
+        await session.ReleaseModifierAsync();
+        await session.WaitForIdleAsync();
+
+        // Nothing more is pasted when the modifier comes up.
+        await Task.Delay(400, TestContext.Current.CancellationToken);
+        Assert.Equal(expected + expected, await session.GetTargetTextAsync());
+    }
+
+    [Fact]
     public async Task PressingVAgainPastesTheOlderItem()
     {
         SkipUnlessEnabled();
@@ -37,7 +62,7 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
         await session.PrepareTargetAsync();
 
         await session.PressModifierAsync();
-        await session.TapAsync(KeyCode.VcV);
+        await session.HoldVUntilThePickerShowsAsync();
         await session.TapAsync(KeyCode.VcV);
         await session.WaitForStateAsync(state => state.PickerVisible && state.SelectedIndex == 1, "picker on the second item");
         await session.ReleaseModifierAsync();
@@ -59,9 +84,8 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
         await session.PrepareTargetAsync();
 
         await session.PressModifierAsync();
-        await session.KeyAsync(KeyCode.VcV, down: true);
-        await session.WaitForStateAsync(state => state.PickerVisible && state.SelectedIndex == 0, "picker after holding");
-        await session.KeyAsync(KeyCode.VcV, down: false);
+        await session.HoldVUntilThePickerShowsAsync();
+        await session.WaitForStateAsync(state => state.PickerVisible && state.SelectedIndex == 0, "picker on the newest item");
         await session.TapAsync(KeyCode.VcDown);
         await session.TapAsync(KeyCode.VcDown);
         await session.TapAsync(KeyCode.VcUp);
@@ -83,8 +107,9 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
         await session.PrepareTargetAsync();
 
         await session.PressModifierAsync();
-        await session.TapAsync(KeyCode.VcV);
+        await session.KeyAsync(KeyCode.VcV, down: true);
         await session.TapAsync(KeyCode.Vc3);
+        await session.KeyAsync(KeyCode.VcV, down: false);
         await session.WaitForStateAsync(state => state.PickerVisible && state.SelectedIndex == 2, "picker on the third item");
         await session.ReleaseModifierAsync();
 
@@ -103,7 +128,7 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
         await session.PrepareTargetAsync();
 
         await session.PressModifierAsync();
-        await session.TapAsync(KeyCode.VcV);
+        await session.HoldVUntilThePickerShowsAsync();
         await session.TapAsync(KeyCode.VcV);
         await session.WaitForStateAsync(state => state.PickerVisible, "picker visible");
         await session.TapAsync(KeyCode.VcEscape);
@@ -126,8 +151,9 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
         await session.PrepareTargetAsync();
 
         await session.PressModifierAsync();
-        await session.TapAsync(KeyCode.VcV);
+        await session.KeyAsync(KeyCode.VcV, down: true);
         await session.TapAsync(KeyCode.VcSpace);
+        await session.KeyAsync(KeyCode.VcV, down: false);
         await session.WaitForStateAsync(state => state.PickerVisible, "picker kept open after Space");
         await session.ReleaseModifierAsync();
 
@@ -157,8 +183,9 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
         await session.PrepareTargetAsync();
 
         await session.PressModifierAsync();
-        await session.TapAsync(KeyCode.VcV);
+        await session.KeyAsync(KeyCode.VcV, down: true);
         await session.TapAsync(KeyCode.VcSpace);
+        await session.KeyAsync(KeyCode.VcV, down: false);
         await session.WaitForStateAsync(state => state.PickerVisible, "picker kept open after Space");
         await session.ReleaseModifierAsync();
         await session.TapAsync(KeyCode.VcEscape);
@@ -191,7 +218,7 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
         await session.PrepareTargetAsync();
 
         await session.PressModifierAsync();
-        await session.TapAsync(KeyCode.VcV);
+        await session.HoldVUntilThePickerShowsAsync();
         await session.TapAsync(KeyCode.VcV);
         await session.WaitForStateAsync(state => state.PickerVisible && state.SelectedIndex == 1, "rich item selected");
         await session.ReleaseModifierAsync();
@@ -212,7 +239,7 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
         await session.PrepareTargetAsync();
 
         await session.PressModifierAsync();
-        await session.TapAsync(KeyCode.VcV);
+        await session.HoldVUntilThePickerShowsAsync();
         await session.TapAsync(KeyCode.VcV);
         await session.WaitForStateAsync(state => state.PickerVisible && state.SelectedIndex == 1, "styled item selected");
         // Actions: Paste, Paste as file, Paste as plain text.
@@ -295,8 +322,9 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
 
         // S starts a search; the S itself never reaches the target.
         await session.PressModifierAsync();
-        await session.TapAsync(KeyCode.VcV);
+        await session.KeyAsync(KeyCode.VcV, down: true);
         await session.TapAsync(KeyCode.VcS);
+        await session.KeyAsync(KeyCode.VcV, down: false);
         await session.ReleaseModifierAsync();
         await session.WaitForStateAsync(state => state.PickerVisible && state.Searching && state.SearchFocused, "the search box focused");
 
@@ -326,8 +354,9 @@ public sealed class PasteGestureEndToEndTests(ShapeshifterSession session)
         await session.PrepareTargetAsync();
 
         await session.PressModifierAsync();
-        await session.TapAsync(KeyCode.VcV);
+        await session.KeyAsync(KeyCode.VcV, down: true);
         await session.TapAsync(KeyCode.VcS);
+        await session.KeyAsync(KeyCode.VcV, down: false);
         await session.ReleaseModifierAsync();
         await session.WaitForStateAsync(state => state.Searching && state.SearchFocused, "the search box focused");
         await session.TypeAsync("first");

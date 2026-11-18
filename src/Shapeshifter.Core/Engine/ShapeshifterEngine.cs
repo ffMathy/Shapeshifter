@@ -235,8 +235,11 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
             if (searching)
             {
                 // The picker has the keyboard focus, and every key belongs to it (including Ctrl+V into the search box).
-                // The modifiers are still tracked, so the next gesture starts from the right state.
-                if (input.Key is GestureKey.Modifier or GestureKey.Shift or GestureKey.Alt or GestureKey.OtherModifier)
+                // The modifiers and the release of V are still tracked, so the next gesture starts from the right state:
+                // V is often still held when S begins the search, and a V the machine thinks is held would make it
+                // swallow the next Ctrl+V as an auto-repeat.
+                if (input.Key is GestureKey.Modifier or GestureKey.Shift or GestureKey.Alt or GestureKey.OtherModifier
+                    || input is { Key: GestureKey.Trigger, IsDown: false })
                 {
                     gesture.Handle(input, Now());
                 }
@@ -244,6 +247,7 @@ public sealed class ShapeshifterEngine : IAsyncDisposable
                 return false;
             }
 
+            gesture.PasteOnTriggerRelease = keyboardHook.GestureModifierPastes;
             var result = gesture.Handle(input, Now());
             UpdateNavigationCapture(gesture.IsActive);
             if (result.Effects.Any(effect => effect is BeginSearch))

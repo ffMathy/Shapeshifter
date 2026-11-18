@@ -37,7 +37,7 @@
     <comment>Link to the project's GitHub page.</comment>
   </data>
   <data name="SettingsUsage" xml:space="preserve">
-    <value>Copy as usual. To paste an older item, hold {0} and press V: keep {0} held to see the history, press V again (or ↑/↓, or 1–9) to pick an item, → to choose what to do with it, Delete to remove it and Esc to cancel. Release {0} to paste.</value>
+    <value>Copy as usual. To paste an older item, hold {0}+V until the history appears, then keep {0} held: press V again (or ↑/↓, or 1–9) to pick an item, → to choose what to do with it, Delete to remove it and Esc to cancel. Release {0} to paste.</value>
     <comment>How to use the app, at the top of the settings window. {0} is the modifier key name (Ctrl, or Cmd on macOS). Keep V, ↑/↓, 1–9, →, Delete and Esc as key names (you may use the local name of the Delete and Esc keys).</comment>
   </data>
   <data name="SettingsHistoryGroup" xml:space="preserve">
@@ -135,7 +135,7 @@
   <data name="PickerEmptyHint" xml:space="preserve">
     <value>Copy as usual, and Shapeshifter keeps everything you copy.
 
-To paste something you copied earlier, hold {0} and press V. Keep holding {0} to see the history, press V or the arrow keys to choose, and release {0} to paste.</value>
+To paste something you copied earlier, hold {0}+V until the history appears. Keep holding {0}, press V or the arrow keys to choose, and release {0} to paste.</value>
     <comment>Shown in the empty picker. {0} is the modifier key (Ctrl or Cmd). Keep the \n\n paragraph break.</comment>
   </data>
   <data name="PickerActions" xml:space="preserve">

@@ -31,7 +31,7 @@
     <value>Projectpagina</value>
   </data>
   <data name="SettingsUsage" xml:space="preserve">
-    <value>Kopieer zoals gewoonlijk. Om een ouder item te plakken, houd je {0} ingedrukt en druk je op V: houd {0} ingedrukt om de geschiedenis te zien, druk nogmaals op V (of ↑/↓, of 1–9) om een item te kiezen, op → om te kiezen wat je ermee wilt doen, op Del om het te verwijderen en op Esc om te annuleren. Laat {0} los om te plakken.</value>
+    <value>Kopieer zoals gewoonlijk. Om een ouder item te plakken, houd je {0}+V ingedrukt tot de geschiedenis verschijnt en houd je daarna {0} ingedrukt: druk nogmaals op V (of ↑/↓, of 1–9) om een item te kiezen, op → om te kiezen wat je ermee wilt doen, op Del om het te verwijderen en op Esc om te annuleren. Laat {0} los om te plakken.</value>
   </data>
   <data name="SettingsHistoryGroup" xml:space="preserve">
     <value>Geschiedenis</value>
@@ -105,7 +105,7 @@
   <data name="PickerEmptyHint" xml:space="preserve">
     <value>Kopieer zoals gewoonlijk; Shapeshifter bewaart alles wat je kopieert.
 
-Om iets te plakken dat je eerder hebt gekopieerd, houd je {0} ingedrukt en druk je op V. Houd {0} ingedrukt om de geschiedenis te zien, kies met V of de pijltoetsen en laat {0} los om te plakken.</value>
+Om iets te plakken dat je eerder hebt gekopieerd, houd je {0}+V ingedrukt tot de geschiedenis verschijnt. Houd {0} ingedrukt, kies met V of de pijltoetsen en laat {0} los om te plakken.</value>
   </data>
   <data name="PickerActions" xml:space="preserve">
     <value>Acties</value>

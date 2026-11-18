@@ -31,7 +31,7 @@
     <value>Trang dự án</value>
   </data>
   <data name="SettingsUsage" xml:space="preserve">
-    <value>Sao chép như bình thường. Để dán một mục cũ hơn, hãy giữ {0} và nhấn V: tiếp tục giữ {0} để xem lịch sử, nhấn V lần nữa (hoặc ↑/↓, hoặc 1–9) để chọn một mục, → để chọn thao tác với mục đó, Delete để xóa mục và Esc để hủy. Thả {0} để dán.</value>
+    <value>Sao chép như bình thường. Để dán một mục cũ hơn, hãy giữ {0}+V cho đến khi lịch sử hiện ra, rồi tiếp tục giữ {0}: nhấn V lần nữa (hoặc ↑/↓, hoặc 1–9) để chọn một mục, → để chọn thao tác với mục đó, Delete để xóa mục và Esc để hủy. Thả {0} để dán.</value>
   </data>
   <data name="SettingsHistoryGroup" xml:space="preserve">
     <value>Lịch sử</value>
@@ -105,7 +105,7 @@
   <data name="PickerEmptyHint" xml:space="preserve">
     <value>Sao chép như bình thường, Shapeshifter sẽ giữ lại mọi thứ bạn sao chép.
 
-Để dán nội dung đã sao chép trước đó, hãy giữ {0} và nhấn V. Tiếp tục giữ {0} để xem lịch sử, nhấn V hoặc các phím mũi tên để chọn, rồi thả {0} để dán.</value>
+Để dán nội dung đã sao chép trước đó, hãy giữ {0}+V cho đến khi lịch sử hiện ra. Tiếp tục giữ {0}, nhấn V hoặc các phím mũi tên để chọn, rồi thả {0} để dán.</value>
   </data>
   <data name="PickerActions" xml:space="preserve">
     <value>Thao tác</value>

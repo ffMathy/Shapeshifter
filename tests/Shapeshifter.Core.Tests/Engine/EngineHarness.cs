@@ -51,6 +51,10 @@ internal sealed class EngineHarness : IAsyncDisposable
         };
 
         FocusTracker = new FakeFocusTracker(Log);
+
+        // Most tests tap V and keep the modifier held, as with the alternative shortcuts, where releasing V does not
+        // paste. The tests of the standard shortcut's paste on releasing V (issue #639) turn this back on.
+        Hook.GestureModifierPastes = false;
         Engine = new ShapeshifterEngine(History, Monitor, Hook, Catalog, Context, Picker, Notifier, Logger, Time, Coach, FocusTracker);
         Engine.EffectProcessed += OnEffectProcessed;
     }

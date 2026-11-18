@@ -69,7 +69,7 @@ public sealed class RemoteDesktopEndToEndTests(ShapeshifterSession session)
         // 3. Picking the older item: Shapeshifter changes the clipboard right before it pastes, and the Remote
         //    Desktop client has to forward that change to the session in time.
         await session.PressModifierAsync();
-        await session.TapAsync(KeyCode.VcV);
+        await session.HoldVUntilThePickerShowsAsync();
         await session.TapAsync(KeyCode.VcV);
         await session.WaitForStateAsync(state => state.PickerVisible && state.SelectedIndex == 1, "older item selected");
         await session.ReleaseModifierAsync();

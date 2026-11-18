@@ -14,21 +14,26 @@ public sealed class PasteGestureStateMachinePropertyTests
     ];
 
     [Theory]
-    [InlineData(1)]
-    [InlineData(7)]
-    [InlineData(42)]
-    [InlineData(1234)]
-    [InlineData(98765)]
-    public void RandomKeySequences_PreserveInvariants(int seed)
+    [InlineData(1, false)]
+    [InlineData(7, false)]
+    [InlineData(42, false)]
+    [InlineData(1234, false)]
+    [InlineData(98765, false)]
+    [InlineData(1, true)]
+    [InlineData(7, true)]
+    [InlineData(42, true)]
+    [InlineData(1234, true)]
+    [InlineData(98765, true)]
+    public void RandomKeySequences_PreserveInvariants(int seed, bool pasteOnTriggerRelease)
     {
         var random = new Random(seed);
         for (var run = 0; run < 200; run++)
         {
-            RunOne(random);
+            RunOne(random, pasteOnTriggerRelease);
         }
     }
 
-    private static void RunOne(Random random)
+    private static void RunOne(Random random, bool pasteOnTriggerRelease)
     {
         var itemCount = random.Next(0, 6);
         var items = Enumerable.Range(0, itemCount)
@@ -36,7 +41,7 @@ public sealed class PasteGestureStateMachinePropertyTests
             .ToList();
         var defaultIndex = random.Next(-2, itemCount + 2);
         var showDelay = random.Next(4) == 0 ? TimeSpan.Zero : TimeSpan.FromMilliseconds(random.Next(1, 500));
-        var harness = new GestureHarness(items, defaultIndex, showDelay);
+        var harness = new GestureHarness(items, defaultIndex, showDelay, pasteOnTriggerRelease);
         var machine = harness.Machine;
 
         var known = items.ToDictionary(i => i.Id);
@@ -46,6 +51,7 @@ public sealed class PasteGestureStateMachinePropertyTests
 
         for (var step = 0; step < 60; step++)
         {
+            var wasPickerVisible = machine.IsPickerVisible;
             var wasActive = machine.IsActive;
             var wasHeldOpen = machine.IsHeldOpen;
             var wasModifierDown = machine.IsModifierDown;
@@ -169,6 +175,23 @@ public sealed class PasteGestureStateMachinePropertyTests
                     Assert.False(machine.IsPickerVisible);
                     Assert.Null(machine.CurrentSelection);
                 }
+            }
+
+            if (key == GestureKey.Trigger && !isDown && wasActive)
+            {
+                // Releasing V pastes the current clipboard, unless the picker is up (issue #639).
+                if (pasteOnTriggerRelease && !wasPickerVisible)
+                {
+                    Assert.IsType<PasteCurrentClipboard>(Assert.Single(result.Effects));
+                    Assert.False(machine.IsActive);
+                }
+                else
+                {
+                    Assert.Empty(result.Effects);
+                    Assert.True(machine.IsActive);
+                }
+
+                Assert.True(result.Suppress);
             }
 
             if (key is GestureKey.Other)

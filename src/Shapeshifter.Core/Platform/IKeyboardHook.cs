@@ -82,6 +82,13 @@ public interface IKeyboardHook : IDisposable
     IReadOnlyList<string> ShortcutModifierNames { get; }
 
     /// <summary>
+    /// Whether the gesture's modifier is the modifier of the paste keystroke (Ctrl+V, or Cmd+V on macOS), so the paste
+    /// can be sent while the user still holds it. <see langword="false"/> with the alternative shortcuts (Win+V on
+    /// Windows, Ctrl+V on macOS).
+    /// </summary>
+    bool GestureModifierPastes { get; }
+
+    /// <summary>
     /// Some platforms (X11) can only suppress keys that were grabbed beforehand. While a gesture is active the
     /// navigation keys (arrows, Delete, Escape, 1 to 9, Space, Enter and S) are grabbed, with and without the modifier
     /// (the picker can be kept open after the modifier is released), so the focused application does not see them.

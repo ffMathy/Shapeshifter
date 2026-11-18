@@ -31,7 +31,7 @@
     <value>项目主页</value>
   </data>
   <data name="SettingsUsage" xml:space="preserve">
-    <value>照常复制即可。要粘贴较早的项目，请按住 {0} 并按 V：一直按住 {0} 可查看历史记录，再按 V（或 ↑/↓，或 1–9）选择项目，按 → 选择对其执行的操作，按 Delete 将其删除，按 Esc 取消。松开 {0} 即可粘贴。</value>
+    <value>照常复制即可。要粘贴较早的项目，请按住 {0}+V 直到出现历史记录，然后继续按住 {0}：再按 V（或 ↑/↓，或 1–9）选择项目，按 → 选择对其执行的操作，按 Delete 将其删除，按 Esc 取消。松开 {0} 即可粘贴。</value>
   </data>
   <data name="SettingsHistoryGroup" xml:space="preserve">
     <value>历史记录</value>
@@ -105,7 +105,7 @@
   <data name="PickerEmptyHint" xml:space="preserve">
     <value>照常复制即可，Shapeshifter 会保留你复制的所有内容。
 
-要粘贴之前复制的内容，请按住 {0} 并按 V。一直按住 {0} 可查看历史记录，按 V 或方向键进行选择，松开 {0} 即可粘贴。</value>
+要粘贴之前复制的内容，请按住 {0}+V 直到出现历史记录。继续按住 {0}，按 V 或方向键进行选择，松开 {0} 即可粘贴。</value>
   </data>
   <data name="PickerActions" xml:space="preserve">
     <value>操作</value>

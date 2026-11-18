@@ -31,7 +31,7 @@
     <value>Pagina del progetto</value>
   </data>
   <data name="SettingsUsage" xml:space="preserve">
-    <value>Copia come al solito. Per incollare un elemento precedente, tieni premuto {0} e premi V: continua a tenere premuto {0} per vedere la cronologia, premi di nuovo V (oppure ↑/↓ o 1–9) per scegliere un elemento, → per scegliere cosa farne, Canc per rimuoverlo ed Esc per annullare. Rilascia {0} per incollare.</value>
+    <value>Copia come al solito. Per incollare un elemento precedente, tieni premuti {0}+V finché non appare la cronologia, poi continua a tenere premuto {0}: premi di nuovo V (oppure ↑/↓ o 1–9) per scegliere un elemento, → per scegliere cosa farne, Canc per rimuoverlo ed Esc per annullare. Rilascia {0} per incollare.</value>
   </data>
   <data name="SettingsHistoryGroup" xml:space="preserve">
     <value>Cronologia</value>
@@ -105,7 +105,7 @@
   <data name="PickerEmptyHint" xml:space="preserve">
     <value>Copia come al solito: Shapeshifter conserva tutto ciò che copi.
 
-Per incollare qualcosa che hai copiato in precedenza, tieni premuto {0} e premi V. Continua a tenere premuto {0} per vedere la cronologia, premi V o i tasti freccia per scegliere e rilascia {0} per incollare.</value>
+Per incollare qualcosa che hai copiato in precedenza, tieni premuti {0}+V finché non appare la cronologia. Continua a tenere premuto {0}, premi V o i tasti freccia per scegliere e rilascia {0} per incollare.</value>
   </data>
   <data name="PickerActions" xml:space="preserve">
     <value>Azioni</value>

@@ -31,7 +31,7 @@
     <value>프로젝트 페이지</value>
   </data>
   <data name="SettingsUsage" xml:space="preserve">
-    <value>평소처럼 복사하세요. 이전 항목을 붙여넣으려면 {0} 키를 누른 채 V를 누르세요. {0} 키를 계속 누르고 있으면 기록이 표시되며, V를 다시 누르거나 ↑/↓ 또는 1–9를 눌러 항목을 선택하고, →로 수행할 작업을 선택하고, Delete로 삭제하고, Esc로 취소합니다. {0} 키를 놓으면 붙여넣어집니다.</value>
+    <value>평소처럼 복사하세요. 이전 항목을 붙여넣으려면 기록이 표시될 때까지 {0}+V를 누르고 있으세요. 그런 다음 {0} 키를 계속 누른 채로 V를 다시 누르거나 ↑/↓ 또는 1–9를 눌러 항목을 선택하고, →로 수행할 작업을 선택하고, Delete로 삭제하고, Esc로 취소합니다. {0} 키를 놓으면 붙여넣어집니다.</value>
   </data>
   <data name="SettingsHistoryGroup" xml:space="preserve">
     <value>기록</value>
@@ -105,7 +105,7 @@
   <data name="PickerEmptyHint" xml:space="preserve">
     <value>평소처럼 복사하면 Shapeshifter가 복사한 모든 내용을 보관합니다.
 
-이전에 복사한 내용을 붙여넣으려면 {0} 키를 누른 채 V를 누르세요. {0} 키를 계속 누르고 있으면 기록이 표시되며, V 또는 화살표 키로 선택하고 {0} 키를 놓으면 붙여넣어집니다.</value>
+이전에 복사한 내용을 붙여넣으려면 기록이 표시될 때까지 {0}+V를 누르고 있으세요. {0} 키를 계속 누른 채로 V 또는 화살표 키로 선택하고 {0} 키를 놓으면 붙여넣어집니다.</value>
   </data>
   <data name="PickerActions" xml:space="preserve">
     <value>작업</value>

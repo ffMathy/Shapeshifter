@@ -31,7 +31,7 @@
     <value>Página del proyecto</value>
   </data>
   <data name="SettingsUsage" xml:space="preserve">
-    <value>Copia como siempre. Para pegar un elemento anterior, mantén pulsada {0} y pulsa V: sigue manteniendo {0} para ver el historial, vuelve a pulsar V (o ↑/↓, o 1–9) para elegir un elemento, → para elegir qué hacer con él, Supr para eliminarlo y Esc para cancelar. Suelta {0} para pegar.</value>
+    <value>Copia como siempre. Para pegar un elemento anterior, mantén pulsadas {0}+V hasta que aparezca el historial y luego sigue manteniendo {0}: vuelve a pulsar V (o ↑/↓, o 1–9) para elegir un elemento, → para elegir qué hacer con él, Supr para eliminarlo y Esc para cancelar. Suelta {0} para pegar.</value>
   </data>
   <data name="SettingsHistoryGroup" xml:space="preserve">
     <value>Historial</value>
@@ -105,7 +105,7 @@
   <data name="PickerEmptyHint" xml:space="preserve">
     <value>Copia como siempre y Shapeshifter guardará todo lo que copies.
 
-Para pegar algo que copiaste antes, mantén pulsada {0} y pulsa V. Sigue manteniendo {0} para ver el historial, pulsa V o las teclas de flecha para elegir y suelta {0} para pegar.</value>
+Para pegar algo que copiaste antes, mantén pulsadas {0}+V hasta que aparezca el historial. Sigue manteniendo {0}, pulsa V o las teclas de flecha para elegir y suelta {0} para pegar.</value>
   </data>
   <data name="PickerActions" xml:space="preserve">
     <value>Acciones</value>
