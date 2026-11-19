@@ -37,8 +37,8 @@ jobs:
     if: vars.MSSTORE_PRODUCT_ID != '' && !contains(inputs.tag, '-')
     runs-on: windows-latest
     env:
-      # Submitting through the Store API needs a Microsoft Entra application, which only company Partner Center accounts
-      # can add. Without its secrets (an individual account) the job builds the package for uploading by hand.
+      # Submitting through the Store API needs a Microsoft Entra application with the Manager role in Partner Center
+      # (packaging/store/README.md, step 2). Without its secrets the job builds the package for uploading by hand.
       CAN_SUBMIT: ${{ secrets.MSSTORE_CLIENT_SECRET != '' && secrets.MSSTORE_TENANT_ID != '' }}
     steps:
       - uses: actions/checkout@v7
@@ -87,8 +87,8 @@ jobs:
           upload=$(basename dist/*.msixupload)
           cat >> "$GITHUB_STEP_SUMMARY" <<EOF
           ### Microsoft Store: upload by hand
-          This Partner Center account cannot submit through the Store API (individual accounts cannot add the Microsoft
-          Entra application it needs), so the package was built but not submitted.
+          The Partner Center API secrets (\`MSSTORE_…\`) are not set, so the package was built but not submitted. To
+          submit automatically, set up a Microsoft Entra application as in packaging/store/README.md (step 2).
           1. Download the **microsoft-store** artifact from [this run]($RUN_URL) and unzip it: it holds \`$upload\`.
           2. In [Partner Center › Apps and games](https://partner.microsoft.com/dashboard/apps-and-games/overview), open the
              app ($PRODUCT_ID) and start an update (or open the pending submission).
