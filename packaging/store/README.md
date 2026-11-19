@@ -12,7 +12,7 @@ Each store's job is skipped until its repository variables are set (`MSSTORE_PRO
 |---|---|---|
 | Account | [Partner Center](https://partner.microsoft.com/dashboard/registration), free for individuals and companies | [Apple Developer Program](https://developer.apple.com/programs/enroll/), 99 USD a year |
 | What CI builds | `.msixupload` with an x64 and an arm64 MSIX (unsigned; the Store signs it) | `.pkg` of a sandboxed, Apple-silicon-only `.app`, signed for the App Store |
-| How CI submits | `msstore publish` ([Microsoft Store Developer CLI](https://learn.microsoft.com/windows/apps/publish/msstore-dev-cli/overview)) | `fastlane deliver`, with an App Store Connect API key |
+| How CI submits | `msstore publish` ([Microsoft Store Developer CLI](https://learn.microsoft.com/windows/apps/publish/msstore-dev-cli/overview)) with a company account; with an individual account, CI builds the package and you upload it | `fastlane deliver`, with an App Store Connect API key |
 | After submitting | Certification (hours to a few days), then the Store publishes it | App Review (usually a day or two), then Apple releases it |
 
 Store copies never install or update themselves from GitHub (`StoreInstall` detects an MSIX package identity on Windows
@@ -47,7 +47,18 @@ package's startup task starts Shapeshifter at login.
    - **Package/Identity/Publisher** (`CN=…`): `MSSTORE_PUBLISHER`
    - **Package/Properties/PublisherDisplayName**: `MSSTORE_PUBLISHER_DISPLAY_NAME`
 
-### 2. Give CI access to Partner Center
+### 2. Give CI access to Partner Center (company accounts only)
+
+Submitting through the Store API needs a Microsoft Entra application with the **Manager** role, and only **company**
+Partner Center accounts can add one: individual accounts do not support other users or applications, so their
+**User management** page has no **Microsoft Entra applications** tab. An individual account cannot be turned into a
+company account; a company account is a separate (free) registration that needs a registered business.
+
+**Individual account:** skip this step and leave the four `MSSTORE_…` secrets unset. For every release the workflow then
+builds the package, keeps it for 90 days as the run's **microsoft-store** artifact and writes upload instructions in the
+run's summary (see step 3).
+
+**Company account:**
 
 1. In Partner Center open **Account settings › User management › Microsoft Entra applications** and add (or create) an
    application with the **Manager** role. Its **Tenant ID** and **Client ID** go into the secrets `MSSTORE_TENANT_ID` and
@@ -56,19 +67,28 @@ package's startup task starts Shapeshifter at login.
    renew the secret when they do.
 3. Your **Seller ID** is under **Account settings › Legal info › Developer** (or the account's profile): `MSSTORE_SELLER_ID`.
 
-### 3. The first submission (by hand)
+### 3. Submissions
 
-The Store API can only update an app whose first submission exists, so make that one in Partner Center:
+**Individual account (by hand, every release you want in the Store):**
+
+1. Open the release's **Store release** run (from the CI run of the merge, or run **Actions › Store release** with a
+   release tag) and download its **microsoft-store** artifact. Unzip it to get the `.msixupload` file.
+2. In Partner Center, open the app and start a submission (the first time) or an update, and drop the `.msixupload` under
+   **Packages**.
+3. The first time, also fill in **Pricing and availability**, **Properties** (category, privacy policy URL), **Age
+   ratings** and the **Store listing** (description, at least one screenshot, 1366×768 or larger). Under **Submission
+   options**, explain the `runFullTrust` restricted capability: "Shapeshifter is a desktop app (packaged Win32/.NET) and needs full trust to watch the clipboard, recognise its paste gesture with a low-level keyboard hook and paste into other apps."
+4. **Submit to the Store**. You don't have to upload every release: each upload replaces the version in the Store.
+
+**Company account:** the Store API can only update an app whose first submission exists, so make that one in Partner
+Center:
 
 1. Set the repository variables and secrets from the steps above, and the variable `STORE_DRAFT_ONLY` to `true`.
 2. Run **Actions › Store release** with the latest release tag. It uploads the package and leaves the submission as a
-   draft. (Or download the `microsoft-store` artifact and upload its `.msixupload` under **Packages** yourself.)
-3. Finish the draft in Partner Center: **Pricing and availability**, **Properties** (category, privacy policy URL),
-   **Age ratings** and the **Store listing** (description, at least one screenshot, 1366×768 or larger).
-   Under **Submission options**, explain the `runFullTrust` restricted capability: "Shapeshifter is a desktop app (packaged
-   Win32/.NET) and needs full trust to watch the clipboard, recognise its paste gesture with a low-level keyboard hook and paste into other apps."
-4. Submit it. When it is published, delete `STORE_DRAFT_ONLY` (or set it to `false`): from then on every release is
-   submitted and published without you.
+   draft.
+3. Finish the draft in Partner Center as in step 3 above, and submit it.
+4. When it is published, delete `STORE_DRAFT_ONLY` (or set it to `false`): from then on every release is submitted and
+   published without you.
 
 ## Mac App Store
 
@@ -135,10 +155,10 @@ gh variable set MSSTORE_PRODUCT_ID --repo ffMathy/Shapeshifter --body 9NXXXXXXXX
 | `MSSTORE_IDENTITY_NAME` | variable | Package/Identity/Name |
 | `MSSTORE_PUBLISHER` | variable | Package/Identity/Publisher (`CN=…`) |
 | `MSSTORE_PUBLISHER_DISPLAY_NAME` | variable | Package/Properties/PublisherDisplayName |
-| `MSSTORE_TENANT_ID` | secret | Entra tenant ID |
-| `MSSTORE_SELLER_ID` | secret | Partner Center seller ID |
-| `MSSTORE_CLIENT_ID` | secret | Entra application (client) ID |
-| `MSSTORE_CLIENT_SECRET` | secret | Entra application key |
+| `MSSTORE_TENANT_ID` | secret | Entra tenant ID (company accounts only; leave the four `MSSTORE_…` secrets unset for an individual account) |
+| `MSSTORE_SELLER_ID` | secret | Partner Center seller ID (company accounts only) |
+| `MSSTORE_CLIENT_ID` | secret | Entra application (client) ID (company accounts only) |
+| `MSSTORE_CLIENT_SECRET` | secret | Entra application key (company accounts only) |
 | `APPLE_TEAM_ID` | variable | Apple team ID; turns the Mac App Store job on |
 | `APP_STORE_CONNECT_KEY_ID` | variable | API key ID |
 | `APP_STORE_CONNECT_ISSUER_ID` | variable | API issuer ID |

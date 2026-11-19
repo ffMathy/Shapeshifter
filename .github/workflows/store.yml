@@ -36,6 +36,10 @@ jobs:
     # Prereleases (v7.1.0-beta.1) stay on GitHub.
     if: vars.MSSTORE_PRODUCT_ID != '' && !contains(inputs.tag, '-')
     runs-on: windows-latest
+    env:
+      # Submitting through the Store API needs a Microsoft Entra application, which only company Partner Center accounts
+      # can add. Without its secrets (an individual account) the job builds the package for uploading by hand.
+      CAN_SUBMIT: ${{ secrets.MSSTORE_CLIENT_SECRET != '' && secrets.MSSTORE_TENANT_ID != '' }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -72,10 +76,31 @@ jobs:
           name: microsoft-store
           path: dist/*.msixupload
           compression-level: 0
-          retention-days: 14
+          retention-days: 90
+      - name: Explain the manual upload
+        if: env.CAN_SUBMIT != 'true'
+        shell: bash
+        env:
+          PRODUCT_ID: ${{ vars.MSSTORE_PRODUCT_ID }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          upload=$(basename dist/*.msixupload)
+          cat >> "$GITHUB_STEP_SUMMARY" <<EOF
+          ### Microsoft Store: upload by hand
+          This Partner Center account cannot submit through the Store API (individual accounts cannot add the Microsoft
+          Entra application it needs), so the package was built but not submitted.
+          1. Download the **microsoft-store** artifact from [this run]($RUN_URL) and unzip it: it holds \`$upload\`.
+          2. In [Partner Center › Apps and games](https://partner.microsoft.com/dashboard/apps-and-games/overview), open the
+             app ($PRODUCT_ID) and start an update (or open the pending submission).
+          3. Under **Packages**, drop in \`$upload\` (older packages can stay; the Store offers the newest), save, and
+             **Submit to the Store**.
+          EOF
+          echo "::notice::Upload $upload from the microsoft-store artifact in Partner Center (see the run summary)."
       - name: Set up the Microsoft Store Developer CLI
+        if: env.CAN_SUBMIT == 'true'
         uses: microsoft/microsoft-store-apppublisher@v1.1
       - name: Sign in to Partner Center
+        if: env.CAN_SUBMIT == 'true'
         env:
           TENANT_ID: ${{ secrets.MSSTORE_TENANT_ID }}
           SELLER_ID: ${{ secrets.MSSTORE_SELLER_ID }}
@@ -83,6 +108,7 @@ jobs:
           CLIENT_SECRET: ${{ secrets.MSSTORE_CLIENT_SECRET }}
         run: msstore reconfigure --tenantId $env:TENANT_ID --sellerId $env:SELLER_ID --clientId $env:CLIENT_ID --clientSecret $env:CLIENT_SECRET
       - name: Submit
+        if: env.CAN_SUBMIT == 'true'
         # Replaces the pending submission with one for this package. Certification takes up to a few days; the Store
         # then publishes it. STORE_DRAFT_ONLY=true leaves the submission as a draft to commit in Partner Center.
         env:
