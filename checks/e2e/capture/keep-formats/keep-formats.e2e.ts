@@ -5,7 +5,7 @@ import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { TargetApp, releaseAll, sleep, unique, waitForPicker } from "../../desktop.ts";
-import { clipboardBytes, clipboardTypes, pasteFromHistory, pointerAway, scratch, waitForNoNotification, xcopy } from "../capture-driver.ts";
+import { clipboardBytes, clipboardTypes, pasteFromHistory, pointerAway, samePixels, scratch, waitForNoNotification, xcopy } from "../capture-driver.ts";
 
 let app: TargetApp;
 beforeAll(async () => { app = await TargetApp.start(); pointerAway(); }, 90_000);
@@ -46,19 +46,22 @@ test("another app's own format is kept byte for byte", async () => {
   expect([...clipboardBytes("application/x-ail-capture-check")]).toEqual([...bytes]);
 }, 30_000);
 
-// Skipped: on Linux, reading an image that Shapeshifter put back on the
-// clipboard makes Shapeshifter crash (ObjectDisposedException in Bitmap.Save),
-// which would end every check after this one. Reported to the owner; turn this
-// back into test(...) once fixed.
-test.skip("an image is kept pixel for pixel", async () => {
-  const { samePixels } = await import("../capture-driver.ts");
+test("an image is kept, and other apps can read it back", async () => {
   const png = join(scratch, `image-${unique()}.png`);
-  Bun.spawnSync(["convert", "-size", "4x3", "xc:red", "-fill", "blue", "-draw", "point 1,1", png]);
+  Bun.spawnSync(["convert", "-size", "4x3", "xc:red", "-fill", "blue", "-draw", "point 1,1", "-fill", "lime", "-draw", "point 2,2", png]);
   await xcopy(new Uint8Array(await Bun.file(png).arrayBuffer()), "image/png");
   await app.copy(`text after image ${unique()}`);
   await pasteFromHistory(app, ["v"]);
   expect(clipboardTypes()).toContain("image/png");
-  const back = join(scratch, `back-${unique()}.png`);
-  writeFileSync(back, clipboardBytes("image/png"));
-  expect(samePixels(png, back)).toBe(true);
-}, 30_000);
+  // Read twice, as an app asking for the image again would: same pixels both times.
+  for (const n of [1, 2]) {
+    const back = join(scratch, `back-${n}-${unique()}.png`);
+    writeFileSync(back, clipboardBytes("image/png"));
+    expect(samePixels(png, back)).toBe(true);
+  }
+  // Shapeshifter is still there: the next copy is in the history.
+  const id = unique();
+  await app.copy(`still running ${id}`);
+  expect(await pasteFromHistory(app, [])).toBe(`still running ${id}`);
+  expect(await pasteFromHistory(app, ["v"])).not.toBe(`still running ${id}`);
+}, 40_000);
