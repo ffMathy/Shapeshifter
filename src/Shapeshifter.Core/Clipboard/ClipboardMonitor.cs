@@ -68,7 +68,8 @@ public sealed class ClipboardMonitor : IDisposable
     /// How long a read of the clipboard may take before that copy is given up on. A read can wait forever: on X11,
     /// Avalonia 12.1 waits for the owner's answer with a timeout that never fires when the read continued off the UI
     /// thread, and an owner that lost the selection mid-read never answers. Without this, one such read held the
-    /// capture lock for good and no copy was recorded again until a restart.
+    /// capture lock for good and no copy was recorded again until a restart. A newer clipboard change does not cut a
+    /// read short: a read that is only slow still records its copy, in order.
     /// </summary>
     public TimeSpan ReadTimeout { get; set; } = TimeSpan.FromSeconds(5);
 
@@ -119,7 +120,7 @@ public sealed class ClipboardMonitor : IDisposable
         await captureLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            var snapshot = await backend.ReadAsync(cancellationToken).WaitAsync(ReadTimeout, cancellationToken).ConfigureAwait(false);
+            var snapshot = await backend.ReadAsync(cancellationToken).WaitAsync(ReadTimeout, CancellationToken.None).ConfigureAwait(false);
             if (snapshot.IsEmpty)
             {
                 return null;

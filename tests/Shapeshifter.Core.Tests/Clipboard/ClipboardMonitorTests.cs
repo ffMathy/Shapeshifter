@@ -485,6 +485,27 @@ public sealed class ClipboardMonitorTests : IDisposable
     }
 
     [Fact]
+    public async Task SlowRead_IsNotCutShortByANewerChange()
+    {
+        monitor.Start();
+        backend.Current = Text("slow");
+        backend.UncancellableReadGate = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var reads = backend.ReadCount;
+        changeSource.Raise();
+        await backend.WaitForReadsAsync(reads + 1, Ct);
+
+        // A newer copy arrives while the first read is still under way.
+        backend.Current = Text("newer");
+        changeSource.Raise();
+        await Task.Delay(100, Ct);
+        backend.UncancellableReadGate.SetResult();
+        await backend.WaitForReadsAsync(reads + 2, Ct);
+        await Task.Delay(100, Ct);
+
+        Assert.Equal(["newer", "slow"], history.Items.Select(i => i.Snapshot.Text));
+    }
+
+    [Fact]
     public async Task ReadThatNeverFinishes_TimesOut_AndReleasesTheNextCapture()
     {
         monitor.ReadTimeout = TimeSpan.FromMilliseconds(200);
@@ -559,6 +580,9 @@ public sealed class ClipboardMonitorTests : IDisposable
 
         public TaskCompletionSource? ReadGate { get; set; }
 
+        /// <summary>Holds reads until set, ignoring cancellation, as the real backend does for text, files and images.</summary>
+        public TaskCompletionSource? UncancellableReadGate { get; set; }
+
         /// <summary>The next read never finishes and ignores cancellation, as an X11 read whose owner never answers.</summary>
         public bool NextReadHangs { get; set; }
 
@@ -580,6 +604,8 @@ public sealed class ClipboardMonitorTests : IDisposable
 
             try
             {
+                // What the clipboard held when the read began, as a real read returns.
+                var snapshot = Current;
                 var count = Interlocked.Increment(ref readCount);
                 lock (gate)
                 {
@@ -595,6 +621,11 @@ public sealed class ClipboardMonitorTests : IDisposable
                     await new TaskCompletionSource().Task;
                 }
 
+                if (UncancellableReadGate is { } slow)
+                {
+                    await slow.Task;
+                }
+
                 if (ReadGate is { } readGate)
                 {
                     await readGate.Task.WaitAsync(cancellationToken);
@@ -605,7 +636,7 @@ public sealed class ClipboardMonitorTests : IDisposable
                     throw exception;
                 }
 
-                return Current;
+                return snapshot;
             }
             finally
             {
