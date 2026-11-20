@@ -82,6 +82,7 @@ test("on a screen too short for the picker, its bottom is cut off", async () => 
     const box = await openTwice(d);
     const text = squash(readText(shootPicker(box, d)));
     await cancelThePicker(d);
+    console.log("SHORT", JSON.stringify(box), text);
     expect(box.y).toBe(0);
     expect(box.height).toBe(480);
     expect(text).toContain("51 characters");

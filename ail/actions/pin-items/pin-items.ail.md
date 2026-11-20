@@ -40,15 +40,15 @@ node PinItems : flow   level: experience
     decide a plain Ctrl+V still pastes the newest copy, not a pinned item; the picker opens on the newest copy
       because pinning must not change what an ordinary paste does
     decide pinning saves the item on the computer straight away; unpinning deletes it from there
-      because a pin is a promise that the item survives a restart, a crash included
+      because the action promises it "is there the next time you open Shapeshifter", and Unpin that it "is no longer saved to your computer"
     decide an unpinned item goes back to the top of the history, as if just copied
       because "unknown, confirm with the owner: should it go back where its copy time puts it?"
     decide copying again what a pinned item holds leaves the pinned item where it is, and adds no duplicate
-      because the pinned order is the user's own
+      because "unknown, confirm with the owner"
     decide pinned items do not count towards "Items to remember"
       because they are kept in addition (the setting's own description says so)
     decide nothing but pinned items is written to disk, unless "Remember history after restart" is on
-      because what was copied may be a password; by default it lives only in memory (commit b3f57d8)
+      because "unknown, confirm with the owner"; commit b3f57d8 keeps it so: "by default only pinned items are ever written to disk"
   copy
     action.pin     "Pin to clipboard"
     action.unpin   "Unpin from clipboard"

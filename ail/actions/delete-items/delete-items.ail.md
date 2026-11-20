@@ -30,7 +30,7 @@ node DeleteItems : flow   level: experience
     decide deleting the last item closes the picker and pastes nothing
       because there is nothing left to choose
     decide a deleted pinned item is also deleted from the computer, and a deleted item is gone from a remembered history
-      because what the user deleted must not come back after a restart
+      because "unknown, confirm with the owner: so a deleted item never comes back after a restart?"
     decide deleting does not clear the clipboard, even when the deleted item is what it holds
       because "unknown, confirm with the owner: should deleting the newest item also clear the clipboard?"
     decide there is no undo, and no key to delete everything; Clear history in the tray menu does that

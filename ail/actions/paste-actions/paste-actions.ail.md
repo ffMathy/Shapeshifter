@@ -34,15 +34,15 @@ node PasteActions : flow   level: experience
     decide Paste moves the item to the top of the history; the other paste actions do not
       because "unknown, confirm with the owner: should Paste as plain text or as file also move it up?"
     decide Paste as plain text is offered only for text that has formatting; plain text from formatted text keeps its own plain version, or is taken out of the web page format when there is none
-      because for text without formatting it would be the same as Paste
+      because "unknown, confirm with the owner: because it would paste the same as Paste?"
     decide what Paste as plain text and Paste as file put on the clipboard is not added to the history
-      because it is Shapeshifter's own doing, not something the user copied
+      because "unknown, confirm with the owner: because the user did not copy it?"
     decide Paste as file names the file after when the item was copied, "Text" or "Image" then the date and time, and gives each item a folder of its own
       because items copied in the same second must not overwrite each other's file
     decide an image file gets the image's own type: PNG, JPEG, GIF, BMP, WebP or TIFF, and PNG when it is none of those
       because the file must open as what it is (PR #629)
     decide the files are temporary and deleted the next time Shapeshifter starts
-      because they hold copied content, and are only needed for the paste
+      because "unknown, confirm with the owner"
     decide on Linux the file is offered only as a list of file addresses
       because "unknown, confirm with the owner: file managers that want their own format cannot paste it"
   uses      ActionCatalog

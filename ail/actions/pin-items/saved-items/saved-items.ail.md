@@ -36,15 +36,15 @@ node SavedItems : data   level: system
     decide write into "<id>.saving", then move the folder into place
       because a folder that exists is complete; a crash leaves only a ".saving" folder, which is skipped
     decide a manifest with unknown parts, missing lists or a file outside its folder is skipped, never trusted
-      because the files can be edited by hand or damaged, and must not read files elsewhere on disk
+      because a manifest must never make the app read files outside its item's folder (PinnedItemStore.Resolve)
     decide each change of the history schedules one sync on a background task; changes during a sync queue exactly one more
       because a burst of copies must not write the disk once per copy, nor block the clipboard
     decide a sync writes only items not on disk yet, deletes folders of items that are gone, then rewrites order.json through order.json.tmp
       because items never change once copied, so only the order needs rewriting
     decide on quitting, syncs are waited for at most 3 seconds
-      because quitting must not hang on a slow disk
+      because "unknown, confirm with the owner"
     decide I/O, permission and JSON errors are logged as warnings and the sync is skipped
-      because a full or read-only disk must not crash the app
+      because "unknown, confirm with the owner"
     decide pinned order after a restart comes from each folder's last write time
       because "unknown, confirm with the owner: an explicit pin order was never stored"
   sources

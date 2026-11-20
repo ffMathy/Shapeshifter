@@ -32,13 +32,13 @@ node RememberHistory : flow   level: experience
     decide off by default
       because by default only pinned items are ever written to disk (commit b3f57d8)
     decide the history is saved as it changes, in the background, not when Shapeshifter quits
-      because a crash or a power cut must not lose it; a burst of copies is saved once
+      because it must survive a reboot, not only a clean quit (#459); a burst of copies is saved once
     decide turning it off deletes what was saved, at once
-      because a user who turns it off expects nothing of the history left on disk
+      because "unknown, confirm with the owner: so nothing of the history is left on disk?"
     decide on start, the saved items go below the pinned ones and the clipboard is read after them, so what it holds lands on top
       because the newest copy is still what was copied last (commit b3f57d8)
     decide restored items keep when they were copied, and the "Items to remember" limit still applies to them
-      because the history must read the same as before the restart
+      because "unknown, confirm with the owner"
     decide the saved history sits next to the pinned items, in Shapeshifter's data folder
       because "unknown, confirm with the owner: is it worth encrypting what is saved?"
   copy

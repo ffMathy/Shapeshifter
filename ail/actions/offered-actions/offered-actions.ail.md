@@ -41,8 +41,8 @@ node OfferedActions : flow   level: experience
     decide one fixed order for every kind: Paste, Paste as file, Paste as plain text, Upload and paste link, Copy as compressed folder, Copy image from link, Open link or Open links, then Pin or Unpin
       because Paste is the default and comes first; "unknown, confirm with the owner: why this order for the rest"
     decide a pinned item offers "Unpin from clipboard" in place of "Pin to clipboard", in the same place
-      because one action toggles, so pinning and unpinning sit under the same keys
-    decide the descriptions say what the action does with this item: ".txt" for text, the image's own type (".png", ".jpeg") for an image, one link or several
+      because "unknown, confirm with the owner"
+    decide the descriptions say what the action does with this item: ".txt" for text, the image's own type (".png", ".jpg") for an image, one link or several
       because each description is written for the item it is shown with (#62 "Have description of actions be dynamically generated")
     decide other data is headed "Actions for this text" in the Windows and Mac looks
       because "unknown, confirm with the owner: keep this?"

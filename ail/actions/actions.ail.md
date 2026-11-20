@@ -34,13 +34,13 @@ node Actions : flow   level: experience
   how
     decide the actions sit to the right of the history and open with Right; Left goes back
       because they moved to the right of the picker, so the arrow points where they are (commit "Open the actions with the Right arrow, now that they are on the right")
-      rejected showing them all the time with Left to reach them, the earlier layout of #258, because the picker became right-aligned to the history in its later redesign
+      rejected hiding the actions until an arrow is pressed, which #258 planned, because "unknown, confirm with the owner"
     decide while the actions are open, Up and Down move through them and wrap around at both ends
       because "unknown, confirm with the owner: the same wrap-around as the history, on purpose?"
     decide V, a number or Delete leaves the actions: the choice goes back to the history, and moving to another item chooses Paste again
-      because each item has its own actions, so a choice made for one item must not carry over to another
+      because "unknown, confirm with the owner: so a choice made for one item never runs on another?"
     decide the chosen action runs when Ctrl is let go, or on Enter, exactly as Paste does
-      because choosing an action is part of the same gesture; nothing else to learn
+      because "unknown, confirm with the owner"
     decide the first action, Paste, is the default and carries a tick
       because a plain release must paste as before (#573 "Default action never selected")
     decide Right does nothing on an item without actions
