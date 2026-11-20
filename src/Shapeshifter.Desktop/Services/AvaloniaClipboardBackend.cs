@@ -34,7 +34,35 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
     private IClipboard Clipboard => host.Clipboard ?? throw new InvalidOperationException("The clipboard is not available.");
 
     public Task<ClipboardSnapshot> ReadAsync(CancellationToken cancellationToken = default) =>
-        OnUiThread(() => ReadCoreAsync(cancellationToken));
+        OnUiThread(async () =>
+        {
+            using var flush = KeepX11RequestsFlowing();
+            return await ReadCoreAsync(cancellationToken).ConfigureAwait(true);
+        });
+
+    /// <summary>
+    /// On X11, Avalonia 12.1 continues a clipboard read on a thread-pool thread and sends its requests to the owner
+    /// from there without flushing them. Its event loop flushes only when it wakes, and it can sleep with nothing to
+    /// wake it: the request then stays in Xlib's buffer, the owner never answers, and the read waits forever (its own
+    /// timeout runs on a dispatcher that never runs). A timer ticking on the UI thread while a read is under way wakes
+    /// the loop, which flushes the request.
+    /// </summary>
+    private static IDisposable? KeepX11RequestsFlowing()
+    {
+        if (!OperatingSystem.IsLinux())
+        {
+            return null;
+        }
+
+        var timer = new DispatcherTimer(TimeSpan.FromMilliseconds(20), DispatcherPriority.Background, (_, _) => { });
+        timer.Start();
+        return new TimerStopper(timer);
+    }
+
+    private sealed class TimerStopper(DispatcherTimer timer) : IDisposable
+    {
+        public void Dispose() => timer.Stop();
+    }
 
     public Task WriteAsync(ClipboardSnapshot snapshot, CancellationToken cancellationToken = default) =>
         OnUiThread(async () =>
