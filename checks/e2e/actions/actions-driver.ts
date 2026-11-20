@@ -14,7 +14,7 @@
 import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { holdVUntilThePickerAppears, keepScreen, keyDown, keyUp, sleep, tap } from "../desktop.ts";
+import { holdVUntilThePickerAppears, keepScreen, keepScreenIfNone, keyDown, keyUp, sleep, tap } from "../desktop.ts";
 
 const root = resolve(import.meta.dir, "../../..");
 const run = (cmd: string[], env: Record<string, string | undefined> = process.env) => Bun.spawnSync(cmd, { env });
@@ -66,6 +66,7 @@ const OCR_PASSES = [
 export function readPickerPasses(part: "actions" | "history" | "all" = "all"): string[] {
   const id = pickerWindow();
   if (!id) throw new Error("the picker is not on screen");
+  keepScreen();
   const dir = mkdtempSync(join(tmpdir(), "ail-actions-ocr-"));
   const shot = join(dir, "picker.png");
   run(["import", "-window", id, shot]);
@@ -257,7 +258,7 @@ export class PrivateDesktop {
   }
 
   async stop() {
-    keepScreen(this.display);
+    keepScreenIfNone(this.display);
     this.app?.kill();
     for (const p of this.procs.reverse()) p.kill();
     await sleep(300);

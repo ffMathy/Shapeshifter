@@ -13,7 +13,7 @@
 import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { TargetApp, keyDown, keyUp, sleep, tap, waitForPicker } from "../desktop.ts";
+import { TargetApp, keepScreenSoon, keyDown, keyUp, sleep, tap, waitForPicker } from "../desktop.ts";
 
 export const scratch = mkdtempSync(join(tmpdir(), "ail-capture-"));
 
@@ -130,7 +130,10 @@ export async function watchNotifications(ms: number): Promise<{ at: number; box:
   const start = Date.now();
   while (Date.now() - start < ms) {
     const box = notification();
-    if (box) seen.push({ at: Date.now() - start, box });
+    if (box) {
+      if (!seen.length) keepScreenSoon();
+      seen.push({ at: Date.now() - start, box });
+    }
     await sleep(40);
   }
   if (seen.some((s) => isTip(s.box))) lastTipSeen = Date.now();

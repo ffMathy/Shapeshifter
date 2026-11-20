@@ -162,12 +162,35 @@ export function screenOf(display = process.env.DISPLAY ?? ""): Uint8Array {
 let keptScreen: Uint8Array | null = null;
 
 /**
- * For a scenario played on a desktop of its own: keeps that desktop's screen before it is closed, so the scenario's
- * screenshot shows where it ended rather than the shared desktop.
+ * Keeps the screen as it is now as the scenario's proof, in place of the screen it ends on. The checks' helpers call
+ * this at the moment they look at something that is gone by the end, such as the open picker or a notification; the
+ * last one kept wins.
  */
-export function keepScreen(display: string) {
+export function keepScreen(display = process.env.DISPLAY ?? "") {
   const png = screenOf(display);
   if (png.length) keptScreen = png;
+}
+
+let pendingScreen: Promise<void> | null = null;
+
+/**
+ * Like keepScreen, but without waiting for the screenshot: for helpers that time what is on screen, such as the
+ * notification watchers. The test waits for it before saving.
+ */
+export function keepScreenSoon(display = process.env.DISPLAY ?? "") {
+  const p = Bun.spawn(["import", "-window", "root", "png:-"], { env: { ...process.env, DISPLAY: display }, stdout: "pipe", stderr: "ignore" });
+  pendingScreen = (async () => {
+    const png = new Uint8Array(await new Response(p.stdout).arrayBuffer());
+    if ((await p.exited) === 0 && png.length) keptScreen = png;
+  })();
+}
+
+/**
+ * For a scenario played on a desktop of its own: keeps that desktop's screen before it is closed, unless something
+ * was kept already, so the scenario's screenshot shows its own desktop rather than the shared one.
+ */
+export function keepScreenIfNone(display: string) {
+  if (!keptScreen) keepScreen(display);
 }
 
 /**
@@ -177,9 +200,11 @@ export function keepScreen(display: string) {
 export function test(name: string, body: () => Promise<unknown> | unknown, timeout?: number) {
   bunTest(name, async () => {
     keptScreen = null;
+    pendingScreen = null;
     try {
       await body();
     } finally {
+      await pendingScreen;
       const dir = process.env.AIL_SHOTS_DIR;
       if (dir) {
         const png = keptScreen ?? screenOf();

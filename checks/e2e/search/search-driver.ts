@@ -8,7 +8,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { keyDown, keyUp, sleep, tap } from "../desktop.ts";
+import { keepScreen, keyDown, keyUp, sleep, tap } from "../desktop.ts";
 
 function run(...args: string[]): string {
   // One thread for tesseract: on a busy machine its thread pool makes it many times slower.
@@ -60,6 +60,7 @@ export function pickerWords(): string {
   const ids = run("xdotool", "search", "--onlyvisible", "--name", "^Shapeshifter$").split("\n").filter(Boolean);
   const id = ids.find((w) => Number(/Geometry:\s*\d+x(\d+)/.exec(run("xdotool", "getwindowgeometry", w))?.[1]) >= 200);
   if (!id) return "";
+  keepScreen();
   const shot = join(scratch, "picker.png");
   const big = join(scratch, "picker-big.png");
   run("import", "-window", id, shot);
