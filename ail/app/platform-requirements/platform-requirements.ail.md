@@ -8,11 +8,10 @@ node PlatformRequirements : fn   level: system
   why   A gesture that silently does nothing looks like a broken app; people must be
         told what is missing and how to fix it.   <- App
   what
-    exports
-      PlatformServices.CreateAsync(logger) => PlatformServices    throws when the platform cannot work at all
-      PlatformServices.Warnings: string[]       limits of this session, shown in the settings window
-      PlatformServices.PlatformName => "Windows" | "macOS" | "Linux (X11)" | "Linux (Wayland)" | the OS name
-    rules
+    PlatformServices.CreateAsync(logger: Logger) -> later PlatformServices — throws when the platform cannot work at all
+    PlatformServices.Warnings: list of text — limits of this session, shown in the settings window
+    PlatformServices.PlatformName: "Windows" | "macOS" | "Linux (X11)" | "Linux (Wayland)" | text — text is the OS name for any other system
+    what CreateAsync finds, by platform:
       Linux, no X11 display reachable => cannot start: "Shapeshifter needs an X11 display (DISPLAY is not set). On Wayland, make sure XWayland is available."
       Linux, WAYLAND_DISPLAY set or XDG_SESSION_TYPE=wayland => runs through XWayland (XRecord and XTest) with the warning
         "This is a Wayland session. Wayland does not let applications observe or synthesize global keystrokes, so the paste gesture only works while an X11 (XWayland) application is focused. Log in to an X11 session for full support."

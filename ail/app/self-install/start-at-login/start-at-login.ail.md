@@ -7,11 +7,10 @@ node StartAtLogin : fn   level: system
   why   A clipboard manager is only useful if it is already running when something is
         copied, so it must start with the user's session.   <- SelfInstall
   what
-    exports
-      IAutostartService { IsSupported: bool; IsEnabled: bool; SetEnabled(enabled: bool) }
-      PlatformServices.CreateAutostart() => WindowsAutostartService | LaunchAgentAutostartService | XdgAutostartService | UnsupportedAutostartService
-      StartCommand.Get() => [Environment.ProcessPath], or [dotnet, Shapeshifter.dll] when run as "dotnet Shapeshifter.dll"
-    per platform (IsEnabled is whether the entry exists; SetEnabled(false) removes it)
+    type IAutostartService = { IsSupported: boolean, IsEnabled: boolean, SetEnabled(enabled: boolean) -> nothing }
+    PlatformServices.CreateAutostart() -> WindowsAutostartService | LaunchAgentAutostartService | XdgAutostartService | UnsupportedAutostartService
+    StartCommand.Get() -> list of text   — [the running process's executable path (Environment.ProcessPath)], or [dotnet, Shapeshifter.dll] when run as "dotnet Shapeshifter.dll"
+    Per platform (IsEnabled is whether the entry exists; SetEnabled(false) removes it):
       Windows => value "Shapeshifter" under HKCU\Software\Microsoft\Windows\CurrentVersion\Run: each part of the command in double quotes, joined by spaces
       macOS => ~/Library/LaunchAgents/app.shapeshifter.desktop.plist: Label app.shapeshifter.desktop, ProgramArguments = the command,
         RunAtLoad true, ProcessType Interactive
@@ -20,7 +19,7 @@ node StartAtLogin : fn   level: system
         "Exec=<the command, quoted>", "Terminal=false", "X-GNOME-Autostart-enabled=true"
       anything else => IsSupported false; the settings switch is greyed
     Exec quoting (Linux, Desktop Entry spec): each part in double quotes with \ " ` $ escaped, then every \ doubled again and % doubled
-    when it is turned on
+    It is turned on:
       by the installer, on the first start of a fresh install (--first-install); see SelfInstall
       on every start of the installed copy whose entry already exists, so the entry points at the installed file
       by the "Start at login" switch in the settings (on writes the entry for the running file, off removes it)

@@ -8,9 +8,11 @@ node DataLocations : data   level: system
   why   People must be able to find, back up or delete what a clipboard manager keeps,
         and other users of the computer must not read it.   <- App
   what
-    exports
-      AppPaths(ConfigDirectory, DataDirectory, LogDirectory, TempDirectory)
-      AppPaths.CreateDefault() => AppPaths;  AppPaths.ForRoot(root) => AppPaths;  EnsureCreated()
+    type AppPaths = { ConfigDirectory: text, DataDirectory: text, LogDirectory: text, TempDirectory: text }
+    AppPaths.CreateDefault() -> AppPaths
+    AppPaths.ForRoot(root: text) -> AppPaths
+    AppPaths.EnsureCreated() -> nothing
+    the files and folders an AppPaths derives, each a path as text:
       SettingsFile = Config/settings.json;  PinnedDirectory = Data/Pinned;  HistoryDirectory = Data/History
       InstanceLockFile = Data/instance.lock;  InstanceInfoFile = Data/instance.json;  install.json = Data/install.json
       logs: Log/shapeshifter-<yyyyMMdd>.log, one file a day, the last 7 kept; Debug and up in the file, Information and up on the console
@@ -21,15 +23,14 @@ node DataLocations : data   level: system
       Linux => config $XDG_CONFIG_HOME/shapeshifter (H/.config when unset); data $XDG_DATA_HOME/shapeshifter (H/.local/share);
         logs data/logs; temp $XDG_RUNTIME_DIR/shapeshifter when that folder exists, else data/temp
     examples
-      Linux, H=/home/u, no XDG variables, no runtime folder => (/home/u/.config/shapeshifter, /home/u/.local/share/shapeshifter, /home/u/.local/share/shapeshifter/logs, /home/u/.local/share/shapeshifter/temp)
+      Linux, H=/home/u, no XDG variables, no runtime folder => { ConfigDirectory: "/home/u/.config/shapeshifter", DataDirectory: "/home/u/.local/share/shapeshifter", LogDirectory: "/home/u/.local/share/shapeshifter/logs", TempDirectory: "/home/u/.local/share/shapeshifter/temp" }
       Linux, XDG_RUNTIME_DIR=/run/user/1000 (exists) => temp /run/user/1000/shapeshifter
       ForRoot("/tmp/s").SettingsFile => "/tmp/s/config/settings.json"
       driven, Linux, throwaway HOME and XDG_* => .config/shapeshifter (0700) and .local/share/shapeshifter (0700) holding install.json, instance.json, instance.lock, logs/, temp/
-    rules
-      on Unix every folder is created with mode 0700, since they hold clipboard contents; Windows uses its per-user folders as they are
-      the temp folder is emptied at every start by deleting and re-creating it, which re-creates it with the default
-        mode (driven: 0755 inside the 0700 data folder); actions put files there (text files, zip archives)
-      --uninstall removes none of these; nothing is ever sent elsewhere, except an image the user chooses to upload
+    on Unix every folder is created with mode 0700, since they hold clipboard contents; Windows uses its per-user folders as they are
+    the temp folder is emptied at every start by deleting and re-creating it, which re-creates it with the default
+      mode (driven: 0755 inside the 0700 data folder); actions put files there (text files, zip archives)
+    --uninstall removes none of these; nothing is ever sent elsewhere, except an image the user chooses to upload
   how
     decide follow each platform's conventions (XDG on Linux, Application Support on macOS, AppData on Windows)
       because "unknown, confirm with the owner"

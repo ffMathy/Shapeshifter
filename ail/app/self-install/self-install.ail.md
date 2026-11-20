@@ -8,13 +8,15 @@ node SelfInstall : fn   level: system
   why   Downloading one file and starting it should be all it takes, without
         administrator rights, and later downloads must not leave stray copies.   <- App
   what
-    exports
-      SelfInstaller.OnStartup(args) => StartupResult(Exit, Arguments, IsInstalledCopy, FirstInstall)   first thing in Main, never throws
-      SelfInstaller.ParseArguments(args) => (Remaining, Replaces?, NoInstall, Uninstall, FirstInstall)
-      InstallLayout.Create(app, platform, home, localAppData, stateDirectory, dataHome?) => InstallLayout(Target, Executable, StateFile, DataHome)
-      RunningApp.Current() => RunningApp(ExecutablePath, BundlePath?, IsSingleFile)
-    options   --no-install  --uninstall  --replaces <pid> (from an update)  --first-install (from the installer); all removed from the arguments
-    rules, in order
+    type StartupResult = { Exit: boolean, Arguments: list of text, IsInstalledCopy: boolean, FirstInstall: boolean }
+    SelfInstaller.OnStartup(args: list of text) -> StartupResult — first thing in Main, never throws
+    SelfInstaller.ParseArguments(args: list of text) -> { Remaining: list of text, Replaces: integer or nothing, NoInstall: boolean, Uninstall: boolean, FirstInstall: boolean }
+    type InstallLayout = { Target: text, Executable: text, StateFile: text, DataHome: text }
+    InstallLayout.Create(app: AppIdentity, platform: InstallPlatform, home: text, localAppData: text, stateDirectory: text, dataHome: text or nothing = nothing) -> InstallLayout
+    type RunningApp = { ExecutablePath: text, BundlePath?: text, IsSingleFile: boolean }
+    RunningApp.Current() -> RunningApp
+    the options are --no-install, --uninstall, --replaces <pid> (from an update) and --first-install (from the installer); all are removed from the arguments
+    at start, in order:
       --replaces <pid> => first wait up to 30 s for that process to exit
       not a single-file build (dotnet run, tests, "dotnet Shapeshifter.dll") => run where it is, no install, no update
       leftovers of earlier swaps next to the running file are cleaned
@@ -36,7 +38,7 @@ node SelfInstall : fn   level: system
         and the icon in …/icons/hicolor/256x256/apps/shapeshifter.png
       install.json in the data folder: {"version": "7.1.0", "path": "<the installed file>"}
     examples
-      ParseArguments(["--no-install", "--replaces", "42", "x"]) => (["x"], 42, true, false, false)
+      ParseArguments(["--no-install", "--replaces", "42", "x"]) => { Remaining: ["x"], Replaces: 42, NoInstall: true, Uninstall: false, FirstInstall: false }
       Create(app, Linux, "/home/u", "", "/home/u/.local/share/shapeshifter").Executable => "/home/u/.local/bin/shapeshifter"
       Create(app, Windows, "C:\Users\u", "C:\Users\u\AppData\Local", s).Executable => "C:\Users\u\AppData\Local\Programs\Shapeshifter\Shapeshifter.exe"
       Create(app, MacOS, "/Users/u", "", s).Executable => "/Users/u/Applications/Shapeshifter.app/Contents/MacOS/Shapeshifter"

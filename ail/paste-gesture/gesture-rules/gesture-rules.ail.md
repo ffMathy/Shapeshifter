@@ -10,14 +10,17 @@ node GestureRules : fn   level: system
   why   The timing and key rules decide whether a paste lands once, twice or
         not at all, so they must be exact and testable without a desktop.   <- PasteGesture
   what
-    exports
-      PasteGestureStateMachine(session: () => (items: GestureItem[], defaultIndex: int))
-      Handle(input: KeyInput, now: TimeSpan) => GestureResult(suppress: bool, effects: GestureEffect[])
-      Tick(now: TimeSpan) => GestureResult      shows the picker once the show delay has passed
-      Cancel() => GestureResult
-      ShowDelay: TimeSpan = 300 ms;  PasteOnTriggerRelease: bool = true
-    effects   ShowPicker(sel) | UpdatePicker(sel) | HidePicker | PerformAction(item, action) | PasteCurrentClipboard | DeleteItem(item) | GestureCancelled | BeginSearch(sel) | RestoreFocus
-    notation  keys(...) feeds key events at the given ms; ↓ is a press, ↑ a release; tick(t) advances the clock; items: n means a history of n items with defaultIndex 0
+    PasteGestureStateMachine(session: () -> { items: list of GestureItem, defaultIndex: integer }) -> PasteGestureStateMachine
+    type GestureResult = { suppress: boolean, effects: list of GestureEffect }
+    PasteGestureStateMachine.Handle(input: KeyInput, now: duration) -> GestureResult
+    PasteGestureStateMachine.Tick(now: duration) -> GestureResult   — shows the picker once the show delay has passed
+    PasteGestureStateMachine.Cancel() -> GestureResult
+    ShowDelay: duration = 300 ms
+    PasteOnTriggerRelease: boolean = true
+    type GestureEffect = { kind: "ShowPicker", sel: PickerSelection } | { kind: "UpdatePicker", sel: PickerSelection } | { kind: "HidePicker" }
+      | { kind: "PerformAction", item: text, action: integer } | { kind: "PasteCurrentClipboard" } | { kind: "DeleteItem", item: text }
+      | { kind: "GestureCancelled" } | { kind: "BeginSearch", sel: PickerSelection } | { kind: "RestoreFocus" }
+    In the examples, keys(...) feeds key events at the given ms; ↓ is a press, ↑ a release; tick(t) advances the clock; items: n means a history of n items with defaultIndex 0.
     examples
       keys(items: 3, Ctrl↓ 0, V↓ 0, V↑ 50) => effects [PasteCurrentClipboard]; V↓ and V↑ suppressed; Ctrl passes through
       keys(items: 3, Ctrl↓ 0, V↓ 0, V↑ 50, V↓ 100, V↑ 150) => [PasteCurrentClipboard], then [PasteCurrentClipboard]

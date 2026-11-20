@@ -5,14 +5,14 @@ node PlacementRules : fn   level: system
   why   Where the picker goes and how much history it shows must be exact on
         every screen size, scaling and monitor layout.   <- OpenPicker
   what
-    exports
-      TopFraction = 0.16;  HeightFraction = 0.62
-      FindScreen(screens, pointer: PixelPoint | null) => Screen | null
-      MaxListHeight(workingArea, scaling, rowHeight) => double
-      FitsOnScreen(pickerHeight, workingArea, scaling) => bool
-      Position(workingArea, pickerSize, scaling) => PixelPoint
-      Scaling(window, screen) => the screen's scaling on Windows and X11; the window's desktop scaling (1) on macOS, where windows are placed in points
-    notation   areas are x,y width×height in pixels; picker sizes in window units; row heights per look: Linux 64, Mac 64, Windows 62
+    TopFraction: number = 0.16
+    HeightFraction: number = 0.62
+    FindScreen(screens: list of Screen, pointer: PixelPoint or nothing) -> Screen or nothing
+    MaxListHeight(workingArea: PixelRect, scaling: number, rowHeight: number) -> number
+    FitsOnScreen(pickerHeight: number, workingArea: PixelRect, scaling: number) -> boolean
+    Position(workingArea: PixelRect, pickerSize: Size, scaling: number) -> PixelPoint
+    Scaling(window: Window, screen: Screen) -> number   — the screen's scaling on Windows and X11; the window's desktop scaling (1) on macOS, where windows are placed in points
+    In the examples, areas are x,y width×height in pixels and picker sizes are in window units; row heights per look are Linux 64, Mac 64, Windows 62.
     examples
       MaxListHeight(0,0 1280×800, 1, 64) => 448; seven whole rows of 0.62 × 800 = 496
       MaxListHeight(0,0 1920×1040, 1, 62) => 620
@@ -30,7 +30,7 @@ node PlacementRules : fn   level: system
       Position(0,0 600×800, 756×584, 1) => 0,128; never left of the area
       Position(0,0 2560×1600, 756×584, 2) => 524,256
       FindScreen(two screens, pointer on the second) => the second
-      FindScreen(two screens, pointer null) => the primary screen, else the first
+      FindScreen(two screens, pointer nothing) => the primary screen, else the first
       FindScreen(macOS, pointer in points 1500,300 over a Retina screen 0,0 3024×1964 at scaling 2) => that screen; the pointer is matched against the bounds divided by the scaling
   how
     decide the picker is placed after it is shown, from its laid-out size, and placed again whenever its content changes

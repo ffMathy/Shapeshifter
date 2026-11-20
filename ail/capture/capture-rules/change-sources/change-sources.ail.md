@@ -8,10 +8,10 @@ node ChangeSources : fn   level: system
   why   Noticing a copy must cost nothing and never get in another app's
         way, on every system.   <- CaptureRules
   what
-    exports
-      IClipboardChangeSource { Changed: event; Start() }
-      PlatformServices.CreateClipboardChangeSource(backend, logger) => IClipboardChangeSource
-      PollingClipboardChangeSource(tokenProvider, interval, logger)
+    type IClipboardChangeSource = { Start() -> nothing }
+    IClipboardChangeSource.Changed — an event, raised with no arguments when the clipboard changed
+    PlatformServices.CreateClipboardChangeSource(backend: IClipboardBackend, logger: Logger) -> IClipboardChangeSource
+    PollingClipboardChangeSource(tokenProvider: () -> later text, interval: duration, logger: Logger or nothing = nothing) -> PollingClipboardChangeSource
     examples
       Windows => polls GetClipboardSequenceNumber every 150 ms
       macOS => polls NSPasteboard.changeCount every 200 ms

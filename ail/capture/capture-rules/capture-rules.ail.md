@@ -8,13 +8,16 @@ node CaptureRules : fn   level: system
   why   Capturing runs on every copy the user makes in any app, so its
         timing and duplicate rules must be exact and testable without a desktop.   <- Capture
   what
-    exports
-      ClipboardMonitor(backend: IClipboardBackend, changes: IClipboardChangeSource, history: ClipboardHistory, logger?, sourceLocator?: IClipboardSourceLocator)
-      Start(); CaptureNowAsync(source?) => ClipboardItem?; WriteAsync(snapshot)       Shapeshifter's own clipboard writes go through WriteAsync
-      Captured: event (item, isNew, source)
-      Debounce: TimeSpan = 100 ms;  SelfWriteGracePeriod: TimeSpan = 750 ms
-      ClipboardHistory(maxUnpinnedItems = 50).Add(snapshot, source?, out isNew) => ClipboardItem
-    notation  change(t) is a change notice at t ms; history [a, b] is top first, *p a pinned item
+    ClipboardMonitor(backend: IClipboardBackend, changes: IClipboardChangeSource, history: ClipboardHistory, logger: Logger or nothing = nothing, sourceLocator: IClipboardSourceLocator or nothing = nothing) -> ClipboardMonitor
+    ClipboardMonitor.Start() -> nothing
+    ClipboardMonitor.CaptureNowAsync(source: ClipboardSource or nothing = nothing) -> later ClipboardItem or nothing
+    ClipboardMonitor.WriteAsync(snapshot: ClipboardSnapshot) -> later nothing — Shapeshifter's own clipboard writes go through WriteAsync
+    ClipboardMonitor.Captured — an event carrying (item, isNew, source)
+    ClipboardMonitor.Debounce: duration = 100 ms
+    ClipboardMonitor.SelfWriteGracePeriod: duration = 750 ms
+    ClipboardHistory(maxUnpinnedItems: integer = 50) -> ClipboardHistory
+    ClipboardHistory.Add(snapshot: ClipboardSnapshot, source: ClipboardSource or nothing = nothing) -> { item: ClipboardItem, isNew: boolean }
+    in the examples, change(t) is a change notice at t ms; history [a, b] is top first, *p a pinned item
     examples
       change(0) => the source is located at 0 ms, the clipboard is read at 100 ms, one capture
       change(0), change(50) => the first capture is cancelled; source located at 50, read at 150, one capture

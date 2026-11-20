@@ -5,10 +5,9 @@ node RelativeTime : fn   level: system
   why   A time of day means little in a list; "5 min ago" tells at once which of
         two similar copies is the recent one (#444, PR #623).   <- HistoryRow
   what
-    exports
-      Describe(time: DateTimeOffset, now: DateTimeOffset, culture?: CultureInfo) => string
-        culture defaults to the current display language; words come from the translations of that culture, numbers and dates are formatted in it
-    notation   times are local, culture en-US; "now" is 2026-11-20 15:00
+    Describe(time: time, now: time, culture: CultureInfo or nothing = nothing) -> text
+      culture defaults to the current display language; words come from the translations of that culture, numbers and dates are formatted in it
+    In the examples, times are local, the culture is en-US, and "now" is 2026-11-20 15:00.
     examples
       Describe(now − 30 s, now) => "Just now"
       Describe(now + 5 min, now) => "Just now"; a clock that went backwards

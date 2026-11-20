@@ -8,20 +8,25 @@ node SavedItems : data   level: system
   why   What survives a restart must survive a crash mid-write too, and must
         be readable on another platform and by a later version.   <- PinItems
   what
-    exports
-      PinnedItemStore(root: string, logger?)
-        SaveAsync(item: ClipboardItem) => Task;  DeleteAsync(id: Guid) => Task;  LoadAllAsync() => ClipboardItem[]   oldest pin first
-      HistoryPersistence(history: ClipboardHistory, root: string, isEnabled: () => bool, logger?)
-        LoadAsync() => int restored;  Start();  Stop();  RequestSync();  FlushAsync() => Task
-    folders   AppPaths.PinnedDirectory = <data>/Pinned;  AppPaths.HistoryDirectory = <data>/History
-              <data> is %LOCALAPPDATA%\Shapeshifter (Windows), ~/Library/Application Support/Shapeshifter (macOS), $XDG_DATA_HOME/shapeshifter (Linux), or $SHAPESHIFTER_HOME/data; created 0700 on Unix
-    item      one folder per item, named id.ToString("N"), holding manifest.json (indented JSON) and one file per part:
-              text.txt (UTF-8 with a byte order mark), image.bin, raw-000.bin, raw-001.bin … in clipboard order, source-icon.png
-    manifest  { Version: 1, Id, CapturedAt, TextFile?, ImageFile?, Files: string[], RawFormats: [{ Name, File }], SourceApplication?, SourceWindowTitle?, SourceIconFile? }
-              formats are keyed by name ("text/html", "HTML Format"), never by a platform's numeric id
-    order     History/order.json: [{ Id, CapturedAt }], unpinned items only, top first
+    PinnedItemStore(root: text, logger: Logger or nothing = nothing) -> PinnedItemStore
+    PinnedItemStore.SaveAsync(item: ClipboardItem) -> later nothing
+    PinnedItemStore.DeleteAsync(id: text) -> later nothing   — id is the item's Id, a GUID
+    PinnedItemStore.LoadAllAsync() -> later list of ClipboardItem   — oldest pin first
+    HistoryPersistence(history: ClipboardHistory, root: text, isEnabled: () -> boolean, logger: Logger or nothing = nothing) -> HistoryPersistence
+    HistoryPersistence.LoadAsync() -> later integer   — the number of items restored
+    HistoryPersistence.Start() -> nothing
+    HistoryPersistence.Stop() -> nothing
+    HistoryPersistence.RequestSync() -> nothing
+    HistoryPersistence.FlushAsync() -> later nothing
+    Pinned items are kept in AppPaths.PinnedDirectory, <data>/Pinned, and the history in AppPaths.HistoryDirectory, <data>/History.
+      <data> is %LOCALAPPDATA%\Shapeshifter (Windows), ~/Library/Application Support/Shapeshifter (macOS), $XDG_DATA_HOME/shapeshifter (Linux), or $SHAPESHIFTER_HOME/data; created 0700 on Unix
+    Each item is one folder, named by its id as 32 hex digits without hyphens, holding manifest.json (indented JSON) and one file per part:
+      text.txt (UTF-8 with a byte order mark), image.bin, raw-000.bin, raw-001.bin … in clipboard order, source-icon.png
+    manifest.json holds { Version: 1, Id, CapturedAt, TextFile?, ImageFile?, Files: list of text, RawFormats: list of { Name, File }, SourceApplication?, SourceWindowTitle?, SourceIconFile? }
+      formats are keyed by name ("text/html", "HTML Format"), never by a platform's numeric id
+    History/order.json holds a list of { Id, CapturedAt }: unpinned items only, top first
     examples
-      SaveAsync(item "hi", plain text) => <root>/<id>/manifest.json with TextFile "text.txt", ImageFile null, RawFormats [], and <root>/<id>/text.txt
+      SaveAsync(item "hi", plain text) => <root>/<id>/manifest.json with TextFile "text.txt", ImageFile nothing, RawFormats [], and <root>/<id>/text.txt
       SaveAsync(item) while <root>/<id> exists => written to <root>/<id>.saving, the old folder deleted, then the new one moved in
       LoadAllAsync() with a folder "<id>.saving" => that folder skipped
       LoadAllAsync() with a manifest of Version 2 => that item skipped

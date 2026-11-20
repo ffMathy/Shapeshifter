@@ -17,10 +17,10 @@ node SingleInstance : fn   level: system
     RunningInstance.Write(path: text) -> nothing
     RunningInstance.Remove(path: text, processId: integer) -> nothing
     ReleaseVersion.TryParse(text: text or nothing) -> ReleaseVersion or nothing — ordered like semantic versions
-    files (in the data folder, DataLocations)
+    the files it keeps, in the data folder (DataLocations):
       instance.lock   held open with no sharing and deleted on close; holds the process id
       instance.json   {"pid":14039,"version":"7.1.0","path":"/home/u/.local/bin/shapeshifter"}
-    rules, in Program.Main, after the installer and before the app starts
+    what happens in Program.Main, after the installer and before the app starts:
       the lock is free => take it, write instance.json, run
       the lock is held => find the running copy: instance.json when its process still runs that executable
         (or one named like it: Windows may run an updated copy as "….old-…"), else, for releases that do not
