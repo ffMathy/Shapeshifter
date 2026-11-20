@@ -1,0 +1,11 @@
+{
+  "name": "shapeshifter-ail",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "adopt": "ail adopt"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}

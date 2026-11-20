@@ -17,3 +17,7 @@ website/app-icons/
 
 # Local agent worktrees
 .claude/
+
+# AIL: the legacy app's runtime folder and caches
+.ail/
+node_modules/

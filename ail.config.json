@@ -1,0 +1,16 @@
+{
+  "specRoot": "ail",
+  "checksDir": "checks",
+  "run": {
+    "legacy": {
+      "start": "scripts/ail/run-legacy.sh",
+      "cwd": ".",
+      "ready": "pgrep -f '[S]hapeshifter.dll --no-install' >/dev/null && grep -q SHAPESHIFTER_READY .ail/legacy/shapeshifter.log",
+      "timeout": 240,
+      "env": {
+        "DISPLAY": ":97",
+        "AIL_TARGET_APP": "tests/Shapeshifter.EndToEnd.TargetApp/bin/Release/net11.0/Shapeshifter.EndToEnd.TargetApp.dll"
+      }
+    }
+  }
+}

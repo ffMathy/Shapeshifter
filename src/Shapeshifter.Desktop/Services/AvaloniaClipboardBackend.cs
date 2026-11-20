@@ -21,6 +21,10 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
     private readonly TopLevel host;
     private readonly ILogger logger;
 
+    // What Shapeshifter last put on the clipboard. On X11 the clipboard hands this very object back while Shapeshifter
+    // owns the selection, and it must stay alive (not disposed) to serve other applications' requests for it.
+    private DataTransfer? written;
+
     public AvaloniaClipboardBackend(TopLevel host, ILogger logger)
     {
         this.host = host;
@@ -30,7 +34,35 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
     private IClipboard Clipboard => host.Clipboard ?? throw new InvalidOperationException("The clipboard is not available.");
 
     public Task<ClipboardSnapshot> ReadAsync(CancellationToken cancellationToken = default) =>
-        OnUiThread(() => ReadCoreAsync(cancellationToken));
+        OnUiThread(async () =>
+        {
+            using var flush = KeepX11RequestsFlowing();
+            return await ReadCoreAsync(cancellationToken).ConfigureAwait(true);
+        });
+
+    /// <summary>
+    /// On X11, Avalonia 12.1 continues a clipboard read on a thread-pool thread and sends its requests to the owner
+    /// from there without flushing them. Its event loop flushes only when it wakes, and it can sleep with nothing to
+    /// wake it: the request then stays in Xlib's buffer, the owner never answers, and the read waits forever (its own
+    /// timeout runs on a dispatcher that never runs). A timer ticking on the UI thread while a read is under way wakes
+    /// the loop, which flushes the request.
+    /// </summary>
+    private static IDisposable? KeepX11RequestsFlowing()
+    {
+        if (!OperatingSystem.IsLinux())
+        {
+            return null;
+        }
+
+        var timer = new DispatcherTimer(TimeSpan.FromMilliseconds(20), DispatcherPriority.Background, (_, _) => { });
+        timer.Start();
+        return new TimerStopper(timer);
+    }
+
+    private sealed class TimerStopper(DispatcherTimer timer) : IDisposable
+    {
+        public void Dispose() => timer.Stop();
+    }
 
     public Task WriteAsync(ClipboardSnapshot snapshot, CancellationToken cancellationToken = default) =>
         OnUiThread(async () =>
@@ -42,11 +74,13 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
     public Task<string> GetChangeTokenAsync(CancellationToken cancellationToken = default) =>
         OnUiThread(async () =>
         {
-            using var data = await Clipboard.TryGetDataAsync().ConfigureAwait(true);
+            var data = await Clipboard.TryGetDataAsync().ConfigureAwait(true);
             if (data is null)
             {
                 return string.Empty;
             }
+
+            using var owned = IsWritten(data) ? null : data;
 
             // The poller only compares tokens for equality, so the content itself is a cheaper and exact token:
             // a string comparison stops at the first difference, while hashing reads and copies all of it.
@@ -67,7 +101,13 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
 
     private async Task<ClipboardSnapshot> ReadCoreAsync(CancellationToken cancellationToken)
     {
-        using var data = await Clipboard.TryGetDataAsync().ConfigureAwait(true);
+        var data = await Clipboard.TryGetDataAsync().ConfigureAwait(true);
+
+        // Shapeshifter's own write is read like any other copy, but never disposed, nor is its bitmap: other
+        // applications are still to be served from them (a paste of an image from the history crashed as soon as
+        // another application asked for it).
+        var own = IsWritten(data);
+        using var owned = own ? null : data;
         if (data is null || data.Formats.Count == 0)
         {
             return ClipboardSnapshot.Empty;
@@ -97,7 +137,8 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
         byte[]? image = null;
         if (data.Contains(DataFormat.Bitmap))
         {
-            using var bitmap = await TryAsync(() => data.TryGetBitmapAsync(), "image").ConfigureAwait(true);
+            var bitmap = await TryAsync(() => data.TryGetBitmapAsync(), "image").ConfigureAwait(true);
+            using var ownedBitmap = own ? null : bitmap;
             if (bitmap is not null)
             {
                 using var stream = new MemoryStream();
@@ -226,6 +267,7 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
             transfer.Add(DataTransferItem.CreateFile(storageItem));
         }
 
+        written = transfer;
         await Clipboard.SetDataAsync(transfer).ConfigureAwait(true);
         if (OperatingSystem.IsWindows())
         {
@@ -233,6 +275,8 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
             await Clipboard.FlushAsync().ConfigureAwait(true);
         }
     }
+
+    private bool IsWritten(IAsyncDataTransfer? data) => data is not null && ReferenceEquals(data, written);
 
     private async Task<T?> TryAsync<T>(Func<Task<T?>> read, string what)
     {
