@@ -1,4 +1,3 @@
-// ail-derived-from: PasteGesture@4c38d880256cf0da
 // End-to-end check for PasteGesture: its scenarios, played with real keys on
 // an X11 desktop against the running app. It sees only what a user sees: the
 // text that lands in another app, and whether the picker is on screen.

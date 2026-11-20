@@ -1,4 +1,3 @@
-// ail-derived-from: Languages@10aeb2f6499a85a6
 // End-to-end check for Languages: the picker in the language SHAPESHIFTER_LANGUAGE
 // names, laid out from right to left in Arabic. Each scenario starts Shapeshifter
 // on a desktop of its own with that variable set, as a user would, and reads the

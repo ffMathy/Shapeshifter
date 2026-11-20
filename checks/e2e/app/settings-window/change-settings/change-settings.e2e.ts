@@ -1,4 +1,3 @@
-// ail-derived-from: ChangeSettings@9f8261fe32a020fb
 // End-to-end check for ChangeSettings: its scenarios, played on an X11 desktop with a system tray against the running
 // app. It changes settings only through the settings window, as a user would, and puts each back afterwards, so the
 // other checks find the defaults. It sees only windows on screen, the clipboard, the text that lands in another app

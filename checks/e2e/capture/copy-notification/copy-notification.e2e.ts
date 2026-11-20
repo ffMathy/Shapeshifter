@@ -1,4 +1,3 @@
-// ail-derived-from: CopyNotification@a9c7d5d9b4934557
 // End-to-end check for CopyNotification: the small "Copied" notification, seen
 // as a window titled "Shapeshifter" smaller than the picker. Its text is not
 // read here (there is no OCR on the test desktop); its place, size and timing are.

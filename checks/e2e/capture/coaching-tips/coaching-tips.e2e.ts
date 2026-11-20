@@ -1,4 +1,3 @@
-// ail-derived-from: CoachingTips@3a0abadd7d6a40c3
 // End-to-end check for CoachingTips. A tip is the notification grown to a
 // title over a wrapped sentence (taller than the one-line "Copied" one) and
 // it stays up for about seven seconds. Tips are at least five minutes apart,

@@ -1,4 +1,3 @@
-// ail-derived-from: PickFromHistory@12a4ff8862ffc80f
 // End-to-end check for PickFromHistory: choosing an older item with the keys
 // already held, on a real X11 desktop, seen only through what the user sees.
 import { afterAll, afterEach, beforeAll, expect } from "bun:test";
