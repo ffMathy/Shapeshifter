@@ -111,7 +111,7 @@ export function actionTitlesOnScreen(): string[] {
 export async function itemCountOnScreen(): Promise<number> {
   // The picker may still be settling into its new size; read again a moment later.
   for (let attempt = 0; attempt < 4; attempt++) {
-    const m = /(\d+)\s+items?\b/.exec(readPickerPasses("history")[0]);
+    const m = readPickerPasses("history").map((t) => /(\d+)\s+items?\b/.exec(t)).find(Boolean);
     if (m) return Number(m[1]);
     await sleep(400);
   }

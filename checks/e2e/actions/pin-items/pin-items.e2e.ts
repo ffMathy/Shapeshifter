@@ -48,7 +48,7 @@ test("pinning keeps an item at the top", async () => {
   await app.copy(`even later ${id}`);
   await app.prepare();
   await openPicker();
-  const history = readPicker("history");
+  const history = readPicker("history", `keep ${id}`, `even later ${id}`);
   expect(history.indexOf(`keep ${id}`)).toBeGreaterThanOrEqual(0);
   expect(history.indexOf(`keep ${id}`)).toBeLessThan(history.indexOf(`even later ${id}`));
   await keyUp("ctrl");
@@ -79,7 +79,7 @@ test("a pinned item offers Unpin, and unpinning lets it move down again", async 
   await app.copy(`newest ${id}`);
   await app.prepare();
   await openPicker();
-  const history = readPicker("history");
+  const history = readPicker("history", `newest ${id}`, `sticky ${id}`);
   expect(history.indexOf(`newest ${id}`)).toBeGreaterThanOrEqual(0);
   expect(history.indexOf(`newest ${id}`)).toBeLessThan(history.indexOf(`sticky ${id}`));
   await tap("1");
@@ -100,9 +100,8 @@ test("pinned items come back after a restart, the rest does not", async () => {
   await desk!.startApp();
   await app.prepare();
   await openPicker();
-  const history = readPicker("history");
-  expect(history).toContain(`pinned ${id}`);
-  expect(history).not.toContain(`gone ${id}`);
+  expect(readPicker("history", `pinned ${id}`)).toContain(`pinned ${id}`);
+  expect(readPicker("history")).not.toContain(`gone ${id}`);
   await tap("1");
   await keyUp("ctrl");
   expect(await app.waitForText(`pinned ${id}`)).toBe(`pinned ${id}`);

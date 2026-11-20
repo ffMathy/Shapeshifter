@@ -43,7 +43,7 @@ test("with the setting on, the whole history comes back in its order", async () 
   app = fresh;
   await fresh.prepare();
   await openPicker();
-  const history = readPicker("history");
+  const history = readPicker("history", `cherry ${id}`, `banana ${id}`, `apple ${id}`);
   const at = (t: string) => history.indexOf(`${t} ${id}`);
   expect(at("cherry")).toBeGreaterThanOrEqual(0);
   expect(at("cherry")).toBeLessThan(at("banana"));
@@ -62,9 +62,8 @@ test("with the setting off, only pinned items come back", async () => {
   await desk!.startApp();
   await app.prepare();
   await openPicker();
-  const history = readPicker("history");
-  expect(history).toContain(`current ${id}`);
-  expect(history).not.toContain(`lost ${id}`);
+  expect(readPicker("history", `current ${id}`)).toContain(`current ${id}`);
+  expect(readPicker("history")).not.toContain(`lost ${id}`);
   await tap("Escape");
   await keyUp("ctrl");
   expect(existsSync(join(desk!.home, "data", "History"))).toBe(false);
