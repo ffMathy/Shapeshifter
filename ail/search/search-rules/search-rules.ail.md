@@ -8,16 +8,19 @@ node SearchRules : fn   level: system
   why   What a query finds and what each key does must be exact and testable
         without a desktop, like the gesture's own rules.   <- SearchHistory
   what
-    exports
-      HistorySearch.Normalize(text: string) => string                 lower case (invariant), accents (non-spacing marks) removed, NFC
-      HistorySearch.ParseQuery(query: string?) => string[]            normalized words, split on white space, duplicates removed; blank => []
-      HistorySearch.Matches(searchText: string, terms: string[]) => bool   every term is an ordinal substring; [] matches everything
-      HistorySearch.CreateContentText(item: ClipboardItem) => string  preview, kind word, text (else HTML as plain text), file paths; normalized, joined by "\n"
-      HistorySearch.CreateSearchText(contentText: string, item: ClipboardItem) => string   adds "\n" + normalized application name and window title, when known
-      HistorySearch.MaxContentLength = 200_000
-      PickerSearch(items: SearchableItem[]);  SearchableItem(Item: GestureItem, SearchText: string)
-      PickerSearch.Handle(input: PickerSearchInput) => GestureResult;  Query: string;  HasEnded: bool;  Selection: PickerSelection
-      PickerSearchKey = QueryChanged | Up | Down | Left | Right | Enter | Escape | Deactivated
+    HistorySearch.Normalize(text: text) -> text — lower case (invariant), accents (non-spacing marks) removed, NFC
+    HistorySearch.ParseQuery(query: text or nothing) -> list of text — normalized words, split on white space, duplicates removed; blank => []
+    HistorySearch.Matches(searchText: text, terms: list of text) -> boolean — every term is an ordinal substring; [] matches everything
+    HistorySearch.CreateContentText(item: ClipboardItem) -> text — preview, kind word, text (else HTML as plain text), file paths; normalized, joined by "\n"
+    HistorySearch.CreateSearchText(contentText: text, item: ClipboardItem) -> text — adds "\n" + normalized application name and window title, when known
+    HistorySearch.MaxContentLength: integer = 200000
+    type SearchableItem = { Item: GestureItem, SearchText: text }
+    PickerSearch(items: list of SearchableItem) -> PickerSearch
+    PickerSearch.Handle(input: PickerSearchInput) -> GestureResult
+    PickerSearch.Query: text
+    PickerSearch.HasEnded: boolean
+    PickerSearch.Selection: PickerSelection
+    type PickerSearchKey = "QueryChanged" | "Up" | "Down" | "Left" | "Right" | "Enter" | "Escape" | "Deactivated"
     examples
       Normalize("Crème BRÛLÉE") => "creme brulee"
       ParseQuery("  Café  cafe ") => ["cafe"];  ParseQuery("   ") => []
@@ -26,7 +29,7 @@ node SearchRules : fn   level: system
       Matches(CreateContentText(HTML only "<p>Hi <span class=\"k\">there</span></p>"), ParseQuery("hi there")) => true; with ParseQuery("span") => false
       Matches(CreateContentText(text "plain" and HTML "<b>bold</b>"), ParseQuery("bold")) => false: the HTML is searched only when there is no text
       CreateContentText(a 300,000-character text) => its preview and its first 200,000 characters only
-      new PickerSearch(3 items).Selection => items [0, 1, 2], selected 0, pane Items, Query ""
+      PickerSearch(3 items).Selection => items [0, 1, 2], selected 0, pane Items, Query ""
       Typed("b") with 2 of 3 matching => [UpdatePicker(results in history order, selected 0, action 0, pane Items)]
       Typed(same query again) => passes through, no effects
       3 results, selected 0, Up => UpdatePicker(selected 2);  selected 2, Down => UpdatePicker(selected 0)

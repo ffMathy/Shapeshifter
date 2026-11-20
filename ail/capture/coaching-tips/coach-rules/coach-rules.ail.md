@@ -8,29 +8,32 @@ node CoachRules : fn   level: system
   why   Whether a tip shows depends on timing, app names and what came
         before, so the rules must be exact and testable with a fake clock.   <- CoachingTips
   what
-    exports
-      CopyCoach(sourceLocator?: IClipboardSourceLocator, modifierName: () => string, isEnabled?: () => bool, time?: TimeProvider)
-      OnStartupCapture(item); OnCopied(item, isNew, source?) => CoachingTip?; OnPasted(); OnPickerUsed()
-      CoachingTip(Kind: CopiedAgain | CopiedBackAndForth, Title, Message)
-      Cooldown: TimeSpan = 5 min;  BackAndForthWindow = 30 s
-    notation  copy(x, new|old, App, t) is OnCopied at t seconds from source App; paste(App, t) is OnPasted with the locator answering App
+    CopyCoach(sourceLocator: IClipboardSourceLocator or nothing, modifierName: () -> text, isEnabled: (() -> boolean) or nothing = nothing, time: TimeProvider or nothing = nothing) -> CopyCoach
+    CopyCoach.OnStartupCapture(item: ClipboardItem) -> nothing
+    CopyCoach.OnCopied(item: ClipboardItem, isNew: boolean, source: ClipboardSource or nothing) -> CoachingTip or nothing
+    CopyCoach.OnPasted() -> nothing
+    CopyCoach.OnPickerUsed() -> nothing
+    type CoachingTip = { Kind: "CopiedAgain" | "CopiedBackAndForth", Title: text, Message: text }
+    Cooldown: duration = 5 min
+    BackAndForthWindow: duration = 30 s
+    In the examples, copy(x, new|old, App, t) is OnCopied at t seconds from source App, and paste(App, t) is OnPasted with the locator answering App.
     examples
-      OnStartupCapture(a); copy(a, old, Editor, 1) => null       a is what the clipboard already held
-      copy(a, new, Editor, 0); copy(a, old, Editor, 1) => null   a second Ctrl+C to be sure
+      OnStartupCapture(a); copy(a, old, Editor, 1) => nothing       a is what the clipboard already held
+      copy(a, new, Editor, 0); copy(a, old, Editor, 1) => nothing   a second Ctrl+C to be sure
       copy(a, new, Editor, 0); copy(b, new, Editor, 5); copy(a, old, Editor, 9) => CopiedAgain("Already in your history", "No need to copy it again: hold Ctrl+V to pick it from your history.")
       copy(x, new, Editor, 0); paste(Browser, 5); copy(y, new, Editor, 30) => CopiedBackAndForth("Did you know?", "You can copy several things from Editor first, then hold Ctrl+V in Browser to pick each one from your history.")
-      copy(x, new, Editor, 0); paste(Browser, 5); copy(y, new, Editor, 31) => null             more than 30 s after the first copy
-      copy(x, new, Editor, 0); paste(editor, 5); copy(y, new, Editor, 9) => null               same app: names compare ignoring case
-      copy(x, new, Editor, 0); paste(Browser, 5); copy(y, new, Mail, 9) => null
-      copy(x, new, Editor, 0); paste(Browser, 5); OnPickerUsed(); copy(y, new, Editor, 9) => null
-      copy(x, new, Editor, 0); paste(Browser, 5); copy(y, new, Mail, 7); copy(z, new, Editor, 9) => null   any copy ends the trip
-      copy(x, new, unknown app, 0); paste(Browser, 5); copy(y, new, Editor, 9) => null
+      copy(x, new, Editor, 0); paste(Browser, 5); copy(y, new, Editor, 31) => nothing             more than 30 s after the first copy
+      copy(x, new, Editor, 0); paste(editor, 5); copy(y, new, Editor, 9) => nothing               same app: names compare ignoring case
+      copy(x, new, Editor, 0); paste(Browser, 5); copy(y, new, Mail, 9) => nothing
+      copy(x, new, Editor, 0); paste(Browser, 5); OnPickerUsed(); copy(y, new, Editor, 9) => nothing
+      copy(x, new, Editor, 0); paste(Browser, 5); copy(y, new, Mail, 7); copy(z, new, Editor, 9) => nothing   any copy ends the trip
+      copy(x, new, unknown app, 0); paste(Browser, 5); copy(y, new, Editor, 9) => nothing
       both habits at once => CopiedAgain                     it is checked first
-      a tip at t; another habit at t + 299 s => null;  at t + 300 s => a tip
-      isEnabled() false => null, and the cooldown does not start
+      a tip at t; another habit at t + 299 s => nothing;  at t + 300 s => a tip
+      isEnabled() false => nothing, and the cooldown does not start
       modifierName() "Cmd" => the messages say "Cmd+V"; read when the tip is made
-    engine     a tip replaces the "Copied" notification: NotifyTip(tip) and no NotifyCopied; when a tip is suppressed, a new item still gets NotifyCopied
-    engine     PasteCurrentClipboard => OnPasted() before the keystroke; ShowPicker or PerformAction => OnPickerUsed()
+    In the engine, a tip replaces the "Copied" notification: NotifyTip(tip) and no NotifyCopied; when a tip is suppressed, a new item still gets NotifyCopied
+    In the engine, PasteCurrentClipboard calls OnPasted() before the keystroke, and ShowPicker or PerformAction call OnPickerUsed().
   how
     decide app names are trimmed; an empty or blank name counts as unknown
       because "unknown, confirm with the owner"

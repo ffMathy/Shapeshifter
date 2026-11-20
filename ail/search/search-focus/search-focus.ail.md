@@ -8,21 +8,21 @@ node SearchFocus : fn   level: system
   why   Typing a query needs the focus in the picker, yet the paste must land in
         the app the user was in; a focus left in the wrong place loses the paste.   <- SearchHistory
   what
-    exports
-      FocusedWindow(Handle: nint)                 a window handle on Windows and X11, a process id on macOS
-      IFocusedWindowTracker.Capture() => FocusedWindow?          must not throw; null when unknown or Shapeshifter's own
-      IFocusedWindowTracker.RestoreAsync(window, ct) => Task<bool>   true once the window has the focus, false after the wait
-      IWindowFocus.ActivateOwnWindow(nativeHandle: nint)          called on the UI thread
-      UiThreadWindowFocus(inner: IWindowFocus) : IWindowFocus     runs RestoreAsync on the UI thread, whatever thread asks
-      FocusWait.Timeout = 600 ms, polled every 15 ms
-      PickerPresenter ActivationTimeout = 1.5 s
-    sequence
+    type FocusedWindow = { Handle: integer }
+      Handle is a window handle on Windows and X11, a process id on macOS
+    IFocusedWindowTracker.Capture() -> FocusedWindow or nothing — must not throw; nothing when unknown or Shapeshifter's own
+    IFocusedWindowTracker.RestoreAsync(window: FocusedWindow) -> later boolean — can be cancelled; true once the window has the focus, false after the wait
+    IWindowFocus.ActivateOwnWindow(nativeHandle: integer) -> nothing — called on the UI thread; an IWindowFocus is also an IFocusedWindowTracker
+    UiThreadWindowFocus(inner: IWindowFocus) -> IWindowFocus — runs RestoreAsync on the UI thread, whatever thread asks
+    FocusWait.Timeout: duration = 600 ms — polled every 15 ms
+    PickerPresenter.ActivationTimeout: duration = 1.5 s
+    a search moves the focus in this order:
       BeginSearch: Capture() first (the picker has not taken the focus), then PickerPresenter.BeginSearchAsync: empty query, search bar shown, ActivateOwnWindow, Activate, focus the search box
       until the search ends, the keyboard hook passes every key through, tracking only the modifiers and the release of V
       Enter: RestoreFocus runs, and is awaited, before HidePicker and PerformAction
       a failed restore logs "Could not give the keyboard focus back to the window it came from" and the action still runs
-    platforms
-      Windows   Capture: GetForegroundWindow, null for Shapeshifter's own; Activate: AttachThreadInput to the foreground thread, then SetForegroundWindow; Restore: the same, then wait for GetForegroundWindow
+    on each platform:
+      Windows   Capture: GetForegroundWindow, nothing for Shapeshifter's own; Activate: AttachThreadInput to the foreground thread, then SetForegroundWindow; Restore: the same, then wait for GetForegroundWindow
       macOS     Capture: the frontmost application's process id; Activate: activateIgnoringOtherApps:; Restore: activateWithOptions: (ignoring other apps), then wait for it to be frontmost
       X11       Capture: the focused window (1 s at most); Activate and Restore: _NET_ACTIVE_WINDOW as a pager, else XSetInputFocus and wait 300 ms more
     examples

@@ -49,7 +49,7 @@ node PasteGesture : flow   level: experience
       because Ctrl+Shift+V is paste as plain text or paste in a terminal, and AltGr+V types characters on some layouts (#5)
     decide the show delay is 300 ms by default, and a setting from 0 to 3000 ms
       because people who hold keys long saw the picker flash during ordinary pastes (#154)
-      because 300 ms was tuned by feel: long enough never to flash on a normal paste (owner, 2026-11-20)
+      because 300 ms was tuned by feel; long enough never to flash on a normal paste (owner, 2026-11-20)
       because "unknown, confirm with the owner: why at most 3 s"
     decide the picker never takes the keyboard focus
       because the paste must land in the app the user was in; other clipboard managers steal the focus (#639)
