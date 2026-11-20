@@ -72,7 +72,16 @@ export const ACTION_TITLES = ["Paste", "Paste as file", "Paste as plain text", "
   "Copy image from link", "Open link", "Open links", "Pin to clipboard", "Unpin from clipboard"];
 
 export function actionTitlesOnScreen(): string[] {
-  return readPicker("actions").split("\n").map((l) => l.replace(/[^\w ().]/g, "").replace(/\s+/g, " ").trim()).filter((l) => ACTION_TITLES.includes(l));
+  // A title shares its line only with what OCR makes of the icon before it and the tick after it: a few stray marks.
+  const titles: string[] = [];
+  for (const raw of readPicker("actions").split("\n")) {
+    const line = raw.replace(/\s+/g, " ").trim();
+    const found = ACTION_TITLES
+      .filter((t) => new RegExp(`(^|\\s)${t.replace(/[()]/g, "\\$&")}(\\s|$)`).test(line) && line.replace(t, "").replace(/\s/g, "").length <= 3)
+      .sort((a, b) => b.length - a.length)[0];
+    if (found) titles.push(found);
+  }
+  return titles;
 }
 
 /** The "N items" count in the picker's header. */

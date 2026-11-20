@@ -11,7 +11,8 @@ import { join } from "node:path";
 import { keyDown, keyUp, sleep, tap } from "../desktop.ts";
 
 function run(...args: string[]): string {
-  const r = Bun.spawnSync(args, { env: process.env });
+  // One thread for tesseract: on a busy machine its thread pool makes it many times slower.
+  const r = Bun.spawnSync(args, { env: { ...process.env, OMP_THREAD_LIMIT: "1" } });
   return r.stdout.toString();
 }
 
@@ -72,7 +73,7 @@ export function pickerWords(): string {
 }
 
 /** Waits until the picker shows all of `words` (case ignored). */
-export async function waitForPickerWords(words: string[], timeout = 4000): Promise<string> {
+export async function waitForPickerWords(words: string[], timeout = 8000): Promise<string> {
   const until = Date.now() + timeout;
   let seen = pickerWords();
   while (!words.every((w) => seen.includes(w.toLowerCase())) && Date.now() < until) {

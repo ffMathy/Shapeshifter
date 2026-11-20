@@ -218,3 +218,28 @@ export async function setItemsToRemember(count: number) {
   await sleep(400);
   await closeSettings();
 }
+
+// ---------------------------------------------------------------- small helpers shared by the checks
+
+/** Moves the pointer to a corner, so it never rests on the notification (pointing at it dismisses it). */
+export function pointerAway() {
+  xdotool("mousemove", "1270", "10");
+}
+
+/** Whether a tip was seen in the last five minutes, so a new one cannot show yet. */
+export const tipShownLately = () => lastTipSeen > 0 && Date.now() - lastTipSeen < 5 * 60_000;
+
+/** Starts a second, different app (xlogo) and returns a way to focus it and to close it. */
+export async function startOtherApp(): Promise<{ focus: () => Promise<void>; stop: () => void }> {
+  const proc = Bun.spawn(["xlogo", "-geometry", "200x200+700+100"], { env: process.env, stdout: "ignore", stderr: "ignore" });
+  let id = "";
+  for (let i = 0; i < 50 && !id; i++) {
+    await sleep(100);
+    id = xdotool("search", "--onlyvisible", "--pid", String(proc.pid)).split("\n").filter(Boolean)[0] ?? "";
+  }
+  if (!id) throw new Error("xlogo did not open a window");
+  return {
+    focus: async () => { xdotool("windowactivate", "--sync", id); await sleep(300); },
+    stop: () => proc.kill(),
+  };
+}
