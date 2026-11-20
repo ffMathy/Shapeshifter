@@ -13,7 +13,7 @@
 import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { TargetApp, holdVUntilThePickerAppears, keyDown, keyUp, sleep, tap, waitForPicker } from "../desktop.ts";
+import { TargetApp, keyDown, keyUp, sleep, tap, waitForPicker } from "../desktop.ts";
 
 export const scratch = mkdtempSync(join(tmpdir(), "ail-capture-"));
 
@@ -64,7 +64,11 @@ export function samePixels(a: string, b: string): boolean {
 export async function pick(keys: string[]) {
   await keyDown("ctrl");
   try {
-    await holdVUntilThePickerAppears();
+    // Like holdVUntilThePickerAppears, but patient: the very first picker after a start can take a few seconds.
+    await keyDown("v", 0);
+    const shown = await waitForPicker(true, 8000);
+    await keyUp("v");
+    if (!shown) throw new Error("the picker did not appear while V was held");
     for (const k of keys) await tap(k, 120);
   } finally {
     await keyUp("ctrl");
