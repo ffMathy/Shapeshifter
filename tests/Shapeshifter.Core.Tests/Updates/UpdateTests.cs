@@ -296,6 +296,28 @@ public sealed class SelfInstallerTests : IDisposable
     }
 
     [Fact]
+    public void OnStartup_LeavesStoreInstallsAlone()
+    {
+        // The Microsoft Store and the Mac App Store install and update their copy; it must not copy itself elsewhere.
+        var layout = InstallLayout.Create(TestApp.Identity, InstallLayout.CurrentPlatform, Path.Combine(root, "home"), Path.Combine(root, "local"), Path.Combine(root, "state"));
+        var packaged = Path.Combine(root, "WindowsApps", "demo");
+        Directory.CreateDirectory(Path.GetDirectoryName(packaged)!);
+        File.WriteAllText(packaged, "store build");
+        var host = new RecordingHost();
+        var installer = new SelfInstaller(
+            TestApp.Identity, layout, new RunningApp(packaged, null, IsSingleFile: true, IsStoreInstall: true), host, new NullLog(), ReleaseVersion.TryParse("2.0.0"));
+
+        var result = installer.OnStartup(["--show"]);
+
+        Assert.False(result.Exit);
+        Assert.False(result.IsInstalledCopy);
+        Assert.Equal(["--show"], result.Arguments);
+        Assert.False(File.Exists(layout.Executable));
+        Assert.Null(SelfInstaller.ReadInstalledVersion(layout));
+        Assert.False(host.Stopped);
+    }
+
+    [Fact]
     public void OnStartup_RunsAPullRequestBuildWhereItIs_WithoutInstallingIt()
     {
         var layout = InstallLayout.Create(TestApp.Identity, InstallLayout.CurrentPlatform, Path.Combine(root, "home"), Path.Combine(root, "local"), Path.Combine(root, "state"));

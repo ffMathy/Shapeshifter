@@ -168,6 +168,14 @@ public sealed class PlatformServices : IAsyncDisposable
     /// <summary>The start-at-login service of this platform; usable without the rest of the platform services.</summary>
     public static IAutostartService CreateAutostart()
     {
+        if (Core.Updates.StoreInstall.IsActive)
+        {
+            // An MSIX package's registry writes and a sandboxed app's ~/Library/LaunchAgents stay private to the app, so
+            // neither Windows nor launchd would see the entry. The Store package starts at login through its manifest's
+            // startup task instead, which the user switches in Settings > Apps > Startup.
+            return new UnsupportedAutostartService();
+        }
+
         if (OperatingSystem.IsWindows())
         {
             return new WindowsAutostartService();

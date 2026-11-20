@@ -1,0 +1,221 @@
+name: Store release
+
+# Sends a released version to the Microsoft Store and the Mac App Store. CI calls this after each GitHub release; run it
+# by hand to send (or resend) a version that is already released. Each store is skipped until it is set up: see
+# packaging/store/README.md for the accounts, secrets and variables.
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: 'Released version tag, such as v7.1.3'
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Released version tag to send to the stores, such as v7.1.3'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+# One store release at a time: each store keeps one pending submission per app.
+concurrency:
+  group: store-release
+  cancel-in-progress: false
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  TAG: ${{ inputs.tag }}
+
+jobs:
+  microsoft-store:
+    name: Microsoft Store
+    # Prereleases (v7.1.0-beta.1) stay on GitHub.
+    if: vars.MSSTORE_PRODUCT_ID != '' && !contains(inputs.tag, '-')
+    runs-on: windows-latest
+    env:
+      # Submitting through the Store API needs a Microsoft Entra application with the Manager role in Partner Center
+      # (packaging/store/README.md, step 2). Without its secrets the job builds the package for uploading by hand.
+      CAN_SUBMIT: ${{ secrets.MSSTORE_CLIENT_SECRET != '' && secrets.MSSTORE_TENANT_ID != '' }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag }}
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - name: Version
+        shell: bash
+        run: |
+          version="${TAG#v}"
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::$TAG is not a release tag like v7.1.3"
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+      - name: Publish x64 and arm64
+        # Single file with the native libraries beside it: the package installs them, so nothing is unpacked at run time.
+        shell: bash
+        run: |
+          for arch in x64 arm64; do
+            dotnet publish src/Shapeshifter.Desktop -c Release -r "win-$arch" --self-contained \
+              -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=false -p:Version="$VERSION" \
+              -o "publish/$arch"
+          done
+      - name: Package
+        env:
+          MSSTORE_IDENTITY_NAME: ${{ vars.MSSTORE_IDENTITY_NAME }}
+          MSSTORE_PUBLISHER: ${{ vars.MSSTORE_PUBLISHER }}
+          MSSTORE_PUBLISHER_DISPLAY_NAME: ${{ vars.MSSTORE_PUBLISHER_DISPLAY_NAME }}
+        run: ./packaging/store/windows/make-msix.ps1 -PublishRoot publish -Version $env:VERSION -OutDir dist
+      - uses: actions/upload-artifact@v7
+        with:
+          name: microsoft-store
+          path: dist/*.msixupload
+          compression-level: 0
+          retention-days: 90
+      - name: Explain the manual upload
+        if: env.CAN_SUBMIT != 'true'
+        shell: bash
+        env:
+          PRODUCT_ID: ${{ vars.MSSTORE_PRODUCT_ID }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          upload=$(basename dist/*.msixupload)
+          cat >> "$GITHUB_STEP_SUMMARY" <<EOF
+          ### Microsoft Store: upload by hand
+          The Partner Center API secrets (\`MSSTORE_…\`) are not set, so the package was built but not submitted. To
+          submit automatically, set up a Microsoft Entra application as in packaging/store/README.md (step 2).
+          1. Download the **microsoft-store** artifact from [this run]($RUN_URL) and unzip it: it holds \`$upload\`.
+          2. In [Partner Center › Apps and games](https://partner.microsoft.com/dashboard/apps-and-games/overview), open the
+             app ($PRODUCT_ID) and start an update (or open the pending submission).
+          3. Under **Packages**, drop in \`$upload\` (older packages can stay; the Store offers the newest), save, and
+             **Submit to the Store**.
+          EOF
+          echo "::notice::Upload $upload from the microsoft-store artifact in Partner Center (see the run summary)."
+      - name: Set up the Microsoft Store Developer CLI
+        if: env.CAN_SUBMIT == 'true'
+        uses: microsoft/microsoft-store-apppublisher@v1.1
+      - name: Sign in to Partner Center
+        if: env.CAN_SUBMIT == 'true'
+        env:
+          TENANT_ID: ${{ secrets.MSSTORE_TENANT_ID }}
+          SELLER_ID: ${{ secrets.MSSTORE_SELLER_ID }}
+          CLIENT_ID: ${{ secrets.MSSTORE_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.MSSTORE_CLIENT_SECRET }}
+        run: msstore reconfigure --tenantId $env:TENANT_ID --sellerId $env:SELLER_ID --clientId $env:CLIENT_ID --clientSecret $env:CLIENT_SECRET
+      - name: Submit
+        if: env.CAN_SUBMIT == 'true'
+        # Replaces the pending submission with one for this package. Certification takes up to a few days; the Store
+        # then publishes it. STORE_DRAFT_ONLY=true leaves the submission as a draft to commit in Partner Center.
+        env:
+          PRODUCT_ID: ${{ vars.MSSTORE_PRODUCT_ID }}
+          DRAFT_ONLY: ${{ vars.STORE_DRAFT_ONLY }}
+        run: |
+          $upload = Get-ChildItem dist -Filter *.msixupload | Select-Object -First 1
+          $draft = @()
+          if ($env:DRAFT_ONLY -eq 'true') { $draft = @('--noCommit') }
+          msstore publish (Resolve-Path dist).Path -i $upload.FullName -id $env:PRODUCT_ID @draft
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+  mac-app-store:
+    name: Mac App Store
+    if: vars.APPLE_TEAM_ID != '' && !contains(inputs.tag, '-')
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag }}
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - name: Version
+        run: |
+          version="${TAG#v}"
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::$TAG is not a release tag like v7.1.3"
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+      - name: Publish arm64
+        run: |
+          dotnet publish src/Shapeshifter.Desktop -c Release -r osx-arm64 --self-contained \
+            -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=false -p:UseAppHost=true -p:Version="$VERSION" \
+            -o publish/osx-arm64
+      - name: Import the signing certificates
+        env:
+          CERTIFICATES_P12: ${{ secrets.MAS_CERTIFICATES_P12 }}
+          CERTIFICATES_PASSWORD: ${{ secrets.MAS_CERTIFICATES_PASSWORD }}
+          PROVISIONING_PROFILE: ${{ secrets.MAS_PROVISIONING_PROFILE }}
+        run: |
+          keychain="$RUNNER_TEMP/store.keychain-db"
+          password="$(openssl rand -hex 24)"
+          security create-keychain -p "$password" "$keychain"
+          security set-keychain-settings -lut 21600 "$keychain"
+          security unlock-keychain -p "$password" "$keychain"
+          echo "$CERTIFICATES_P12" | base64 --decode > "$RUNNER_TEMP/certificates.p12"
+          security import "$RUNNER_TEMP/certificates.p12" -k "$keychain" -P "$CERTIFICATES_PASSWORD" \
+            -T /usr/bin/codesign -T /usr/bin/productbuild -T /usr/bin/security
+          rm "$RUNNER_TEMP/certificates.p12"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$password" "$keychain" > /dev/null
+          security list-keychains -d user -s "$keychain" $(security list-keychains -d user | tr -d '"')
+
+          app=$(security find-identity -v -p codesigning "$keychain" \
+            | sed -n -E 's/.*"((Apple Distribution|3rd Party Mac Developer Application): [^"]+)".*/\1/p' | head -n 1)
+          installer=$(security find-identity -v "$keychain" \
+            | sed -n -E 's/.*"((3rd Party Mac Developer Installer|Mac Installer Distribution): [^"]+)".*/\1/p' | head -n 1)
+          if [[ -z "$app" || -z "$installer" ]]; then
+            echo "::error::MAS_CERTIFICATES_P12 must hold an Apple Distribution and a Mac Installer Distribution certificate"
+            security find-identity -v "$keychain"
+            exit 1
+          fi
+          echo "MAS_KEYCHAIN=$keychain" >> "$GITHUB_ENV"
+          echo "MAS_APP_IDENTITY=$app" >> "$GITHUB_ENV"
+          echo "MAS_INSTALLER_IDENTITY=$installer" >> "$GITHUB_ENV"
+
+          echo "$PROVISIONING_PROFILE" | base64 --decode > "$RUNNER_TEMP/app.provisionprofile"
+          echo "MAS_PROVISIONING_PROFILE=$RUNNER_TEMP/app.provisionprofile" >> "$GITHUB_ENV"
+      - name: Sign and package
+        env:
+          APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
+        run: packaging/store/macos/make-pkg.sh publish/osx-arm64 "$VERSION" dist
+      - uses: actions/upload-artifact@v7
+        with:
+          name: mac-app-store
+          path: dist/*.pkg
+          compression-level: 0
+          retention-days: 14
+      - name: Upload and submit for review
+        # fastlane deliver uploads the package, waits until App Store Connect has processed it, creates the version
+        # with these release notes and submits it; Apple releases it once approved. STORE_DRAFT_ONLY=true stops after
+        # the upload, for a submission made by hand in App Store Connect.
+        env:
+          KEY_ID: ${{ vars.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ vars.APP_STORE_CONNECT_ISSUER_ID }}
+          PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+          DRAFT_ONLY: ${{ vars.STORE_DRAFT_ONLY }}
+          RELEASE_NOTES: "What's new in this version: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ inputs.tag }}"
+        run: |
+          command -v fastlane > /dev/null || brew install fastlane
+          deliver="$RUNNER_TEMP/deliver"
+          mkdir -p "$deliver/metadata/en-US"
+          printf '%s\n' "$RELEASE_NOTES" > "$deliver/metadata/en-US/release_notes.txt"
+          jq -n --arg key_id "$KEY_ID" --arg issuer_id "$ISSUER_ID" --arg key "$PRIVATE_KEY" \
+            '{key_id: $key_id, issuer_id: $issuer_id, key: $key, in_house: false}' > "$deliver/api_key.json"
+          submit=true
+          if [[ "$DRAFT_ONLY" == true ]]; then submit=false; fi
+          pkg=$(ls dist/*.pkg)
+          bundle_id=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' packaging/store/macos/Info.plist)
+          fastlane deliver --platform osx --pkg "$pkg" --app_identifier "$bundle_id" --app_version "$VERSION" \
+            --api_key_path "$deliver/api_key.json" --metadata_path "$deliver/metadata" \
+            --skip_screenshots true --skip_metadata false --force true \
+            --submit_for_review "$submit" --automatic_release true --run_precheck_before_submit false \
+            --submission_information '{"add_id_info_uses_idfa": false, "export_compliance_uses_encryption": false}'
+          rm -f "$deliver/api_key.json"
+      - name: Remove the keychain
+        if: always()
+        run: |
+          if [[ -n "${MAS_KEYCHAIN:-}" ]]; then security delete-keychain "$MAS_KEYCHAIN" || true; fi

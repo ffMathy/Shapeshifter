@@ -350,6 +350,12 @@ public partial class App : Application
 
     private void StartUpdater()
     {
+        if (StoreInstall.IsActive)
+        {
+            // The Microsoft Store or the Mac App Store updates this copy; store policies forbid updating it from GitHub.
+            return;
+        }
+
         updateHttp = new HttpClient { Timeout = Timeout.InfiniteTimeSpan };
         updateHttp.DefaultRequestHeaders.UserAgent.ParseAdd("Shapeshifter/" + ReleaseVersion.Current());
         updater = new Updater(

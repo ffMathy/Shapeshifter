@@ -130,7 +130,11 @@ public sealed class InstallLayout
 /// True for a published single-file build: only those are installed and updated, so <c>dotnet run</c>, tests and
 /// other builds that consist of many files stay where they are.
 /// </param>
-public sealed record RunningApp(string ExecutablePath, string? BundlePath, bool IsSingleFile)
+/// <param name="IsStoreInstall">
+/// True when the Microsoft Store or the Mac App Store installed this copy (see <see cref="StoreInstall"/>): the store
+/// updates it, so it is neither installed nor updated from GitHub.
+/// </param>
+public sealed record RunningApp(string ExecutablePath, string? BundlePath, bool IsSingleFile, bool IsStoreInstall = false)
 {
     /// <summary>What an update replaces: the bundle on macOS, otherwise the executable.</summary>
     public string ReplaceablePath => BundlePath ?? ExecutablePath;
@@ -147,7 +151,7 @@ public sealed record RunningApp(string ExecutablePath, string? BundlePath, bool 
             && !string.Equals(host, "dotnet", StringComparison.OrdinalIgnoreCase)
             && !string.IsNullOrEmpty(entryName)
             && !File.Exists(Path.Combine(AppContext.BaseDirectory, entryName + ".dll"));
-        return new RunningApp(executable, BundleOf(executable), isSingleFile);
+        return new RunningApp(executable, BundleOf(executable), isSingleFile, StoreInstall.IsActive);
     }
 
     /// <summary>The <c>X.app</c> folder when <paramref name="executable"/> is <c>X.app/Contents/MacOS/X</c>.</summary>

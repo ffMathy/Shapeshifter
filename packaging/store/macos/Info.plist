@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Info.plist of the Mac App Store build (packaging/store/macos/make-pkg.sh fills in __VERSION__). -->
+<plist version="1.0">
+<dict>
+  <key>CFBundleName</key>
+  <string>Shapeshifter</string>
+  <key>CFBundleDisplayName</key>
+  <string>Shapeshifter</string>
+  <key>CFBundleIdentifier</key>
+  <string>app.shapeshifter.Shapeshifter</string>
+  <key>CFBundleExecutable</key>
+  <string>Shapeshifter</string>
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+  <key>CFBundleIconFile</key>
+  <string>AppIcon</string>
+  <key>CFBundleShortVersionString</key>
+  <string>__VERSION__</string>
+  <key>CFBundleVersion</key>
+  <string>__VERSION__</string>
+  <key>CFBundleDevelopmentRegion</key>
+  <string>en</string>
+  <key>CFBundleSupportedPlatforms</key>
+  <array>
+    <string>MacOSX</string>
+  </array>
+  <!-- The App Store files the app under this category; it is required for Mac App Store uploads. -->
+  <key>LSApplicationCategoryType</key>
+  <string>public.app-category.productivity</string>
+  <!-- The store build is Apple silicon only: .NET cannot merge its x64 and arm64 builds into one universal app. -->
+  <key>LSArchitecturePriority</key>
+  <array>
+    <string>arm64</string>
+  </array>
+  <key>LSMinimumSystemVersion</key>
+  <string>14.0</string>
+  <!-- Menu-bar app: no Dock icon. -->
+  <key>LSUIElement</key>
+  <true/>
+  <key>NSHighResolutionCapable</key>
+  <true/>
+  <key>NSHumanReadableCopyright</key>
+  <string>Shapeshifter contributors</string>
+  <!-- Only standard HTTPS (or no networking at all), which is exempt from export documentation. -->
+  <key>ITSAppUsesNonExemptEncryption</key>
+  <false/>
+</dict>
+</plist>

@@ -350,6 +350,11 @@ public sealed class Updater : IDisposable
             return Localizer.Format(Strings.UpdateTurnedOff, app.NoUpdateVariable);
         }
 
+        if (running.IsStoreInstall)
+        {
+            return Strings.UpdateUnsupported;
+        }
+
         if (!running.IsSingleFile)
         {
             return Strings.UpdateReleaseBuildsOnly;
