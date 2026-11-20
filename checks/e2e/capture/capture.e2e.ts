@@ -3,8 +3,8 @@
 // against the running app. Copies are made by other apps (the target app and
 // xclip); what the history holds is seen by picking from it with the paste
 // gesture and reading what lands in the text box.
-import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
-import { TargetApp, releaseAll, sleep, unique, waitForPicker } from "../desktop.ts";
+import { afterAll, afterEach, beforeAll, expect } from "bun:test";
+import { releaseAll, sleep, TargetApp, test, unique, waitForPicker } from "../desktop.ts";
 import { notification, pasteFromHistory, pointerAway, waitForNoNotification, watchNotifications, xcopy } from "./capture-driver.ts";
 
 let app: TargetApp;

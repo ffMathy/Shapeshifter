@@ -2,8 +2,8 @@
 // End-to-end check for CopyNotification: the small "Copied" notification, seen
 // as a window titled "Shapeshifter" smaller than the picker. Its text is not
 // read here (there is no OCR on the test desktop); its place, size and timing are.
-import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
-import { TargetApp, releaseAll, sleep, unique, waitForPicker } from "../../desktop.ts";
+import { afterAll, afterEach, beforeAll, expect } from "bun:test";
+import { releaseAll, sleep, TargetApp, test, unique, waitForPicker } from "../../desktop.ts";
 import { closeSettings, isTip, notification, pointerAway, setSwitch, waitForNoNotification, watchNotifications, workArea } from "../capture-driver.ts";
 
 let app: TargetApp;

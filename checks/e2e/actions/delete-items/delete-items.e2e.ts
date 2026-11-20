@@ -2,8 +2,8 @@
 // End-to-end check for DeleteItems: Delete removes the chosen item from the
 // history while the picker is up. It reads the item count on screen (OCR) and
 // what arrives in another app.
-import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
-import { TargetApp, keyUp, releaseAll, sleep, tap, waitForPicker } from "../../desktop.ts";
+import { afterAll, afterEach, beforeAll, expect } from "bun:test";
+import { keyUp, releaseAll, sleep, tap, TargetApp, test, waitForPicker } from "../../desktop.ts";
 import { itemCountOnScreen, readableId, openPicker, readPicker } from "../actions-driver.ts";
 
 let app: TargetApp;

@@ -11,7 +11,7 @@
 import { existsSync, mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { sleep } from "../desktop.ts";
+import { keepScreen, sleep } from "../desktop.ts";
 
 const root = resolve(import.meta.dir, "../../..");
 const shots = mkdtempSync(join(tmpdir(), "ail-picker-"));
@@ -184,6 +184,7 @@ export class OwnDesktop {
   }
 
   async stop() {
+    keepScreen(this.display);
     this.app.kill("SIGTERM");
     await Promise.race([this.app.exited, sleep(5000)]);
     this.xvfb.kill();

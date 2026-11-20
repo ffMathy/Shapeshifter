@@ -4,8 +4,8 @@
 // it stays up for about seven seconds. Tips are at least five minutes apart,
 // so a check that expects one first waits until five minutes have passed
 // since the last tip it saw; these checks therefore take several minutes.
-import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
-import { TargetApp, keyDown, keyUp, releaseAll, tap, unique, waitForPicker } from "../../desktop.ts";
+import { afterAll, afterEach, beforeAll, expect } from "bun:test";
+import { keyDown, keyUp, releaseAll, tap, TargetApp, test, unique, waitForPicker } from "../../desktop.ts";
 import {
   closeSettings, isTip, pointerAway, sawTip, setSwitch, startOtherApp, tipShownLately,
   waitForNoNotification, waitUntilATipCanShow, watchNotifications,

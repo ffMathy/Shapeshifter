@@ -4,10 +4,10 @@
 // what comes back after quitting Shapeshifter from its tray menu and starting
 // it again. Each scenario runs on a desktop of its own (PrivateDesktop); the
 // saved history is a folder the user can see in Shapeshifter's data folder.
-import { afterEach, expect, test } from "bun:test";
+import { afterEach, expect } from "bun:test";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { TargetApp, keyUp, releaseAll, sleep, tap } from "../../../desktop.ts";
+import { keyUp, releaseAll, sleep, tap, TargetApp, test } from "../../../desktop.ts";
 import { PrivateDesktop, readableId, openPicker, readPicker } from "../../actions-driver.ts";
 
 let desk: PrivateDesktop | undefined;

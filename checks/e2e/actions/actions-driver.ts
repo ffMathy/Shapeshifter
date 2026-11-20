@@ -14,7 +14,7 @@
 import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { holdVUntilThePickerAppears, keyDown, keyUp, sleep, tap } from "../desktop.ts";
+import { holdVUntilThePickerAppears, keepScreen, keyDown, keyUp, sleep, tap } from "../desktop.ts";
 
 const root = resolve(import.meta.dir, "../../..");
 const run = (cmd: string[], env: Record<string, string | undefined> = process.env) => Bun.spawnSync(cmd, { env });
@@ -257,6 +257,7 @@ export class PrivateDesktop {
   }
 
   async stop() {
+    keepScreen(this.display);
     this.app?.kill();
     for (const p of this.procs.reverse()) p.kill();
     await sleep(300);

@@ -2,8 +2,8 @@
 // End-to-end check for OpenPicker: where the picker appears, that it leaves the
 // keyboard with the app the user is in, and what happens on a screen too short
 // for it. Seen only through the windows on screen and what they show.
-import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
-import { TargetApp, unique } from "../../desktop.ts";
+import { afterAll, afterEach, beforeAll, expect } from "bun:test";
+import { TargetApp, test, unique } from "../../desktop.ts";
 import {
   OwnDesktop, cancelThePicker, copyWithXclip, focusedWindowName, holdThePickerOpen, makeImage, movePointer,
   readText, releaseAll, shootPicker, squash, waitForPicker, workArea, type Box,

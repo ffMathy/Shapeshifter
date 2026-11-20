@@ -3,8 +3,8 @@
 // pinned items surviving a restart. Pinned items stay at the top for good, so
 // every scenario runs on a desktop of its own (PrivateDesktop), where it may
 // also quit Shapeshifter from its tray menu and start it again.
-import { afterEach, expect, test } from "bun:test";
-import { TargetApp, keyUp, releaseAll, sleep, tap, waitForPicker } from "../../desktop.ts";
+import { afterEach, expect } from "bun:test";
+import { keyUp, releaseAll, sleep, tap, TargetApp, test, waitForPicker } from "../../desktop.ts";
 import { PrivateDesktop, readableId, actionTitlesOnScreen, openPicker, readPicker } from "../actions-driver.ts";
 
 let desk: PrivateDesktop | undefined;

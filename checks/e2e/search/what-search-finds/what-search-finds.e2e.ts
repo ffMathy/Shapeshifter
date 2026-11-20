@@ -3,8 +3,8 @@
 // X11 desktop. Copies come from the target app and from small xterm windows
 // with titles of our choosing; a find is proven by what Enter puts in the
 // other app or on the clipboard, and "No matches" by the words on the picker.
-import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
-import { TargetApp, releaseAll, sleep, tap, unique, waitForPicker } from "../../desktop.ts";
+import { afterAll, afterEach, beforeAll, expect } from "bun:test";
+import { releaseAll, sleep, tap, TargetApp, test, unique, waitForPicker } from "../../desktop.ts";
 import {
   clipboardAs, clipboardTargets, copyFromWindow, focusedWindowName, makeFile, squarePng, startSearch, type, waitForPickerWords,
 } from "../search-driver.ts";

@@ -2,8 +2,8 @@
 // End-to-end check for HistoryLimit: how many items the history keeps, and
 // pinned items on top. The limit is changed in the settings window, opened
 // from the tray icon, as a user would.
-import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
-import { TargetApp, releaseAll, unique, waitForPicker } from "../../desktop.ts";
+import { afterAll, afterEach, beforeAll, expect } from "bun:test";
+import { releaseAll, TargetApp, test, unique, waitForPicker } from "../../desktop.ts";
 import { closeSettings, pasteFromHistory, pick, pointerAway, setItemsToRemember, waitForNoNotification } from "../capture-driver.ts";
 
 let app: TargetApp;

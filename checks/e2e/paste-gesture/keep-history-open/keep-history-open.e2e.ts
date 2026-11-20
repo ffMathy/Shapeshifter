@@ -1,8 +1,8 @@
 // ail-derived-from: KeepHistoryOpen@8cf0585bce4571ec
 // End-to-end check for KeepHistoryOpen: Space keeps the picker up without
 // holding Ctrl, on a real X11 desktop, seen only through what the user sees.
-import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
-import { TargetApp, keyDown, keyUp, pickerVisible, releaseAll, sleep, tap, unique, waitForPicker } from "../../desktop.ts";
+import { afterAll, afterEach, beforeAll, expect } from "bun:test";
+import { keyDown, keyUp, pickerVisible, releaseAll, sleep, tap, TargetApp, test, unique, waitForPicker } from "../../desktop.ts";
 
 let app: TargetApp;
 beforeAll(async () => { app = await TargetApp.start(); }, 90_000);

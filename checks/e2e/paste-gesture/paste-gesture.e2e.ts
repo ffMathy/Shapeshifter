@@ -2,8 +2,8 @@
 // End-to-end check for PasteGesture: its scenarios, played with real keys on
 // an X11 desktop against the running app. It sees only what a user sees: the
 // text that lands in another app, and whether the picker is on screen.
-import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
-import { TargetApp, holdVUntilThePickerAppears, keyDown, keyUp, pickerVisible, releaseAll, sleep, tap, unique, waitForPicker } from "../desktop.ts";
+import { afterAll, afterEach, beforeAll, expect } from "bun:test";
+import { holdVUntilThePickerAppears, keyDown, keyUp, pickerVisible, releaseAll, sleep, tap, TargetApp, test, unique, waitForPicker } from "../desktop.ts";
 
 let app: TargetApp;
 beforeAll(async () => { app = await TargetApp.start(); }, 90_000);

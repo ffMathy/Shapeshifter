@@ -2,8 +2,8 @@
 // End-to-end check for Actions: opening the actions of an item with Right,
 // going back with Left, and running the chosen action by letting go of Ctrl.
 // It sees only the text that lands in another app and the clipboard (xclip).
-import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
-import { TargetApp, keyUp, releaseAll, sleep, tap, unique, waitForPicker } from "../desktop.ts";
+import { afterAll, afterEach, beforeAll, expect } from "bun:test";
+import { keyUp, releaseAll, sleep, tap, TargetApp, test, unique, waitForPicker } from "../desktop.ts";
 import { clipboardFiles, clipboardFormats, openPicker } from "./actions-driver.ts";
 
 let app: TargetApp;

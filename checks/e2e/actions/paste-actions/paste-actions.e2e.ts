@@ -2,8 +2,8 @@
 // End-to-end check for PasteActions: Paste, Paste as plain text and Paste as
 // file, seen through what arrives in another app, the clipboard (xclip) and
 // the files the user is handed.
-import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
-import { TargetApp, keyUp, releaseAll, sleep, tap, unique, waitForPicker } from "../../desktop.ts";
+import { afterAll, afterEach, beforeAll, expect } from "bun:test";
+import { keyUp, releaseAll, sleep, tap, TargetApp, test, unique, waitForPicker } from "../../desktop.ts";
 import { actionTitlesOnScreen, chooseAction, clipboardAs, clipboardFiles, clipboardFormats, copyAs, makePng, openPicker } from "../actions-driver.ts";
 
 let app: TargetApp;

@@ -3,7 +3,8 @@
 // names, laid out from right to left in Arabic. Each scenario starts Shapeshifter
 // on a desktop of its own with that variable set, as a user would, and reads the
 // picker back from the screen (OCR, English letters only).
-import { expect, test } from "bun:test";
+import { expect } from "bun:test";
+import { test } from "../../desktop.ts";
 import {
   OwnDesktop, cancelThePicker, copyWithXclip, holdThePickerOpen, readText, readWords, releaseAll, shootPicker, squash,
 } from "../picker-driver.ts";
