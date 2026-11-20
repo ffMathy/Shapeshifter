@@ -63,7 +63,7 @@ export function readPicker(part: "actions" | "history" | "all" = "all"): string 
   // The actions column is 284 px wide plus the margins at the right; the history takes the rest.
   const crop = part === "actions" ? `310x${h}+${w - 310}+0` : part === "history" ? `${w - 310}x${h}+0+0` : `${w}x${h}+0+0`;
   const big = join(dir, "big.png");
-  run(["convert", shot, "-crop", crop, "+repage", "-resize", "200%", "-colorspace", "Gray", big]);
+  run(["convert", shot, "-crop", crop, "+repage", "-resize", "300%", "-colorspace", "Gray", big]);
   return text(["tesseract", big, "-", "--psm", "6"]);
 }
 
@@ -73,11 +73,12 @@ export const ACTION_TITLES = ["Paste", "Paste as file", "Paste as plain text", "
 
 export function actionTitlesOnScreen(): string[] {
   // A title shares its line only with what OCR makes of the icon before it and the tick after it: a few stray marks.
+  const isStray = (rest: string) => { const marks = rest.trim().split(/\s+/).filter(Boolean); return marks.length <= 2 && marks.every((m) => m.length <= 2); };
   const titles: string[] = [];
   for (const raw of readPicker("actions").split("\n")) {
     const line = raw.replace(/\s+/g, " ").trim();
     const found = ACTION_TITLES
-      .filter((t) => new RegExp(`(^|\\s)${t.replace(/[()]/g, "\\$&")}(\\s|$)`).test(line) && line.replace(t, "").replace(/\s/g, "").length <= 3)
+      .filter((t) => new RegExp(`(^|\\s)${t.replace(/[()]/g, "\\$&")}(\\s|$)`).test(line) && isStray(line.replace(t, " ")))
       .sort((a, b) => b.length - a.length)[0];
     if (found) titles.push(found);
   }

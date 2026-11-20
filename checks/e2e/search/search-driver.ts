@@ -110,8 +110,9 @@ export const clipboardTargets = () => run("xclip", "-o", "-selection", "clipboar
 /** The clipboard's content of one kind. */
 export const clipboardAs = (type: string) => run("xclip", "-o", "-selection", "clipboard", "-t", type);
 
-/** A small red square, as PNG. */
-export function redSquarePng(): Uint8Array {
-  const r = Bun.spawnSync(["convert", "-size", "24x24", "xc:red", "png:-"]);
+/** A small square of a random colour, as PNG: a picture never copied before. */
+export function squarePng(): Uint8Array {
+  const colour = "#" + Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, "0");
+  const r = Bun.spawnSync(["convert", "-size", "24x24", `xc:${colour}`, "png:-"]);
   return r.stdout;
 }

@@ -5,7 +5,7 @@
 import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
 import { TargetApp, releaseAll, sleep, tap, unique, waitForPicker } from "../../desktop.ts";
 import {
-  clipboardAs, clipboardTargets, copyFromWindow, focusedWindowName, makeFile, redSquarePng, startSearch, type, waitForPickerWords,
+  clipboardAs, clipboardTargets, copyFromWindow, focusedWindowName, makeFile, squarePng, startSearch, type, waitForPickerWords,
 } from "../search-driver.ts";
 
 let app: TargetApp;
@@ -96,7 +96,7 @@ test("a copied file is found by its path and by the word file", async () => {
 
 test("a copied picture is found by the word image", async () => {
   const id = unique();
-  await copyFromWindow(`album ${id}`, "image/png", redSquarePng());
+  await copyFromWindow(`album ${id}`, "image/png", squarePng());
   await copyFromWindow(`album ${id}`, "text/plain", `caption ${unique()}`);
   await app.copy(`later ${unique()}`);
   await app.prepare();

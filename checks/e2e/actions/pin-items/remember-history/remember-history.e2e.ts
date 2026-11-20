@@ -57,12 +57,14 @@ test("with the setting off, only pinned items come back", async () => {
   const id = unique();
   const app = await setUp();
   await app.copy(`lost ${id}`);
+  await app.copy(`current ${id}`);
   await desk!.quitApp();
   await desk!.startApp();
-  await app.copy(`current ${id}`);
   await app.prepare();
   await openPicker();
-  expect(readPicker("history")).not.toContain(`lost ${id}`);
+  const history = readPicker("history");
+  expect(history).toContain(`current ${id}`);
+  expect(history).not.toContain(`lost ${id}`);
   await tap("Escape");
   await keyUp("ctrl");
   expect(existsSync(join(desk!.home, "data", "History"))).toBe(false);
@@ -79,9 +81,9 @@ test("turning the setting off deletes the saved history", async () => {
   await desk!.toggleRememberHistory();
   await sleep(1000);
   expect(existsSync(saved)).toBe(false);
+  await app.copy(`after ${id}`);
   await desk!.quitApp();
   await desk!.startApp();
-  await app.copy(`after ${id}`);
   await app.prepare();
   await openPicker();
   expect(readPicker("history")).not.toContain(`saved ${id}`);

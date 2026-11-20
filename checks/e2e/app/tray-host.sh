@@ -4,7 +4,8 @@
 # Shapeshifter (Avalonia) shows its tray icon only over D-Bus, so start this BEFORE Shapeshifter and give Shapeshifter
 # the bus address it prints:
 #   eval "$(DISPLAY=:105 checks/e2e/app/tray-host.sh .ail/app-tray)"   # exports DBUS_SESSION_BUS_ADDRESS
-# Needs: dbus-daemon, xfce4-panel (sudo apt-get install -y xfce4-panel). Everything it writes stays under the folder.
+# Needs: dbus-daemon, xfce4-panel (sudo apt-get install -y xfce4-panel). Everything it writes stays under the folder;
+# the bus and the panel run until killed (their process ids are in dbus.pid and panel.pid there).
 set -euo pipefail
 dir="$(mkdir -p "${1:?usage: tray-host.sh <state folder>}" && cd "$1" && pwd)"
 : "${DISPLAY:?DISPLAY must be set}"
@@ -46,9 +47,9 @@ if ! DBUS_SESSION_BUS_ADDRESS="$address" gdbus call --session -d org.freedesktop
     dbus-daemon --session --address="$address" --fork --print-pid >"$dir/dbus.pid"
 fi
 export DBUS_SESSION_BUS_ADDRESS="$address"
-if ! pgrep -f "xfce4-panel.*--sm-client-id=ail-tray-$(basename "$dir")" >/dev/null; then
+if ! { [[ -f "$dir/panel.pid" ]] && kill -0 "$(cat "$dir/panel.pid")" 2>/dev/null; }; then
   HOME="$dir" XDG_CONFIG_HOME="$dir/config" XDG_DATA_HOME="$dir/data" XDG_CACHE_HOME="$dir/cache" XDG_RUNTIME_DIR="$dir/runtime" \
-    nohup xfce4-panel --disable-wm-check --sm-client-id="ail-tray-$(basename "$dir")" >"$dir/panel.log" 2>&1 &
+    nohup xfce4-panel --disable-wm-check >"$dir/panel.log" 2>&1 &
   echo $! >"$dir/panel.pid"
   sleep 2
 fi
