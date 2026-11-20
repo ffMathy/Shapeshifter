@@ -27,9 +27,9 @@ node CaptureRules : fn   level: system
       history [*p, b], Add(p) => [*p, b] unchanged, isNew false
       history [b, a] without a source on a, Add(a, source Editor) => a's source becomes Editor; a source already known is kept
       max 3, history [c, b, a], Add(d) => [d, c, b]; a is removed
-      max 3, history [*p, c, b, a] => pinned items do not count
+      max 3, history [*p, c, b], Add(a) => [*p, a, c, b]; pinned items do not count
       MaxUnpinnedItems = 1 on [*p, c, b] => [*p, c]
-      startup: the current clipboard is captured once before the keyboard hook starts; the coach is told, never coached
+      StartAsync() with text on the clipboard => it is captured once, before the keyboard hook starts; NotifyCopied, and the coach only remembers it
       Captured(isNew: true) and no tip => NotifyCopied(item, history.Count), the count includes pinned items
       Captured(isNew: false) and no tip => nothing shown
       a tip from the coach => NotifyTip(tip) instead of NotifyCopied
@@ -41,7 +41,7 @@ node CaptureRules : fn   level: system
     decide an ignored read becomes the remembered self-write fingerprint
       because "unknown, confirm with the owner: keep this? A user copying, in another app, exactly what was last pasted from the history is never captured until something else is"
     decide captures are serialized and failures are logged and dropped
-      because a clipboard read can fail when another app holds the clipboard; a missed copy must not stop capturing
+      because "unknown, confirm with the owner"
     decide the fingerprint is computed before taking the history's lock
       because hashing a large image takes milliseconds (commit b069ac4)
   children  ClipboardFormats, ChangeSources, CopySource
