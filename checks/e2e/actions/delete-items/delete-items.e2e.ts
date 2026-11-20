@@ -2,8 +2,8 @@
 // history while the picker is up. It reads the item count on screen (OCR) and
 // what arrives in another app.
 import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
-import { TargetApp, keyUp, releaseAll, sleep, tap, unique, waitForPicker } from "../../desktop.ts";
-import { itemCountOnScreen, openPicker, readPicker } from "../actions-driver.ts";
+import { TargetApp, keyUp, releaseAll, sleep, tap, waitForPicker } from "../../desktop.ts";
+import { itemCountOnScreen, readableId, openPicker, readPicker } from "../actions-driver.ts";
 
 let app: TargetApp;
 beforeAll(async () => { app = await TargetApp.start(); }, 90_000);
@@ -11,7 +11,7 @@ afterAll(async () => { await releaseAll(); await app?.stop(); });
 afterEach(async () => { await releaseAll(); await waitForPicker(false); });
 
 test("Delete removes the chosen item", async () => {
-  const id = unique();
+  const id = readableId();
   for (const t of ["keep", "drop", "top"]) await app.copy(`${t} ${id}`);
   await app.prepare();
   await openPicker(1);
@@ -30,7 +30,7 @@ test("Delete removes the chosen item", async () => {
 }, 40_000);
 
 test("after Delete the next item is chosen, and letting go of Ctrl pastes it", async () => {
-  const id = unique();
+  const id = readableId();
   for (const t of ["first", "second", "third"]) await app.copy(`${t} ${id}`);
   await app.prepare();
   await openPicker(1);

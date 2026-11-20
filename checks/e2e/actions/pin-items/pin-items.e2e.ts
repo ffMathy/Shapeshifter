@@ -3,8 +3,8 @@
 // every scenario runs on a desktop of its own (PrivateDesktop), where it may
 // also quit Shapeshifter from its tray menu and start it again.
 import { afterEach, expect, test } from "bun:test";
-import { TargetApp, keyUp, releaseAll, sleep, tap, unique, waitForPicker } from "../../desktop.ts";
-import { PrivateDesktop, actionTitlesOnScreen, openPicker, readPicker } from "../actions-driver.ts";
+import { TargetApp, keyUp, releaseAll, sleep, tap, waitForPicker } from "../../desktop.ts";
+import { PrivateDesktop, readableId, actionTitlesOnScreen, openPicker, readPicker } from "../actions-driver.ts";
 
 let desk: PrivateDesktop | undefined;
 let app: TargetApp | undefined;
@@ -36,7 +36,7 @@ async function pinOrUnpinChosen() {
 }
 
 test("pinning keeps an item at the top", async () => {
-  const id = unique();
+  const id = readableId();
   const app = await setUp();
   await app.copy(`keep ${id}`);
   await app.copy(`later ${id}`);
@@ -61,7 +61,7 @@ test("pinning keeps an item at the top", async () => {
 }, 180_000);
 
 test("a pinned item offers Unpin, and unpinning lets it move down again", async () => {
-  const id = unique();
+  const id = readableId();
   const app = await setUp();
   await app.copy(`sticky ${id}`);
   await app.prepare();
@@ -88,7 +88,7 @@ test("a pinned item offers Unpin, and unpinning lets it move down again", async 
 }, 180_000);
 
 test("pinned items come back after a restart, the rest does not", async () => {
-  const id = unique();
+  const id = readableId();
   const app = await setUp();
   await app.copy(`pinned ${id}`);
   await app.prepare();
@@ -109,7 +109,7 @@ test("pinned items come back after a restart, the rest does not", async () => {
 }, 240_000);
 
 test("a deleted pinned item does not come back", async () => {
-  const id = unique();
+  const id = readableId();
   const app = await setUp();
   await app.copy(`doomed ${id}`);
   await app.prepare();

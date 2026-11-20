@@ -47,6 +47,9 @@ export const clipboardFiles = () => clipboardAs("text/uri-list").split(/\r?\n/).
 
 // ---------- reading the picker ----------
 
+/** A short id that OCR reads back reliably (no 0/o, 1/l/i, 5/s look-alikes), for texts a check looks for on screen. */
+export const readableId = () => Array.from({ length: 6 }, () => "acdefhkmnprtwxyz"[Math.floor(Math.random() * 16)]).join("");
+
 function pickerWindow(): string | undefined {
   const ids = text(["xdotool", "search", "--onlyvisible", "--name", "^Shapeshifter$"]).split("\n").filter(Boolean);
   return ids.find((id) => Number(/Geometry:\s*\d+x(\d+)/.exec(text(["xdotool", "getwindowgeometry", id]))?.[1]) >= 200);

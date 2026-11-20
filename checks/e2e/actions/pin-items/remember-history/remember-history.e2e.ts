@@ -6,8 +6,8 @@
 import { afterEach, expect, test } from "bun:test";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { TargetApp, keyUp, releaseAll, sleep, tap, unique } from "../../../desktop.ts";
-import { PrivateDesktop, openPicker, readPicker } from "../../actions-driver.ts";
+import { TargetApp, keyUp, releaseAll, sleep, tap } from "../../../desktop.ts";
+import { PrivateDesktop, readableId, openPicker, readPicker } from "../../actions-driver.ts";
 
 let desk: PrivateDesktop | undefined;
 let app: TargetApp | undefined;
@@ -30,7 +30,7 @@ afterEach(async () => {
 });
 
 test("with the setting on, the whole history comes back in its order", async () => {
-  const id = unique();
+  const id = readableId();
   const first = await setUp();
   await desk!.toggleRememberHistory();
   for (const t of ["apple", "banana", "cherry"]) await first.copy(`${t} ${id}`);
@@ -54,7 +54,7 @@ test("with the setting on, the whole history comes back in its order", async () 
 }, 300_000);
 
 test("with the setting off, only pinned items come back", async () => {
-  const id = unique();
+  const id = readableId();
   const app = await setUp();
   await app.copy(`lost ${id}`);
   await app.copy(`current ${id}`);
@@ -71,7 +71,7 @@ test("with the setting off, only pinned items come back", async () => {
 }, 300_000);
 
 test("turning the setting off deletes the saved history", async () => {
-  const id = unique();
+  const id = readableId();
   const app = await setUp();
   await desk!.toggleRememberHistory();
   await app.copy(`saved ${id}`);

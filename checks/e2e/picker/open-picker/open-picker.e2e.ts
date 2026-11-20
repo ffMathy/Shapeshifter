@@ -74,19 +74,26 @@ test("the picker is placed for the size it had the time before", async () => {
   expect(Math.abs(short.y - placeFor(tall).y)).toBeLessThanOrEqual(1);
 }, 30_000);
 
-test("on a screen too short for the picker, its bottom is cut off", async () => {
+test("on a screen too short for the picker, it is shown in turn whole without its preview and cut off with it", async () => {
   const desktop = await OwnDesktop.start({ width: 1280, height: 480, name: "short-screen" });
   try {
     const d = desktop.display;
     await copyWithXclip("first short line\nsecond short line\nthird short line", undefined, d);
-    const box = await openTwice(d);
-    const text = squash(readText(shootPicker(box, d)));
-    await cancelThePicker(d);
-    console.log("SHORT", JSON.stringify(box), text);
-    expect(box.y).toBe(0);
-    expect(box.height).toBe(480);
-    expect(text).toContain("51 characters");
-    expect(text).not.toContain("Esc");
+    const seen: string[] = [];
+    for (let i = 0; i < 4; i++) {
+      const box = await holdThePickerOpen(d);
+      const text = squash(readText(shootPicker(box, d)));
+      await cancelThePicker(d);
+      const preview = text.includes("51 characters");
+      const footer = text.includes("Esc");
+      if (!preview && footer && box.height < 480) seen.push("whole, without its preview");
+      else if (preview && !footer && box.y + box.height >= 480) seen.push("cut off, with its preview");
+      else seen.push(`neither (${box.height} high at ${box.y}, preview ${preview}, footer ${footer})`);
+    }
+    console.log("SHORT", seen);
+    expect(seen).toContain("whole, without its preview");
+    expect(seen).toContain("cut off, with its preview");
+    expect(seen.filter((s) => s.startsWith("neither"))).toEqual([]);
   } finally {
     await desktop.stop();
   }
