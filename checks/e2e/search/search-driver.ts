@@ -62,8 +62,13 @@ export function pickerWords(): string {
   const shot = join(scratch, "picker.png");
   const big = join(scratch, "picker-big.png");
   run("import", "-window", id, shot);
-  run("convert", shot, "-resize", "200%", "-colorspace", "Gray", big);
-  return run("tesseract", big, "stdout").replace(/[“”]/g, '"').replace(/\s+/g, " ").toLowerCase();
+  // Twice: once as it is, once in black and white, which also catches the pale placeholder.
+  let words = "";
+  for (const extra of [[], ["-threshold", "90%"]]) {
+    run("convert", shot, "-resize", "200%", "-colorspace", "Gray", ...extra, big);
+    words += " " + run("tesseract", big, "stdout");
+  }
+  return words.replace(/[“”]/g, '"').replace(/\s+/g, " ").toLowerCase();
 }
 
 /** Waits until the picker shows all of `words` (case ignored). */
@@ -84,13 +89,14 @@ export async function waitForPickerWords(words: string[], timeout = 4000): Promi
 export async function copyFromWindow(title: string, type: string, data: string | Uint8Array) {
   const file = join(scratch, `copy-${Math.random().toString(36).slice(2)}`);
   writeFileSync(file, data);
-  run("xterm", "-T", title, "-e", "sh", "-c", `xclip -selection clipboard -t '${type}' -i '${file}'; sleep 1.2`);
+  run("xterm", "-T", title, "-e", "sh", "-c", `sleep 0.5; xclip -selection clipboard -t '${type}' -i '${file}'; sleep 1`);
   await sleep(800);
 }
 
 /** A file on disk, as the user would copy it in a file manager; returns its path. */
 export function makeFile(name: string, content = "hello"): string {
-  const dir = join(scratch, "files");
+  // Not under a folder named "files", so the path never contains the kind word by chance.
+  const dir = join(scratch, "docs");
   mkdirSync(dir, { recursive: true });
   const path = join(dir, name);
   writeFileSync(path, content);
