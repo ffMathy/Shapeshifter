@@ -63,6 +63,28 @@ public sealed class ImageEndToEndTests(ShapeshifterSession session)
         }
     }
 
+    /// <summary>
+    /// An image picked from the history must survive another application reading it. On Linux, Shapeshifter read its
+    /// own clipboard write back and disposed the bitmap it was still serving, so it crashed as soon as an application
+    /// asked for the image.
+    /// </summary>
+    [Fact]
+    public async Task AnImageFromTheHistoryCanBeReadByAnotherApplication()
+    {
+        SkipUnlessEnabled();
+        var id = Unique();
+        await session.CopyTextAsync($"before {id}");
+        await session.CopyBitmapAsync();
+
+        await PasteSecondItemAsync(id);
+
+        Assert.Equal("IMAGE 4x3", await session.ReadImageAsync());
+        Assert.Equal("IMAGE 4x3", await session.ReadImageAsync());
+        await Task.Delay(500, TestContext.Current.CancellationToken);
+        Assert.True(session.IsShapeshifterRunning, $"Shapeshifter exited after the image was read.\n{session.Logs}");
+        await session.CopyTextAsync($"still running {id}");
+    }
+
     /// <summary>Copies one more text item, then picks the image (now second) with holding Ctrl+V and pressing V again, and pastes it.</summary>
     private async Task PasteSecondItemAsync(string id)
     {
@@ -86,6 +108,14 @@ public sealed class ImageEndToEndTests(ShapeshifterSession session)
     private static string Report(IReadOnlyDictionary<string, string> original, IReadOnlyDictionary<string, string> restored) =>
         "Original clipboard:\n" + string.Join('\n', original.Select(pair => $"  {pair.Key}: {pair.Value}"))
         + "\nAfter pasting from Shapeshifter:\n" + string.Join('\n', restored.Select(pair => $"  {pair.Key}: {pair.Value}"));
+
+    private static void SkipUnlessEnabled()
+    {
+        if (!ShapeshifterSession.IsEnabled)
+        {
+            Assert.Skip(ShapeshifterSession.SkipReason);
+        }
+    }
 
     private static void SkipUnlessWindows()
     {

@@ -23,6 +23,13 @@ namespace Shapeshifter.EndToEnd.TargetApp;
 /// application does. <c>screenshot</c>: CF_DIB (24-bit) and PNG, like Snipping Tool. <c>firefox</c>: CF_DIB and a
 /// CF_HDROP pointing to a temporary copy of the image, like Firefox's "Copy Image".
 /// </item>
+/// <item>
+/// <c>copy-bitmap</c>: put <see cref="TestImage"/> on the clipboard as a bitmap, through Avalonia (every platform).
+/// </item>
+/// <item>
+/// <c>read-image</c>: read the clipboard's image the way an application pasting it does; answers
+/// <c>IMAGE &lt;width&gt;x&lt;height&gt;</c>, or <c>NONE</c>.
+/// </item>
 /// <item><c>delete-temp</c>: delete the temporary file of the <c>firefox</c> scenario, as Firefox does later.</item>
 /// <item><c>describe-image</c> (Windows): answers <c>IMAGE &lt;description&gt;</c>, see <see cref="WindowsClipboard.Describe"/>.</item>
 /// <item>
@@ -153,6 +160,25 @@ internal sealed class TargetApplication : Application
                 secretTransfer.Add(secret);
                 await clipboard.SetDataAsync(secretTransfer);
                 return "OK";
+
+            case "copy-bitmap":
+                using (var stream = new MemoryStream(EncodePng()))
+                {
+                    var bitmapItem = new DataTransferItem();
+                    bitmapItem.SetBitmap(new Bitmap(stream));
+                    var bitmapTransfer = new DataTransfer();
+                    bitmapTransfer.Add(bitmapItem);
+                    await clipboard.SetDataAsync(bitmapTransfer);
+                }
+
+                return "OK";
+
+            case "read-image":
+                using (var data = await clipboard.TryGetDataAsync())
+                {
+                    using var image = data is null ? null : await data.TryGetBitmapAsync();
+                    return image is null ? "NONE" : $"IMAGE {image.PixelSize.Width}x{image.PixelSize.Height}";
+                }
 
             case "copy-image" when OperatingSystem.IsWindows():
                 CopyImage(parts[1]);

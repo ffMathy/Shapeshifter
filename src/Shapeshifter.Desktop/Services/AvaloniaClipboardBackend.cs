@@ -21,6 +21,11 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
     private readonly TopLevel host;
     private readonly ILogger logger;
 
+    // What Shapeshifter last put on the clipboard. On X11 the clipboard hands this very object back while Shapeshifter
+    // owns the selection, and it must stay alive (not disposed) to serve other applications' requests for it.
+    private DataTransfer? written;
+    private ClipboardSnapshot? writtenSnapshot;
+
     public AvaloniaClipboardBackend(TopLevel host, ILogger logger)
     {
         this.host = host;
@@ -42,11 +47,13 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
     public Task<string> GetChangeTokenAsync(CancellationToken cancellationToken = default) =>
         OnUiThread(async () =>
         {
-            using var data = await Clipboard.TryGetDataAsync().ConfigureAwait(true);
+            var data = await Clipboard.TryGetDataAsync().ConfigureAwait(true);
             if (data is null)
             {
                 return string.Empty;
             }
+
+            using var owned = IsWritten(data) ? null : data;
 
             // The poller only compares tokens for equality, so the content itself is a cheaper and exact token:
             // a string comparison stops at the first difference, while hashing reads and copies all of it.
@@ -67,7 +74,16 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
 
     private async Task<ClipboardSnapshot> ReadCoreAsync(CancellationToken cancellationToken)
     {
-        using var data = await Clipboard.TryGetDataAsync().ConfigureAwait(true);
+        var data = await Clipboard.TryGetDataAsync().ConfigureAwait(true);
+        if (IsWritten(data) && writtenSnapshot is not null)
+        {
+            // Reading it would dispose the bitmap that other applications are still to be served (issue: a paste of
+            // an image from the history crashed as soon as another application asked for it), and what was written
+            // is exactly what the clipboard holds.
+            return writtenSnapshot;
+        }
+
+        using var owned = data;
         if (data is null || data.Formats.Count == 0)
         {
             return ClipboardSnapshot.Empty;
@@ -226,6 +242,8 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
             transfer.Add(DataTransferItem.CreateFile(storageItem));
         }
 
+        written = transfer;
+        writtenSnapshot = snapshot;
         await Clipboard.SetDataAsync(transfer).ConfigureAwait(true);
         if (OperatingSystem.IsWindows())
         {
@@ -233,6 +251,8 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
             await Clipboard.FlushAsync().ConfigureAwait(true);
         }
     }
+
+    private bool IsWritten(IAsyncDataTransfer? data) => data is not null && ReferenceEquals(data, written);
 
     private async Task<T?> TryAsync<T>(Func<Task<T?>> read, string what)
     {
