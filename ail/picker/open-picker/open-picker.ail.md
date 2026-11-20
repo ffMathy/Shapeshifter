@@ -27,10 +27,11 @@ node OpenPicker : flow   level: experience
       And then a short text was copied
       When the user holds Ctrl+V until the picker appears
       Then the shorter picker opens where the tall one was placed, higher than 16 % down
-    Scenario: on a screen too short for the picker, its bottom is cut off
+    Scenario: on a screen too short for the picker, it is shown in turn whole without its preview and cut off with it
       Given a screen 480 pixels high, and a text of three lines was copied
-      When the user holds Ctrl+V until the picker appears, the second time
-      Then the picker fills the screen's height from the top, its preview still shows "51 characters", and its footer is below the screen
+      When the user holds Ctrl+V until the picker appears, four times
+      Then the first and third times the picker keeps its preview, "51 characters", and its footer is below the screen's edge
+      And the second and fourth times it has no preview and shows whole, its footer with "Esc" on screen
   how
     decide centred across the screen, near its top
       because "unknown, confirm with the owner: v6 opened at the top left (#224 asked for the right); why centred, 16 % down?"
@@ -41,13 +42,13 @@ node OpenPicker : flow   level: experience
     decide the preview is left out when the whole picker is taller than the screen's working area
       because the picker must stay on one screen with all its keys visible (PR #634)
     decide the place is worked out from the window's size as last laid out by the system
-      because "unknown, confirm with the owner: keep this? On Linux the picker is placed for its previous size, so it can reach below the screen, and on a short screen the system has already cut it to the screen's height, so the preview is never left out"
+      because "unknown, confirm with the owner: keep this? On Linux the picker is placed for its previous size, so it can reach below the screen, and on a short screen the preview is left out only every other time"
   uses      PlacementRules
   children  PlacementRules
   sources
     issues #143, #211, #224, #280, #639; PRs #614, #618, #634
     docs/architecture.md, "The picker"
-    driven on Linux (Xvfb, openbox) 2026-11-20 on 1280 × 800: a text picker of 584 at 128 (16 %); an image picker of 736 at 64 the second time, at 128 (reaching to 864) the first time after a text; a text picker of 605 at 64 after the image picker; on 1280 × 600 and 1280 × 480 the picker was cut to the screen with its preview kept
+    driven on Linux (Xvfb, openbox) 2026-11-20 on 1280 × 800: a text picker of 584 at 128 (16 %); an image picker of 736 at 64 the second time, at 128 (reaching to 864) the first time after a text; a text picker of 605 at 64 after the image picker; on 1280 × 600 it fit; on 1280 × 480 it alternated: cut off with its preview, then whole without it
     driven 2026-11-20: Xvfb's two-screen mode reported both screens at 0,0, so the pointer's screen could not be driven
     src/Shapeshifter.Desktop/Services/PickerPresenter.cs, ShowAsync, FitsOnScreen, Position, FindScreen
     src/Shapeshifter.Desktop/Views/PickerWindow.axaml: ShowActivated False, Topmost True, Focusable False, SizeToContent

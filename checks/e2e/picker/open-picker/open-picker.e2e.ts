@@ -90,7 +90,6 @@ test("on a screen too short for the picker, it is shown in turn whole without it
       else if (preview && !footer && box.y + box.height >= 480) seen.push("cut off, with its preview");
       else seen.push(`neither (${box.height} high at ${box.y}, preview ${preview}, footer ${footer})`);
     }
-    console.log("SHORT", seen);
     expect(seen).toContain("whole, without its preview");
     expect(seen).toContain("cut off, with its preview");
     expect(seen.filter((s) => s.startsWith("neither"))).toEqual([]);
