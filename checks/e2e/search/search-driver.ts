@@ -85,12 +85,14 @@ export async function waitForPickerWords(words: string[], timeout = 8000): Promi
 
 /**
  * Copies in another app: an xterm titled `title` puts `data` on the clipboard as `type` (with xclip, which keeps
- * serving it after the xterm closes), then the clipboard manager is given time to notice.
+ * serving it after the xterm closes), then the clipboard manager is given time to notice. Plain text is copied
+ * with type "text", which offers it the way terminals do (UTF8_STRING, STRING, TEXT).
  */
 export async function copyFromWindow(title: string, type: string, data: string | Uint8Array) {
   const file = join(scratch, `copy-${Math.random().toString(36).slice(2)}`);
   writeFileSync(file, data);
-  run("xterm", "-T", title, "-e", "sh", "-c", `sleep 0.5; xclip -selection clipboard -t '${type}' -i '${file}'; sleep 1`);
+  const target = type === "text" ? "" : `-t '${type}'`;
+  run("xterm", "-T", title, "-e", "sh", "-c", `sleep 0.5; xclip -selection clipboard ${target} -i '${file}'; sleep 1`);
   await sleep(800);
 }
 

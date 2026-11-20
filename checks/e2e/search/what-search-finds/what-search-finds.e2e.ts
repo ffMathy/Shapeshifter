@@ -97,7 +97,7 @@ test("a copied file is found by its path and by the word file", async () => {
 test("a copied picture is found by the word image", async () => {
   const id = unique();
   await copyFromWindow(`album ${id}`, "image/png", squarePng());
-  await copyFromWindow(`album ${id}`, "text/plain", `caption ${unique()}`);
+  await copyFromWindow(`album ${id}`, "text", `caption ${unique()}`);
   await app.copy(`later ${unique()}`);
   await app.prepare();
   await startSearch();
@@ -110,7 +110,7 @@ test("a copied picture is found by the word image", async () => {
 test("an item is found by the window it was copied from", async () => {
   const id = unique();
   const words = `sunny weather ${unique()}`;
-  await copyFromWindow(`notes ${id}`, "text/plain", words);
+  await copyFromWindow(`notes ${id}`, "text", words);
   await app.copy(`later ${unique()}`);
   await app.prepare();
   await startSearch();
