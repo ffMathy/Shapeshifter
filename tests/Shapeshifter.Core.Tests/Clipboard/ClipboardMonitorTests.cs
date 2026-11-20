@@ -469,6 +469,36 @@ public sealed class ClipboardMonitorTests : IDisposable
     }
 
     [Fact]
+    public async Task ReadThatNeverFinishes_IsGivenUp_AndLaterCopiesAreStillCaptured()
+    {
+        monitor.ReadTimeout = TimeSpan.FromMilliseconds(200);
+        monitor.Start();
+        backend.Current = Text("lost");
+        backend.NextReadHangs = true;
+        await RaiseAndWaitForReadAsync();
+
+        backend.Current = Text("after");
+        var capture = NextCaptureAsync();
+        changeSource.Raise();
+
+        Assert.Equal("after", (await capture).Item.Snapshot.Text);
+    }
+
+    [Fact]
+    public async Task ReadThatNeverFinishes_TimesOut_AndReleasesTheNextCapture()
+    {
+        monitor.ReadTimeout = TimeSpan.FromMilliseconds(200);
+        backend.Current = Text("stuck");
+        backend.NextReadHangs = true;
+
+        Assert.Null(await monitor.CaptureNowAsync(Ct).WaitAsync(Timeout, Ct));
+
+        backend.Current = Text("next");
+        var item = await monitor.CaptureNowAsync(Ct).WaitAsync(Timeout, Ct);
+        Assert.Equal("next", item?.Snapshot.Text);
+    }
+
+    [Fact]
     public void Dispose_Twice_DoesNotThrow()
     {
         monitor.Start();
@@ -529,6 +559,9 @@ public sealed class ClipboardMonitorTests : IDisposable
 
         public TaskCompletionSource? ReadGate { get; set; }
 
+        /// <summary>The next read never finishes and ignores cancellation, as an X11 read whose owner never answers.</summary>
+        public bool NextReadHangs { get; set; }
+
         public TaskCompletionSource? WriteGate { get; set; }
 
         public List<ClipboardSnapshot> Written { get; } = [];
@@ -554,6 +587,12 @@ public sealed class ClipboardMonitorTests : IDisposable
                     {
                         waiter.Tcs.TrySetResult();
                     }
+                }
+
+                if (NextReadHangs)
+                {
+                    NextReadHangs = false;
+                    await new TaskCompletionSource().Task;
                 }
 
                 if (ReadGate is { } readGate)
