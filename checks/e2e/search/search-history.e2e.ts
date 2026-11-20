@@ -77,6 +77,8 @@ test("Right at the end of the query opens the actions", async () => {
   const path = decodeURIComponent(uris.trim().split(/\r?\n/)[0].replace(/^file:\/\//, ""));
   expect(path.endsWith(".txt")).toBe(true);
   expect(readFileSync(path, "utf8").replace(/^\uFEFF/, "")).toBe(`memo ${id}`);
+  // A copy made within a moment of "Paste as file" is not kept in the history (not this check's subject): wait.
+  await sleep(2000);
 }, 30_000);
 
 test("Right inside the query moves the caret instead", async () => {
