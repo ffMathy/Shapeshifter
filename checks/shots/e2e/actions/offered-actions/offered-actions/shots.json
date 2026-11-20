@@ -1,0 +1,33 @@
+{
+  "node": "OfferedActions",
+  "shots": [
+    {
+      "test": "plain text offers Paste, Paste as file and Pin",
+      "file": "plain-text-offers-paste-paste-as-file-and-pin.png"
+    },
+    {
+      "test": "formatted text also offers Paste as plain text",
+      "file": "formatted-text-also-offers-paste-as-plain-text.png"
+    },
+    {
+      "test": "an image offers Paste, Paste as file, Upload and paste link, and Pin",
+      "file": "an-image-offers-paste-paste-as-file-upload-and-paste-link-an.png"
+    },
+    {
+      "test": "a file offers Paste, Copy as compressed folder and Pin",
+      "file": "a-file-offers-paste-copy-as-compressed-folder-and-pin.png"
+    },
+    {
+      "test": "several files offer the same as one file",
+      "file": "several-files-offer-the-same-as-one-file.png"
+    },
+    {
+      "test": "other data offers only Paste and Pin",
+      "file": "other-data-offers-only-paste-and-pin.png"
+    },
+    {
+      "test": "text with links also offers the link actions",
+      "file": "text-with-links-also-offers-the-link-actions.png"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "node": "Languages",
+  "shots": [
+    {
+      "test": "the picker speaks the language SHAPESHIFTER_LANGUAGE names",
+      "file": "the-picker-speaks-the-language-shapeshifter-language-names.png"
+    },
+    {
+      "test": "the Linux look's list headings stay in English",
+      "file": "the-linux-look-s-list-headings-stay-in-english.png"
+    },
+    {
+      "test": "in Arabic the picker is laid out from right to left",
+      "file": "in-arabic-the-picker-is-laid-out-from-right-to-left.png"
+    }
+  ]
+}

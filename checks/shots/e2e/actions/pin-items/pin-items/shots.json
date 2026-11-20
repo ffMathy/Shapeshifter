@@ -1,0 +1,21 @@
+{
+  "node": "PinItems",
+  "shots": [
+    {
+      "test": "pinning keeps an item at the top",
+      "file": "pinning-keeps-an-item-at-the-top.png"
+    },
+    {
+      "test": "a pinned item offers Unpin, and unpinning lets it move down again",
+      "file": "a-pinned-item-offers-unpin-and-unpinning-lets-it-move-down-a.png"
+    },
+    {
+      "test": "pinned items come back after a restart, the rest does not",
+      "file": "pinned-items-come-back-after-a-restart-the-rest-does-not.png"
+    },
+    {
+      "test": "a deleted pinned item does not come back",
+      "file": "a-deleted-pinned-item-does-not-come-back.png"
+    }
+  ]
+}

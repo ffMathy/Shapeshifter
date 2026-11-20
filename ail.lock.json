@@ -1,0 +1,378 @@
+{
+  "version": 1,
+  "nodes": {
+    "AccentShades": {
+      "hash": "e5b4409f2c1251572ed13b915d0f7a218b819a694c837ad7b8905bf5c238444c",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "ActionCatalog": {
+      "hash": "db11a399ab06d13d91d0b90674a6162f8bc8952d2aeff43167d66f2834f43c61",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "Actions": {
+      "hash": "c2f5540acafac619f6361c228bfe5e1602b1cf59227f71ebffe95b2b9dbb8d83",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "ActionsList": {
+      "hash": "fa5cc0a38ba19b8bbc0c8cad89baa8392c8a9c26c87e46adac1b4a59f4ced06b",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "App": {
+      "hash": "1e7109d6df453d8f765aff860f497e2e3cd6309c13c7a1aa67379ca65899011f",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "AutoUpdate": {
+      "hash": "1d6cfb0a71fdf5cba26792252cea46084c55a39a47466cd697c0be9101ec148d",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "BoxedSheet": {
+      "hash": "19d63e9c746c618c8d70b4dbf7dd0354a4490511939b1adb5515c15db632feff",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "Capture": {
+      "hash": "fc903736d7de2815e3ddd2bd145c52a2046abcb5188d8afdb1ce821204b0ae9b",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "CaptureRules": {
+      "hash": "fa3e506b6290f2ac1c399e9666162010d25f5688aa2e2e9dcce67c971b6313a7",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "ChangeSettings": {
+      "hash": "470c46c085a82dedf24e2f3e828bb074426d8e70915cef8b55642741162244cc",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "ChangeSources": {
+      "hash": "d8744e135773be96d15674fb3ad1fb93744b7cf3af9a25c6f072e503d8efc767",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "ClipboardFormats": {
+      "hash": "d3cccc5e833dc17f5b8642a66781efbd40a0844c032fc07128abbe14a6dd87d5",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "CoachingTips": {
+      "hash": "a617a5770ae691bac8ec2b7ea4d4c988ecc5d65dfbcced0022a2a89c4029b499",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "CoachRules": {
+      "hash": "caaedf5cfd3b914ddf6b5232438928244514040e50c6926834a9de9ee48222a7",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "CopyNotification": {
+      "hash": "d048adce93f9a22a591bea7afa0b9802bd4a87144dcbf92c876ec0f61894e4c8",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "CopySource": {
+      "hash": "53bf108c6933bc5187ec4d42ac8facc0c8199c8db8f5c02d863dc8db55ed2171",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "DataLocations": {
+      "hash": "df6c7e3b3dbd1f22802aeab73a6dd1090baa04af97582745e021422dcdc62d40",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "DeleteItems": {
+      "hash": "361b1b3d5812626a016802dfa7ee4fb56b18baf130fd1e75f1ba860e7245a5be",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "EmptyPicker": {
+      "hash": "2ce52868af6b2ef3ddefe2c2c15e6f1a951dd4823807dd2821945d86f4557a33",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "GestureRules": {
+      "hash": "7ac840ff57932ad5ed92bb8db4acbdd9b87bf30f71830eddc905d4b210a2b7bd",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "HistoryLimit": {
+      "hash": "891a95b7689648b6c70d8f0a217ecedc8477aaf65fd93c387ac6a83dccca96c1",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "HistoryRow": {
+      "hash": "75714452296c1bf6c07b1dead8697d582408f770bb5915732b8c9d38866e0364",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "KeepFormats": {
+      "hash": "83fa57eb4102aa201088f7158d15bb5b79fc278d6085166f5780d1d3c860caac",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "KeepHistoryOpen": {
+      "hash": "6c442a4b47f97dd90121d25eb32d64f35645ed8b912b357607d963397145e78a",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "LanguageRules": {
+      "hash": "5f1fd05d127fef24d8a756bd77b46b395671a207e31a0245073d71d9cb16312a",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "Languages": {
+      "hash": "97efcfba30d1ad9befb117889ba3ae5cf90e17dbbf4fd09a74a3a96dcf09905c",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "Looks": {
+      "hash": "c5cb2a3f4b50f4d593df3a2e33a72fd4d1e527e3a8869ee37619b21bde2a8f13",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "MicaSheets": {
+      "hash": "cd17dad4281ae53757bf761bc6a2fb7a3f02358273956e21d0db36b3f31dcb34",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "NativeMaterial": {
+      "hash": "5d91d4a7547300164fa86e80d9ed526d512a08074613d21ee1bbf67987a8f17b",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "NotificationCard": {
+      "hash": "a83a291d15665c26b9ab5bb7a5790605f12ccbac5df9940a7b73eaeeecb44b45",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "OfferedActions": {
+      "hash": "10f685f9821334908a03cd789131485c11c41b01435a37a3d2c46a534cb02c8a",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "OpenPicker": {
+      "hash": "b1bac5841140050761335593bc3c3e5b1ab9cbb0c889167ea3d52ac4fcef68ba",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "PasteActions": {
+      "hash": "1c136b09e3fd09ece32aad11a0a334e1dba7f7273ec42fde743a431ce00123a2",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "PasteGesture": {
+      "hash": "1539a98d75cd9dda895a1442242ee05d695e29fb27fd47da1676e40d8cf652b3",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "Picker": {
+      "hash": "33546e0c2bea9325732d1f96e69e7f6467458bf831000f23703c14c0e561b1ea",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "PickerFooter": {
+      "hash": "97643e13235cad392cbbd332ee07a3543a2b89b46304590cecb7847b0eec83f0",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "PickFromHistory": {
+      "hash": "6b563def1c718f9eb09e7232cacb7f58f4918884e4ba2f2da80b314b6a9ed1dd",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "PinItems": {
+      "hash": "02998546ec4712a3a66dfd49a445ebf85f700b4303f0fc86214166da3d7cf13d",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "PlacementRules": {
+      "hash": "830f4201a2dcdd3f3911cd4883cccb5ce7381f5d37c02f34436542c55631691d",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "PlatformRequirements": {
+      "hash": "c53a7cc62b1c9bc0803da813c3e3160da86bdb07df8c868c287c20b810e98c84",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "Preferences": {
+      "hash": "2fa0ce35a2c800f682b283a8a2d389b99d8928bfec5651c78cb371a38122c495",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "PreviewCard": {
+      "hash": "df72f9fd44462cf2430d7abb3aeda75149e618ee6bab96e5844528fcd1be5514",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "PreviewRules": {
+      "hash": "83e796b9a58d392b6a46a55b09f409391ddc39030326512a1eadb1ede681f25c",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "ProblemReport": {
+      "hash": "d92b64044b5009e7bd93d0114df63b79270e5f5b0c44b371951498b2ac3b3118",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "Refraction": {
+      "hash": "f97344964f47429bb3ba26efd0bf0f1e9f64d88457cf2f09e27828c4026d9e10",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "RelativeTime": {
+      "hash": "f74a7a5c8a9d4a2f3dd0477483219090b6f4c95ca33c0fa2572bba2f39259250",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "RememberHistory": {
+      "hash": "fd68f6b60413b390c78c9af945d461374d64eb2f30b79d57424113d29777adf5",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "RowContent": {
+      "hash": "e1cd1107d9856ecea53692ad0380622f69fec153be404d7e363b5449106fe15d",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "SavedItems": {
+      "hash": "8876322aa6445ddde026e1a3a8ea5ce4566425f66a3f761bd09d729339133aa3",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "SearchBar": {
+      "hash": "ef8373b9e8775f726de0b6b0ff13668a98851466742166751d10c1c21b25437b",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "SearchFocus": {
+      "hash": "2a08192f0ab691b03f744157040e222f9e484747b73d0859d9149c8b7f1b2c23",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "SearchHistory": {
+      "hash": "2c63973f308d54c00ea17a1e7bd7d620541a0923953ff64d9feb1946bd434a8f",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "SearchRules": {
+      "hash": "287d759b4b9a1917f6177dd4e4948974ab1bbd2406c33e4b7a7b7e534463eab8",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "SelfInstall": {
+      "hash": "ec2d1314ebaa6679569364f54d76162cc35154cc6dc5146120499beaa68d6ffe",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "SettingsWindow": {
+      "hash": "631a9d20d490d2fa0000eeeae11fcf1871938950f625f2724b4939b800d0de84",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "Shapeshifter": {
+      "hash": "00708cf9b9db154151fde79951ea9d82f73781c0bddd60628d1f1729dcd88fe5",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "ShortcutChoice": {
+      "hash": "c8309c5f55581491e3d43bb947141a8ffabf2de8fa52abea510e649736bb89dc",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "SingleInstance": {
+      "hash": "e54a74a9cadde6ae8f90a48ae524c84ecc0fdf08fd8b56ae98fbfc5e6a1da5d8",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "StartAtLogin": {
+      "hash": "df23fd42e2960f8debe9267850243847099a333656c86eaf05b376567e5265e8",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "TrayMenu": {
+      "hash": "fcb0482c8f3f7a8b8941257b361744add9d7acd94f0b86e3f3b981c007280334",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "UploadImage": {
+      "hash": "d16aa07ba3fd065227da86f569e194a2d69bde48672782fd750b7a7baf1fde5c",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    },
+    "WhatSearchFinds": {
+      "hash": "2136d8147a1ae17a2379d4ece70b0480de70a9b5c2ac8290b2c24fdd8b393adb",
+      "files": {},
+      "by": "adopted",
+      "adopted": true
+    }
+  },
+  "glue": {}
+}

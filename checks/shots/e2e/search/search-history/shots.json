@@ -1,0 +1,37 @@
+{
+  "node": "SearchHistory",
+  "shots": [
+    {
+      "test": "S starts a search, even before the history appears",
+      "file": "s-starts-a-search-even-before-the-history-appears.png"
+    },
+    {
+      "test": "typing narrows the history, and Enter pastes into the app the user came from",
+      "file": "typing-narrows-the-history-and-enter-pastes-into-the-app-the.png"
+    },
+    {
+      "test": "the arrows move through the results, wrapping around",
+      "file": "the-arrows-move-through-the-results-wrapping-around.png"
+    },
+    {
+      "test": "Right at the end of the query opens the actions",
+      "file": "right-at-the-end-of-the-query-opens-the-actions.png"
+    },
+    {
+      "test": "Right inside the query moves the caret instead",
+      "file": "right-inside-the-query-moves-the-caret-instead.png"
+    },
+    {
+      "test": "Escape gives the focus back without pasting",
+      "file": "escape-gives-the-focus-back-without-pasting.png"
+    },
+    {
+      "test": "clicking another window cancels the search",
+      "file": "clicking-another-window-cancels-the-search.png"
+    },
+    {
+      "test": "Ctrl+V in the search box pastes nothing on Linux",
+      "file": "ctrl-v-in-the-search-box-pastes-nothing-on-linux.png"
+    }
+  ]
+}

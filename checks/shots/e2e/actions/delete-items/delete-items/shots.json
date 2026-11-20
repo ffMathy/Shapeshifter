@@ -1,0 +1,13 @@
+{
+  "node": "DeleteItems",
+  "shots": [
+    {
+      "test": "Delete removes the chosen item",
+      "file": "delete-removes-the-chosen-item.png"
+    },
+    {
+      "test": "after Delete the next item is chosen, and letting go of Ctrl pastes it",
+      "file": "after-delete-the-next-item-is-chosen-and-letting-go-of-ctrl-.png"
+    }
+  ]
+}

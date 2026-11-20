@@ -1,0 +1,17 @@
+{
+  "node": "RememberHistory",
+  "shots": [
+    {
+      "test": "with the setting on, the whole history comes back in its order",
+      "file": "with-the-setting-on-the-whole-history-comes-back-in-its-orde.png"
+    },
+    {
+      "test": "with the setting off, only pinned items come back",
+      "file": "with-the-setting-off-only-pinned-items-come-back.png"
+    },
+    {
+      "test": "turning the setting off deletes the saved history",
+      "file": "turning-the-setting-off-deletes-the-saved-history.png"
+    }
+  ]
+}

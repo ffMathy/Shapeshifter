@@ -1,0 +1,33 @@
+{
+  "node": "WhatSearchFinds",
+  "shots": [
+    {
+      "test": "every word must occur, in any order, ignoring case and accents",
+      "file": "every-word-must-occur-in-any-order-ignoring-case-and-accents.png"
+    },
+    {
+      "test": "a search that finds nothing says so",
+      "file": "a-search-that-finds-nothing-says-so.png"
+    },
+    {
+      "test": "the whole text is searched, not only its first line",
+      "file": "the-whole-text-is-searched-not-only-its-first-line.png"
+    },
+    {
+      "test": "copied HTML is searched by its words, not its markup",
+      "file": "copied-html-is-searched-by-its-words-not-its-markup.png"
+    },
+    {
+      "test": "a copied file is found by its path and by the word file",
+      "file": "a-copied-file-is-found-by-its-path-and-by-the-word-file.png"
+    },
+    {
+      "test": "a copied picture is found by the word image",
+      "file": "a-copied-picture-is-found-by-the-word-image.png"
+    },
+    {
+      "test": "an item is found by the window it was copied from",
+      "file": "an-item-is-found-by-the-window-it-was-copied-from.png"
+    }
+  ]
+}
