@@ -55,8 +55,15 @@ function pickerWindow(): string | undefined {
   return ids.find((id) => Number(/Geometry:\s*\d+x(\d+)/.exec(text(["xdotool", "getwindowgeometry", id]))?.[1]) >= 200);
 }
 
-/** OCR of a part of the picker: "actions" is the right-hand column, "history" the left one, "all" the whole picker. */
-export function readPicker(part: "actions" | "history" | "all" = "all"): string {
+/** Ways to prepare a screenshot for OCR; each misreads different things (the chosen row's colour and ring, small grey text). */
+const OCR_PASSES = [
+  ["-resize", "300%", "-colorspace", "Gray"],
+  ["-resize", "200%", "-colorspace", "Gray"],
+  ["-colorspace", "Gray", "-resize", "300%", "-sharpen", "0x1"],
+];
+
+/** OCR of a part of the picker, one text per pass: "actions" is the right-hand column, "history" the left one, "all" the whole picker. */
+export function readPickerPasses(part: "actions" | "history" | "all" = "all"): string[] {
   const id = pickerWindow();
   if (!id) throw new Error("the picker is not on screen");
   const dir = mkdtempSync(join(tmpdir(), "ail-actions-ocr-"));
@@ -65,9 +72,17 @@ export function readPicker(part: "actions" | "history" | "all" = "all"): string 
   const [w, h] = text(["identify", "-format", "%w %h", shot]).split(" ").map(Number);
   // The actions column is 284 px wide plus the margins at the right; the history takes the rest.
   const crop = part === "actions" ? `310x${h}+${w - 310}+0` : part === "history" ? `${w - 310}x${h}+0+0` : `${w}x${h}+0+0`;
-  const big = join(dir, "big.png");
-  run(["convert", shot, "-crop", crop, "+repage", "-resize", "300%", "-colorspace", "Gray", big]);
-  return text(["tesseract", big, "-", "--psm", "6"]);
+  return OCR_PASSES.map((pass, i) => {
+    const big = join(dir, `pass${i}.png`);
+    run(["convert", shot, "-crop", crop, "+repage", ...pass, big]);
+    return text(["tesseract", big, "-", "--psm", "6"]);
+  });
+}
+
+/** The first OCR pass in which every one of `needles` is found, else every pass joined (so "not found" means no pass found it). */
+export function readPicker(part: "actions" | "history" | "all" = "all", ...needles: string[]): string {
+  const passes = readPickerPasses(part);
+  return passes.find((t) => needles.length > 0 && needles.every((n) => t.includes(n))) ?? passes.join("\n");
 }
 
 /** Every action title, in the order they are shown, as read from the screen. */
@@ -77,22 +92,26 @@ export const ACTION_TITLES = ["Paste", "Paste as file", "Paste as plain text", "
 export function actionTitlesOnScreen(): string[] {
   // A title shares its line only with what OCR makes of the icon before it and the tick after it: a few stray marks.
   const isStray = (rest: string) => { const marks = rest.trim().split(/\s+/).filter(Boolean); return marks.length <= 2 && marks.every((m) => m.length <= 2); };
-  const titles: string[] = [];
-  for (const raw of readPicker("actions").split("\n")) {
-    const line = raw.replace(/\s+/g, " ").trim();
-    const found = ACTION_TITLES
-      .filter((t) => new RegExp(`(^|\\s)${t.replace(/[()]/g, "\\$&")}(\\s|$)`).test(line) && isStray(line.replace(t, " ")))
-      .sort((a, b) => b.length - a.length)[0];
-    if (found) titles.push(found);
-  }
-  return titles;
+  // Each pass may miss a title; none invents one, so the longest list is the most complete.
+  const lists = readPickerPasses("actions").map((ocr) => {
+    const titles: string[] = [];
+    for (const raw of ocr.split("\n")) {
+      const line = raw.replace(/\s+/g, " ").trim();
+      const found = ACTION_TITLES
+        .filter((t) => new RegExp(`(^|\\s)${t.replace(/[()]/g, "\\$&")}(\\s|$)`).test(line) && isStray(line.replace(t, " ")))
+        .sort((a, b) => b.length - a.length)[0];
+      if (found) titles.push(found);
+    }
+    return titles;
+  });
+  return lists.reduce((a, b) => (b.length > a.length ? b : a));
 }
 
 /** The "N items" count in the picker's header. */
 export async function itemCountOnScreen(): Promise<number> {
   // The picker may still be settling into its new size; read again a moment later.
   for (let attempt = 0; attempt < 4; attempt++) {
-    const m = /(\d+)\s+items?\b/.exec(readPicker("history"));
+    const m = /(\d+)\s+items?\b/.exec(readPickerPasses("history")[0]);
     if (m) return Number(m[1]);
     await sleep(400);
   }
