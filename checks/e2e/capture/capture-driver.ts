@@ -256,7 +256,7 @@ export async function startOtherApp(): Promise<{ focus: () => Promise<void>; sto
     await sleep(100);
     id = windows().find((w) => !before.has(w)) ?? "";
   }
-  if (!id) throw new Error("xlogo did not open a window");
+  if (!id) { proc.kill(); throw new Error("xlogo did not open a window"); }
   return {
     focus: async () => { xdotool("windowactivate", "--sync", id); await sleep(300); },
     stop: () => proc.kill(),
