@@ -24,7 +24,6 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
     // What Shapeshifter last put on the clipboard. On X11 the clipboard hands this very object back while Shapeshifter
     // owns the selection, and it must stay alive (not disposed) to serve other applications' requests for it.
     private DataTransfer? written;
-    private ClipboardSnapshot? writtenSnapshot;
 
     public AvaloniaClipboardBackend(TopLevel host, ILogger logger)
     {
@@ -75,15 +74,12 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
     private async Task<ClipboardSnapshot> ReadCoreAsync(CancellationToken cancellationToken)
     {
         var data = await Clipboard.TryGetDataAsync().ConfigureAwait(true);
-        if (IsWritten(data) && writtenSnapshot is not null)
-        {
-            // Reading it would dispose the bitmap that other applications are still to be served (issue: a paste of
-            // an image from the history crashed as soon as another application asked for it), and what was written
-            // is exactly what the clipboard holds.
-            return writtenSnapshot;
-        }
 
-        using var owned = data;
+        // Shapeshifter's own write is read like any other copy, but never disposed, nor is its bitmap: other
+        // applications are still to be served from them (a paste of an image from the history crashed as soon as
+        // another application asked for it).
+        var own = IsWritten(data);
+        using var owned = own ? null : data;
         if (data is null || data.Formats.Count == 0)
         {
             return ClipboardSnapshot.Empty;
@@ -113,7 +109,8 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
         byte[]? image = null;
         if (data.Contains(DataFormat.Bitmap))
         {
-            using var bitmap = await TryAsync(() => data.TryGetBitmapAsync(), "image").ConfigureAwait(true);
+            var bitmap = await TryAsync(() => data.TryGetBitmapAsync(), "image").ConfigureAwait(true);
+            using var ownedBitmap = own ? null : bitmap;
             if (bitmap is not null)
             {
                 using var stream = new MemoryStream();
@@ -243,7 +240,6 @@ internal sealed class AvaloniaClipboardBackend : IClipboardBackend
         }
 
         written = transfer;
-        writtenSnapshot = snapshot;
         await Clipboard.SetDataAsync(transfer).ConfigureAwait(true);
         if (OperatingSystem.IsWindows())
         {
