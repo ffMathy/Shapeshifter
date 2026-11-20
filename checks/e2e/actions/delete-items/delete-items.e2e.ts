@@ -15,10 +15,10 @@ test("Delete removes the chosen item", async () => {
   for (const t of ["keep", "drop", "top"]) await app.copy(`${t} ${id}`);
   await app.prepare();
   await openPicker(1);
-  const before = itemCountOnScreen();
+  const before = await itemCountOnScreen();
   await tap("Delete");
   await sleep(400);
-  expect(itemCountOnScreen()).toBe(before - 1);
+  expect(await itemCountOnScreen()).toBe(before - 1);
   expect(readPicker("history")).not.toContain(`drop ${id}`);
   await tap("Escape");
   await keyUp("ctrl");

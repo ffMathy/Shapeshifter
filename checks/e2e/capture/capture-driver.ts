@@ -6,9 +6,10 @@
 //
 // Needs: DISPLAY, xdotool, xclip, xprop, xwininfo, ImageMagick (import, compare).
 // The settings window opens from the tray icon, so changing a setting needs a
-// StatusNotifierItem tray on the display (e.g. status-notifier-watcher and
-// gtk-sni-tray-standalone, with a DBus session); checks that change a setting
-// fail with a clear message without one.
+// StatusNotifierItem tray on the display: checks/e2e/app/tray-host.sh (an
+// xfce4-panel), or status-notifier-watcher with gtk-sni-tray-standalone, on a
+// D-Bus session that Shapeshifter was started with. Checks that change a
+// setting fail with a clear message without one.
 import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -154,16 +155,27 @@ export async function waitUntilATipCanShow() {
 export async function openSettings(): Promise<Box> {
   let win = settingsWindow();
   if (!win) {
-    const trays = xdotool("search", "--onlyvisible", "--name", "gtk-sni-tray-standalone").split("\n").filter(Boolean);
-    const tray = trays.map(geometry).find(Boolean);
-    if (!tray) throw new Error("no tray on this display: the settings window opens from Shapeshifter's tray icon");
-    // The first (and only) icon in the tray.
-    xdotool("mousemove", String(tray.x + 15), String(tray.y + tray.height / 2), "click", "1");
+    const icon = trayIcon();
+    if (!icon) throw new Error("no tray on this display: the settings window opens from Shapeshifter's tray icon (start checks/e2e/app/tray-host.sh, then Shapeshifter with its D-Bus address)");
+    xdotool("mousemove", String(icon.x), String(icon.y), "click", "1");
     for (let i = 0; i < 50 && !(win = settingsWindow()); i++) await sleep(100);
     if (!win) throw new Error("clicking the tray icon did not open the settings window");
   }
   await sleep(500);
   return win;
+}
+
+/**
+ * Where Shapeshifter's tray icon is: the right end of the xfce4-panel that
+ * checks/e2e/app/tray-host.sh puts at the bottom of the screen, or the only
+ * icon of a gtk-sni-tray-standalone bar.
+ */
+function trayIcon(): { x: number; y: number } | null {
+  const find = (name: string) => xdotool("search", "--onlyvisible", "--name", name).split("\n").filter(Boolean).map(geometry);
+  const panel = find("^xfce4-panel$").find((g) => g && g.width > 200);
+  if (panel) return { x: panel.x + panel.width - 17, y: panel.y + Math.floor(panel.height / 2) };
+  const bar = find("^gtk-sni-tray-standalone$").find(Boolean);
+  return bar ? { x: bar.x + 15, y: bar.y + Math.floor(bar.height / 2) } : null;
 }
 
 function settingsWindow(): Box | null {
@@ -231,11 +243,14 @@ export const tipShownLately = () => lastTipSeen > 0 && Date.now() - lastTipSeen 
 
 /** Starts a second, different app (xlogo) and returns a way to focus it and to close it. */
 export async function startOtherApp(): Promise<{ focus: () => Promise<void>; stop: () => void }> {
+  // xlogo does not say which process it is, so look for the XLogo window that was not there before.
+  const windows = () => xdotool("search", "--onlyvisible", "--class", "XLogo").split("\n").filter(Boolean);
+  const before = new Set(windows());
   const proc = Bun.spawn(["xlogo", "-geometry", "200x200+700+100"], { env: process.env, stdout: "ignore", stderr: "ignore" });
   let id = "";
   for (let i = 0; i < 50 && !id; i++) {
     await sleep(100);
-    id = xdotool("search", "--onlyvisible", "--pid", String(proc.pid)).split("\n").filter(Boolean)[0] ?? "";
+    id = windows().find((w) => !before.has(w)) ?? "";
   }
   if (!id) throw new Error("xlogo did not open a window");
   return {

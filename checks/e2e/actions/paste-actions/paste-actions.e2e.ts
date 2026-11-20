@@ -2,8 +2,8 @@
 // file, seen through what arrives in another app, the clipboard (xclip) and
 // the files the user is handed.
 import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
-import { TargetApp, releaseAll, sleep, unique, waitForPicker } from "../../desktop.ts";
-import { chooseAction, clipboardAs, clipboardFiles, clipboardFormats, copyAs, makePng, openPicker } from "../actions-driver.ts";
+import { TargetApp, keyUp, releaseAll, sleep, tap, unique, waitForPicker } from "../../desktop.ts";
+import { actionTitlesOnScreen, chooseAction, clipboardAs, clipboardFiles, clipboardFormats, copyAs, makePng, openPicker } from "../actions-driver.ts";
 
 let app: TargetApp;
 beforeAll(async () => { app = await TargetApp.start(); }, 90_000);
@@ -55,7 +55,20 @@ test("Paste as file turns an image into an image file", async () => {
   await copyAs("image/png", makePng(width, 17, "blue"));
   await app.prepare();
   await openPicker();
-  await chooseAction(1);
+  // An image also offers "Upload and paste link", which would send it to a public host: never land on it.
+  // Find "Paste as file" on screen first, and cancel unless it is exactly where it should be.
+  await tap("Right");
+  await sleep(300);
+  const titles = actionTitlesOnScreen();
+  if (titles.indexOf("Paste as file") !== 1 || titles.indexOf("Upload and paste link") === 1) {
+    await tap("Escape");
+    await keyUp("ctrl");
+    throw new Error(`unexpected actions for an image: ${titles.join(", ")}`);
+  }
+  await tap("Down");
+  await sleep(200);
+  await keyUp("ctrl");
+  await sleep(1200);
   const files = clipboardFiles();
   expect(files).toHaveLength(1);
   expect(files[0]).toMatch(/\/Image \d{4}-\d\d-\d\d \d\d\.\d\d\.\d\d\.png$/);

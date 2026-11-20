@@ -89,10 +89,14 @@ export function actionTitlesOnScreen(): string[] {
 }
 
 /** The "N items" count in the picker's header. */
-export function itemCountOnScreen(): number {
-  const m = /(\d+)\s+items?\b/.exec(readPicker("history"));
-  if (!m) throw new Error("no item count on screen");
-  return Number(m[1]);
+export async function itemCountOnScreen(): Promise<number> {
+  // The picker may still be settling into its new size; read again a moment later.
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const m = /(\d+)\s+items?\b/.exec(readPicker("history"));
+    if (m) return Number(m[1]);
+    await sleep(400);
+  }
+  throw new Error("no item count on screen");
 }
 
 // ---------- gestures ----------
