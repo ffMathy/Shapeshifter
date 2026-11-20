@@ -7,3 +7,8 @@
 *.jpg binary
 *.ico binary
 *.dll binary
+
+# AIL: generated code and the lock file stay committed, but are collapsed in pull request diffs.
+src/Shapeshifter.Core/Ail/** linguist-generated=true
+src/Shapeshifter.Desktop/Ail/** linguist-generated=true
+ail.lock.json linguist-generated=true
