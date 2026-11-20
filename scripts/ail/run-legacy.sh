@@ -2,15 +2,18 @@
 # Starts the existing Shapeshifter on a virtual X11 desktop, for the AIL end-to-end checks (ail.config.json run.legacy).
 # Needs: the .NET SDK from global.json, xvfb, openbox, x11-utils, xdotool.
 #   sudo apt-get install -y xvfb openbox x11-utils xdotool
-# The desktop is $AIL_DISPLAY (default :97); settings and history live in a fresh folder under .ail/legacy.
+# The desktop is $AIL_DISPLAY (default :97); settings, history and logs live in a fresh $AIL_STATE (default .ail/legacy).
+# Several copies can run side by side, each with its own AIL_DISPLAY and AIL_STATE. AIL_SKIP_BUILD=1 skips the build.
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 export PATH="$HOME/.dotnet:$PATH" DOTNET_NOLOGO=1 DOTNET_CLI_TELEMETRY_OPTOUT=1
-state=.ail/legacy
+state="${AIL_STATE:-.ail/legacy}"
 rm -rf "$state" && mkdir -p "$state/home"
 
-dotnet build src/Shapeshifter.Desktop -c Release -v quiet -nologo >"$state/build.log"
-dotnet build tests/Shapeshifter.EndToEnd.TargetApp -c Release -v quiet -nologo >>"$state/build.log"
+if [[ "${AIL_SKIP_BUILD:-}" != 1 ]]; then
+  dotnet build src/Shapeshifter.Desktop -c Release -v quiet -nologo >"$state/build.log"
+  dotnet build tests/Shapeshifter.EndToEnd.TargetApp -c Release -v quiet -nologo >>"$state/build.log"
+fi
 
 export DISPLAY="${AIL_DISPLAY:-:97}"
 pids=()
@@ -29,7 +32,7 @@ if ! xprop -root _NET_SUPPORTING_WM_CHECK 2>/dev/null | grep -q "window id #"; t
   sleep 1
 fi
 
-SHAPESHIFTER_HOME="$PWD/$state/home" SHAPESHIFTER_NO_UPDATE=1 SHAPESHIFTER_NO_INSTALL=1 SHAPESHIFTER_LOOK=linux \
+SHAPESHIFTER_HOME="$(cd "$state" && pwd)/home" SHAPESHIFTER_NO_UPDATE=1 SHAPESHIFTER_NO_INSTALL=1 SHAPESHIFTER_LOOK=linux \
   dotnet src/Shapeshifter.Desktop/bin/Release/net11.0/Shapeshifter.dll --no-install >"$state/shapeshifter.log" 2>&1 &
 pids+=($!)
 wait "${pids[-1]}"
