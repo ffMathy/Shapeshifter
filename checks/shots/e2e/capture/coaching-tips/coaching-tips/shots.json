@@ -1,0 +1,25 @@
+{
+  "node": "CoachingTips",
+  "shots": [
+    {
+      "test": "copying the same thing twice in a row shows no tip",
+      "file": "copying-the-same-thing-twice-in-a-row-shows-no-tip.png"
+    },
+    {
+      "test": "with Tips off, copying something again shows nothing",
+      "file": "with-tips-off-copying-something-again-shows-nothing.png"
+    },
+    {
+      "test": "copying something from the history again shows a tip",
+      "file": "copying-something-from-the-history-again-shows-a-tip.png"
+    },
+    {
+      "test": "a second tip within five minutes is not shown",
+      "file": "a-second-tip-within-five-minutes-is-not-shown.png"
+    },
+    {
+      "test": "copying back and forth between two apps shows a tip",
+      "file": "copying-back-and-forth-between-two-apps-shows-a-tip.png"
+    }
+  ]
+}

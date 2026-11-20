@@ -1,0 +1,21 @@
+{
+  "node": "KeepFormats",
+  "shots": [
+    {
+      "test": "rich text keeps its HTML",
+      "file": "rich-text-keeps-its-html.png"
+    },
+    {
+      "test": "copied files are kept as files",
+      "file": "copied-files-are-kept-as-files.png"
+    },
+    {
+      "test": "another app's own format is kept byte for byte",
+      "file": "another-app-s-own-format-is-kept-byte-for-byte.png"
+    },
+    {
+      "test": "an image is kept, and other apps can read it back",
+      "file": "an-image-is-kept-and-other-apps-can-read-it-back.png"
+    }
+  ]
+}

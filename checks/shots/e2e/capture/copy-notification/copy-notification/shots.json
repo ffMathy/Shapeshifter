@@ -1,0 +1,21 @@
+{
+  "node": "CopyNotification",
+  "shots": [
+    {
+      "test": "a copy shows the Copied notification at the bottom centre for a moment",
+      "file": "a-copy-shows-the-copied-notification-at-the-bottom-centre-fo.png"
+    },
+    {
+      "test": "copying the same thing twice in a row shows it only once",
+      "file": "copying-the-same-thing-twice-in-a-row-shows-it-only-once.png"
+    },
+    {
+      "test": "pointing at the notification makes it go away",
+      "file": "pointing-at-the-notification-makes-it-go-away.png"
+    },
+    {
+      "test": "with Copy notifications off, a copy shows nothing",
+      "file": "with-copy-notifications-off-a-copy-shows-nothing.png"
+    }
+  ]
+}

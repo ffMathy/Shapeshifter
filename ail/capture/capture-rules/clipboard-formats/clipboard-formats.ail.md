@@ -8,19 +8,23 @@ node ClipboardFormats : fn   level: system
   why   Restoring a copy exactly, recognising duplicates and respecting
         password managers all hang on the same format rules.   <- CaptureRules
   what
-    exports
-      ClipboardSnapshot { Text?, Files: string[], Image?: PNG bytes, RawFormats: (Name, Data)[] }; Kind; Fingerprint; IsEmpty
-      ClipboardFormatClassifier.IsExcludedFromHistoryAsync(names, readValue) => bool
-      ClipboardFormatClassifier.ShouldCapture(name, size = 0) => bool;  ShouldRestore(name, snapshot) => bool
-      MaxRawFormatBytes = 32 MB
+    type ClipboardSnapshot = { Text?: text, Files: list of text, Image?: bytes, RawFormats: list of { Name: text, Data: bytes } }
+      Image holds PNG bytes
+    ClipboardSnapshot.Kind: ClipboardContentKind
+    ClipboardSnapshot.Fingerprint: text
+    ClipboardSnapshot.IsEmpty: boolean
+    ClipboardFormatClassifier.IsExcludedFromHistoryAsync(names: list of text, readValue: (name: text) -> later bytes or nothing) -> later boolean
+    ClipboardFormatClassifier.ShouldCapture(name: text, size: integer = 0) -> boolean
+    ClipboardFormatClassifier.ShouldRestore(name: text, snapshot: ClipboardSnapshot) -> boolean
+    MaxRawFormatBytes: integer = 32 MB
     examples
       Kind(Files ["/a", "/b"], Text "x") => FileCollection;  Kind(Files ["/a"]) => File
       Kind(Text "hello", Image png) => Text;  Kind(Image png) => Image
       Kind(Image png, Files ["<temp>/x.png"]) => Image          Firefox on Windows (#606)
       Kind(Text "", RawFormats [text/html]) => Text;  Kind(RawFormats [application/x-foo]) => Other
-      Fingerprint(Text "a", RawFormats [text/html "<b>a</b>"]) == Fingerprint(Text "a") => true     text is compared by its text only
-      Fingerprint(Files ["/a"]) == Fingerprint(Files ["/a"], Text "file:///a") => true
-      Fingerprint(Image p1) == Fingerprint(Image p2) => true only when the PNG bytes are equal
+      Fingerprint(Text "a", RawFormats [text/html "<b>a</b>"]) is Fingerprint(Text "a") => true     text is compared by its text only
+      Fingerprint(Files ["/a"]) is Fingerprint(Files ["/a"], Text "file:///a") => true
+      Fingerprint(Image p1) is Fingerprint(Image p2) => true only when the PNG bytes are equal
       Fingerprint(Other) => hash of every raw format's name and bytes, each part prefixed with its length
       IsExcludedFromHistory(["ExcludeClipboardContentFromMonitorProcessing"]) => true            Windows
       IsExcludedFromHistory(["Clipboard Viewer Ignore"]) => true

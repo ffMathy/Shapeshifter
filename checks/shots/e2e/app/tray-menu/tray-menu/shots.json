@@ -1,0 +1,33 @@
+{
+  "node": "TrayMenu",
+  "shots": [
+    {
+      "test": "clicking the tray icon opens the settings",
+      "file": "clicking-the-tray-icon-opens-the-settings.png"
+    },
+    {
+      "test": "Settings… opens the settings, and only once",
+      "file": "settings-opens-the-settings-and-only-once.png"
+    },
+    {
+      "test": "About Shapeshifter opens the settings",
+      "file": "about-shapeshifter-opens-the-settings.png"
+    },
+    {
+      "test": "Report a problem… opens a new GitHub issue with the version filled in",
+      "file": "report-a-problem-opens-a-new-github-issue-with-the-version-f.png"
+    },
+    {
+      "test": "Open log folder opens the folder of the logs",
+      "file": "open-log-folder-opens-the-folder-of-the-logs.png"
+    },
+    {
+      "test": "Check for updates… opens the releases page when this copy cannot update itself",
+      "file": "check-for-updates-opens-the-releases-page-when-this-copy-can.png"
+    },
+    {
+      "test": "Clear history forgets what was copied before",
+      "file": "clear-history-forgets-what-was-copied-before.png"
+    }
+  ]
+}

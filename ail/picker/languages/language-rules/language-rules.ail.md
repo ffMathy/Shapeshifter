@@ -5,14 +5,13 @@ node LanguageRules : fn   level: system
   why   Which language is spoken, and which way the windows read, must be decided
         once, before any window exists, the same way for every window.   <- Languages
   what
-    exports
-      Variable = "SHAPESHIFTER_LANGUAGE"
-      Translations = ["ar", "bn", "da", "de", "es", "fa", "fr", "hi", "id", "it", "ja", "ko", "nl", "pl", "pt-BR", "ru", "th", "tr", "uk", "vi", "zh-Hans"]
-      ApplyLanguageOverride()        first thing at start: sets the display (UI) culture of every thread to the variable's culture
-      IsRightToLeft => the display culture's text info is right to left
-      Format(format, args) => the string filled in with the current (format) culture
-      Get(name, culture) => that culture's string, else English, else the name itself
-      ModifierKey(name) => the translated "Ctrl" for "Ctrl", the name as is otherwise
+    Variable: text = "SHAPESHIFTER_LANGUAGE"
+    Translations: list of text = ["ar", "bn", "da", "de", "es", "fa", "fr", "hi", "id", "it", "ja", "ko", "nl", "pl", "pt-BR", "ru", "th", "tr", "uk", "vi", "zh-Hans"]
+    ApplyLanguageOverride() -> nothing — first thing at start: sets the display (UI) culture of every thread to the variable's culture
+    IsRightToLeft: boolean — the display culture's text info is right to left
+    Format(format: text, args) -> text — the text filled in with the current (format) culture
+    Get(name: text, culture: Culture) -> text — that culture's text, else English, else the name itself
+    ModifierKey(name: text) -> text — the translated "Ctrl" for "Ctrl", the name as is otherwise
     examples
       ApplyLanguageOverride(variable "de") => display culture de; strings German
       ApplyLanguageOverride(variable " pt-BR ") => display culture pt-BR; trimmed
@@ -25,9 +24,8 @@ node LanguageRules : fn   level: system
       Get("TimeJustNow", culture de) => "Gerade eben";  Get("TimeJustNow", culture sv) => "Just now"
       Format("{0} items", 3) => "3 items"
       the picker's footer key cap for Cmd => "⌘" in every language
-    notes
-      only the display culture changes; numbers in Format follow the system's format culture, dates in RelativeTime the display culture
-      a right-to-left display culture sets the picker's, the settings window's and the notification's flow direction when they are created
+    only the display culture changes; numbers in Format follow the system's format culture, dates in RelativeTime the display culture
+    a right-to-left display culture sets the picker's, the settings window's and the notification's flow direction when they are created
   how
     decide the override is read once, before the first window
       because every string is read through the display culture, and the windows take their direction when they are made (Program.Main)

@@ -1,0 +1,41 @@
+{
+  "node": "ChangeSettings",
+  "shots": [
+    {
+      "test": "a longer delay keeps the history hidden for longer",
+      "file": "a-longer-delay-keeps-the-history-hidden-for-longer.png"
+    },
+    {
+      "test": "turning off copy notifications hides the Copied notification",
+      "file": "turning-off-copy-notifications-hides-the-copied-notification.png"
+    },
+    {
+      "test": "Items to remember limits how much is kept",
+      "file": "items-to-remember-limits-how-much-is-kept.png"
+    },
+    {
+      "test": "Clear history forgets older copies but keeps the clipboard",
+      "file": "clear-history-forgets-older-copies-but-keeps-the-clipboard.png"
+    },
+    {
+      "test": "Copy version puts the version and the system on the clipboard",
+      "file": "copy-version-puts-the-version-and-the-system-on-the-clipboar.png"
+    },
+    {
+      "test": "Report a problem opens a new GitHub issue",
+      "file": "report-a-problem-opens-a-new-github-issue.png"
+    },
+    {
+      "test": "Project page opens the project on GitHub",
+      "file": "project-page-opens-the-project-on-github.png"
+    },
+    {
+      "test": "Check for updates opens the releases page when this copy cannot update itself",
+      "file": "check-for-updates-opens-the-releases-page-when-this-copy-can.png"
+    },
+    {
+      "test": "Open log folder opens the folder of the logs",
+      "file": "open-log-folder-opens-the-folder-of-the-logs.png"
+    }
+  ]
+}

@@ -9,13 +9,15 @@ node ActionCatalog : fn   level: system
         platform and for every build, so which actions apply and their order
         are exact rules, testable without a desktop.   <- Actions
   what
-    exports
-      interface IClipboardAction { Id: string; Order: int; GetTitle(item) => string; GetDescription(item) => string; CanExecute(item) => bool; ExecuteAsync(item, context: ActionContext) => Task }
-      ActionCatalog(actions: IClipboardAction[])   All sorted by Order;  GetAvailable(item) => All where CanExecute(item)
-      ActionCatalog.CreateDefault()
-      ActionContext.WriteAndPasteAsync(snapshot)   writes the clipboard, waits PasteSettleDelay = 40 ms, then simulates Ctrl+V (Cmd+V on macOS)
-      ActionContext.CopyNewContentAsync(snapshot)  writes the clipboard and adds the snapshot to the history as its newest item; no paste
-    catalog   id                     order  offered when
+    type IClipboardAction = { Id: text, Order: integer, GetTitle(item: ClipboardItem) -> text, GetDescription(item: ClipboardItem) -> text, CanExecute(item: ClipboardItem) -> boolean, ExecuteAsync(item: ClipboardItem, context: ActionContext) -> later nothing }
+    ActionCatalog(actions: list of IClipboardAction) -> ActionCatalog
+    ActionCatalog.All: list of IClipboardAction — the actions sorted by Order
+    ActionCatalog.GetAvailable(item: ClipboardItem) -> list of IClipboardAction — the actions of All whose CanExecute(item) is true, in order
+    ActionCatalog.CreateDefault() -> ActionCatalog
+    ActionContext.WriteAndPasteAsync(snapshot: ClipboardSnapshot) -> later nothing — writes the clipboard, waits PasteSettleDelay = 40 ms, then simulates Ctrl+V (Cmd+V on macOS)
+    ActionContext.CopyNewContentAsync(snapshot: ClipboardSnapshot) -> later nothing — writes the clipboard and adds the snapshot to the history as its newest item; no paste
+    the catalog, one action per line:
+              id                     order  offered when
               paste                  0      always
               paste-as-file          10     an image with bytes, or Text kind with non-empty text
               paste-plain-text       20     Text kind with a rich format (HTML or RTF), and either non-empty text or an HTML format
@@ -25,7 +27,7 @@ node ActionCatalog : fn   level: system
               open-links             200    Text kind whose text holds at least one link; opens at most 10
               toggle-pin             255    always; titled "Unpin from clipboard" when the item is pinned
     examples
-      CreateDefault().All.Select(a => a.Id) => [paste, paste-as-file, paste-plain-text, upload-image, copy-as-zip, copy-image-from-link, open-links, toggle-pin]
+      the ids of CreateDefault().All, in order => [paste, paste-as-file, paste-plain-text, upload-image, copy-as-zip, copy-image-from-link, open-links, toggle-pin]
       GetAvailable(text "hello") => [paste, paste-as-file, toggle-pin]
       GetAvailable(text "x" + raw "text/html") => [paste, paste-as-file, paste-plain-text, toggle-pin]
       GetAvailable(raw "text/html" only, no plain text) => [paste, paste-plain-text, toggle-pin]

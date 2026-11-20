@@ -1,11 +1,11 @@
-// ail-derived-from: SearchHistory@21f8dcb4bb5b0524
+// ail-derived-from: SearchHistory@aac74c1589e9545c
 // End-to-end check for SearchHistory: S during the gesture, typing in the
 // picker, then Enter, Escape or another window, on a real X11 desktop. It sees
 // only what a user sees: which window has the keyboard focus, the text that
 // lands in another app, files on disk, and the words on the picker.
-import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
+import { afterAll, afterEach, beforeAll, expect } from "bun:test";
 import { readFileSync } from "node:fs";
-import { TargetApp, keyDown, keyUp, releaseAll, sleep, tap, unique, waitForPicker } from "../desktop.ts";
+import { keyDown, keyUp, releaseAll, sleep, tap, TargetApp, test, unique, waitForPicker } from "../desktop.ts";
 import { clickAt, clipboardAs, clipboardTargets, focusedWindowName, startSearch, type, waitForFocus, waitForPickerWords } from "./search-driver.ts";
 
 const target = "Shapeshifter E2E Target";

@@ -8,7 +8,7 @@
 // Positions inside the settings window are those of the Linux look ("Boxed Sheet"), which has no "Shortcut" row.
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { sleep } from "../desktop.ts";
+import { keepScreenSoon, sleep } from "../desktop.ts";
 
 const root = resolve(import.meta.dir, "../../..");
 
@@ -134,7 +134,9 @@ export const notificationVisible = () =>
 
 /** Watches for the "Copied" notification for a while; true as soon as it shows. */
 export async function notificationAppears(within = 2000): Promise<boolean> {
-  for (const until = Date.now() + within; Date.now() < until; await sleep(50)) if (notificationVisible()) return true;
+  for (const until = Date.now() + within; Date.now() < until; await sleep(50)) {
+    if (notificationVisible()) { keepScreenSoon(); return true; }
+  }
   return false;
 }
 

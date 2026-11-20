@@ -6,13 +6,12 @@ node AccentShades : fn   level: system
         must stay readable on light and dark surfaces (#164; commit fd387a4
         "Give the looks softer and text-safe accent shades").   <- Looks
   what
-    exports
-      Attach(application)        applies the platform's accent, and again whenever the system's colours change
-      Apply(application, accent: Color)
-      LightThemeAccentText(accent) => Color
-      DarkThemeAccentText(accent, light2: Color | null) => Color
-      ContrastRatio(a, b) => double      WCAG 2 relative luminance, (lighter + 0.05) / (darker + 0.05)
-      Darken(color, factor) => each channel × factor, rounded
+    Attach(application: Application) -> nothing — applies the platform's accent, and again whenever the system's colours change
+    Apply(application: Application, accent: Color) -> nothing
+    LightThemeAccentText(accent: Color) -> Color
+    DarkThemeAccentText(accent: Color, light2: Color or nothing) -> Color
+    ContrastRatio(a: Color, b: Color) -> number — WCAG 2 relative luminance, (lighter + 0.05) / (darker + 0.05)
+    Darken(color: Color, factor: number) -> Color — each channel × factor, rounded
     resources set by Apply, the accent's alpha ignored
       AccentBrush = accent;  AccentColor = accent
       AccentDarkBrush = Darken(accent, 0.7);  AccentDarkerBrush = Darken(accent, 0.6)
@@ -29,7 +28,7 @@ node AccentShades : fn   level: system
       Apply(accent #3A5CF0 at alpha 80) => AccentBrush #3A5CF0
       Attach(platform reporting an accent with alpha 0) => nothing set; the look's own palette stays
       DarkThemeAccentText(accent, light2 #99EBFF) => #99EBFF, mixed 8 % toward white per step while under 4.5:1 on #2C2C2C or under 3:1 on #575757
-      DarkThemeAccentText(accent, null) => the accent 70/255 lighter in HSL, then mixed toward white the same way
+      DarkThemeAccentText(accent, nothing) => the accent 70/255 lighter in HSL, then mixed toward white the same way
   how
     decide the text shade goes in the theme dictionaries, never at the top level
       because a top-level entry would win over every theme dictionary (AccentPalette)

@@ -7,7 +7,8 @@
 // Needs: DISPLAY, xdotool, the .NET runtime, and AIL_TARGET_APP, the path
 // (relative to the project root) of a small app with one text box that takes
 // commands on stdin (tests/Shapeshifter.EndToEnd.TargetApp).
-import { existsSync } from "node:fs";
+import { test as bunTest } from "bun:test";
+import { existsSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join, resolve } from "node:path";
 
@@ -144,4 +145,72 @@ export async function holdVUntilThePickerAppears() {
   const shown = await waitForPicker(true);
   await keyUp("v");
   if (!shown) throw new Error("the picker did not appear while V was held");
+}
+
+// ---------------------------------------------------------------- screenshots as proof
+
+/** The file name `ail adopt` expects for a test's screenshot (the same rule as AIL's own slugOf). */
+export const shotName = (test: string) =>
+  `${test.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "test"}.png`;
+
+/** The whole screen of an X display, as PNG bytes; empty when it cannot be taken. */
+export function screenOf(display = process.env.DISPLAY ?? ""): Uint8Array {
+  const r = Bun.spawnSync(["import", "-window", "root", "png:-"], { env: { ...process.env, DISPLAY: display }, stdout: "pipe", stderr: "ignore" });
+  return r.exitCode === 0 ? r.stdout : new Uint8Array();
+}
+
+let keptScreen: Uint8Array | null = null;
+
+/**
+ * Keeps the screen as it is now as the scenario's proof, in place of the screen it ends on. The checks' helpers call
+ * this at the moment they look at something that is gone by the end, such as the open picker or a notification; the
+ * last one kept wins.
+ */
+export function keepScreen(display = process.env.DISPLAY ?? "") {
+  const png = screenOf(display);
+  if (png.length) keptScreen = png;
+}
+
+let pendingScreen: Promise<void> | null = null;
+
+/**
+ * Like keepScreen, but without waiting for the screenshot: for helpers that time what is on screen, such as the
+ * notification watchers. The test waits for it before saving.
+ */
+export function keepScreenSoon(display = process.env.DISPLAY ?? "") {
+  const p = Bun.spawn(["import", "-window", "root", "png:-"], { env: { ...process.env, DISPLAY: display }, stdout: "pipe", stderr: "ignore" });
+  pendingScreen = (async () => {
+    const png = new Uint8Array(await new Response(p.stdout).arrayBuffer());
+    if ((await p.exited) === 0 && png.length) keptScreen = png;
+  })();
+}
+
+/**
+ * For a scenario played on a desktop of its own: keeps that desktop's screen before it is closed, unless something
+ * was kept already, so the scenario's screenshot shows its own desktop rather than the shared one.
+ */
+export function keepScreenIfNone(display: string) {
+  if (!keptScreen) keepScreen(display);
+}
+
+/**
+ * A bun:test test that, once its scenario has run (passed or not), saves the screen it ended on as
+ * `AIL_SHOTS_DIR/<test name as a slug>.png`, the proof `ail adopt` collects. Use it in place of bun:test's `test`.
+ */
+export function test(name: string, body: () => Promise<unknown> | unknown, timeout?: number) {
+  bunTest(name, async () => {
+    keptScreen = null;
+    pendingScreen = null;
+    try {
+      await body();
+    } finally {
+      await pendingScreen;
+      const dir = process.env.AIL_SHOTS_DIR;
+      if (dir) {
+        const png = keptScreen ?? screenOf();
+        if (png.length) writeFileSync(join(dir, shotName(name)), png);
+      }
+      keptScreen = null;
+    }
+  }, timeout);
 }

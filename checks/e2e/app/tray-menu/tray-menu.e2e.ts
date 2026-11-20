@@ -1,9 +1,9 @@
-// ail-derived-from: TrayMenu@239885e0bbfd8402
+// ail-derived-from: TrayMenu@8b8636bf5f214da9
 // End-to-end check for TrayMenu: its scenarios, played on an X11 desktop with a system tray against the running app.
 // It sees only what a user sees: windows on screen, the text that lands in another app, and what would have opened
 // in the browser or the file manager (see app-driver.ts for what the desktop needs).
-import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
-import { TargetApp, holdVUntilThePickerAppears, keyDown, keyUp, releaseAll, tap, unique, waitForPicker } from "../../desktop.ts";
+import { afterAll, afterEach, beforeAll, expect } from "bun:test";
+import { holdVUntilThePickerAppears, keyDown, keyUp, releaseAll, tap, TargetApp, test, unique, waitForPicker } from "../../desktop.ts";
 import { chooseFromTrayMenu, clickTrayIcon, closeSettings, nextOpened, opened, settingsWindows, waitForSettings } from "../app-driver.ts";
 
 let app: TargetApp;

@@ -5,15 +5,16 @@ node PreviewRules : fn   level: system
   why   The card's content and caption must be decided from the item alone, the
         same in every look, and tested without a window.   <- PreviewCard
   what
-    exports
-      PreviewText(item) => string            "" for anything but text, and for a colour code
-      LooksLikeCode(text: string | null) => bool
-      PreviewCaption(item, title) => string
-      ColorHex(text) => string;  ColorRgb(text) => string
-      LinkedImage.Find(text: string | null) => LinkedImage(link: Uri | null, filePath: string | null) | null
-      LinkedImage.Location => the link's host, or the file's folder (the file path itself when it has none)
-      MorePreviewFiles(files) => "+{count − 6}" when more than six, else ""
-      ShowsPreviewGlyph(item) => no preview text, no image, no colour and not files
+    PreviewText(item: ClipboardItem) -> text   — "" for anything but text, and for a colour code
+    LooksLikeCode(text: text or nothing) -> boolean
+    PreviewCaption(item: ClipboardItem, title: text) -> text
+    ColorHex(text: text) -> text
+    ColorRgb(text: text) -> text
+    type LinkedImage = { link: text or nothing, filePath: text or nothing, Location: text }
+    LinkedImage.Find(text: text or nothing) -> LinkedImage or nothing   — link is an absolute web address
+    A LinkedImage's Location is the link's host, or the file's folder (the file path itself when it has none).
+    MorePreviewFiles(files: list of text) -> text   — "+{count − 6}" when more than six, else ""
+    ShowsPreviewGlyph(item: ClipboardItem) -> boolean   — true when there is no preview text, no image, no colour and not files
     examples
       PreviewText(text "a\tb\r\nc") => "a    b\nc"; every line ending one line break, a tab four spaces
       PreviewText(text of 2500 characters) => its first 2000 characters + "…"
@@ -36,12 +37,12 @@ node PreviewRules : fn   level: system
       PreviewCaption(text "#2c549780") => "rgba(44, 84, 151, 0.5)";  ColorHex("#2c549780") => "#2C549780"
       PreviewCaption(other data) => "Other data"
       LinkedImage.Find("https://i.imgur.com/cat.png") => link, Location "i.imgur.com", caption after a link icon
-      LinkedImage.Find("https://example.com/page") => null; not an image
-      LinkedImage.Find("see https://i.imgur.com/cat.png") => null; a link may not contain spaces
+      LinkedImage.Find("https://example.com/page") => nothing; not an image
+      LinkedImage.Find("see https://i.imgur.com/cat.png") => nothing; a link may not contain spaces
       LinkedImage.Find("\"/home/u/My Pictures/cat.JPG\"") => file "/home/u/My Pictures/cat.JPG", Location "/home/u/My Pictures"
       LinkedImage.Find("file:///home/u/a.webp") => file "/home/u/a.webp"
-      LinkedImage.Find("C:\\Pics\\cat.png") => file; LinkedImage.Find("Pics/cat.png") => null; only full paths
-      LinkedImage.Find("#ff0000") => null; a colour code is never a linked image
+      LinkedImage.Find("C:\\Pics\\cat.png") => file; LinkedImage.Find("Pics/cat.png") => nothing; only full paths
+      LinkedImage.Find("#ff0000") => nothing; a colour code is never a linked image
       MorePreviewFiles(eight files) => "+2"
   how
     decide image formats are recognised by extension: .png .jpg .jpeg .gif .bmp .webp, any case

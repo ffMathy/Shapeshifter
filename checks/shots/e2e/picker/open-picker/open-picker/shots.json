@@ -1,0 +1,25 @@
+{
+  "node": "OpenPicker",
+  "shots": [
+    {
+      "test": "the picker opens centred near the top of the screen",
+      "file": "the-picker-opens-centred-near-the-top-of-the-screen.png"
+    },
+    {
+      "test": "the picker never takes the keyboard focus",
+      "file": "the-picker-never-takes-the-keyboard-focus.png"
+    },
+    {
+      "test": "a picker too tall for its usual place moves up to end at the bottom of the screen",
+      "file": "a-picker-too-tall-for-its-usual-place-moves-up-to-end-at-the.png"
+    },
+    {
+      "test": "the picker is placed for the size it had the time before",
+      "file": "the-picker-is-placed-for-the-size-it-had-the-time-before.png"
+    },
+    {
+      "test": "on a screen too short for the picker, it is shown in turn whole without its preview and cut off with it",
+      "file": "on-a-screen-too-short-for-the-picker-it-is-shown-in-turn-who.png"
+    }
+  ]
+}

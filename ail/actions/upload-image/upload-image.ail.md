@@ -10,14 +10,15 @@ node UploadImage : fn   level: system
         images needs a link, and getting one used to mean a separate upload
         tool (#23 "Implement the Upload image action").   <- Actions
   what
-    exports
-      UploadImageAction : IClipboardAction   Id "upload-image", Order 30
-        CanExecute(item) => item.Kind == Image && item.Snapshot.Image is non-empty
-        GetDescription(item) => "Uploads this image to Catbox and pastes a public link to it."
-      Catbox.UploadAsync(http: HttpClient, data: byte[], fileName: string) => Uri
-      Catbox.Name = "Catbox";  Catbox.MaxBytes = 200 MB;  Catbox.Endpoint = https://catbox.moe/user/api.php
-    request   POST Endpoint, multipart/form-data: reqtype = "fileupload"; fileToUpload = the image bytes, named fileName, with the image's media type
-              the shared HttpClient sends User-Agent "Shapeshifter/<major.minor.patch>"; no account, no key
+    UploadImageAction is an IClipboardAction with Id "upload-image" and Order 30:
+      CanExecute(item) is true when item.Kind is Image and item.Snapshot.Image is not empty
+      GetDescription(item) gives "Uploads this image to Catbox and pastes a public link to it."
+    Catbox.UploadAsync(http: HttpClient, data: bytes, fileName: text) -> later text   — the public link, an absolute web address
+    Catbox.Name: text = "Catbox"
+    Catbox.MaxBytes: integer = 200 × 1024 × 1024   — 200 MB
+    Catbox.Endpoint: text = "https://catbox.moe/user/api.php"
+    An upload is a POST to Endpoint, multipart/form-data: reqtype = "fileupload"; fileToUpload = the image bytes, named fileName, with the image's media type
+      the shared HttpClient sends User-Agent "Shapeshifter/<major.minor.patch>"; no account, no key
     examples
       ExecuteAsync(PNG captured 2026-11-20 13:05:09 local) => uploads "Image 2026-11-20 13.05.09.png" as image/png
       ExecuteAsync(JPEG image) => uploads "Image <time>.jpg" as image/jpeg

@@ -1,0 +1,21 @@
+{
+  "node": "PasteActions",
+  "shots": [
+    {
+      "test": "Paste puts back every format",
+      "file": "paste-puts-back-every-format.png"
+    },
+    {
+      "test": "Paste as plain text leaves the formatting out",
+      "file": "paste-as-plain-text-leaves-the-formatting-out.png"
+    },
+    {
+      "test": "Paste as file turns text into a .txt file",
+      "file": "paste-as-file-turns-text-into-a-txt-file.png"
+    },
+    {
+      "test": "Paste as file turns an image into an image file",
+      "file": "paste-as-file-turns-an-image-into-an-image-file.png"
+    }
+  ]
+}

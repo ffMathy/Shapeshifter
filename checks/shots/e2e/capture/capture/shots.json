@@ -1,0 +1,25 @@
+{
+  "node": "Capture",
+  "shots": [
+    {
+      "test": "each copy joins the history, newest first",
+      "file": "each-copy-joins-the-history-newest-first.png"
+    },
+    {
+      "test": "copying something again moves it to the top instead of adding it twice",
+      "file": "copying-something-again-moves-it-to-the-top-instead-of-addin.png"
+    },
+    {
+      "test": "a password manager's secret is not recorded",
+      "file": "a-password-manager-s-secret-is-not-recorded.png"
+    },
+    {
+      "test": "an app that writes the clipboard several times at once adds one item",
+      "file": "an-app-that-writes-the-clipboard-several-times-at-once-adds-.png"
+    },
+    {
+      "test": "pasting from the history adds nothing to it",
+      "file": "pasting-from-the-history-adds-nothing-to-it.png"
+    }
+  ]
+}

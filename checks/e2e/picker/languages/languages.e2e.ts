@@ -1,9 +1,10 @@
-// ail-derived-from: Languages@10aeb2f6499a85a6
+// ail-derived-from: Languages@988032379fe28687
 // End-to-end check for Languages: the picker in the language SHAPESHIFTER_LANGUAGE
 // names, laid out from right to left in Arabic. Each scenario starts Shapeshifter
 // on a desktop of its own with that variable set, as a user would, and reads the
 // picker back from the screen (OCR, English letters only).
-import { expect, test } from "bun:test";
+import { expect } from "bun:test";
+import { test } from "../../desktop.ts";
 import {
   OwnDesktop, cancelThePicker, copyWithXclip, holdThePickerOpen, readText, readWords, releaseAll, shootPicker, squash,
 } from "../picker-driver.ts";

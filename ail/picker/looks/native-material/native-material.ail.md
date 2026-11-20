@@ -9,10 +9,9 @@ node NativeMaterial : fn   level: system
         where the system offers it, the picker should sit on the real thing,
         with the system's corners and shadow (PRs #625, #626).   <- Looks
   what
-    exports
-      Prepare(window, panel)       before the window is first shown
-      ClassName = "nativeMaterial"  set on the panel while the material is on
-      Variable = "SHAPESHIFTER_NATIVE_MATERIAL": "off" | "glass" | "acrylic" | "emulated"
+    Prepare(window: Window, panel: Border) -> nothing   — before the window is first shown
+    ClassName: text = "nativeMaterial"   — set on the panel while the material is on
+    Variable: text = "SHAPESHIFTER_NATIVE_MATERIAL"   — an environment variable whose value is "off" | "glass" | "acrylic" | "emulated"
     examples
       Prepare(picker, look Windows, Windows 11, transparency effects on) => Mica (Avalonia's), else Acrylic; a thin frame for DWM's 8 px corners and shadow; panel gets "nativeMaterial"
       Prepare(picker, look Windows, SHAPESHIFTER_NATIVE_MATERIAL "acrylic") => Acrylic

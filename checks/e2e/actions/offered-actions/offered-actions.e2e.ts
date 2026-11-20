@@ -1,9 +1,9 @@
-// ail-derived-from: OfferedActions@a5ec5ab84129f884
+// ail-derived-from: OfferedActions@dfc8b4b4c9f75be5
 // End-to-end check for OfferedActions: which actions each kind of item offers,
 // in which order, as read from the screen (OCR of the picker's actions column).
 // Content is put on the clipboard with xclip, as another app would.
-import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
-import { TargetApp, keyUp, releaseAll, sleep, tap, unique, waitForPicker } from "../../desktop.ts";
+import { afterAll, afterEach, beforeAll, expect } from "bun:test";
+import { keyUp, releaseAll, sleep, tap, TargetApp, test, unique, waitForPicker } from "../../desktop.ts";
 import { actionTitlesOnScreen, copyAs, makePng, openPicker } from "../actions-driver.ts";
 import { mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";

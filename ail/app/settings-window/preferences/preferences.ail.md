@@ -8,31 +8,32 @@ node Preferences : data   level: system
   why   Every setting needs one default, one valid range and one place on disk, so
         a hand-edited or older file can never break the app.   <- SettingsWindow
   what
-    exports
-      record ShapeshifterSettings
-        PasteDelayMilliseconds: int = 300      clamped to 0..3000 (MaxPasteDelayMilliseconds)
-        PasteShortcut: PasteShortcut = Standard   enum Standard = 0 | Alternative = 1, saved as a number
-        QuietMode: bool = false                  true hides the "Copied" notification (tips still show)
-        CoachingTips: bool = true
-        MaxHistoryItems: int = 50                clamped to 1..1000; unpinned items only
-        RememberHistory: bool = false
-        AutomaticUpdates: bool = true
-        Normalize() => a copy with the clamps above, and an undefined PasteShortcut replaced by Standard
-      SettingsStore(path, logger?)
-        Current: ShapeshifterSettings            loaded and normalized once, in the constructor
-        Update(change: settings => settings)     normalizes; does nothing when the result equals Current; else saves, then raises Changed
-        event Changed(ShapeshifterSettings)      raised after saving, outside the lock
+    type PasteShortcut = "Standard" | "Alternative"
+      saved as a number: Standard is 0, Alternative is 1
+    type ShapeshifterSettings = { PasteDelayMilliseconds: integer, PasteShortcut: PasteShortcut, QuietMode: boolean, CoachingTips: boolean, MaxHistoryItems: integer, RememberHistory: boolean, AutomaticUpdates: boolean }
+      PasteDelayMilliseconds starts at 300, clamped to 0 through 3000 (MaxPasteDelayMilliseconds)
+      PasteShortcut starts at Standard
+      QuietMode starts at false, and true hides the "Copied" notification (tips still show)
+      CoachingTips starts at true
+      MaxHistoryItems starts at 50, clamped to 1 through 1000, and counts unpinned items only
+      RememberHistory starts at false
+      AutomaticUpdates starts at true
+    defaultSettings() -> ShapeshifterSettings — every value at its starting value above
+    ShapeshifterSettings.Normalize() -> ShapeshifterSettings — a copy with the clamps above, and a PasteShortcut number that names neither choice replaced by Standard
+    SettingsStore(path: text, logger: Logger or nothing = nothing) -> SettingsStore
+    SettingsStore.Current: ShapeshifterSettings — loaded and normalized once, when the store is made
+    SettingsStore.Update(change: (ShapeshifterSettings) -> ShapeshifterSettings) -> nothing — normalizes; does nothing when the result equals Current; else saves, then raises Changed
+    SettingsStore.Changed — an event carrying the new ShapeshifterSettings, raised after saving, outside the lock
     examples
-      new ShapeshifterSettings() with { PasteDelayMilliseconds = 5000 }.Normalize().PasteDelayMilliseconds => 3000
-      with { PasteDelayMilliseconds = -1 }.Normalize().PasteDelayMilliseconds => 0
-      with { MaxHistoryItems = 0 }.Normalize().MaxHistoryItems => 1;  with { MaxHistoryItems = 5000 } => 1000
-      with { PasteShortcut = (PasteShortcut)7 }.Normalize().PasteShortcut => Standard
-      SettingsStore over a missing file => Current == new ShapeshifterSettings(); nothing is written until the first change
+      (defaultSettings() with PasteDelayMilliseconds 5000).Normalize().PasteDelayMilliseconds => 3000
+      (defaultSettings() with PasteDelayMilliseconds -1).Normalize().PasteDelayMilliseconds => 0
+      (defaultSettings() with MaxHistoryItems 0).Normalize().MaxHistoryItems => 1;  with MaxHistoryItems 5000 => 1000
+      (defaultSettings() with PasteShortcut saved as the number 7).Normalize().PasteShortcut => Standard
+      SettingsStore over a missing file => Current is defaultSettings() by value; nothing is written until the first change
       SettingsStore over "{ not json" => defaults, and a warning in the log; the bad file is overwritten by the next change
       file {"PasteDelayMilliseconds": 900} => 900 with every other value at its default
-      Update(s => s with { QuietMode = true }) twice => saved once, Changed raised once
-    file
-      settings.json in the settings folder (DataLocations), indented JSON with the property names above, e.g.
+      Update(a change that sets QuietMode to true) twice => saved once, Changed raised once
+    the settings are kept in settings.json in the settings folder (DataLocations), indented JSON with the property names above, e.g.
       { "PasteDelayMilliseconds": 300, "PasteShortcut": 0, "QuietMode": false, "CoachingTips": true,
         "MaxHistoryItems": 50, "RememberHistory": false, "AutomaticUpdates": true }
       written to settings.json.tmp, then moved over settings.json; a failed save is logged and the change still applies

@@ -8,16 +8,19 @@ node SingleInstance : fn   level: system
   why   Two running copies fight over the paste keys; and after a download or an
         update, the newest copy must be the one that runs.   <- App
   what
-    exports
-      SingleInstance.Acquire(paths: AppPaths, layout: InstallLayout, version: ReleaseVersion) => IDisposable?   null: exit
-      RunningInstance(ProcessId: int, Version: ReleaseVersion, ExecutablePath: string)
-      RunningInstance.ShouldReplace(launching, running?) => running is not null && launching > running.Version
-      RunningInstance.Read(path) => RunningInstance?;  Write(path);  Remove(path, processId)
-      ReleaseVersion.TryParse(text) => ReleaseVersion?;  ordered like semantic versions
-    files (in the data folder, DataLocations)
+    type Lease = { Release() -> nothing }
+      held while the app runs and released on exit (below)
+    SingleInstance.Acquire(paths: AppPaths, layout: InstallLayout, version: ReleaseVersion) -> Lease or nothing — nothing: exit
+    type RunningInstance = { ProcessId: integer, Version: ReleaseVersion, ExecutablePath: text }
+    RunningInstance.ShouldReplace(launching: ReleaseVersion, running: RunningInstance or nothing) -> boolean — running is not nothing and launching > running.Version
+    RunningInstance.Read(path: text) -> RunningInstance or nothing
+    RunningInstance.Write(path: text) -> nothing
+    RunningInstance.Remove(path: text, processId: integer) -> nothing
+    ReleaseVersion.TryParse(text: text or nothing) -> ReleaseVersion or nothing — ordered like semantic versions
+    the files it keeps, in the data folder (DataLocations):
       instance.lock   held open with no sharing and deleted on close; holds the process id
       instance.json   {"pid":14039,"version":"7.1.0","path":"/home/u/.local/bin/shapeshifter"}
-    rules, in Program.Main, after the installer and before the app starts
+    what happens in Program.Main, after the installer and before the app starts:
       the lock is free => take it, write instance.json, run
       the lock is held => find the running copy: instance.json when its process still runs that executable
         (or one named like it: Windows may run an updated copy as "….old-…"), else, for releases that do not
@@ -28,9 +31,9 @@ node SingleInstance : fn   level: system
       on exit the lease removes instance.json only when it still names this process, then releases the lock
     examples
       ShouldReplace(7.2.0, running 7.1.0) => true
-      ShouldReplace(7.1.0, running 7.1.0) => false;  ShouldReplace(7.1.0, running 7.2.0) => false;  ShouldReplace(7.2.0, null) => false
+      ShouldReplace(7.1.0, running 7.1.0) => false;  ShouldReplace(7.1.0, running 7.2.0) => false;  ShouldReplace(7.2.0, nothing) => false
       ShouldReplace(7.1.17-pr.635.98, running 7.1.16) => true;  ShouldReplace(7.1.17, running 7.1.17-pr.635.98) => true
-      ReleaseVersion.TryParse("v7.2.0-beta.1+build") => 7.2.0-beta.1;  TryParse("7.2") => 7.2.0;  TryParse("7") => null
+      ReleaseVersion.TryParse("v7.2.0-beta.1+build") => 7.2.0-beta.1;  TryParse("7.2") => 7.2.0;  TryParse("7") => nothing
       7.2.0-beta.2 < 7.2.0-beta.10 => true (numeric parts compare as numbers);  7.2.0-beta < 7.2.0 => true
       driven: installed 7.1.0 runs, start it again => "Shapeshifter is already running.", exit code 1
       driven: 7.1.0 runs with --no-install, start 7.2.0 with --no-install => "Shapeshifter 7.1.0 is running (process 14478); ending it to run this newer copy, 7.2.0", then 7.2.0 runs

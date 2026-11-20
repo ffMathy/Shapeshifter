@@ -1,10 +1,10 @@
-// ail-derived-from: PinItems@2105a89f09ea16cb
+// ail-derived-from: PinItems@dc042e3d435cd0a3
 // End-to-end check for PinItems: pinning and unpinning from the actions, and
 // pinned items surviving a restart. Pinned items stay at the top for good, so
 // every scenario runs on a desktop of its own (PrivateDesktop), where it may
 // also quit Shapeshifter from its tray menu and start it again.
-import { afterEach, expect, test } from "bun:test";
-import { TargetApp, keyUp, releaseAll, sleep, tap, waitForPicker } from "../../desktop.ts";
+import { afterEach, expect } from "bun:test";
+import { keyUp, releaseAll, sleep, tap, TargetApp, test, waitForPicker } from "../../desktop.ts";
 import { PrivateDesktop, readableId, actionTitlesOnScreen, openPicker, readPicker } from "../actions-driver.ts";
 
 let desk: PrivateDesktop | undefined;

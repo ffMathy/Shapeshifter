@@ -11,7 +11,7 @@
 import { existsSync, mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { sleep } from "../desktop.ts";
+import { keepScreen, keepScreenIfNone, sleep } from "../desktop.ts";
 
 const root = resolve(import.meta.dir, "../../..");
 const shots = mkdtempSync(join(tmpdir(), "ail-picker-"));
@@ -91,7 +91,9 @@ export async function holdThePickerOpen(display = mainDisplay()): Promise<Box> {
   const shown = await waitForPicker(true, display);
   await keyUp("v", display);
   if (!shown) throw new Error("the picker did not appear while Ctrl+V was held");
-  return settledPicker(display);
+  const box = await settledPicker(display);
+  keepScreen(display);
+  return box;
 }
 
 /** Escape, then Ctrl let go: the picker closes without pasting. */
@@ -184,6 +186,7 @@ export class OwnDesktop {
   }
 
   async stop() {
+    keepScreenIfNone(this.display);
     this.app.kill("SIGTERM");
     await Promise.race([this.app.exited, sleep(5000)]);
     this.xvfb.kill();

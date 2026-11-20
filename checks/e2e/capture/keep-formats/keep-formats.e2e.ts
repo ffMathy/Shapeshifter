@@ -1,11 +1,11 @@
-// ail-derived-from: KeepFormats@19ae976bb2591267
+// ail-derived-from: KeepFormats@feed999fc00cb138
 // End-to-end check for KeepFormats: an item picked from the history puts back
 // on the clipboard what was copied, format by format. Another app's view of
 // the clipboard is read with xclip after the paste.
-import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
+import { afterAll, afterEach, beforeAll, expect } from "bun:test";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { TargetApp, releaseAll, sleep, unique, waitForPicker } from "../../desktop.ts";
+import { releaseAll, sleep, TargetApp, test, unique, waitForPicker } from "../../desktop.ts";
 import { clipboardBytes, clipboardTypes, pasteFromHistory, pointerAway, samePixels, scratch, waitForNoNotification, xcopy } from "../capture-driver.ts";
 
 let app: TargetApp;

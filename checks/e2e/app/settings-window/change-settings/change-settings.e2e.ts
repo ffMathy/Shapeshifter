@@ -1,10 +1,10 @@
-// ail-derived-from: ChangeSettings@9f8261fe32a020fb
+// ail-derived-from: ChangeSettings@0f6b1c8d37e3d5a5
 // End-to-end check for ChangeSettings: its scenarios, played on an X11 desktop with a system tray against the running
 // app. It changes settings only through the settings window, as a user would, and puts each back afterwards, so the
 // other checks find the defaults. It sees only windows on screen, the clipboard, the text that lands in another app
 // and what would have opened in the browser (see app-driver.ts).
-import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
-import { TargetApp, holdVUntilThePickerAppears, keyDown, keyUp, pickerVisible, releaseAll, sleep, tap, unique, waitForPicker } from "../../../desktop.ts";
+import { afterAll, afterEach, beforeAll, expect } from "bun:test";
+import { holdVUntilThePickerAppears, keyDown, keyUp, pickerVisible, releaseAll, sleep, tap, TargetApp, test, unique, waitForPicker } from "../../../desktop.ts";
 import {
   clickInSettings, clipboardText, closeSettings, nextOpened, notificationAppears, openSettings, opened, pressSettingsButton, typeNumber,
 } from "../../app-driver.ts";
