@@ -1,3 +1,4 @@
+// ail-derived-from: OpenPicker@dc385e4d450c4288
 // End-to-end check for OpenPicker: where the picker appears, that it leaves the
 // keyboard with the app the user is in, and what happens on a screen too short
 // for it. Seen only through the windows on screen and what they show.
