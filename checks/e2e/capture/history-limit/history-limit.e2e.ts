@@ -29,8 +29,7 @@ test("a pinned item stays on top and keeps its place", async () => {
   await app.copy(`filler ${id}`);
   await app.copy(`pinned ${id}`);
   // Pin it: the history's actions are to the right; Pin is the last one.
-  await app.prepare();
-  await pick(["Right", "Up"]);
+  await pick(["Right", "Up"], () => app.prepare());
   try {
     await app.copy(`newer ${id}`);
     await app.copy(`newest ${id}`);
@@ -44,7 +43,6 @@ test("a pinned item stays on top and keeps its place", async () => {
     expect(await pasteFromHistory(app, ["v"])).toBe(`newer ${id}`);
   } finally {
     // Unpin it again, so other checks start without pinned items.
-    await app.prepare();
-    await pick(["Up", "Right", "Up"]);
+    await pick(["Up", "Right", "Up"], () => app.prepare());
   }
 }, 60_000);

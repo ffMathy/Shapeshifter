@@ -60,26 +60,40 @@ export function samePixels(a: string, b: string): boolean {
 /**
  * With the target app focused: holds Ctrl+V until the picker appears, taps
  * each key in `keys` (e.g. ["v", "v"], ["Up"], ["3"]) and lets go of Ctrl.
+ * Returns false, having let go of everything, if the picker did not appear.
  */
-export async function pick(keys: string[]) {
+async function tryPick(keys: string[]): Promise<boolean> {
   await keyDown("ctrl");
   try {
-    // Like holdVUntilThePickerAppears, but patient: the very first picker after a start can take a few seconds.
     await keyDown("v", 0);
-    const shown = await waitForPicker(true, 8000);
+    const shown = await waitForPicker(true, 4000);
     await keyUp("v");
-    if (!shown) throw new Error("the picker did not appear while V was held");
+    if (!shown) return false;
     for (const k of keys) await tap(k, 120);
+    return true;
   } finally {
     await keyUp("ctrl");
+    await waitForPicker(false);
   }
-  await waitForPicker(false);
+}
+
+/**
+ * Picks from the history like a person who, when the history does not come
+ * up (the first time right after Shapeshifter starts), simply tries again.
+ * `before` runs before each try (e.g. emptying the text box).
+ */
+export async function pick(keys: string[], before: () => Promise<void> = async () => {}) {
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    await before();
+    if (await tryPick(keys)) return;
+    await sleep(1000);
+  }
+  throw new Error("the picker did not appear while Ctrl+V was held, three times");
 }
 
 /** Pastes what picking `keys` from the history gives, into an empty text box, and returns it. */
 export async function pasteFromHistory(app: TargetApp, keys: string[]): Promise<string> {
-  await app.prepare();
-  await pick(keys);
+  await pick(keys, () => app.prepare());
   await sleep(700);
   return app.text();
 }
