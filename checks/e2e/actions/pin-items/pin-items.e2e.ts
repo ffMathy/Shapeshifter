@@ -1,3 +1,4 @@
+// ail-derived-from: PinItems@dc042e3d435cd0a3
 // End-to-end check for PinItems: pinning and unpinning from the actions, and
 // pinned items surviving a restart. Pinned items stay at the top for good, so
 // every scenario runs on a desktop of its own (PrivateDesktop), where it may

@@ -1,3 +1,4 @@
+// ail-derived-from: WhatSearchFinds@b79b620a1398ff71
 // End-to-end check for WhatSearchFinds: which copies a search finds, on a real
 // X11 desktop. Copies come from the target app and from small xterm windows
 // with titles of our choosing; a find is proven by what Enter puts in the

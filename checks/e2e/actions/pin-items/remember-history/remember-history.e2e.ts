@@ -1,3 +1,4 @@
+// ail-derived-from: RememberHistory@24ab9c40f887e1a6
 // End-to-end check for RememberHistory: the "Remember history after restart"
 // setting, switched in the settings window (opened from the tray icon), and
 // what comes back after quitting Shapeshifter from its tray menu and starting

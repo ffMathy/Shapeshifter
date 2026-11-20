@@ -1,3 +1,4 @@
+// ail-derived-from: OfferedActions@dfc8b4b4c9f75be5
 // End-to-end check for OfferedActions: which actions each kind of item offers,
 // in which order, as read from the screen (OCR of the picker's actions column).
 // Content is put on the clipboard with xclip, as another app would.

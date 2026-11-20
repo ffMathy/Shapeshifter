@@ -1,3 +1,4 @@
+// ail-derived-from: KeepHistoryOpen@0a094410a23655fe
 // End-to-end check for KeepHistoryOpen: Space keeps the picker up without
 // holding Ctrl, on a real X11 desktop, seen only through what the user sees.
 import { afterAll, afterEach, beforeAll, expect } from "bun:test";

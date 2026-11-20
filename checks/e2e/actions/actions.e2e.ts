@@ -1,3 +1,4 @@
+// ail-derived-from: Actions@adb0f4c4431849b6
 // End-to-end check for Actions: opening the actions of an item with Right,
 // going back with Left, and running the chosen action by letting go of Ctrl.
 // It sees only the text that lands in another app and the clipboard (xclip).

@@ -1,3 +1,4 @@
+// ail-derived-from: SearchHistory@aac74c1589e9545c
 // End-to-end check for SearchHistory: S during the gesture, typing in the
 // picker, then Enter, Escape or another window, on a real X11 desktop. It sees
 // only what a user sees: which window has the keyboard focus, the text that

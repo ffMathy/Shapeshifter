@@ -1,3 +1,4 @@
+// ail-derived-from: Capture@60164061625cee49
 // End-to-end check for Capture: its scenarios, played on an X11 desktop
 // against the running app. Copies are made by other apps (the target app and
 // xclip); what the history holds is seen by picking from it with the paste

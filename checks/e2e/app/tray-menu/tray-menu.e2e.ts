@@ -1,3 +1,4 @@
+// ail-derived-from: TrayMenu@8b8636bf5f214da9
 // End-to-end check for TrayMenu: its scenarios, played on an X11 desktop with a system tray against the running app.
 // It sees only what a user sees: windows on screen, the text that lands in another app, and what would have opened
 // in the browser or the file manager (see app-driver.ts for what the desktop needs).
