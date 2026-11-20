@@ -1,4 +1,3 @@
-// ail-derived-from: OpenPicker@32c52b3b5d6f919a
 // End-to-end check for OpenPicker: where the picker appears, that it leaves the
 // keyboard with the app the user is in, and what happens on a screen too short
 // for it. Seen only through the windows on screen and what they show.
@@ -6,7 +5,7 @@ import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
 import { TargetApp, unique } from "../../desktop.ts";
 import {
   OwnDesktop, cancelThePicker, copyWithXclip, focusedWindowName, holdThePickerOpen, makeImage, movePointer,
-  readText, releaseAll, screenSize, shootPicker, squash, waitForPicker, type Box,
+  readText, releaseAll, shootPicker, squash, waitForPicker, workArea, type Box,
 } from "../picker-driver.ts";
 
 let app: TargetApp;
@@ -14,12 +13,15 @@ beforeAll(async () => { app = await TargetApp.start(); }, 90_000);
 afterAll(async () => { await releaseAll(); await app?.stop(); });
 afterEach(async () => { await releaseAll(); await waitForPicker(false); });
 
-/** Where a picker of `size` belongs: centred, its top 16 % down the screen, or higher so that it ends at the bottom. */
+/**
+ * Where a picker of `size` belongs in the screen's working area (the screen less its panels): centred, its top 16 %
+ * down, or higher so that it ends at the bottom.
+ */
 function placeFor(size: { width: number; height: number }) {
-  const screen = screenSize();
+  const area = workArea();
   return {
-    x: Math.floor(Math.max(0, (screen.width - size.width) / 2)),
-    y: Math.floor(Math.max(0, Math.min(screen.height * 0.16, screen.height - size.height))),
+    x: area.x + Math.floor(Math.max(0, (area.width - size.width) / 2)),
+    y: area.y + Math.floor(Math.max(0, Math.min(area.height * 0.16, area.height - size.height))),
   };
 }
 
@@ -38,7 +40,8 @@ test("the picker opens centred near the top of the screen", async () => {
   await cancelThePicker();
   const place = placeFor(box);
   expect(Math.abs(box.x - place.x)).toBeLessThanOrEqual(1);
-  expect(Math.abs(box.y - Math.floor(screenSize().height * 0.16))).toBeLessThanOrEqual(1);
+  const area = workArea();
+  expect(Math.abs(box.y - (area.y + Math.floor(area.height * 0.16)))).toBeLessThanOrEqual(1);
 }, 30_000);
 
 test("the picker never takes the keyboard focus", async () => {
@@ -56,9 +59,9 @@ test("a picker too tall for its usual place moves up to end at the bottom of the
   await app.prepare();
   const box = await openTwice();
   await cancelThePicker();
-  const screen = screenSize();
-  expect(box.height).toBeGreaterThan(screen.height * 0.84);
-  expect(Math.abs(box.y + box.height - screen.height)).toBeLessThanOrEqual(1);
+  const area = workArea();
+  expect(box.height).toBeGreaterThan(area.height * 0.84);
+  expect(Math.abs(box.y + box.height - (area.y + area.height))).toBeLessThanOrEqual(1);
   expect(Math.abs(box.x - placeFor(box).x)).toBeLessThanOrEqual(1);
 }, 30_000);
 

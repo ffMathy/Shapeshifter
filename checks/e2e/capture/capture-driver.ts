@@ -153,7 +153,9 @@ export function workArea(): Box {
 // ---------------------------------------------------------------- tips are at least five minutes apart
 
 const TIP_GAP_MS = 5 * 60_000 + 5_000;
-let lastTipSeen = 0;
+// Checks of other areas that ran just before against the same app may have shown a tip without anyone watching, so
+// until a tip is seen here, assume one was shown the moment this file started.
+let lastTipSeen = Date.now();
 
 /** Remembers that a tip was just seen (a check that saw one calls this). */
 export const sawTip = () => { lastTipSeen = Date.now(); };

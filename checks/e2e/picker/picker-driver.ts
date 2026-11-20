@@ -40,6 +40,16 @@ export function screenSize(display = mainDisplay()): { width: number; height: nu
   return { width: Number(m[1]), height: Number(m[2]) };
 }
 
+/**
+ * The screen's working area: the screen less the panels a desktop keeps there (the window manager's _NET_WORKAREA),
+ * which is what the picker places itself in. The whole screen when the window manager reports none.
+ */
+export function workArea(display = mainDisplay()): Box {
+  const m = /=\s*(\d+),\s*(\d+),\s*(\d+),\s*(\d+)/.exec(run(["xprop", "-root", "_NET_WORKAREA"], display));
+  if (m) return { x: Number(m[1]), y: Number(m[2]), width: Number(m[3]), height: Number(m[4]) };
+  return { x: 0, y: 0, ...screenSize(display) };
+}
+
 /** The picker on screen: the visible window titled "Shapeshifter" taller than the copy notification; null when none. */
 export function picker(display = mainDisplay()): Box | null {
   const ids = xdotool(display, "search", "--onlyvisible", "--name", "^Shapeshifter$").split("\n").filter(Boolean);

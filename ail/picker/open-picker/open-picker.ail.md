@@ -8,6 +8,7 @@ node OpenPicker : flow   level: experience
   what
     the picker appears on the screen that has the pointer, centred across it, its top edge 16 % of the way down
     a picker too tall for that moves up until it ends at the bottom of the screen, and never above the top
+    "the screen" here is its working area: the screen less the panels and docks the desktop keeps on it
     the picker never takes the keyboard focus; only a search gives it the focus, until it closes
     Scenario: the picker opens centred near the top of the screen
       Given "centred" and a unique word were copied, and the picker was shown once before for the same history
