@@ -1,3 +1,4 @@
+// ail-derived-from: KeepFormats@19ae976bb2591267
 // End-to-end check for KeepFormats: an item picked from the history puts back
 // on the clipboard what was copied, format by format. Another app's view of
 // the clipboard is read with xclip after the paste.

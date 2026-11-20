@@ -1,3 +1,4 @@
+// ail-derived-from: HistoryLimit@0ae42c498412fed2
 // End-to-end check for HistoryLimit: how many items the history keeps, and
 // pinned items on top. The limit is changed in the settings window, opened
 // from the tray icon, as a user would.

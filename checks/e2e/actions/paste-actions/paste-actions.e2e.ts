@@ -1,3 +1,4 @@
+// ail-derived-from: PasteActions@ec44d088cb0de5c2
 // End-to-end check for PasteActions: Paste, Paste as plain text and Paste as
 // file, seen through what arrives in another app, the clipboard (xclip) and
 // the files the user is handed.

@@ -68,6 +68,10 @@ glossary
   term "start at login" plain "starting Shapeshifter when the user signs in"                                formal IAutostartService
   term "release build" plain "a downloaded single-file build, the only kind that installs and updates itself" formal RunningApp.IsSingleFile
   term "pull request build" plain "a test build of a pull request, which never installs or updates"         formal ReleaseVersion.IsPullRequestBuild
+  term notification plain "the small 'Copied · N items in your history' message after a new copy"          formal ICopyNotifier, ToastWindow
+  term tip          plain "a hint, in the notification's place, that the history could have saved a copy"  formal CoachingTip
+  term secret       plain "content a password manager marks as not to be recorded"                          formal ClipboardFormatClassifier.IsExcludedFromHistoryAsync
+  term source       plain "the app and window in front when something was copied"                           formal ClipboardSource
   term "newer copy" plain "a running copy of a higher version, which ends an older one"                     formal RunningInstance.ShouldReplace
 ```
 

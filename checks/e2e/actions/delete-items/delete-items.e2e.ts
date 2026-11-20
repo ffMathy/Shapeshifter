@@ -1,3 +1,4 @@
+// ail-derived-from: DeleteItems@8e866d67f505c972
 // End-to-end check for DeleteItems: Delete removes the chosen item from the
 // history while the picker is up. It reads the item count on screen (OCR) and
 // what arrives in another app.
