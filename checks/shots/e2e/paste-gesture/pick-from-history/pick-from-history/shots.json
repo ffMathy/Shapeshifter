@@ -1,0 +1,29 @@
+{
+  "node": "PickFromHistory",
+  "shots": [
+    {
+      "test": "pressing V again picks the next older item",
+      "file": "pressing-v-again-picks-the-next-older-item.png"
+    },
+    {
+      "test": "the arrow keys move the choice",
+      "file": "the-arrow-keys-move-the-choice.png"
+    },
+    {
+      "test": "a number jumps to that item",
+      "file": "a-number-jumps-to-that-item.png"
+    },
+    {
+      "test": "Enter pastes right away",
+      "file": "enter-pastes-right-away.png"
+    },
+    {
+      "test": "the pasted item moves to the top",
+      "file": "the-pasted-item-moves-to-the-top.png"
+    },
+    {
+      "test": "Escape cancels without pasting",
+      "file": "escape-cancels-without-pasting.png"
+    }
+  ]
+}

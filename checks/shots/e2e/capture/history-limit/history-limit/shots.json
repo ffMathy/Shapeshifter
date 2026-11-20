@@ -1,0 +1,13 @@
+{
+  "node": "HistoryLimit",
+  "shots": [
+    {
+      "test": "the history keeps the newest items, up to Items to remember",
+      "file": "the-history-keeps-the-newest-items-up-to-items-to-remember.png"
+    },
+    {
+      "test": "a pinned item stays on top and keeps its place",
+      "file": "a-pinned-item-stays-on-top-and-keeps-its-place.png"
+    }
+  ]
+}

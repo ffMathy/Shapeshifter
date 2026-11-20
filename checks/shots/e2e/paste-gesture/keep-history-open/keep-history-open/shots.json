@@ -1,0 +1,13 @@
+{
+  "node": "KeepHistoryOpen",
+  "shots": [
+    {
+      "test": "Space keeps the history open, and Enter pastes",
+      "file": "space-keeps-the-history-open-and-enter-pastes.png"
+    },
+    {
+      "test": "Escape closes a history kept open, without pasting",
+      "file": "escape-closes-a-history-kept-open-without-pasting.png"
+    }
+  ]
+}

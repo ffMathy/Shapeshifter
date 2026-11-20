@@ -1,0 +1,29 @@
+{
+  "node": "PasteGesture",
+  "shots": [
+    {
+      "test": "a quick Ctrl+V pastes what was copied last",
+      "file": "a-quick-ctrl-v-pastes-what-was-copied-last.png"
+    },
+    {
+      "test": "keeping Ctrl held, each tap of V pastes again",
+      "file": "keeping-ctrl-held-each-tap-of-v-pastes-again.png"
+    },
+    {
+      "test": "letting go of Ctrl a moment before V still pastes",
+      "file": "letting-go-of-ctrl-a-moment-before-v-still-pastes.png"
+    },
+    {
+      "test": "typing V without Ctrl types a v",
+      "file": "typing-v-without-ctrl-types-a-v.png"
+    },
+    {
+      "test": "Ctrl+Shift+V is left to the app",
+      "file": "ctrl-shift-v-is-left-to-the-app.png"
+    },
+    {
+      "test": "holding Ctrl+V shows the history",
+      "file": "holding-ctrl-v-shows-the-history.png"
+    }
+  ]
+}
